@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: providercard-api
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: ALLOWED_ORIGINS
+        value: https://providercard-poc.vercel.app,http://localhost:3000
+      - key: DATABASE_URL
+        value: sqlite:///./providercard.db
+      - key: PAYER_API_URL
+        value: https://mock-payer-api.example.com
+      - key: STATE_BOARD_API_URL
+        value: https://mock-state-board.example.com
