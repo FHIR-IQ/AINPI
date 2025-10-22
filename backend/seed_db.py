@@ -122,6 +122,9 @@ def create_practitioner(db: Session, data: dict):
             active=True
         )
 
+        # Set the practitioner relationship manually
+        role_model.practitioner = practitioner_model
+
         # Generate FHIR resource for role
         role_model.fhir_resource = practitioner_role_to_fhir(role_model)
 
