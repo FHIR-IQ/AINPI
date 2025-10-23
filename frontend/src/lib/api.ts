@@ -1,9 +1,11 @@
 /**
- * API client for ProviderCard backend
+ * API client for ProviderCard - Serverless POC version
+ * All API calls go to Next.js API routes (no separate backend needed)
  */
 import axios, { AxiosInstance } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Use relative paths for Next.js API routes (serverless)
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 // Create axios instance
 const api: AxiosInstance = axios.create({
