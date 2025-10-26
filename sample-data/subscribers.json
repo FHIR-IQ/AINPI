@@ -1,0 +1,205 @@
+{
+  "subscribers": [
+    {
+      "id": "sub-credentialing-system",
+      "name": "Credentialing Management System",
+      "description": "Enterprise credentialing and privileging system that monitors provider credentials and licenses",
+      "endpoint": {
+        "resourceType": "Endpoint",
+        "id": "endpoint-001",
+        "status": "active",
+        "connectionType": {
+          "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
+          "code": "rest-hook",
+          "display": "REST Hook"
+        },
+        "name": "Credentialing System Webhook",
+        "address": "https://credentialing-system.example.com/webhooks/provider-updates",
+        "payloadType": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/resource-types",
+                "code": "Practitioner"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/resource-types",
+                "code": "PractitionerRole"
+              }
+            ]
+          }
+        ],
+        "payloadMimeType": ["application/fhir+json"],
+        "webhookConfig": {
+          "eventTypes": [
+            "practitioner.created",
+            "practitioner.updated",
+            "practitionerRole.updated",
+            "license.expiring",
+            "license.expired",
+            "credentialing.statusChange"
+          ],
+          "retryPolicy": {
+            "maxAttempts": 5,
+            "backoffStrategy": "exponential",
+            "initialDelayMs": 1000,
+            "maxDelayMs": 60000,
+            "retryableStatusCodes": [408, 429, 500, 502, 503, 504]
+          },
+          "timeout": 30000,
+          "includeFullResource": true,
+          "signatureAlgorithm": "HMAC-SHA256",
+          "secret": "cred-system-secret-key-12345",
+          "batchingEnabled": false
+        },
+        "authentication": {
+          "type": "api-key",
+          "credentials": {
+            "apiKey": "cred-api-key-abcdef123456"
+          },
+          "headers": [
+            {
+              "key": "X-API-Key",
+              "value": "cred-api-key-abcdef123456"
+            }
+          ]
+        },
+        "rateLimit": {
+          "requestsPerMinute": 100,
+          "requestsPerHour": 5000,
+          "requestsPerDay": 50000,
+          "burstLimit": 200
+        },
+        "monitoring": {
+          "enabled": true,
+          "healthCheckUrl": "https://credentialing-system.example.com/health",
+          "healthCheckIntervalMs": 300000,
+          "alertOnFailure": true,
+          "alertEmail": ["ops@credentialing-system.example.com", "admin@credentialing-system.example.com"],
+          "successRate": {
+            "threshold": 98,
+            "windowMinutes": 60
+          }
+        }
+      },
+      "subscriptionDetails": {
+        "purpose": "Monitor provider credentials, licenses, and board certifications",
+        "dataUsage": "Credentialing verification and compliance monitoring",
+        "contactEmail": "integrations@credentialing-system.example.com",
+        "technicalContact": "api-support@credentialing-system.example.com",
+        "businessContact": "credentialing-team@credentialing-system.example.com"
+      }
+    },
+    {
+      "id": "sub-directory-service",
+      "name": "Provider Directory Service",
+      "description": "Public-facing provider directory and search platform",
+      "endpoint": {
+        "resourceType": "Endpoint",
+        "id": "endpoint-002",
+        "status": "active",
+        "connectionType": {
+          "system": "http://terminology.hl7.org/CodeSystem/endpoint-connection-type",
+          "code": "rest-hook",
+          "display": "REST Hook"
+        },
+        "name": "Directory Service Webhook",
+        "address": "https://provider-directory.example.com/api/v1/webhooks/updates",
+        "payloadType": [
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/resource-types",
+                "code": "Practitioner"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/resource-types",
+                "code": "PractitionerRole"
+              }
+            ]
+          },
+          {
+            "coding": [
+              {
+                "system": "http://hl7.org/fhir/resource-types",
+                "code": "Organization"
+              }
+            ]
+          }
+        ],
+        "payloadMimeType": ["application/fhir+json"],
+        "webhookConfig": {
+          "eventTypes": [
+            "practitioner.created",
+            "practitioner.updated",
+            "practitioner.deleted",
+            "practitionerRole.created",
+            "practitionerRole.updated",
+            "practitionerRole.deleted",
+            "organization.created",
+            "organization.updated",
+            "organization.deleted"
+          ],
+          "retryPolicy": {
+            "maxAttempts": 3,
+            "backoffStrategy": "exponential",
+            "initialDelayMs": 500,
+            "maxDelayMs": 30000,
+            "retryableStatusCodes": [408, 429, 500, 502, 503, 504]
+          },
+          "timeout": 15000,
+          "includeFullResource": true,
+          "signatureAlgorithm": "HMAC-SHA512",
+          "secret": "directory-secret-key-xyz789",
+          "batchingEnabled": true,
+          "batchSize": 50,
+          "batchWindowMs": 5000
+        },
+        "authentication": {
+          "type": "bearer",
+          "credentials": {
+            "token": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          },
+          "headers": [
+            {
+              "key": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            }
+          ]
+        },
+        "rateLimit": {
+          "requestsPerMinute": 200,
+          "requestsPerHour": 10000,
+          "requestsPerDay": 100000,
+          "burstLimit": 500
+        },
+        "monitoring": {
+          "enabled": true,
+          "healthCheckUrl": "https://provider-directory.example.com/health/webhook",
+          "healthCheckIntervalMs": 180000,
+          "alertOnFailure": true,
+          "alertEmail": ["devops@provider-directory.example.com"],
+          "successRate": {
+            "threshold": 95,
+            "windowMinutes": 30
+          }
+        }
+      },
+      "subscriptionDetails": {
+        "purpose": "Maintain up-to-date provider directory for public search and referrals",
+        "dataUsage": "Public directory display, search indexing, and provider matching",
+        "contactEmail": "directory@provider-directory.example.com",
+        "technicalContact": "api@provider-directory.example.com",
+        "businessContact": "partnerships@provider-directory.example.com"
+      }
+    }
+  ]
+}

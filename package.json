@@ -1,0 +1,28 @@
+{
+  "name": "providercard-v2",
+  "version": "2.0.0",
+  "description": "FHIR-based provider directory and synchronization system",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example": "ts-node examples/basic-usage.ts"
+  },
+  "keywords": [
+    "fhir",
+    "provider",
+    "directory",
+    "credentialing",
+    "healthcare",
+    "nucc",
+    "taxonomy",
+    "webhooks"
+  ],
+  "author": "Eugene Vestel (FHIR IQ)",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0"
+  }
+}
