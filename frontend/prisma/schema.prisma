@@ -30,7 +30,7 @@ model Practitioner {
   // Contact
   email        String  @unique
   phone        String?
-  passwordHash String  @map("password_hash")
+  passwordHash String? @map("password_hash")
 
   // Address
   addressLine1 String? @map("address_line1")
@@ -41,10 +41,17 @@ model Practitioner {
   country      String? @default("US")
 
   // FHIR representation (stored as JSON)
-  fhirResource Json    @map("fhir_resource")
+  fhirResource Json?   @map("fhir_resource")
+
+  // Extended provider data (JSON)
+  specialties       Json? // Array of {code, display, isPrimary}
+  licenses          Json? // Array of {state, licenseNumber, type, status, expirationDate}
+  practiceLocations Json? @map("practice_locations") // Array of location objects
+  insurancePlans    Json? @map("insurance_plans") // Array of insurance plan objects
 
   // Metadata
   status       String  @default("pending_verification")
+  active       Boolean @default(true)
   completeness Int     @default(0)
   verified     Boolean @default(false)
 

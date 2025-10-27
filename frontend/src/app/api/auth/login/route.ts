@@ -29,6 +29,13 @@ export async function POST(request: Request) {
     }
 
     // Verify password
+    if (!practitioner.passwordHash) {
+      return NextResponse.json(
+        { detail: 'Invalid email or password' },
+        { status: 401 }
+      );
+    }
+
     const isValidPassword = await bcrypt.compare(password, practitioner.passwordHash);
 
     if (!isValidPassword) {
