@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getUserIdFromToken } from '@/lib/auth';
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY || '',
+// Use OpenAI SDK with Perplexity API
+const perplexity = new OpenAI({
+  apiKey: process.env.PERPLEXITY_API_KEY || '',
+  baseURL: 'https://api.perplexity.ai',
 });
 
 interface ScanResult {
@@ -186,28 +188,30 @@ CRITICAL INSTRUCTIONS:
 
 START YOUR WEB SEARCH NOW.`;
 
-    console.log('[Magic Scanner] Calling Claude API with web search instructions...');
+    console.log('[Magic Scanner] Calling Perplexity AI with web search...');
 
-    // Call Claude API with extended thinking for complex research
-    const message = await anthropic.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
-      max_tokens: 8000,
-      temperature: 0.3, // Lower temperature for more factual responses
+    // Call Perplexity AI - it has built-in web search capabilities
+    const response = await perplexity.chat.completions.create({
+      model: 'llama-3.1-sonar-large-128k-online', // Online model with web search
       messages: [
+        {
+          role: 'system',
+          content: 'You are a healthcare provider directory search assistant. You have web search capabilities and should use them to find real, current information about providers in directories, health systems, and insurance networks. Always search the web for actual data.'
+        },
         {
           role: 'user',
           content: searchPrompt,
         },
       ],
+      temperature: 0.2, // Lower temperature for more factual responses
+      max_tokens: 4000,
     });
 
-    console.log('[Magic Scanner] Claude API response received');
+    console.log('[Magic Scanner] Perplexity AI response received');
 
-    // Extract text content from Claude's response
-    const responseText = message.content
-      .filter((block) => block.type === 'text')
-      .map((block) => (block as any).text)
-      .join('\n');
+    // Extract text content from Perplexity's response
+    const responseText = response.choices[0]?.message?.content || '';
+    const citations = (response as any).citations || [];
 
     // Try to parse JSON from the response
     let scanResults: ScanResult[] = [];
@@ -266,7 +270,7 @@ START YOUR WEB SEARCH NOW.`;
     const nppesStaleCheck = checkNPPESStaleness(current_data?.updated_at);
 
     // Combine results
-    const response = {
+    const finalResponse = {
       success: true,
       npi,
       last_name,
@@ -274,6 +278,7 @@ START YOUR WEB SEARCH NOW.`;
       scan_results: scanResults,
       nppes_stale_check: nppesStaleCheck,
       ai_summary: responseText,
+      citations: citations, // Include Perplexity's web citations
       scanned_at: new Date().toISOString(),
       total_sources_checked: scanResults.length,
       total_discrepancies: scanResults.reduce(
@@ -285,10 +290,12 @@ START YOUR WEB SEARCH NOW.`;
     console.log(
       '[Magic Scanner] Scan complete. Found',
       scanResults.length,
-      'sources'
+      'sources with',
+      citations.length,
+      'citations'
     );
 
-    return NextResponse.json(response);
+    return NextResponse.json(finalResponse);
   } catch (error: any) {
     console.error('[Magic Scanner] Error:', error);
     return NextResponse.json(
