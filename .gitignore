@@ -38,6 +38,10 @@ out/
 # TypeScript
 *.tsbuildinfo
 
+# Allow frontend/src/lib (needed for Next.js)
+!frontend/src/lib/
+!web-app/lib/
+
 # IDE
 .vscode/
 .idea/
