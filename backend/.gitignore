@@ -4,6 +4,9 @@ __pycache__/
 *$py.class
 *.so
 .Python
+env/
+venv/
+ENV/
 build/
 develop-eggs/
 dist/
@@ -19,24 +22,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
-MANIFEST
-venv/
-env/
-ENV/
+
+# Environment
+.env
+.venv
 
 # Database
 *.db
 *.sqlite
 *.sqlite3
-
-# Node
-node_modules/
-.next/
-out/
-.vercel
-
-# TypeScript
-*.tsbuildinfo
 
 # IDE
 .vscode/
@@ -48,11 +42,3 @@ out/
 # OS
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-logs/
-
-# Environment
-.env
-.env.local
