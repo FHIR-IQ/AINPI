@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import bcrypt from 'bcryptjs';
 
 interface ProviderData {
   npi: string;
@@ -92,6 +93,11 @@ export async function POST(request: NextRequest) {
     // Create practitioner in database
     const fhirId = `Practitioner/${data.npi}`;
 
+    // Generate a temporary password hash for providers added via form
+    // They will need to reset password via email to login
+    const tempPassword = Math.random().toString(36).slice(-12);
+    const passwordHash = await bcrypt.hash(tempPassword, 10);
+
     const practitioner = await prisma.practitioner.create({
       data: {
         fhirId,
@@ -101,11 +107,13 @@ export async function POST(request: NextRequest) {
         middleName: data.middleName,
         email: data.email,
         phone: data.phone,
-        specialties: JSON.stringify(data.specialties),
-        licenses: JSON.stringify(data.licenses),
-        practiceLocations: JSON.stringify(data.practiceLocations),
-        insurancePlans: JSON.stringify(data.insurancePlans),
+        passwordHash, // Required for authentication system
+        specialties: data.specialties as any, // Prisma expects JSON, not string
+        licenses: data.licenses as any,
+        practiceLocations: data.practiceLocations as any,
+        insurancePlans: data.insurancePlans as any,
         active: true,
+        status: 'active',
       },
     });
 
