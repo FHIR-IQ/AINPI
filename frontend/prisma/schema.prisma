@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Practitioner {
+  id       String   @id @default(uuid())
+  fhirId   String   @unique @map("fhir_id")
+
+  // Core identifiers
+  npi       String?  @unique
+  deaNumber String?  @map("dea_number")
+  taxId     String?  @map("tax_id")
+
+  // Personal info
+  firstName  String   @map("first_name")
+  middleName String?  @map("middle_name")
+  lastName   String   @map("last_name")
+  suffix     String?
+  gender     String?
+
+  // Contact
+  email        String  @unique
+  phone        String?
+  passwordHash String  @map("password_hash")
+
+  // Address
+  addressLine1 String? @map("address_line1")
+  addressLine2 String? @map("address_line2")
+  city         String?
+  state        String?
+  postalCode   String? @map("postal_code")
+  country      String? @default("US")
+
+  // FHIR representation (stored as JSON)
+  fhirResource Json    @map("fhir_resource")
+
+  // Metadata
+  status       String  @default("pending_verification")
+  completeness Int     @default(0)
+  verified     Boolean @default(false)
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  roles     PractitionerRole[]
+  syncLogs  SyncLog[]
+  consents  Consent[]
+
+  @@index([email])
+  @@index([npi])
+  @@index([fhirId])
+  @@map("practitioners")
+}
+
+model PractitionerRole {
+  id             String   @id @default(uuid())
+  fhirId         String   @unique @map("fhir_id")
+  practitionerId String   @map("practitioner_id")
+
+  // Role details
+  specialtyCode    String? @map("specialty_code")
+  specialtyDisplay String? @map("specialty_display")
+
+  // Practice location
+  practiceName        String? @map("practice_name")
+  practiceAddressLine1 String? @map("practice_address_line1")
+  practiceAddressLine2 String? @map("practice_address_line2")
+  practiceCity        String? @map("practice_city")
+  practiceState       String? @map("practice_state")
+  practicePostalCode  String? @map("practice_postal_code")
+
+  // Accepted insurances (JSON array)
+  acceptedInsurances Json?   @map("accepted_insurances")
+
+  // License
+  licenseState      String?   @map("license_state")
+  licenseNumber     String?   @map("license_number")
+  licenseExpiration DateTime? @map("license_expiration")
+
+  // FHIR representation
+  fhirResource Json    @map("fhir_resource")
+
+  // Status
+  active Boolean @default(true)
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  practitioner Practitioner @relation(fields: [practitionerId], references: [id], onDelete: Cascade)
+
+  @@map("practitioner_roles")
+}
+
+model SyncLog {
+  id             String   @id @default(uuid())
+  practitionerId String   @map("practitioner_id")
+
+  // Sync details
+  targetSystem String  @map("target_system")
+  targetUrl    String? @map("target_url")
+  syncType     String  @default("manual") @map("sync_type")
+  eventType    String  @default("provider.updated") @map("event_type")
+
+  // Status
+  status String @default("pending")
+
+  // Request/Response
+  requestPayload Json?   @map("request_payload")
+  responseStatus Int?    @map("response_status")
+  responseBody   String? @map("response_body") @db.Text
+  errorMessage   String? @map("error_message") @db.Text
+
+  // Performance
+  durationMs Int? @map("duration_ms")
+
+  // Timestamp
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  practitioner Practitioner @relation(fields: [practitionerId], references: [id], onDelete: Cascade)
+
+  @@index([createdAt])
+  @@map("sync_logs")
+}
+
+model Consent {
+  id             String   @id @default(uuid())
+  practitionerId String   @map("practitioner_id")
+
+  // Recipient organization details
+  recipientName       String  @map("recipient_name")
+  recipientType       String  @map("recipient_type")
+  recipientId         String? @map("recipient_id")
+  recipientWebhookUrl String? @map("recipient_webhook_url")
+
+  // Authorization details
+  status String @default("active")
+  scope  Json?  // Array of scopes
+
+  // Purpose
+  purpose String? @db.Text
+
+  // Validity period
+  validFrom  DateTime? @map("valid_from")
+  validUntil DateTime? @map("valid_until")
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  practitioner Practitioner @relation(fields: [practitionerId], references: [id], onDelete: Cascade)
+
+  @@map("consents")
+}
