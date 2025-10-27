@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Activity, LayoutDashboard, UserPlus } from 'lucide-react';
+import { LogOut, User, Activity, LayoutDashboard, UserPlus, Sparkles } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -32,6 +32,13 @@ export default function Navbar() {
             >
               <User className="w-4 h-4 mr-2" />
               Profile
+            </button>
+            <button
+              onClick={() => router.push('/magic-scanner')}
+              className="flex items-center text-primary-600 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              Magic Scanner
             </button>
             <button
               onClick={() => router.push('/providers/new')}
