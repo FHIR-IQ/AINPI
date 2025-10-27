@@ -50,6 +50,7 @@ interface ScanResponse {
   scan_results: ScanResult[];
   nppes_stale_check: NPPESStaleCheck;
   ai_summary: string;
+  citations?: string[]; // Web citations from Perplexity
   scanned_at: string;
   total_sources_checked: number;
   total_discrepancies: number;
@@ -196,7 +197,7 @@ export default function MagicScannerPage() {
             <div className="text-sm text-blue-800">
               <p className="font-semibold mb-1">How it works:</p>
               <ul className="space-y-1 ml-4 list-disc">
-                <li>Claude AI searches major insurance directories and provider networks</li>
+                <li>Perplexity AI performs real web searches of insurance directories and provider networks</li>
                 <li>Compares found information with your current profile data</li>
                 <li>Flags discrepancies and outdated information</li>
                 <li>Checks NPPES data staleness and recommends sync if needed</li>
@@ -288,7 +289,7 @@ export default function MagicScannerPage() {
               <div className="card text-center py-12">
                 <Loader2 className="w-12 h-12 animate-spin text-primary-600 mx-auto mb-4" />
                 <p className="text-gray-600">
-                  Claude AI is scanning provider directories...
+                  Perplexity AI is searching provider directories across the web...
                 </p>
                 <p className="text-sm text-gray-500 mt-2">This may take 10-30 seconds</p>
               </div>
@@ -459,11 +460,34 @@ export default function MagicScannerPage() {
                 <div className="card">
                   <h3 className="text-lg font-semibold mb-3 flex items-center">
                     <Sparkles className="w-5 h-5 text-primary-600 mr-2" />
-                    AI Analysis Summary
+                    AI Web Search Analysis
                   </h3>
-                  <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-wrap font-mono max-h-96 overflow-y-auto">
+                  <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700 whitespace-pre-wrap max-h-96 overflow-y-auto">
                     {scanResults.ai_summary}
                   </div>
+
+                  {/* Citations */}
+                  {scanResults.citations && scanResults.citations.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                        <ExternalLink className="w-4 h-4 mr-1" />
+                        Web Sources ({scanResults.citations.length})
+                      </h4>
+                      <div className="space-y-1">
+                        {scanResults.citations.map((citation, i) => (
+                          <a
+                            key={i}
+                            href={citation}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary-600 hover:text-primary-700 block truncate"
+                          >
+                            [{i + 1}] {citation}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </>
             )}
@@ -473,7 +497,7 @@ export default function MagicScannerPage() {
                 <Sparkles className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-gray-500">Enter your information and click "Start Magic Scan"</p>
                 <p className="text-sm text-gray-400 mt-2">
-                  Claude AI will search provider directories for you
+                  Perplexity AI will search provider directories across the web for you
                 </p>
               </div>
             )}
