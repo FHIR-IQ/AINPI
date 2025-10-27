@@ -1,0 +1,233 @@
+{
+  "description": "Mock webhook delivery logs for demo",
+  "webhookDeliveries": [
+    {
+      "id": "wh-delivery-001",
+      "timestamp": "2025-10-24T16:30:45Z",
+      "subscriberId": "sub-001",
+      "subscriberName": "Credentialing Management System",
+      "endpoint": "https://credentialing-system.example.com/webhooks/provider-updates",
+      "eventType": "practitioner.updated",
+      "status": "delivered",
+      "httpStatus": 200,
+      "responseTime": "245ms",
+      "attempts": 1,
+      "payload": {
+        "eventType": "practitioner.updated",
+        "timestamp": "2025-10-24T16:30:45Z",
+        "resource": {
+          "resourceType": "Practitioner",
+          "id": "demo-001",
+          "meta": {
+            "versionId": "2",
+            "lastUpdated": "2025-10-24T16:30:45Z"
+          },
+          "identifier": [
+            {
+              "system": "http://hl7.org/fhir/sid/us-npi",
+              "value": "1234567890"
+            }
+          ],
+          "name": [{
+            "use": "official",
+            "family": "Johnson",
+            "given": ["Sarah", "Elizabeth"],
+            "prefix": ["Dr."],
+            "suffix": ["MD"]
+          }],
+          "telecom": [
+            {
+              "system": "email",
+              "value": "sarah.johnson@example.com"
+            },
+            {
+              "system": "phone",
+              "value": "617-555-0123"
+            }
+          ],
+          "specialty": [
+            {
+              "coding": [{
+                "system": "http://nucc.org/provider-taxonomy",
+                "code": "207RC0000X",
+                "display": "Cardiovascular Disease"
+              }]
+            },
+            {
+              "coding": [{
+                "system": "http://nucc.org/provider-taxonomy",
+                "code": "207R00000X",
+                "display": "Internal Medicine"
+              }]
+            }
+          ],
+          "qualification": [
+            {
+              "code": {
+                "text": "Medical License - Massachusetts"
+              },
+              "identifier": [{
+                "value": "MD123456"
+              }],
+              "period": {
+                "end": "2026-12-31"
+              },
+              "issuer": {
+                "display": "Massachusetts Board of Registration in Medicine"
+              }
+            },
+            {
+              "code": {
+                "text": "Medical License - New Hampshire"
+              },
+              "identifier": [{
+                "value": "NH789012"
+              }],
+              "period": {
+                "end": "2026-06-30"
+              },
+              "issuer": {
+                "display": "New Hampshire Board of Medicine"
+              }
+            }
+          ]
+        },
+        "changes": [
+          {
+            "field": "specialty",
+            "oldValue": [],
+            "newValue": ["207RC0000X", "207R00000X"]
+          },
+          {
+            "field": "qualification",
+            "oldValue": [],
+            "newValue": ["MA:MD123456", "NH:NH789012"]
+          },
+          {
+            "field": "address",
+            "oldValue": [],
+            "newValue": ["Boston, MA", "Cambridge, MA"]
+          }
+        ]
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "received": true,
+          "processedAt": "2025-10-24T16:30:45.245Z",
+          "message": "Provider update processed successfully",
+          "credentialingReviewTriggered": true
+        }
+      }
+    },
+    {
+      "id": "wh-delivery-002",
+      "timestamp": "2025-10-24T16:30:45Z",
+      "subscriberId": "sub-002",
+      "subscriberName": "Provider Directory Service",
+      "endpoint": "https://provider-directory.example.com/api/v1/webhooks/updates",
+      "eventType": "practitioner.updated",
+      "status": "delivered",
+      "httpStatus": 200,
+      "responseTime": "187ms",
+      "attempts": 1,
+      "payload": {
+        "eventType": "practitioner.updated",
+        "timestamp": "2025-10-24T16:30:45Z",
+        "resource": {
+          "resourceType": "Practitioner",
+          "id": "demo-001",
+          "npi": "1234567890",
+          "name": "Dr. Sarah Elizabeth Johnson, MD",
+          "specialties": [
+            "Cardiovascular Disease",
+            "Internal Medicine"
+          ],
+          "licenses": [
+            {
+              "state": "MA",
+              "number": "MD123456",
+              "expires": "2026-12-31"
+            },
+            {
+              "state": "NH",
+              "number": "NH789012",
+              "expires": "2026-06-30"
+            }
+          ],
+          "locations": [
+            {
+              "name": "Boston Medical Plaza",
+              "address": "123 Medical Plaza, Suite 200, Boston, MA 02101",
+              "isPrimary": true,
+              "phone": "617-555-0100"
+            },
+            {
+              "name": "Cambridge Satellite Office",
+              "address": "456 Healthcare Drive, Cambridge, MA 02138",
+              "isPrimary": false,
+              "phone": "617-555-0200"
+            }
+          ],
+          "insurancePlans": [
+            {
+              "carrier": "Aetna",
+              "plan": "Aetna PPO",
+              "acceptingNewPatients": true
+            },
+            {
+              "carrier": "Medicare",
+              "plan": "Traditional Medicare",
+              "acceptingNewPatients": true
+            },
+            {
+              "carrier": "Blue Cross Blue Shield of Massachusetts",
+              "plan": "BCBS HMO Blue",
+              "acceptingNewPatients": false
+            }
+          ]
+        }
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "success": true,
+          "message": "Directory updated",
+          "indexedAt": "2025-10-24T16:30:45.187Z",
+          "searchIndexUpdated": true,
+          "publicProfileUrl": "https://provider-directory.example.com/providers/demo-001"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "totalDeliveries": 2,
+    "successful": 2,
+    "failed": 0,
+    "averageResponseTime": "216ms",
+    "systemsNotified": [
+      "Credentialing Management System",
+      "Provider Directory Service"
+    ]
+  },
+  "displayForDemo": {
+    "recentWebhooks": [
+      {
+        "icon": "✅",
+        "subscriber": "Credentialing Management System",
+        "event": "practitioner.updated",
+        "status": "200 OK",
+        "time": "2 seconds ago",
+        "details": "Credentialing review triggered"
+      },
+      {
+        "icon": "✅",
+        "subscriber": "Provider Directory Service",
+        "event": "practitioner.updated",
+        "status": "200 OK",
+        "time": "2 seconds ago",
+        "details": "Search index updated"
+      }
+    ]
+  }
+}

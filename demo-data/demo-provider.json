@@ -1,0 +1,262 @@
+{
+  "name": "Demo Provider - Dr. Sarah Johnson",
+  "description": "Seed data for 3-minute demo walkthrough",
+  "initialState": {
+    "comment": "Provider profile before demo (partial data loaded)",
+    "practitioner": {
+      "resourceType": "Practitioner",
+      "id": "demo-001",
+      "npi": "1234567890",
+      "name": [{
+        "use": "official",
+        "family": "Johnson",
+        "given": ["Sarah", "Elizabeth"],
+        "prefix": ["Dr."],
+        "suffix": ["MD"]
+      }],
+      "gender": "female",
+      "birthDate": "1980-05-15",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "sarah.johnson@example.com",
+          "use": "work"
+        },
+        {
+          "system": "phone",
+          "value": "617-555-0123",
+          "use": "work"
+        }
+      ],
+      "specialties": [],
+      "licenses": [],
+      "practiceLocations": [],
+      "insurancePlans": []
+    }
+  },
+  "finalState": {
+    "comment": "Provider profile after demo (complete with all data)",
+    "practitioner": {
+      "resourceType": "Practitioner",
+      "id": "demo-001",
+      "npi": "1234567890",
+      "name": [{
+        "use": "official",
+        "family": "Johnson",
+        "given": ["Sarah", "Elizabeth"],
+        "prefix": ["Dr."],
+        "suffix": ["MD"]
+      }],
+      "gender": "female",
+      "birthDate": "1980-05-15",
+      "telecom": [
+        {
+          "system": "email",
+          "value": "sarah.johnson@example.com",
+          "use": "work"
+        },
+        {
+          "system": "phone",
+          "value": "617-555-0123",
+          "use": "work"
+        }
+      ],
+      "specialties": [
+        {
+          "code": "207RC0000X",
+          "display": "Cardiovascular Disease",
+          "classification": "Internal Medicine",
+          "specialization": "Cardiovascular Disease",
+          "isPrimary": true
+        },
+        {
+          "code": "207R00000X",
+          "display": "Internal Medicine",
+          "classification": "Internal Medicine",
+          "isPrimary": false
+        }
+      ],
+      "licenses": [
+        {
+          "id": "lic-001",
+          "state": "MA",
+          "licenseNumber": "MD123456",
+          "licenseType": "MD",
+          "status": "active",
+          "issueDate": "2010-07-01",
+          "expirationDate": "2026-12-31"
+        },
+        {
+          "id": "lic-002",
+          "state": "NH",
+          "licenseNumber": "NH789012",
+          "licenseType": "MD",
+          "status": "active",
+          "issueDate": "2012-01-15",
+          "expirationDate": "2026-06-30"
+        }
+      ],
+      "practiceLocations": [
+        {
+          "id": "loc-001",
+          "name": "Boston Medical Plaza",
+          "isPrimary": true,
+          "address": {
+            "line": ["123 Medical Plaza", "Suite 200"],
+            "city": "Boston",
+            "state": "MA",
+            "postalCode": "02101"
+          },
+          "phone": "617-555-0100"
+        },
+        {
+          "id": "loc-002",
+          "name": "Cambridge Satellite Office",
+          "isPrimary": false,
+          "address": {
+            "line": ["456 Healthcare Drive"],
+            "city": "Cambridge",
+            "state": "MA",
+            "postalCode": "02138"
+          },
+          "phone": "617-555-0200"
+        }
+      ],
+      "insurancePlans": [
+        {
+          "id": "plan-001",
+          "carrier": "Aetna",
+          "planName": "Aetna PPO",
+          "lob": "Commercial",
+          "networkStatus": "In-Network",
+          "acceptingNewPatients": true
+        },
+        {
+          "id": "plan-002",
+          "carrier": "Medicare",
+          "planName": "Traditional Medicare",
+          "lob": "Medicare",
+          "networkStatus": "In-Network",
+          "acceptingNewPatients": true
+        },
+        {
+          "id": "plan-003",
+          "carrier": "Blue Cross Blue Shield of Massachusetts",
+          "planName": "BCBS HMO Blue",
+          "lob": "Commercial",
+          "networkStatus": "In-Network",
+          "acceptingNewPatients": false
+        }
+      ]
+    }
+  },
+  "demoSteps": {
+    "step1_specialties": {
+      "action": "Add specialties with NUCC autocomplete",
+      "data": [
+        {
+          "searchTerm": "cardio",
+          "selected": "207RC0000X - Cardiovascular Disease",
+          "isPrimary": true
+        },
+        {
+          "searchTerm": "internal",
+          "selected": "207R00000X - Internal Medicine",
+          "isPrimary": false
+        }
+      ]
+    },
+    "step2_licenses": {
+      "action": "Add two medical licenses",
+      "data": [
+        {
+          "state": "Massachusetts",
+          "licenseNumber": "MD123456",
+          "type": "MD",
+          "status": "Active",
+          "expirationDate": "2026-12-31"
+        },
+        {
+          "state": "New Hampshire",
+          "licenseNumber": "NH789012",
+          "type": "MD",
+          "status": "Active",
+          "expirationDate": "2026-06-30"
+        }
+      ]
+    },
+    "step3_locations": {
+      "action": "Add two practice locations",
+      "data": [
+        {
+          "name": "Boston Medical Plaza",
+          "address": "123 Medical Plaza, Suite 200",
+          "city": "Boston",
+          "state": "MA",
+          "zip": "02101",
+          "isPrimary": true
+        },
+        {
+          "name": "Cambridge Satellite Office",
+          "address": "456 Healthcare Drive",
+          "city": "Cambridge",
+          "state": "MA",
+          "zip": "02138",
+          "isPrimary": false
+        }
+      ]
+    },
+    "step4_insurance": {
+      "action": "Add three insurance plans",
+      "data": [
+        {
+          "carrier": "Aetna",
+          "planName": "Aetna PPO",
+          "lob": "Commercial",
+          "status": "In-Network",
+          "acceptingNewPatients": true
+        },
+        {
+          "carrier": "Medicare",
+          "planName": "Traditional Medicare",
+          "lob": "Medicare",
+          "status": "In-Network",
+          "acceptingNewPatients": true
+        },
+        {
+          "carrier": "Blue Cross Blue Shield of Massachusetts",
+          "planName": "BCBS HMO Blue",
+          "lob": "Commercial",
+          "status": "In-Network",
+          "acceptingNewPatients": false
+        }
+      ]
+    },
+    "step5_save": {
+      "action": "Save provider profile",
+      "validationPasses": true,
+      "response": {
+        "status": 200,
+        "message": "Provider saved successfully",
+        "id": "demo-001"
+      }
+    },
+    "step6_sync": {
+      "action": "Trigger manual sync",
+      "subscriberSystems": [
+        {
+          "id": "sub-001",
+          "name": "Credentialing Management System",
+          "status": "Connected",
+          "lastSync": "2 minutes ago"
+        },
+        {
+          "id": "sub-002",
+          "name": "Provider Directory Service",
+          "status": "Connected",
+          "lastSync": "2 minutes ago"
+        }
+      ]
+    }
+  }
+}
