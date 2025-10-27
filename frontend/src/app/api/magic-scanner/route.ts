@@ -204,7 +204,7 @@ START YOUR WEB SEARCH NOW.`;
 
     // Call Perplexity AI - it has built-in web search capabilities
     const response = await perplexity.chat.completions.create({
-      model: 'llama-3.1-sonar-large-128k-online', // Online model with web search
+      model: 'sonar-pro', // Advanced search model with web search (2x more results than standard sonar)
       messages: [
         {
           role: 'system',
