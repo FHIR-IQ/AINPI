@@ -39,6 +39,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
     }
 
+    // Check if Perplexity API key is configured
+    if (!process.env.PERPLEXITY_API_KEY) {
+      console.error('[Magic Scanner] PERPLEXITY_API_KEY not configured');
+      return NextResponse.json(
+        {
+          success: false,
+          detail: 'Magic Scanner is not configured. Please add PERPLEXITY_API_KEY environment variable.',
+        },
+        { status: 500 }
+      );
+    }
+
     const { npi, last_name, state, current_data } = await request.json();
 
     if (!npi || !last_name) {
