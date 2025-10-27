@@ -5,9 +5,15 @@ import { calculateCompleteness } from '@/lib/fhirUtils';
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('[API] GET /api/practitioners/me - Request received');
+    console.log('[API] Authorization header:', request.headers.get('authorization') ? 'Present' : 'Missing');
+    console.log('[API] JWT_SECRET configured:', process.env.JWT_SECRET ? 'Yes' : 'No');
+
     const userId = getUserIdFromToken(request);
+    console.log('[API] User ID from token:', userId);
 
     if (!userId) {
+      console.log('[API] Unauthorized - no valid user ID from token');
       return NextResponse.json(
         { detail: 'Unauthorized' },
         { status: 401 }
