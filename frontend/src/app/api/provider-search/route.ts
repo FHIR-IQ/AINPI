@@ -82,14 +82,12 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Provider Search] Searching for NPI: ${npi}`);
 
-    // Get connected payer APIs (public endpoints only for now)
+    // Get connected payer APIs (public endpoints only - verified working)
     const connectedAPIs = await prisma.providerDirectoryAPI.findMany({
       where: {
         organizationType: 'insurance_payer',
-        requiresAuth: false, // Start with public endpoints only
-        status: {
-          in: ['active', 'tested', 'discovered'],
-        },
+        requiresAuth: false, // Only public endpoints
+        status: 'verified', // Only verified working endpoints
       },
       orderBy: {
         organizationName: 'asc',
@@ -175,12 +173,12 @@ async function searchPayerAPI(
     let searchUrl: string;
     const npiIdentifier = `http://hl7.org/fhir/sid/us-npi|${npi}`;
 
-    // Special handling for known endpoints
+    // Special handling for verified endpoints
     if (api.organizationName === 'Humana') {
-      // Humana endpoint already includes /Practitioner
-      searchUrl = `${api.apiEndpoint}?identifier=${encodeURIComponent(npiIdentifier)}`;
-    } else if (api.organizationName.includes('Anthem') || api.organizationName.includes('Elevance')) {
-      // Anthem/Elevance uses full FHIR path
+      // Humana: https://fhir.humana.com/api + /Practitioner?identifier=...
+      searchUrl = `${api.apiEndpoint}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
+    } else if (api.organizationName.includes('BlueCross') || api.organizationName.includes('BCBS')) {
+      // BCBS SC: https://fhir.bcbssc.com/r4/providerlisting + /Practitioner?identifier=...
       searchUrl = `${api.apiEndpoint}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
     } else {
       // Default FHIR pattern: append /Practitioner?identifier=
