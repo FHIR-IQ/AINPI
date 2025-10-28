@@ -3,10 +3,18 @@ import { getUserIdFromToken } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
 
-// Use OpenAI SDK with Perplexity API
+// Determine which AI provider to use (defaults to Perplexity)
+const AI_PROVIDER = process.env.AI_PROVIDER || 'perplexity'; // 'perplexity' or 'openai'
+
+// Initialize Perplexity API client
 const perplexity = new OpenAI({
   apiKey: process.env.PERPLEXITY_API_KEY || '',
   baseURL: 'https://api.perplexity.ai',
+});
+
+// Initialize OpenAI API client
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY || '',
 });
 
 interface ScanResult {
@@ -46,6 +54,60 @@ interface APIConnectionResult {
   tested_at: string;
 }
 
+// Helper function to call the appropriate AI provider
+async function callAIProvider(prompt: string, systemPrompt: string) {
+  if (AI_PROVIDER === 'openai') {
+    console.log('[Magic Scanner] Using OpenAI GPT-4o for API discovery...');
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o', // Latest GPT-4o model (was gpt-4-turbo)
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt,
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature: 0.2,
+      max_tokens: 4000,
+    });
+
+    return {
+      text: response.choices[0]?.message?.content || '',
+      citations: [], // OpenAI doesn't provide citations like Perplexity
+      provider: 'openai',
+      model: 'gpt-4o',
+    };
+  } else {
+    // Default to Perplexity
+    console.log('[Magic Scanner] Using Perplexity Sonar Pro for API discovery...');
+    const response = await perplexity.chat.completions.create({
+      model: 'sonar-pro',
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt,
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature: 0.2,
+      max_tokens: 4000,
+    });
+
+    return {
+      text: response.choices[0]?.message?.content || '',
+      citations: (response as any).citations || [],
+      provider: 'perplexity',
+      model: 'sonar-pro',
+    };
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     console.log('[Magic Scanner Enhanced] Request received');
@@ -55,13 +117,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if Perplexity API key is configured
-    if (!process.env.PERPLEXITY_API_KEY) {
+    // Check if AI provider API key is configured
+    if (AI_PROVIDER === 'perplexity' && !process.env.PERPLEXITY_API_KEY) {
       console.error('[Magic Scanner] PERPLEXITY_API_KEY not configured');
       return NextResponse.json(
         {
           success: false,
           detail: 'Magic Scanner is not configured. Please add PERPLEXITY_API_KEY environment variable.',
+        },
+        { status: 500 }
+      );
+    }
+
+    if (AI_PROVIDER === 'openai' && !process.env.OPENAI_API_KEY) {
+      console.error('[Magic Scanner] OPENAI_API_KEY not configured');
+      return NextResponse.json(
+        {
+          success: false,
+          detail: 'Magic Scanner is not configured. Please add OPENAI_API_KEY environment variable.',
         },
         { status: 500 }
       );
@@ -138,8 +211,8 @@ export async function POST(request: NextRequest) {
       console.error('[Magic Scanner] NPPES API error:', nppesError);
     }
 
-    // STEP 2: Use Perplexity AI to discover provider directories and their APIs
-    console.log('[Magic Scanner] Step 2: Discovering provider directory APIs via Perplexity AI...');
+    // STEP 2: Use AI to discover provider directories and their APIs
+    console.log(`[Magic Scanner] Step 2: Discovering provider directory APIs via ${AI_PROVIDER.toUpperCase()}...`);
 
     const apiDiscoveryPrompt = `You are an expert at finding provider directory APIs for healthcare organizations.
 
@@ -180,26 +253,14 @@ RETURN JSON ARRAY:
 Focus on finding at least 5-10 major organizations with their directory information.
 If an organization doesn't have a public API, note their web directory and mark api_type as "web_scrape".`;
 
-    const apiDiscoveryResponse = await perplexity.chat.completions.create({
-      model: 'sonar-pro',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are an expert at finding healthcare provider directory APIs. Search the web thoroughly for API documentation and provider directories.'
-        },
-        {
-          role: 'user',
-          content: apiDiscoveryPrompt,
-        },
-      ],
-      temperature: 0.2,
-      max_tokens: 4000,
-    });
+    const systemPrompt = 'You are an expert at finding healthcare provider directory APIs. Search the web thoroughly for API documentation and provider directories.';
 
-    const apiDiscoveryText = apiDiscoveryResponse.choices[0]?.message?.content || '';
-    const citations = (apiDiscoveryResponse as any).citations || [];
+    const aiResponse = await callAIProvider(apiDiscoveryPrompt, systemPrompt);
 
-    console.log('[Magic Scanner] Step 2 Complete: API discovery response received');
+    const apiDiscoveryText = aiResponse.text;
+    const citations = aiResponse.citations;
+
+    console.log(`[Magic Scanner] Step 2 Complete: API discovery response received from ${aiResponse.provider} (${aiResponse.model})`);
 
     // Parse discovered APIs
     let discoveredAPIs: any[] = [];
