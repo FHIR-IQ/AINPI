@@ -117,27 +117,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
     }
 
-    // Check if AI provider API key is configured
-    if (AI_PROVIDER === 'perplexity' && !process.env.PERPLEXITY_API_KEY) {
-      console.error('[Magic Scanner] PERPLEXITY_API_KEY not configured');
-      return NextResponse.json(
-        {
-          success: false,
-          detail: 'Magic Scanner is not configured. Please add PERPLEXITY_API_KEY environment variable.',
-        },
-        { status: 500 }
-      );
-    }
+    // Check if AI provider API key is configured (optional - will skip AI discovery if not available)
+    const hasAIProviderKey = (AI_PROVIDER === 'perplexity' && process.env.PERPLEXITY_API_KEY) ||
+                             (AI_PROVIDER === 'openai' && process.env.OPENAI_API_KEY);
 
-    if (AI_PROVIDER === 'openai' && !process.env.OPENAI_API_KEY) {
-      console.error('[Magic Scanner] OPENAI_API_KEY not configured');
-      return NextResponse.json(
-        {
-          success: false,
-          detail: 'Magic Scanner is not configured. Please add OPENAI_API_KEY environment variable.',
-        },
-        { status: 500 }
-      );
+    if (!hasAIProviderKey) {
+      console.log(`[Magic Scanner] No ${AI_PROVIDER.toUpperCase()} API key found - will use pre-seeded payers only`);
     }
 
     const { npi, last_name, state, current_data } = await request.json();
@@ -242,10 +227,22 @@ export async function POST(request: NextRequest) {
       notes: `Pre-seeded major payer API. ${api.notes || ''}`,
     }));
 
-    // STEP 2B: Use AI to discover additional provider directories and their APIs
-    console.log(`[Magic Scanner] Step 2B: Discovering additional APIs via ${AI_PROVIDER.toUpperCase()}...`);
+    // STEP 2B: Use AI to discover additional provider directories and their APIs (OPTIONAL)
+    let discoveredAPIsFromAI: any[] = [];
+    let citations: string[] = [];
+    let apiDiscoveryText = '';
 
-    const apiDiscoveryPrompt = `You are an expert at finding provider directory APIs for healthcare organizations.
+    // Check if AI API key is available
+    const hasAIKey = (AI_PROVIDER === 'perplexity' && process.env.PERPLEXITY_API_KEY) ||
+                      (AI_PROVIDER === 'openai' && process.env.OPENAI_API_KEY);
+
+    if (!hasAIKey) {
+      console.log('[Magic Scanner] Step 2B: Skipping AI discovery (no API key configured)');
+      console.log('[Magic Scanner] Using pre-seeded major payers only');
+    } else {
+      console.log(`[Magic Scanner] Step 2B: Discovering additional APIs via ${AI_PROVIDER.toUpperCase()}...`);
+
+      const apiDiscoveryPrompt = `You are an expert at finding provider directory APIs for healthcare organizations.
 
 TASK: Find health systems, insurance payers, and their provider directory APIs in ${state || 'the United States'}.
 
@@ -284,25 +281,25 @@ RETURN JSON ARRAY:
 Focus on finding at least 5-10 major organizations with their directory information.
 If an organization doesn't have a public API, note their web directory and mark api_type as "web_scrape".`;
 
-    const systemPrompt = 'You are an expert at finding healthcare provider directory APIs. Search the web thoroughly for API documentation and provider directories.';
+      const systemPrompt = 'You are an expert at finding healthcare provider directory APIs. Search the web thoroughly for API documentation and provider directories.';
 
-    const aiResponse = await callAIProvider(apiDiscoveryPrompt, systemPrompt);
+      const aiResponse = await callAIProvider(apiDiscoveryPrompt, systemPrompt);
 
-    const apiDiscoveryText = aiResponse.text;
-    const citations = aiResponse.citations;
+      apiDiscoveryText = aiResponse.text;
+      citations = aiResponse.citations;
 
-    console.log(`[Magic Scanner] Step 2B Complete: API discovery response received from ${aiResponse.provider} (${aiResponse.model})`);
+      console.log(`[Magic Scanner] Step 2B Complete: API discovery response received from ${aiResponse.provider} (${aiResponse.model})`);
 
-    // Parse AI-discovered APIs
-    let discoveredAPIsFromAI: any[] = [];
-    try {
-      const jsonMatch = apiDiscoveryText.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        discoveredAPIsFromAI = JSON.parse(jsonMatch[0]);
-        console.log('[Magic Scanner] Step 2B: Discovered', discoveredAPIsFromAI.length, 'additional organizations via AI');
+      // Parse AI-discovered APIs
+      try {
+        const jsonMatch = apiDiscoveryText.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          discoveredAPIsFromAI = JSON.parse(jsonMatch[0]);
+          console.log('[Magic Scanner] Step 2B: Discovered', discoveredAPIsFromAI.length, 'additional organizations via AI');
+        }
+      } catch (parseError) {
+        console.error('[Magic Scanner] Failed to parse API discovery results:', parseError);
       }
-    } catch (parseError) {
-      console.error('[Magic Scanner] Failed to parse API discovery results:', parseError);
     }
 
     // Combine pre-seeded APIs with AI-discovered APIs (pre-seeded takes priority)
