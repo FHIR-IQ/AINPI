@@ -211,8 +211,39 @@ export async function POST(request: NextRequest) {
       console.error('[Magic Scanner] NPPES API error:', nppesError);
     }
 
-    // STEP 2: Use AI to discover provider directories and their APIs
-    console.log(`[Magic Scanner] Step 2: Discovering provider directory APIs via ${AI_PROVIDER.toUpperCase()}...`);
+    // STEP 2A: Retrieve pre-seeded major payer APIs from database
+    console.log('[Magic Scanner] Step 2A: Retrieving pre-seeded major payer APIs from database...');
+    const preSeededAPIs = await prisma.providerDirectoryAPI.findMany({
+      where: {
+        organizationType: 'insurance_payer',
+        status: {
+          in: ['discovered', 'active', 'tested'],
+        },
+      },
+      orderBy: {
+        organizationName: 'asc',
+      },
+    });
+
+    console.log(`[Magic Scanner] Step 2A: Found ${preSeededAPIs.length} pre-configured payer APIs`);
+
+    // Convert pre-seeded APIs to discoveredAPIs format
+    let discoveredAPIsFromDB: any[] = preSeededAPIs.map(api => ({
+      organization_name: api.organizationName,
+      organization_type: api.organizationType,
+      state: api.state || 'US',
+      directory_url: api.apiDocUrl || '',
+      api_endpoint: api.apiEndpoint,
+      api_type: api.apiType,
+      api_doc_url: api.apiDocUrl,
+      supports_npi_search: api.supportsNpiSearch,
+      supports_name_search: api.supportsNameSearch,
+      requires_auth: api.requiresAuth,
+      notes: `Pre-seeded major payer API. ${api.notes || ''}`,
+    }));
+
+    // STEP 2B: Use AI to discover additional provider directories and their APIs
+    console.log(`[Magic Scanner] Step 2B: Discovering additional APIs via ${AI_PROVIDER.toUpperCase()}...`);
 
     const apiDiscoveryPrompt = `You are an expert at finding provider directory APIs for healthcare organizations.
 
@@ -260,19 +291,29 @@ If an organization doesn't have a public API, note their web directory and mark 
     const apiDiscoveryText = aiResponse.text;
     const citations = aiResponse.citations;
 
-    console.log(`[Magic Scanner] Step 2 Complete: API discovery response received from ${aiResponse.provider} (${aiResponse.model})`);
+    console.log(`[Magic Scanner] Step 2B Complete: API discovery response received from ${aiResponse.provider} (${aiResponse.model})`);
 
-    // Parse discovered APIs
-    let discoveredAPIs: any[] = [];
+    // Parse AI-discovered APIs
+    let discoveredAPIsFromAI: any[] = [];
     try {
       const jsonMatch = apiDiscoveryText.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
-        discoveredAPIs = JSON.parse(jsonMatch[0]);
-        console.log('[Magic Scanner] Step 2: Discovered', discoveredAPIs.length, 'organizations');
+        discoveredAPIsFromAI = JSON.parse(jsonMatch[0]);
+        console.log('[Magic Scanner] Step 2B: Discovered', discoveredAPIsFromAI.length, 'additional organizations via AI');
       }
     } catch (parseError) {
       console.error('[Magic Scanner] Failed to parse API discovery results:', parseError);
     }
+
+    // Combine pre-seeded APIs with AI-discovered APIs (pre-seeded takes priority)
+    const allDiscoveredAPIs = [...discoveredAPIsFromDB, ...discoveredAPIsFromAI];
+
+    // Deduplicate by organization name (prefer pre-seeded)
+    const discoveredAPIs = allDiscoveredAPIs.filter((api, index, self) =>
+      index === self.findIndex((t) => t.organization_name === api.organization_name)
+    );
+
+    console.log(`[Magic Scanner] Step 2 Complete: ${discoveredAPIsFromDB.length} pre-seeded + ${discoveredAPIsFromAI.length} AI-discovered = ${discoveredAPIs.length} total unique organizations`);
 
     // STEP 3: Test API connections for discovered endpoints
     console.log('[Magic Scanner] Step 3: Testing API connections...');
