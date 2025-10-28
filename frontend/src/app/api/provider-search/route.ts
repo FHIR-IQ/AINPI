@@ -170,12 +170,25 @@ async function searchPayerAPI(
   try {
     console.log(`[Provider Search] Searching ${api.organizationName}...`);
 
-    // Build search URL based on API's search param format
-    const searchParams = api.searchParamFormat as any;
-    const npiSearchParam = searchParams?.npi || 'Practitioner?identifier={npi}';
-    const searchUrl = `${api.apiEndpoint}/${npiSearchParam.replace('{npi}', npi)}`;
+    // Build search URL based on API endpoint and NPI
+    // FHIR standard uses: {base}/Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|{npi}
+    let searchUrl: string;
+    const npiIdentifier = `http://hl7.org/fhir/sid/us-npi|${npi}`;
 
-    console.log(`[Provider Search] URL: ${searchUrl}`);
+    // Special handling for known endpoints
+    if (api.organizationName === 'Humana') {
+      // Humana endpoint already includes /Practitioner
+      searchUrl = `${api.apiEndpoint}?identifier=${encodeURIComponent(npiIdentifier)}`;
+    } else if (api.organizationName.includes('Anthem') || api.organizationName.includes('Elevance')) {
+      // Anthem/Elevance uses full FHIR path
+      searchUrl = `${api.apiEndpoint}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
+    } else {
+      // Default FHIR pattern: append /Practitioner?identifier=
+      const baseUrl = api.apiEndpoint.replace(/\/$/, ''); // Remove trailing slash
+      searchUrl = `${baseUrl}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
+    }
+
+    console.log(`[Provider Search] ${api.organizationName}: ${searchUrl}`);
 
     // Make request with timeout
     const controller = new AbortController();
@@ -265,6 +278,8 @@ async function searchPayerAPI(
   } catch (error: any) {
     const responseTime = Date.now() - startTime;
 
+    console.error(`[Provider Search] ${api.organizationName} error:`, error.message);
+
     if (error.name === 'AbortError') {
       return {
         payer: api.organizationName,
@@ -275,11 +290,17 @@ async function searchPayerAPI(
       };
     }
 
+    // Provide more specific error messages
+    let errorMessage = error.message;
+    if (error.cause) {
+      errorMessage += ` (${error.cause.code || error.cause})`;
+    }
+
     return {
       payer: api.organizationName,
       found: false,
       status: 'error',
-      error_message: error.message,
+      error_message: errorMessage,
       response_time_ms: responseTime,
     };
   }
