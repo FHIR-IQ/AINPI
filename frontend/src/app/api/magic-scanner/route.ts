@@ -324,6 +324,27 @@ If an organization doesn't have a public API, note their web directory and mark 
     for (const api of discoveredAPIs) {
       const connectionResult = apiConnectionResults.find(r => r.organization_name === api.organization_name);
 
+      // Map connection_status to api_status
+      let apiStatus: 'discovered' | 'testing' | 'active' | 'inactive' | 'error' = 'discovered';
+      if (connectionResult) {
+        switch (connectionResult.connection_status) {
+          case 'connected':
+            apiStatus = 'active';
+            break;
+          case 'testing':
+            apiStatus = 'testing';
+            break;
+          case 'failed':
+            apiStatus = 'error';
+            break;
+          case 'no_api_found':
+            apiStatus = 'inactive';
+            break;
+          default:
+            apiStatus = 'discovered';
+        }
+      }
+
       scanResults.push({
         source: api.organization_name,
         type: api.organization_type === 'health_system' ? 'hospital_network' : 'insurance_directory',
@@ -331,7 +352,7 @@ If an organization doesn't have a public API, note their web directory and mark 
         discrepancies: [],
         url: api.directory_url,
         api_endpoint: api.api_endpoint,
-        api_status: connectionResult?.connection_status || 'discovered',
+        api_status: apiStatus,
       });
     }
 
