@@ -310,6 +310,11 @@ export default function ProviderSearchPage() {
                                 {formatName(result.data.name)}
                               </p>
                               <p className="text-gray-600">NPI: {result.data.npi}</p>
+                              {result.data.gender && (
+                                <p className="text-xs text-gray-500 capitalize">
+                                  {result.data.gender}
+                                </p>
+                              )}
                             </div>
 
                             {result.data.specialties && result.data.specialties.length > 0 && (
@@ -319,12 +324,65 @@ export default function ProviderSearchPage() {
                                   {result.data.specialties.map((spec, i) => (
                                     <span
                                       key={i}
-                                      className="inline-block px-2 py-0.5 text-xs bg-white rounded border border-gray-200"
+                                      className="inline-block px-2 py-0.5 text-xs bg-blue-50 text-blue-700 rounded border border-blue-200"
                                     >
                                       {spec.display}
                                     </span>
                                   ))}
                                 </div>
+                              </div>
+                            )}
+
+                            {result.data.networks && result.data.networks.length > 0 && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-700 mb-1">Networks:</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {result.data.networks.map((network, i) => (
+                                    <span
+                                      key={i}
+                                      className="inline-block px-2 py-0.5 text-xs bg-green-50 text-green-700 rounded border border-green-200"
+                                    >
+                                      {network}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {result.data.locations && result.data.locations.length > 0 && (
+                              <div>
+                                <p className="text-xs font-medium text-gray-700 mb-1">
+                                  Locations ({result.data.locations.length}):
+                                </p>
+                                <div className="space-y-1">
+                                  {result.data.locations.slice(0, 3).map((loc, i) => (
+                                    <div key={i} className="text-xs text-gray-600 flex items-start">
+                                      <Building2 className="w-3 h-3 mr-1 mt-0.5 flex-shrink-0" />
+                                      <span>{loc.name}</span>
+                                    </div>
+                                  ))}
+                                  {result.data.locations.length > 3 && (
+                                    <p className="text-xs text-gray-500 italic">
+                                      +{result.data.locations.length - 3} more locations
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {result.data.accepting_patients !== undefined && (
+                              <div>
+                                <span
+                                  className={`inline-block px-2 py-1 text-xs font-medium rounded ${
+                                    result.data.accepting_patients
+                                      ? 'bg-green-100 text-green-800'
+                                      : 'bg-yellow-100 text-yellow-800'
+                                  }`}
+                                >
+                                  {result.data.accepting_patients
+                                    ? '✓ Accepting New Patients'
+                                    : 'Existing Patients Only'}
+                                </span>
                               </div>
                             )}
 
