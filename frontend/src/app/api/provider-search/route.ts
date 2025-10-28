@@ -245,7 +245,35 @@ async function searchPayerAPI(
 
       // Extract practitioner data from FHIR Bundle
       const practitioner = entries[0].resource;
-      const providerData = parseFHIRPractitioner(practitioner);
+
+      // Get the practitioner ID for PractitionerRole lookup
+      const practitionerId = practitioner.id;
+      const practitionerFullUrl = entries[0].fullUrl;
+
+      // Query PractitionerRole for complete provider data (locations, specialties, networks)
+      let practitionerRoles: any[] = [];
+      try {
+        const roleUrl = `${api.apiEndpoint}/PractitionerRole?practitioner=${practitionerId}`;
+        const roleResponse = await fetch(roleUrl, {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/fhir+json, application/json',
+          },
+          signal: AbortSignal.timeout(5000), // 5 second timeout for role lookup
+        });
+
+        if (roleResponse.ok) {
+          const roleData = await roleResponse.json();
+          if (roleData.resourceType === 'Bundle' && roleData.entry) {
+            practitionerRoles = roleData.entry.map((e: any) => e.resource);
+          }
+        }
+      } catch (error) {
+        console.warn(`[Provider Search] Could not fetch PractitionerRole for ${api.organizationName}:`, error);
+        // Continue without role data
+      }
+
+      const providerData = await parseFHIRPractitioner(practitioner, practitionerRoles, api);
 
       return {
         payer: api.organizationName,
@@ -253,12 +281,12 @@ async function searchPayerAPI(
         status: 'success',
         data: providerData,
         response_time_ms: responseTime,
-        raw_fhir: practitioner, // Include raw FHIR for reference
+        raw_fhir: { practitioner, roles: practitionerRoles }, // Include raw FHIR for reference
       };
 
     } else if (fhirData.resourceType === 'Practitioner') {
       // Direct Practitioner resource response
-      const providerData = parseFHIRPractitioner(fhirData);
+      const providerData = await parseFHIRPractitioner(fhirData, [], api);
 
       return {
         payer: api.organizationName,
@@ -306,8 +334,13 @@ async function searchPayerAPI(
 
 /**
  * Parse FHIR Practitioner resource to our standardized format
+ * Enhanced to include PractitionerRole data for complete provider information
  */
-function parseFHIRPractitioner(practitioner: any): ProviderSearchResult['data'] {
+async function parseFHIRPractitioner(
+  practitioner: any,
+  practitionerRoles: any[] = [],
+  api?: any
+): Promise<ProviderSearchResult['data']> {
   // Extract name
   const nameObj = practitioner.name?.[0] || {};
   const name = {
@@ -327,9 +360,18 @@ function parseFHIRPractitioner(practitioner: any): ProviderSearchResult['data'] 
   // Extract gender
   const gender = practitioner.gender;
 
-  // Extract qualifications (specialties, board certifications)
+  // Extract phone/fax from practitioner telecom
+  const practitionerTelecom = practitioner.telecom || [];
+  const phones = practitionerTelecom
+    .filter((t: any) => t.system === 'phone')
+    .map((t: any) => t.value);
+  const faxes = practitionerTelecom
+    .filter((t: any) => t.system === 'fax')
+    .map((t: any) => t.value);
+
+  // Extract qualifications (specialties, board certifications) from Practitioner
   const qualifications = practitioner.qualification || [];
-  const specialties = qualifications.map((qual: any) => ({
+  const practitionerSpecialties = qualifications.map((qual: any) => ({
     code: qual.code?.coding?.[0]?.code || '',
     display: qual.code?.coding?.[0]?.display || qual.code?.text || '',
     system: qual.code?.coding?.[0]?.system || undefined,
@@ -340,20 +382,107 @@ function parseFHIRPractitioner(practitioner: any): ProviderSearchResult['data'] 
     (comm: any) => comm.coding?.[0]?.display || comm.text || ''
   ) || [];
 
-  // Note: Locations, networks, etc. typically come from PractitionerRole
-  // For now, we'll return what we can get from Practitioner resource
+  // Process PractitionerRole data for locations, specialties, networks
+  let allSpecialties = [...practitionerSpecialties];
+  let networks: string[] = [];
+  let acceptingPatients: boolean | undefined = undefined;
+  let locations: Array<{
+    name?: string;
+    address: {
+      line1?: string;
+      line2?: string;
+      city?: string;
+      state?: string;
+      zip?: string;
+    };
+    phone?: string;
+    fax?: string;
+  }> = [];
+
+  // Process each PractitionerRole
+  for (const role of practitionerRoles) {
+    // Extract specialties from role
+    if (role.specialty) {
+      const roleSpecialties = role.specialty.map((spec: any) => ({
+        code: spec.coding?.[0]?.code || '',
+        display: spec.coding?.[0]?.display || '',
+        system: spec.coding?.[0]?.system || undefined,
+      }));
+      allSpecialties = [...allSpecialties, ...roleSpecialties];
+    }
+
+    // Extract network information
+    const networkExtension = role.extension?.find(
+      (ext: any) => ext.url === 'http://hl7.org/fhir/us/davinci-pdex-plan-net/StructureDefinition/network-reference'
+    );
+    if (networkExtension?.valueReference?.display) {
+      networks.push(networkExtension.valueReference.display);
+    }
+
+    // Extract accepting patients status
+    const newPatientsExtension = role.extension?.find(
+      (ext: any) => ext.url === 'http://hl7.org/fhir/us/davinci-pdex-plan-net/StructureDefinition/newpatients'
+    );
+    const acceptingCode = newPatientsExtension?.extension?.[0]?.valueCodeableConcept?.coding?.[0]?.code;
+    if (acceptingCode === 'newpt' || acceptingCode === 'existptonly') {
+      acceptingPatients = acceptingCode === 'newpt';
+    }
+
+    // Extract location references
+    if (role.location && api) {
+      for (const locRef of role.location) {
+        try {
+          // Location display often has useful info
+          const locationDisplay = locRef.display || '';
+
+          // Optionally fetch full location details (commented out to avoid too many requests)
+          // In production, you might want to batch these or fetch on-demand
+          /*
+          const locationUrl = locRef.reference;
+          if (locationUrl.startsWith('http')) {
+            const locResponse = await fetch(locationUrl, {
+              headers: { 'Accept': 'application/fhir+json' },
+              signal: AbortSignal.timeout(3000),
+            });
+            if (locResponse.ok) {
+              const locData = await locResponse.json();
+              // Parse location address from locData.address
+            }
+          }
+          */
+
+          locations.push({
+            name: locationDisplay,
+            address: {}, // Would be populated from full Location resource
+            phone: phones[0] || undefined,
+            fax: faxes[0] || undefined,
+          });
+        } catch (error) {
+          // Skip this location if fetch fails
+          console.warn('Failed to fetch location:', error);
+        }
+      }
+    }
+  }
+
+  // Deduplicate specialties
+  const uniqueSpecialties = Array.from(
+    new Map(allSpecialties.map(s => [s.code, s])).values()
+  ).filter(s => s.code || s.display);
+
+  // Deduplicate networks
+  const uniqueNetworks = Array.from(new Set(networks));
 
   return {
     npi,
     name,
     gender,
-    specialties: specialties.length > 0 ? specialties : undefined,
+    specialties: uniqueSpecialties.length > 0 ? uniqueSpecialties : undefined,
     languages: languages.length > 0 ? languages : undefined,
-    // These fields typically require PractitionerRole lookup
-    locations: undefined,
-    networks: undefined,
-    accepting_patients: undefined,
-    board_certifications: undefined,
+    locations: locations.length > 0 ? locations : undefined,
+    networks: uniqueNetworks.length > 0 ? uniqueNetworks : undefined,
+    accepting_patients: acceptingPatients,
+    board_certifications: undefined, // Would need additional qualification data
     last_updated: practitioner.meta?.lastUpdated,
   };
 }
