@@ -173,3 +173,94 @@ model Consent {
 
   @@map("consents")
 }
+
+model ProviderDirectoryAPI {
+  id       String   @id @default(uuid())
+
+  // Organization details
+  organizationName String  @map("organization_name")
+  organizationType String  @map("organization_type") // 'health_system' | 'insurance_payer' | 'state_board'
+  state            String? // State if specific to one state
+
+  // API details
+  apiEndpoint      String  @map("api_endpoint")
+  apiType          String  @map("api_type") // 'rest' | 'fhir' | 'soap' | 'web_scrape'
+  apiDocUrl        String? @map("api_doc_url")
+
+  // Authentication
+  requiresAuth     Boolean @default(false) @map("requires_auth")
+  authType         String? @map("auth_type") // 'api_key' | 'oauth' | 'basic' | 'none'
+
+  // API capabilities
+  supportsNpiSearch   Boolean @default(false) @map("supports_npi_search")
+  supportsNameSearch  Boolean @default(false) @map("supports_name_search")
+  searchParamFormat   Json?   @map("search_param_format") // How to format search params
+
+  // Connection status
+  status              String  @default("discovered") // 'discovered' | 'tested' | 'active' | 'inactive' | 'error'
+  lastTestedAt        DateTime? @map("last_tested_at")
+  lastSuccessAt       DateTime? @map("last_success_at")
+  consecutiveFailures Int     @default(0) @map("consecutive_failures")
+
+  // Performance metrics
+  avgResponseTimeMs   Int?    @map("avg_response_time_ms")
+  successRate         Float?  @map("success_rate")
+
+  // Discovery info
+  discoveredBy        String  @map("discovered_by") // 'manual' | 'ai_scanner' | 'import'
+  discoverySource     String? @map("discovery_source")
+
+  // Metadata
+  notes               String? @db.Text
+
+  // Timestamps
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  scanResults MagicScanResult[]
+
+  @@unique([organizationName, apiEndpoint])
+  @@index([organizationType, state])
+  @@index([status])
+  @@map("provider_directory_apis")
+}
+
+model MagicScanResult {
+  id             String   @id @default(uuid())
+  practitionerId String?  @map("practitioner_id")
+
+  // Search criteria
+  npi            String
+  lastName       String   @map("last_name")
+  state          String?
+
+  // Results summary
+  totalSourcesChecked   Int     @map("total_sources_checked")
+  totalSourcesFound     Int     @map("total_sources_found")
+  totalDiscrepancies    Int     @map("total_discrepancies")
+
+  // NPPES staleness
+  nppesIsStale          Boolean? @map("nppes_is_stale")
+  nppesDaysSinceUpdate  Int?     @map("nppes_days_since_update")
+  nppesNeedsSync        Boolean? @map("nppes_needs_sync")
+
+  // Full results (JSON)
+  scanResults           Json     @map("scan_results")
+  aiSummary             String?  @map("ai_summary") @db.Text
+  citations             Json?    // Array of URLs
+
+  // API connections attempted
+  apiConnectionResults  Json?    @map("api_connection_results") // Array of connection test results
+
+  // Relations
+  apiId                 String?  @map("api_id")
+  api                   ProviderDirectoryAPI? @relation(fields: [apiId], references: [id])
+
+  // Timestamps
+  scannedAt DateTime @default(now()) @map("scanned_at")
+
+  @@index([npi])
+  @@index([scannedAt])
+  @@map("magic_scan_results")
+}

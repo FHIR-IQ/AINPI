@@ -32,6 +32,8 @@ interface ScanResult {
   }>;
   last_updated?: string;
   url?: string;
+  api_endpoint?: string;
+  api_status?: 'discovered' | 'testing' | 'active' | 'inactive' | 'error';
 }
 
 interface NPPESStaleCheck {
@@ -42,13 +44,35 @@ interface NPPESStaleCheck {
   recommendation: string;
 }
 
+interface APIConnectionResult {
+  organization_name: string;
+  organization_type: 'health_system' | 'insurance_payer' | 'state_board';
+  api_endpoint?: string;
+  api_type?: 'rest' | 'fhir' | 'soap' | 'web_scrape' | 'unknown';
+  connection_status: 'discovered' | 'testing' | 'connected' | 'failed' | 'no_api_found';
+  supports_npi_search?: boolean;
+  supports_name_search?: boolean;
+  response_time_ms?: number;
+  error_message?: string;
+  tested_at: string;
+}
+
 interface ScanResponse {
   success: boolean;
+  scan_id: string;
   npi: string;
   last_name: string;
   state?: string;
   scan_results: ScanResult[];
   nppes_stale_check: NPPESStaleCheck;
+  api_discovery: {
+    total_organizations_found: number;
+    organizations_with_apis: number;
+    successful_connections: number;
+    failed_connections: number;
+    no_api_available: number;
+  };
+  api_connection_results: APIConnectionResult[];
   ai_summary: string;
   citations?: string[]; // Web citations from Perplexity
   scanned_at: string;
@@ -164,6 +188,21 @@ export default function MagicScannerPage() {
     }
   };
 
+  const getConnectionStatusBadge = (status: string) => {
+    switch (status) {
+      case 'connected':
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"><CheckCircle className="w-3 h-3 mr-1" />Connected</span>;
+      case 'testing':
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"><Loader2 className="w-3 h-3 mr-1 animate-spin" />Testing</span>;
+      case 'failed':
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800"><AlertTriangle className="w-3 h-3 mr-1" />Failed</span>;
+      case 'no_api_found':
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800"><Info className="w-3 h-3 mr-1" />No API</span>;
+      default:
+        return <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800"><Clock className="w-3 h-3 mr-1" />Discovered</span>;
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen">
@@ -195,12 +234,13 @@ export default function MagicScannerPage() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-start">
             <Info className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
             <div className="text-sm text-blue-800">
-              <p className="font-semibold mb-1">How it works:</p>
+              <p className="font-semibold mb-1">How it works (3-Step Process):</p>
               <ul className="space-y-1 ml-4 list-disc">
-                <li>Perplexity AI performs real web searches of insurance directories and provider networks</li>
-                <li>Compares found information with your current profile data</li>
-                <li>Flags discrepancies and outdated information</li>
-                <li>Checks NPPES data staleness and recommends sync if needed</li>
+                <li><strong>Step 1:</strong> Searches NPPES database directly for provider information</li>
+                <li><strong>Step 2:</strong> Uses Perplexity AI to discover provider directories and their APIs</li>
+                <li><strong>Step 3:</strong> Tests each discovered API endpoint and records connection status</li>
+                <li>Builds a registry of working APIs for future automated data sync</li>
+                <li>Compares found information and flags discrepancies</li>
               </ul>
             </div>
           </div>
@@ -352,11 +392,23 @@ export default function MagicScannerPage() {
                 )}
 
                 {/* Summary Stats */}
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   <div className="card text-center">
-                    <p className="text-sm text-gray-600">Sources Checked</p>
+                    <p className="text-sm text-gray-600">Organizations Found</p>
                     <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {scanResults.total_sources_checked}
+                      {scanResults.api_discovery.total_organizations_found}
+                    </p>
+                  </div>
+                  <div className="card text-center">
+                    <p className="text-sm text-gray-600">APIs Connected</p>
+                    <p className="text-2xl font-bold text-green-600 mt-1">
+                      {scanResults.api_discovery.successful_connections}
+                    </p>
+                  </div>
+                  <div className="card text-center">
+                    <p className="text-sm text-gray-600">APIs Failed</p>
+                    <p className="text-2xl font-bold text-red-600 mt-1">
+                      {scanResults.api_discovery.failed_connections}
                     </p>
                   </div>
                   <div className="card text-center">
@@ -455,6 +507,82 @@ export default function MagicScannerPage() {
                     ))}
                   </div>
                 </div>
+
+                {/* API Connection Results */}
+                {scanResults.api_connection_results && scanResults.api_connection_results.length > 0 && (
+                  <div className="card">
+                    <h3 className="text-lg font-semibold mb-4 flex items-center">
+                      <Shield className="w-5 h-5 text-primary-600 mr-2" />
+                      API Discovery & Connection Tests
+                      <span className="ml-auto text-sm font-normal text-gray-600">
+                        {scanResults.api_discovery.successful_connections} of {scanResults.api_connection_results.length} connected
+                      </span>
+                    </h3>
+                    <div className="space-y-3">
+                      {scanResults.api_connection_results.map((apiResult, index) => (
+                        <div
+                          key={index}
+                          className="p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors"
+                        >
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-1">
+                                <h4 className="font-semibold text-gray-900">{apiResult.organization_name}</h4>
+                                {getConnectionStatusBadge(apiResult.connection_status)}
+                              </div>
+                              <p className="text-xs text-gray-500 capitalize">
+                                {apiResult.organization_type.replace('_', ' ')} • {apiResult.api_type || 'unknown'}
+                              </p>
+                            </div>
+                          </div>
+
+                          {apiResult.api_endpoint && (
+                            <div className="mb-2">
+                              <p className="text-xs text-gray-600 mb-1">API Endpoint:</p>
+                              <code className="block px-2 py-1 text-xs bg-white rounded border border-gray-200 text-gray-700 font-mono truncate">
+                                {apiResult.api_endpoint}
+                              </code>
+                            </div>
+                          )}
+
+                          <div className="flex flex-wrap gap-3 text-xs text-gray-600">
+                            {apiResult.supports_npi_search && (
+                              <span className="flex items-center">
+                                <CheckCircle className="w-3 h-3 mr-1 text-green-600" />
+                                NPI Search
+                              </span>
+                            )}
+                            {apiResult.supports_name_search && (
+                              <span className="flex items-center">
+                                <CheckCircle className="w-3 h-3 mr-1 text-green-600" />
+                                Name Search
+                              </span>
+                            )}
+                            {apiResult.response_time_ms && (
+                              <span className="flex items-center">
+                                <Clock className="w-3 h-3 mr-1" />
+                                {apiResult.response_time_ms}ms
+                              </span>
+                            )}
+                          </div>
+
+                          {apiResult.error_message && (
+                            <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-700">
+                              <AlertTriangle className="w-3 h-3 inline mr-1" />
+                              {apiResult.error_message}
+                            </div>
+                          )}
+
+                          {apiResult.connection_status === 'connected' && (
+                            <div className="mt-2 text-xs text-green-700 bg-green-50 px-2 py-1 rounded">
+                              ✓ API endpoint saved to registry for future automated sync
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* AI Summary */}
                 <div className="card">
