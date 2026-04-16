@@ -3,27 +3,25 @@
  * CMS National Provider Directory Ingestion Pipeline
  *
  * Downloads, decompresses (zstd), and streams NDJSON into BigQuery.
- * Also populates lean Supabase index tables for the web app.
+ * Stores the full FHIR resource as a JSON column + extracted flat fields for querying.
  *
  * Usage:
- *   npx tsx scripts/ingest-cms-npd.ts                    # Full ingestion
+ *   npx tsx scripts/ingest-cms-npd.ts                       # Full ingestion
  *   npx tsx scripts/ingest-cms-npd.ts --resource Practitioner
- *   npx tsx scripts/ingest-cms-npd.ts --local ./data     # From local files
- *   npx tsx scripts/ingest-cms-npd.ts --sample 10000     # First N records only
+ *   npx tsx scripts/ingest-cms-npd.ts --local ./data/cms-npd
+ *   npx tsx scripts/ingest-cms-npd.ts --sample 10000
  */
 
 import { BigQuery } from '@google-cloud/bigquery';
-import { createReadStream, existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, createReadStream } from 'fs';
 import { createInterface } from 'readline';
 import { execSync, spawn } from 'child_process';
-import { Writable } from 'stream';
 import path from 'path';
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
 const DATA_DIR = process.env.CMS_NPD_DATA_DIR || path.join(process.cwd(), 'data', 'cms-npd');
-const BATCH_SIZE = 5000; // Rows per BigQuery insert batch
-
+const BATCH_SIZE = 2000;
 const CMS_NPD_BASE_URL = 'https://directory.cms.gov/downloads';
 
 interface ResourceConfig {
@@ -33,20 +31,12 @@ interface ResourceConfig {
   extractFields: (resource: Record<string, unknown>) => Record<string, unknown>;
 }
 
-// Extract NPI from FHIR identifier array
 function extractNpi(identifiers: Array<{ system?: string; value?: string }> | undefined): string | null {
   if (!identifiers) return null;
   const npiId = identifiers.find(
     (id) => id.system === 'http://hl7.org/fhir/sid/us-npi' || id.system === 'http://terminology.hl7.org/NamingSystem/npi'
   );
   return npiId?.value || null;
-}
-
-// Extract reference ID (e.g., "Practitioner/123" -> "123")
-function extractRefId(ref: { reference?: string } | undefined): string | null {
-  if (!ref?.reference) return null;
-  const parts = ref.reference.split('/');
-  return parts[parts.length - 1] || null;
 }
 
 const RESOURCES: ResourceConfig[] = [
@@ -65,6 +55,8 @@ const RESOURCES: ResourceConfig[] = [
         _state: addresses?.[0]?.state || null,
         _city: addresses?.[0]?.city || null,
         _postal_code: addresses?.[0]?.postalCode || null,
+        _gender: (r.gender as string) || null,
+        _active: r.active === true,
       };
     },
   },
@@ -81,6 +73,7 @@ const RESOURCES: ResourceConfig[] = [
         _org_npi: organization?.identifier?.value || null,
         _specialty_code: specialties?.[0]?.coding?.[0]?.code || null,
         _specialty_display: specialties?.[0]?.coding?.[0]?.display || null,
+        _active: r.active === true,
       };
     },
   },
@@ -94,9 +87,11 @@ const RESOURCES: ResourceConfig[] = [
       const types = r.type as Array<{ coding?: Array<{ code?: string }> }> | undefined;
       return {
         _npi: extractNpi(identifiers),
+        _name: (r.name as string) || null,
         _state: addresses?.[0]?.state || null,
         _city: addresses?.[0]?.city || null,
         _org_type: types?.[0]?.coding?.[0]?.code || null,
+        _active: r.active === true,
       };
     },
   },
@@ -111,6 +106,8 @@ const RESOURCES: ResourceConfig[] = [
         _state: address?.state || null,
         _city: address?.city || null,
         _postal_code: address?.postalCode || null,
+        _name: (r.name as string) || null,
+        _status: (r.status as string) || null,
         _managing_org_npi: managingOrg?.identifier?.value || null,
       };
     },
@@ -122,11 +119,12 @@ const RESOURCES: ResourceConfig[] = [
     extractFields: (r) => {
       const connectionType = r.connectionType as { code?: string } | undefined;
       const managingOrg = r.managingOrganization as { display?: string } | undefined;
-      const mimeTypes = r.payloadMimeType as string[] | undefined;
       return {
         _connection_type_code: connectionType?.code || null,
+        _status: (r.status as string) || null,
+        _address: (r.address as string) || null,
+        _name: (r.name as string) || null,
         _managing_org_name: managingOrg?.display || null,
-        _mime_types: mimeTypes?.join(',') || null,
       };
     },
   },
@@ -135,102 +133,24 @@ const RESOURCES: ResourceConfig[] = [
     file: 'OrganizationAffiliation.ndjson.zst',
     tableName: 'organization_affiliation',
     extractFields: (r) => {
-      const org = r.organization as { identifier?: { value?: string } } | undefined;
-      const participating = r.participatingOrganization as { identifier?: { value?: string } } | undefined;
+      const org = r.organization as { reference?: string } | undefined;
+      const participating = r.participatingOrganization as { reference?: string } | undefined;
       return {
-        _org_npi: org?.identifier?.value || null,
-        _participating_org_npi: participating?.identifier?.value || null,
+        _org_ref: org?.reference || null,
+        _participating_org_ref: participating?.reference || null,
+        _active: r.active === true,
       };
     },
   },
 ];
 
-// Check if zstd is available
 function ensureZstd() {
   try {
     execSync('which zstd', { stdio: 'ignore' });
   } catch {
-    console.error('zstd is not installed. Install it:');
-    console.error('  macOS:        brew install zstd');
-    console.error('  Debian/Ubuntu: apt install zstd');
-    console.error('  Windows:      winget install Facebook.Zstandard');
+    console.error('zstd not installed. Run: brew install zstd');
     process.exit(1);
   }
-}
-
-// Download a file from CMS NPD
-async function downloadFile(filename: string, destDir: string): Promise<string> {
-  const destPath = path.join(destDir, filename);
-  if (existsSync(destPath)) {
-    console.log(`  File exists: ${destPath}`);
-    return destPath;
-  }
-
-  const url = `${CMS_NPD_BASE_URL}/${filename}`;
-  console.log(`  Downloading ${url}...`);
-
-  // Use curl for large file downloads with progress
-  execSync(`curl -L -o "${destPath}" "${url}"`, { stdio: 'inherit' });
-  return destPath;
-}
-
-// Stream decompress and parse NDJSON
-function createDecompressStream(filePath: string): ReturnType<typeof spawn> {
-  return spawn('zstdcat', [filePath], {
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-}
-
-// Process a resource type: decompress -> parse -> batch insert into BigQuery
-async function ingestResource(
-  config: ResourceConfig,
-  bigquery: BigQuery,
-  options: { localDir?: string; sampleSize?: number }
-) {
-  const { localDir, sampleSize } = options;
-  const dataDir = localDir || DATA_DIR;
-
-  if (!existsSync(dataDir)) {
-    mkdirSync(dataDir, { recursive: true });
-  }
-
-  const filePath = path.join(dataDir, config.file);
-
-  // Download if not local
-  if (!existsSync(filePath)) {
-    if (localDir) {
-      // Check for uncompressed file
-      const uncompressed = filePath.replace('.zst', '');
-      if (existsSync(uncompressed)) {
-        console.log(`  Using uncompressed file: ${uncompressed}`);
-        return ingestFromUncompressed(config, bigquery, uncompressed, sampleSize);
-      }
-      console.error(`  File not found: ${filePath}`);
-      return;
-    }
-    await downloadFile(config.file, dataDir);
-  }
-
-  console.log(`\nIngesting ${config.name} from ${filePath}...`);
-
-  const decompressor = createDecompressStream(filePath);
-  const rl = createInterface({ input: decompressor.stdout!, crlfDelay: Infinity });
-
-  await processLines(config, bigquery, rl, sampleSize);
-
-  decompressor.kill();
-}
-
-async function ingestFromUncompressed(
-  config: ResourceConfig,
-  bigquery: BigQuery,
-  filePath: string,
-  sampleSize?: number
-) {
-  console.log(`\nIngesting ${config.name} from ${filePath}...`);
-  const stream = createReadStream(filePath, { encoding: 'utf-8' });
-  const rl = createInterface({ input: stream, crlfDelay: Infinity });
-  await processLines(config, bigquery, rl, sampleSize);
 }
 
 async function processLines(
@@ -254,17 +174,11 @@ async function processLines(
       const resource = JSON.parse(line);
       const extracted = config.extractFields(resource);
 
-      // Merge extracted fields with the raw resource
-      // Store complex fields as JSON strings for BigQuery JSON type
-      const row: Record<string, unknown> = {};
-      for (const [key, value] of Object.entries(resource)) {
-        if (typeof value === 'object' && value !== null) {
-          row[key] = JSON.stringify(value);
-        } else {
-          row[key] = value;
-        }
-      }
-      Object.assign(row, extracted);
+      // Store full resource as JSON string + flat extracted fields
+      const row: Record<string, unknown> = {
+        resource: JSON.stringify(resource),
+        ...extracted,
+      };
 
       batch.push(row);
       totalRows++;
@@ -276,7 +190,7 @@ async function processLines(
           const bqErr = err as { errors?: unknown[] };
           errorCount += bqErr.errors?.length || 1;
         }
-        process.stdout.write(`\r  ${config.name}: ${totalRows.toLocaleString()} rows ingested (${errorCount} errors)`);
+        process.stdout.write(`\r  ${config.name}: ${totalRows.toLocaleString()} rows (${errorCount} errors)`);
         batch = [];
       }
     } catch {
@@ -284,7 +198,6 @@ async function processLines(
     }
   }
 
-  // Flush remaining batch
   if (batch.length > 0) {
     try {
       await table.insert(batch, { ignoreUnknownValues: true, skipInvalidRows: true });
@@ -294,55 +207,76 @@ async function processLines(
     }
   }
 
-  console.log(`\n  ${config.name}: Done. ${totalRows.toLocaleString()} total rows, ${errorCount} errors.`);
+  console.log(`\n  ${config.name}: Done. ${totalRows.toLocaleString()} total, ${errorCount} errors.`);
 }
 
-// Parse CLI args
+async function ingestResource(
+  config: ResourceConfig,
+  bigquery: BigQuery,
+  options: { localDir?: string; sampleSize?: number }
+) {
+  const dataDir = options.localDir || DATA_DIR;
+  if (!existsSync(dataDir)) mkdirSync(dataDir, { recursive: true });
+
+  const filePath = path.join(dataDir, config.file);
+
+  if (!existsSync(filePath)) {
+    const uncompressed = filePath.replace('.zst', '');
+    if (existsSync(uncompressed)) {
+      console.log(`\nIngesting ${config.name} from ${uncompressed}...`);
+      const stream = createReadStream(uncompressed, { encoding: 'utf-8' });
+      const rl = createInterface({ input: stream, crlfDelay: Infinity });
+      await processLines(config, bigquery, rl, options.sampleSize);
+      return;
+    }
+    // Download
+    const url = `${CMS_NPD_BASE_URL}/${config.file}`;
+    console.log(`  Downloading ${url}...`);
+    execSync(`curl -L -o "${filePath}" "${url}"`, { stdio: 'inherit' });
+  }
+
+  console.log(`\nIngesting ${config.name} from ${filePath}...`);
+  const decompressor = spawn('zstdcat', [filePath], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const rl = createInterface({ input: decompressor.stdout!, crlfDelay: Infinity });
+  await processLines(config, bigquery, rl, options.sampleSize);
+  decompressor.kill();
+}
+
 function parseArgs() {
   const args = process.argv.slice(2);
   const options: { resource?: string; localDir?: string; sampleSize?: number } = {};
-
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--resource' && args[i + 1]) {
-      options.resource = args[++i];
-    } else if (args[i] === '--local' && args[i + 1]) {
-      options.localDir = args[++i];
-    } else if (args[i] === '--sample' && args[i + 1]) {
-      options.sampleSize = parseInt(args[++i], 10);
-    }
+    if (args[i] === '--resource' && args[i + 1]) options.resource = args[++i];
+    else if (args[i] === '--local' && args[i + 1]) options.localDir = args[++i];
+    else if (args[i] === '--sample' && args[i + 1]) options.sampleSize = parseInt(args[++i], 10);
   }
-
   return options;
 }
 
 async function main() {
   ensureZstd();
-
   const options = parseArgs();
   const bigquery = new BigQuery({ projectId: PROJECT_ID });
 
   console.log('CMS National Provider Directory Ingestion');
   console.log(`Project: ${PROJECT_ID}, Dataset: ${DATASET_ID}`);
-  if (options.sampleSize) console.log(`Sample mode: first ${options.sampleSize.toLocaleString()} records per resource`);
-  if (options.localDir) console.log(`Local directory: ${options.localDir}`);
+  if (options.sampleSize) console.log(`Sample: first ${options.sampleSize.toLocaleString()} per resource`);
   console.log();
 
-  const resourcesToIngest = options.resource
+  const toIngest = options.resource
     ? RESOURCES.filter((r) => r.name.toLowerCase() === options.resource!.toLowerCase())
     : RESOURCES;
 
-  if (resourcesToIngest.length === 0) {
+  if (toIngest.length === 0) {
     console.error(`Unknown resource: ${options.resource}`);
-    console.error(`Available: ${RESOURCES.map((r) => r.name).join(', ')}`);
     process.exit(1);
   }
 
-  for (const config of resourcesToIngest) {
+  for (const config of toIngest) {
     await ingestResource(config, bigquery, options);
   }
 
   console.log('\nIngestion complete!');
-  console.log('Run the data quality dashboard to see metrics: npm run dev -> /data-quality');
 }
 
 main().catch((err) => {
