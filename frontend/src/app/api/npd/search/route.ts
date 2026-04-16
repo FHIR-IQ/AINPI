@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { queryBigQuery } from '@/lib/bigquery';
 
-/**
- * CMS National Provider Directory Search API
- *
- * Public search endpoint — no authentication required.
- * Schema: each table has a `resource` JSON column (full FHIR) + extracted `_*` flat fields.
- */
-
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
-const T = (name: string) => `\`${PROJECT_ID}.${DATASET_ID}.${name}\``;
+
+function table(name: string): string {
+  return PROJECT_ID + '.' + DATASET_ID + '.' + name;
+}
+
 const MAX_RESULTS = 50;
 
 interface SearchParams {
@@ -48,7 +45,7 @@ async function searchPractitioners(params: SearchParams) {
   }
   if (params.name) {
     conditions.push('(LOWER(_family_name) LIKE LOWER(@name) OR LOWER(_given_name) LIKE LOWER(@name))');
-    qp.name = `%${params.name}%`;
+    qp.name = '%' + params.name + '%';
   }
   if (params.state) {
     conditions.push('_state = @state');
@@ -56,22 +53,13 @@ async function searchPractitioners(params: SearchParams) {
   }
   if (params.city) {
     conditions.push('LOWER(_city) LIKE LOWER(@city)');
-    qp.city = `%${params.city}%`;
+    qp.city = '%' + params.city + '%';
   }
   if (conditions.length === 0) return [];
 
-  return queryBigQuery(`
-    SELECT
-      _npi AS npi, _family_name AS family_name, _given_name AS given_name,
-      _gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code,
-      _active AS active,
-      STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
-      STRING(JSON_EXTRACT(resource, '$.address')) AS address,
-      STRING(JSON_EXTRACT(resource, '$.qualification')) AS qualification
-    FROM ${T('practitioner')}
-    WHERE ${conditions.join(' AND ')}
-    LIMIT ${params.limit}
-  `, qp);
+  const sql = 'SELECT _npi AS npi, _family_name AS family_name, _given_name AS given_name, _gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, _active AS active, TO_JSON_STRING(JSON_EXTRACT(resource, "$.telecom")) AS telecom, TO_JSON_STRING(JSON_EXTRACT(resource, "$.address")) AS address, TO_JSON_STRING(JSON_EXTRACT(resource, "$.qualification")) AS qualification FROM `' + table('practitioner') + '` WHERE ' + conditions.join(' AND ') + ' LIMIT ' + params.limit;
+
+  return queryBigQuery(sql, qp);
 }
 
 async function searchOrganizations(params: SearchParams) {
@@ -84,7 +72,7 @@ async function searchOrganizations(params: SearchParams) {
   }
   if (params.org || params.name) {
     conditions.push('LOWER(_name) LIKE LOWER(@orgName)');
-    qp.orgName = `%${params.org || params.name}%`;
+    qp.orgName = '%' + (params.org || params.name) + '%';
   }
   if (params.state) {
     conditions.push('_state = @state');
@@ -92,16 +80,9 @@ async function searchOrganizations(params: SearchParams) {
   }
   if (conditions.length === 0) return [];
 
-  return queryBigQuery(`
-    SELECT
-      _npi AS npi, _name AS name, _org_type AS org_type,
-      _state AS state, _city AS city, _active AS active,
-      STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
-      STRING(JSON_EXTRACT(resource, '$.address')) AS address
-    FROM ${T('organization')}
-    WHERE ${conditions.join(' AND ')}
-    LIMIT ${params.limit}
-  `, qp);
+  const sql = 'SELECT _npi AS npi, _name AS name, _org_type AS org_type, _state AS state, _city AS city, _active AS active, TO_JSON_STRING(JSON_EXTRACT(resource, "$.telecom")) AS telecom, TO_JSON_STRING(JSON_EXTRACT(resource, "$.address")) AS address FROM `' + table('organization') + '` WHERE ' + conditions.join(' AND ') + ' LIMIT ' + params.limit;
+
+  return queryBigQuery(sql, qp);
 }
 
 async function searchLocations(params: SearchParams) {
@@ -114,24 +95,17 @@ async function searchLocations(params: SearchParams) {
   }
   if (params.city) {
     conditions.push('LOWER(_city) LIKE LOWER(@city)');
-    qp.city = `%${params.city}%`;
+    qp.city = '%' + params.city + '%';
   }
   if (params.name) {
     conditions.push('LOWER(_name) LIKE LOWER(@lname)');
-    qp.lname = `%${params.name}%`;
+    qp.lname = '%' + params.name + '%';
   }
   if (conditions.length === 0) return [];
 
-  return queryBigQuery(`
-    SELECT
-      _name AS name, _status AS status, _state AS state, _city AS city,
-      _postal_code AS postal_code, _managing_org_npi AS managing_org_npi,
-      STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
-      STRING(JSON_EXTRACT(resource, '$.address')) AS address
-    FROM ${T('location')}
-    WHERE ${conditions.join(' AND ')}
-    LIMIT ${params.limit}
-  `, qp);
+  const sql = 'SELECT _name AS name, _status AS status, _state AS state, _city AS city, _postal_code AS postal_code, _managing_org_npi AS managing_org_npi, TO_JSON_STRING(JSON_EXTRACT(resource, "$.telecom")) AS telecom, TO_JSON_STRING(JSON_EXTRACT(resource, "$.address")) AS address FROM `' + table('location') + '` WHERE ' + conditions.join(' AND ') + ' LIMIT ' + params.limit;
+
+  return queryBigQuery(sql, qp);
 }
 
 async function searchEndpoints(params: SearchParams) {
@@ -140,53 +114,30 @@ async function searchEndpoints(params: SearchParams) {
 
   if (params.org) {
     conditions.push('LOWER(_managing_org_name) LIKE LOWER(@org)');
-    qp.org = `%${params.org}%`;
+    qp.org = '%' + params.org + '%';
   }
   if (params.name) {
     conditions.push('LOWER(_name) LIKE LOWER(@ename)');
-    qp.ename = `%${params.name}%`;
+    qp.ename = '%' + params.name + '%';
   }
   if (conditions.length === 0) return [];
 
-  return queryBigQuery(`
-    SELECT
-      _name AS name, _status AS status,
-      _connection_type_code AS connection_type,
-      _address AS endpoint_url,
-      _managing_org_name AS managing_org
-    FROM ${T('endpoint')}
-    WHERE ${conditions.join(' AND ')}
-    LIMIT ${params.limit}
-  `, qp);
+  const sql = 'SELECT _name AS name, _status AS status, _connection_type_code AS connection_type, _address AS endpoint_url, _managing_org_name AS managing_org FROM `' + table('endpoint') + '` WHERE ' + conditions.join(' AND ') + ' LIMIT ' + params.limit;
+
+  return queryBigQuery(sql, qp);
 }
 
 async function getProviderProfile(npi: string) {
+  const practitionerSql = 'SELECT _npi AS npi, _family_name AS family_name, _given_name AS given_name, _gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, _active AS active, TO_JSON_STRING(JSON_EXTRACT(resource, "$.telecom")) AS telecom, TO_JSON_STRING(JSON_EXTRACT(resource, "$.address")) AS address, TO_JSON_STRING(JSON_EXTRACT(resource, "$.qualification")) AS qualification FROM `' + table('practitioner') + '` WHERE _npi = @npi LIMIT 1';
+
+  const rolesSql = 'SELECT _practitioner_npi, _org_npi, _specialty_code, _specialty_display, _active FROM `' + table('practitioner_role') + '` WHERE _practitioner_npi = @npi';
+
+  const endpointSql = 'SELECT e._name AS name, e._status AS status, e._connection_type_code AS connection_type, e._address AS endpoint_url, e._managing_org_name AS managing_org FROM `' + table('practitioner_role') + '` pr JOIN `' + table('organization') + '` o ON pr._org_npi = o._npi JOIN `' + table('endpoint') + '` e ON e._managing_org_name = o._name WHERE pr._practitioner_npi = @npi LIMIT 20';
+
   const [practitioners, roles, endpoints] = await Promise.all([
-    queryBigQuery(`
-      SELECT
-        _npi AS npi, _family_name AS family_name, _given_name AS given_name,
-        _gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code,
-        _active AS active,
-        STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
-        STRING(JSON_EXTRACT(resource, '$.address')) AS address,
-        STRING(JSON_EXTRACT(resource, '$.qualification')) AS qualification
-      FROM ${T('practitioner')} WHERE _npi = @npi LIMIT 1
-    `, { npi }),
-    queryBigQuery(`
-      SELECT _practitioner_npi, _org_npi, _specialty_code, _specialty_display, _active
-      FROM ${T('practitioner_role')} WHERE _practitioner_npi = @npi
-    `, { npi }),
-    queryBigQuery(`
-      SELECT e._name AS name, e._status AS status,
-             e._connection_type_code AS connection_type,
-             e._address AS endpoint_url,
-             e._managing_org_name AS managing_org
-      FROM ${T('practitioner_role')} pr
-      JOIN ${T('organization')} o ON pr._org_npi = o._npi
-      JOIN ${T('endpoint')} e ON e._managing_org_name = o._name
-      WHERE pr._practitioner_npi = @npi
-      LIMIT 20
-    `, { npi }),
+    queryBigQuery(practitionerSql, { npi }),
+    queryBigQuery(rolesSql, { npi }),
+    queryBigQuery(endpointSql, { npi }),
   ]);
 
   return {
@@ -246,7 +197,7 @@ export async function GET(req: NextRequest) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('NPD search error:', message);
     return NextResponse.json(
-      { error: `Search failed: ${message}` },
+      { error: 'Search failed: ' + message },
       { status: 500 }
     );
   }
