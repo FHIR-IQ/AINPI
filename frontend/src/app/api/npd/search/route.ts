@@ -5,16 +5,12 @@ import { queryBigQuery } from '@/lib/bigquery';
  * CMS National Provider Directory Search API
  *
  * Public search endpoint — no authentication required.
- * Queries BigQuery for provider, organization, location, and endpoint data.
- *
- * GET /api/npd/search?npi=1234567890
- * GET /api/npd/search?name=Smith&state=CA
- * GET /api/npd/search?org=Mayo+Clinic
- * GET /api/npd/search?specialty=207R00000X
+ * Schema: each table has a `resource` JSON column (full FHIR) + extracted `_*` flat fields.
  */
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
+const T = (name: string) => `\`${PROJECT_ID}.${DATASET_ID}.${name}\``;
 const MAX_RESULTS = 50;
 
 interface SearchParams {
@@ -42,172 +38,152 @@ function parseSearchParams(req: NextRequest): SearchParams {
   };
 }
 
-function sanitize(value: string): string {
-  // Prevent SQL injection in BigQuery parameterized queries
-  return value.replace(/['"\\;]/g, '');
-}
-
 async function searchPractitioners(params: SearchParams) {
   const conditions: string[] = [];
-  const queryParams: Record<string, string> = {};
+  const qp: Record<string, string> = {};
 
   if (params.npi) {
     conditions.push('_npi = @npi');
-    queryParams.npi = sanitize(params.npi);
+    qp.npi = params.npi;
   }
   if (params.name) {
     conditions.push('(LOWER(_family_name) LIKE LOWER(@name) OR LOWER(_given_name) LIKE LOWER(@name))');
-    queryParams.name = `%${sanitize(params.name)}%`;
+    qp.name = `%${params.name}%`;
   }
   if (params.state) {
     conditions.push('_state = @state');
-    queryParams.state = sanitize(params.state);
+    qp.state = params.state;
   }
   if (params.city) {
     conditions.push('LOWER(_city) LIKE LOWER(@city)');
-    queryParams.city = `%${sanitize(params.city)}%`;
+    qp.city = `%${params.city}%`;
   }
-
   if (conditions.length === 0) return [];
 
-  const sql = `
+  return queryBigQuery(`
     SELECT
-      id, _npi AS npi, _family_name AS family_name, _given_name AS given_name,
-      gender, _state AS state, _city AS city, _postal_code AS postal_code,
-      active,
-      TO_JSON_STRING(telecom) AS telecom,
-      TO_JSON_STRING(address) AS address,
-      TO_JSON_STRING(qualification) AS qualification
-    FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner\`
+      _npi AS npi, _family_name AS family_name, _given_name AS given_name,
+      _gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code,
+      _active AS active,
+      STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
+      STRING(JSON_EXTRACT(resource, '$.address')) AS address,
+      STRING(JSON_EXTRACT(resource, '$.qualification')) AS qualification
+    FROM ${T('practitioner')}
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
-  `;
-
-  return queryBigQuery(sql, queryParams);
+  `, qp);
 }
 
 async function searchOrganizations(params: SearchParams) {
   const conditions: string[] = [];
-  const queryParams: Record<string, string> = {};
+  const qp: Record<string, string> = {};
 
   if (params.npi) {
     conditions.push('_npi = @npi');
-    queryParams.npi = sanitize(params.npi);
+    qp.npi = params.npi;
   }
   if (params.org || params.name) {
-    conditions.push('LOWER(name) LIKE LOWER(@orgName)');
-    queryParams.orgName = `%${sanitize(params.org || params.name!)}%`;
+    conditions.push('LOWER(_name) LIKE LOWER(@orgName)');
+    qp.orgName = `%${params.org || params.name}%`;
   }
   if (params.state) {
     conditions.push('_state = @state');
-    queryParams.state = sanitize(params.state);
+    qp.state = params.state;
   }
-
   if (conditions.length === 0) return [];
 
-  const sql = `
+  return queryBigQuery(`
     SELECT
-      id, _npi AS npi, name, _org_type AS org_type,
-      _state AS state, _city AS city, active,
-      TO_JSON_STRING(telecom) AS telecom,
-      TO_JSON_STRING(address) AS address
-    FROM \`${PROJECT_ID}.${DATASET_ID}.organization\`
+      _npi AS npi, _name AS name, _org_type AS org_type,
+      _state AS state, _city AS city, _active AS active,
+      STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
+      STRING(JSON_EXTRACT(resource, '$.address')) AS address
+    FROM ${T('organization')}
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
-  `;
-
-  return queryBigQuery(sql, queryParams);
+  `, qp);
 }
 
 async function searchLocations(params: SearchParams) {
   const conditions: string[] = [];
-  const queryParams: Record<string, string> = {};
+  const qp: Record<string, string> = {};
 
   if (params.state) {
     conditions.push('_state = @state');
-    queryParams.state = sanitize(params.state);
+    qp.state = params.state;
   }
   if (params.city) {
     conditions.push('LOWER(_city) LIKE LOWER(@city)');
-    queryParams.city = `%${sanitize(params.city)}%`;
+    qp.city = `%${params.city}%`;
   }
   if (params.name) {
-    conditions.push('LOWER(name) LIKE LOWER(@name)');
-    queryParams.name = `%${sanitize(params.name)}%`;
+    conditions.push('LOWER(_name) LIKE LOWER(@lname)');
+    qp.lname = `%${params.name}%`;
   }
-
   if (conditions.length === 0) return [];
 
-  const sql = `
+  return queryBigQuery(`
     SELECT
-      id, name, status, _state AS state, _city AS city,
+      _name AS name, _status AS status, _state AS state, _city AS city,
       _postal_code AS postal_code, _managing_org_npi AS managing_org_npi,
-      TO_JSON_STRING(telecom) AS telecom,
-      TO_JSON_STRING(address) AS address,
-      TO_JSON_STRING(position) AS position
-    FROM \`${PROJECT_ID}.${DATASET_ID}.location\`
+      STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
+      STRING(JSON_EXTRACT(resource, '$.address')) AS address
+    FROM ${T('location')}
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
-  `;
-
-  return queryBigQuery(sql, queryParams);
+  `, qp);
 }
 
 async function searchEndpoints(params: SearchParams) {
   const conditions: string[] = [];
-  const queryParams: Record<string, string> = {};
+  const qp: Record<string, string> = {};
 
   if (params.org) {
     conditions.push('LOWER(_managing_org_name) LIKE LOWER(@org)');
-    queryParams.org = `%${sanitize(params.org)}%`;
+    qp.org = `%${params.org}%`;
   }
   if (params.name) {
-    conditions.push('LOWER(name) LIKE LOWER(@name)');
-    queryParams.name = `%${sanitize(params.name)}%`;
+    conditions.push('LOWER(_name) LIKE LOWER(@ename)');
+    qp.ename = `%${params.name}%`;
   }
-
   if (conditions.length === 0) return [];
 
-  const sql = `
+  return queryBigQuery(`
     SELECT
-      id, status, _connection_type_code AS connection_type,
-      name, address AS endpoint_url,
-      _managing_org_name AS managing_org,
-      _mime_types AS mime_types
-    FROM \`${PROJECT_ID}.${DATASET_ID}.endpoint\`
+      _name AS name, _status AS status,
+      _connection_type_code AS connection_type,
+      _address AS endpoint_url,
+      _managing_org_name AS managing_org
+    FROM ${T('endpoint')}
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
-  `;
-
-  return queryBigQuery(sql, queryParams);
+  `, qp);
 }
 
-// Get full provider profile: practitioner + roles + endpoints
 async function getProviderProfile(npi: string) {
   const [practitioners, roles, endpoints] = await Promise.all([
-    queryBigQuery(
-      `SELECT id, _npi AS npi, _family_name AS family_name, _given_name AS given_name,
-              gender, _state AS state, _city AS city, _postal_code AS postal_code,
-              active,
-              TO_JSON_STRING(telecom) AS telecom,
-              TO_JSON_STRING(address) AS address,
-              TO_JSON_STRING(qualification) AS qualification
-       FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner\` WHERE _npi = @npi LIMIT 1`,
-      { npi }
-    ),
-    queryBigQuery(
-      `SELECT id, _practitioner_npi, _org_npi, _specialty_code, _specialty_display, active
-       FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner_role\` WHERE _practitioner_npi = @npi`,
-      { npi }
-    ),
-    // Find endpoints through org affiliations
     queryBigQuery(`
-      SELECT e.id, e.status, e._connection_type_code AS connection_type,
-             e.name, e.address AS endpoint_url, e._managing_org_name AS managing_org,
-             e._mime_types AS mime_types
-      FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner_role\` pr
-      JOIN \`${PROJECT_ID}.${DATASET_ID}.organization\` o ON pr._org_npi = o._npi
-      JOIN \`${PROJECT_ID}.${DATASET_ID}.endpoint\` e ON e._managing_org_name = o.name
+      SELECT
+        _npi AS npi, _family_name AS family_name, _given_name AS given_name,
+        _gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code,
+        _active AS active,
+        STRING(JSON_EXTRACT(resource, '$.telecom')) AS telecom,
+        STRING(JSON_EXTRACT(resource, '$.address')) AS address,
+        STRING(JSON_EXTRACT(resource, '$.qualification')) AS qualification
+      FROM ${T('practitioner')} WHERE _npi = @npi LIMIT 1
+    `, { npi }),
+    queryBigQuery(`
+      SELECT _practitioner_npi, _org_npi, _specialty_code, _specialty_display, _active
+      FROM ${T('practitioner_role')} WHERE _practitioner_npi = @npi
+    `, { npi }),
+    queryBigQuery(`
+      SELECT e._name AS name, e._status AS status,
+             e._connection_type_code AS connection_type,
+             e._address AS endpoint_url,
+             e._managing_org_name AS managing_org
+      FROM ${T('practitioner_role')} pr
+      JOIN ${T('organization')} o ON pr._org_npi = o._npi
+      JOIN ${T('endpoint')} e ON e._managing_org_name = o._name
       WHERE pr._practitioner_npi = @npi
       LIMIT 20
     `, { npi }),
@@ -224,7 +200,6 @@ export async function GET(req: NextRequest) {
   try {
     const params = parseSearchParams(req);
 
-    // Validate at least one search param
     if (!params.npi && !params.name && !params.state && !params.city && !params.specialty && !params.org) {
       return NextResponse.json(
         { error: 'At least one search parameter required: npi, name, state, city, specialty, org' },
@@ -232,7 +207,6 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // If NPI provided, return full provider profile
     if (params.npi && params.type === 'all') {
       const profile = await getProviderProfile(params.npi);
       return NextResponse.json({
@@ -243,7 +217,6 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    // Run searches based on type
     const results: Record<string, unknown[]> = {};
 
     if (params.type === 'all' || params.type === 'practitioner') {
