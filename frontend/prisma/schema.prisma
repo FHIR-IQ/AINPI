@@ -264,3 +264,89 @@ model MagicScanResult {
   @@index([scannedAt])
   @@map("magic_scan_results")
 }
+
+// ============================================================
+// CMS National Provider Directory - Data Quality & Index Tables
+// These are lean index tables populated from BigQuery aggregations
+// for fast API serving. Full FHIR resources live in BigQuery.
+// ============================================================
+
+model NpdDataQualitySummary {
+  id                   String   @id @default(uuid())
+  releaseDate          String   @map("release_date") // "2026-04-09"
+  resourceType         String   @map("resource_type") // practitioner, organization, location, endpoint
+  totalRecords         Int      @map("total_records")
+  withPrimaryId        Int      @map("with_primary_id")
+  withName             Int      @map("with_name")
+  withAddress          Int      @map("with_address")
+  activeRecords        Int      @map("active_records")
+  idCompletenessPct    Float    @map("id_completeness_pct")
+  nameCompletenessPct  Float    @map("name_completeness_pct")
+  addressCompletenessPct Float  @map("address_completeness_pct")
+  updatedAt            DateTime @default(now()) @map("updated_at")
+
+  @@unique([releaseDate, resourceType])
+  @@map("npd_data_quality_summary")
+}
+
+model NpdStateMetrics {
+  id                String   @id @default(uuid())
+  releaseDate       String   @map("release_date")
+  state             String   // 2-letter state code
+  providerCount     Int      @map("provider_count")
+  orgCount          Int      @map("org_count")
+  locationCount     Int      @map("location_count")
+  endpointCount     Int      @map("endpoint_count")
+  activeProviders   Int      @map("active_providers")
+  npiCompleteness   Float    @map("npi_completeness") // pct
+  addressCompleteness Float  @map("address_completeness") // pct
+  updatedAt         DateTime @default(now()) @map("updated_at")
+
+  @@unique([releaseDate, state])
+  @@index([state])
+  @@map("npd_state_metrics")
+}
+
+model NpdSpecialtyMetrics {
+  id               String   @id @default(uuid())
+  releaseDate      String   @map("release_date")
+  specialtyCode    String   @map("specialty_code")
+  specialtyDisplay String   @map("specialty_display")
+  providerCount    Int      @map("provider_count")
+  orgCount         Int      @map("org_count")
+  topStates        Json?    @map("top_states") // Array of {state, count}
+  updatedAt        DateTime @default(now()) @map("updated_at")
+
+  @@unique([releaseDate, specialtyCode])
+  @@index([specialtyCode])
+  @@map("npd_specialty_metrics")
+}
+
+model NpdEndpointMetrics {
+  id               String   @id @default(uuid())
+  releaseDate      String   @map("release_date")
+  connectionType   String   @map("connection_type")
+  status           String
+  endpointCount    Int      @map("endpoint_count")
+  uniqueOrgs       Int      @map("unique_orgs")
+  updatedAt        DateTime @default(now()) @map("updated_at")
+
+  @@unique([releaseDate, connectionType, status])
+  @@map("npd_endpoint_metrics")
+}
+
+model NpdIngestionLog {
+  id            String   @id @default(uuid())
+  releaseDate   String   @map("release_date")
+  resourceType  String   @map("resource_type")
+  status        String   @default("pending") // pending, running, completed, failed
+  recordCount   Int?     @map("record_count")
+  errorCount    Int?     @map("error_count")
+  durationMs    Int?     @map("duration_ms")
+  errorMessage  String?  @map("error_message") @db.Text
+  startedAt     DateTime @default(now()) @map("started_at")
+  completedAt   DateTime? @map("completed_at")
+
+  @@index([releaseDate])
+  @@map("npd_ingestion_logs")
+}
