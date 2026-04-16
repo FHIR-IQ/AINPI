@@ -1,55 +1,30 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Activity, LayoutDashboard, UserPlus, Sparkles, Search, Database, BarChart3 } from 'lucide-react';
+import { LogOut, User, Activity, LayoutDashboard, Sparkles, Search, Database, BarChart3 } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    router.push('/login');
-  };
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem('token'));
+  }, []);
 
   return (
     <nav className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <h1 className="text-2xl font-bold text-primary-600">ProviderCard</h1>
+            <button onClick={() => router.push('/npd')} className="text-2xl font-bold text-primary-600">
+              AINPI
+            </button>
           </div>
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => router.push('/demo')}
-              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              <LayoutDashboard className="w-4 h-4 mr-2" />
-              Demo
-            </button>
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              <User className="w-4 h-4 mr-2" />
-              Profile
-            </button>
-            <button
-              onClick={() => router.push('/magic-scanner')}
-              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Magic Scanner
-            </button>
-            <button
-              onClick={() => router.push('/provider-search')}
-              className="flex items-center text-primary-600 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              <Search className="w-4 h-4 mr-2" />
-              Provider Search
-            </button>
-            <button
               onClick={() => router.push('/npd')}
-              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+              className="flex items-center text-primary-600 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium"
             >
               <Database className="w-4 h-4 mr-2" />
               NPD Search
@@ -62,26 +37,49 @@ export default function Navbar() {
               Data Quality
             </button>
             <button
-              onClick={() => router.push('/providers/new')}
+              onClick={() => router.push('/provider-search')}
               className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
             >
-              <UserPlus className="w-4 h-4 mr-2" />
-              New Provider
+              <Search className="w-4 h-4 mr-2" />
+              Payer Search
             </button>
             <button
-              onClick={() => router.push('/audit-log')}
+              onClick={() => router.push('/magic-scanner')}
               className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
             >
-              <Activity className="w-4 h-4 mr-2" />
-              Audit Log
+              <Sparkles className="w-4 h-4 mr-2" />
+              Magic Scanner
             </button>
-            <button
-              onClick={handleLogout}
-              className="flex items-center text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Logout
-            </button>
+            {isLoggedIn ? (
+              <>
+                <button
+                  onClick={() => router.push('/dashboard')}
+                  className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Profile
+                </button>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    setIsLoggedIn(false);
+                    router.push('/npd');
+                  }}
+                  className="flex items-center text-gray-700 hover:text-red-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => router.push('/login')}
+                className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </div>

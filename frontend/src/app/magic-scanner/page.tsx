@@ -101,7 +101,8 @@ export default function MagicScannerPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/login');
+        // No login required — user can fill form manually
+        setLoading(false);
         return;
       }
 
@@ -127,17 +128,13 @@ export default function MagicScannerPage() {
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
+
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers.Authorization = `Bearer ${token}`;
 
       const response = await fetch('/api/magic-scanner', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers,
         body: JSON.stringify({
           npi,
           last_name: lastName,

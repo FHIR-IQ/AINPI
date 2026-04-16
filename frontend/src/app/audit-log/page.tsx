@@ -21,7 +21,7 @@ export default function AuditLogPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/login');
+        setLoading(false);
         return;
       }
 

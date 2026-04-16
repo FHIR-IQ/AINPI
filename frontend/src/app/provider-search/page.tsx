@@ -84,17 +84,13 @@ export default function ProviderSearchPage() {
 
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        router.push('/login');
-        return;
-      }
+
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) headers.Authorization = `Bearer ${token}`;
 
       const response = await fetch('/api/provider-search', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
+        headers,
         body: JSON.stringify({ npi }),
       });
 
