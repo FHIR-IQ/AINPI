@@ -50,7 +50,7 @@ export default function DemoPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/login');
+        setLoading(false);
         return;
       }
 
