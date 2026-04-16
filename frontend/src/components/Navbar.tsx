@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Activity, LayoutDashboard, UserPlus, Sparkles, Search } from 'lucide-react';
+import { LogOut, User, Activity, LayoutDashboard, UserPlus, Sparkles, Search, Database, BarChart3 } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -46,6 +46,20 @@ export default function Navbar() {
             >
               <Search className="w-4 h-4 mr-2" />
               Provider Search
+            </button>
+            <button
+              onClick={() => router.push('/npd')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <Database className="w-4 h-4 mr-2" />
+              NPD Search
+            </button>
+            <button
+              onClick={() => router.push('/data-quality')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <BarChart3 className="w-4 h-4 mr-2" />
+              Data Quality
             </button>
             <button
               onClick={() => router.push('/providers/new')}
