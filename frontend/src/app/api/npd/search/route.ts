@@ -265,9 +265,10 @@ export async function GET(req: NextRequest) {
       release_date: '2026-04-09',
     });
   } catch (error) {
-    console.error('NPD search error:', error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('NPD search error:', message);
     return NextResponse.json(
-      { error: 'Search failed. Ensure BigQuery is configured and data is ingested.' },
+      { error: `Search failed: ${message}` },
       { status: 500 }
     );
   }
