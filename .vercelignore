@@ -1,0 +1,11 @@
+frontend/data/
+backend/
+web-app/
+demo-data/
+sample-data/
+specs/
+*.db
+*.sqlite
+.agents/
+.kiro/
+.claude/
