@@ -75,8 +75,9 @@ async function searchPractitioners(params: SearchParams) {
       id, _npi AS npi, _family_name AS family_name, _given_name AS given_name,
       gender, _state AS state, _city AS city, _postal_code AS postal_code,
       active,
-      JSON_EXTRACT_SCALAR(meta, '$.lastUpdated') AS last_updated,
-      telecom, address, qualification
+      TO_JSON_STRING(telecom) AS telecom,
+      TO_JSON_STRING(address) AS address,
+      TO_JSON_STRING(qualification) AS qualification
     FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner\`
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
@@ -108,7 +109,8 @@ async function searchOrganizations(params: SearchParams) {
     SELECT
       id, _npi AS npi, name, _org_type AS org_type,
       _state AS state, _city AS city, active,
-      telecom, address, endpoint
+      TO_JSON_STRING(telecom) AS telecom,
+      TO_JSON_STRING(address) AS address
     FROM \`${PROJECT_ID}.${DATASET_ID}.organization\`
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
@@ -140,7 +142,9 @@ async function searchLocations(params: SearchParams) {
     SELECT
       id, name, status, _state AS state, _city AS city,
       _postal_code AS postal_code, _managing_org_npi AS managing_org_npi,
-      telecom, address, position
+      TO_JSON_STRING(telecom) AS telecom,
+      TO_JSON_STRING(address) AS address,
+      TO_JSON_STRING(position) AS position
     FROM \`${PROJECT_ID}.${DATASET_ID}.location\`
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
@@ -169,8 +173,7 @@ async function searchEndpoints(params: SearchParams) {
       id, status, _connection_type_code AS connection_type,
       name, address AS endpoint_url,
       _managing_org_name AS managing_org,
-      _mime_types AS mime_types,
-      payloadType
+      _mime_types AS mime_types
     FROM \`${PROJECT_ID}.${DATASET_ID}.endpoint\`
     WHERE ${conditions.join(' AND ')}
     LIMIT ${params.limit}
@@ -185,8 +188,10 @@ async function getProviderProfile(npi: string) {
     queryBigQuery(
       `SELECT id, _npi AS npi, _family_name AS family_name, _given_name AS given_name,
               gender, _state AS state, _city AS city, _postal_code AS postal_code,
-              active, telecom, address, qualification,
-              JSON_EXTRACT_SCALAR(meta, '$.lastUpdated') AS last_updated
+              active,
+              TO_JSON_STRING(telecom) AS telecom,
+              TO_JSON_STRING(address) AS address,
+              TO_JSON_STRING(qualification) AS qualification
        FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner\` WHERE _npi = @npi LIMIT 1`,
       { npi }
     ),
