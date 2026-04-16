@@ -7,11 +7,17 @@ let bigqueryClient: BigQuery | null = null;
 
 export function getBigQueryClient(): BigQuery {
   if (!bigqueryClient) {
-    bigqueryClient = new BigQuery({
-      projectId: PROJECT_ID,
-      // Uses Application Default Credentials (ADC)
-      // Run: gcloud auth application-default login
-    });
+    const options: Record<string, unknown> = { projectId: PROJECT_ID };
+
+    // In production (Vercel), use service account key from env var
+    const keyJson = process.env.GCP_SERVICE_ACCOUNT_KEY;
+    if (keyJson) {
+      const credentials = JSON.parse(keyJson);
+      options.credentials = credentials;
+    }
+    // Locally, falls back to Application Default Credentials (ADC)
+
+    bigqueryClient = new BigQuery(options);
   }
   return bigqueryClient;
 }
