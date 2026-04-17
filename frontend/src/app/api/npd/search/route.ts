@@ -107,7 +107,7 @@ async function searchEndpoints(params: SearchParams) {
   if (where.length === 0) return [];
 
   return runQuery(
-    'SELECT _name AS name, _status AS status, _connection_type_code AS connection_type, ' +
+    'SELECT _name AS name, _status AS status, _connection_type AS connection_type, ' +
     '_address AS endpoint_url, _managing_org_name AS managing_org ' +
     'FROM ' + tbl('endpoint') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
@@ -131,7 +131,7 @@ async function getProviderProfile(npi: string) {
     ),
     runQuery(
       'SELECT e._name AS name, e._status AS status, ' +
-      'e._connection_type_code AS connection_type, e._address AS endpoint_url, ' +
+      'e._connection_type AS connection_type, e._address AS endpoint_url, ' +
       'e._managing_org_name AS managing_org ' +
       'FROM ' + tbl('practitioner_role') + ' pr ' +
       'JOIN ' + tbl('organization') + ' o ON pr._org_npi = o._npi ' +
