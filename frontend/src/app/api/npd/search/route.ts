@@ -56,7 +56,7 @@ async function searchPractitioners(params: SearchParams) {
     'SELECT _npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
     '_gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, ' +
     '_active AS active ' +
-    'FROM `' + tbl('practitioner') + '` ' +
+    'FROM ' + tbl('practitioner') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
   );
@@ -74,7 +74,7 @@ async function searchOrganizations(params: SearchParams) {
   return runQuery(
     'SELECT _npi AS npi, _name AS name, _org_type AS org_type, ' +
     '_state AS state, _city AS city, _active AS active ' +
-    'FROM `' + tbl('organization') + '` ' +
+    'FROM ' + tbl('organization') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
   );
@@ -92,7 +92,7 @@ async function searchLocations(params: SearchParams) {
   return runQuery(
     'SELECT _name AS name, _status AS status, _state AS state, _city AS city, ' +
     '_postal_code AS postal_code, _managing_org_npi AS managing_org_npi ' +
-    'FROM `' + tbl('location') + '` ' +
+    'FROM ' + tbl('location') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
   );
@@ -109,7 +109,7 @@ async function searchEndpoints(params: SearchParams) {
   return runQuery(
     'SELECT _name AS name, _status AS status, _connection_type_code AS connection_type, ' +
     '_address AS endpoint_url, _managing_org_name AS managing_org ' +
-    'FROM `' + tbl('endpoint') + '` ' +
+    'FROM ' + tbl('endpoint') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
   );
@@ -121,21 +121,21 @@ async function getProviderProfile(npi: string) {
       'SELECT _npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
       '_gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, ' +
       '_active AS active ' +
-      'FROM `' + tbl('practitioner') + '` WHERE _npi = @npi LIMIT 1',
+      'FROM ' + tbl('practitioner') + ' WHERE _npi = @npi LIMIT 1',
       { npi }
     ),
     runQuery(
       'SELECT _practitioner_npi, _org_npi, _specialty_code, _specialty_display, _active ' +
-      'FROM `' + tbl('practitioner_role') + '` WHERE _practitioner_npi = @npi',
+      'FROM ' + tbl('practitioner_role') + ' WHERE _practitioner_npi = @npi',
       { npi }
     ),
     runQuery(
       'SELECT e._name AS name, e._status AS status, ' +
       'e._connection_type_code AS connection_type, e._address AS endpoint_url, ' +
       'e._managing_org_name AS managing_org ' +
-      'FROM `' + tbl('practitioner_role') + '` pr ' +
-      'JOIN `' + tbl('organization') + '` o ON pr._org_npi = o._npi ' +
-      'JOIN `' + tbl('endpoint') + '` e ON e._managing_org_name = o._name ' +
+      'FROM ' + tbl('practitioner_role') + ' pr ' +
+      'JOIN ' + tbl('organization') + ' o ON pr._org_npi = o._npi ' +
+      'JOIN ' + tbl('endpoint') + ' e ON e._managing_org_name = o._name ' +
       'WHERE pr._practitioner_npi = @npi LIMIT 20',
       { npi }
     ),
