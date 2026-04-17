@@ -1,12 +1,13 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import WipBanner from '@/components/WipBanner'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ProviderCard - Provider Identity Hub',
-  description: 'Unified provider identity and information management',
+  title: 'AINPI - CMS National Provider Directory Explorer',
+  description: 'Experimental exploration of the CMS National Provider Directory public use files.',
 }
 
 export default function RootLayout({
@@ -16,7 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <WipBanner />
+        {children}
+      </body>
     </html>
   )
 }
