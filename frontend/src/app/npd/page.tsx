@@ -16,6 +16,7 @@ interface PractitionerResult {
   telecom: string;
   address: string;
   qualification: string;
+  all_states?: string;
 }
 
 interface OrganizationResult {
@@ -51,11 +52,23 @@ interface EndpointResult {
 }
 
 interface ProviderProfile {
-  practitioner: PractitionerResult | null;
+  practitioner: (PractitionerResult & {
+    addresses_json?: string;
+    telecom_json?: string;
+    qualification_json?: string;
+  }) | null;
   roles: Array<{
     _specialty_code: string;
     _specialty_display: string;
-    _org_npi: string;
+    _org_id?: string;
+    _active?: boolean;
+  }>;
+  specialties?: Array<{
+    code: string;
+    display: string;
+    role_count: number;
+    active_count: number;
+    org_ids: string[];
   }>;
   endpoints: EndpointResult[];
 }
@@ -71,6 +84,8 @@ interface SearchResponse {
   total_results?: number;
   source: string;
   release_date: string;
+  search_scope_notes?: string[];
+  query?: Record<string, string | undefined>;
 }
 
 export default function NpdSearchPage() {
@@ -307,8 +322,31 @@ export default function NpdSearchPage() {
                     <p>{formatPhone(profile.practitioner.telecom)}</p>
                   </div>
                   <div className="md:col-span-2">
-                    <p className="text-sm text-gray-500">Address</p>
-                    <p>{formatAddress(profile.practitioner.address)}</p>
+                    <p className="text-sm text-gray-500 mb-2">
+                      All Addresses{' '}
+                      {(() => {
+                        const parsed = parseJsonField(profile.practitioner.addresses_json || profile.practitioner.address) as Array<unknown> | null;
+                        return parsed && Array.isArray(parsed) ? <span className="text-xs text-gray-400">({parsed.length} on file)</span> : null;
+                      })()}
+                    </p>
+                    {(() => {
+                      const parsed = parseJsonField(profile.practitioner.addresses_json || profile.practitioner.address) as Array<{
+                        line?: string[]; city?: string; state?: string; postalCode?: string; use?: string; type?: string;
+                      }> | null;
+                      if (!parsed || !Array.isArray(parsed) || parsed.length === 0) return <p>-</p>;
+                      return (
+                        <ul className="space-y-1.5">
+                          {parsed.map((a, i) => (
+                            <li key={i} className="text-sm">
+                              <span className="inline-block bg-gray-100 text-gray-600 text-xs px-1.5 py-0.5 rounded mr-2 uppercase">
+                                {a.use || 'work'}{a.type ? ' · ' + a.type : ''}
+                              </span>
+                              {[...(a.line || []), a.city, a.state, a.postalCode].filter(Boolean).join(', ')}
+                            </li>
+                          ))}
+                        </ul>
+                      );
+                    })()}
                   </div>
                 </div>
               ) : (
@@ -316,23 +354,29 @@ export default function NpdSearchPage() {
               )}
             </div>
 
-            {profile.roles.length > 0 && (
+            {/* Specialties grouped view (dedup of raw roles) */}
+            {profile.specialties && profile.specialties.length > 0 && (
               <div className="card">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  Roles & Affiliations ({profile.roles.length})
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  Specialties &amp; Affiliations
                 </h3>
-                <div className="space-y-2">
-                  {profile.roles.map((role, i) => (
-                    <div key={i} className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <div>
-                        <p className="font-medium">
-                          {role._specialty_display || 'General Practice'}
-                        </p>
-                        <p className="text-sm text-gray-500 font-mono">{role._specialty_code}</p>
+                <p className="text-xs text-gray-500 mb-3">
+                  {profile.specialties.length} distinct {profile.specialties.length === 1 ? 'specialty' : 'specialties'} across{' '}
+                  {profile.roles.length} PractitionerRole records. Same specialty at multiple organizations is correct FHIR — each row is one practitioner-at-org relationship.
+                </p>
+                <div className="space-y-3">
+                  {profile.specialties.map((s) => (
+                    <div key={s.code} className="border border-gray-100 rounded-lg p-3">
+                      <div className="flex justify-between items-start gap-4">
+                        <div>
+                          <p className="font-medium text-gray-900">{s.display || 'General Practice'}</p>
+                          <p className="text-xs text-gray-500 font-mono">{s.code}</p>
+                        </div>
+                        <div className="text-right text-xs">
+                          <p className="font-semibold text-gray-800">{s.role_count} role{s.role_count !== 1 ? 's' : ''}</p>
+                          <p className="text-gray-500">{s.active_count} active &middot; {s.org_ids.length} org{s.org_ids.length !== 1 ? 's' : ''}</p>
+                        </div>
                       </div>
-                      {role._org_npi && (
-                        <span className="text-sm text-gray-500">Org NPI: {role._org_npi}</span>
-                      )}
                     </div>
                   ))}
                 </div>
@@ -383,9 +427,53 @@ export default function NpdSearchPage() {
         {/* General Search Results */}
         {searchData && (
           <div className="space-y-6">
-            <p className="text-sm text-gray-500">
-              {results?.total_results} results found
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-gray-500">
+                <span className="font-semibold text-gray-700">{results?.total_results ?? 0}</span> results found
+              </p>
+              {results?.search_scope_notes && results.search_scope_notes.length > 0 && (
+                <details className="text-xs text-gray-500">
+                  <summary className="cursor-pointer hover:text-gray-700">Search scope</summary>
+                  <ul className="mt-1 space-y-0.5 list-disc list-inside">
+                    {results.search_scope_notes.map((n, i) => <li key={i}>{n}</li>)}
+                  </ul>
+                </details>
+              )}
+            </div>
+
+            {/* Empty-state: zero results across every result type */}
+            {results?.total_results === 0 && (
+              <div className="card bg-amber-50 border border-amber-200">
+                <h3 className="text-base font-semibold text-gray-900 mb-2">No matches in NPD for this query</h3>
+                <p className="text-sm text-gray-700 mb-3">
+                  The CMS National Provider Directory only contains entities that hold a Type-1 (individual) or Type-2
+                  (organization) NPI. Some common reasons a match might be missing:
+                </p>
+                <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside mb-3">
+                  <li>
+                    <strong>Parent / holding companies</strong> often have no NPI — the operating subsidiaries do. Try
+                    searching for the hospital or medical-group subsidiary by name instead.
+                  </li>
+                  <li>
+                    <strong>Aliases / DBAs</strong> are not populated by CMS in this release (0% of 3.6M organizations
+                    have any <code>alias[]</code> entries). Use the legal registered name you see in NPPES.
+                  </li>
+                  <li>
+                    <strong>Name variations</strong> — NPPES is self-attested. Try last name alone, or strip suffixes like
+                    &quot;MD&quot; / &quot;PA-C&quot;.
+                  </li>
+                  <li>
+                    <strong>State filter</strong> — we match your state against any address in the record&apos;s{' '}
+                    <code>address[]</code> array, but if the practitioner&apos;s address list is empty we can&apos;t filter them in.
+                  </li>
+                </ul>
+                <p className="text-xs text-gray-500">
+                  See <a className="underline text-primary-600" href="/insights">/insights</a> for the full
+                  provenance analysis — NPD today is structurally a FHIR improvement over NPPES, not yet a provenance
+                  improvement.
+                </p>
+              </div>
+            )}
 
             {searchData.practitioners && searchData.practitioners.length > 0 && (
               <div className="card">
@@ -422,7 +510,12 @@ export default function NpdSearchPage() {
                             {p.given_name} {p.family_name}
                           </td>
                           <td className="py-2 pr-4">
-                            {p.city}, {p.state} {p.postal_code}
+                            <div>{p.city}, {p.state} {p.postal_code}</div>
+                            {p.all_states && p.all_states.split(',').filter((s) => s !== p.state).length > 0 && (
+                              <div className="text-xs text-gray-400 mt-0.5">
+                                also in: {p.all_states.split(',').filter((s) => s !== p.state).join(', ')}
+                              </div>
+                            )}
                           </td>
                           <td className="py-2 pr-4">
                             <span
