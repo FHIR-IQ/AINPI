@@ -27,29 +27,33 @@ export async function GET(req: NextRequest) {
 
     const pattern = '%' + org.toLowerCase() + '%';
 
-    // Match organizations by name
-    const orgs = await runQuery(
-      'SELECT _id, _npi, _name, _state, _city, _active ' +
-      'FROM ' + tbl('organization') + ' ' +
-      'WHERE LOWER(_name) LIKE @pattern ORDER BY _name LIMIT 500',
-      { pattern }
-    ) as Array<{ _id: string; _npi: string | null; _name: string; _state: string | null; _city: string | null; _active: boolean | null }>;
+    // Get totals + state distribution with server-side aggregation (no row limit)
+    const [totalsAgg, stateAgg, sampleOrgs] = await Promise.all([
+      runQuery(
+        'SELECT COUNT(*) AS total_orgs, ' +
+        'COUNTIF(_active = true) AS active_orgs, ' +
+        'COUNTIF(_active = false) AS inactive_orgs ' +
+        'FROM ' + tbl('organization') + ' WHERE LOWER(_name) LIKE @pattern',
+        { pattern }
+      ) as Promise<Array<{ total_orgs: string | number; active_orgs: string | number; inactive_orgs: string | number }>>,
+      runQuery(
+        'SELECT COALESCE(_state, "unknown") AS state, COUNT(*) AS c ' +
+        'FROM ' + tbl('organization') + ' WHERE LOWER(_name) LIKE @pattern ' +
+        'GROUP BY state ORDER BY c DESC LIMIT 15',
+        { pattern }
+      ) as Promise<Array<{ state: string; c: string | number }>>,
+      runQuery(
+        'SELECT _id, _npi, _name, _state, _city, _active ' +
+        'FROM ' + tbl('organization') + ' ' +
+        'WHERE LOWER(_name) LIKE @pattern ORDER BY _name LIMIT 20',
+        { pattern }
+      ) as Promise<Array<{ _id: string; _npi: string | null; _name: string; _state: string | null; _city: string | null; _active: boolean | null }>>,
+    ]);
 
-    const totalOrgs = orgs.length;
-    const activeOrgs = orgs.filter((o) => o._active === true).length;
-    const inactiveOrgs = orgs.filter((o) => o._active === false).length;
-
-    // Group by state
-    const byState: Record<string, number> = {};
-    orgs.forEach((o) => {
-      const s = o._state || 'unknown';
-      byState[s] = (byState[s] || 0) + 1;
-    });
-
-    const stateDistribution = Object.entries(byState)
-      .map(([state, count]) => ({ state, count }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 15);
+    const totalOrgs = Number(totalsAgg[0]?.total_orgs || 0);
+    const activeOrgs = Number(totalsAgg[0]?.active_orgs || 0);
+    const inactiveOrgs = Number(totalsAgg[0]?.inactive_orgs || 0);
+    const stateDistribution = stateAgg.map((r) => ({ state: r.state, count: Number(r.c) }));
 
     // Build practitioner/role/location/endpoint counts
     const [practitionerCounts, endpoints, locs, topSpecialties, endpointSample] = await Promise.all([
@@ -113,7 +117,7 @@ export async function GET(req: NextRequest) {
         display: s.display,
         unique_practitioners: Number(s.unique_pracs),
       })),
-      sample_organizations: orgs.slice(0, 20).map((o) => ({
+      sample_organizations: sampleOrgs.slice(0, 20).map((o) => ({
         name: o._name,
         npi: o._npi,
         state: o._state,
