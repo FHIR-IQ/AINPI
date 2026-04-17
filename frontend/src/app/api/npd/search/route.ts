@@ -91,7 +91,7 @@ async function searchLocations(params: SearchParams) {
 
   return runQuery(
     'SELECT _name AS name, _status AS status, _state AS state, _city AS city, ' +
-    '_postal_code AS postal_code, _managing_org_npi AS managing_org_npi ' +
+    '_postal_code AS postal_code, _managing_org_id AS managing_org_id ' +
     'FROM ' + tbl('location') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
