@@ -11,6 +11,8 @@ const SpecialtyTreemap = dynamic(() => import('@/components/charts/SpecialtyTree
 const EndpointSunburst = dynamic(() => import('@/components/charts/EndpointSunburst'), { ssr: false });
 const CompletenessHeatmap = dynamic(() => import('@/components/charts/CompletenessHeatmap'), { ssr: false });
 const StateBarChart = dynamic(() => import('@/components/charts/StateBarChart'), { ssr: false });
+const SankeyGraph = dynamic(() => import('@/components/charts/SankeyGraph'), { ssr: false });
+const KnowledgeGraph = dynamic(() => import('@/components/charts/KnowledgeGraph'), { ssr: false });
 
 interface ResourceQuality {
   resource_type: string;
@@ -57,11 +59,34 @@ interface SummaryData {
   resource_quality: ResourceQuality[];
 }
 
+interface RelationshipStats {
+  total_practitioners: number;
+  total_organizations: number;
+  total_locations: number;
+  total_endpoints: number;
+  total_roles: number;
+  practitioners_with_roles: number;
+  orgs_with_practitioners: number;
+  orgs_with_endpoints: number;
+}
+
+interface TopOrg {
+  org_id: string;
+  org_name: string;
+  state: string;
+  city: string;
+  practitioner_count: number;
+  specialty_count: number;
+  endpoint_count: number;
+}
+
 export default function DataQualityDashboard() {
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [states, setStates] = useState<StateData[]>([]);
   const [specialties, setSpecialties] = useState<SpecialtyData[]>([]);
   const [endpoints, setEndpoints] = useState<EndpointData[]>([]);
+  const [relStats, setRelStats] = useState<RelationshipStats | null>(null);
+  const [topOrgs, setTopOrgs] = useState<TopOrg[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -69,26 +94,30 @@ export default function DataQualityDashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [summaryRes, statesRes, specialtiesRes, endpointsRes] = await Promise.all([
+      const [summaryRes, statesRes, specialtiesRes, endpointsRes, relRes] = await Promise.all([
         fetch('/api/npd/data-quality?view=summary'),
         fetch('/api/npd/data-quality?view=states'),
         fetch('/api/npd/data-quality?view=specialties&limit=100'),
         fetch('/api/npd/data-quality?view=endpoints'),
+        fetch('/api/npd/relationships?view=overview&limit=15'),
       ]);
 
       if (!summaryRes.ok) throw new Error('Failed to fetch data quality metrics');
 
-      const [summaryData, statesData, specialtiesData, endpointsData] = await Promise.all([
+      const [summaryData, statesData, specialtiesData, endpointsData, relData] = await Promise.all([
         summaryRes.json(),
         statesRes.json(),
         specialtiesRes.json(),
         endpointsRes.json(),
+        relRes.ok ? relRes.json() : { stats: null, top_organizations: [] },
       ]);
 
       setSummary(summaryData);
       setStates(statesData.states || []);
       setSpecialties(specialtiesData.specialties || []);
       setEndpoints(endpointsData.by_type || []);
+      if (relData.stats) setRelStats(relData.stats);
+      setTopOrgs(relData.top_organizations || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
@@ -319,6 +348,96 @@ export default function DataQualityDashboard() {
                 </table>
               </div>
             </div>
+
+            {/* Row 8: Relationship Stats */}
+            {relStats && (
+              <div className="card">
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">FHIR Resource Relationships</h3>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="bg-blue-50 rounded-lg p-4 text-center">
+                    <p className="text-2xl font-bold text-blue-700">{formatNumber(Number(relStats.practitioners_with_roles))}</p>
+                    <p className="text-xs text-blue-500">Practitioners with Roles</p>
+                  </div>
+                  <div className="bg-purple-50 rounded-lg p-4 text-center">
+                    <p className="text-2xl font-bold text-purple-700">{formatNumber(Number(relStats.orgs_with_practitioners))}</p>
+                    <p className="text-xs text-purple-500">Orgs with Practitioners</p>
+                  </div>
+                  <div className="bg-green-50 rounded-lg p-4 text-center">
+                    <p className="text-2xl font-bold text-green-700">{formatNumber(Number(relStats.orgs_with_endpoints))}</p>
+                    <p className="text-xs text-green-500">Orgs with Endpoints</p>
+                  </div>
+                  <div className="bg-amber-50 rounded-lg p-4 text-center">
+                    <p className="text-2xl font-bold text-amber-700">{formatNumber(Number(relStats.total_roles))}</p>
+                    <p className="text-xs text-amber-500">Total PractitionerRoles</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Row 9: Sankey — Organization -> Practitioner -> Endpoint flow */}
+            {topOrgs.length > 0 && (
+              <div className="card">
+                <SankeyGraph
+                  title="Organization Network — Practitioners & Endpoints"
+                  nodes={[
+                    ...topOrgs.map((o) => ({ id: o.org_id, name: o.org_name || 'Unknown', type: 'organization' as const, count: Number(o.practitioner_count) })),
+                    ...topOrgs.filter((o) => Number(o.practitioner_count) > 0).map((o) => ({
+                      id: 'practitioners-' + o.org_id, name: Number(o.practitioner_count).toLocaleString() + ' practitioners',
+                      type: 'practitioner' as const, count: Number(o.practitioner_count),
+                    })),
+                    ...topOrgs.filter((o) => Number(o.endpoint_count) > 0).map((o) => ({
+                      id: 'endpoints-' + o.org_id, name: Number(o.endpoint_count).toLocaleString() + ' endpoints',
+                      type: 'endpoint' as const, count: Number(o.endpoint_count),
+                    })),
+                  ]}
+                  links={[
+                    ...topOrgs.filter((o) => Number(o.practitioner_count) > 0).map((o) => ({
+                      source: o.org_id, target: 'practitioners-' + o.org_id, value: Number(o.practitioner_count),
+                    })),
+                    ...topOrgs.filter((o) => Number(o.endpoint_count) > 0).map((o) => ({
+                      source: o.org_id, target: 'endpoints-' + o.org_id, value: Number(o.endpoint_count),
+                    })),
+                  ]}
+                  width={1300}
+                  height={600}
+                />
+              </div>
+            )}
+
+            {/* Row 10: Knowledge Graph */}
+            {topOrgs.length > 0 && (
+              <div className="card">
+                <KnowledgeGraph
+                  title="Provider Network Knowledge Graph"
+                  nodes={[
+                    ...topOrgs.map((o) => ({
+                      id: o.org_id, label: o.org_name || 'Unknown', type: 'organization' as const,
+                      size: Number(o.practitioner_count),
+                    })),
+                    ...topOrgs.filter((o) => Number(o.practitioner_count) > 0).map((o) => ({
+                      id: 'p-' + o.org_id,
+                      label: Number(o.practitioner_count).toLocaleString() + ' practitioners',
+                      type: 'practitioner' as const, size: Number(o.practitioner_count) / 5,
+                    })),
+                    ...topOrgs.filter((o) => Number(o.endpoint_count) > 0).map((o) => ({
+                      id: 'e-' + o.org_id,
+                      label: Number(o.endpoint_count).toLocaleString() + ' endpoints',
+                      type: 'endpoint' as const, size: Number(o.endpoint_count) / 2,
+                    })),
+                  ]}
+                  links={[
+                    ...topOrgs.filter((o) => Number(o.practitioner_count) > 0).map((o) => ({
+                      source: o.org_id, target: 'p-' + o.org_id, relationship: 'employs',
+                    })),
+                    ...topOrgs.filter((o) => Number(o.endpoint_count) > 0).map((o) => ({
+                      source: o.org_id, target: 'e-' + o.org_id, relationship: 'manages',
+                    })),
+                  ]}
+                  width={1300}
+                  height={700}
+                />
+              </div>
+            )}
 
             {/* Footer */}
             <p className="text-xs text-gray-400 text-center">
