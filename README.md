@@ -1,238 +1,96 @@
-# ProviderCard-v2
+# AINPI
 
-> A comprehensive FHIR-based provider directory and synchronization system
+Experimental explorer for the CMS National Provider Directory (NPD) public use files.
 
-## 📋 Overview
+**Live:** <https://ainpi.vercel.app>
 
-ProviderCard-v2 is a modular system for managing healthcare provider information using FHIR R4 standards. It supports multi-address practices, licensing, taxonomy lookups, insurance plan management, and real-time synchronization via webhooks.
+> **Work in progress.** AINPI is research/educational. Data may be incomplete, stale, or incorrect. Every number should be verified against primary sources before any business or clinical decision. See the [`/insights`](https://ainpi.vercel.app/insights) page for a full provenance analysis.
 
-## 🎯 Key Features
+## What it does
 
-- **FHIR R4 Compliant**: Full support for Practitioner, PractitionerRole, Organization, and Endpoint resources
-- **Multi-Address Support**: Handle providers with multiple practice locations
-- **License Management**: Track multiple state licenses with validation and expiration
-- **NUCC Taxonomy Lookup**: Autocomplete provider specialties with code ↔ name mapping
-- **Insurance Plan Management**: Structured data for Carrier, Plan Name, and Line of Business (LOB)
-- **Real-time Sync**: FHIR Subscription and webhook support for data updates
-- **Modular Architecture**: Clean separation of concerns across provider-profile, sync-engine, integrations, and validation modules
+CMS released the National Provider Directory as FHIR R4 NDJSON public use files from [directory.cms.gov](https://directory.cms.gov/) — 27.2M records across 6 resource types (Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint). AINPI:
 
-## 🏗️ Architecture
+1. **Ingests** the full 40.7 GB dataset into Google BigQuery (2.8 GB compressed zstd on disk, 27,200,569 rows loaded, 99.985% completeness vs CMS manifest)
+2. **Serves** interactive exploration through a Next.js 14 app on Vercel, backed by Supabase Postgres for pre-aggregated metrics
+3. **Analyzes** data provenance — which fields come from NPPES vs PECOS vs CEHRT vendor submissions, and where the self-attestation gaps are (CAQH is not in the NPD pipeline)
 
+## Pages
+
+| Path | What it is |
+|---|---|
+| [`/npd`](https://ainpi.vercel.app/npd) | Public search by NPI, name, organization, state, city |
+| [`/data-quality`](https://ainpi.vercel.app/data-quality) | D3 dashboard: choropleth, sankey, knowledge graph, drill-down, validation |
+| [`/insights`](https://ainpi.vercel.app/insights) | Provenance + variance analysis (NPD vs published org numbers) |
+| [`/provider-search`](https://ainpi.vercel.app/provider-search) | Real-time search against live payer FHIR directories |
+| [`/magic-scanner`](https://ainpi.vercel.app/magic-scanner) | AI-augmented provider discovery |
+
+## Architecture
+
+```text
+       ┌────────────────────────────────┐
+       │ directory.cms.gov              │
+       │ 6 NDJSON.zst files, 2.8 GB     │
+       └──────────────┬─────────────────┘
+                      │ scripts/ingest-cms-npd.ts
+                      ▼
+       ┌────────────────────────────────┐
+       │ BigQuery (cms_npd dataset)     │
+       │ resource:JSON + _* flat fields │
+       │ 27.2M rows + 5 analytics views │
+       └──────┬─────────────────────┬───┘
+              │                     │
+  live query  │                     │ scripts/sync-bq-to-supabase.ts
+              │                     │  (nightly aggregation)
+              ▼                     ▼
+       ┌──────────────┐     ┌──────────────────┐
+       │ Next.js API  │     │ Supabase Postgres│
+       │ routes       │◄────┤ Prisma ORM       │
+       │ on Vercel    │     │ pre-agg metrics  │
+       └──────┬───────┘     │ user auth        │
+              │             └──────────────────┘
+              ▼
+       ┌────────────────────────────────┐
+       │ React + D3 dashboard           │
+       │ FilterContext cross-filtering  │
+       └────────────────────────────────┘
 ```
-ProviderCard-v2/
-├── modules/
-│   ├── provider-profile/     # Core provider CRUD operations
-│   ├── sync-engine/          # Real-time synchronization logic
-│   ├── integrations/         # External system connectors
-│   └── validation/           # FHIR & business rule validation
-├── models/                   # FHIR resource definitions
-├── sample-data/              # Mock providers and subscribers
-├── config/                   # Configuration files
-└── docs/                     # API documentation
-```
 
-## 📦 Modules
+**Why this split:** BigQuery costs <$1/mo to hold 40 GB of FHIR JSON and gives free-tier-friendly analytics. Supabase is where the app's hot-path queries and auth data live. Pre-aggregations are synced nightly so the dashboard doesn't hit BigQuery on every page load.
 
-### 1. Provider Profile Module
-Manages core provider data including:
-- Practitioner demographics
-- Multiple practice addresses
-- State licenses and credentials
-- NUCC taxonomy codes
-- Insurance plan participation
-
-### 2. Sync Engine Module
-Handles real-time data synchronization:
-- FHIR Subscription management
-- Webhook event dispatching
-- Change detection and notification
-- Retry logic and error handling
-
-### 3. Integrations Module
-External system connections:
-- NUCC taxonomy service
-- State license verification APIs
-- Insurance carrier directories
-- Credentialing systems
-
-### 4. Validation Module
-Data integrity and compliance:
-- FHIR resource validation
-- NPI validation
-- License expiration checks
-- Required field validation
-- Business rule enforcement
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- TypeScript 5+
-- Understanding of FHIR R4
-
-### Installation
+## Quickstart
 
 ```bash
-git clone https://github.com/your-org/ProviderCard-v2.git
-cd ProviderCard-v2
+cd frontend
 npm install
+cp .env.example .env.local   # fill in Supabase + GCP values
+npm run db:push              # push Prisma schema to Supabase
+npm run dev                  # http://localhost:3000
 ```
 
-### Quick Start
-
-```typescript
-import { ProviderProfile } from './modules/provider-profile';
-import { SyncEngine } from './modules/sync-engine';
-
-// Create a provider profile
-const profile = new ProviderProfile({
-  npi: '1234567890',
-  name: {
-    family: 'Smith',
-    given: ['John', 'Michael']
-  },
-  specialties: ['208D00000X'], // General Practice
-  addresses: [
-    {
-      line: ['123 Main St'],
-      city: 'Boston',
-      state: 'MA',
-      postalCode: '02101'
-    }
-  ]
-});
-
-// Subscribe to changes
-const syncEngine = new SyncEngine();
-syncEngine.subscribe('http://subscriber-system.com/webhook', {
-  resourceTypes: ['Practitioner', 'PractitionerRole']
-});
-```
-
-## 📚 FHIR Resources
-
-### Practitioner
-Core provider demographics, identifiers, and qualifications.
-
-### PractitionerRole
-Provider roles, specialties, locations, and availability.
-
-### Organization
-Practice groups, hospitals, and healthcare facilities.
-
-### Endpoint
-Technical endpoints for data exchange and webhooks.
-
-## 🔍 NUCC Taxonomy
-
-The system includes a complete NUCC Healthcare Provider Taxonomy lookup with:
-- Autocomplete search by specialty name
-- Code → Name resolution
-- Name → Code resolution
-- Hierarchical taxonomy navigation
-
-Example:
-```typescript
-import { taxonomyLookup } from './modules/integrations/nucc-taxonomy';
-
-// Search by name
-const results = taxonomyLookup.search('cardiology');
-// Returns: [{ code: '207RC0000X', name: 'Cardiovascular Disease' }, ...]
-
-// Get by code
-const specialty = taxonomyLookup.getByCode('207RC0000X');
-// Returns: { code: '207RC0000X', name: 'Cardiovascular Disease', ... }
-```
-
-## 💳 Insurance Plans
-
-Structured insurance plan data:
-
-```typescript
-interface InsurancePlan {
-  carrier: string;           // Aetna, Blue Cross, etc.
-  planName: string;          // PPO Gold, HMO Silver, etc.
-  lob: 'Commercial' | 'Medicare' | 'Medicaid' | 'Exchange';
-  networkStatus: 'In-Network' | 'Out-of-Network';
-  effectiveDate: string;
-  terminationDate?: string;
-}
-```
-
-## 🔔 Webhooks & Subscriptions
-
-The sync engine supports FHIR Subscriptions and custom webhooks:
-
-```typescript
-// FHIR Subscription
-{
-  "resourceType": "Subscription",
-  "status": "active",
-  "criteria": "Practitioner?active=true",
-  "channel": {
-    "type": "rest-hook",
-    "endpoint": "https://example.com/webhook",
-    "payload": "application/fhir+json"
-  }
-}
-
-// Webhook payload example
-{
-  "eventType": "practitioner.updated",
-  "timestamp": "2025-10-24T15:30:00Z",
-  "resource": {
-    "resourceType": "Practitioner",
-    "id": "123",
-    ...
-  }
-}
-```
-
-## 📊 Sample Data
-
-The project includes sample data for:
-- 2 complete provider profiles with multiple addresses and licenses
-- 2 mock subscriber systems configured for different event types
-- NUCC taxonomy reference data
-- Insurance carrier and plan examples
-
-See `/sample-data` directory for details.
-
-## 🧪 Testing
+To reload the NPD warehouse (only needed when CMS publishes a new release):
 
 ```bash
-npm test                 # Run all tests
-npm run test:unit       # Unit tests only
-npm run test:integration # Integration tests
-npm run test:validation # FHIR validation tests
+npm run bq:setup     # Create dataset + tables + views (idempotent)
+npm run bq:ingest    # Download from directory.cms.gov, stream into BigQuery
+npm run bq:sync      # Aggregate BigQuery → Supabase metrics
 ```
 
-## 📖 API Documentation
+## Testing
 
-Detailed API documentation is available in the `/docs` directory:
-- [Provider Profile API](docs/provider-profile-api.md)
-- [Sync Engine API](docs/sync-engine-api.md)
-- [Webhook Events](docs/webhook-events.md)
-- [FHIR Resources](docs/fhir-resources.md)
+```bash
+npm run test         # Vitest — 62 unit tests
+npm run test:e2e     # Playwright — 15 E2E specs
+```
 
-## 🤝 Contributing
+Covers FHIR reference extraction, API parameter parsing, validation contract, filter context hierarchy, NPI/URL regex, BigQuery schema, dashboard dropdown interactions, and search.
 
-Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) for details.
+## Documentation
 
-## 📄 License
+- [CLAUDE.md](./CLAUDE.md) — Architecture + developer reference
+- [DATABASE_SETUP.md](./DATABASE_SETUP.md) — Supabase + Prisma + BigQuery setup walkthrough
 
-MIT License - see [LICENSE](LICENSE) file for details.
+## Key references
 
-## 🔗 Related Resources
-
-- [FHIR R4 Specification](https://hl7.org/fhir/R4/)
-- [NUCC Healthcare Provider Taxonomy](https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40)
-- [NPI Registry](https://npiregistry.cms.hhs.gov/)
-
-## 📞 Support
-
-For questions or issues, please [open an issue](https://github.com/your-org/ProviderCard-v2/issues) on GitHub.
-
----
-
-Built with ❤️ for better healthcare provider data management
+- [CMS National Provider Directory](https://directory.cms.gov/)
+- [HTE Data Release Specifications](https://github.com/ftrotter-gov/HTE_data_release_specifications)
+- [NDH FHIR IG v2.0.0](https://build.fhir.org/ig/HL7/fhir-us-ndh/)

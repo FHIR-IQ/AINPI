@@ -60,3 +60,14 @@ logs/
 # Environment
 .env
 .env.local
+
+# Local agent / skill tooling (not part of application code)
+.agents/
+.kiro/
+.claude/
+skills-lock.json
+
+# Supabase CLI local project metadata
+supabase/.branches/
+supabase/.temp/
+supabase/migrations/*.local.sql
