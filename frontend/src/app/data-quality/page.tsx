@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import { ChartSelect, ChartHeader } from '@/components/charts/ChartControls';
+import { FilterProvider, useFilters } from '@/contexts/FilterContext';
 
 const USChoroplethMap = dynamic(() => import('@/components/charts/USChoroplethMap'), { ssr: false });
 const QualityGauge = dynamic(() => import('@/components/charts/QualityGauge'), { ssr: false });
@@ -13,6 +14,9 @@ const CompletenessHeatmap = dynamic(() => import('@/components/charts/Completene
 const StateBarChart = dynamic(() => import('@/components/charts/StateBarChart'), { ssr: false });
 const SankeyGraph = dynamic(() => import('@/components/charts/SankeyGraph'), { ssr: false });
 const KnowledgeGraph = dynamic(() => import('@/components/charts/KnowledgeGraph'), { ssr: false });
+const FilterBreadcrumb = dynamic(() => import('@/components/charts/FilterBreadcrumb'), { ssr: false });
+const StateDetailPanel = dynamic(() => import('@/components/charts/StateDetailPanel'), { ssr: false });
+const DataValidationPanel = dynamic(() => import('@/components/charts/DataValidationPanel'), { ssr: false });
 
 interface ResourceQuality { resource_type: string; total_records: number; active_records: number; completeness: { primary_id: number; name: number; address: number }; }
 interface StateData { state: string; providers: number; organizations: number; locations: number; active_providers: number; npi_completeness: number; address_completeness: number; }
@@ -22,7 +26,6 @@ interface SummaryData { release_date: string; overview: { total_records: number;
 interface RelationshipStats { total_practitioners: number; total_organizations: number; total_locations: number; total_endpoints: number; total_roles: number; practitioners_with_roles: number; orgs_with_practitioners: number; orgs_with_endpoints: number; }
 interface TopOrg { org_id: string; org_name: string; state: string; city: string; practitioner_count: number; specialty_count: number; endpoint_count: number; }
 
-// Dropdown option sets
 const MAP_METRICS = [
   { value: 'locations', label: 'Locations' },
   { value: 'providers', label: 'Practitioners' },
@@ -49,7 +52,15 @@ const SANKEY_LIMITS = [
   { value: '20', label: 'Top 20 Orgs' },
 ];
 
-export default function DataQualityDashboard() {
+function fmt(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
+
+function DashboardContent() {
+  const { filters, setState: setFilterState, setSpecialty } = useFilters();
+
   const [summary, setSummary] = useState<SummaryData | null>(null);
   const [states, setStates] = useState<StateData[]>([]);
   const [specialties, setSpecialties] = useState<SpecialtyData[]>([]);
@@ -98,21 +109,11 @@ export default function DataQualityDashboard() {
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
-  function fmt(n: number): string {
-    if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
-    if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
-    return n.toLocaleString();
-  }
+  const mapData = useMemo(() => states.map((s) => ({
+    state: s.state,
+    value: (s[mapMetric as keyof StateData] as number) || 0,
+  })), [states, mapMetric]);
 
-  // Derived data for map
-  const mapData = useMemo(() => {
-    return states.map((s) => ({
-      state: s.state,
-      value: s[mapMetric as keyof StateData] as number || 0,
-    }));
-  }, [states, mapMetric]);
-
-  // Heatmap
   const heatmapData = useMemo(() => {
     return summary?.resource_quality.flatMap((rq) => [
       { row: rq.resource_type, col: 'Primary ID', value: rq.completeness.primary_id },
@@ -129,11 +130,17 @@ export default function DataQualityDashboard() {
     ) / summary.resource_quality.length;
   }, [summary]);
 
-  // Sankey data
-  const sankeyN = parseInt(sankeyLimit);
-  const sankeyOrgs = topOrgs.slice(0, sankeyN);
+  // Apply filter to states (for sections that aren't the drill-down)
+  const filteredStateData = useMemo(() => {
+    return filters.state ? states.filter((s) => s.state === filters.state) : states;
+  }, [states, filters.state]);
 
-  // Filtered tables
+  const sankeyN = parseInt(sankeyLimit);
+  const sankeyOrgs = useMemo(() => {
+    const filtered = filters.state ? topOrgs.filter((o) => o.state === filters.state) : topOrgs;
+    return filtered.slice(0, sankeyN);
+  }, [topOrgs, filters.state, sankeyN]);
+
   const filteredStates = states.filter((s) => !stateFilter || s.state.includes(stateFilter.toUpperCase()));
   const filteredSpecialties = specialties.filter((s) =>
     !specialtyFilter || s.display.toLowerCase().includes(specialtyFilter.toLowerCase()) || s.code.includes(specialtyFilter)
@@ -143,10 +150,12 @@ export default function DataQualityDashboard() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <div className="max-w-[1400px] mx-auto px-4 py-8">
-        <div className="mb-8">
+        <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">CMS National Provider Directory</h1>
-          <p className="text-gray-500 mt-1">Data Quality Intelligence — Release: 2026-04-09 — 27.2M records from directory.cms.gov</p>
+          <p className="text-gray-500 mt-1">Cross-filtered, drill-down data quality intelligence — Release 2026-04-09</p>
         </div>
+
+        <FilterBreadcrumb />
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -163,6 +172,9 @@ export default function DataQualityDashboard() {
           </div>
         ) : summary && (
           <div className="space-y-8">
+
+            {/* Validation panel at the top — authoritative source-vs-ingested check */}
+            <DataValidationPanel />
 
             {/* Row 1: KPI + Gauge */}
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
@@ -190,9 +202,9 @@ export default function DataQualityDashboard() {
               <CompletenessHeatmap data={heatmapData} title="Data Completeness by Resource Type" width={800} height={280} />
             </div>
 
-            {/* Row 3: US Map with controls */}
+            {/* Row 3: US Map with click-to-filter */}
             <div className="card">
-              <ChartHeader title="Geographic Distribution" subtitle="Provider directory coverage across US states">
+              <ChartHeader title="Geographic Distribution" subtitle="Click any state to drill down to city level. Click again to clear.">
                 <ChartSelect label="Metric" value={mapMetric} options={MAP_METRICS} onChange={setMapMetric} />
                 <ChartSelect label="Color" value={mapColor} options={MAP_COLORS} onChange={setMapColor} />
               </ChartHeader>
@@ -203,15 +215,28 @@ export default function DataQualityDashboard() {
                 formatValue={(v) => fmt(v) + ' ' + MAP_METRICS.find((m) => m.value === mapMetric)?.label.toLowerCase()}
                 width={1300}
                 height={600}
+                onStateClick={(s) => setFilterState(s || null)}
+                selectedState={filters.state}
               />
             </div>
 
-            {/* Row 4: Top States Stacked Bar with controls */}
+            {/* State Detail Panel — appears when state is selected */}
+            {filters.state && <StateDetailPanel />}
+
+            {/* Row 4: Top States Stacked Bar with click-to-filter */}
             <div className="card">
-              <ChartHeader title="States — Providers, Organizations & Locations" subtitle="Stacked comparison across resource types">
+              <ChartHeader title="States — Providers, Organizations & Locations" subtitle="Click a state bar to filter">
                 <ChartSelect label="Show" value={barTop} options={BAR_TOPS} onChange={setBarTop} />
               </ChartHeader>
-              <StateBarChart data={states} title="" width={1300} height={420} top={parseInt(barTop)} />
+              <StateBarChart
+                data={states}
+                title=""
+                width={1300}
+                height={420}
+                top={parseInt(barTop)}
+                onStateClick={(s) => setFilterState(s || null)}
+                selectedState={filters.state}
+              />
             </div>
 
             {/* Row 5: Quality Gauges per Resource */}
@@ -230,10 +255,10 @@ export default function DataQualityDashboard() {
               </div>
             </div>
 
-            {/* Row 6: Specialty Treemap + Endpoint Sunburst with filter */}
+            {/* Row 6: Specialty Treemap (click to filter) + Endpoint Sunburst */}
             <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <div className="card">
-                <ChartHeader title="Provider Specialty Distribution" subtitle="Sized by provider count">
+                <ChartHeader title="Provider Specialty Distribution" subtitle="Click a specialty to filter. Sized by provider count.">
                   <input
                     type="text"
                     placeholder="Filter specialties..."
@@ -242,7 +267,14 @@ export default function DataQualityDashboard() {
                     onChange={(e) => setSpecialtyFilter(e.target.value)}
                   />
                 </ChartHeader>
-                <SpecialtyTreemap data={filteredSpecialties.length > 0 ? filteredSpecialties : specialties} title="" width={640} height={450} />
+                <SpecialtyTreemap
+                  data={filteredSpecialties.length > 0 ? filteredSpecialties : specialties}
+                  title=""
+                  width={640}
+                  height={450}
+                  onSpecialtyClick={(s) => setSpecialty(s || null)}
+                  selectedSpecialty={filters.specialty}
+                />
               </div>
               <div className="card">
                 <ChartHeader title="FHIR Endpoint Distribution" subtitle="Inner: connection type, Outer: status" />
@@ -275,10 +307,13 @@ export default function DataQualityDashboard() {
               </div>
             )}
 
-            {/* Row 8: Sankey with control */}
+            {/* Row 8: Sankey (filtered by selected state) */}
             {sankeyOrgs.length > 0 && (
               <div className="card">
-                <ChartHeader title="Organization Network Flow" subtitle="Organization → Practitioners → Endpoints">
+                <ChartHeader
+                  title={'Organization Network Flow' + (filters.state ? ' — ' + filters.state : '')}
+                  subtitle="Organization → Practitioners → Endpoints"
+                >
                   <ChartSelect label="Show" value={sankeyLimit} options={SANKEY_LIMITS} onChange={setSankeyLimit} />
                 </ChartHeader>
                 <SankeyGraph
@@ -318,9 +353,9 @@ export default function DataQualityDashboard() {
               </div>
             )}
 
-            {/* Row 10: State detail table */}
+            {/* Row 10: State table — respects state filter */}
             <div className="card">
-              <ChartHeader title="State-Level Data Quality" subtitle="Filterable table with completeness metrics">
+              <ChartHeader title="State-Level Data Quality" subtitle="Filterable table with completeness metrics. Click a state to drill down.">
                 <input
                   type="text"
                   placeholder="Filter states..."
@@ -342,8 +377,12 @@ export default function DataQualityDashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredStates.map((s) => (
-                      <tr key={s.state} className="border-b border-gray-100 hover:bg-gray-50">
+                    {(filters.state ? filteredStateData : filteredStates).map((s) => (
+                      <tr
+                        key={s.state}
+                        className={'border-b border-gray-100 cursor-pointer ' + (s.state === filters.state ? 'bg-primary-50 hover:bg-primary-100' : 'hover:bg-gray-50')}
+                        onClick={() => setFilterState(s.state === filters.state ? null : s.state)}
+                      >
                         <td className="py-2.5 pr-4 font-semibold">{s.state}</td>
                         <td className="py-2.5 pr-4 text-right">{s.providers.toLocaleString()}</td>
                         <td className="py-2.5 pr-4 text-right">{s.organizations.toLocaleString()}</td>
@@ -371,5 +410,13 @@ export default function DataQualityDashboard() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function DataQualityDashboard() {
+  return (
+    <FilterProvider>
+      <DashboardContent />
+    </FilterProvider>
   );
 }

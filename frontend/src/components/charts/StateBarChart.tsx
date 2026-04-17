@@ -16,6 +16,8 @@ interface StateBarChartProps {
   width?: number;
   height?: number;
   top?: number;
+  onStateClick?: (state: string) => void;
+  selectedState?: string | null;
 }
 
 export default function StateBarChart({
@@ -24,6 +26,8 @@ export default function StateBarChart({
   width = 900,
   height = 400,
   top = 25,
+  onStateClick,
+  selectedState,
 }: StateBarChartProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -78,9 +82,11 @@ export default function StateBarChart({
       .attr('y', innerHeight)
       .attr('height', 0)
       .attr('rx', 2)
-      .attr('cursor', 'pointer')
+      .attr('cursor', onStateClick ? 'pointer' : 'default')
+      .attr('opacity', (d) => selectedState && d.data.state !== selectedState ? 0.35 : 1)
+      .on('click', (_event, d) => { if (onStateClick) onStateClick(d.data.state === selectedState ? '' : d.data.state); })
       .on('mouseover', function (event: MouseEvent, d) {
-        d3.select(this).attr('opacity', 0.8);
+        d3.select(this).attr('opacity', 0.7);
         if (tooltipRef.current) {
           const svgRect = svgRef.current!.getBoundingClientRect();
           tooltipRef.current.style.display = 'block';
@@ -94,8 +100,8 @@ export default function StateBarChart({
           `;
         }
       })
-      .on('mouseout', function () {
-        d3.select(this).attr('opacity', 1);
+      .on('mouseout', function (_event, d) {
+        d3.select(this).attr('opacity', selectedState && d.data.state !== selectedState ? 0.35 : 1);
         if (tooltipRef.current) tooltipRef.current.style.display = 'none';
       })
       .transition()
@@ -136,7 +142,7 @@ export default function StateBarChart({
         .attr('fill', '#6b7280')
         .text(key.charAt(0).toUpperCase() + key.slice(1));
     });
-  }, [data, width, height, top]);
+  }, [data, width, height, top, onStateClick, selectedState]);
 
   return (
     <div className="relative">

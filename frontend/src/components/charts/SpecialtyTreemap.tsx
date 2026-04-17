@@ -14,6 +14,8 @@ interface SpecialtyTreemapProps {
   title: string;
   width?: number;
   height?: number;
+  onSpecialtyClick?: (specialtyDisplay: string) => void;
+  selectedSpecialty?: string | null;
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -43,6 +45,8 @@ export default function SpecialtyTreemap({
   title,
   width = 900,
   height = 500,
+  onSpecialtyClick,
+  selectedSpecialty,
 }: SpecialtyTreemapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -116,10 +120,21 @@ export default function SpecialtyTreemap({
           tooltipRef.current.style.top = `${event.clientY - svgRect.top - 40}px`;
         }
       })
-      .on('mouseout', function () {
-        d3.select(this).attr('opacity', 0.85).attr('stroke', 'none');
+      .on('mouseout', function (_event, d: any) {
+        const isSelected = selectedSpecialty && d.data.name === selectedSpecialty;
+        d3.select(this)
+          .attr('opacity', selectedSpecialty && !isSelected ? 0.35 : 0.85)
+          .attr('stroke', isSelected ? '#1e40af' : 'none')
+          .attr('stroke-width', isSelected ? 2 : 0);
         if (tooltipRef.current) tooltipRef.current.style.display = 'none';
-      });
+      })
+      .on('click', function (_event, d: any) {
+        if (!onSpecialtyClick) return;
+        const next = d.data.name === selectedSpecialty ? '' : d.data.name;
+        onSpecialtyClick(next);
+      })
+      .attr('cursor', onSpecialtyClick ? 'pointer' : 'default')
+      .attr('opacity', (d: any) => selectedSpecialty && d.data.name !== selectedSpecialty ? 0.35 : 0.85);
 
     // Labels (only for cells large enough)
     cells
@@ -150,7 +165,7 @@ export default function SpecialtyTreemap({
       .attr('font-size', '10px')
       .attr('pointer-events', 'none')
       .text((d: any) => d.data.value.toLocaleString());
-  }, [data, width, height]);
+  }, [data, width, height, onSpecialtyClick, selectedSpecialty]);
 
   return (
     <div className="relative">

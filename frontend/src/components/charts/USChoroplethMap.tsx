@@ -16,6 +16,8 @@ interface USChoroplethMapProps {
   formatValue?: (value: number) => string;
   width?: number;
   height?: number;
+  onStateClick?: (state: string) => void;
+  selectedState?: string | null;
 }
 
 // FIPS code -> state abbreviation mapping
@@ -48,6 +50,8 @@ export default function USChoroplethMap({
   formatValue = (v) => v.toLocaleString(),
   width = 960,
   height = 600,
+  onStateClick,
+  selectedState,
 }: USChoroplethMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -86,22 +90,27 @@ export default function USChoroplethMap({
         const val = stateMap.get(abbr);
         return val !== undefined ? colorScale(val) : '#f3f4f6';
       })
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 0.8)
-      .attr('cursor', 'pointer')
-      .on('mouseover', function (event: MouseEvent, d: any) {
-        d3.select(this).attr('stroke', '#1e40af').attr('stroke-width', 2);
+      .attr('stroke', (d: any) => {
         const fips = String(d.id).padStart(2, '0');
         const abbr = FIPS_TO_STATE[fips];
+        return abbr === selectedState ? '#1e40af' : '#fff';
+      })
+      .attr('stroke-width', (d: any) => {
+        const fips = String(d.id).padStart(2, '0');
+        const abbr = FIPS_TO_STATE[fips];
+        return abbr === selectedState ? 3 : 0.8;
+      })
+      .attr('cursor', onStateClick ? 'pointer' : 'default')
+      .on('mouseover', function (event: MouseEvent, d: any) {
+        const fips = String(d.id).padStart(2, '0');
+        const abbr = FIPS_TO_STATE[fips];
+        if (abbr !== selectedState) d3.select(this).attr('stroke', '#1e40af').attr('stroke-width', 2);
         const val = stateMap.get(abbr);
         if (tooltipRef.current) {
           tooltipRef.current.style.display = 'block';
           tooltipRef.current.style.left = `${event.offsetX + 12}px`;
           tooltipRef.current.style.top = `${event.offsetY - 28}px`;
-          tooltipRef.current.innerHTML = `
-            <strong>${abbr || 'Unknown'}</strong><br/>
-            ${val !== undefined ? formatValue(val) : 'No data'}
-          `;
+          tooltipRef.current.innerHTML = `<strong>${abbr || 'Unknown'}</strong><br/>${val !== undefined ? formatValue(val) : 'No data'}${onStateClick ? '<br/><em style="opacity:0.7">Click to filter</em>' : ''}`;
         }
       })
       .on('mousemove', function (event: MouseEvent) {
@@ -110,9 +119,19 @@ export default function USChoroplethMap({
           tooltipRef.current.style.top = `${event.offsetY - 28}px`;
         }
       })
-      .on('mouseout', function () {
-        d3.select(this).attr('stroke', '#fff').attr('stroke-width', 0.8);
+      .on('mouseout', function (_event, d: any) {
+        const fips = String(d.id).padStart(2, '0');
+        const abbr = FIPS_TO_STATE[fips];
+        if (abbr !== selectedState) {
+          d3.select(this).attr('stroke', '#fff').attr('stroke-width', 0.8);
+        }
         if (tooltipRef.current) tooltipRef.current.style.display = 'none';
+      })
+      .on('click', function (_event, d: any) {
+        if (!onStateClick) return;
+        const fips = String(d.id).padStart(2, '0');
+        const abbr = FIPS_TO_STATE[fips];
+        if (abbr) onStateClick(abbr === selectedState ? '' : abbr);
       });
 
     // State borders
@@ -164,7 +183,7 @@ export default function USChoroplethMap({
       .call((g) => g.select('.domain').remove())
       .call((g) => g.selectAll('.tick line').attr('stroke', '#9ca3af'))
       .call((g) => g.selectAll('.tick text').attr('fill', '#6b7280').attr('font-size', '11px'));
-  }, [topoData, data, colorScheme, formatValue, width, height]);
+  }, [topoData, data, colorScheme, formatValue, width, height, onStateClick, selectedState]);
 
   return (
     <div className="relative">
