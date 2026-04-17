@@ -102,46 +102,61 @@ async function searchEndpoints(params: SearchParams) {
   const where: string[] = [];
   const qp: Record<string, string> = {};
 
-  if (params.org) { where.push('LOWER(_managing_org_name) LIKE LOWER(@org)'); qp.org = '%' + params.org + '%'; }
-  if (params.name) { where.push('LOWER(_name) LIKE LOWER(@ename)'); qp.ename = '%' + params.name + '%'; }
+  // Endpoint stores _managing_org_id (FHIR ref like "Organization/Organization-1234"),
+  // not the org name. To search by org name we JOIN to organization.
+  if (params.org) {
+    where.push('LOWER(o._name) LIKE LOWER(@org)');
+    qp.org = '%' + params.org + '%';
+  }
+  if (params.name) {
+    where.push('LOWER(e._name) LIKE LOWER(@ename)');
+    qp.ename = '%' + params.name + '%';
+  }
   if (where.length === 0) return [];
 
   return runQuery(
-    'SELECT _name AS name, _status AS status, _connection_type AS connection_type, ' +
-    '_address AS endpoint_url, _managing_org_name AS managing_org ' +
-    'FROM ' + tbl('endpoint') + ' ' +
+    'SELECT e._name AS name, e._status AS status, e._connection_type AS connection_type, ' +
+    'e._address AS endpoint_url, o._name AS managing_org ' +
+    'FROM ' + tbl('endpoint') + ' e ' +
+    'LEFT JOIN ' + tbl('organization') + ' o ON e._managing_org_id = CONCAT("Organization/", o._id) ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
   );
 }
 
 async function getProviderProfile(npi: string) {
-  const [practitioners, roles, endpoints] = await Promise.all([
+  // First find the practitioner and their _id so we can build the FHIR reference
+  const practitioners = await runQuery(
+    'SELECT _id, _npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
+    '_gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, _active AS active ' +
+    'FROM ' + tbl('practitioner') + ' WHERE _npi = @npi LIMIT 1',
+    { npi }
+  ) as Array<Record<string, unknown>>;
+
+  if (practitioners.length === 0) {
+    return { practitioner: null, roles: [], endpoints: [] };
+  }
+
+  const practitionerRef = 'Practitioner/' + practitioners[0]._id;
+
+  const [roles, endpoints] = await Promise.all([
     runQuery(
-      'SELECT _npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
-      '_gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, ' +
-      '_active AS active ' +
-      'FROM ' + tbl('practitioner') + ' WHERE _npi = @npi LIMIT 1',
-      { npi }
+      'SELECT _practitioner_id, _org_id, _specialty_code, _specialty_display, _active ' +
+      'FROM ' + tbl('practitioner_role') + ' WHERE _practitioner_id = @ref LIMIT 100',
+      { ref: practitionerRef }
     ),
     runQuery(
-      'SELECT _practitioner_npi, _org_npi, _specialty_code, _specialty_display, _active ' +
-      'FROM ' + tbl('practitioner_role') + ' WHERE _practitioner_npi = @npi',
-      { npi }
-    ),
-    runQuery(
-      'SELECT e._name AS name, e._status AS status, ' +
-      'e._connection_type AS connection_type, e._address AS endpoint_url, ' +
-      'e._managing_org_name AS managing_org ' +
+      'SELECT e._name AS name, e._status AS status, e._connection_type AS connection_type, ' +
+      'e._address AS endpoint_url, o._name AS managing_org ' +
       'FROM ' + tbl('practitioner_role') + ' pr ' +
-      'JOIN ' + tbl('organization') + ' o ON pr._org_npi = o._npi ' +
-      'JOIN ' + tbl('endpoint') + ' e ON e._managing_org_name = o._name ' +
-      'WHERE pr._practitioner_npi = @npi LIMIT 20',
-      { npi }
+      'JOIN ' + tbl('organization') + ' o ON pr._org_id = CONCAT("Organization/", o._id) ' +
+      'JOIN ' + tbl('endpoint') + ' e ON e._managing_org_id = CONCAT("Organization/", o._id) ' +
+      'WHERE pr._practitioner_id = @ref LIMIT 20',
+      { ref: practitionerRef }
     ),
   ]);
 
-  return { practitioner: practitioners[0] || null, roles, endpoints };
+  return { practitioner: practitioners[0], roles, endpoints };
 }
 
 export async function GET(req: NextRequest) {
