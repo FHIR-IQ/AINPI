@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
+import { parseNameQuery, groupRolesBySpecialty, type RoleRow } from '@/lib/npd-search-utils';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
@@ -46,16 +50,58 @@ async function searchPractitioners(params: SearchParams) {
   const where: string[] = [];
   const qp: Record<string, string> = {};
 
-  if (params.npi) { where.push('_npi = @npi'); qp.npi = params.npi; }
-  if (params.name) { where.push('(LOWER(_family_name) LIKE LOWER(@name) OR LOWER(_given_name) LIKE LOWER(@name))'); qp.name = '%' + params.name + '%'; }
-  if (params.state) { where.push('_state = @state'); qp.state = params.state; }
-  if (params.city) { where.push('LOWER(_city) LIKE LOWER(@city)'); qp.city = '%' + params.city + '%'; }
+  if (params.npi) {
+    where.push('_npi = @npi');
+    qp.npi = params.npi;
+  }
+
+  if (params.name) {
+    const { family, given } = parseNameQuery(params.name);
+    if (family && given) {
+      where.push(
+        '((LOWER(_family_name) LIKE LOWER(@familyTok) AND LOWER(_given_name) LIKE LOWER(@givenTok)) ' +
+        'OR (LOWER(_family_name) LIKE LOWER(@givenTok) AND LOWER(_given_name) LIKE LOWER(@familyTok)))'
+      );
+      qp.familyTok = '%' + family + '%';
+      qp.givenTok = '%' + given + '%';
+    } else if (family) {
+      where.push('(LOWER(_family_name) LIKE LOWER(@name) OR LOWER(_given_name) LIKE LOWER(@name))');
+      qp.name = '%' + family + '%';
+    }
+  }
+
+  // State search matches the extracted _state (address[0]) OR any address in the array.
+  // This catches providers whose primary practice address is 2nd/3rd in the list.
+  if (params.state) {
+    where.push(
+      '(_state = @state OR EXISTS(' +
+      'SELECT 1 FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
+      'WHERE JSON_EXTRACT_SCALAR(a, "$.state") = @state))'
+    );
+    qp.state = params.state;
+  }
+
+  if (params.city) {
+    where.push(
+      '(LOWER(_city) LIKE LOWER(@city) OR EXISTS(' +
+      'SELECT 1 FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
+      'WHERE LOWER(JSON_EXTRACT_SCALAR(a, "$.city")) LIKE LOWER(@city)))'
+    );
+    qp.city = '%' + params.city + '%';
+  }
+
   if (where.length === 0) return [];
 
+  // Return a deduplicated list of states across all addresses so the UI can
+  // show "CA, NY, PA" rather than just the first one.
   return runQuery(
-    'SELECT _npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
+    'SELECT ' +
+    '_npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
     '_gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, ' +
-    '_active AS active ' +
+    '_active AS active, ' +
+    '(SELECT STRING_AGG(DISTINCT JSON_EXTRACT_SCALAR(a, "$.state"), ",") ' +
+    ' FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
+    ' WHERE JSON_EXTRACT_SCALAR(a, "$.state") IS NOT NULL) AS all_states ' +
     'FROM ' + tbl('practitioner') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
@@ -66,14 +112,33 @@ async function searchOrganizations(params: SearchParams) {
   const where: string[] = [];
   const qp: Record<string, string> = {};
 
-  if (params.npi) { where.push('_npi = @npi'); qp.npi = params.npi; }
-  if (params.org || params.name) { where.push('LOWER(_name) LIKE LOWER(@orgName)'); qp.orgName = '%' + (params.org || params.name) + '%'; }
-  if (params.state) { where.push('_state = @state'); qp.state = params.state; }
+  if (params.npi) {
+    where.push('_npi = @npi');
+    qp.npi = params.npi;
+  }
+  if (params.org || params.name) {
+    const q = (params.org || params.name || '').trim();
+    // Match _name OR any alias in resource.alias[] (alias array is 0%-populated
+    // in the 2026-04-09 release but including it keeps us forward-compatible
+    // and costs essentially nothing per query).
+    where.push(
+      '(LOWER(_name) LIKE LOWER(@orgName) OR EXISTS(' +
+      'SELECT 1 FROM UNNEST(JSON_EXTRACT_STRING_ARRAY(resource, "$.alias")) a ' +
+      'WHERE LOWER(a) LIKE LOWER(@orgName)))'
+    );
+    qp.orgName = '%' + q + '%';
+  }
+  if (params.state) {
+    where.push('_state = @state');
+    qp.state = params.state;
+  }
   if (where.length === 0) return [];
 
+  // Include partOf so the UI can show parent-org relationships.
   return runQuery(
-    'SELECT _npi AS npi, _name AS name, _org_type AS org_type, ' +
-    '_state AS state, _city AS city, _active AS active ' +
+    'SELECT _id AS id, _npi AS npi, _name AS name, _org_type AS org_type, ' +
+    '_state AS state, _city AS city, _active AS active, ' +
+    'JSON_EXTRACT_SCALAR(resource, "$.partOf.reference") AS part_of_ref ' +
     'FROM ' + tbl('organization') + ' ' +
     'WHERE ' + where.join(' AND ') + ' LIMIT ' + params.limit,
     qp
@@ -102,16 +167,8 @@ async function searchEndpoints(params: SearchParams) {
   const where: string[] = [];
   const qp: Record<string, string> = {};
 
-  // Endpoint stores _managing_org_id (FHIR ref like "Organization/Organization-1234"),
-  // not the org name. To search by org name we JOIN to organization.
-  if (params.org) {
-    where.push('LOWER(o._name) LIKE LOWER(@org)');
-    qp.org = '%' + params.org + '%';
-  }
-  if (params.name) {
-    where.push('LOWER(e._name) LIKE LOWER(@ename)');
-    qp.ename = '%' + params.name + '%';
-  }
+  if (params.org) { where.push('LOWER(o._name) LIKE LOWER(@org)'); qp.org = '%' + params.org + '%'; }
+  if (params.name) { where.push('LOWER(e._name) LIKE LOWER(@ename)'); qp.ename = '%' + params.name + '%'; }
   if (where.length === 0) return [];
 
   return runQuery(
@@ -125,26 +182,29 @@ async function searchEndpoints(params: SearchParams) {
 }
 
 async function getProviderProfile(npi: string) {
-  // First find the practitioner and their _id so we can build the FHIR reference
+  // Find the practitioner + all their addresses (parsed from resource JSON)
   const practitioners = await runQuery(
     'SELECT _id, _npi AS npi, _family_name AS family_name, _given_name AS given_name, ' +
-    '_gender AS gender, _state AS state, _city AS city, _postal_code AS postal_code, _active AS active ' +
+    '_gender AS gender, _active AS active, ' +
+    'TO_JSON_STRING(JSON_EXTRACT_ARRAY(resource, "$.address")) AS addresses_json, ' +
+    'TO_JSON_STRING(JSON_EXTRACT_ARRAY(resource, "$.telecom")) AS telecom_json, ' +
+    'TO_JSON_STRING(JSON_EXTRACT_ARRAY(resource, "$.qualification")) AS qualification_json ' +
     'FROM ' + tbl('practitioner') + ' WHERE _npi = @npi LIMIT 1',
     { npi }
   ) as Array<Record<string, unknown>>;
 
   if (practitioners.length === 0) {
-    return { practitioner: null, roles: [], endpoints: [] };
+    return { practitioner: null, roles: [], endpoints: [], specialties: [] };
   }
 
   const practitionerRef = 'Practitioner/' + practitioners[0]._id;
 
-  const [roles, endpoints] = await Promise.all([
+  const [rawRoles, endpoints] = await Promise.all([
     runQuery(
       'SELECT _practitioner_id, _org_id, _specialty_code, _specialty_display, _active ' +
-      'FROM ' + tbl('practitioner_role') + ' WHERE _practitioner_id = @ref LIMIT 100',
+      'FROM ' + tbl('practitioner_role') + ' WHERE _practitioner_id = @ref LIMIT 200',
       { ref: practitionerRef }
-    ),
+    ) as Promise<RoleRow[]>,
     runQuery(
       'SELECT e._name AS name, e._status AS status, e._connection_type AS connection_type, ' +
       'e._address AS endpoint_url, o._name AS managing_org ' +
@@ -156,7 +216,14 @@ async function getProviderProfile(npi: string) {
     ),
   ]);
 
-  return { practitioner: practitioners[0], roles, endpoints };
+  const specialties = groupRolesBySpecialty(rawRoles);
+
+  return {
+    practitioner: practitioners[0],
+    roles: rawRoles,           // raw list (for debugging / API consumers)
+    specialties,               // grouped view (for UI)
+    endpoints,
+  };
 }
 
 export async function GET(req: NextRequest) {
@@ -172,7 +239,12 @@ export async function GET(req: NextRequest) {
 
     if (params.npi && params.type === 'all') {
       const profile = await getProviderProfile(params.npi);
-      return NextResponse.json({ type: 'provider_profile', data: profile, source: 'cms_npd', release_date: '2026-04-09' });
+      return NextResponse.json({
+        type: 'provider_profile',
+        data: profile,
+        source: 'cms_npd',
+        release_date: '2026-04-09',
+      });
     }
 
     const results: Record<string, unknown[]> = {};
@@ -183,7 +255,20 @@ export async function GET(req: NextRequest) {
 
     const totalResults = Object.values(results).reduce((sum, arr) => sum + arr.length, 0);
 
-    return NextResponse.json({ type: 'search', query: params, total_results: totalResults, data: results, source: 'cms_npd', release_date: '2026-04-09' });
+    return NextResponse.json({
+      type: 'search',
+      query: params,
+      total_results: totalResults,
+      data: results,
+      source: 'cms_npd',
+      release_date: '2026-04-09',
+      // Hint for the UI about how we expanded the search
+      search_scope_notes: [
+        params.name ? 'Name matches use fuzzy multi-token + credential-suffix stripping.' : null,
+        params.state ? 'State matches any address in the practitioner\'s address[] array, not just the primary one.' : null,
+        params.org ? 'Org matches both _name and Organization.alias[]. Note: alias is 0% populated in 2026-04-09 release.' : null,
+      ].filter(Boolean),
+    });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('NPD search error:', message);

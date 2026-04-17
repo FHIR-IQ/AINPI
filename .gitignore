@@ -38,8 +38,9 @@ out/
 # TypeScript
 *.tsbuildinfo
 
-# Allow frontend/src/lib (needed for Next.js)
+# Allow frontend/src/lib and tests (needed for Next.js; `lib/` match above is for Python)
 !frontend/src/lib/
+!frontend/tests/lib/
 !web-app/lib/
 
 # IDE
