@@ -1,0 +1,15 @@
+{
+  "slug": "endpoint-liveness",
+  "title": "Endpoint liveness",
+  "hypotheses": ["H1", "H2", "H3", "H4", "H5"],
+  "status": "pre-registered",
+  "release_date": "2026-04-09",
+  "generated_at": "2026-04-18T00:00:00Z",
+  "methodology_version": "0.1.0-draft",
+  "commit_sha": "pending",
+  "headline": null,
+  "numerator": null,
+  "denominator": null,
+  "chart": null,
+  "notes": "Results await the ainpi-probe crawler run. Pre-registration details live in /findings/endpoint-liveness."
+}

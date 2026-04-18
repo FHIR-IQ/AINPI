@@ -1,0 +1,15 @@
+{
+  "slug": "referential-integrity",
+  "title": "Referential integrity",
+  "hypotheses": ["H6", "H7", "H8"],
+  "status": "pre-registered",
+  "release_date": "2026-04-09",
+  "generated_at": "2026-04-18T00:00:00Z",
+  "methodology_version": "0.1.0-draft",
+  "commit_sha": "pending",
+  "headline": null,
+  "numerator": null,
+  "denominator": null,
+  "chart": null,
+  "notes": "Results await pipeline run. Computed from edge extraction (pipeline/1_extract_edges.sql)."
+}

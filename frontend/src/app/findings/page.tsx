@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+import StatsStrip from '@/components/StatsStrip';
 import { FINDINGS } from '@/data/findings';
+import { loadStats } from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default function FindingsIndex() {
+  const stats = loadStats();
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
@@ -26,7 +29,7 @@ export default function FindingsIndex() {
         <p className="text-lg text-gray-600 mb-2">
           Pre-registered audit findings on the CMS National Provider Directory.
         </p>
-        <p className="text-sm text-gray-500 mb-8">
+        <p className="text-sm text-gray-500 mb-6">
           Each finding lists its null hypothesis, denominator, and data source{' '}
           <em>before</em> results drop. Methodology:{' '}
           <a href="/methodology" className="text-primary-600 hover:underline">
@@ -34,6 +37,10 @@ export default function FindingsIndex() {
           </a>
           .
         </p>
+
+        <div className="mb-8">
+          <StatsStrip stats={stats} />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {FINDINGS.map((f) => (
