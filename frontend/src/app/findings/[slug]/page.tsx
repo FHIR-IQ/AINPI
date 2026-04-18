@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { FINDINGS, findBySlug, allSlugs } from '@/data/findings';
+import { findBySlug, allSlugs } from '@/data/findings';
+import { loadFinding } from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -57,9 +58,18 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
+function fmt(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
+
 export default function FindingPage({ params }: { params: { slug: string } }) {
   const finding = findBySlug(params.slug);
   if (!finding) notFound();
+
+  const live = loadFinding(finding.slug);
+  const hasNumbers = !!(live && live.headline);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -82,13 +92,31 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
               {h}
             </span>
           ))}
-          <StatusBadge status={finding.status} />
+          <StatusBadge status={live?.status || finding.status} />
+          {live?.release_date && (
+            <span className="text-xs text-gray-500">NPD release {live.release_date}</span>
+          )}
         </div>
 
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
           {finding.title}
         </h1>
         <p className="text-lg text-gray-600 mb-8">{finding.summary}</p>
+
+        {hasNumbers && live?.headline && (
+          <section className="bg-gray-900 text-white rounded-lg p-6 mb-6">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">
+              Headline
+            </h2>
+            <p className="text-xl font-semibold leading-snug">{live.headline}</p>
+            {live.numerator != null && live.denominator != null && (
+              <p className="mt-3 text-sm text-gray-300 font-mono">
+                {fmt(live.numerator)} / {fmt(live.denominator)} ={' '}
+                {((live.numerator / live.denominator) * 100).toFixed(2)}%
+              </p>
+            )}
+          </section>
+        )}
 
         <section className="bg-white rounded-lg shadow-sm border p-6 mb-6">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
@@ -111,7 +139,16 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
           <p className="text-gray-900">{finding.dataSource}</p>
         </section>
 
-        {finding.status === 'pre-registered' && (
+        {live?.notes && (
+          <section className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-6 text-sm text-amber-900">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-amber-700 mb-1">
+              Notes
+            </h2>
+            <p>{live.notes}</p>
+          </section>
+        )}
+
+        {!hasNumbers && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900">
             <p className="font-medium mb-1">Pre-registered — results not yet published.</p>
             <p>
@@ -126,7 +163,7 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
           </div>
         )}
 
-        <footer className="mt-12 pt-8 border-t text-sm text-gray-500">
+        <footer className="mt-12 pt-8 border-t text-sm text-gray-500 space-y-1">
           <p>
             Hypotheses mapped:{' '}
             {finding.hypotheses.map((h, i) => (
@@ -136,6 +173,18 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
               </span>
             ))}
           </p>
+          {live && (
+            <p className="text-xs font-mono">
+              API:{' '}
+              <a className="text-primary-600 hover:underline" href={`/api/v1/findings/${finding.slug}.json`}>
+                /api/v1/findings/{finding.slug}.json
+              </a>
+              {' · '}methodology v{live.methodology_version}
+              {live.commit_sha && live.commit_sha !== 'pending' && (
+                <> · commit <code>{live.commit_sha.slice(0, 7)}</code></>
+              )}
+            </p>
+          )}
         </footer>
       </main>
     </div>
