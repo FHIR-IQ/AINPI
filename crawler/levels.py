@@ -23,7 +23,22 @@ from datetime import datetime, timezone
 from typing import Any
 from urllib.parse import urlparse
 
+import certifi
 import httpx
+
+
+# Shared SSL context: uses certifi's CA bundle so we don't depend on the
+# host OS's trust store. macOS Python installs and slim Docker images both
+# ship without a system CA trust path — certifi makes the crawler behave
+# identically everywhere.
+_SSL_CONTEXT: ssl.SSLContext | None = None
+
+
+def _ssl_context() -> ssl.SSLContext:
+    global _SSL_CONTEXT
+    if _SSL_CONTEXT is None:
+        _SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+    return _SSL_CONTEXT
 
 from parsers import (
     CapabilityStatementVerdict,
@@ -124,7 +139,7 @@ async def l1_l2_tcp_tls(host: str, port: int, use_tls: bool) -> dict[str, Any]:
         "l2_cert_issuer": None,
     }
 
-    ssl_ctx = ssl.create_default_context() if use_tls else None
+    ssl_ctx = _ssl_context() if use_tls else None
     try:
         reader, writer = await asyncio.wait_for(
             asyncio.open_connection(host=host, port=port, ssl=ssl_ctx, server_hostname=host if use_tls else None),
@@ -207,7 +222,11 @@ async def l3_http(client: httpx.AsyncClient, base: str) -> tuple[bool, int | Non
     resp = await _get_with_backoff(client, base)
     if resp is None:
         return False, None, "request failed after retries"
-    passing = 200 <= resp.status_code < 400 or resp.status_code == 401
+    # L3 = "server answered HTTP." Any non-5xx counts as reachable. FHIR
+    # doesn't require servers to respond at the bare base URL (only at
+    # /metadata per §2.3.1) so 4xx here is common and not a liveness
+    # failure. Status code is recorded for downstream analysis.
+    passing = resp.status_code < 500
     return passing, resp.status_code, None
 
 
