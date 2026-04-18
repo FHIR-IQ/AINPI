@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use AINPI findings, methodology, or data in academic or policy work, please cite this repository."
+title: "AINPI — open-source audit of the CMS National Provider Directory"
+type: software
+authors:
+  - family-names: "Vestel"
+    given-names: "Eugene"
+    email: "gene@fhiriq.com"
+    affiliation: "FHIR IQ"
+repository-code: "https://github.com/FHIR-IQ/AINPI"
+url: "https://ainpi.vercel.app"
+abstract: >-
+  AINPI is a reproducible, FHIR-native audit of the CMS National Provider Directory (NPD)
+  public-use files. It ingests the NPD FHIR R4 bulk dataset, runs structural and
+  profile-aware validation, referential integrity checks, endpoint liveness probes,
+  and temporal churn analysis, and emits findings as FHIR VerificationResult resources.
+keywords:
+  - FHIR
+  - healthcare interoperability
+  - provider directory
+  - data quality
+  - CMS
+  - NPPES
+  - NDH
+  - National Directory of Healthcare
+license: Apache-2.0
