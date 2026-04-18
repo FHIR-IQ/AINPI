@@ -164,7 +164,7 @@ Scored L0 through L7 against every FHIR-REST `Endpoint.address` URL:
 | L0 | DNS resolves |
 | L1 | TCP connect |
 | L2 | TLS handshake with certificate capture |
-| L3 | HTTP 2xx / 3xx / 401 at base URL |
+| L3 | HTTP response at base URL (any non-5xx). FHIR servers aren't required to answer at the bare base — only at `/metadata` — so 4xx at root is common and not a liveness failure. Status code is recorded. |
 | L4 | Parseable `CapabilityStatement` at `/metadata` |
 | L5 | `CapabilityStatement` conformance with `fhirVersion` declared + REST server mode |
 | L6 | Valid `.well-known/smart-configuration` with PKCE S256 and required fields |
