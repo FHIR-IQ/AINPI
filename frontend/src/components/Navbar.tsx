@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Sparkles, Search, Database, BarChart3, Lightbulb } from 'lucide-react';
+import { LogOut, User, Sparkles, Search, Database, BarChart3, Lightbulb, FileText, BookOpen } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -35,6 +35,20 @@ export default function Navbar() {
             >
               <BarChart3 className="w-4 h-4 mr-2" />
               Data Quality
+            </button>
+            <button
+              onClick={() => router.push('/findings')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              Findings
+            </button>
+            <button
+              onClick={() => router.push('/methodology')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              Methodology
             </button>
             <button
               onClick={() => router.push('/insights')}
