@@ -1,3 +1,10 @@
+# Private strategy / planning — NEVER commit
+.private/
+/private/
+*_STRATEGY.md
+*_PLAN.md
+RELAUNCH_*.md
+
 # Python
 __pycache__/
 *.py[cod]
