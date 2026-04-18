@@ -9,7 +9,7 @@ import { FilterProvider, useFilters } from '@/contexts/FilterContext';
 const USChoroplethMap = dynamic(() => import('@/components/charts/USChoroplethMap'), { ssr: false });
 const QualityGauge = dynamic(() => import('@/components/charts/QualityGauge'), { ssr: false });
 const SpecialtyTreemap = dynamic(() => import('@/components/charts/SpecialtyTreemap'), { ssr: false });
-const EndpointSunburst = dynamic(() => import('@/components/charts/EndpointSunburst'), { ssr: false });
+const EndpointBarChart = dynamic(() => import('@/components/charts/EndpointBarChart'), { ssr: false });
 const CompletenessHeatmap = dynamic(() => import('@/components/charts/CompletenessHeatmap'), { ssr: false });
 const StateBarChart = dynamic(() => import('@/components/charts/StateBarChart'), { ssr: false });
 const SankeyGraph = dynamic(() => import('@/components/charts/SankeyGraph'), { ssr: false });
@@ -46,10 +46,10 @@ const BAR_TOPS = [
   { value: '50', label: 'All States' },
 ];
 const SANKEY_LIMITS = [
-  { value: '5', label: 'Top 5 Orgs' },
   { value: '10', label: 'Top 10 Orgs' },
-  { value: '15', label: 'Top 15 Orgs' },
-  { value: '20', label: 'Top 20 Orgs' },
+  { value: '25', label: 'Top 25 Orgs' },
+  { value: '50', label: 'Top 50 Orgs' },
+  { value: '100', label: 'Top 100 Orgs' },
 ];
 
 function fmt(n: number): string {
@@ -87,7 +87,7 @@ function DashboardContent() {
         fetch('/api/npd/data-quality?view=states'),
         fetch('/api/npd/data-quality?view=specialties&limit=200'),
         fetch('/api/npd/data-quality?view=endpoints'),
-        fetch('/api/npd/relationships?view=overview&limit=20'),
+        fetch('/api/npd/relationships?view=overview&limit=100'),
       ]);
       if (!summaryRes.ok) throw new Error('Failed to fetch data quality metrics');
       const [summaryData, statesData, specialtiesData, endpointsData, relData] = await Promise.all([
@@ -277,8 +277,8 @@ function DashboardContent() {
                 />
               </div>
               <div className="card">
-                <ChartHeader title="FHIR Endpoint Distribution" subtitle="Inner: connection type, Outer: status" />
-                <EndpointSunburst data={endpoints} title="" size={400} />
+                <ChartHeader title="FHIR Endpoint Distribution" subtitle="Endpoints by connection type, colored by status" />
+                <EndpointBarChart data={endpoints} title="" width={620} height={320} />
               </div>
             </div>
 
@@ -328,7 +328,7 @@ function DashboardContent() {
                     ...sankeyOrgs.filter((o) => Number(o.endpoint_count) > 0).map((o) => ({ source: o.org_id, target: 'e-' + o.org_id, value: Number(o.endpoint_count) })),
                   ]}
                   width={1300}
-                  height={550}
+                  height={Math.max(550, sankeyN * 18)}
                 />
               </div>
             )}

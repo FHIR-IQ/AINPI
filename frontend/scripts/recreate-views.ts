@@ -33,8 +33,8 @@ const views = [
         _specialty_code AS specialty_code,
         _specialty_display AS specialty_display,
         COUNT(*) AS role_count,
-        COUNT(DISTINCT _practitioner_npi) AS unique_providers,
-        COUNT(DISTINCT _org_npi) AS unique_orgs
+        COUNT(DISTINCT _practitioner_id) AS unique_providers,
+        COUNT(DISTINCT _org_id) AS unique_orgs
       FROM \`${PROJECT_ID}.${DATASET_ID}.practitioner_role\`
       WHERE _specialty_code IS NOT NULL
       GROUP BY _specialty_code, _specialty_display
@@ -46,12 +46,12 @@ const views = [
     sql: `
       CREATE OR REPLACE VIEW \`${PROJECT_ID}.${DATASET_ID}.v_endpoint_by_type\` AS
       SELECT
-        _connection_type_code AS connection_type,
+        _connection_type AS connection_type,
         _status AS status,
         COUNT(*) AS endpoint_count,
-        COUNT(DISTINCT _managing_org_name) AS unique_orgs
+        COUNT(DISTINCT _managing_org_id) AS unique_orgs
       FROM \`${PROJECT_ID}.${DATASET_ID}.endpoint\`
-      GROUP BY _connection_type_code, _status
+      GROUP BY _connection_type, _status
       ORDER BY endpoint_count DESC
     `,
   },
@@ -102,11 +102,11 @@ const views = [
       SELECT
         'location',
         COUNT(*),
-        COUNTIF(_managing_org_npi IS NOT NULL),
+        COUNTIF(_managing_org_id IS NOT NULL),
         COUNTIF(_name IS NOT NULL),
         COUNTIF(_state IS NOT NULL),
         COUNTIF(_status = 'active'),
-        ROUND(SAFE_DIVIDE(COUNTIF(_managing_org_npi IS NOT NULL), COUNT(*)) * 100, 2),
+        ROUND(SAFE_DIVIDE(COUNTIF(_managing_org_id IS NOT NULL), COUNT(*)) * 100, 2),
         ROUND(SAFE_DIVIDE(COUNTIF(_name IS NOT NULL), COUNT(*)) * 100, 2),
         ROUND(SAFE_DIVIDE(COUNTIF(_state IS NOT NULL), COUNT(*)) * 100, 2)
       FROM \`${PROJECT_ID}.${DATASET_ID}.location\`
@@ -116,11 +116,11 @@ const views = [
         COUNT(*),
         COUNTIF(_address IS NOT NULL),
         COUNTIF(_name IS NOT NULL),
-        COUNTIF(_connection_type_code IS NOT NULL),
+        COUNTIF(_connection_type IS NOT NULL),
         COUNTIF(_status = 'active'),
         ROUND(SAFE_DIVIDE(COUNTIF(_address IS NOT NULL), COUNT(*)) * 100, 2),
         ROUND(SAFE_DIVIDE(COUNTIF(_name IS NOT NULL), COUNT(*)) * 100, 2),
-        ROUND(SAFE_DIVIDE(COUNTIF(_connection_type_code IS NOT NULL), COUNT(*)) * 100, 2)
+        ROUND(SAFE_DIVIDE(COUNTIF(_connection_type IS NOT NULL), COUNT(*)) * 100, 2)
       FROM \`${PROJECT_ID}.${DATASET_ID}.endpoint\`
     `,
   },

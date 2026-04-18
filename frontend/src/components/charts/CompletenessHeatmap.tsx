@@ -84,7 +84,8 @@ export default function CompletenessHeatmap({
       .delay((_, i) => i * 50)
       .attr('fill', (d) => colorScale(d.value));
 
-    // Cell labels
+    // Cell labels — set text statically so they always render regardless
+    // of animation state; only the opacity fade is animated.
     g.selectAll('text.cell-label')
       .data(data)
       .join('text')
@@ -93,25 +94,16 @@ export default function CompletenessHeatmap({
       .attr('y', (d) => y(d.row)! + y.bandwidth() / 2)
       .attr('text-anchor', 'middle')
       .attr('dominant-baseline', 'middle')
-      .attr('font-size', '13px')
-      .attr('font-weight', '600')
+      .attr('font-size', '14px')
+      .attr('font-weight', '700')
       .attr('fill', (d) => (d.value > 50 ? '#065f46' : '#991b1b'))
       .attr('pointer-events', 'none')
+      .text((d) => d.value.toFixed(1) + '%')
       .attr('opacity', 0)
       .transition()
-      .duration(600)
-      .delay((_, i) => i * 50 + 300)
-      .attr('opacity', 1)
-      .each(function (d) {
-        const el = this as SVGTextElement;
-        const interp = d3.interpolate(0, d.value);
-        d3.select(el)
-          .transition()
-          .duration(600)
-          .tween('text', () => (t: number) => {
-            el.textContent = `${interp(t).toFixed(1)}%`;
-          });
-      });
+      .duration(400)
+      .delay((_, i) => i * 40 + 200)
+      .attr('opacity', 1);
 
     // Column headers
     g.selectAll('text.col-header')

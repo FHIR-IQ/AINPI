@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.url);
     const view = url.searchParams.get('view') || 'overview';
     const org = url.searchParams.get('org');
-    const limit = Math.min(parseInt(url.searchParams.get('limit') || '20', 10), 50);
+    const limit = Math.min(parseInt(url.searchParams.get('limit') || '20', 10), 100);
 
     switch (view) {
       case 'overview': {
