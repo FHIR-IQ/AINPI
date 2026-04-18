@@ -125,12 +125,14 @@ export default function QualityGauge({
       .attr('r', 5)
       .attr('fill', '#374151');
 
-    // Value text
+    // Value text — scale font to gauge size so "100.0%" doesn't overflow
+    // small gauges (size=160 gets ~23px, size=200 gets ~28px).
+    const valueFontSize = Math.max(16, Math.floor(size / 7.1));
     const valueText = svg.append('text')
       .attr('x', cx)
-      .attr('y', cy + 35)
+      .attr('y', cy + Math.floor(size / 5.7))
       .attr('text-anchor', 'middle')
-      .attr('font-size', '28px')
+      .attr('font-size', valueFontSize + 'px')
       .attr('font-weight', '700')
       .attr('fill', valueColor);
 
@@ -171,7 +173,7 @@ export default function QualityGauge({
 
   return (
     <div className="flex flex-col items-center">
-      <svg ref={svgRef} width={size} height={size + 20} />
+      <svg ref={svgRef} width={size} height={size + 20} style={{ overflow: 'visible' }} />
       <p className="text-sm font-semibold text-gray-700 -mt-2">{label}</p>
       {sublabel && <p className="text-xs text-gray-500">{sublabel}</p>}
     </div>

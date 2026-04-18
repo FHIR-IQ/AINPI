@@ -75,17 +75,52 @@ async function syncDataQualitySummary() {
   console.log(`  Synced ${rows.length} resource type summaries.`);
 }
 
+// 50 US states + DC + inhabited territories. Anything outside this set is
+// dropped from syncs so the dashboard doesn't report "351 states" when the
+// raw data contains free-text entries like "SARAJEVO" or "BRANSON MO 65616".
+const VALID_US_STATES = new Set([
+  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA',
+  'KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ',
+  'NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT',
+  'VA','WA','WV','WI','WY',
+  'DC', // District of Columbia
+  'PR','VI','GU','MP','AS', // Puerto Rico, US Virgin Islands, Guam, N. Mariana Islands, American Samoa
+]);
+
+function isValidUsState(s: string | null | undefined): boolean {
+  return typeof s === 'string' && VALID_US_STATES.has(s.trim().toUpperCase());
+}
+
 async function syncStateMetrics() {
-  console.log('Syncing state metrics...');
+  console.log('Syncing state metrics (US states + territories only)...');
 
   // Combine practitioner, org, location, endpoint counts by state
-  const rows = await query<{
+  const allRows = await query<{
     state: string;
     provider_count: number;
     active_count: number;
     with_npi_count: number;
     npi_completeness_pct: number;
   }>(`SELECT * FROM \`${PROJECT_ID}.${DATASET_ID}.v_provider_by_state\``);
+
+  const rows = allRows.filter((r) => isValidUsState(r.state));
+  if (allRows.length !== rows.length) {
+    console.log('  Filtered ' + (allRows.length - rows.length) + ' non-US state values (kept ' + rows.length + ').');
+  }
+
+  // Remove any previously-synced rows that are no longer in the valid set
+  // (e.g., "SARAJEVO", "BRANSON MO 65616" left over from earlier syncs).
+  const existing = await prisma.npdStateMetrics.findMany({
+    where: { releaseDate: RELEASE_DATE },
+    select: { state: true },
+  });
+  const invalidExisting = existing.filter((e) => !isValidUsState(e.state));
+  if (invalidExisting.length > 0) {
+    await prisma.npdStateMetrics.deleteMany({
+      where: { releaseDate: RELEASE_DATE, state: { in: invalidExisting.map((e) => e.state) } },
+    });
+    console.log('  Deleted ' + invalidExisting.length + ' stale non-US state rows from Supabase.');
+  }
 
   const orgRows = await query<{
     state: string;
