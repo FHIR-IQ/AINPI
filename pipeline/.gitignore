@@ -1,0 +1,12 @@
+# Raw source NDJSON and working intermediates — not committed
+data/
+out/
+
+# Python virtualenv
+.venv/
+__pycache__/
+*.pyc
+
+# DuckDB ephemeral databases
+*.duckdb
+*.wal
