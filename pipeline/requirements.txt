@@ -1,0 +1,9 @@
+# AINPI pipeline — Python deps pinned to major versions
+duckdb>=1.1,<2
+pyarrow>=17,<21
+zstandard>=0.22,<1
+fhir.resources>=8,<9
+pydantic>=2.8,<3
+jellyfish>=1.1,<2      # Jaro-Winkler for name agreement
+tqdm>=4.66,<5
+click>=8.1,<9
