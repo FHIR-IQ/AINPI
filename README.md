@@ -18,11 +18,38 @@ CMS released the National Provider Directory as FHIR R4 NDJSON public use files 
 
 | Path | What it is |
 |---|---|
+| [`/methodology`](https://ainpi.vercel.app/methodology) | Versioned audit methodology — DAMA DMBOK mapping, L0–L7 scoring, reproducibility commands |
+| [`/findings`](https://ainpi.vercel.app/findings) | Pre-registered findings (H1–H22). Each states null hypothesis + denominator *before* numbers drop |
 | [`/npd`](https://ainpi.vercel.app/npd) | Public search by NPI, name, organization, state, city |
 | [`/data-quality`](https://ainpi.vercel.app/data-quality) | D3 dashboard: choropleth, sankey, knowledge graph, drill-down, validation |
 | [`/insights`](https://ainpi.vercel.app/insights) | Provenance + variance analysis (NPD vs published org numbers) |
 | [`/provider-search`](https://ainpi.vercel.app/provider-search) | Real-time search against live payer FHIR directories |
 | [`/magic-scanner`](https://ainpi.vercel.app/magic-scanner) | AI-augmented provider discovery |
+
+## Public URL contract
+
+Static JSON, CDN-cached, safe to depend on across releases:
+
+- [`/api/v1/stats.json`](https://ainpi.vercel.app/api/v1/stats.json) — site-wide counters, methodology version, commit SHA
+- `/api/v1/findings/<slug>.json` — one per finding ([types](./frontend/src/lib/api-v1-types.ts))
+
+Breaking changes bump the path (`/api/v2/`), not the shape in place.
+
+## Sibling repositories
+
+| Repo | Scope |
+|---|---|
+| [`FHIR-IQ/ainpi-probe`](https://github.com/FHIR-IQ/ainpi-probe) | FHIR endpoint liveness crawler (L0–L7). Runs separately from the site so operators can audit the code that hits their endpoints. |
+| [`FHIR-IQ/ainpi-examples`](https://github.com/FHIR-IQ/ainpi-examples) | Python + DuckDB usage examples for the `/api/v1/*` contract. |
+
+## What's in this repo
+
+```text
+frontend/          Next.js 14 app — routes, API, charts, tests
+pipeline/          DuckDB-over-Parquet validation pipeline (shard, edges, NPI Luhn, temporal)
+docs/methodology/  Versioned methodology doc, rendered at /methodology
+.github/           CI, CodeQL, dependabot, issue + PR templates, release workflow
+```
 
 ## Architecture
 
