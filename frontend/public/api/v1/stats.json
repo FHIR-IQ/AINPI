@@ -1,6 +1,6 @@
 {
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-20T00:30:00Z",
+  "generated_at": "2026-04-20T00:34:00Z",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
   "counters": {
@@ -8,8 +8,8 @@
     "npis_checked": 10856109,
     "npis_flagged": 3,
     "endpoints_live_pct": 91.7,
-    "findings_published": 1,
+    "findings_published": 2,
     "findings_in_progress": 2,
-    "findings_pre_registered": 3
+    "findings_pre_registered": 2
   }
 }

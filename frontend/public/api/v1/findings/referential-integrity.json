@@ -1,15 +1,40 @@
 {
   "slug": "referential-integrity",
   "title": "Referential integrity",
-  "hypotheses": ["H6", "H7", "H8"],
-  "status": "pre-registered",
+  "hypotheses": [
+    "H6",
+    "H7",
+    "H8"
+  ],
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-18T00:00:00Z",
+  "generated_at": "2026-04-20T00:34:06+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": null,
-  "numerator": null,
-  "denominator": null,
-  "chart": null,
-  "notes": "Results await pipeline run. Computed from edge extraction (pipeline/1_extract_edges.sql)."
+  "headline": "Referential integrity is clean but coverage is sparse. 0.000% of 17.0M declared cross-resource references actually dangle (target missing). But only 3.0% of Endpoints carry a managingOrganization (149,080 of 5,043,524) and only 76.0% of Locations do (2,654,922 of 3,494,239). H8: the NPD bulk export does not ship HealthcareService (NDH IG defines 10 resources; NPD ships 6).",
+  "numerator": 0,
+  "denominator": 17016618,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "PR \u2192 Practitioner (coverage)",
+        "value": 100.0
+      },
+      {
+        "label": "PR \u2192 Organization (coverage)",
+        "value": 97.98
+      },
+      {
+        "label": "Location \u2192 Org (coverage)",
+        "value": 75.98
+      },
+      {
+        "label": "Endpoint \u2192 Org (coverage)",
+        "value": 2.96
+      }
+    ]
+  },
+  "notes": "Integrity (dangling rate among declared references): H6a PR\u2192Practitioner 0.0000%, H6b PR\u2192Organization 0.0000%, H7 Location\u2192Org 0.0000%, Endpoint\u2192Org 0.0000%. All near zero \u2014 when a reference is declared, it resolves. Coverage (share of rows with the optional reference populated): PR\u2192Practitioner 100.00% (required), PR\u2192Organization 97.98%, Location\u2192managingOrganization 75.98%, Endpoint\u2192managingOrganization 2.96%. The Endpoint\u2192Organization gap pairs with H5 (98.69% of Orgs have no Endpoint referencing them) \u2014 the Endpoint\u2194Organization link is sparse in both directions. H8 requires HealthcareService, which is one of four NDH IG resources (HealthcareService, InsurancePlan, Network, Verification) absent from the 2026-04-09 NPD bulk export. Any HealthcareService-based check cannot be performed from NPD alone."
 }
