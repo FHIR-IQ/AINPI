@@ -52,7 +52,7 @@ export default function StatsStrip({ stats, variant = 'light' }: StatsStripProps
         />
         <Metric
           label="Findings"
-          value={`${stats.counters.findings_published} published / ${stats.counters.findings_pre_registered} pre-reg`}
+          value={`${stats.counters.findings_published} pub · ${stats.counters.findings_in_progress ?? 0} WIP · ${stats.counters.findings_pre_registered} pre-reg`}
           small
           labelColor={labelColor}
           numberColor={numberColor}

@@ -1,15 +1,42 @@
 {
   "slug": "npi-taxonomy-correctness",
   "title": "NPI and taxonomy correctness",
-  "hypotheses": ["H9", "H10", "H11", "H12", "H13"],
-  "status": "pre-registered",
+  "hypotheses": [
+    "H9",
+    "H10",
+    "H11",
+    "H12",
+    "H13"
+  ],
+  "status": "in-progress",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-18T00:00:00Z",
+  "generated_at": "2026-04-20T00:21:41+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": null,
-  "numerator": null,
-  "denominator": null,
-  "chart": null,
-  "notes": "Results await pipeline run. Requires NPPES monthly file join + NUCC quarterly code set."
+  "headline": "100.0000% of 10.9M NDH NPIs pass structural + Luhn validation (3 failing records: 1 structural, 2 Luhn checksum). 188,366 Practitioner/Organization resources carry no us-npi identifier.",
+  "numerator": 3,
+  "denominator": 10856109,
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "OK",
+        "value": 10856106
+      },
+      {
+        "label": "INVALID_STRUCTURE",
+        "value": 1
+      },
+      {
+        "label": "LUHN_FAIL",
+        "value": 2
+      },
+      {
+        "label": "MISSING",
+        "value": 188366
+      }
+    ]
+  },
+  "notes": "H9 only \u2014 Practitioner: 7,441,210 OK / 1 invalid structure / 2 Luhn fail / 0 missing. Organization: 3,414,896 OK / 0 invalid / 0 Luhn fail / 188,366 missing. H10 (NPPES existence), H11 (name agreement), H12 (NUCC taxonomy), H13 (specialty agreement) pending the NPPES monthly file + NUCC code set joins."
 }

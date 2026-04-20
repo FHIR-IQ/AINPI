@@ -1,15 +1,46 @@
 {
   "slug": "temporal-staleness",
   "title": "Temporal staleness",
-  "hypotheses": ["H18"],
-  "status": "pre-registered",
+  "hypotheses": [
+    "H18"
+  ],
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-18T00:00:00Z",
+  "generated_at": "2026-04-20T00:15:19+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": null,
-  "numerator": null,
-  "denominator": null,
-  "chart": null,
-  "notes": "Results await pipeline run. Computed from meta.lastUpdated CDF vs 30/90/365-day thresholds."
+  "headline": "100.0% of NPD resources carry a meta.lastUpdated value on the release day (2026-04-09). Distinct meta.lastUpdated values range from 1 to 5 across the 6 resource types \u2014 meta.lastUpdated on the NPD bulk public-use files is a bulk-export stamp, not a per-resource freshness signal.",
+  "numerator": 27200471,
+  "denominator": 27200569,
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "practitioner",
+        "value": 1
+      },
+      {
+        "label": "organization",
+        "value": 5
+      },
+      {
+        "label": "location",
+        "value": 1
+      },
+      {
+        "label": "endpoint",
+        "value": 1
+      },
+      {
+        "label": "practitioner_role",
+        "value": 1
+      },
+      {
+        "label": "organization_affiliation",
+        "value": 1
+      }
+    ]
+  },
+  "notes": "Per-resource distinct meta.lastUpdated values on release day 2026-04-09: practitioner \u2192 1 distinct, 100.00% at modal; organization \u2192 5 distinct, 55.48% at modal; location \u2192 1 distinct, 100.00% at modal; endpoint \u2192 1 distinct, 100.00% at modal; practitioner_role \u2192 1 distinct, 100.00% at modal; organization_affiliation \u2192 1 distinct, 100.00% at modal. Regulatory compliance with the 30-day CMS-9115-F or 90-day REAL Health Providers Act / No Surprises Act update cadence CANNOT be measured from meta.lastUpdated on the bulk files \u2014 a per-record freshness signal from upstream NPPES (enumeration_date / last_updated) or PECOS would be required."
 }

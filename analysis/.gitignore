@@ -1,0 +1,5 @@
+# Intermediate outputs. Finding JSONs live under frontend/public/api/v1/
+__pycache__/
+*.pyc
+out/
+.venv/
