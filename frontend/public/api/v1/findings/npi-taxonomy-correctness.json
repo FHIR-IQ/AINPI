@@ -8,35 +8,47 @@
     "H12",
     "H13"
   ],
-  "status": "in-progress",
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-20T00:21:41+00:00",
+  "generated_at": "2026-04-20T01:58:20+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": "100.0000% of 10.9M NDH NPIs pass structural + Luhn validation (3 failing records: 1 structural, 2 Luhn checksum). 188,366 Practitioner/Organization resources carry no us-npi identifier.",
-  "numerator": 3,
+  "headline": "H9 3/10,856,109 NPIs fail structural+Luhn. H10 \u2014 0.789% of 10.9M NDH NPIs are NOT in NPPES; 3.49% are deactivated in NPPES; 0.000% have entity-type mismatch (95.72% clean). H11 \u2014 94.9% of Practitioners match NPPES on full name (exact); 56.3% of Organizations match NPPES on business name (exact). H12 \u2014 99.83% of 7.1M NDH Practitioner.qualification NUCC codes are valid in NUCC v17.0. NDH PractitionerRole.specialty uses CMS Medicare Physician Specialty Types (100.0% of specialty-bearing roles), NOT NUCC. H13 \u2014 92.02% of 7.1M NDH Practitioners agree with NPPES on primary taxonomy code.",
+  "numerator": 10391125,
   "denominator": 10856109,
   "chart": {
     "type": "bar",
-    "unit": "count",
+    "unit": "percent",
     "data": [
       {
-        "label": "OK",
-        "value": 10856106
+        "label": "H10 NPPES match OK",
+        "value": 95.72
       },
       {
-        "label": "INVALID_STRUCTURE",
-        "value": 1
+        "label": "H10 not in NPPES",
+        "value": 0.789
       },
       {
-        "label": "LUHN_FAIL",
-        "value": 2
+        "label": "H10 deactivated in NPPES",
+        "value": 3.49
       },
       {
-        "label": "MISSING",
-        "value": 188366
+        "label": "H11 full name match (Prac)",
+        "value": 94.9
+      },
+      {
+        "label": "H11 name match (Org)",
+        "value": 56.3
+      },
+      {
+        "label": "H12 NUCC valid (qual.)",
+        "value": 99.83
+      },
+      {
+        "label": "H13 NUCC agree w/ NPPES",
+        "value": 92.0
       }
     ]
   },
-  "notes": "H9 only \u2014 Practitioner: 7,441,210 OK / 1 invalid structure / 2 Luhn fail / 0 missing. Organization: 3,414,896 OK / 0 invalid / 0 Luhn fail / 188,366 missing. H10 (NPPES existence), H11 (name agreement), H12 (NUCC taxonomy), H13 (specialty agreement) pending the NPPES monthly file + NUCC code set joins."
+  "notes": "Source: bigquery-public-data.nppes.npi_raw (latest update 2026-02-09, 9.37M NPIs) + .healthcare_provider_taxonomy_code_set_170 joined against NDH 2026-04-09. ~8-week gap window means NPIs deactivated between 2026-02-09 and 2026-04-09 may appear active in NPPES \u2014 known caveat. H10: Practitioner \u2014 7,124,478 ok / 56,157 not in NPPES / 260,534 deactivated / 44 enumerated as org in NPPES. Organization \u2014 3,266,647 ok / 29,548 not in NPPES / 118,701 deactivated / 0 enumerated as individual. H11 uses exact case-insensitive match after TRIM+UPPER; Jaro-Winkler \u22650.85 = v2 upgrade. H12 NOTE: NDH PractitionerRole.specialty uses CMS Medicare Physician Specialty Types with system URI https://www.cms.gov/files/document/acceptable-physician-specialty-types-py-2025.pdf (codes like '14-50' = 'PRACTITIONER - NURSE PRACTITIONER'), NOT NUCC. NUCC codes appear on Practitioner.qualification.code with system http://nucc.org/provider-taxonomy (7,124,017 of 7,441,213 Practitioners). H12's metric is validity of those NUCC codes against the v17.0 code set (7,112,042 valid of 7,124,017 populated). NUCC v17.0 is the latest version in bigquery-public-data; if NDH uses a newer code set, codes from later releases would appear invalid here (upgrade to current quarterly NUCC + accept-last-3-years window = v2). H13 compares NUCC primary taxonomy NDH\u2192NPPES only for Practitioners where NDH.qualification.system = http://nucc.org/provider-taxonomy AND NPPES entity_type_code = 1."
 }
