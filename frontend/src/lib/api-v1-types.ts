@@ -31,10 +31,12 @@ export interface ApiV1Stats {
     npis_checked: number | null;
     /** NPIs that failed any validation code (INVALID_STRUCTURE or LUHN_FAIL). */
     npis_flagged: number | null;
-    /** % of FHIR-REST endpoints that pass L3 or better. Null until crawler runs. */
+    /** % of FHIR-REST endpoints that serve a parseable CapabilityStatement. Null until crawler runs. */
     endpoints_live_pct: number | null;
     /** Findings whose status has advanced to 'published'. */
     findings_published: number;
+    /** Findings with partial results landed (one or more hypotheses published, others pending). */
+    findings_in_progress: number;
     /** Findings currently in pre-registered state (no numbers yet). */
     findings_pre_registered: number;
   };

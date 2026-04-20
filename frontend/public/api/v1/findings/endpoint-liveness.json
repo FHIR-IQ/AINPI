@@ -1,15 +1,42 @@
 {
   "slug": "endpoint-liveness",
   "title": "Endpoint liveness",
-  "hypotheses": ["H1", "H2", "H3", "H4", "H5"],
-  "status": "pre-registered",
+  "hypotheses": [
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "H5"
+  ],
+  "status": "in-progress",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-18T00:00:00Z",
+  "generated_at": "2026-04-20T00:28:09+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": null,
-  "numerator": null,
-  "denominator": null,
-  "chart": null,
-  "notes": "Results await the ainpi-probe crawler run. Pre-registration details live in /findings/endpoint-liveness."
+  "headline": "Pilot of 300 distinct FHIR-REST hosts: 96.7% answered HTTP, 91.7% served a parseable CapabilityStatement at /metadata, 86.7% published a valid .well-known/smart-configuration. Across all 5.0M NPD endpoints, 74.19% declare FHIR-REST and 25.81% declare Direct. 98.69% of Organizations carry zero Endpoint references.",
+  "numerator": 275,
+  "denominator": 300,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "L3 any HTTP",
+        "value": 96.7
+      },
+      {
+        "label": "H1 200/30x/401",
+        "value": 65.0
+      },
+      {
+        "label": "H2 CS parseable",
+        "value": 91.7
+      },
+      {
+        "label": "H3 SMART valid",
+        "value": 86.7
+      }
+    ]
+  },
+  "notes": "H1-H3 results from 300-host pilot sample (1 endpoint per host, stratified by host-fingerprint). Full FHIR-REST crawl spans 2,974 distinct hosts; results here are preliminary. Highest level reached on pilot: {7: 280, -1: 7, 3: 8, 0: 3, 5: 1, 6: 1}. FHIR version top declarations: {'4.0.1': 165, '4.0.0': 110}. H4 and H5 computed over the full population in BigQuery: H4 5,043,524 endpoints (3,741,547 FHIR-REST, 1,301,977 Direct); H5 3,603,262 orgs of which 3,556,049 have no managingOrganization reference from any Endpoint."
 }
