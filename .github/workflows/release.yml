@@ -1,0 +1,76 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Draft GitHub Release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
+          if [ -z "$PREV" ]; then
+            RANGE=""
+            echo "First release; including all history."
+          else
+            RANGE="${PREV}..${TAG}"
+            echo "Range: $RANGE"
+          fi
+
+          {
+            echo "## What's in ${TAG}"
+            echo
+            echo "### Commits"
+            if [ -z "$RANGE" ]; then
+              git log --pretty=format:"- %s (%h)" | head -100
+            else
+              git log "${RANGE}" --pretty=format:"- %s (%h)"
+            fi
+            echo
+            echo
+            echo "### Full diff"
+            if [ -z "$PREV" ]; then
+              echo "Full history — first tagged release."
+            else
+              echo "https://github.com/${GITHUB_REPOSITORY}/compare/${PREV}...${TAG}"
+            fi
+            echo
+            echo "### Methodology + findings"
+            echo
+            echo "- Site: https://ainpi.vercel.app"
+            echo "- Methodology (versioned): https://ainpi.vercel.app/methodology"
+            echo "- Findings: https://ainpi.vercel.app/findings"
+            echo "- Static JSON contract: https://ainpi.vercel.app/api/v1/stats.json"
+            echo
+            echo "### Sibling repos"
+            echo
+            echo "- Crawler: https://github.com/FHIR-IQ/ainpi-probe"
+            echo "- Usage examples: https://github.com/FHIR-IQ/ainpi-examples"
+          } > RELEASE_NOTES.md
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PRERELEASE=""
+          if [[ "${GITHUB_REF_NAME}" == *-* ]]; then
+            PRERELEASE="--prerelease"
+          fi
+          gh release create "${GITHUB_REF_NAME}" \
+            --title "${GITHUB_REF_NAME}" \
+            --notes-file RELEASE_NOTES.md \
+            --draft \
+            $PRERELEASE
