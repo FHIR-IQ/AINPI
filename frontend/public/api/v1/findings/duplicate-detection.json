@@ -1,15 +1,35 @@
 {
   "slug": "duplicate-detection",
   "title": "Duplicate detection",
-  "hypotheses": ["H14", "H15"],
-  "status": "pre-registered",
+  "hypotheses": [
+    "H14",
+    "H15"
+  ],
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-18T00:00:00Z",
+  "generated_at": "2026-04-20T01:44:41+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": null,
-  "numerator": null,
-  "denominator": null,
-  "chart": null,
-  "notes": "Results await pipeline run. Practitioner duplicates by NPI; Organization duplicates by normalized name + address."
+  "headline": "Practitioner dedup is clean \u2014 0 excess rows across 7,441,212 NPIs (H14). But Organizations multiply: 70.5% of the 1,999,118 unique Org NPIs map to more than one Organization resource (1,415,777 excess rows; max 5 resources per one NPI). By normalized (name, state, city), 70.3% of keys repeat. Downstream consumers assuming one Organization resource = one real-world entity will be wrong roughly two out of three times.",
+  "numerator": 1226189,
+  "denominator": 9185995,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "H14 Practitioner by NPI",
+        "value": 0.0
+      },
+      {
+        "label": "H15 Org by name+state+city",
+        "value": 70.2774
+      },
+      {
+        "label": "H15b Org by NPI",
+        "value": 70.5422
+      }
+    ]
+  },
+  "notes": "BigQuery dataset has primary-key dedup applied at ingest (-4.6M Practitioner, -383K Organization at _id). These are residual entity-level duplicates. H14 key = _npi on practitioner. Max copies observed: 1 for a single Practitioner NPI. H15 key = (LOWER(name) stripped of LLC/INC/PC/PA/PLLC/CORP/LLP/LTD/CO/COMPANY/THE and non-alphanumerics, UPPER(state), UPPER(TRIM(city))); orgs with missing name or state or city are excluded. Max copies for one key: 2206. H15-bonus keys by _npi; max copies for one Org NPI: 5. Caveat \u2014 some portion of the Organization multiplicity may reflect CMS modeling one FHIR Organization resource per service location rather than true duplication. Either interpretation breaks the common downstream assumption that COUNT(Organization) equals the number of unique organizations. Fuzzy matching (Jaro-Winkler, suite-unit tolerance) is a v2 enhancement."
 }
