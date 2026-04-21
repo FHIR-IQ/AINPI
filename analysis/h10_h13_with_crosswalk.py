@@ -261,7 +261,13 @@ def main() -> None:
     """)
     print(f"  {h13_internal}")
 
-    print("\nH13b — external NDH↔NPPES agreement (NUCC on qualification vs NPPES primary taxonomy)")
+    print("\nH13b — external NDH↔NPPES agreement (NUCC on qualification vs ALL NPPES taxonomy slots)")
+    # NPPES carries up to 15 taxonomies per NPI (slots 1..15 with a
+    # parallel switch_1..15 marking which is primary). The prior
+    # implementation compared NDH only to slot 1 — but NDH may record
+    # the provider's SECONDARY board (e.g. a pulmonologist who also
+    # holds critical-care credentials). Matching any of the 15 slots
+    # is a more accurate NDH↔NPPES agreement signal.
     h13_external = scalar(c, f"""
     WITH ndh AS (
       SELECT p._npi,
@@ -270,14 +276,30 @@ def main() -> None:
       WHERE p._npi IS NOT NULL
         AND JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].system') = 'http://nucc.org/provider-taxonomy'
         AND JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].code') IS NOT NULL
+    ),
+    joined AS (
+      SELECT
+        ndh.ndh_code,
+        n.healthcare_provider_taxonomy_code_1 AS slot_1,
+        [n.healthcare_provider_taxonomy_code_1, n.healthcare_provider_taxonomy_code_2,
+         n.healthcare_provider_taxonomy_code_3, n.healthcare_provider_taxonomy_code_4,
+         n.healthcare_provider_taxonomy_code_5, n.healthcare_provider_taxonomy_code_6,
+         n.healthcare_provider_taxonomy_code_7, n.healthcare_provider_taxonomy_code_8,
+         n.healthcare_provider_taxonomy_code_9, n.healthcare_provider_taxonomy_code_10,
+         n.healthcare_provider_taxonomy_code_11, n.healthcare_provider_taxonomy_code_12,
+         n.healthcare_provider_taxonomy_code_13, n.healthcare_provider_taxonomy_code_14,
+         n.healthcare_provider_taxonomy_code_15] AS all_slots
+      FROM ndh
+      JOIN `{NPPES_DATASET}.npi_raw` n ON n.npi = ndh._npi AND n.entity_type_code = 1
     )
     SELECT
       COUNT(*) AS total,
-      COUNTIF(ndh.ndh_code = n.healthcare_provider_taxonomy_code_1) AS agree,
-      COUNTIF(ndh.ndh_code != n.healthcare_provider_taxonomy_code_1 AND n.healthcare_provider_taxonomy_code_1 IS NOT NULL) AS disagree,
-      COUNTIF(n.healthcare_provider_taxonomy_code_1 IS NULL) AS nppes_missing
-    FROM ndh
-    JOIN `{NPPES_DATASET}.npi_raw` n ON n.npi = ndh._npi AND n.entity_type_code = 1
+      COUNTIF(ndh_code = slot_1) AS agree_slot_1,
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(all_slots) c WHERE c = ndh_code)) AS agree_any_slot,
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(all_slots) c WHERE c = ndh_code)
+              AND ndh_code != slot_1) AS agree_only_secondary,
+      COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(all_slots) c WHERE c = ndh_code)) AS disagree_entirely
+    FROM joined
     """)
     print(f"  {h13_external}")
 
@@ -448,7 +470,10 @@ def main() -> None:
     h12_nucc_valid     = pct(h12_nucc["valid_in_nucc_v17"], h12_nucc["with_nucc_code"])
     h12_cms_valid      = pct(h12_cms["valid_in_crosswalk"], h12_cms["total_role_specialties"])
     h13_int_pct        = pct(h13_internal["crosswalk_consistent"], h13_internal["total_pairs"])
-    h13_ext_pct        = pct(h13_external["agree"], h13_external["total"])
+    h13_ext_slot1_pct  = pct(h13_external["agree_slot_1"], h13_external["total"])
+    h13_ext_any_pct    = pct(h13_external["agree_any_slot"], h13_external["total"])
+    h13_ext_only_sec_pct = pct(h13_external["agree_only_secondary"], h13_external["total"])
+    h13_ext_disagree_pct = pct(h13_external["disagree_entirely"], h13_external["total"])
 
     headline = (
         f"{h10_pct_ok:.2f}% of {n(h10['total'])/1_000_000:.1f}M NDH NPIs clear NPPES "
@@ -463,7 +488,9 @@ def main() -> None:
         f"against the CMS-published crosswalk). "
         f"Internal cross-system consistency: {h13_int_pct:.1f}% of "
         f"{n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs agree via the crosswalk. "
-        f"External NUCC agreement NDH↔NPPES: {h13_ext_pct:.1f}%."
+        f"External NUCC agreement NDH↔NPPES: {h13_ext_slot1_pct:.1f}% on the primary slot, "
+        f"{h13_ext_any_pct:.1f}% across any of the 15 NPPES slots "
+        f"(+{h13_ext_only_sec_pct:.1f}pp from secondary matches)."
     )
 
     chart_data = [
@@ -479,7 +506,8 @@ def main() -> None:
         {"label": "H12 NUCC valid",                "value": round(h12_nucc_valid, 2)},
         {"label": "H12 CMS code valid",            "value": round(h12_cms_valid, 2)},
         {"label": "H13 internal crosswalk",        "value": round(h13_int_pct, 1)},
-        {"label": "H13 NDH↔NPPES agree",           "value": round(h13_ext_pct, 1)},
+        {"label": "H13 NDH↔NPPES primary slot",    "value": round(h13_ext_slot1_pct, 1)},
+        {"label": "H13 NDH↔NPPES any of 15",       "value": round(h13_ext_any_pct, 1)},
     ]
 
     # Format confusion matrix rows as compact strings for the notes
@@ -524,8 +552,19 @@ def main() -> None:
         f"{n(h13_internal['crosswalk_consistent']):,} agree via crosswalk. "
         f"H13 confusion matrix — top 10 inconsistent (Medicare → qualification-NUCC) pairs: "
         f"{confusion_block}. "
-        f"H13 external: {n(h13_external['agree']):,} / {n(h13_external['total']):,} NUCC "
-        f"qualifications match NPPES primary taxonomy exactly. "
+        f"H13 external (v2): NPPES stores up to 15 taxonomies per NPI "
+        f"(slots 1..15). Prior version compared only to slot 1 ({h13_ext_slot1_pct:.2f}% "
+        f"agree). Matching against ANY of the 15 slots: "
+        f"{n(h13_external['agree_any_slot']):,} / {n(h13_external['total']):,} "
+        f"= {h13_ext_any_pct:.2f}%. The delta "
+        f"({n(h13_external['agree_only_secondary']):,} rows, +{h13_ext_only_sec_pct:.2f}pp) "
+        f"are Practitioners whose NDH qualification matches an NPPES SECONDARY "
+        f"board (a pulmonologist NPPES-primary plus critical-care NPPES-secondary "
+        f"where NDH records the critical-care NUCC). "
+        f"{n(h13_external['disagree_entirely']):,} rows ({h13_ext_disagree_pct:.2f}%) "
+        f"show NDH qualifications that don't appear anywhere in NPPES — these are "
+        f"the genuine disagreements (real drift OR NDH uses a finer-grained code "
+        f"than NPPES carries). "
         f"Known caveats: NPPES vintage 2026-02-09 vs NDH {RELEASE_DATE} — 8-week "
         f"gap means taxonomy changes in that window show as disagreement; "
         f"Jaro-Winkler ≥0.85 is a permissive threshold that recovers common "
@@ -544,7 +583,7 @@ def main() -> None:
         "status": "published",
         "release_date": RELEASE_DATE,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "methodology_version": "0.4.0-draft",
+        "methodology_version": "0.5.0-draft",
         "commit_sha": "pending",
         "headline": headline,
         "numerator": n(h13_internal["crosswalk_consistent"]),
