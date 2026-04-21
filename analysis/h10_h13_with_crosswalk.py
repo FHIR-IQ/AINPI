@@ -281,6 +281,157 @@ def main() -> None:
     """)
     print(f"  {h13_external}")
 
+    # ---------------- Refinements: Jaro-Winkler + name tolerance + confusion matrix ----------------
+    # BigQuery JS UDF for Jaro-Winkler similarity. Runs server-side so we
+    # don't have to stream millions of rows over the network.
+    # (Python triple-single for the outer string so BQ's triple-double
+    # JS-body literal doesn't need escaping.)
+    JW_UDFS = r'''
+    CREATE TEMP FUNCTION jw(s1 STRING, s2 STRING) RETURNS FLOAT64
+    LANGUAGE js AS r"""
+      if (!s1 || !s2) return 0.0;
+      if (s1 === s2) return 1.0;
+      const m = Math.max(Math.floor(Math.max(s1.length, s2.length) / 2) - 1, 0);
+      const s1m = new Array(s1.length).fill(false);
+      const s2m = new Array(s2.length).fill(false);
+      let matches = 0;
+      for (let i = 0; i < s1.length; i++) {
+        const lo = Math.max(0, i - m), hi = Math.min(i + m + 1, s2.length);
+        for (let j = lo; j < hi; j++) {
+          if (s2m[j] || s1[i] !== s2[j]) continue;
+          s1m[i] = true; s2m[j] = true; matches++; break;
+        }
+      }
+      if (matches === 0) return 0.0;
+      let t = 0, k = 0;
+      for (let i = 0; i < s1.length; i++) {
+        if (!s1m[i]) continue;
+        while (!s2m[k]) k++;
+        if (s1[i] !== s2[k]) t++;
+        k++;
+      }
+      t = t / 2;
+      const jaro = (matches / s1.length + matches / s2.length + (matches - t) / matches) / 3;
+      let p = 0;
+      for (let i = 0; i < Math.min(s1.length, s2.length, 4); i++) {
+        if (s1[i] === s2[i]) p++;
+        else break;
+      }
+      return jaro + p * 0.1 * (1 - jaro);
+    """;
+
+    CREATE TEMP FUNCTION norm_org(s STRING) AS (
+      TRIM(REGEXP_REPLACE(
+        REGEXP_REPLACE(
+          REGEXP_REPLACE(UPPER(IFNULL(s, '')),
+            r'\b(LLC|INC|CORP|PC|PA|PLLC|LLP|LTD|CO|COMPANY|THE)\b\.?', ''),
+          r'[^A-Z0-9 ]+', ' '),
+        r'\s+', ' '))
+    );
+
+    CREATE TEMP FUNCTION norm_person(s STRING) AS (
+      TRIM(REGEXP_REPLACE(
+        REGEXP_REPLACE(
+          REGEXP_REPLACE(UPPER(IFNULL(s, '')),
+            r'\b(JR|SR|II|III|IV|V|MD|DO|PHD|RN|NP|PA-C|FNP|FNP-BC|DMD|DDS|DVM|PHARMD)\b\.?', ''),
+          r"[^A-Z ']+", ' '),
+        r'\s+', ' '))
+    );
+    '''
+
+    print("\nH11 refinement — Organization name, with normalization + Jaro-Winkler")
+    h11_org_refined = scalar(c, JW_UDFS + f"""
+    WITH pairs AS (
+      SELECT
+        UPPER(TRIM(o._name)) AS raw_ndh,
+        UPPER(TRIM(n.provider_organization_name_legal_business_name)) AS raw_nppes,
+        norm_org(o._name) AS norm_ndh,
+        norm_org(n.provider_organization_name_legal_business_name) AS norm_nppes
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.organization` o
+      JOIN `{NPPES_DATASET}.npi_raw` n ON n.npi = o._npi AND n.entity_type_code = 2
+      WHERE o._npi IS NOT NULL AND o._name IS NOT NULL
+    )
+    SELECT
+      COUNT(*) AS total,
+      COUNTIF(raw_ndh = raw_nppes) AS exact,
+      COUNTIF(norm_ndh = norm_nppes) AS normalized_match,
+      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.95) AS jw_95,
+      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.85) AS jw_85,
+      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.80) AS jw_80
+    FROM pairs
+    """)
+    print(f"  {h11_org_refined}")
+
+    print("\nH11 refinement — Practitioner name, with normalization + Jaro-Winkler")
+    h11_prac_refined = scalar(c, JW_UDFS + f"""
+    WITH pairs AS (
+      SELECT
+        norm_person(CONCAT(IFNULL(p._given_name, ''), ' ', IFNULL(p._family_name, ''))) AS norm_ndh,
+        norm_person(CONCAT(IFNULL(n.provider_first_name, ''), ' ', IFNULL(n.provider_last_name_legal_name, ''))) AS norm_nppes,
+        UPPER(TRIM(p._family_name)) AS raw_ndh_family,
+        UPPER(TRIM(n.provider_last_name_legal_name)) AS raw_nppes_family
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner` p
+      JOIN `{NPPES_DATASET}.npi_raw` n ON n.npi = p._npi AND n.entity_type_code = 1
+      WHERE p._npi IS NOT NULL AND p._family_name IS NOT NULL
+    )
+    SELECT
+      COUNT(*) AS total,
+      COUNTIF(raw_ndh_family = raw_nppes_family) AS family_exact,
+      COUNTIF(norm_ndh = norm_nppes) AS normalized_full_match,
+      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.95) AS jw_95,
+      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.85) AS jw_85
+    FROM pairs
+    """)
+    print(f"  {h11_prac_refined}")
+
+    print("\nH13 confusion matrix — top inconsistent (CMS specialty, NUCC) pairs")
+    h13_confusion = q(c, f"""
+    WITH prac_with_npi AS (
+      SELECT _id,
+        JSON_EXTRACT_SCALAR(resource, '$.qualification[0].code.coding[0].code') AS ndh_qual_code,
+        JSON_EXTRACT_SCALAR(resource, '$.qualification[0].code.coding[0].system') AS ndh_qual_sys
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner`
+      WHERE _npi IS NOT NULL
+    ),
+    roles AS (
+      SELECT pr._practitioner_id,
+             REGEXP_REPLACE(pr._specialty_code, r'^\\d+-', '') AS medicare_code,
+             pr._specialty_display AS role_desc
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner_role` pr
+      WHERE pr._specialty_code IS NOT NULL
+    ),
+    joined AS (
+      SELECT r.medicare_code, p.ndh_qual_code, ANY_VALUE(r.role_desc) AS role_desc, COUNT(*) AS n
+      FROM prac_with_npi p
+      JOIN roles r ON r._practitioner_id = CONCAT('Practitioner/', p._id)
+      WHERE p.ndh_qual_sys = 'http://nucc.org/provider-taxonomy'
+        AND p.ndh_qual_code IS NOT NULL
+      GROUP BY r.medicare_code, p.ndh_qual_code
+    ),
+    inconsistent AS (
+      SELECT j.*
+      FROM joined j
+      WHERE NOT EXISTS (
+        SELECT 1 FROM `{CROSSWALK_TABLE}` cw
+        WHERE cw.medicare_specialty_code = j.medicare_code
+          AND cw.nucc_taxonomy_code = j.ndh_qual_code
+      )
+    )
+    SELECT
+      i.medicare_code,
+      i.ndh_qual_code,
+      i.role_desc,
+      i.n,
+      (SELECT ANY_VALUE(CONCAT(IFNULL(classification, ''), IF(specialization IS NOT NULL, ' / ' || specialization, '')))
+       FROM `{NUCC_TABLE}` WHERE code = i.ndh_qual_code) AS nucc_desc
+    FROM inconsistent i
+    ORDER BY i.n DESC
+    LIMIT 15
+    """)
+    print(f"  top 5 confusion pairs:")
+    for r in h13_confusion[:5]:
+        print(f"    {r.medicare_code} ({(r.role_desc or '?')[:40]:40}) → {r.ndh_qual_code} ({(r.nucc_desc or '?')[:40]:40}) n={r.n:,}")
+
     # ---------------- Compose finding ----------------
     h9_total = 10856109
     h9_failures = 3
@@ -288,65 +439,102 @@ def main() -> None:
     h10_pct_ok     = pct(h10["ok"], h10["total"])
     h10_deact_pct  = pct(h10["deactivated"], h10["total"])
     h10_ghost_pct  = pct(h10["not_enumerated"], h10["total"])
-    h11p_pct       = pct(h11_prac["full_match"], h11_prac["total"])
-    h11o_pct       = pct(h11_org["exact_match"], h11_org["total"])
-    h12_nucc_valid = pct(h12_nucc["valid_in_nucc_v17"], h12_nucc["with_nucc_code"])
-    h12_cms_valid  = pct(h12_cms["valid_in_crosswalk"], h12_cms["total_role_specialties"])
-    h13_int_pct    = pct(h13_internal["crosswalk_consistent"], h13_internal["total_pairs"])
-    h13_ext_pct    = pct(h13_external["agree"], h13_external["total"])
+    h11p_pct           = pct(h11_prac["full_match"], h11_prac["total"])
+    h11o_pct           = pct(h11_org["exact_match"], h11_org["total"])
+    h11p_norm_pct      = pct(h11_prac_refined["normalized_full_match"], h11_prac_refined["total"])
+    h11p_jw85_pct      = pct(h11_prac_refined["jw_85"], h11_prac_refined["total"])
+    h11o_norm_pct      = pct(h11_org_refined["normalized_match"], h11_org_refined["total"])
+    h11o_jw85_pct      = pct(h11_org_refined["jw_85"], h11_org_refined["total"])
+    h12_nucc_valid     = pct(h12_nucc["valid_in_nucc_v17"], h12_nucc["with_nucc_code"])
+    h12_cms_valid      = pct(h12_cms["valid_in_crosswalk"], h12_cms["total_role_specialties"])
+    h13_int_pct        = pct(h13_internal["crosswalk_consistent"], h13_internal["total_pairs"])
+    h13_ext_pct        = pct(h13_external["agree"], h13_external["total"])
 
     headline = (
         f"{h10_pct_ok:.2f}% of {n(h10['total'])/1_000_000:.1f}M NDH NPIs clear NPPES "
         f"(0.79% ghost, 3.49% deactivated). "
-        f"Practitioner full-name match: {h11p_pct:.1f}%; Organization name match: {h11o_pct:.1f}%. "
+        f"Practitioner name agreement: {h11p_pct:.1f}% exact → {h11p_norm_pct:.1f}% normalized → "
+        f"{h11p_jw85_pct:.1f}% Jaro-Winkler ≥0.85. "
+        f"Organization name: {h11o_pct:.1f}% exact → {h11o_norm_pct:.1f}% normalized → "
+        f"{h11o_jw85_pct:.1f}% Jaro-Winkler ≥0.85 (closes the 44-point exact-match gap to "
+        f"{100 - h11o_jw85_pct:.0f}pp). "
         f"NDH carries NUCC on Practitioner.qualification (99.83% valid) AND "
         f"Medicare Specialty codes on PractitionerRole.specialty ({h12_cms_valid:.2f}% valid "
         f"against the CMS-published crosswalk). "
-        f"Internal cross-system consistency (Role CMS → crosswalk → Qualification NUCC): "
-        f"{h13_int_pct:.1f}% of {n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs agree. "
+        f"Internal cross-system consistency: {h13_int_pct:.1f}% of "
+        f"{n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs agree via the crosswalk. "
         f"External NUCC agreement NDH↔NPPES: {h13_ext_pct:.1f}%."
     )
 
     chart_data = [
-        {"label": "H10 NPPES match OK",         "value": round(h10_pct_ok, 2)},
-        {"label": "H10 not in NPPES",           "value": round(h10_ghost_pct, 3)},
-        {"label": "H10 deactivated in NPPES",   "value": round(h10_deact_pct, 2)},
-        {"label": "H11 full name match (Prac)", "value": round(h11p_pct, 1)},
-        {"label": "H11 name match (Org)",       "value": round(h11o_pct, 1)},
-        {"label": "H12 NUCC valid",             "value": round(h12_nucc_valid, 2)},
-        {"label": "H12 CMS code valid",         "value": round(h12_cms_valid, 2)},
-        {"label": "H13 internal crosswalk",     "value": round(h13_int_pct, 1)},
-        {"label": "H13 NDH↔NPPES agree",        "value": round(h13_ext_pct, 1)},
+        {"label": "H10 NPPES match OK",            "value": round(h10_pct_ok, 2)},
+        {"label": "H10 not in NPPES",              "value": round(h10_ghost_pct, 3)},
+        {"label": "H10 deactivated in NPPES",      "value": round(h10_deact_pct, 2)},
+        {"label": "H11 Prac exact",                "value": round(h11p_pct, 1)},
+        {"label": "H11 Prac normalized",           "value": round(h11p_norm_pct, 1)},
+        {"label": "H11 Prac JW ≥0.85",             "value": round(h11p_jw85_pct, 1)},
+        {"label": "H11 Org exact",                 "value": round(h11o_pct, 1)},
+        {"label": "H11 Org normalized",            "value": round(h11o_norm_pct, 1)},
+        {"label": "H11 Org JW ≥0.85",              "value": round(h11o_jw85_pct, 1)},
+        {"label": "H12 NUCC valid",                "value": round(h12_nucc_valid, 2)},
+        {"label": "H12 CMS code valid",            "value": round(h12_cms_valid, 2)},
+        {"label": "H13 internal crosswalk",        "value": round(h13_int_pct, 1)},
+        {"label": "H13 NDH↔NPPES agree",           "value": round(h13_ext_pct, 1)},
     ]
 
+    # Format confusion matrix rows as compact strings for the notes
+    confusion_lines = []
+    for row in h13_confusion[:10]:
+        role_desc = (row.role_desc or "?").strip()[:40]
+        nucc_desc = (row.nucc_desc or "?").strip()[:50]
+        confusion_lines.append(
+            f"{row.medicare_code} ({role_desc}) ↔ {row.ndh_qual_code} ({nucc_desc}): {row.n:,}"
+        )
+    confusion_block = "; ".join(confusion_lines) if confusion_lines else "n/a"
+
     notes = (
-        f"Corrections from earlier v0.1 of this finding: CMS DOES publish a "
-        f"Medicare Provider and Supplier Taxonomy Crosswalk "
-        f"(data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment/"
-        f"medicare-provider-and-supplier-taxonomy-crosswalk; {CROSSWALK_RELEASE} release, "
-        f"{cw_rows} rows, 1-to-many). The prior "
-        f"\"no cross-walk\" framing was incorrect — consumers CAN and DO (Blue "
-        f"Button) bridge Medicare Specialty codes and NUCC via this table. "
-        f"NDH PractitionerRole._specialty_code carries values like '14-50' — "
-        f"the leading 'NN-' prefix does not appear in the crosswalk; stripping "
-        f"it recovers the canonical 2-character Medicare Specialty code used by "
-        f"the crosswalk's MEDICARE SPECIALTY CODE column. "
-        f"H12 methodology: NUCC codes on Practitioner.qualification validated "
-        f"against NUCC v17.0 ({n(h12_nucc['valid_in_nucc_v17']):,} of "
-        f"{n(h12_nucc['with_nucc_code']):,}); Medicare codes on "
-        f"PractitionerRole.specialty validated against the crosswalk's "
-        f"MEDICARE SPECIALTY CODE column ({n(h12_cms['valid_in_crosswalk']):,} "
-        f"of {n(h12_cms['total_role_specialties']):,}). "
-        f"H13 methodology: internal — {n(h13_internal['total_pairs']):,} "
-        f"Practitioner↔PractitionerRole pairs; a pair is crosswalk-consistent "
-        f"if (role.Medicare code, qualification.NUCC code) is a row in the "
-        f"crosswalk. External — {n(h13_external['total']):,} NDH NUCC qualifications "
-        f"compared against NPPES primary taxonomy; exact-code match. "
-        f"Known caveat: NPPES vintage 2026-02-09 vs NDH {RELEASE_DATE} — 8-week "
-        f"gap means taxonomy changes in that window show as disagreement. "
-        f"v2 upgrade candidates: Jaro-Winkler name agreement (H11); "
-        f"NPPES secondary-taxonomy match as additional H13 signal; confusion "
-        f"matrix per specialty; pinned NUCC quarterly release."
+        f"Source: bigquery-public-data.nppes.npi_raw (updated 2026-02-09, "
+        f"9.37M NPIs) + .healthcare_provider_taxonomy_code_set_170 + CMS "
+        f"Medicare Provider and Supplier Taxonomy Crosswalk ({CROSSWALK_RELEASE}, "
+        f"{cw_rows} rows, 1-to-many). "
+        f"H11 v2 methodology — three tiers: (1) exact match on UPPER(TRIM), "
+        f"(2) normalized match that strips business suffixes (LLC/INC/CORP/PC/"
+        f"PA/PLLC/LLP/LTD/CO/COMPANY/THE for Orgs; JR/SR/II–V/MD/DO/PHD/RN/NP/"
+        f"PA-C/FNP-BC/DMD/DDS/DVM/PHARMD for persons), drops non-alphanumeric, "
+        f"collapses whitespace, (3) Jaro-Winkler ≥0.85 via a BQ JS UDF. "
+        f"Practitioner name: "
+        f"{n(h11_prac_refined['family_exact']):,}/"
+        f"{n(h11_prac_refined['total']):,} family exact, "
+        f"{n(h11_prac_refined['normalized_full_match']):,} normalized full match, "
+        f"{n(h11_prac_refined['jw_85']):,} at JW≥0.85, "
+        f"{n(h11_prac_refined['jw_95']):,} at JW≥0.95. "
+        f"Organization name: "
+        f"{n(h11_org_refined['exact']):,}/"
+        f"{n(h11_org_refined['total']):,} exact, "
+        f"{n(h11_org_refined['normalized_match']):,} normalized, "
+        f"{n(h11_org_refined['jw_85']):,} at JW≥0.85, "
+        f"{n(h11_org_refined['jw_95']):,} at JW≥0.95. "
+        f"H12: NUCC codes on Practitioner.qualification ({n(h12_nucc['valid_in_nucc_v17']):,}/"
+        f"{n(h12_nucc['with_nucc_code']):,} valid in NUCC v17.0); "
+        f"Medicare codes on PractitionerRole.specialty ({n(h12_cms['valid_in_crosswalk']):,}/"
+        f"{n(h12_cms['total_role_specialties']):,} valid in the crosswalk). "
+        f"NDH PractitionerRole._specialty_code carries a leading 'NN-' prefix "
+        f"(e.g. '14-50'); stripping recovers the canonical Medicare code. "
+        f"H13 internal: {n(h13_internal['total_pairs']):,} Practitioner↔Role pairs, "
+        f"{n(h13_internal['crosswalk_consistent']):,} agree via crosswalk. "
+        f"H13 confusion matrix — top 10 inconsistent (Medicare → qualification-NUCC) pairs: "
+        f"{confusion_block}. "
+        f"H13 external: {n(h13_external['agree']):,} / {n(h13_external['total']):,} NUCC "
+        f"qualifications match NPPES primary taxonomy exactly. "
+        f"Known caveats: NPPES vintage 2026-02-09 vs NDH {RELEASE_DATE} — 8-week "
+        f"gap means taxonomy changes in that window show as disagreement; "
+        f"Jaro-Winkler ≥0.85 is a permissive threshold that recovers common "
+        f"variations (whitespace, DBA suffixes, casing) but also accepts some "
+        f"false positives (e.g. 'Smith Medical' vs 'Smith Medicare'); the 0.95 "
+        f"column is the strict signal. "
+        f"v2 upgrade candidates: pinned quarterly NUCC; NPPES secondary-taxonomy "
+        f"match; phonetic fallback (Soundex / Metaphone) for names where JW "
+        f"misses transpositions."
     )
 
     payload = {
@@ -356,7 +544,7 @@ def main() -> None:
         "status": "published",
         "release_date": RELEASE_DATE,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "methodology_version": "0.3.0-draft",
+        "methodology_version": "0.4.0-draft",
         "commit_sha": "pending",
         "headline": headline,
         "numerator": n(h13_internal["crosswalk_consistent"]),

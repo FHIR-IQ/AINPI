@@ -10,10 +10,10 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-21T16:54:14+00:00",
-  "methodology_version": "0.3.0-draft",
+  "generated_at": "2026-04-21T17:08:51+00:00",
+  "methodology_version": "0.4.0-draft",
   "commit_sha": "pending",
-  "headline": "95.72% of 10.9M NDH NPIs clear NPPES (0.79% ghost, 3.49% deactivated). Practitioner full-name match: 94.9%; Organization name match: 56.3%. NDH carries NUCC on Practitioner.qualification (99.83% valid) AND Medicare Specialty codes on PractitionerRole.specialty (99.98% valid against the CMS-published crosswalk). Internal cross-system consistency (Role CMS \u2192 crosswalk \u2192 Qualification NUCC): 85.8% of 3.3M Practitioner\u2194Role pairs agree. External NUCC agreement NDH\u2194NPPES: 92.0%.",
+  "headline": "95.72% of 10.9M NDH NPIs clear NPPES (0.79% ghost, 3.49% deactivated). Practitioner name agreement: 94.9% exact \u2192 95.3% normalized \u2192 97.9% Jaro-Winkler \u22650.85. Organization name: 56.3% exact \u2192 88.0% normalized \u2192 98.8% Jaro-Winkler \u22650.85 (closes the 44-point exact-match gap to 1pp). NDH carries NUCC on Practitioner.qualification (99.83% valid) AND Medicare Specialty codes on PractitionerRole.specialty (99.98% valid against the CMS-published crosswalk). Internal cross-system consistency: 85.8% of 3.3M Practitioner\u2194Role pairs agree via the crosswalk. External NUCC agreement NDH\u2194NPPES: 92.0%.",
   "numerator": 2862934,
   "denominator": 3337053,
   "chart": {
@@ -33,12 +33,28 @@
         "value": 3.49
       },
       {
-        "label": "H11 full name match (Prac)",
+        "label": "H11 Prac exact",
         "value": 94.9
       },
       {
-        "label": "H11 name match (Org)",
+        "label": "H11 Prac normalized",
+        "value": 95.3
+      },
+      {
+        "label": "H11 Prac JW \u22650.85",
+        "value": 97.9
+      },
+      {
+        "label": "H11 Org exact",
         "value": 56.3
+      },
+      {
+        "label": "H11 Org normalized",
+        "value": 88.0
+      },
+      {
+        "label": "H11 Org JW \u22650.85",
+        "value": 98.8
       },
       {
         "label": "H12 NUCC valid",
@@ -58,5 +74,5 @@
       }
     ]
   },
-  "notes": "Corrections from earlier v0.1 of this finding: CMS DOES publish a Medicare Provider and Supplier Taxonomy Crosswalk (data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment/medicare-provider-and-supplier-taxonomy-crosswalk; 2025-10 release, 565 rows, 1-to-many). The prior \"no cross-walk\" framing was incorrect \u2014 consumers CAN and DO (Blue Button) bridge Medicare Specialty codes and NUCC via this table. NDH PractitionerRole._specialty_code carries values like '14-50' \u2014 the leading 'NN-' prefix does not appear in the crosswalk; stripping it recovers the canonical 2-character Medicare Specialty code used by the crosswalk's MEDICARE SPECIALTY CODE column. H12 methodology: NUCC codes on Practitioner.qualification validated against NUCC v17.0 (7,112,042 of 7,124,017); Medicare codes on PractitionerRole.specialty validated against the crosswalk's MEDICARE SPECIALTY CODE column (3,344,800 of 3,345,518). H13 methodology: internal \u2014 3,337,053 Practitioner\u2194PractitionerRole pairs; a pair is crosswalk-consistent if (role.Medicare code, qualification.NUCC code) is a row in the crosswalk. External \u2014 7,124,017 NDH NUCC qualifications compared against NPPES primary taxonomy; exact-code match. Known caveat: NPPES vintage 2026-02-09 vs NDH 2026-04-09 \u2014 8-week gap means taxonomy changes in that window show as disagreement. v2 upgrade candidates: Jaro-Winkler name agreement (H11); NPPES secondary-taxonomy match as additional H13 signal; confusion matrix per specialty; pinned NUCC quarterly release."
+  "notes": "Source: bigquery-public-data.nppes.npi_raw (updated 2026-02-09, 9.37M NPIs) + .healthcare_provider_taxonomy_code_set_170 + CMS Medicare Provider and Supplier Taxonomy Crosswalk (2025-10, 565 rows, 1-to-many). H11 v2 methodology \u2014 three tiers: (1) exact match on UPPER(TRIM), (2) normalized match that strips business suffixes (LLC/INC/CORP/PC/PA/PLLC/LLP/LTD/CO/COMPANY/THE for Orgs; JR/SR/II\u2013V/MD/DO/PHD/RN/NP/PA-C/FNP-BC/DMD/DDS/DVM/PHARMD for persons), drops non-alphanumeric, collapses whitespace, (3) Jaro-Winkler \u22650.85 via a BQ JS UDF. Practitioner name: 6,893,725/7,139,700 family exact, 6,805,038 normalized full match, 6,990,597 at JW\u22650.85, 6,833,522 at JW\u22650.95. Organization name: 1,840,638/3,270,089 exact, 2,878,882 normalized, 3,229,845 at JW\u22650.85, 3,119,323 at JW\u22650.95. H12: NUCC codes on Practitioner.qualification (7,112,042/7,124,017 valid in NUCC v17.0); Medicare codes on PractitionerRole.specialty (3,344,800/3,345,518 valid in the crosswalk). NDH PractitionerRole._specialty_code carries a leading 'NN-' prefix (e.g. '14-50'); stripping recovers the canonical Medicare code. H13 internal: 3,337,053 Practitioner\u2194Role pairs, 2,862,934 agree via crosswalk. H13 confusion matrix \u2014 top 10 inconsistent (Medicare \u2192 qualification-NUCC) pairs: C6 (PRACTITIONER - HOSPITALIST) \u2194 207R00000X (Internal Medicine /): 39,150; 80 (PRACTITIONER - CLINICAL SOCIAL WORKER) \u2194 104100000X (Social Worker /): 21,026; 30 (PRACTITIONER - DIAGNOSTIC RADIOLOGY) \u2194 2085R0204X (Radiology / Vascular & Interventional Radiology): 17,599; 29 (PRACTITIONER - PULMONARY DISEASE) \u2194 207RC0200X (Internal Medicine / Critical Care Medicine): 12,819; 08 (PRACTITIONER - FAMILY PRACTICE) \u2194 207P00000X (Emergency Medicine /): 11,904; 68 (PRACTITIONER - CLINICAL PSYCHOLOGIST) \u2194 103T00000X (Psychologist /): 8,637; 06 (PRACTITIONER - CARDIOVASCULAR DISEASE (C) \u2194 207RI0011X (Internal Medicine / Interventional Cardiology): 8,133; 26 (PRACTITIONER - PSYCHIATRY) \u2194 2084P0804X (Psychiatry & Neurology / Child & Adolescent Psychi): 7,084; 05 (PRACTITIONER - ANESTHESIOLOGY) \u2194 390200000X (Student in an Organized Health Care Education/Trai): 6,835; 50 (PRACTITIONER - NURSE PRACTITIONER) \u2194 207Q00000X (Family Medicine /): 6,628. H13 external: 6,555,738 / 7,124,017 NUCC qualifications match NPPES primary taxonomy exactly. Known caveats: NPPES vintage 2026-02-09 vs NDH 2026-04-09 \u2014 8-week gap means taxonomy changes in that window show as disagreement; Jaro-Winkler \u22650.85 is a permissive threshold that recovers common variations (whitespace, DBA suffixes, casing) but also accepts some false positives (e.g. 'Smith Medical' vs 'Smith Medicare'); the 0.95 column is the strict signal. v2 upgrade candidates: pinned quarterly NUCC; NPPES secondary-taxonomy match; phonetic fallback (Soundex / Metaphone) for names where JW misses transpositions."
 }
