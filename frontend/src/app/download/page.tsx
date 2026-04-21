@@ -147,6 +147,9 @@ export default function DownloadPage() {
           <p className="text-xs text-gray-500">
             Submitting this form creates one row in AINPI&apos;s Supabase (encrypted, US-east-2). We use it to understand who&apos;s reading the research and may email you about major updates. See the <a href="/privacy" className="underline">privacy policy</a>. No third-party sharing.
           </p>
+          <p className="text-xs text-gray-500">
+            Prefer the web version? View the full report at <a href="/report" className="underline">/report</a> (same content, no download required).
+          </p>
         </form>
       </main>
     </div>

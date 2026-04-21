@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REPORT_VERSION = 'v1.0.0';
-const REDIRECT_URL = '/report';
+const REDIRECT_URL = `/downloads/ainpi-state-of-ndh-${REPORT_VERSION}.pdf`;
 
 export async function POST(req: NextRequest) {
   let body: unknown;

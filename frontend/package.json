@@ -20,7 +20,8 @@
     "test:e2e:ui": "playwright test --ui",
     "bq:setup": "tsx scripts/setup-bigquery.ts",
     "bq:ingest": "tsx scripts/ingest-cms-npd.ts",
-    "bq:sync": "tsx scripts/sync-bq-to-supabase.ts"
+    "bq:sync": "tsx scripts/sync-bq-to-supabase.ts",
+    "report:pdf": "tsx scripts/generate-report-pdf.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.67.1",
