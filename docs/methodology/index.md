@@ -1,13 +1,13 @@
 ---
 title: AINPI methodology
-version: 0.1.0-draft
-status: skeleton
-last_updated: 2026-04-17
+version: 0.2.0-draft
+status: findings-landed
+last_updated: 2026-04-21
 ---
 
 # AINPI methodology
 
-> **Status: `0.1.0-draft`.** This document is a skeleton. Prose, SQL, and reproducibility commands fill in as the pipeline lands. Do not cite individual numbers from AINPI until this document reaches `1.0.0`.
+> **Status: `0.2.0-draft`.** All six pre-registered findings (H1–H22 bundled into 6 slugs) have landed real numbers against the 2026-04-09 NPD release. Analyses are reproducible from the scripts in `analysis/`. The methodology prose below is still a working document — expect formalization before `1.0.0`. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
 
 AINPI audits the CMS National Provider Directory (NPD) bulk public-use release against its own structural requirements, its referential integrity, its endpoint liveness, and its temporal freshness. Every check is reproducible from a clean checkout; every finding is emitted as a FHIR `VerificationResult`.
 

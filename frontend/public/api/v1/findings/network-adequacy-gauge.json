@@ -1,15 +1,38 @@
 {
   "slug": "network-adequacy-gauge",
   "title": "Network adequacy gauge",
-  "hypotheses": ["H22"],
-  "status": "pre-registered",
+  "hypotheses": [
+    "H22"
+  ],
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-18T00:00:00Z",
-  "methodology_version": "0.1.0-draft",
+  "generated_at": "2026-04-21T11:44:55+00:00",
+  "methodology_version": "0.2.0-draft",
   "commit_sha": "pending",
-  "headline": null,
-  "numerator": null,
-  "denominator": null,
-  "chart": null,
-  "notes": "Results await ainpi-probe crawler run. Compares empirical endpoint-liveness rate against the 85% regulatory line."
+  "headline": "Empirical FHIR endpoint liveness vs the 85% Medicare Advantage network-adequacy implied ceiling: L7 unauthenticated-read 90.3% (ABOVE), L5 CapabilityStatement conformance 85.4% (AT), L6 SMART well-known 81.6% (BELOW). Gauge sampled across 2,974 distinct FHIR-REST hosts in the NDH.",
+  "numerator": 2687,
+  "denominator": 2974,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "Regulatory ceiling (implied)",
+        "value": 85.0
+      },
+      {
+        "label": "L7 unauth Practitioner read",
+        "value": 90.35
+      },
+      {
+        "label": "L5 CS conformance",
+        "value": 85.37
+      },
+      {
+        "label": "L6 SMART well-known",
+        "value": 81.57
+      }
+    ]
+  },
+  "notes": "The 85% network-adequacy ceiling is the implied minimum active provider share under Medicare Advantage adequacy rules (42 CFR \u00a7422.116). This comparison maps 'adequacy' onto technical reachability and conformance \u2014 NOT onto the regulatory definition itself, which concerns whether a sufficient share of the network is active, not whether its FHIR endpoints respond. Interpret as: if consumers assume the FHIR directory surface offers a regulatory-equivalent conformance floor, that assumption holds only on unauthenticated basic reachability (L7 90.3%) and collapses on SMART discovery (81.6% vs 85%). Probe methodology: 2,974 distinct FHIR-REST hosts, one endpoint per host, stratified by host-fingerprint, via ainpi-probe L0-L7 with 1 rps per host rate limit and 10s connect / 30s read timeouts."
 }

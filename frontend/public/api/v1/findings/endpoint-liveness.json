@@ -8,35 +8,43 @@
     "H4",
     "H5"
   ],
-  "status": "in-progress",
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-20T00:28:09+00:00",
-  "methodology_version": "0.1.0-draft",
+  "generated_at": "2026-04-21T11:44:55+00:00",
+  "methodology_version": "0.2.0-draft",
   "commit_sha": "pending",
-  "headline": "Pilot of 300 distinct FHIR-REST hosts: 96.7% answered HTTP, 91.7% served a parseable CapabilityStatement at /metadata, 86.7% published a valid .well-known/smart-configuration. Across all 5.0M NPD endpoints, 74.19% declare FHIR-REST and 25.81% declare Direct. 98.69% of Organizations carry zero Endpoint references.",
-  "numerator": 275,
-  "denominator": 300,
+  "headline": "Full crawl of 2,974 distinct FHIR-REST hosts in the NDH: 93.3% answered HTTP, 85.4% served a parseable CapabilityStatement, 81.6% published valid SMART well-known, 90.3% answered an unauthenticated Practitioner?_count=1 with 200/401. Across the full NDH endpoint population: 5,043,524 endpoints total (74.2% FHIR-REST, 25.8% Direct Project); 98.7% of Organizations carry zero Endpoint references.",
+  "numerator": 2539,
+  "denominator": 2974,
   "chart": {
     "type": "bar",
     "unit": "percent",
     "data": [
       {
         "label": "L3 any HTTP",
-        "value": 96.7
+        "value": 93.34
       },
       {
-        "label": "H1 200/30x/401",
-        "value": 65.0
+        "label": "L3 strict (200/30x/401)",
+        "value": 62.44
       },
       {
-        "label": "H2 CS parseable",
-        "value": 91.7
+        "label": "L4 CS parseable",
+        "value": 85.37
       },
       {
-        "label": "H3 SMART valid",
-        "value": 86.7
+        "label": "L5 CS conformant",
+        "value": 85.37
+      },
+      {
+        "label": "L6 SMART valid",
+        "value": 81.57
+      },
+      {
+        "label": "L7 unauth search",
+        "value": 90.35
       }
     ]
   },
-  "notes": "H1-H3 results from 300-host pilot sample (1 endpoint per host, stratified by host-fingerprint). Full FHIR-REST crawl spans 2,974 distinct hosts; results here are preliminary. Highest level reached on pilot: {7: 280, -1: 7, 3: 8, 0: 3, 5: 1, 6: 1}. FHIR version top declarations: {'4.0.1': 165, '4.0.0': 110}. H4 and H5 computed over the full population in BigQuery: H4 5,043,524 endpoints (3,741,547 FHIR-REST, 1,301,977 Direct); H5 3,603,262 orgs of which 3,556,049 have no managingOrganization reference from any Endpoint."
+  "notes": "Probed 2,974 distinct FHIR-REST hosts (one endpoint per host, stratified by host). Crawl: 16 global concurrency, 1 rps per host, 10s connect / 30s read, exponential backoff on 429/503, User-Agent AINPI-DirectoryQualityBot/1.0. fhirVersion declared by L5-conformant hosts: {'4.0.1': 1599, '4.0.0': 938, '3.0.2': 1, '3.0.1': 1}. CapabilityStatement software top-5: {'Firely Server': 505, 'Epic': 456, 'Fhir Server': 282, 'Altera FHIR': 71, '1up FHIR Server': 42}. Highest level reached distribution: {7: 2687, 0: 33, -1: 136, 1: 23, 2: 28, 3: 39, 6: 14, 5: 14}. Certs expiring within 90 days of release: 271. H4 (connection type distribution) and H5 (orgs without endpoints) computed over the full population in BigQuery: H4 connection types: {'hl7-fhir-rest': 3741547, 'direct-project': 1301977}; H5 3,603,262 orgs of which 3,556,049 have no managingOrganization reference from any Endpoint."
 }

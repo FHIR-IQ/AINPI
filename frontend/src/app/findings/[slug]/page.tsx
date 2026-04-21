@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import FindingChart from '@/components/FindingChart';
 import { findBySlug, allSlugs } from '@/data/findings';
 import { loadFinding } from '@/lib/load-api-v1';
 
@@ -117,6 +118,8 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
             )}
           </section>
         )}
+
+        {live?.chart && <FindingChart chart={live.chart} />}
 
         <section className="bg-white rounded-lg shadow-sm border p-6 mb-6">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
