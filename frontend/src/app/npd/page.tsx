@@ -1,7 +1,40 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import type { ApiV1Stats } from '@/lib/api-v1-types';
+
+const HERO_FINDING_CARDS: {
+  slug: string;
+  label: string;
+  blurb: string;
+}[] = [
+  {
+    slug: 'endpoint-liveness',
+    label: 'Endpoint liveness',
+    blurb:
+      '85.4% of 2,974 FHIR-REST hosts serve a parseable CapabilityStatement. 81.6% publish valid SMART .well-known.',
+  },
+  {
+    slug: 'npi-taxonomy-correctness',
+    label: 'NPI & taxonomy',
+    blurb:
+      '10.86M NPIs checked. 3.49% are deactivated in NPPES but live in NDH. Two specialty code systems, no cross-walk.',
+  },
+  {
+    slug: 'temporal-staleness',
+    label: 'Temporal staleness',
+    blurb:
+      'meta.lastUpdated on the NPD bulk files is a release-day stamp. 30- and 90-day compliance cadence is not measurable from these files.',
+  },
+];
+
+function fmtBig(n: number | null | undefined): string {
+  if (n == null) return '—';
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
 
 interface PractitionerResult {
   npi: string;
@@ -98,6 +131,14 @@ export default function NpdSearchPage() {
   const [results, setResults] = useState<SearchResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [stats, setStats] = useState<ApiV1Stats | null>(null);
+
+  useEffect(() => {
+    fetch('/api/v1/stats.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => setStats(j))
+      .catch(() => setStats(null));
+  }, []);
 
   async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -166,28 +207,115 @@ export default function NpdSearchPage() {
         })
       : null;
 
+  async function handleNpiHero(e: React.FormEvent) {
+    setSearchType('npi');
+    await handleSearch(e);
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            National Provider Directory Search
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Search the CMS National Provider Directory for providers, organizations, locations, and FHIR endpoints
+
+      {/* HERO */}
+      <section className="bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-white py-16 sm:py-24">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <p className="text-xs uppercase tracking-widest text-gray-400 mb-3 font-mono">
+            AINPI · CMS National Provider Directory audit
           </p>
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
+            Check any NPI against the NPD.
+          </h1>
+          <p className="text-gray-300 mb-8 max-w-xl mx-auto">
+            27.2M FHIR R4 records from the 2026-04-09 bulk public-use release.
+            Six pre-registered findings, reproducible from open source.
+          </p>
+          <form onSubmit={handleNpiHero} className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
+            <input
+              type="text"
+              inputMode="numeric"
+              className="flex-1 px-5 py-4 rounded-lg bg-white text-gray-900 placeholder:text-gray-400 text-lg font-mono tracking-wider focus:outline-none focus:ring-2 focus:ring-primary-400"
+              placeholder="10-digit NPI"
+              value={npi}
+              onChange={(e) => setNpi(e.target.value.replace(/\D/g, ''))}
+              maxLength={10}
+              aria-label="NPI number"
+            />
+            <button
+              type="submit"
+              disabled={loading || npi.length !== 10}
+              className="px-8 py-4 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Checking…' : 'Check NPI'}
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* LIVE COUNTERS */}
+      {stats && (
+        <section className="bg-white border-b">
+          <div className="max-w-5xl mx-auto px-4 py-5 flex flex-wrap items-baseline justify-center gap-x-8 gap-y-2 text-sm text-gray-600">
+            <div>
+              <span className="font-semibold text-gray-900">{fmtBig(stats.counters.resources_processed)}</span> resources
+            </div>
+            <div>
+              <span className="font-semibold text-gray-900">{fmtBig(stats.counters.npis_checked)}</span> NPIs checked
+            </div>
+            {stats.counters.endpoints_live_pct != null && (
+              <div>
+                <span className="font-semibold text-gray-900">{stats.counters.endpoints_live_pct.toFixed(1)}%</span> endpoints live
+              </div>
+            )}
+            <div>
+              <span className="font-semibold text-gray-900">{stats.counters.findings_published}</span> findings published
+            </div>
+            <div className="text-xs text-gray-400 font-mono">
+              NPD {stats.release_date} · methodology v{stats.methodology_version}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <div className="max-w-7xl mx-auto px-4 py-10">
+
+        {/* FINDING CARDS */}
+        <div className="mb-10">
+          <div className="flex items-baseline justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Latest findings</h2>
+            <a href="/findings" className="text-sm text-primary-600 hover:underline">
+              See all →
+            </a>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {HERO_FINDING_CARDS.map((card) => (
+              <a
+                key={card.slug}
+                href={`/findings/${card.slug}`}
+                className="block bg-white rounded-lg shadow-sm border p-5 hover:border-primary-400 hover:shadow transition"
+              >
+                <p className="text-xs uppercase tracking-wider text-primary-600 mb-2 font-semibold">
+                  {card.label}
+                </p>
+                <p className="text-sm text-gray-700 leading-snug">{card.blurb}</p>
+              </a>
+            ))}
+          </div>
         </div>
 
-        {/* Search Form */}
-        <div className="card mb-8">
-          <form onSubmit={handleSearch} className="space-y-4">
-            {/* Search type selector */}
+        {/* ADVANCED SEARCH (collapsible) */}
+        <details className="card mb-8 group">
+          <summary className="cursor-pointer list-none flex items-center justify-between">
+            <span className="text-sm font-semibold text-gray-900">
+              or search by name, organization, or location
+            </span>
+            <span className="text-gray-400 group-open:rotate-180 transition-transform">▾</span>
+          </summary>
+          <form onSubmit={handleSearch} className="space-y-4 mt-4">
             <div className="flex gap-2">
               {([
-                ['npi', 'Search by NPI'],
-                ['name', 'Search by Name'],
-                ['org', 'Search by Organization'],
+                ['npi', 'NPI'],
+                ['name', 'Name'],
+                ['org', 'Organization'],
               ] as ['npi' | 'name' | 'org', string][]).map(([type, label]) => (
                 <button
                   key={type}
@@ -269,7 +397,7 @@ export default function NpdSearchPage() {
               {loading ? 'Searching...' : 'Search Directory'}
             </button>
           </form>
-        </div>
+        </details>
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
