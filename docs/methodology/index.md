@@ -1,6 +1,6 @@
 ---
 title: AINPI methodology
-version: 0.2.0-draft
+version: 0.3.0-draft
 status: findings-landed
 last_updated: 2026-04-21
 ---

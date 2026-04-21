@@ -54,8 +54,11 @@ jobs:
       - name: Re-run NPI Luhn (H9)
         run: python analysis/h9_npi_luhn.py
 
-      - name: Re-run NPPES + NUCC (H10-H13)
-        run: python analysis/h10_h13_nppes.py
+      - name: Download CMS Medicare Taxonomy Crosswalk
+        run: curl -sL "https://data.cms.gov/sites/default/files/2025-12/2c2c6ece-e78f-45be-ba66-4e92075fbb7a/Medicare_Provider_and_Supplier_Taxonomy_Crosswalk_October_2025.csv" -o /tmp/crosswalk.csv
+
+      - name: Re-run NPPES + NUCC + Crosswalk (H10-H13)
+        run: python analysis/h10_h13_with_crosswalk.py
 
       - name: Re-run referential integrity (H6-H8)
         run: python analysis/h6_h8_integrity.py

@@ -10,12 +10,12 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-20T01:58:20+00:00",
-  "methodology_version": "0.1.0-draft",
+  "generated_at": "2026-04-21T14:05:53+00:00",
+  "methodology_version": "0.3.0-draft",
   "commit_sha": "pending",
-  "headline": "H9 3/10,856,109 NPIs fail structural+Luhn. H10 \u2014 0.789% of 10.9M NDH NPIs are NOT in NPPES; 3.49% are deactivated in NPPES; 0.000% have entity-type mismatch (95.72% clean). H11 \u2014 94.9% of Practitioners match NPPES on full name (exact); 56.3% of Organizations match NPPES on business name (exact). H12 \u2014 99.83% of 7.1M NDH Practitioner.qualification NUCC codes are valid in NUCC v17.0. NDH PractitionerRole.specialty uses CMS Medicare Physician Specialty Types (100.0% of specialty-bearing roles), NOT NUCC. H13 \u2014 92.02% of 7.1M NDH Practitioners agree with NPPES on primary taxonomy code.",
-  "numerator": 10391125,
-  "denominator": 10856109,
+  "headline": "95.72% of 10.9M NDH NPIs clear NPPES (0.79% ghost, 3.49% deactivated). Practitioner full-name match: 94.9%; Organization name match: 56.3%. NDH carries NUCC on Practitioner.qualification (99.83% valid) AND Medicare Specialty codes on PractitionerRole.specialty (99.98% valid against the CMS-published crosswalk). Internal cross-system consistency (Role CMS \u2192 crosswalk \u2192 Qualification NUCC): 85.8% of 3.3M Practitioner\u2194Role pairs agree. External NUCC agreement NDH\u2194NPPES: 92.0%.",
+  "numerator": 2862934,
+  "denominator": 3337053,
   "chart": {
     "type": "bar",
     "unit": "percent",
@@ -41,14 +41,22 @@
         "value": 56.3
       },
       {
-        "label": "H12 NUCC valid (qual.)",
+        "label": "H12 NUCC valid",
         "value": 99.83
       },
       {
-        "label": "H13 NUCC agree w/ NPPES",
+        "label": "H12 CMS code valid",
+        "value": 99.98
+      },
+      {
+        "label": "H13 internal crosswalk",
+        "value": 85.8
+      },
+      {
+        "label": "H13 NDH\u2194NPPES agree",
         "value": 92.0
       }
     ]
   },
-  "notes": "Source: bigquery-public-data.nppes.npi_raw (latest update 2026-02-09, 9.37M NPIs) + .healthcare_provider_taxonomy_code_set_170 joined against NDH 2026-04-09. ~8-week gap window means NPIs deactivated between 2026-02-09 and 2026-04-09 may appear active in NPPES \u2014 known caveat. H10: Practitioner \u2014 7,124,478 ok / 56,157 not in NPPES / 260,534 deactivated / 44 enumerated as org in NPPES. Organization \u2014 3,266,647 ok / 29,548 not in NPPES / 118,701 deactivated / 0 enumerated as individual. H11 uses exact case-insensitive match after TRIM+UPPER; Jaro-Winkler \u22650.85 = v2 upgrade. H12 NOTE: NDH PractitionerRole.specialty uses CMS Medicare Physician Specialty Types with system URI https://www.cms.gov/files/document/acceptable-physician-specialty-types-py-2025.pdf (codes like '14-50' = 'PRACTITIONER - NURSE PRACTITIONER'), NOT NUCC. NUCC codes appear on Practitioner.qualification.code with system http://nucc.org/provider-taxonomy (7,124,017 of 7,441,213 Practitioners). H12's metric is validity of those NUCC codes against the v17.0 code set (7,112,042 valid of 7,124,017 populated). NUCC v17.0 is the latest version in bigquery-public-data; if NDH uses a newer code set, codes from later releases would appear invalid here (upgrade to current quarterly NUCC + accept-last-3-years window = v2). H13 compares NUCC primary taxonomy NDH\u2192NPPES only for Practitioners where NDH.qualification.system = http://nucc.org/provider-taxonomy AND NPPES entity_type_code = 1."
+  "notes": "Corrections from earlier v0.1 of this finding: CMS DOES publish a Medicare Provider and Supplier Taxonomy Crosswalk (data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment/medicare-provider-and-supplier-taxonomy-crosswalk; 2025-10 release, 565 rows, 1-to-many). The prior \"no cross-walk\" framing was incorrect \u2014 consumers CAN and DO (Blue Button) bridge Medicare Specialty codes and NUCC via this table. NDH PractitionerRole._specialty_code carries values like '14-50' \u2014 the leading 'NN-' prefix does not appear in the crosswalk; stripping it recovers the canonical 2-character Medicare Specialty code used by the crosswalk's MEDICARE SPECIALTY CODE column. H12 methodology: NUCC codes on Practitioner.qualification validated against NUCC v17.0 (7,112,042 of 7,124,017); Medicare codes on PractitionerRole.specialty validated against the crosswalk's MEDICARE SPECIALTY CODE column (3,344,800 of 3,345,518). H13 methodology: internal \u2014 3,337,053 Practitioner\u2194PractitionerRole pairs; a pair is crosswalk-consistent if (role.Medicare code, qualification.NUCC code) is a row in the crosswalk. External \u2014 7,124,017 NDH NUCC qualifications compared against NPPES primary taxonomy; exact-code match. Known caveat: NPPES vintage 2026-02-09 vs NDH 2026-04-09 \u2014 8-week gap means taxonomy changes in that window show as disagreement. v2 upgrade candidates: Jaro-Winkler name agreement (H11); NPPES secondary-taxonomy match as additional H13 signal; confusion matrix per specialty; pinned NUCC quarterly release."
 }
