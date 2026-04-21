@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
+import ShareButtons from '@/components/ShareButtons';
 import type { ApiV1Stats } from '@/lib/api-v1-types';
 
 const HERO_FINDING_CARDS: {
@@ -248,6 +249,16 @@ export default function NpdSearchPage() {
               {loading ? 'Checking…' : 'Check NPI'}
             </button>
           </form>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs text-gray-400">
+            <a href="/subscribe" className="inline-flex items-center gap-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 font-medium transition">
+              Subscribe for updates
+            </a>
+            <a href="/download" className="inline-flex items-center gap-1.5 rounded-md bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 font-medium transition">
+              Download the report
+            </a>
+            <span className="hidden sm:inline text-gray-600">·</span>
+            <ShareButtons variant="dark" compact />
+          </div>
         </div>
       </section>
 

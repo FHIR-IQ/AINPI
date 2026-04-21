@@ -350,3 +350,34 @@ model NpdIngestionLog {
   @@index([releaseDate])
   @@map("npd_ingestion_logs")
 }
+
+// Email capture — anyone who subscribes for updates via /subscribe.
+// Minimal fields on purpose; transactional-email service integration is TBD.
+model Subscriber {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  source      String?  // 'subscribe_page', 'hero', 'footer', 'download_gate'
+  createdAt   DateTime @default(now()) @map("created_at")
+  confirmedAt DateTime? @map("confirmed_at")
+
+  @@index([createdAt])
+  @@map("subscribers")
+}
+
+// Email capture gating the downloadable white paper at /download.
+// Captures role/org context so we understand who's using the research.
+model ReportDownload {
+  id          String   @id @default(uuid())
+  email       String
+  name        String?
+  organization String?
+  useCase     String?  @map("use_case") @db.Text
+  reportVersion String @map("report_version")  // e.g. 'v1.0.0'
+  ipAddress   String?  @map("ip_address")      // first-party log only; see privacy policy
+  userAgent   String?  @map("user_agent") @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([email])
+  @@index([createdAt])
+  @@map("report_downloads")
+}
