@@ -8,7 +8,7 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-20T00:34:06+00:00",
+  "generated_at": "2026-04-21T16:54:17+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
   "headline": "Referential integrity is clean but coverage is sparse. 0.000% of 17.0M declared cross-resource references actually dangle (target missing). But only 3.0% of Endpoints carry a managingOrganization (149,080 of 5,043,524) and only 76.0% of Locations do (2,654,922 of 3,494,239). H8: the NPD bulk export does not ship HealthcareService (NDH IG defines 10 resources; NPD ships 6).",

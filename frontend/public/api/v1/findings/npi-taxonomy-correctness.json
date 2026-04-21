@@ -10,7 +10,7 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-21T14:05:53+00:00",
+  "generated_at": "2026-04-21T16:54:14+00:00",
   "methodology_version": "0.3.0-draft",
   "commit_sha": "pending",
   "headline": "95.72% of 10.9M NDH NPIs clear NPPES (0.79% ghost, 3.49% deactivated). Practitioner full-name match: 94.9%; Organization name match: 56.3%. NDH carries NUCC on Practitioner.qualification (99.83% valid) AND Medicare Specialty codes on PractitionerRole.specialty (99.98% valid against the CMS-published crosswalk). Internal cross-system consistency (Role CMS \u2192 crosswalk \u2192 Qualification NUCC): 85.8% of 3.3M Practitioner\u2194Role pairs agree. External NUCC agreement NDH\u2194NPPES: 92.0%.",

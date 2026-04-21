@@ -6,7 +6,7 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-20T00:15:19+00:00",
+  "generated_at": "2026-04-21T16:48:20+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
   "headline": "100.0% of NPD resources carry a meta.lastUpdated value on the release day (2026-04-09). Distinct meta.lastUpdated values range from 1 to 5 across the 6 resource types \u2014 meta.lastUpdated on the NPD bulk public-use files is a bulk-export stamp, not a per-resource freshness signal.",
