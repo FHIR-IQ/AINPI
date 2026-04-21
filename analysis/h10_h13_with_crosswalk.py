@@ -261,13 +261,14 @@ def main() -> None:
     """)
     print(f"  {h13_internal}")
 
-    print("\nH13b — external NDH↔NPPES agreement (NUCC on qualification vs ALL NPPES taxonomy slots)")
-    # NPPES carries up to 15 taxonomies per NPI (slots 1..15 with a
-    # parallel switch_1..15 marking which is primary). The prior
-    # implementation compared NDH only to slot 1 — but NDH may record
-    # the provider's SECONDARY board (e.g. a pulmonologist who also
-    # holds critical-care credentials). Matching any of the 15 slots
-    # is a more accurate NDH↔NPPES agreement signal.
+    print("\nH13b — external NDH↔NPPES agreement (switch-aware across 15 taxonomy slots)")
+    # NPPES stores 15 (taxonomy_code, primary_switch) pairs per NPI.
+    # Only one should have switch='Y' (true primary). Pairing the code
+    # and switch arrays into a STRUCT array lets us ask:
+    #   1. Does NDH match any slot?
+    #   2. Does NDH match the switch='Y' (TRUE primary) slot?
+    #   3. Does NDH match only a switch='N' slot (genuine secondary)?
+    #   4. Does slot_1 hold the TRUE primary (slot ordering sanity check)?
     h13_external = scalar(c, f"""
     WITH ndh AS (
       SELECT p._npi,
@@ -281,24 +282,37 @@ def main() -> None:
       SELECT
         ndh.ndh_code,
         n.healthcare_provider_taxonomy_code_1 AS slot_1,
-        [n.healthcare_provider_taxonomy_code_1, n.healthcare_provider_taxonomy_code_2,
-         n.healthcare_provider_taxonomy_code_3, n.healthcare_provider_taxonomy_code_4,
-         n.healthcare_provider_taxonomy_code_5, n.healthcare_provider_taxonomy_code_6,
-         n.healthcare_provider_taxonomy_code_7, n.healthcare_provider_taxonomy_code_8,
-         n.healthcare_provider_taxonomy_code_9, n.healthcare_provider_taxonomy_code_10,
-         n.healthcare_provider_taxonomy_code_11, n.healthcare_provider_taxonomy_code_12,
-         n.healthcare_provider_taxonomy_code_13, n.healthcare_provider_taxonomy_code_14,
-         n.healthcare_provider_taxonomy_code_15] AS all_slots
+        n.healthcare_provider_primary_taxonomy_switch_1 AS slot_1_switch,
+        [
+          STRUCT(n.healthcare_provider_taxonomy_code_1 AS c, n.healthcare_provider_primary_taxonomy_switch_1 AS s),
+          STRUCT(n.healthcare_provider_taxonomy_code_2, n.healthcare_provider_primary_taxonomy_switch_2),
+          STRUCT(n.healthcare_provider_taxonomy_code_3, n.healthcare_provider_primary_taxonomy_switch_3),
+          STRUCT(n.healthcare_provider_taxonomy_code_4, n.healthcare_provider_primary_taxonomy_switch_4),
+          STRUCT(n.healthcare_provider_taxonomy_code_5, n.healthcare_provider_primary_taxonomy_switch_5),
+          STRUCT(n.healthcare_provider_taxonomy_code_6, n.healthcare_provider_primary_taxonomy_switch_6),
+          STRUCT(n.healthcare_provider_taxonomy_code_7, n.healthcare_provider_primary_taxonomy_switch_7),
+          STRUCT(n.healthcare_provider_taxonomy_code_8, n.healthcare_provider_primary_taxonomy_switch_8),
+          STRUCT(n.healthcare_provider_taxonomy_code_9, n.healthcare_provider_primary_taxonomy_switch_9),
+          STRUCT(n.healthcare_provider_taxonomy_code_10, n.healthcare_provider_primary_taxonomy_switch_10),
+          STRUCT(n.healthcare_provider_taxonomy_code_11, n.healthcare_provider_primary_taxonomy_switch_11),
+          STRUCT(n.healthcare_provider_taxonomy_code_12, n.healthcare_provider_primary_taxonomy_switch_12),
+          STRUCT(n.healthcare_provider_taxonomy_code_13, n.healthcare_provider_primary_taxonomy_switch_13),
+          STRUCT(n.healthcare_provider_taxonomy_code_14, n.healthcare_provider_primary_taxonomy_switch_14),
+          STRUCT(n.healthcare_provider_taxonomy_code_15, n.healthcare_provider_primary_taxonomy_switch_15)
+        ] AS slots
       FROM ndh
       JOIN `{NPPES_DATASET}.npi_raw` n ON n.npi = ndh._npi AND n.entity_type_code = 1
     )
     SELECT
       COUNT(*) AS total,
       COUNTIF(ndh_code = slot_1) AS agree_slot_1,
-      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(all_slots) c WHERE c = ndh_code)) AS agree_any_slot,
-      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(all_slots) c WHERE c = ndh_code)
-              AND ndh_code != slot_1) AS agree_only_secondary,
-      COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(all_slots) c WHERE c = ndh_code)) AS disagree_entirely
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code)) AS agree_any_slot,
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code AND x.s = 'Y')) AS agree_true_primary,
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code)
+              AND NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code AND x.s = 'Y')) AS agree_secondary_only,
+      COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code)) AS disagree_entirely,
+      COUNTIF(slot_1_switch != 'Y' AND EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.s = 'Y')) AS slot_1_not_true_primary,
+      COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.s = 'Y')) AS nppes_no_primary_flag
     FROM joined
     """)
     print(f"  {h13_external}")
@@ -469,11 +483,14 @@ def main() -> None:
     h11o_jw85_pct      = pct(h11_org_refined["jw_85"], h11_org_refined["total"])
     h12_nucc_valid     = pct(h12_nucc["valid_in_nucc_v17"], h12_nucc["with_nucc_code"])
     h12_cms_valid      = pct(h12_cms["valid_in_crosswalk"], h12_cms["total_role_specialties"])
-    h13_int_pct        = pct(h13_internal["crosswalk_consistent"], h13_internal["total_pairs"])
-    h13_ext_slot1_pct  = pct(h13_external["agree_slot_1"], h13_external["total"])
-    h13_ext_any_pct    = pct(h13_external["agree_any_slot"], h13_external["total"])
-    h13_ext_only_sec_pct = pct(h13_external["agree_only_secondary"], h13_external["total"])
-    h13_ext_disagree_pct = pct(h13_external["disagree_entirely"], h13_external["total"])
+    h13_int_pct            = pct(h13_internal["crosswalk_consistent"], h13_internal["total_pairs"])
+    h13_ext_slot1_pct      = pct(h13_external["agree_slot_1"], h13_external["total"])
+    h13_ext_any_pct        = pct(h13_external["agree_any_slot"], h13_external["total"])
+    h13_ext_true_prim_pct  = pct(h13_external["agree_true_primary"], h13_external["total"])
+    h13_ext_sec_only_pct   = pct(h13_external["agree_secondary_only"], h13_external["total"])
+    h13_ext_disagree_pct   = pct(h13_external["disagree_entirely"], h13_external["total"])
+    slot1_not_primary_pct  = pct(h13_external["slot_1_not_true_primary"], h13_external["total"])
+    no_primary_flag_pct    = pct(h13_external["nppes_no_primary_flag"], h13_external["total"])
 
     headline = (
         f"{h10_pct_ok:.2f}% of {n(h10['total'])/1_000_000:.1f}M NDH NPIs clear NPPES "
@@ -488,9 +505,10 @@ def main() -> None:
         f"against the CMS-published crosswalk). "
         f"Internal cross-system consistency: {h13_int_pct:.1f}% of "
         f"{n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs agree via the crosswalk. "
-        f"External NUCC agreement NDH↔NPPES: {h13_ext_slot1_pct:.1f}% on the primary slot, "
-        f"{h13_ext_any_pct:.1f}% across any of the 15 NPPES slots "
-        f"(+{h13_ext_only_sec_pct:.1f}pp from secondary matches)."
+        f"External NUCC agreement NDH↔NPPES: {h13_ext_true_prim_pct:.1f}% match NPPES's "
+        f"switch='Y' TRUE primary, {h13_ext_any_pct:.1f}% match any of the 15 slots, "
+        f"{h13_ext_sec_only_pct:.1f}% match only a secondary. Slot_1 is NOT always the "
+        f"true primary ({slot1_not_primary_pct:.2f}% of rows)."
     )
 
     chart_data = [
@@ -506,7 +524,8 @@ def main() -> None:
         {"label": "H12 NUCC valid",                "value": round(h12_nucc_valid, 2)},
         {"label": "H12 CMS code valid",            "value": round(h12_cms_valid, 2)},
         {"label": "H13 internal crosswalk",        "value": round(h13_int_pct, 1)},
-        {"label": "H13 NDH↔NPPES primary slot",    "value": round(h13_ext_slot1_pct, 1)},
+        {"label": "H13 NDH↔NPPES slot 1",          "value": round(h13_ext_slot1_pct, 1)},
+        {"label": "H13 NDH↔NPPES true primary",    "value": round(h13_ext_true_prim_pct, 1)},
         {"label": "H13 NDH↔NPPES any of 15",       "value": round(h13_ext_any_pct, 1)},
     ]
 
@@ -552,19 +571,24 @@ def main() -> None:
         f"{n(h13_internal['crosswalk_consistent']):,} agree via crosswalk. "
         f"H13 confusion matrix — top 10 inconsistent (Medicare → qualification-NUCC) pairs: "
         f"{confusion_block}. "
-        f"H13 external (v2): NPPES stores up to 15 taxonomies per NPI "
-        f"(slots 1..15). Prior version compared only to slot 1 ({h13_ext_slot1_pct:.2f}% "
-        f"agree). Matching against ANY of the 15 slots: "
-        f"{n(h13_external['agree_any_slot']):,} / {n(h13_external['total']):,} "
-        f"= {h13_ext_any_pct:.2f}%. The delta "
-        f"({n(h13_external['agree_only_secondary']):,} rows, +{h13_ext_only_sec_pct:.2f}pp) "
-        f"are Practitioners whose NDH qualification matches an NPPES SECONDARY "
-        f"board (a pulmonologist NPPES-primary plus critical-care NPPES-secondary "
-        f"where NDH records the critical-care NUCC). "
-        f"{n(h13_external['disagree_entirely']):,} rows ({h13_ext_disagree_pct:.2f}%) "
-        f"show NDH qualifications that don't appear anywhere in NPPES — these are "
-        f"the genuine disagreements (real drift OR NDH uses a finer-grained code "
-        f"than NPPES carries). "
+        f"H13 external (v3 — switch-aware): NPPES stores 15 (taxonomy_code, "
+        f"primary_switch) pairs per NPI; exactly one should have switch='Y' "
+        f"(the TRUE primary). Four buckets:\n"
+        f"  • Match NPPES true primary (switch='Y' slot): "
+        f"{n(h13_external['agree_true_primary']):,} ({h13_ext_true_prim_pct:.2f}%)\n"
+        f"  • Match any slot:           "
+        f"{n(h13_external['agree_any_slot']):,} ({h13_ext_any_pct:.2f}%)\n"
+        f"  • Match slot_1 specifically:"
+        f"{n(h13_external['agree_slot_1']):,} ({h13_ext_slot1_pct:.2f}%)\n"
+        f"  • Match only a secondary (switch='N'): "
+        f"{n(h13_external['agree_secondary_only']):,} ({h13_ext_sec_only_pct:.2f}%)\n"
+        f"  • Disagree entirely (not in any slot): "
+        f"{n(h13_external['disagree_entirely']):,} ({h13_ext_disagree_pct:.2f}%)\n"
+        f"Slot-ordering observation: {n(h13_external['slot_1_not_true_primary']):,} "
+        f"rows ({slot1_not_primary_pct:.2f}%) have the NPPES TRUE primary in a slot "
+        f"other than slot_1 — so the prior 'slot_1' proxy for 'primary' was slightly "
+        f"wrong. {n(h13_external['nppes_no_primary_flag']):,} rows "
+        f"({no_primary_flag_pct:.2f}%) have no switch='Y' at all (NPPES data-quality edge). "
         f"Known caveats: NPPES vintage 2026-02-09 vs NDH {RELEASE_DATE} — 8-week "
         f"gap means taxonomy changes in that window show as disagreement; "
         f"Jaro-Winkler ≥0.85 is a permissive threshold that recovers common "
@@ -583,7 +607,7 @@ def main() -> None:
         "status": "published",
         "release_date": RELEASE_DATE,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "methodology_version": "0.5.0-draft",
+        "methodology_version": "0.6.0-draft",
         "commit_sha": "pending",
         "headline": headline,
         "numerator": n(h13_internal["crosswalk_consistent"]),
