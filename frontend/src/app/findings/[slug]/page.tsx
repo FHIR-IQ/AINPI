@@ -121,6 +121,27 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
 
         {live?.chart && <FindingChart chart={live.chart} />}
 
+        {finding.implications && finding.implications.length > 0 && (
+          <section className="mb-6">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+              What this means
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {finding.implications.map((imp) => (
+                <div
+                  key={imp.audience + imp.takeaway.slice(0, 30)}
+                  className="bg-white rounded-lg shadow-sm border p-4"
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-2">
+                    {imp.audience}
+                  </p>
+                  <p className="text-sm text-gray-800 leading-snug">{imp.takeaway}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="bg-white rounded-lg shadow-sm border p-6 mb-6">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
             Null hypothesis

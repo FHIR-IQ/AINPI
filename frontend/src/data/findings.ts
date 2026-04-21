@@ -12,6 +12,19 @@
 
 export type FindingStatus = 'pre-registered' | 'in-progress' | 'published';
 
+export type ImplicationAudience =
+  | 'Payer data teams'
+  | 'Provider data teams'
+  | 'Regulators'
+  | 'Researchers'
+  | 'FHIR implementers'
+  | 'Everyone using NDH';
+
+export interface Implication {
+  audience: ImplicationAudience;
+  takeaway: string;
+}
+
 export interface Finding {
   slug: string;
   hypotheses: string[];
@@ -22,6 +35,8 @@ export interface Finding {
   dataSource: string;
   status: FindingStatus;
   ogTagline?: string;
+  /** Audience-specific "so what" — what to do with this number */
+  implications?: Implication[];
 }
 
 export const FINDINGS: Finding[] = [
@@ -39,6 +54,12 @@ export const FINDINGS: Finding[] = [
       'CMS NPD bulk export + live HTTP probes run by the `ainpi-probe` crawler against declared `Endpoint.address` URLs.',
     status: 'pre-registered',
     ogTagline: 'How many NDH endpoints are actually alive?',
+    implications: [
+      { audience: 'Payer data teams', takeaway: 'If you build integrations against declared NDH FHIR endpoints, expect 14.6% to fail at /metadata and 18.4% to lack a valid SMART well-known — budget for partial availability rather than treating endpoint presence as functional.' },
+      { audience: 'Provider data teams', takeaway: 'An endpoint URL in NDH does not prove your endpoint works. Audit yours against ainpi-probe L0–L7: DNS, TLS cert expiry, CapabilityStatement conformance, SMART discovery, unauthenticated Practitioner search.' },
+      { audience: 'Regulators', takeaway: 'Technical reachability (90.4% L7) vs SMART discovery compliance (81.6%) is a 9-point gap. If rules start citing SMART conformance, current NDH is below the implied bar.' },
+      { audience: 'FHIR implementers', takeaway: 'Zero R5 endpoints, zero R2 — NDH is a pure R4 population. Don\u2019t spend cycles on R5 compatibility testing for this directory.' },
+    ],
   },
   {
     slug: 'npi-taxonomy-correctness',
@@ -54,6 +75,12 @@ export const FINDINGS: Finding[] = [
       'CMS NPD bulk export joined against the NPPES monthly full dissemination file (V.2) and the current NUCC quarterly code set.',
     status: 'pre-registered',
     ogTagline: 'Do NDH NPIs match NPPES?',
+    implications: [
+      { audience: 'Payer data teams', takeaway: 'When comparing NDH specialty to NPPES, match against all 15 NPPES taxonomy slots — NOT just slot 1. 15% of NPPES records have their TRUE primary (switch=Y) in a non-slot-1 position, and 6% of NDH Practitioners legitimately match only an NPPES secondary board (dual-specialists).' },
+      { audience: 'FHIR implementers', takeaway: 'NDH uses TWO specialty code systems on two resources — NUCC on Practitioner.qualification, CMS Medicare Types on PractitionerRole.specialty. A consumer filtering on one won\u2019t interoperate with one using the other. Apply the CMS-published Medicare/NUCC crosswalk (updated quarterly) to bridge.' },
+      { audience: 'Regulators', takeaway: '0.79% of NDH NPIs (86K) don\u2019t exist in NPPES at all. 3.49% (379K) are deactivated in NPPES but still live in NDH. NDH\u2019s update cadence lags NPPES by the gap window between releases.' },
+      { audience: 'Researchers', takeaway: '99.98% CMS structural validity + 99.83% NUCC validity = the underlying code quality is excellent. The interesting signal is inconsistency BETWEEN code systems for the same practitioner (14% fail the crosswalk check), not invalid codes themselves.' },
+    ],
   },
   {
     slug: 'temporal-staleness',
@@ -68,6 +95,11 @@ export const FINDINGS: Finding[] = [
     dataSource: 'CMS NPD bulk export (pinned release).',
     status: 'pre-registered',
     ogTagline: 'How fresh is the National Provider Directory?',
+    implications: [
+      { audience: 'Regulators', takeaway: 'Compliance with the CMS-9115-F 30-day or REAL Health Providers Act / No Surprises Act 90-day update cadence CANNOT be measured from NDH bulk files. meta.lastUpdated is an export stamp, not a per-record signal. Upstream NPPES last_updated (or attestation logs) is the right denominator.' },
+      { audience: 'Payer data teams', takeaway: 'Don\u2019t use NDH meta.lastUpdated as a freshness heuristic to decide which records to refresh from upstream. Every record carries the same release-day timestamp. Cross-reference NPPES last_updated for real cadence signal.' },
+      { audience: 'Researchers', takeaway: 'Any analysis claiming NDH per-record freshness must caveat that meta.lastUpdated is release-time stamping. Use the NPD release date itself as a lower bound on staleness.' },
+    ],
   },
   {
     slug: 'referential-integrity',
@@ -83,6 +115,12 @@ export const FINDINGS: Finding[] = [
       'Edge tuples extracted from the NPD bulk export in a single streaming pass, queried in DuckDB.',
     status: 'pre-registered',
     ogTagline: 'Do the graph edges actually resolve?',
+    implications: [
+      { audience: 'Payer data teams', takeaway: '97% of NDH Endpoints have no managingOrganization back-reference. You can\u2019t reliably traverse Endpoint → Organization. Work around via NPI-based secondary joins (NPPES, CAQH).' },
+      { audience: 'Provider data teams', takeaway: 'If your organization has Endpoints registered, audit whether they declare managingOrganization pointing back to you. The 97% coverage gap is in this exact pointer.' },
+      { audience: 'FHIR implementers', takeaway: 'Integrity of DECLARED references is 100% — zero dangling refs across 17M edges. The defect pattern is under-population, not broken pointers. Trust your resolver, but expect 4 of the 10 NDH IG resources (HealthcareService, InsurancePlan, Network, Verification) to be absent entirely.' },
+      { audience: 'Regulators', takeaway: 'The NDH bulk export omits 4 of the 10 NDH-IG resources (HealthcareService + InsurancePlan + Network + Verification). Any rule citing those resources cannot be measured from the current public-use artifact.' },
+    ],
   },
   {
     slug: 'duplicate-detection',
@@ -97,6 +135,11 @@ export const FINDINGS: Finding[] = [
     dataSource: 'CMS NPD bulk export.',
     status: 'pre-registered',
     ogTagline: 'How many providers appear twice?',
+    implications: [
+      { audience: 'Everyone using NDH', takeaway: 'COUNT(Organization) is roughly 2× the number of unique real-world organizations. De-duplicate by _npi before treating org counts as unique entities. Practitioner dedup is clean (0 excess rows).' },
+      { audience: 'Payer data teams', takeaway: 'An org that appears multiple times in NDH under different resource IDs may be legitimate (one FHIR Organization per service location) or defect (true duplicate). Either way, your match-to-internal-roster logic needs a normalization pass on NPI or (name, state, city).' },
+      { audience: 'Researchers', takeaway: '70% of Org NPIs map to multiple Organization resources. Any study that treats NDH Organization count as a population figure will be inflated by ~1.7× at the entity level.' },
+    ],
   },
   {
     slug: 'network-adequacy-gauge',
@@ -112,6 +155,11 @@ export const FINDINGS: Finding[] = [
       '`ainpi-probe` crawler results joined to the `Endpoint` resource table.',
     status: 'pre-registered',
     ogTagline: 'Empirical liveness vs the 85% regulatory line.',
+    implications: [
+      { audience: 'Regulators', takeaway: 'Empirical FHIR endpoint reachability (90.3% L7) clears the 85% MA network-adequacy implied ceiling on BASIC reachability, but SMART discovery (81.6%) sits below it. If policy adds SMART conformance to the adequacy frame, the floor moves.' },
+      { audience: 'Payer data teams', takeaway: 'Technical reachability ≠ regulatory adequacy. The 85% ceiling concerns active-provider share, not endpoint liveness. Don\u2019t substitute one for the other; use both as independent signals.' },
+      { audience: 'Researchers', takeaway: 'This gauge maps technical reachability ONTO a regulatory proxy. The mapping is defensible but imperfect. Treat the comparison as illustrative, not regulatory-equivalent.' },
+    ],
   },
 ];
 

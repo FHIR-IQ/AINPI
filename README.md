@@ -35,6 +35,18 @@ Static JSON, CDN-cached, safe to depend on across releases:
 
 Breaking changes bump the path (`/api/v2/`), not the shape in place.
 
+## Roadmap
+
+Public roadmap lives in [GitHub Issues](https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap) tagged `roadmap`, grouped into three milestones:
+
+| Milestone | Scope |
+|---|---|
+| [`v1.1`](https://github.com/FHIR-IQ/AINPI/milestone/1) | Data refinements on existing findings — phonetic name match, dual-board atlas, per-state drill-downs, methodology v1.0 prose |
+| [`v1.2`](https://github.com/FHIR-IQ/AINPI/milestone/2) | New findings — H16 address geocoding, H17 USPS drift, H19/H20 state scale, weekly endpoint-crawl host |
+| [`v2.0`](https://github.com/FHIR-IQ/AINPI/milestone/3) | Expansion beyond NPD's current 6 resources — blocked until CMS ships InsurancePlan / HealthcareService / Network / Verification |
+
+Contributions welcome on any issue. File a new one using the [issue templates](https://github.com/FHIR-IQ/AINPI/issues/new/choose).
+
 ## Sibling repositories
 
 | Repo | Scope |
