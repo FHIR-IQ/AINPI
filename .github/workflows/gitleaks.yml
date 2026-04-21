@@ -33,9 +33,15 @@ jobs:
           /tmp/gitleaks version
 
       - name: Run gitleaks scan
+        # Baseline approach: 16 pre-scrub historical findings in
+        # .github/gitleaks-baseline.json are accepted (demo site, all
+        # creds already rotated, history would require yet another
+        # force-push through protected main to fully scrub). Any NEW
+        # finding introduced by a PR or push WILL fail the build.
         run: |
           /tmp/gitleaks detect \
             --source . \
+            --baseline-path .github/gitleaks-baseline.json \
             --redact \
             --no-banner \
             --exit-code 1 \
