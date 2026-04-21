@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import ComingSoonBanner from '@/components/ComingSoonBanner';
 import {
   Search,
   Loader2,
@@ -157,6 +158,7 @@ export default function ProviderSearchPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
+      <ComingSoonBanner note="Payer FHIR directory reachability will be audited by ainpi-probe against external payer endpoints in a future release." />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}

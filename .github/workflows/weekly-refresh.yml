@@ -1,0 +1,114 @@
+name: Weekly refresh
+
+# Regenerates /api/v1/*.json by re-running the BigQuery-driven
+# analyses (H6-H15, H18) every Monday 09:00 UTC.
+#
+# The endpoint-liveness crawl (H1-H5) and H22 gauge need a multi-host
+# network probe that doesn't belong on GitHub runners. Those numbers
+# are refreshed out-of-band (see crawler/ README + analysis/h1_h5_h22_full.py)
+# and the weekly workflow only updates the BQ-derived findings.
+#
+# Required secrets:
+#   GCP_SERVICE_ACCOUNT_KEY  — JSON service account with BigQuery jobUser +
+#                              dataViewer on the ndh dataset AND dataViewer
+#                              on bigquery-public-data.nppes
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"   # Monday 09:00 UTC
+  workflow_dispatch:      # manual trigger
+
+permissions:
+  contents: write
+
+concurrency:
+  group: weekly-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Re-run BQ analyses + PR findings
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-cloud-bigquery
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Re-run temporal (H18)
+        run: python analysis/h18_temporal.py
+
+      - name: Re-run NPI Luhn (H9)
+        run: python analysis/h9_npi_luhn.py
+
+      - name: Re-run NPPES + NUCC (H10-H13)
+        run: python analysis/h10_h13_nppes.py
+
+      - name: Re-run referential integrity (H6-H8)
+        run: python analysis/h6_h8_integrity.py
+
+      - name: Re-run duplicate detection (H14-H15)
+        run: python analysis/h14_h15_duplicates.py
+
+      - name: Stamp stats.json with run metadata
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, subprocess
+          p = pathlib.Path('frontend/public/api/v1/stats.json')
+          stats = json.loads(p.read_text())
+          stats['commit_sha'] = os.environ['GITHUB_SHA'][:7]
+          stats['generated_at'] = os.environ['GITHUB_RUN_STARTED'] if 'GITHUB_RUN_STARTED' in os.environ else stats['generated_at']
+          p.write_text(json.dumps(stats, indent=2) + '\n')
+          PY
+
+      - name: Detect changes
+        id: diff
+        run: |
+          if git diff --quiet frontend/public/api/v1/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            git --no-pager diff --stat frontend/public/api/v1/
+          fi
+
+      - name: Create pull request
+        if: steps.diff.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "Weekly refresh: regenerate /api/v1/*.json from latest BQ analyses"
+          title: "Weekly refresh — ${{ github.run_started_at }}"
+          body: |
+            Automated weekly run of `analysis/*.py` against the current
+            BigQuery state + public NPPES + NUCC tables.
+
+            Re-generates:
+            - /api/v1/stats.json
+            - /api/v1/findings/temporal-staleness.json
+            - /api/v1/findings/npi-taxonomy-correctness.json
+            - /api/v1/findings/referential-integrity.json
+            - /api/v1/findings/duplicate-detection.json
+
+            Does NOT re-run the FHIR-REST crawl (H1-H5) or H22 gauge —
+            those depend on the sibling `ainpi-probe` repo and run
+            out-of-band.
+
+            Review the diff and merge to publish. CI will deploy via
+            Vercel on merge.
+          branch: chore/weekly-refresh
+          delete-branch: true
+          labels: |
+            automated
+            weekly-refresh

@@ -59,17 +59,23 @@ export default function Navbar() {
             </button>
             <button
               onClick={() => router.push('/provider-search')}
-              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+              className="flex items-center text-gray-500 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               <Search className="w-4 h-4 mr-2" />
               Payer Search
+              <span className="ml-1.5 inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+                Soon
+              </span>
             </button>
             <button
               onClick={() => router.push('/magic-scanner')}
-              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+              className="flex items-center text-gray-500 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
             >
               <Sparkles className="w-4 h-4 mr-2" />
               Magic Scanner
+              <span className="ml-1.5 inline-flex items-center rounded-full bg-amber-100 text-amber-800 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+                Soon
+              </span>
             </button>
             {isLoggedIn ? (
               <>
