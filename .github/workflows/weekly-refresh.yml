@@ -45,7 +45,12 @@ jobs:
           pip install google-cloud-bigquery
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+        # v2.1.11+ writes the creds file to $RUNNER_TEMP (outside the
+        # workspace). We also .gitignore gha-creds-*.json as defense
+        # in depth — a prior run leaked a key that ended up in
+        # chore/weekly-refresh because `git add -A` scooped it from
+        # the workspace. Google auto-disabled the key.
+        uses: google-github-actions/auth@v2.1.11
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 

@@ -5,6 +5,13 @@
 *_PLAN.md
 RELAUNCH_*.md
 
+# Google Cloud Actions credentials (written into workspace by some
+# versions of google-github-actions/auth). Defense-in-depth — if the
+# action misconfigures and drops the file in workspace, git won't
+# pick it up.
+gha-creds-*.json
+ainpi-gcp-creds*.json
+
 # Python
 __pycache__/
 *.py[cod]
