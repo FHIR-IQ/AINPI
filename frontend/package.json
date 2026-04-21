@@ -47,6 +47,7 @@
     "react-dom": "^18.2.0",
     "react-markdown": "^9.1.0",
     "remark-gfm": "^4.0.1",
+    "resend": "^6.12.2",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {

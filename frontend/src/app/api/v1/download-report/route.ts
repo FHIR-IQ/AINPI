@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendDownloadThanks, sendSubscribeWelcome } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,11 +39,14 @@ export async function POST(req: NextRequest) {
   // Best-effort capture of contact info; a DB failure should still let
   // the user read the report (fail open), since failing closed would
   // reward a misconfigured deploy by blocking public research.
+  const cleanName =
+    typeof name === 'string' && name.trim() ? name.trim().slice(0, 200) : null;
+
   try {
     await prisma.reportDownload.create({
       data: {
         email: normalizedEmail,
-        name: typeof name === 'string' && name.trim() ? name.trim().slice(0, 200) : null,
+        name: cleanName,
         organization:
           typeof organization === 'string' && organization.trim()
             ? organization.trim().slice(0, 200)
@@ -58,17 +62,32 @@ export async function POST(req: NextRequest) {
     });
 
     if (alsoSubscribe) {
+      const existing = await prisma.subscriber.findUnique({
+        where: { email: normalizedEmail },
+        select: { id: true },
+      });
       await prisma.subscriber.upsert({
         where: { email: normalizedEmail },
         update: { source: 'download_gate' },
         create: { email: normalizedEmail, source: 'download_gate' },
       });
+      if (!existing) {
+        void sendSubscribeWelcome(normalizedEmail);
+      }
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[download-report] capture failed:', msg);
     // Fail open — still return the redirect so the user gets the report
   }
+
+  // Build an absolute URL for the PDF so the welcome email is clickable
+  // from any inbox, not just when viewed next to the app.
+  const origin = req.headers.get('origin') || req.headers.get('x-forwarded-host')
+    ? `https://${req.headers.get('x-forwarded-host') || 'ainpi.vercel.app'}`
+    : 'https://ainpi.vercel.app';
+  const pdfAbsoluteUrl = `${origin}${REDIRECT_URL}`;
+  void sendDownloadThanks(normalizedEmail, cleanName, pdfAbsoluteUrl);
 
   return NextResponse.json({ ok: true, redirect: REDIRECT_URL });
 }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { sendSubscribeWelcome } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,12 +31,22 @@ export async function POST(req: NextRequest) {
   const normalizedSource = source && VALID_SOURCES.has(source) ? source : 'unspecified';
 
   try {
-    // Upsert so re-subscribes don't 500 on unique constraint
+    // Upsert so re-subscribes don't 500 on unique constraint.
+    // Also track whether this row was newly created so we only send
+    // a welcome email on the first subscribe.
+    const existing = await prisma.subscriber.findUnique({
+      where: { email: normalizedEmail },
+      select: { id: true },
+    });
     await prisma.subscriber.upsert({
       where: { email: normalizedEmail },
       update: { source: normalizedSource },
       create: { email: normalizedEmail, source: normalizedSource },
     });
+    if (!existing) {
+      // Fire-and-forget; the response shouldn't wait on SMTP
+      void sendSubscribeWelcome(normalizedEmail);
+    }
     return NextResponse.json({ ok: true });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
