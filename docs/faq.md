@@ -76,7 +76,13 @@ Any analysis that depends on these resources cannot be performed from NPD alone.
 
 ## Where can I see the roadmap?
 
-The public roadmap is tracked as [GitHub Issues](https://github.com/FHIR-IQ/AINPI/issues) with label `roadmap`. The methodology doc's Section 11 also lists version-bump triggers.
+The public roadmap lives in [GitHub Issues tagged `roadmap`](https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap), grouped into three milestones:
+
+- [**`v1.1`**](https://github.com/FHIR-IQ/AINPI/milestone/1) — Data refinements on existing findings (phonetic name match, dual-board atlas, per-state drill-downs, methodology v1.0 prose, mobile layout, E2E tests).
+- [**`v1.2`**](https://github.com/FHIR-IQ/AINPI/milestone/2) — New findings in the H-catalog (H16 address geocoding, H17 USPS canonical drift, H19 per-state coverage, H20 state payload size, weekly endpoint-crawl host, downloadable disagreement CSV, `/findings` filters).
+- [**`v2.0`**](https://github.com/FHIR-IQ/AINPI/milestone/3) — Expansion beyond NPD's current 6 resources. Blocked until CMS ships `InsurancePlan`, `HealthcareService`, `Network`, `Verification` in the public-use export.
+
+Issues have `enhancement` / `new-finding` / `pipeline` / `crawler` / `web` / `methodology` labels so you can filter to your interest. PRs welcome.
 
 ## Who is this for?
 
