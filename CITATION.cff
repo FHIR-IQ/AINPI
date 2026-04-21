@@ -8,7 +8,7 @@ authors:
     email: "gene@fhiriq.com"
     affiliation: "FHIR IQ"
 repository-code: "https://github.com/FHIR-IQ/AINPI"
-url: "https://ainpi.vercel.app"
+url: "https://ainpi.dev"
 abstract: >-
   AINPI is a reproducible, FHIR-native audit of the CMS National Provider Directory (NPD)
   public-use files. It ingests the NPD FHIR R4 bulk dataset, runs structural and
