@@ -1,0 +1,31 @@
+name: Secret scan
+
+# Blocks PRs and fails main pushes that introduce committed secrets.
+# Belt-and-suspenders complement to .gitignore — if someone bypasses
+# the ignore (force-add, new file) gitleaks catches it at CI time.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history so PRs can scan their diff
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # No license required for solo / small-org use on public repos;
+          # gitleaks-action reads GITLEAKS_LICENSE if present, falls back
+          # to free scanning otherwise.

@@ -20,7 +20,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: weekly-refresh
@@ -93,31 +92,18 @@ jobs:
             git --no-pager diff --stat frontend/public/api/v1/
           fi
 
-      - name: Create pull request
+      - name: Commit + push directly to main
+        # Demo site: refresh outputs are deterministic (BQ queries over
+        # versioned analysis scripts). No human review adds signal, so
+        # push directly rather than opening a PR. Also: the org policy
+        # disallows Actions from creating PRs, which makes the PR path
+        # a non-starter without a PAT. If the repo ever graduates to
+        # "needs review," switch back to peter-evans/create-pull-request
+        # and set `admin:org` → "Allow Actions to create pull requests".
         if: steps.diff.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "Weekly refresh: regenerate /api/v1/*.json from latest BQ analyses"
-          title: "Weekly refresh — ${{ github.run_started_at }}"
-          body: |
-            Automated weekly run of `analysis/*.py` against the current
-            BigQuery state + public NPPES + NUCC tables.
-
-            Re-generates:
-            - /api/v1/stats.json
-            - /api/v1/findings/temporal-staleness.json
-            - /api/v1/findings/npi-taxonomy-correctness.json
-            - /api/v1/findings/referential-integrity.json
-            - /api/v1/findings/duplicate-detection.json
-
-            Does NOT re-run the FHIR-REST crawl (H1-H5) or H22 gauge —
-            those depend on the sibling `ainpi-probe` repo and run
-            out-of-band.
-
-            Review the diff and merge to publish. CI will deploy via
-            Vercel on merge.
-          branch: chore/weekly-refresh
-          delete-branch: true
-          labels: |
-            automated
-            weekly-refresh
+        run: |
+          git config user.name "ainpi-weekly-refresh"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/api/v1/
+          git commit -m "Weekly refresh: regenerate /api/v1/*.json from latest BQ analyses"
+          git push origin main
