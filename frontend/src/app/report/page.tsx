@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { FINDINGS } from '@/data/findings';
 import { loadFinding, loadStats } from '@/lib/load-api-v1';
 import FindingChart from '@/components/FindingChart';
+import PrintButton from '@/components/PrintButton';
 
 export const dynamic = 'force-static';
 
@@ -53,14 +54,7 @@ export default function ReportPage() {
             <strong>Tip:</strong> use your browser&apos;s <em>Print → Save as PDF</em> to
             export this report. It&apos;s styled for Letter paper at 0.75-inch margins.
           </p>
-          <button
-            type="button"
-            onClick={() => typeof window !== 'undefined' && window.print()}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-semibold rounded-lg transition-colors"
-            suppressHydrationWarning
-          >
-            Save as PDF
-          </button>
+          <PrintButton label="Save as PDF" />
           <a
             href="/findings"
             className="text-sm text-primary-700 hover:underline"
