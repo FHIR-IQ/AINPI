@@ -33,6 +33,7 @@
     "@types/d3": "^7.4.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/topojson-client": "^3.1.5",
+    "@vercel/analytics": "^2.0.1",
     "@vercel/postgres": "^0.10.0",
     "axios": "^1.6.2",
     "bcryptjs": "^3.0.2",
