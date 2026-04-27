@@ -7,7 +7,7 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-21T16:54:22+00:00",
+  "generated_at": "2026-04-27T11:14:02+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
   "headline": "Practitioner dedup is clean \u2014 0 excess rows across 7,441,212 NPIs (H14). But Organizations multiply: 70.5% of the 1,999,118 unique Org NPIs map to more than one Organization resource (1,415,777 excess rows; max 5 resources per one NPI). By normalized (name, state, city), 70.3% of keys repeat. Downstream consumers assuming one Organization resource = one real-world entity will be wrong roughly two out of three times.",
