@@ -49,7 +49,7 @@ jobs:
         # in depth — a prior run leaked a key that ended up in
         # chore/weekly-refresh because `git add -A` scooped it from
         # the workspace. Google auto-disabled the key.
-        uses: google-github-actions/auth@v2.1.11
+        uses: google-github-actions/auth@v3.0.0
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
