@@ -16,6 +16,7 @@ export default function Footer() {
               <li><a href="/states" className="hover:text-white">State audits</a></li>
               <li><a href="/smd-revalidation" className="hover:text-white">For state Medicaid</a></li>
               <li><a href="/methodology" className="hover:text-white">Methodology</a></li>
+              <li><a href="/data-sources" className="hover:text-white">Data sources</a></li>
               <li><a href="/npd" className="hover:text-white">NPI search</a></li>
               <li><a href="/api/v1/stats.json" className="hover:text-white font-mono text-xs">/api/v1/stats.json</a></li>
             </ul>
