@@ -1,0 +1,15 @@
+{
+  "slug": "oig-leie-exclusions",
+  "title": "OIG LEIE excluded providers in NDH",
+  "hypotheses": ["H24"],
+  "status": "pre-registered",
+  "release_date": "2026-04-09",
+  "generated_at": "2026-04-29T00:00:00+00:00",
+  "methodology_version": "0.3.0",
+  "commit_sha": "pending",
+  "headline": null,
+  "numerator": null,
+  "denominator": null,
+  "chart": null,
+  "notes": "Pre-registration record. The match logic — NPI-keyed inner join between active LEIE rows (NPI != '0000000000', REINDATE = '00000000') and NDH practitioner._npi / organization._npi — is published before any results drop. The 89% of LEIE rows without a populated NPI are not addressable by AINPI's NPI-keyed methodology. Numbers populate when `analysis/ingest_oig_leie.py` and `analysis/h24_oig_exclusions.py` run against the pinned NPD release. Each match is a data-quality flag aligned with 42 CFR § 455.436, NOT a fraud determination."
+}

@@ -142,6 +142,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'oig-leie-exclusions',
+    hypotheses: ['H24'],
+    title: 'OIG LEIE excluded providers in NDH',
+    summary:
+      'Active OIG List of Excluded Individuals/Entities (LEIE) NPIs that also appear in the federal NDH bulk export. Direct measurement of 42 CFR § 455.436 federal database alignment between the federal directory and the federal exclusion list.',
+    nullHypothesis:
+      'Zero NPIs on the active OIG LEIE also appear in the federal NDH bulk export. Federal directory and federal exclusion list are in agreement.',
+    denominator:
+      'Active LEIE rows with a populated NPI (NPI != "0000000000" and REINDATE = "00000000"). Approximately 8,977 of the 83,001 LEIE rows on 2026-04-29; the remaining 89% are predominantly pre-NPI-era exclusions and are out of scope for AINPI\'s NPI-keyed match.',
+    dataSource:
+      'OIG LEIE downloadable CSV (`UPDATED.csv` from oig.hhs.gov/exclusions/downloadables) joined to NDH `practitioner._npi` and `organization._npi`. Refreshed weekly via the GitHub Actions cron.',
+    status: 'pre-registered',
+    ogTagline: 'Are LEIE-excluded providers still in the federal NDH?',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 455.436 requires monthly LEIE checks. If matches exist between active LEIE and NDH, that is direct evidence of federal-level data lag between OIG enforcement and CMS directory publication. The NDH update cadence may need a tighter coupling to LEIE supplements.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your practitioner or organization NPI appears here, that is a serious flag. The LEIE search portal at exclusions.oig.hhs.gov is the authoritative source — verify there first, then contact OIG\'s Exclusion Review Section if you believe the match is in error.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'Each match is a high-priority revalidation case for the state\'s PI team. AINPI surfaces the cohort; investigation, hearing rights, and any reinstatement claim belong to the state agency and OIG, not to AINPI.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'The 89% of LEIE rows without a populated NPI are a structural limit on NPI-only matching. State MMIS systems use (lastname, firstname, DOB) demographic match for the remainder. AINPI does not implement demographic match because the data-quality risk on a national directory is too high.',
+      },
+    ],
+  },
+  {
     slug: 'high-risk-cohort',
     hypotheses: ['H23'],
     title: 'High-risk provider cohort',

@@ -78,11 +78,20 @@ jobs:
         # in analysis/state_findings.py STATE_NAMES and frontend/src/data/states.ts.
         run: python analysis/state_findings.py va pa oh
 
+      - name: Refresh OIG LEIE (federal exclusion list)
+        # Downloads UPDATED.csv from oig.hhs.gov and loads into BigQuery.
+        # LEIE updates monthly; weekly refresh keeps the table within ~7
+        # days of OIG's publication cadence.
+        run: python analysis/ingest_oig_leie.py
+
+      - name: Re-run H24 LEIE-NDH match
+        run: python analysis/h24_oig_exclusions.py
+
       - name: Re-run high-risk cohort (H23, composite score)
         # Composite revalidation prioritization signal aligned with 42 CFR
-        # § 455.436. Combines NPPES match, deactivation, and Luhn signals
-        # into a per-NPI score. LEIE/SAM ingestion will extend this once
-        # those data sources are added.
+        # § 455.436. Combines OIG LEIE, NPPES match, NPPES deactivation,
+        # and Luhn signals into a per-NPI score. SAM.gov is the next
+        # roadmap addition.
         run: python analysis/high_risk_cohort.py
 
       - name: Stamp stats.json with run metadata

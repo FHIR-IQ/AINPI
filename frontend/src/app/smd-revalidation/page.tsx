@@ -152,15 +152,11 @@ export default function SmdRevalidationPage() {
                   </a>
                 </td>
                 <td className="py-2 px-3">Monthly</td>
-                <td className="py-2 px-3 text-amber-700">
-                  Roadmap — see{' '}
-                  <a
-                    href="https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+label%3Aroadmap+leie"
-                    target="_blank"
-                    rel="noopener"
-                    className="underline"
-                  >
-                    LEIE ingestion issue
+                <td className="py-2 px-3 text-green-700">
+                  Yes — H24 joins active LEIE NPIs (REINDATE = 00000000) to NDH
+                  practitioner._npi and organization._npi. See{' '}
+                  <a href="/findings/oig-leie-exclusions" className="underline">
+                    /findings/oig-leie-exclusions
                   </a>
                 </td>
               </tr>
@@ -177,7 +173,15 @@ export default function SmdRevalidationPage() {
                 </td>
                 <td className="py-2 px-3">Monthly</td>
                 <td className="py-2 px-3 text-amber-700">
-                  Roadmap — same milestone as LEIE
+                  Roadmap — see{' '}
+                  <a
+                    href="https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+sam.gov"
+                    target="_blank"
+                    rel="noopener"
+                    className="underline"
+                  >
+                    SAM.gov ingestion issue
+                  </a>
                 </td>
               </tr>
               <tr>

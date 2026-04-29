@@ -5,23 +5,23 @@ screening). Produces /api/v1/findings/high-risk-cohort.json with a transparent,
 audit-friendly composite score per NPI plus a downloadable CSV at
 /api/v1/findings/high-risk-cohort-export.csv.
 
-The composite combines four NDH/NPPES signals already produced by other AINPI
-analyses (no new data ingestion required for v1):
+The composite combines five NDH/NPPES/LEIE signals (LEIE added in v0.3.0):
 
   Signal                           Weight   Reason code            Source
   -----------------------------    ------   --------------------   ---------------
+  Active OIG LEIE NPI match        1.5      oig_excluded           H24
   No NPPES NPI match               1.0      not_in_nppes           H10
   NPPES deactivated, NDH active    0.8      nppes_deactivated      H10 v2
   Luhn check fails                 1.0      luhn_fail              H9
   Specialty mismatch with NPPES    0.4      specialty_mismatch     H13
 
 Bucketed:
-    score >= 1.0 → 'high'   (lead with these in the state revalidation queue)
-    score >= 0.5 → 'medium' (review during normal cadence)
-    score <  0.5 → 'clean'  (no flag)
+    score >= 1.5 → 'critical'  (LEIE-excluded — immediate revalidation)
+    score >= 1.0 → 'high'      (lead the state revalidation queue)
+    score >= 0.5 → 'medium'    (review during normal cadence)
+    score <  0.5 → 'clean'     (no flag)
 
 Roadmap signals (not yet ingested):
-    OIG LEIE excluded provider          weight 1.5  reason: oig_excluded
     SAM.gov exclusion record            weight 1.5  reason: sam_excluded
     Endpoint dead (L4+)                 weight 0.3  reason: endpoint_dead
     meta.lastUpdated > 180 days drift   weight 0.2  reason: stale_metadata
@@ -46,8 +46,10 @@ from google.cloud import bigquery
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 NPPES_DATASET = "bigquery-public-data.nppes"
+LEIE_TABLE = f"{PROJECT}.{DATASET}.oig_leie"
 RELEASE_DATE = "2026-04-09"
-METHODOLOGY_VERSION = "0.2.0"
+METHODOLOGY_VERSION = "0.3.0"
+CRITICAL_RISK_THRESHOLD = 1.5
 HIGH_RISK_THRESHOLD = 1.0
 MEDIUM_RISK_THRESHOLD = 0.5
 EXPORT_TOP_N = 10000  # Cap CSV export size; full cohort available via /api/v1/* refresh
@@ -106,6 +108,12 @@ def run() -> None:
       FROM `{PROJECT}.{DATASET}.practitioner`
       WHERE _npi IS NOT NULL
     ),
+    active_leie AS (
+      SELECT NPI
+      FROM `{LEIE_TABLE}`
+      WHERE NPI != '' AND NPI != '0000000000'
+        AND (REINDATE = '00000000' OR REINDATE IS NULL OR REINDATE = '')
+    ),
     nppes_join AS (
       SELECT
         p._npi,
@@ -114,12 +122,12 @@ def run() -> None:
         p._state,
         nppes.npi IS NOT NULL                                     AS in_nppes,
         nppes.npi_deactivation_date IS NOT NULL                   AS nppes_deactivated,
-        nppes.provider_last_name_legal_name                       AS nppes_last,
-        nppes.provider_first_name                                 AS nppes_first,
-        nppes.healthcare_provider_taxonomy_code_1                 AS nppes_taxonomy_1
+        leie.NPI IS NOT NULL                                      AS oig_excluded
       FROM ndh_practitioners p
       LEFT JOIN `{NPPES_DATASET}.npi_raw` nppes
         ON p._npi = CAST(nppes.npi AS STRING)
+      LEFT JOIN active_leie leie
+        ON p._npi = leie.NPI
     )
     SELECT
       _npi,
@@ -127,7 +135,8 @@ def run() -> None:
       _given_name,
       _state,
       in_nppes,
-      nppes_deactivated
+      nppes_deactivated,
+      oig_excluded
     FROM nppes_join
     """
     print(f"Running composite cohort query — this may take ~3-5 min on 7.4M practitioners...")
@@ -137,8 +146,9 @@ def run() -> None:
     # Score each NPI in Python (Luhn check is Python-side; remaining signals
     # come from the BQ row).
     cohort = []
-    bucket_counts = {"high": 0, "medium": 0, "clean": 0}
+    bucket_counts = {"critical": 0, "high": 0, "medium": 0, "clean": 0}
     reason_counts = {
+        "oig_excluded": 0,
         "not_in_nppes": 0,
         "nppes_deactivated": 0,
         "luhn_fail": 0,
@@ -148,6 +158,11 @@ def run() -> None:
         npi = r._npi
         score = 0.0
         reasons = []
+
+        if r.oig_excluded:
+            score += 1.5
+            reasons.append("oig_excluded")
+            reason_counts["oig_excluded"] += 1
 
         if not luhn_check(npi):
             score += 1.0
@@ -169,7 +184,9 @@ def run() -> None:
         # weight 0.4 + reason `specialty_mismatch`.
 
         bucket = "clean"
-        if score >= HIGH_RISK_THRESHOLD:
+        if score >= CRITICAL_RISK_THRESHOLD:
+            bucket = "critical"
+        elif score >= HIGH_RISK_THRESHOLD:
             bucket = "high"
         elif score >= MEDIUM_RISK_THRESHOLD:
             bucket = "medium"
@@ -189,13 +206,15 @@ def run() -> None:
 
     cohort.sort(key=lambda c: (-c["score"], c["npi"]))
     total = len(rows)
+    crit_n = bucket_counts["critical"]
     high_n = bucket_counts["high"]
     med_n = bucket_counts["medium"]
 
     print(f"\nCohort distribution:")
-    print(f"  high   (score >= {HIGH_RISK_THRESHOLD}):   {high_n:>10,}  ({100*high_n/total:.4f}%)")
-    print(f"  medium (score >= {MEDIUM_RISK_THRESHOLD}): {med_n:>10,}  ({100*med_n/total:.4f}%)")
-    print(f"  clean:                              {bucket_counts['clean']:>10,}")
+    print(f"  critical (score >= {CRITICAL_RISK_THRESHOLD}): {crit_n:>10,}  ({100*crit_n/total:.4f}%)")
+    print(f"  high     (score >= {HIGH_RISK_THRESHOLD}):     {high_n:>10,}  ({100*high_n/total:.4f}%)")
+    print(f"  medium   (score >= {MEDIUM_RISK_THRESHOLD}):   {med_n:>10,}  ({100*med_n/total:.4f}%)")
+    print(f"  clean:                                  {bucket_counts['clean']:>10,}")
     print(f"\nReason-code prevalence:")
     for k, v in reason_counts.items():
         print(f"  {k:<22} {v:>10,}  ({100*v/total:.4f}%)")
@@ -216,10 +235,13 @@ def run() -> None:
             })
     print(f"\nWrote {csv_path} ({min(len(cohort), EXPORT_TOP_N):,} rows)")
 
+    flagged_n = crit_n + high_n
     headline = (
-        f"{high_n:,} of {total:,} ({100*high_n/total:.2f}%) NDH practitioner NPIs "
-        f"score at or above the {HIGH_RISK_THRESHOLD} composite threshold, anchored in "
-        f"42 CFR § 455.436 federal database checks. Reason codes: "
+        f"{flagged_n:,} of {total:,} ({100*flagged_n/total:.2f}%) NDH practitioner NPIs "
+        f"score at or above the {HIGH_RISK_THRESHOLD} composite threshold, including "
+        f"{crit_n:,} at the critical {CRITICAL_RISK_THRESHOLD} threshold (LEIE-excluded). "
+        f"Anchored in 42 CFR § 455.436 federal database checks. Reason codes: "
+        f"oig_excluded ({reason_counts['oig_excluded']:,}), "
         f"not_in_nppes ({reason_counts['not_in_nppes']:,}), "
         f"nppes_deactivated ({reason_counts['nppes_deactivated']:,}), "
         f"luhn_fail ({reason_counts['luhn_fail']:,})."
@@ -235,26 +257,27 @@ def run() -> None:
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
         "headline": headline,
-        "numerator": high_n,
+        "numerator": flagged_n,
         "denominator": total,
         "chart": {
             "type": "bar",
             "unit": "count",
             "data": [
+                {"label": "critical", "value": bucket_counts["critical"]},
                 {"label": "high", "value": bucket_counts["high"]},
                 {"label": "medium", "value": bucket_counts["medium"]},
                 {"label": "clean", "value": bucket_counts["clean"]},
             ],
         },
         "notes": (
-            f"v1 composite uses three of the four documented signals: NPPES match (1.0), "
-            f"NPPES deactivation (0.8), and Luhn validity (1.0). H13 specialty mismatch "
-            f"(weight 0.4) is wired into the next pass via the cohort_specialty_mismatch "
-            f"derived table populated by analysis/h10_h13_with_crosswalk.py. OIG LEIE and "
-            f"SAM.gov exclusion ingestion (each weight 1.5) are roadmap items; until "
-            f"ingested, state Medicaid agencies must run independent monthly checks per "
-            f"42 CFR § 455.436. Composite score is a data-quality flag, NOT a fraud "
-            f"determination — each NPI carries reason codes for transparent triage."
+            f"v0.3 composite combines four signals: OIG LEIE active exclusion match (1.5), "
+            f"NPPES match (1.0), NPPES deactivation (0.8), and Luhn validity (1.0). "
+            f"H13 specialty mismatch (weight 0.4) wires in via the cohort_specialty_mismatch "
+            f"derived table from analysis/h10_h13_with_crosswalk.py. SAM.gov exclusion "
+            f"ingestion (weight 1.5) is the next roadmap item. Until SAM is in, state "
+            f"Medicaid agencies must run independent monthly SAM checks per 42 CFR § 455.436. "
+            f"Composite score is a data-quality flag, NOT a fraud determination — each NPI "
+            f"carries reason codes for transparent triage."
         ),
     }
 
