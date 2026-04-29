@@ -1,0 +1,15 @@
+{
+  "slug": "high-risk-cohort",
+  "title": "High-risk provider cohort",
+  "hypotheses": ["H23"],
+  "status": "pre-registered",
+  "release_date": "2026-04-09",
+  "generated_at": "2026-04-29T00:00:00+00:00",
+  "methodology_version": "0.2.0",
+  "commit_sha": "pending",
+  "headline": null,
+  "numerator": null,
+  "denominator": null,
+  "chart": null,
+  "notes": "Pre-registration record. The composite weights (1.0 / 0.8 / 1.0 / 0.4) and the high (>=1.0) and medium (>=0.5) bucket thresholds are public on this page before the per-NPI cohort is computed. Numbers populate when `analysis/high_risk_cohort.py` runs against the pinned 2026-04-09 NPD release. CSV export at /api/v1/findings/high-risk-cohort-export.csv will be capped at 10,000 rows by score; the full cohort is available via the weekly refresh artifact. Composite score is a data-quality flag aligned with 42 CFR § 455.436 federal database checks, NOT a fraud determination."
+}

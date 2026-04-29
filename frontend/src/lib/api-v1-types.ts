@@ -75,3 +75,72 @@ export interface ApiV1Finding {
   /** Free-form notes — caveats, data-cleanup events, known edge cases. */
   notes: string | null;
 }
+
+/**
+ * State-scoped view of the audit, for `/states/<state>` pages and the
+ * State Medicaid Director ask under the 2026-04-23 CMS PR letter.
+ *
+ * One file per state at `/api/v1/states/<lowercase-abbrev>.json`.
+ */
+
+export interface ApiV1StateFindingRow {
+  /** Maps to the slug at /findings/[slug]. */
+  slug: string;
+  /** H10, H13, etc. */
+  hypotheses: string[];
+  /** Display title. */
+  title: string;
+  /** Whether the finding is computable at state granularity. */
+  state_computable: boolean;
+  /** State numerator. Null when not yet computed or not state-computable. */
+  state_numerator: number | null;
+  /** State denominator. Null when not yet computed or not state-computable. */
+  state_denominator: number | null;
+  /** State rate as percent. Null when not yet computed. */
+  state_pct: number | null;
+  /** Published national rate (percent), for side-by-side context. */
+  national_pct: number | null;
+  /** One-sentence state-specific takeaway. Null until computed. */
+  state_headline: string | null;
+  /** Why a finding cannot be computed at state level (e.g. endpoint→state mapping is indirect). */
+  not_computable_reason: string | null;
+}
+
+/**
+ * A specific record a reader can independently verify against the
+ * authoritative public source (NPPES NPI Registry). Surfacing concrete
+ * NPIs that AINPI flagged is the strongest trust signal we can publish.
+ */
+export interface ApiV1StateSampleNPI {
+  /** 10-digit NPI. */
+  npi: string;
+  /** Display name (last, first OR organization legal name). */
+  display_name: string;
+  /** Slug of the finding that flagged this NPI. */
+  flagged_by: string;
+  /** Plain-English flag reason ("not present in NPPES", "primary specialty disagrees with NPPES", etc.). */
+  flag_reason: string;
+  /** Direct verification URL on nppes.cms.hhs.gov. */
+  nppes_lookup_url: string;
+}
+
+export interface ApiV1StateFindings {
+  state: string; // 'VA'
+  state_name: string; // 'Virginia'
+  status: 'pre-registered' | 'in-progress' | 'published';
+  release_date: string;
+  generated_at: string;
+  methodology_version: string;
+  commit_sha: string;
+  /** Counts of NDH resources tied to this state (by service-address state). */
+  denominators: {
+    practitioner: number | null;
+    organization: number | null;
+    location: number | null;
+  };
+  findings: ApiV1StateFindingRow[];
+  /** Concrete records the reader can verify. Empty until computed. */
+  verify_samples: ApiV1StateSampleNPI[];
+  /** Free-form state-specific caveats. */
+  notes: string | null;
+}

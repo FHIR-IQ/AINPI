@@ -71,6 +71,20 @@ jobs:
       - name: Re-run duplicate detection (H14-H15)
         run: python analysis/h14_h15_duplicates.py
 
+      - name: Re-run state-scoped findings (VA, PA, OH)
+        # State pages support state Medicaid agencies responding to the
+        # 2026-04-23 CMS State Medicaid Director letter on provider
+        # revalidation strategies. Add states here as they're registered
+        # in analysis/state_findings.py STATE_NAMES and frontend/src/data/states.ts.
+        run: python analysis/state_findings.py va pa oh
+
+      - name: Re-run high-risk cohort (H23, composite score)
+        # Composite revalidation prioritization signal aligned with 42 CFR
+        # § 455.436. Combines NPPES match, deactivation, and Luhn signals
+        # into a per-NPI score. LEIE/SAM ingestion will extend this once
+        # those data sources are added.
+        run: python analysis/high_risk_cohort.py
+
       - name: Stamp stats.json with run metadata
         run: |
           python - <<'PY'

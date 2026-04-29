@@ -13,6 +13,8 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2">
               <li><a href="/findings" className="hover:text-white">Findings</a></li>
+              <li><a href="/states" className="hover:text-white">State audits</a></li>
+              <li><a href="/smd-revalidation" className="hover:text-white">For state Medicaid</a></li>
               <li><a href="/methodology" className="hover:text-white">Methodology</a></li>
               <li><a href="/npd" className="hover:text-white">NPI search</a></li>
               <li><a href="/api/v1/stats.json" className="hover:text-white font-mono text-xs">/api/v1/stats.json</a></li>

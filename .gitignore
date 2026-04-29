@@ -83,6 +83,9 @@ logs/
 .claude/
 skills-lock.json
 
+# Playwright MCP output (screenshots + console logs from local QA runs)
+.playwright-mcp/
+
 # Supabase CLI local project metadata
 supabase/.branches/
 supabase/.temp/

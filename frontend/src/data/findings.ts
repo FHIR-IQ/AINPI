@@ -142,6 +142,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'high-risk-cohort',
+    hypotheses: ['H23'],
+    title: 'High-risk provider cohort',
+    summary:
+      'A composite, transparent, audit-friendly score combining six independent NDH/NPPES quality signals into a per-NPI revalidation prioritization list. Aligned with 42 CFR § 455.436 federal database checks and § 455.450 risk-tier screening.',
+    nullHypothesis:
+      'Less than 1% of NDH practitioner NPIs accumulate a composite high-risk score above the 1.0 threshold, indicating that the federal directory population is broadly clean and revalidation can proceed on the standard 5-year cadence under 42 CFR § 455.414.',
+    denominator:
+      'All `Practitioner` resources in the NDH bulk export with a populated NPI.',
+    dataSource:
+      'NDH bulk export joined to NPPES `npi_raw` for match and deactivation status; the AINPI H9 Luhn check; the AINPI H13 NPPES↔NDH specialty agreement check; and the `ainpi-probe` endpoint liveness L4+ score for any endpoints declared by the practitioner’s organization. Roadmap: OIG LEIE and SAM.gov exclusion lists per 42 CFR § 455.436.',
+    status: 'pre-registered',
+    ogTagline: 'A transparent, citable revalidation prioritization list for state PI teams.',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 455.436 requires monthly NPPES + LEIE + SAM checks on all enrolled providers. AINPI today covers the NPPES leg with audit-trail-ready output (commit SHA, methodology version, generated_at). LEIE and SAM ingestion are roadmap items — the high-risk cohort will become a 4-database composite once ingested.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'Composite scores are NOT fraud determinations. Each NPI in the cohort carries reason codes (e.g. `not_in_nppes`, `nppes_deactivated`, `luhn_fail`, `specialty_mismatch`). Use the reason codes to triage; do not treat the score as a substitute for investigation.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'The composite weights (1.0 / 0.8 / 1.0 / 0.4 / 0.3 / 0.2) are pre-registered and visible in the analysis script. Sensitivity analyses welcome — file an issue with a reproducible alternative weighting and we will publish the comparison.',
+      },
+      {
+        audience: 'Everyone using NDH',
+        takeaway:
+          'The cohort is exported as CSV/JSON keyed by NPI with reason codes. State Medicaid PI teams can join this directly to their internal roster and produce an actionable revalidation queue inside one workday.',
+      },
+    ],
+  },
+  {
     slug: 'network-adequacy-gauge',
     hypotheses: ['H22'],
     title: 'Network adequacy gauge',
