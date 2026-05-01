@@ -19,7 +19,7 @@ AINPI/
 │   │   ├── app/              Routes (pages + API, including /api/v1/*)
 │   │   ├── components/       Shared UI (Navbar, WipBanner, Footer, charts/)
 │   │   ├── contexts/         FilterContext for cross-chart filtering
-│   │   ├── data/findings.ts  Pre-registration catalog (H1-H22 → slugs)
+│   │   ├── data/findings.ts  Pre-registration catalog (H1-H26 → slugs)
 │   │   ├── lib/              bigquery.ts, prisma.ts, auth.ts, api-v1-types.ts, load-api-v1.ts
 │   │   └── utils/supabase/   SSR-safe Supabase clients
 │   ├── public/api/v1/        Static JSON contract (stats.json, findings/<slug>.json)
@@ -133,9 +133,9 @@ Server Components read these via `loadStats()` / `loadFinding(slug)` in `fronten
 
 The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js route handlers — the static JSON files sit in `public/` and take precedence over same-named routes, so never name a route handler `stats/route.ts`.
 
-## Pre-registration workflow (H1–H24)
+## Pre-registration workflow (H1–H26)
 
-Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H24**, with H23 (high-risk cohort) and H24 (OIG LEIE) added in the SMD-revalidation push.
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H26**, with H23 (high-risk cohort), H24 (OIG LEIE), H25 (SAM.gov), and H26 (VA payer-directory exposure, methodology demo) added in the SMD-revalidation push.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
 2. **Compute** via `analysis/<hN>_*.py` (BigQuery-driven) or `crawler/` (endpoint probes for H1–H5, H22). Each script emits a `frontend/public/api/v1/findings/<slug>.json` conforming to `ApiV1Finding`.
@@ -153,6 +153,7 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `oig-leie-exclusions` → H24 (ingest: `analysis/ingest_oig_leie.py`, BQ: `analysis/h24_oig_exclusions.py`) — joins OIG LEIE monthly file to NDH practitioner NPIs
 - State-scoped slices → `analysis/state_findings.py <state>` writes `frontend/public/api/v1/states/<state>.json`
 - `sam-exclusions` → H25 (ingest: `analysis/ingest_sam_exclusions.py`, BQ: `analysis/h25_sam_exclusions.py`) — joins SAM.gov Public Extract V2 to NDH practitioner NPIs. Independent from LEIE: HHS slice overlaps, OPM slice is net-new. Ingest defaults to `sample-data/SAM_Exclusions_Public_Extract_V2_*.CSV`; API path requires `SAM_GOV_API_KEY` from `analysis/.env.example`.
+- `mco-exposure-va` → H26 (live FHIR: `analysis/h26_mco_exposure_va.py`) — joins the VA federally-excluded cohort to 2 publicly-queryable payer FHIR endpoints (Humana via `?identifier=`; Cigna via `?family=&given=` + post-filter Bundle by NPI in `identifier[]`). v1 is a methodology demo; the substantive VA-Medicaid version (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan) is Stage B follow-on, blocked on per-payer OAuth registration. The script shells out to `curl` instead of `urllib` because Akamai-fronted endpoints WAF-block Python's TLS fingerprint.
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).
 
