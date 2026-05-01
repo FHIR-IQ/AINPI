@@ -84,6 +84,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 - `/data-quality` — Interactive dashboard: KPIs, completeness heatmap, US choropleth, per-resource gauges, state bar chart, specialty treemap, endpoint sunburst, relationship stats, Sankey graph, force-directed knowledge graph, state→city drill-down via `StateDetailPanel`, data validation panel. All charts share a `FilterContext` for cross-filtering.
 - `/insights` — Provenance & variance analysis. Interactive org comparison tool + narrative sections on NPPES-vs-PECOS-vs-CAQH sources, active-flag signal limitations, CAQH ingestion path. Pre-filled with UPMC.
 - `/methodology` — Versioned audit methodology (DAMA DMBOK mapping, L0–L7 scoring, reproducibility). Sourced from `docs/methodology/index.md`.
+- `/data-sources` — Citation-grade reference: every public dataset AINPI ingests, considers, or rejects (NPPES, PECOS, LEIE, SAM, NUCC, NDH IG, etc.) with primary-source URLs, license terms, refresh cadence, and the hypothesis each maps to. `force-static`.
 - `/findings` — Index of pre-registered findings. Data in `frontend/src/data/findings.ts` (the **pre-registration record** — slug, hypotheses, null, denominator, audience implications). Live numbers hydrate from `/api/v1/findings/<slug>.json`.
 - `/findings/[slug]` — One finding per page. `force-static` + `generateStaticParams` over `allSlugs()`; live headline/chart/notes come from `loadFinding(slug)`, which reads `frontend/public/api/v1/findings/<slug>.json` at build time.
 - `/states` — Index of state-scoped audit slices. State catalog in `frontend/src/data/states.ts` (VA, PA, OH today). Built specifically for state Medicaid agencies responding to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation.
@@ -126,14 +127,15 @@ Static files under `frontend/public/api/v1/` are the **stable public contract** 
 | --- | --- | --- |
 | `/api/v1/stats.json` | weekly-refresh workflow | `ApiV1Stats` in `frontend/src/lib/api-v1-types.ts` |
 | `/api/v1/findings/<slug>.json` | `analysis/h*.py` scripts | `ApiV1Finding` in same file |
+| `/api/v1/states/<state>.json` | `analysis/state_findings.py <state>` | state-scoped payload consumed by `loadStateFindings(state)` |
 
 Server Components read these via `loadStats()` / `loadFinding(slug)` in `frontend/src/lib/load-api-v1.ts` (filesystem reads at build time; no round-trip). External consumers hit the same files over HTTP.
 
 The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js route handlers — the static JSON files sit in `public/` and take precedence over same-named routes, so never name a route handler `stats/route.ts`.
 
-## Pre-registration workflow (H1–H22)
+## Pre-registration workflow (H1–H24)
 
-Each hypothesis in the check catalog is registered **before** numbers drop:
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H24**, with H23 (high-risk cohort) and H24 (OIG LEIE) added in the SMD-revalidation push.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
 2. **Compute** via `analysis/<hN>_*.py` (BigQuery-driven) or `crawler/` (endpoint probes for H1–H5, H22). Each script emits a `frontend/public/api/v1/findings/<slug>.json` conforming to `ApiV1Finding`.
@@ -147,6 +149,10 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `referential-integrity` → H6–H8 (BQ: `analysis/h6_h8_integrity.py`)
 - `duplicate-detection` → H14–H15 (BQ: `analysis/h14_h15_duplicates.py`)
 - `network-adequacy-gauge` → H22 (joins crawler results to Endpoint table)
+- `high-risk-cohort` → H23 (BQ: `analysis/high_risk_cohort.py`) — composite NPPES+LEIE risk score; today single-database, expands to NPPES+LEIE+SAM+SSA-DMF per 42 CFR § 455.436 once SAM ingestion ships
+- `oig-leie-exclusions` → H24 (ingest: `analysis/ingest_oig_leie.py`, BQ: `analysis/h24_oig_exclusions.py`) — joins OIG LEIE monthly file to NDH practitioner NPIs
+- State-scoped slices → `analysis/state_findings.py <state>` writes `frontend/public/api/v1/states/<state>.json`
+- `sam-exclusions` → H25 (ingest: `analysis/ingest_sam_exclusions.py`, BQ: `analysis/h25_sam_exclusions.py`) — joins SAM.gov Public Extract V2 to NDH practitioner NPIs. Independent from LEIE: HHS slice overlaps, OPM slice is net-new. Ingest defaults to `sample-data/SAM_Exclusions_Public_Extract_V2_*.CSV`; API path requires `SAM_GOV_API_KEY` from `analysis/.env.example`.
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).
 
@@ -224,6 +230,10 @@ OPENAI_API_KEY
 PERPLEXITY_API_KEY
 AI_PROVIDER                  anthropic | openai | perplexity
 ```
+
+`analysis/` Python scripts read their own env from `analysis/.env` (gitignored). Copy `analysis/.env.example` and `set -a; source analysis/.env; set +a` before running. Currently holds `SAM_API_KEY` for the SAM.gov ingestion scaffold.
+
+`./.private/` is a gitignored workspace for strategy and competitive-positioning docs. Don't reference it in shipped code, public docs, commit messages, or PR descriptions.
 
 ## Testing
 

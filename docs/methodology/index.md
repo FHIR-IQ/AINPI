@@ -7,7 +7,7 @@ last_updated: 2026-04-21
 
 # AINPI methodology
 
-> **Status: `0.2.0-draft`.** All six pre-registered findings (H1–H22 bundled into 6 slugs) have landed real numbers against the 2026-04-09 NPD release. Analyses are reproducible from the scripts in `analysis/`. The methodology prose below is still a working document — expect formalization before `1.0.0`. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
+> **Status: `0.4.0-draft`.** All eight pre-registered findings (H1–H25 bundled into 8 slugs) have landed real numbers against the 2026-04-09 NPD release. Three of the four federal database checks under 42 CFR § 455.436 are covered: NPPES (H10–H13), OIG LEIE (H24), and SAM.gov (H25); the SSA Death Master File leg remains out-of-scope due to access restrictions. Analyses are reproducible from the scripts in `analysis/`. The methodology prose below is still a working document — expect formalization before `1.0.0`. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
 
 AINPI audits the CMS National Provider Directory (NPD) bulk public-use release against its own structural requirements, its referential integrity, its endpoint liveness, and its temporal freshness. Every check is reproducible from a clean checkout; every finding is emitted as a FHIR `VerificationResult`.
 

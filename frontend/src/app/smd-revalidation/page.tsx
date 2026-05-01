@@ -172,15 +172,11 @@ export default function SmdRevalidationPage() {
                   </a>
                 </td>
                 <td className="py-2 px-3">Monthly</td>
-                <td className="py-2 px-3 text-amber-700">
-                  Roadmap — see{' '}
-                  <a
-                    href="https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+sam.gov"
-                    target="_blank"
-                    rel="noopener"
-                    className="underline"
-                  >
-                    SAM.gov ingestion issue
+                <td className="py-2 px-3 text-green-700">
+                  Yes — H25 joins active SAM exclusions to NDH
+                  practitioner._npi. See{' '}
+                  <a href="/findings/sam-exclusions" className="underline">
+                    /findings/sam-exclusions
                   </a>
                 </td>
               </tr>
@@ -410,10 +406,11 @@ export default function SmdRevalidationPage() {
               tuples.
             </li>
             <li>
-              <strong>OIG LEIE and SAM.gov are not yet ingested</strong> by
-              AINPI. Until they are, the high-risk cohort here uses
-              NPPES-only signals; your team should run independent monthly
-              checks against both per 42 CFR § 455.436.
+              <strong>SSA Death Master File is not yet ingested</strong> by
+              AINPI (see below). The high-risk cohort covers three of the four
+              federal database checks under 42 CFR § 455.436 — NPPES, OIG LEIE,
+              and SAM.gov — but your team must still run independent monthly
+              SSA-DMF checks until that leg lands.
             </li>
             <li>
               <strong>The CMS Preclusion List is not public</strong>. AINPI
