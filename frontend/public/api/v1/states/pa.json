@@ -1,0 +1,90 @@
+{
+  "state": "PA",
+  "state_name": "Pennsylvania",
+  "status": "pre-registered",
+  "release_date": "2026-04-09",
+  "generated_at": "2026-04-29T00:00:00+00:00",
+  "methodology_version": "0.1.0-draft",
+  "commit_sha": "pending",
+  "denominators": {
+    "practitioner": null,
+    "organization": null,
+    "location": null
+  },
+  "findings": [
+    {
+      "slug": "npi-taxonomy-correctness",
+      "hypotheses": ["H9", "H10", "H11", "H12", "H13"],
+      "title": "NPI and taxonomy correctness",
+      "state_computable": true,
+      "state_numerator": null,
+      "state_denominator": null,
+      "state_pct": null,
+      "national_pct": null,
+      "state_headline": null,
+      "not_computable_reason": null
+    },
+    {
+      "slug": "duplicate-detection",
+      "hypotheses": ["H14", "H15"],
+      "title": "Duplicate detection",
+      "state_computable": true,
+      "state_numerator": null,
+      "state_denominator": null,
+      "state_pct": null,
+      "national_pct": null,
+      "state_headline": null,
+      "not_computable_reason": null
+    },
+    {
+      "slug": "temporal-staleness",
+      "hypotheses": ["H18"],
+      "title": "Temporal staleness",
+      "state_computable": true,
+      "state_numerator": null,
+      "state_denominator": null,
+      "state_pct": null,
+      "national_pct": null,
+      "state_headline": null,
+      "not_computable_reason": null
+    },
+    {
+      "slug": "endpoint-liveness",
+      "hypotheses": ["H1", "H2", "H3", "H4", "H5"],
+      "title": "Endpoint liveness",
+      "state_computable": false,
+      "state_numerator": null,
+      "state_denominator": null,
+      "state_pct": null,
+      "national_pct": null,
+      "state_headline": null,
+      "not_computable_reason": "FHIR Endpoints in NDH do not carry a state field. State scoping requires joining Endpoint.managingOrganization to Organization._state. Approximately 97% of NDH Endpoints have no populated managingOrganization back-reference, so a state-scoped endpoint-liveness number would only cover the 3% with a resolvable back-reference. The national rate is the defensible reference."
+    },
+    {
+      "slug": "referential-integrity",
+      "hypotheses": ["H6", "H7", "H8"],
+      "title": "Referential integrity",
+      "state_computable": false,
+      "state_numerator": null,
+      "state_denominator": null,
+      "state_pct": null,
+      "national_pct": null,
+      "state_headline": null,
+      "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
+    },
+    {
+      "slug": "network-adequacy-gauge",
+      "hypotheses": ["H22"],
+      "title": "Network adequacy gauge",
+      "state_computable": false,
+      "state_numerator": null,
+      "state_denominator": null,
+      "state_pct": null,
+      "national_pct": null,
+      "state_headline": null,
+      "not_computable_reason": "Same constraint as endpoint-liveness: FHIR Endpoints lack a state field, and the indirect join via managingOrganization covers only ~3% of Endpoints. The 85% Medicare Advantage network-adequacy implied ceiling is itself a national reference, so a state-scoped recomputation here would not be meaningful for state Medicaid PR strategy."
+    }
+  ],
+  "verify_samples": [],
+  "notes": "Pre-registration record. Numbers will populate when `analysis/state_findings.py pa` is run against the pinned 2026-04-09 NPD release. Status will advance to `published` at that point with a methodology version bump and commit SHA."
+}
