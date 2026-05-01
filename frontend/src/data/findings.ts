@@ -142,6 +142,117 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'oig-leie-exclusions',
+    hypotheses: ['H24'],
+    title: 'OIG LEIE excluded providers in NDH',
+    summary:
+      'Active OIG List of Excluded Individuals/Entities (LEIE) NPIs that also appear in the federal NDH bulk export. Direct measurement of 42 CFR § 455.436 federal database alignment between the federal directory and the federal exclusion list.',
+    nullHypothesis:
+      'Zero NPIs on the active OIG LEIE also appear in the federal NDH bulk export. Federal directory and federal exclusion list are in agreement.',
+    denominator:
+      'Active LEIE rows with a populated NPI (NPI != "0000000000" and REINDATE = "00000000"). Approximately 8,977 of the 83,001 LEIE rows on 2026-04-29; the remaining 89% are predominantly pre-NPI-era exclusions and are out of scope for AINPI\'s NPI-keyed match.',
+    dataSource:
+      'OIG LEIE downloadable CSV (`UPDATED.csv` from oig.hhs.gov/exclusions/downloadables) joined to NDH `practitioner._npi` and `organization._npi`. Refreshed weekly via the GitHub Actions cron.',
+    status: 'pre-registered',
+    ogTagline: 'Are LEIE-excluded providers still in the federal NDH?',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 455.436 requires monthly LEIE checks. If matches exist between active LEIE and NDH, that is direct evidence of federal-level data lag between OIG enforcement and CMS directory publication. The NDH update cadence may need a tighter coupling to LEIE supplements.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your practitioner or organization NPI appears here, that is a serious flag. The LEIE search portal at exclusions.oig.hhs.gov is the authoritative source — verify there first, then contact OIG\'s Exclusion Review Section if you believe the match is in error.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'Each match is a high-priority revalidation case for the state\'s PI team. AINPI surfaces the cohort; investigation, hearing rights, and any reinstatement claim belong to the state agency and OIG, not to AINPI.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'The 89% of LEIE rows without a populated NPI are a structural limit on NPI-only matching. State MMIS systems use (lastname, firstname, DOB) demographic match for the remainder. AINPI does not implement demographic match because the data-quality risk on a national directory is too high.',
+      },
+    ],
+  },
+  {
+    slug: 'sam-exclusions',
+    hypotheses: ['H25'],
+    title: 'SAM.gov excluded providers in NDH',
+    summary:
+      'Active SAM.gov exclusion records (HHS LEIE + OPM FEHBP debarment + DOJ + others, aggregated) whose NPI also appears in the federal NDH bulk export. Closes the third of four federal database checks named in 42 CFR § 455.436.',
+    nullHypothesis:
+      'Zero NPIs on SAM.gov\'s active exclusion list also appear in the federal NDH bulk export. Federal directory and federal exclusion list are in agreement.',
+    denominator:
+      'Active SAM rows (record_status = "Active") with a populated, real-format NPI. Approximately 7,063 of the 167,262 SAM rows in the V2_26120 extract; the remaining 96% are non-healthcare exclusions (OFAC sanctions, EPA contractor debarments, etc.) and are out of scope for AINPI\'s NPI-keyed match.',
+    dataSource:
+      'SAM.gov Public Extract V2 (sam.gov/data-services/Exclusions/Public V2) loaded via `analysis/ingest_sam_exclusions.py`, joined to NDH `practitioner._npi`. The HHS slice overlaps substantially with H24 LEIE; the OPM slice (FEHBP debarment under 5 USC 8902a) is net-new federal-screening signal not visible from LEIE alone.',
+    status: 'pre-registered',
+    ogTagline: 'Are SAM-excluded providers still in the federal NDH?',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 455.436 names SAM as one of four federal databases for monthly Medicaid screening. Matches between active SAM exclusions and NDH directly measure federal-level alignment; persistent matches indicate cadence drift between excluding-agency action and NDH publication.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'The OPM-debarred slice is the operationally interesting one — those providers are barred from FEHBP but may still be in commercial network listings if your data feed treats SAM as out-of-scope. Treat OPM exclusion as an independent signal from LEIE, not a duplicate.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your NPI is matched here, sam.gov/search/?index=ex is the authoritative lookup. SAM exclusions can come from agencies other than HHS — read the excluding_agency and exclusion_type fields before assuming an OIG-LEIE issue.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'NPI population in SAM is the structural ceiling — only ~4% of SAM rows carry a real NPI, because SAM is a multi-domain feed (sanctions, contractor debarment, foreign-asset blocks). Healthcare-relevant matches are concentrated in the HHS and OPM agency slices.',
+      },
+    ],
+  },
+  {
+    slug: 'high-risk-cohort',
+    hypotheses: ['H23'],
+    title: 'High-risk provider cohort',
+    summary:
+      'A composite, transparent, audit-friendly score combining six independent NDH/NPPES quality signals into a per-NPI revalidation prioritization list. Aligned with 42 CFR § 455.436 federal database checks and § 455.450 risk-tier screening.',
+    nullHypothesis:
+      'Less than 1% of NDH practitioner NPIs accumulate a composite high-risk score above the 1.0 threshold, indicating that the federal directory population is broadly clean and revalidation can proceed on the standard 5-year cadence under 42 CFR § 455.414.',
+    denominator:
+      'All `Practitioner` resources in the NDH bulk export with a populated NPI.',
+    dataSource:
+      'NDH bulk export joined to NPPES `npi_raw` for match and deactivation status; the AINPI H9 Luhn check; the AINPI H13 NPPES↔NDH specialty agreement check; and the `ainpi-probe` endpoint liveness L4+ score for any endpoints declared by the practitioner’s organization. Roadmap: OIG LEIE and SAM.gov exclusion lists per 42 CFR § 455.436.',
+    status: 'pre-registered',
+    ogTagline: 'A transparent, citable revalidation prioritization list for state PI teams.',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 455.436 requires monthly NPPES + LEIE + SAM checks on all enrolled providers. AINPI today covers the NPPES leg with audit-trail-ready output (commit SHA, methodology version, generated_at). LEIE and SAM ingestion are roadmap items — the high-risk cohort will become a 4-database composite once ingested.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'Composite scores are NOT fraud determinations. Each NPI in the cohort carries reason codes (e.g. `not_in_nppes`, `nppes_deactivated`, `luhn_fail`, `specialty_mismatch`). Use the reason codes to triage; do not treat the score as a substitute for investigation.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'The composite weights (1.0 / 0.8 / 1.0 / 0.4 / 0.3 / 0.2) are pre-registered and visible in the analysis script. Sensitivity analyses welcome — file an issue with a reproducible alternative weighting and we will publish the comparison.',
+      },
+      {
+        audience: 'Everyone using NDH',
+        takeaway:
+          'The cohort is exported as CSV/JSON keyed by NPI with reason codes. State Medicaid PI teams can join this directly to their internal roster and produce an actionable revalidation queue inside one workday.',
+      },
+    ],
+  },
+  {
     slug: 'network-adequacy-gauge',
     hypotheses: ['H22'],
     title: 'Network adequacy gauge',

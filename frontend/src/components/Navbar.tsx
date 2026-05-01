@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Sparkles, Search, Database, BarChart3, Lightbulb, FileText, BookOpen } from 'lucide-react';
+import { LogOut, User, Sparkles, Search, Database, BarChart3, Lightbulb, FileText, BookOpen, MapPin } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -42,6 +42,13 @@ export default function Navbar() {
             >
               <FileText className="w-4 h-4 mr-2" />
               Findings
+            </button>
+            <button
+              onClick={() => router.push('/states')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <MapPin className="w-4 h-4 mr-2" />
+              States
             </button>
             <button
               onClick={() => router.push('/methodology')}

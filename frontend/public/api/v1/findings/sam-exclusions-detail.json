@@ -1,0 +1,173 @@
+{
+  "samples": [
+    {
+      "npi": "1255690558",
+      "display_name": "BOUTON, RAQUEL",
+      "ndh_state": "NY",
+      "sam_state": "NY",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2016-06-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1255690558"
+    },
+    {
+      "npi": "1033382551",
+      "display_name": "MARTIN, KIMBERLY",
+      "ndh_state": "KY",
+      "sam_state": "KY",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2013-03-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033382551"
+    },
+    {
+      "npi": "1558434985",
+      "display_name": "ADEBIMPE, ADEBOLA",
+      "ndh_state": "CA",
+      "sam_state": "CA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2014-11-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558434985"
+    },
+    {
+      "npi": "1164475638",
+      "display_name": "KISHORE, PUNYAMURTULA",
+      "ndh_state": "MA",
+      "sam_state": "MA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2015-10-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1164475638"
+    },
+    {
+      "npi": "1760408041",
+      "display_name": "MCGAVIN, CAMERON",
+      "ndh_state": "PA",
+      "sam_state": "PA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2015-01-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1760408041"
+    },
+    {
+      "npi": "1255431888",
+      "display_name": "KURRLE, ROBERT",
+      "ndh_state": "VA",
+      "sam_state": "VA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2020-05-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1255431888"
+    },
+    {
+      "npi": "1871638502",
+      "display_name": "BOSHERS, BEAU",
+      "ndh_state": "FL",
+      "sam_state": "OK",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2013-03-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1871638502"
+    },
+    {
+      "npi": "1497934566",
+      "display_name": "PANGALLO, PAUL",
+      "ndh_state": "IN",
+      "sam_state": "IN",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2015-10-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1497934566"
+    },
+    {
+      "npi": "1679646475",
+      "display_name": "MICHAELSON, RICHARD",
+      "ndh_state": "IA",
+      "sam_state": "IA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2009-04-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1679646475"
+    },
+    {
+      "npi": "1396744892",
+      "display_name": "GIUDICI, STANLEY",
+      "ndh_state": "IA",
+      "sam_state": "FL",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2018-02-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396744892"
+    }
+  ],
+  "agency_breakdown": [
+    {
+      "agency": "HHS",
+      "matches": 4422,
+      "ndh_active": 3693
+    },
+    {
+      "agency": "OPM",
+      "matches": 2213,
+      "ndh_active": 1720
+    },
+    {
+      "agency": "(unattributed)",
+      "matches": 2,
+      "ndh_active": 2
+    }
+  ],
+  "state_breakdown": [
+    {
+      "state": "CA",
+      "n": 655
+    },
+    {
+      "state": "NY",
+      "n": 458
+    },
+    {
+      "state": "FL",
+      "n": 347
+    },
+    {
+      "state": "OH",
+      "n": 303
+    },
+    {
+      "state": "TX",
+      "n": 203
+    },
+    {
+      "state": "PA",
+      "n": 182
+    },
+    {
+      "state": "MI",
+      "n": 177
+    },
+    {
+      "state": "IL",
+      "n": 164
+    },
+    {
+      "state": "NJ",
+      "n": 116
+    },
+    {
+      "state": "TN",
+      "n": 99
+    }
+  ]
+}
