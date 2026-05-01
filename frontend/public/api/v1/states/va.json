@@ -1,90 +1,149 @@
 {
   "state": "VA",
   "state_name": "Virginia",
-  "status": "pre-registered",
+  "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-04-29T00:00:00+00:00",
-  "methodology_version": "0.1.0-draft",
-  "commit_sha": "pending",
+  "generated_at": "2026-05-01T23:03:34+00:00",
+  "methodology_version": "0.2.0",
+  "commit_sha": "39d0590",
   "denominators": {
-    "practitioner": null,
-    "organization": null,
-    "location": null
+    "practitioner": 141660,
+    "organization": 83163,
+    "location": 84640
   },
   "findings": [
     {
       "slug": "npi-taxonomy-correctness",
-      "hypotheses": ["H9", "H10", "H11", "H12", "H13"],
+      "hypotheses": [
+        "H9",
+        "H10",
+        "H11",
+        "H12",
+        "H13"
+      ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": null,
-      "state_denominator": null,
-      "state_pct": null,
-      "national_pct": null,
-      "state_headline": null,
+      "state_numerator": 140794,
+      "state_denominator": 141660,
+      "state_pct": 99.3887,
+      "national_pct": 85.7923,
+      "state_headline": "140,794 of 141,660 VA practitioner NPIs (99.3887%) match NPPES; 4,657 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
       "slug": "duplicate-detection",
-      "hypotheses": ["H14", "H15"],
+      "hypotheses": [
+        "H14",
+        "H15"
+      ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": null,
-      "state_denominator": null,
-      "state_pct": null,
-      "national_pct": null,
-      "state_headline": null,
+      "state_numerator": 35348,
+      "state_denominator": 83163,
+      "state_pct": 42.5045,
+      "national_pct": 13.3485,
+      "state_headline": "VA has 83,163 Organization resources covering 47,815 unique NPIs \u2014 35,348 excess resources (42.5045%) appear duplicated.",
       "not_computable_reason": null
     },
     {
       "slug": "temporal-staleness",
-      "hypotheses": ["H18"],
+      "hypotheses": [
+        "H18"
+      ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": null,
-      "state_denominator": null,
-      "state_pct": null,
-      "national_pct": null,
-      "state_headline": null,
+      "state_numerator": 309463,
+      "state_denominator": 309463,
+      "state_pct": 100.0,
+      "national_pct": 99.9996,
+      "state_headline": "309,463 of 309,463 VA-resident resources carry a meta.lastUpdated on the 2026-04-09 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
       "slug": "endpoint-liveness",
-      "hypotheses": ["H1", "H2", "H3", "H4", "H5"],
+      "hypotheses": [
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5"
+      ],
       "title": "Endpoint liveness",
       "state_computable": false,
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": null,
+      "national_pct": 85.3732,
       "state_headline": null,
       "not_computable_reason": "FHIR Endpoints in NDH do not carry a state field. State scoping requires joining Endpoint.managingOrganization to Organization._state. Approximately 97% of NDH Endpoints have no populated managingOrganization back-reference (see /findings/referential-integrity), so a state-scoped endpoint-liveness number would only cover the 3% with a resolvable back-reference. The national rate is the defensible reference."
     },
     {
       "slug": "referential-integrity",
-      "hypotheses": ["H6", "H7", "H8"],
+      "hypotheses": [
+        "H6",
+        "H7",
+        "H8"
+      ],
       "title": "Referential integrity",
       "state_computable": false,
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": null,
+      "national_pct": 0.0,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
     {
       "slug": "network-adequacy-gauge",
-      "hypotheses": ["H22"],
+      "hypotheses": [
+        "H22"
+      ],
       "title": "Network adequacy gauge",
       "state_computable": false,
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": null,
+      "national_pct": 90.3497,
       "state_headline": null,
       "not_computable_reason": "Same constraint as endpoint-liveness: FHIR Endpoints lack a state field, and the indirect join via managingOrganization covers only ~3% of Endpoints. The 85% Medicare Advantage network-adequacy implied ceiling is itself a national reference, so a state-scoped recomputation here would not be meaningful for state Medicaid PR strategy."
     }
   ],
-  "verify_samples": [],
-  "notes": "Pre-registration record. Numbers will populate when `analysis/state_findings.py va` is run against the pinned 2026-04-09 NPD release. Status will advance to `published` at that point with a methodology version bump and commit SHA."
+  "verify_samples": [
+    {
+      "npi": "1710831599",
+      "display_name": "YATCHAK, SYDNEY",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710831599"
+    },
+    {
+      "npi": "1679425037",
+      "display_name": "REDD, MARTHA",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1679425037"
+    },
+    {
+      "npi": "1033065156",
+      "display_name": "BANKSWYRICK, AVIS",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033065156"
+    },
+    {
+      "npi": "1104771971",
+      "display_name": "JACKSON, SANDRA",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104771971"
+    },
+    {
+      "npi": "1124975610",
+      "display_name": "LEWIS, DIAMOND",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124975610"
+    }
+  ],
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-04-09 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

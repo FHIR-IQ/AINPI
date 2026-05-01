@@ -49,7 +49,7 @@ jobs:
         # in depth — a prior run leaked a key that ended up in
         # chore/weekly-refresh because `git add -A` scooped it from
         # the workspace. Google auto-disabled the key.
-        uses: google-github-actions/auth@v2.1.11
+        uses: google-github-actions/auth@v3.0.0
         with:
           credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
 
@@ -108,6 +108,15 @@ jobs:
         # match (H10), NPPES deactivation, and Luhn (H9). Three of the four
         # § 455.436 federal database checks; SSA-DMF is out-of-scope.
         run: python analysis/high_risk_cohort.py
+
+      - name: Re-run H26 MCO exposure (VA pilot, methodology demo)
+        # Cross-references the federally-excluded VA cohort against live
+        # FHIR provider directories of 2 publicly-queryable payer endpoints
+        # (Humana via identifier search, Cigna via name + post-filter).
+        # Requires curl in PATH (sidesteps Akamai TLS fingerprinting that
+        # blocks Python urllib). curl is on ubuntu-latest by default.
+        # No new secrets — endpoints are public per CMS-9115-F.
+        run: python analysis/h26_mco_exposure_va.py
 
       - name: Stamp stats.json with run metadata
         run: |

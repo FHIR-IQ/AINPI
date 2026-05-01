@@ -216,6 +216,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'mco-exposure-va',
+    hypotheses: ['H26'],
+    title: 'VA payer networks containing federally excluded providers (methodology demo)',
+    summary:
+      'Cross-references the AINPI federally-excluded cohort (LEIE or SAM, score >= 1.5) for Virginia against live FHIR provider directories of 2 publicly-queryable payer endpoints (Humana, Cigna). v1 is a methodology demonstration; the full VA Medicaid MCO version requires credentialed access to Anthem/Aetna/UHC and is tracked as Stage B fast-follow. Anchored in 42 CFR § 455.436 (federal database checks) and § 438.602 (Medicaid managed care directory oversight).',
+    nullHypothesis:
+      'Zero federally-excluded VA-resident NPIs appear in any of the queried payer provider directories. Federal exclusion status and payer directory publication are in agreement.',
+    denominator:
+      'VA-resident NPIs in the AINPI high-risk cohort\'s critical bucket (composite score >= 1.5) flagged for OIG LEIE or SAM.gov active exclusion. Source: `high-risk-cohort-export.csv`, filtered to `state=VA AND bucket=critical AND (oig_excluded OR sam_excluded)`.',
+    dataSource:
+      'Live FHIR `Practitioner` queries against 2 publicly-queryable Da Vinci PDex Plan-Net endpoints. Humana accepts `?identifier=NPI` directly; Cigna does not (its CapabilityStatement returns `Search param not valid for resource: Practitioner by identifier` on 400) so we name-search via `?family=&given=` and post-filter the Bundle for the target NPI in `identifier[]`. Anthem (HealthKeepersInc and AnthemBlueCross via Elevance TotalView), Aetna, and UnitedHealthcare are deferred to Stage B because each requires per-payer OAuth registration and client-credential storage.',
+    status: 'published',
+    ogTagline: 'Are federally excluded providers in VA payer networks?',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 438.602 requires MCO directory oversight. v1 finds matches in Cigna\'s public directory — a payer that aggregates commercial + Medicaid managed care lines in one FHIR endpoint. Each match is a § 455.436-relevant flag for state PI staff to investigate. The substantive VA-Medicaid version requires Stage B (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan) which is not yet wired.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'Cigna is the v1 hit surface — if your organization carries any of the listed NPIs in your published provider directory, run an internal sweep against your provider data management workflow. Directory listing is operationally separate from active billing privileges, but the directory is the public-facing artifact regulators read first.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your NPI is matched here AND you believe the federal exclusion is in error, the LEIE search portal at exclusions.oig.hhs.gov and SAM.gov are the authoritative sources; pursue reinstatement with the excluding agency before contesting the directory listing.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'v1 reaches Humana (identifier search) and Cigna (name+filter). Neither is a primary VA Medicaid carrier; the actual VA Medicaid MCO products (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara, Molina, Virginia Premier) all require credentialed access. The Cigna name-search has a known false-negative class: cohort names are stored as "FAMILY, GIVEN" and may not exactly match payer-published names (typographic variants, hyphenated names, suffixes).',
+      },
+    ],
+  },
+  {
     slug: 'high-risk-cohort',
     hypotheses: ['H23'],
     title: 'High-risk provider cohort',

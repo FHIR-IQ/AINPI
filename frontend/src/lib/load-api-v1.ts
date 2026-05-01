@@ -41,3 +41,21 @@ export function loadStateFindings(state: string): ApiV1StateFindings | null {
     return null;
   }
 }
+
+/**
+ * Load a finding's sidecar JSON (e.g. `<slug>-detail.json`). Sidecars
+ * carry samples, breakdowns, and limitations that are too large for the
+ * stable `<slug>.json` public contract. Untyped because each finding
+ * has its own sidecar shape; consumers cast to the expected shape.
+ */
+export function loadFindingDetail(slug: string): unknown | null {
+  try {
+    const raw = fs.readFileSync(
+      path.join(PUBLIC_API_ROOT, 'findings', `${slug}-detail.json`),
+      'utf8',
+    );
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
