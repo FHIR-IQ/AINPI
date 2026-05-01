@@ -279,3 +279,154 @@ def query_mco(npi: str, name: str, mco: dict[str, str]) -> Classification:
         time.sleep(RETRY_DELAY_SECONDS)
         result = _once()
     return result
+
+
+def _read_cohort_csv(path: pathlib.Path) -> list[dict]:
+    with open(path, newline="", encoding="utf-8") as fh:
+        return list(csv.DictReader(fh))
+
+
+def run(state: str = "VA") -> None:
+    started = datetime.now(timezone.utc)
+    cohort_rows = _read_cohort_csv(COHORT_CSV)
+    queue = filter_cohort(cohort_rows, state=state)
+    print(f"Cohort source: {COHORT_CSV}")
+    print(f"NPIs to query: {len(queue):,} ({state} critical, federally excluded)")
+    if not queue:
+        raise SystemExit(
+            f"No NPIs to query — {state} critical bucket is empty for "
+            "oig_excluded/sam_excluded reasons. Did the cohort run? "
+            "Check frontend/public/api/v1/findings/high-risk-cohort.json."
+        )
+
+    # Per-payer counters and per-NPI matched-in lists.
+    per_mco: list[dict] = [
+        {"name": m["name"], "endpoint": m["endpoint"], "search": m.get("search", "identifier"),
+         "queried": 0, "matched": 0, "errors": 0}
+        for m in MCOS
+    ]
+    matched_in_per_npi: dict[str, list[str]] = {row["npi"]: [] for row in queue}
+
+    for row in queue:
+        npi = row["npi"]
+        name = row.get("name", "")
+        for mco_index, mco in enumerate(MCOS):
+            slot = per_mco[mco_index]
+            slot["queried"] += 1
+            try:
+                result = query_mco(npi, name, mco)
+            except Exception as e:  # belt + suspenders — never crash the whole run
+                print(f"  ! {mco['name']} {npi}: unexpected exception {e}")
+                slot["errors"] += 1
+                continue
+            if result == "matched":
+                slot["matched"] += 1
+                matched_in_per_npi[npi].append(mco["name"])
+            elif result == "error":
+                slot["errors"] += 1
+            time.sleep(THROTTLE_SECONDS_PER_HOST)
+        print(
+            f"  {npi}  {name:<28}  "
+            + " ".join(
+                f"{m['name'][:6]}={'M' if m['name'] in matched_in_per_npi[npi] else '.'}"
+                for m in MCOS
+            )
+        )
+
+    # Soft-fail on excessive payer errors.
+    warnings: list[str] = []
+    for slot in per_mco:
+        if slot["queried"] and slot["errors"] / slot["queried"] > 0.10:
+            warnings.append(
+                f"{slot['name']} error rate "
+                f"{slot['errors']}/{slot['queried']} > 10% — match counts may understate."
+            )
+
+    numerator = sum(1 for npis in matched_in_per_npi.values() if npis)
+    denominator = len(queue)
+
+    public_payload = {
+        "slug": "mco-exposure-va",
+        "title": "VA payer networks containing federally excluded providers (methodology demo)",
+        "hypotheses": ["H26"],
+        "status": "published",
+        "release_date": RELEASE_DATE,
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "methodology_version": METHODOLOGY_VERSION,
+        "commit_sha": get_commit_sha(),
+        "headline": compose_headline(numerator, denominator, per_mco),
+        "numerator": numerator,
+        "denominator": denominator,
+        "chart": {
+            "type": "bar",
+            "unit": "count",
+            "data": [{"label": m["name"], "value": m["matched"]} for m in per_mco],
+        },
+        "notes": (
+            f"v1 methodology demonstration. Cross-references the VA-resident "
+            f"critical-bucket cohort (LEIE or SAM, score >= 1.5) against {len(MCOS)} "
+            f"publicly-queryable payer FHIR endpoints. Humana accepts "
+            f"`?identifier=NPI` directly; Cigna does not (its CapabilityStatement "
+            f"rejects identifier search) so we name-search and post-filter the "
+            f"Bundle by NPI. Each match is a data-quality and triage signal "
+            f"aligned with 42 CFR § 455.436 and § 438.602 — investigation, "
+            f"hearing rights, and reinstatement claims belong to the payer and "
+            f"the excluding agency. Provider directory listing alone does not "
+            f"establish current billing privileges or active patient assignment. "
+            + (" ; ".join(warnings) if warnings else "")
+        ),
+    }
+
+    samples = []
+    for npi, matched_in in sorted(
+        matched_in_per_npi.items(),
+        key=lambda kv: (-len(kv[1]), kv[0]),
+    ):
+        if not matched_in:
+            continue
+        original = next(r for r in queue if r["npi"] == npi)
+        reasons = (original.get("reasons") or "").split("|")
+        samples.append({
+            "npi": npi,
+            "name": original.get("name") or "(name not in cohort export)",
+            "reason_codes": [r for r in reasons if r],
+            "matched_in": matched_in,
+            "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+            "sam_lookup_url": "https://sam.gov/search/?index=ex",
+            "nppes_lookup_url": f"https://npiregistry.cms.hhs.gov/provider-view/{npi}",
+        })
+        if len(samples) >= 10:
+            break
+
+    detail_payload = {
+        "queried_at": started.isoformat(timespec="seconds"),
+        "cohort_source": f"high-risk-cohort-export.csv@{get_commit_sha()}",
+        "mcos": [
+            {"name": m["name"], "endpoint": m["endpoint"], "search": m["search"],
+             "queried": m["queried"], "matched": m["matched"], "errors": m["errors"]}
+            for m in per_mco
+        ],
+        "samples": samples,
+        "limitations": [
+            "v1 of H26 is a methodology demonstration covering 2 publicly-queryable payer FHIR endpoints (Humana, Cigna). Neither is a primary VA Medicaid carrier; the actual VA Medicaid MCO products (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara Community Plan, Molina Complete Care, Virginia Premier) all require credentialed access and are deferred to Stage B follow-on.",
+            "Anthem's TotalView FHIR endpoints (HealthKeepersInc, AnthemBlueCross via /resources/registered/...) return 403 on every Practitioner query without app registration. Aetna requires OAuth from developerportal.aetna.com. UnitedHealthcare's URL captured in our `ProviderDirectoryAPI` Supabase table is stale (DNS-fails); current public URL is unconfirmed.",
+            "Cigna's CapabilityStatement does not list `identifier` as a Practitioner search parameter, so we name-search (`?family=&given=`) and post-filter Bundle entries for the target NPI. False negatives are possible if the cohort name (`FAMILY, GIVEN`) does not exactly match the payer's listing.",
+            "Provider directory listing alone does not establish current network participation, billing privileges, or active patient assignment.",
+            "Each match is a data-quality and triage flag, not a fraud determination — investigation, hearing rights, and reinstatement claims belong to the payer and the excluding agency.",
+        ],
+    }
+
+    out_public = FINDINGS_DIR / "mco-exposure-va.json"
+    out_detail = FINDINGS_DIR / "mco-exposure-va-detail.json"
+    out_public.write_text(json.dumps(public_payload, indent=2) + "\n")
+    out_detail.write_text(json.dumps(detail_payload, indent=2) + "\n")
+    print(f"\nWrote {out_public}")
+    print(f"Wrote {out_detail}")
+    print(
+        f"\nDone in {(datetime.now(timezone.utc) - started).total_seconds():.1f}s. "
+        f"Numerator: {numerator}, Denominator: {denominator}."
+    )
+
+
+if __name__ == "__main__":
+    run()
