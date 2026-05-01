@@ -1,0 +1,83 @@
+{
+  "queried_at": "2026-05-01T20:58:21+00:00",
+  "cohort_source": "high-risk-cohort-export.csv@123fd98",
+  "mcos": [
+    {
+      "name": "Humana",
+      "endpoint": "https://fhir.humana.com/api",
+      "search": "identifier",
+      "queried": 125,
+      "matched": 0,
+      "errors": 0
+    },
+    {
+      "name": "Cigna",
+      "endpoint": "https://fhir.cigna.com/ProviderDirectory/v1",
+      "search": "name",
+      "queried": 125,
+      "matched": 4,
+      "errors": 0
+    }
+  ],
+  "samples": [
+    {
+      "npi": "1710496161",
+      "name": "BURKHEAD, JASON",
+      "reason_codes": [
+        "oig_excluded"
+      ],
+      "matched_in": [
+        "Cigna"
+      ],
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710496161"
+    },
+    {
+      "npi": "1750462008",
+      "name": "JACOBSEN, DANIEL",
+      "reason_codes": [
+        "oig_excluded"
+      ],
+      "matched_in": [
+        "Cigna"
+      ],
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1750462008"
+    },
+    {
+      "npi": "1801070313",
+      "name": "BREWER, STEVEN",
+      "reason_codes": [
+        "oig_excluded"
+      ],
+      "matched_in": [
+        "Cigna"
+      ],
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801070313"
+    },
+    {
+      "npi": "1942523451",
+      "name": "WHATMOUGH, RACHELLE",
+      "reason_codes": [
+        "oig_excluded"
+      ],
+      "matched_in": [
+        "Cigna"
+      ],
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942523451"
+    }
+  ],
+  "limitations": [
+    "v1 of H26 is a methodology demonstration covering 2 publicly-queryable payer FHIR endpoints (Humana, Cigna). Neither is a primary VA Medicaid carrier; the actual VA Medicaid MCO products (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara Community Plan, Molina Complete Care, Virginia Premier) all require credentialed access and are deferred to Stage B follow-on.",
+    "Anthem's TotalView FHIR endpoints (HealthKeepersInc, AnthemBlueCross via /resources/registered/...) return 403 on every Practitioner query without app registration. Aetna requires OAuth from developerportal.aetna.com. UnitedHealthcare's URL captured in our `ProviderDirectoryAPI` Supabase table is stale (DNS-fails); current public URL is unconfirmed.",
+    "Cigna's CapabilityStatement does not list `identifier` as a Practitioner search parameter, so we name-search (`?family=&given=`) and post-filter Bundle entries for the target NPI. False negatives are possible if the cohort name (`FAMILY, GIVEN`) does not exactly match the payer's listing.",
+    "Provider directory listing alone does not establish current network participation, billing privileges, or active patient assignment.",
+    "Each match is a data-quality and triage flag, not a fraud determination \u2014 investigation, hearing rights, and reinstatement claims belong to the payer and the excluding agency."
+  ]
+}
