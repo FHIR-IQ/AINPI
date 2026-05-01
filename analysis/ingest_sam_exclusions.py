@@ -56,12 +56,20 @@ TABLE = f"{PROJECT}.{DATASET}.sam_exclusions"
 SAM_API_BASE = "https://api.sam.gov/exclusions/v1"
 CSV_CACHE = "/tmp/sam_exclusions.csv"
 
-# Default location for a manually-downloaded SAM Public Extract V2 — the
-# script will pick it up automatically if no --from-csv flag is passed.
-# Drop new monthly extracts here with the same naming convention; the
+# Default location for manually-downloaded SAM Public Extract V2 files —
+# the script will pick up the lexicographically-latest one (filenames
+# encode YYDDD Julian date so lex-sort matches publication date) when no
+# --from-csv flag is passed. Drop new monthly extracts here with the
+# canonical SAM_Exclusions_Public_Extract_V2_<YYDDD>.CSV naming; the
 # CSV is gitignored under sample-data/*.CSV.
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
-DEFAULT_LOCAL_CSV = REPO_ROOT / "sample-data" / "SAM_Exclusions_Public_Extract_V2_26120.CSV"
+SAMPLE_DATA_DIR = REPO_ROOT / "sample-data"
+SAM_CSV_GLOB = "SAM_Exclusions_Public_Extract_V2_*.CSV"
+
+
+def _latest_local_extract() -> pathlib.Path | None:
+    matches = sorted(SAMPLE_DATA_DIR.glob(SAM_CSV_GLOB))
+    return matches[-1] if matches else None
 
 
 def fetch_via_api(api_key: str) -> str:
@@ -164,17 +172,18 @@ def main() -> None:
 
     started = datetime.now(timezone.utc)
 
+    local = _latest_local_extract()
     if args.from_csv:
         rows = load_csv_to_bq(args.from_csv)
-    elif DEFAULT_LOCAL_CSV.exists():
-        print(f"Using local extract: {DEFAULT_LOCAL_CSV}")
-        rows = load_csv_to_bq(str(DEFAULT_LOCAL_CSV))
+    elif local is not None:
+        print(f"Using latest local extract: {local}")
+        rows = load_csv_to_bq(str(local))
     else:
         api_key = os.environ.get("SAM_GOV_API_KEY")
         if not api_key:
             raise SystemExit(
-                "No SAM_GOV_API_KEY in env, no local extract at\n"
-                f"  {DEFAULT_LOCAL_CSV},\n"
+                "No SAM_GOV_API_KEY in env, no local extract matching\n"
+                f"  {SAMPLE_DATA_DIR}/{SAM_CSV_GLOB},\n"
                 "and no --from-csv path supplied. See module docstring for paths."
             )
         csv_path = fetch_via_api(api_key)  # writes CSV_CACHE
