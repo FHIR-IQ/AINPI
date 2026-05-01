@@ -87,11 +87,26 @@ jobs:
       - name: Re-run H24 LEIE-NDH match
         run: python analysis/h24_oig_exclusions.py
 
+      - name: Refresh SAM.gov exclusions (best-effort)
+        # SAM ingest needs either SAM_GOV_API_KEY (not yet provisioned) or
+        # a local CSV checked into sample-data/ (gitignored — won't appear
+        # on the runner). Until the API key lands, this step exits non-zero
+        # and the existing sam_exclusions table (last loaded ad-hoc) carries
+        # forward into H25 + the cohort. Once the secret is added, flip
+        # continue-on-error to false.
+        continue-on-error: true
+        env:
+          SAM_GOV_API_KEY: ${{ secrets.SAM_GOV_API_KEY }}
+        run: python analysis/ingest_sam_exclusions.py
+
+      - name: Re-run H25 SAM-NDH match
+        run: python analysis/h25_sam_exclusions.py
+
       - name: Re-run high-risk cohort (H23, composite score)
         # Composite revalidation prioritization signal aligned with 42 CFR
-        # § 455.436. Combines OIG LEIE, NPPES match, NPPES deactivation,
-        # and Luhn signals into a per-NPI score. SAM.gov is the next
-        # roadmap addition.
+        # § 455.436. v0.4.0 combines OIG LEIE (H24), SAM.gov (H25), NPPES
+        # match (H10), NPPES deactivation, and Luhn (H9). Three of the four
+        # § 455.436 federal database checks; SSA-DMF is out-of-scope.
         run: python analysis/high_risk_cohort.py
 
       - name: Stamp stats.json with run metadata
