@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Cross-reference the federally-excluded subset of the AINPI high-risk cohort (LEIE or SAM, score ≥ 1.5) for Virginia against live FHIR provider directories of 4 wired MCO parent payers, publishing per-MCO match counts as a citable finding.
+**Goal:** Cross-reference the federally-excluded subset of the AINPI high-risk cohort (LEIE or SAM, score ≥ 1.5) for Virginia against live FHIR provider directories of 4 publicly-queryable payer endpoints (Anthem HealthKeepers Plus, Anthem Blue Cross, Humana, Cigna), publishing per-payer match counts as a citable finding. Aetna and UHC are deliberate v1 gaps (Stage C fast-follow).
 
-**Architecture:** New Python script `analysis/h26_mco_exposure_va.py` mirrors the H24/H25 pattern. It reads `frontend/public/api/v1/findings/high-risk-cohort-export.csv`, filters to VA critical NPIs, hits `${endpoint}/Practitioner?identifier=...` on each MCO with a 1 req/sec/host throttle, and writes `frontend/public/api/v1/findings/mco-exposure-va.json` (public contract) + `mco-exposure-va-detail.json` (sidecar). The finding entry registers in `findings.ts`; `/states/va` gains a panel that reads the sidecar.
+**Architecture:** New Python script `analysis/h26_mco_exposure_va.py` mirrors the H24/H25 pattern. It reads `frontend/public/api/v1/findings/high-risk-cohort-export.csv`, filters to VA critical NPIs, hits `${endpoint}/Practitioner?identifier=...` on each payer with a 1 req/sec/host throttle, and writes `frontend/public/api/v1/findings/mco-exposure-va.json` (public contract) + `mco-exposure-va-detail.json` (sidecar). The finding entry registers in `findings.ts`; `/states/va` gains a panel that reads the sidecar.
 
 **Tech Stack:** Python 3.12+ (stdlib only — no new deps), Next.js 14, TypeScript, Vitest, GitHub Actions YAML.
 
@@ -404,19 +404,24 @@ Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>"
 
 - [ ] **Step 1: Add the MCO registry constant**
 
-Substitute the **actual URLs from /tmp/mco-endpoints.json (Task 1)** for the placeholders below. Append to `analysis/h26_mco_exposure_va.py` immediately after the constants block:
+The 4 endpoints below were verified working (200 on `/metadata`) during Task 1. Append to `analysis/h26_mco_exposure_va.py` immediately after the constants block:
 
 ```python
-# MCO FHIR endpoint registry — base URLs only.
-# Sourced from the live `ProviderDirectoryAPI` rows used by
-# `frontend/src/app/api/provider-search/route.ts`. Hardcoded here to keep
-# the analysis pipeline self-contained (no Supabase dependency).
-# Update these when the canonical Supabase rows change.
+# Payer FHIR endpoint registry — base URLs only.
+# v1 wiring: 4 publicly-queryable endpoints verified to return 200 on
+# /metadata as of 2026-05-01. Aetna and UnitedHealthcare are deferred
+# to Stage C (Aetna requires OAuth registration; UHC URL drift).
+# When endpoints change or new payers are added, update this list and
+# the spec/plan.
 MCOS: list[dict[str, str]] = [
-    {"name": "Aetna",  "endpoint": "<AETNA_FHIR_BASE_URL_FROM_TASK_1>"},
-    {"name": "Anthem", "endpoint": "<ANTHEM_FHIR_BASE_URL_FROM_TASK_1>"},
-    {"name": "UHC",    "endpoint": "<UHC_FHIR_BASE_URL_FROM_TASK_1>"},
-    {"name": "Humana", "endpoint": "<HUMANA_FHIR_BASE_URL_FROM_TASK_1>"},
+    {"name": "Anthem HealthKeepers Plus",
+     "endpoint": "https://totalview.healthos.elevancehealth.com/resources/registered/HealthKeepersInc/api/v1/fhir"},
+    {"name": "Anthem Blue Cross",
+     "endpoint": "https://totalview.healthos.elevancehealth.com/resources/registered/AnthemBlueCross/api/v1/fhir"},
+    {"name": "Humana",
+     "endpoint": "https://fhir.humana.com/api"},
+    {"name": "Cigna",
+     "endpoint": "https://fhir.cigna.com/ProviderDirectory/v1"},
 ]
 ```
 
@@ -503,36 +508,35 @@ Append to `analysis/tests/test_h26_mco_exposure_va.py`:
 ```python
 def test_compose_headline_zero_matches():
     per_mco = [
-        {"name": "Aetna",  "matched": 0, "queried": 312, "errors": 0},
-        {"name": "Anthem", "matched": 0, "queried": 312, "errors": 0},
-        {"name": "UHC",    "matched": 0, "queried": 312, "errors": 0},
-        {"name": "Humana", "matched": 0, "queried": 312, "errors": 0},
+        {"name": "Anthem HealthKeepers Plus", "matched": 0, "queried": 312, "errors": 0},
+        {"name": "Anthem Blue Cross",         "matched": 0, "queried": 312, "errors": 0},
+        {"name": "Humana",                    "matched": 0, "queried": 312, "errors": 0},
+        {"name": "Cigna",                     "matched": 0, "queried": 312, "errors": 0},
     ]
     line = h26.compose_headline(numerator=0, denominator=312, per_mco=per_mco)
     assert "0 of 312" in line
-    assert "Aetna 0" in line
-    assert "Anthem 0" in line
-    assert "UHC 0" in line
+    assert "Anthem HealthKeepers Plus 0" in line
     assert "Humana 0" in line
+    assert "Cigna 0" in line
 
 
 def test_compose_headline_with_matches():
     per_mco = [
-        {"name": "Aetna",  "matched": 4, "queried": 312, "errors": 0},
-        {"name": "Anthem", "matched": 7, "queried": 312, "errors": 0},
-        {"name": "UHC",    "matched": 2, "queried": 312, "errors": 1},
-        {"name": "Humana", "matched": 1, "queried": 312, "errors": 0},
+        {"name": "Anthem HealthKeepers Plus", "matched": 7, "queried": 312, "errors": 0},
+        {"name": "Anthem Blue Cross",         "matched": 4, "queried": 312, "errors": 0},
+        {"name": "Humana",                    "matched": 1, "queried": 312, "errors": 0},
+        {"name": "Cigna",                     "matched": 2, "queried": 312, "errors": 1},
     ]
-    line = h26.compose_headline(numerator=11, denominator=312, per_mco=per_mco)
-    assert "11 of 312" in line
-    assert "Aetna 4, Anthem 7, UHC 2, Humana 1" in line
+    line = h26.compose_headline(numerator=12, denominator=312, per_mco=per_mco)
+    assert "12 of 312" in line
+    assert "Anthem HealthKeepers Plus 7, Anthem Blue Cross 4, Humana 1, Cigna 2" in line
 
 
-def test_compose_headline_stable_with_single_mco():
-    per_mco = [{"name": "Aetna", "matched": 3, "queried": 100, "errors": 0}]
+def test_compose_headline_stable_with_single_payer():
+    per_mco = [{"name": "Humana", "matched": 3, "queried": 100, "errors": 0}]
     line = h26.compose_headline(numerator=3, denominator=100, per_mco=per_mco)
     assert "3 of 100" in line
-    assert "Aetna 3" in line
+    assert "Humana 3" in line
 ```
 
 - [ ] **Step 2: Run — must fail with AttributeError**
@@ -549,12 +553,12 @@ Append to `analysis/h26_mco_exposure_va.py`:
 
 ```python
 def compose_headline(numerator: int, denominator: int, per_mco: list[dict]) -> str:
-    """Stable headline: count + per-MCO breakdown in registry order."""
+    """Stable headline: count + per-payer breakdown in registry order."""
     breakdown = ", ".join(f"{m['name']} {m['matched']}" for m in per_mco)
     return (
         f"{numerator:,} of {denominator:,} federally excluded VA-resident "
         f"providers (LEIE or SAM, score ≥ 1.5) appear in at least one of "
-        f"{len(per_mco)} wired MCO provider directories. Per-MCO: {breakdown}."
+        f"{len(per_mco)} wired payer provider directories. Per-payer: {breakdown}."
     )
 ```
 
@@ -668,11 +672,11 @@ def run(state: str = "VA") -> None:
         "notes": (
             f"Cross-references the VA-resident critical-bucket cohort "
             f"(LEIE or SAM, score ≥ 1.5) against live FHIR provider directories "
-            f"of {len(MCOS)} wired MCO parent payers via "
+            f"of {len(MCOS)} wired payer endpoints via "
             f"`{{base}}/Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|<npi>`. "
             f"Each match is a data-quality and triage signal aligned with "
             f"42 CFR § 455.436 and § 438.602 — investigation, hearing rights, "
-            f"and reinstatement claims belong to the MCO and the excluding "
+            f"and reinstatement claims belong to the payer and the excluding "
             f"agency. Provider directory listing alone does not establish "
             f"current billing privileges or active patient assignment. "
             + (" ; ".join(warnings) if warnings else "")
@@ -710,10 +714,11 @@ def run(state: str = "VA") -> None:
         ],
         "samples": samples,
         "limitations": [
-            "VA Medicaid landscape includes 6 MCO products; this finding queries 4 parent payers (Aetna, Anthem, UHC, Humana). Sentara Community Plan and Virginia Premier are not yet wired.",
-            "Parent-payer FHIR endpoints may aggregate commercial + Medicaid managed care directories. The match is 'appears in payer's published provider directory'; the Medicaid line specifically may differ.",
+            "VA Medicaid landscape includes 6 MCO products; v1 of H26 reaches Anthem HealthKeepers Plus directly (the Anthem VA Medicaid brand) plus 3 broader payer endpoints (Anthem Blue Cross, Humana, Cigna). Aetna BH of VA, UHC Community Plan, Sentara Community Plan, Molina Complete Care, and Virginia Premier are not yet wired.",
+            "Aetna's public Provider Directory FHIR endpoint requires OAuth registration that is not yet wired into the analysis pipeline. UnitedHealthcare's URL captured in our `ProviderDirectoryAPI` Supabase table is stale (DNS-fails). Both are Stage C fast-follows.",
+            "Anthem Blue Cross, Humana, and Cigna FHIR endpoints aggregate commercial + Medicaid managed care directories; the match is 'appears in payer's published provider directory', not 'in Medicaid line specifically'. Anthem HealthKeepers Plus is the exception — it is wired as a brand-specific Medicaid endpoint.",
             "Provider directory listing alone does not establish current network participation, billing privileges, or active patient assignment.",
-            "Each match is a data-quality and triage flag, not a fraud determination — investigation, hearing rights, and reinstatement claims belong to the MCO and the excluding agency.",
+            "Each match is a data-quality and triage flag, not a fraud determination — investigation, hearing rights, and reinstatement claims belong to the payer and the excluding agency.",
         ],
     }
 
@@ -826,22 +831,22 @@ Open `frontend/src/data/findings.ts`. Locate the `sam-exclusions` entry (slug `'
   {
     slug: 'mco-exposure-va',
     hypotheses: ['H26'],
-    title: 'VA Medicaid MCO networks containing federally excluded providers',
+    title: 'VA payer networks containing federally excluded providers',
     summary:
-      'Cross-references the AINPI federally-excluded cohort (LEIE or SAM, score ≥ 1.5) for Virginia against live FHIR provider directories of 4 wired MCO parent payers (Aetna, Anthem, UHC, Humana). Anchored in 42 CFR § 455.436 (federal database checks) and § 438.602 (Medicaid managed care directory oversight).',
+      'Cross-references the AINPI federally-excluded cohort (LEIE or SAM, score ≥ 1.5) for Virginia against live FHIR provider directories of 4 publicly-queryable payer endpoints (Anthem HealthKeepers Plus — Anthem\'s VA Medicaid brand — plus Anthem Blue Cross, Humana, and Cigna). Anchored in 42 CFR § 455.436 (federal database checks) and § 438.602 (Medicaid managed care directory oversight).',
     nullHypothesis:
-      'Zero federally-excluded VA-resident NPIs appear in any of the queried MCO provider directories. Federal exclusion status and MCO directory publication are in agreement.',
+      'Zero federally-excluded VA-resident NPIs appear in any of the queried payer provider directories. Federal exclusion status and payer directory publication are in agreement.',
     denominator:
       'VA-resident NPIs in the AINPI high-risk cohort\'s critical bucket (composite score ≥ 1.5) flagged for OIG LEIE or SAM.gov active exclusion. Source: `high-risk-cohort-export.csv`, filtered to `state=VA AND bucket=critical AND (oig_excluded OR sam_excluded)`.',
     dataSource:
-      'Live FHIR `Practitioner?identifier=` queries against the four wired MCO parent payers used by `/api/provider-search`. Sentara Community Plan and Virginia Premier are not yet wired and are documented as a v1 gap.',
+      'Live FHIR `Practitioner?identifier=` queries against 4 publicly-queryable Da Vinci PDex Plan-Net endpoints: Anthem HealthKeepers Plus (`HealthKeepersInc`, the VA Medicaid brand) and Anthem Blue Cross via Elevance TotalView; Humana; Cigna. Aetna and UnitedHealthcare are deferred to a Stage C fast-follow (Aetna requires OAuth; UHC URL drift). Sentara Community Plan, Molina Complete Care, and Virginia Premier are also unwired in v1.',
     status: 'published',
-    ogTagline: 'Are federally excluded providers in VA Medicaid MCO networks?',
+    ogTagline: 'Are federally excluded providers in VA payer networks?',
     implications: [
       {
         audience: 'Regulators',
         takeaway:
-          '42 CFR § 438.602 requires MCO directory oversight. Persistent matches between active federal exclusions and MCO-published directories indicate either MCO directory drift or carryover from commercial network listings; either way it is a § 455.436-relevant flag for state PI staff.',
+          '42 CFR § 438.602 requires MCO directory oversight. Persistent matches between active federal exclusions and payer-published directories indicate either directory drift or carryover from commercial network listings; either way it is a § 455.436-relevant flag for state PI staff. The Anthem HealthKeepers Plus endpoint is queried as a Medicaid line specifically.',
       },
       {
         audience: 'Payer data teams',
@@ -856,7 +861,7 @@ Open `frontend/src/data/findings.ts`. Locate the `sam-exclusions` entry (slug `'
       {
         audience: 'Researchers',
         takeaway:
-          'The 4-MCO denominator covers ~80% of VA Medicaid managed care lives but not all. Sentara and Virginia Premier are not yet queried. Parent-payer endpoints may aggregate commercial + Medicaid lines; product-level disambiguation requires future work to wire the Medicaid-specific FHIR endpoint per CMS-9115-F.',
+          'v1 reaches one VA-Medicaid-specific endpoint (Anthem HealthKeepers Plus) plus three commercial-aggregating endpoints (Anthem Blue Cross, Humana, Cigna). Aetna BH of VA, UHC Community Plan, Sentara, Molina Complete Care, and Virginia Premier are not yet wired. Product-level Medicaid-line disambiguation for the commercial-aggregating endpoints requires future work to wire each Medicaid-specific FHIR endpoint per CMS-9115-F.',
       },
     ],
   },
@@ -1161,7 +1166,7 @@ Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>"
 Open `CLAUDE.md`. Find the hypothesis-to-slug bullet list and append after the `sam-exclusions` line:
 
 ```markdown
-- `mco-exposure-va` → H26 (BQ-free; live FHIR: `analysis/h26_mco_exposure_va.py`) — joins the VA federally-excluded cohort to live MCO provider directories (Aetna, Anthem, UHC, Humana). VA pilot; multi-state generalization is roadmap.
+- `mco-exposure-va` → H26 (BQ-free; live FHIR: `analysis/h26_mco_exposure_va.py`) — joins the VA federally-excluded cohort to 4 publicly-queryable payer FHIR endpoints (Anthem HealthKeepers Plus, Anthem Blue Cross, Humana, Cigna). Aetna + UHC deferred to Stage C; multi-state generalization is roadmap.
 ```
 
 Also update the `## Pre-registration workflow (H1–H25)` heading to `H1–H26`, and the descriptive sentence (`Current range: **H1–H25**...`) to `Current range: **H1–H26**, with H26 (VA MCO exposure) added on top of H23–H25 in the SMD-revalidation push.`
@@ -1225,6 +1230,7 @@ Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>"
 ## Out-of-scope reminders (do NOT add to this PR)
 
 - T-MSIS Medicaid claims signal — separate Stage 2 spec
-- Sentara / Virginia Premier wiring — needs Sentara API to land
+- Aetna OAuth registration + UHC URL re-discovery — Stage C fast-follow
+- Sentara, Molina, Virginia Premier wiring — needs payer API discovery
 - PA / OH / multi-state generalization — fast-follow after VA proves the pattern
-- PractitionerRole / Location filtering for Medicaid-line-specific filtering
+- PractitionerRole / Location filtering for Medicaid-line-specific filtering on aggregated endpoints (Anthem Blue Cross, Humana, Cigna)
