@@ -249,6 +249,16 @@ def _query_by_name(npi: str, family: str, given: str, mco: dict[str, str]) -> Cl
     return "matched" if bundle_contains_npi(body, npi) else "not_in_directory"
 
 
+def compose_headline(numerator: int, denominator: int, per_mco: list[dict]) -> str:
+    """Stable headline: count + per-payer breakdown in registry order."""
+    breakdown = ", ".join(f"{m['name']} {m['matched']}" for m in per_mco)
+    return (
+        f"{numerator:,} of {denominator:,} federally excluded VA-resident "
+        f"providers (LEIE or SAM, score >= 1.5) appear in at least one of "
+        f"{len(per_mco)} wired payer provider directories. Per-payer: {breakdown}."
+    )
+
+
 def query_mco(npi: str, name: str, mco: dict[str, str]) -> Classification:
     """Query one payer for one NPI. Single retry on `error` after RETRY_DELAY_SECONDS.
 

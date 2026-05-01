@@ -150,3 +150,31 @@ def test_bundle_contains_npi_empty_bundle():
 
 def test_bundle_contains_npi_malformed_json():
     assert h26.bundle_contains_npi("not json", "1234567890") is False
+
+
+def test_compose_headline_zero_matches():
+    per_mco = [
+        {"name": "Humana", "matched": 0, "queried": 125, "errors": 0},
+        {"name": "Cigna",  "matched": 0, "queried": 125, "errors": 0},
+    ]
+    line = h26.compose_headline(numerator=0, denominator=125, per_mco=per_mco)
+    assert "0 of 125" in line
+    assert "Humana 0" in line
+    assert "Cigna 0" in line
+
+
+def test_compose_headline_with_matches():
+    per_mco = [
+        {"name": "Humana", "matched": 1, "queried": 125, "errors": 0},
+        {"name": "Cigna",  "matched": 2, "queried": 125, "errors": 1},
+    ]
+    line = h26.compose_headline(numerator=3, denominator=125, per_mco=per_mco)
+    assert "3 of 125" in line
+    assert "Humana 1, Cigna 2" in line
+
+
+def test_compose_headline_stable_with_single_payer():
+    per_mco = [{"name": "Humana", "matched": 3, "queried": 100, "errors": 0}]
+    line = h26.compose_headline(numerator=3, denominator=100, per_mco=per_mco)
+    assert "3 of 100" in line
+    assert "Humana 3" in line
