@@ -41,3 +41,46 @@ def test_filter_cohort_keeps_only_va_critical_excluded():
     ]
     kept = h26.filter_cohort(rows, state="VA")
     assert [r["npi"] for r in kept] == ["1111111111", "2222222222", "3333333333"]
+
+
+def test_classify_response_matched_with_total_one():
+    body = '{"resourceType":"Bundle","type":"searchset","total":1,"entry":[{}]}'
+    assert h26.classify_response(200, body) == "matched"
+
+
+def test_classify_response_matched_with_entries_no_total():
+    body = '{"resourceType":"Bundle","type":"searchset","entry":[{"resource":{}}]}'
+    assert h26.classify_response(200, body) == "matched"
+
+
+def test_classify_response_not_in_directory_zero_total():
+    body = '{"resourceType":"Bundle","type":"searchset","total":0}'
+    assert h26.classify_response(200, body) == "not_in_directory"
+
+
+def test_classify_response_not_in_directory_empty_entry():
+    body = '{"resourceType":"Bundle","type":"searchset","entry":[]}'
+    assert h26.classify_response(200, body) == "not_in_directory"
+
+
+def test_classify_response_error_on_5xx():
+    assert h26.classify_response(503, "service unavailable") == "error"
+
+
+def test_classify_response_error_on_4xx_non_404():
+    # 400 / 401 / 403 are auth/parse errors — never silently say "not in directory"
+    assert h26.classify_response(401, "") == "error"
+
+
+def test_classify_response_404_treated_as_not_in_directory():
+    # Some FHIR servers return 404 for empty searches instead of empty Bundle
+    assert h26.classify_response(404, "") == "not_in_directory"
+
+
+def test_classify_response_error_on_malformed_json():
+    assert h26.classify_response(200, "not json") == "error"
+
+
+def test_classify_response_error_on_non_bundle_resource():
+    body = '{"resourceType":"OperationOutcome","issue":[{"severity":"error"}]}'
+    assert h26.classify_response(200, body) == "error"

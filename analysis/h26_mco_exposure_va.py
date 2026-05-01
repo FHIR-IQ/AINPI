@@ -77,3 +77,32 @@ def get_commit_sha() -> str:
     except (FileNotFoundError, subprocess.SubprocessError):
         pass
     return "pending"
+
+
+def classify_response(status_code: int, body: str) -> Classification:
+    """Map an MCO HTTP response into one of three buckets.
+
+    - matched          : Bundle with at least one entry (total>=1 or entry list non-empty)
+    - not_in_directory : Bundle with total=0 / empty entry list, OR HTTP 404
+    - error            : everything else (5xx, 4xx-not-404, malformed JSON,
+                         non-Bundle resourceType)
+
+    The 404 -> not_in_directory rule covers FHIR servers that return 404 for
+    empty searches; everything else 4xx is treated as `error` so we never
+    silently miss a match because of an auth or schema issue.
+    """
+    if status_code == 404:
+        return "not_in_directory"
+    if status_code != 200:
+        return "error"
+    try:
+        body_json = json.loads(body)
+    except json.JSONDecodeError:
+        return "error"
+    if body_json.get("resourceType") != "Bundle":
+        return "error"
+    total = body_json.get("total")
+    entries = body_json.get("entry") or []
+    if total is None:
+        return "matched" if entries else "not_in_directory"
+    return "matched" if total >= 1 else "not_in_directory"
