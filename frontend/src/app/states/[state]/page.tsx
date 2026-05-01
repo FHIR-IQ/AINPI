@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import AuthorByline from '@/components/AuthorByline';
 import { findStateByCode, allStateCodes } from '@/data/states';
-import { loadStateFindings } from '@/lib/load-api-v1';
+import { loadStateFindings, loadFinding, loadFindingDetail } from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -50,6 +50,93 @@ function fmt(n: number | null): string {
 function pct(n: number | null): string {
   if (n === null || n === undefined) return '—';
   return n.toFixed(2) + '%';
+}
+
+interface McoExposureDetail {
+  queried_at: string;
+  cohort_source: string;
+  mcos: { name: string; endpoint: string; search: string; queried: number; matched: number; errors: number }[];
+  samples: {
+    npi: string;
+    name: string;
+    reason_codes: string[];
+    matched_in: string[];
+    leie_lookup_url: string;
+    sam_lookup_url: string;
+    nppes_lookup_url: string;
+  }[];
+  limitations: string[];
+}
+
+function McoExposurePanel() {
+  const finding = loadFinding('mco-exposure-va');
+  const detail = loadFindingDetail('mco-exposure-va') as McoExposureDetail | null;
+  if (!finding || !detail) return null;
+
+  const maxMatched = Math.max(1, ...detail.mcos.map((m) => m.matched));
+
+  return (
+    <section className="mt-8 bg-white border border-gray-200 rounded-lg p-6">
+      <h2 className="text-lg font-semibold text-gray-900 mb-1">
+        Payer directory exposure to federally excluded providers
+      </h2>
+      <p className="text-sm text-gray-600 mb-4">
+        H26 (methodology demo). {finding.headline}{' '}
+        <a href="/findings/mco-exposure-va" className="underline">
+          See the full finding →
+        </a>
+      </p>
+
+      <div className="space-y-2 mb-6">
+        {detail.mcos.map((m) => (
+          <div key={m.name} className="flex items-center gap-3">
+            <span className="w-20 text-sm font-medium text-gray-700">{m.name}</span>
+            <div className="flex-1 bg-gray-100 rounded h-5 relative overflow-hidden">
+              <div
+                className="bg-red-600 h-full"
+                style={{ width: `${(m.matched / maxMatched) * 100}%` }}
+              />
+            </div>
+            <span className="w-44 text-sm text-gray-700 tabular-nums">
+              {m.matched} matched / {m.queried} queried
+              {m.errors > 0 && (
+                <span className="text-amber-700"> · {m.errors} err</span>
+              )}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {detail.samples.length > 0 && (
+        <details className="mt-4 text-sm">
+          <summary className="cursor-pointer font-medium text-gray-700">
+            Verify a sample yourself ({detail.samples.length} NPIs)
+          </summary>
+          <ul className="mt-2 space-y-1 font-mono text-xs">
+            {detail.samples.map((s) => (
+              <li key={s.npi}>
+                <a
+                  href={s.nppes_lookup_url}
+                  target="_blank"
+                  rel="noopener"
+                  className="underline"
+                >
+                  {s.npi}
+                </a>{' '}
+                — {s.name} — matched: {s.matched_in.join(', ')}
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+
+      <ul className="mt-4 text-xs text-gray-500 list-disc list-inside space-y-1">
+        {detail.limitations.map((lim, i) => (
+          <li key={i}>{lim}</li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 export default function StatePage({ params }: { params: { state: string } }) {
@@ -479,6 +566,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
             </a>
           </p>
         </footer>
+
+        {entry.code === 'VA' && <McoExposurePanel />}
       </main>
     </div>
   );
