@@ -179,6 +179,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'sam-exclusions',
+    hypotheses: ['H25'],
+    title: 'SAM.gov excluded providers in NDH',
+    summary:
+      'Active SAM.gov exclusion records (HHS LEIE + OPM FEHBP debarment + DOJ + others, aggregated) whose NPI also appears in the federal NDH bulk export. Closes the third of four federal database checks named in 42 CFR § 455.436.',
+    nullHypothesis:
+      'Zero NPIs on SAM.gov\'s active exclusion list also appear in the federal NDH bulk export. Federal directory and federal exclusion list are in agreement.',
+    denominator:
+      'Active SAM rows (record_status = "Active") with a populated, real-format NPI. Approximately 7,063 of the 167,262 SAM rows in the V2_26120 extract; the remaining 96% are non-healthcare exclusions (OFAC sanctions, EPA contractor debarments, etc.) and are out of scope for AINPI\'s NPI-keyed match.',
+    dataSource:
+      'SAM.gov Public Extract V2 (sam.gov/data-services/Exclusions/Public V2) loaded via `analysis/ingest_sam_exclusions.py`, joined to NDH `practitioner._npi`. The HHS slice overlaps substantially with H24 LEIE; the OPM slice (FEHBP debarment under 5 USC 8902a) is net-new federal-screening signal not visible from LEIE alone.',
+    status: 'pre-registered',
+    ogTagline: 'Are SAM-excluded providers still in the federal NDH?',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          '42 CFR § 455.436 names SAM as one of four federal databases for monthly Medicaid screening. Matches between active SAM exclusions and NDH directly measure federal-level alignment; persistent matches indicate cadence drift between excluding-agency action and NDH publication.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'The OPM-debarred slice is the operationally interesting one — those providers are barred from FEHBP but may still be in commercial network listings if your data feed treats SAM as out-of-scope. Treat OPM exclusion as an independent signal from LEIE, not a duplicate.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your NPI is matched here, sam.gov/search/?index=ex is the authoritative lookup. SAM exclusions can come from agencies other than HHS — read the excluding_agency and exclusion_type fields before assuming an OIG-LEIE issue.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'NPI population in SAM is the structural ceiling — only ~4% of SAM rows carry a real NPI, because SAM is a multi-domain feed (sanctions, contractor debarment, foreign-asset blocks). Healthcare-relevant matches are concentrated in the HHS and OPM agency slices.',
+      },
+    ],
+  },
+  {
     slug: 'high-risk-cohort',
     hypotheses: ['H23'],
     title: 'High-risk provider cohort',

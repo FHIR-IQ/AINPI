@@ -40,10 +40,12 @@ Required:
     BigQuery jobUser + dataEditor on cms_npd dataset.
 """
 from __future__ import annotations
+import argparse
 import csv
 import io
 import json
 import pathlib
+import shutil
 import urllib.request
 from datetime import datetime, timezone
 from google.cloud import bigquery
@@ -139,16 +141,32 @@ def report_quality(client: bigquery.Client) -> dict:
     return stats
 
 
-def run() -> None:
-    download()
+def run(from_csv: str | None = None) -> None:
+    if from_csv:
+        src = pathlib.Path(from_csv)
+        if not src.exists():
+            raise SystemExit(f"--from-csv path not found: {src}")
+        shutil.copyfile(src, LEIE_CACHE)
+        print(f"Using local LEIE extract: {src} ({src.stat().st_size:,} bytes) → {LEIE_CACHE}")
+    else:
+        download()
     client = bigquery.Client(project=PROJECT)
     rows = load_to_bq(client)
     stats = report_quality(client)
     stats["rows_loaded"] = rows
     stats["loaded_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-    stats["source"] = LEIE_URL
+    stats["source"] = from_csv or LEIE_URL
     print(f"\n{json.dumps(stats, indent=2)}")
 
 
 if __name__ == "__main__":
-    run()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--from-csv",
+        help=("Path to a pre-downloaded LEIE CSV (e.g. fetched via curl when "
+              "Python's certifi bundle doesn't trust an intercepting proxy). "
+              "Bypasses the urllib download path."),
+        default=None,
+    )
+    args = parser.parse_args()
+    run(from_csv=args.from_csv)

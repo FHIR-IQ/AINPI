@@ -5,24 +5,30 @@ screening). Produces /api/v1/findings/high-risk-cohort.json with a transparent,
 audit-friendly composite score per NPI plus a downloadable CSV at
 /api/v1/findings/high-risk-cohort-export.csv.
 
-The composite combines five NDH/NPPES/LEIE signals (LEIE added in v0.3.0):
+The composite combines six NDH/NPPES/LEIE/SAM signals (SAM added in v0.4.0):
 
   Signal                           Weight   Reason code            Source
   -----------------------------    ------   --------------------   ---------------
   Active OIG LEIE NPI match        1.5      oig_excluded           H24
+  Active SAM.gov exclusion match   1.5      sam_excluded           H25
   No NPPES NPI match               1.0      not_in_nppes           H10
   NPPES deactivated, NDH active    0.8      nppes_deactivated      H10 v2
   Luhn check fails                 1.0      luhn_fail              H9
   Specialty mismatch with NPPES    0.4      specialty_mismatch     H13
 
 Bucketed:
-    score >= 1.5 → 'critical'  (LEIE-excluded — immediate revalidation)
+    score >= 1.5 → 'critical'  (federally excluded — immediate revalidation)
     score >= 1.0 → 'high'      (lead the state revalidation queue)
     score >= 0.5 → 'medium'    (review during normal cadence)
     score <  0.5 → 'clean'     (no flag)
 
+LEIE and SAM are scored independently even though SAM's HHS slice overlaps
+LEIE — they are independent legal sources under 42 CFR § 455.436, and a
+double-flagged NPI (score 3.0) is genuinely higher-confidence triage than
+a single-flagged one. The bucket cap is 'critical' either way.
+
 Roadmap signals (not yet ingested):
-    SAM.gov exclusion record            weight 1.5  reason: sam_excluded
+    SSA-DMF deceased provider match     weight 2.0  reason: ssa_dmf_match
     Endpoint dead (L4+)                 weight 0.3  reason: endpoint_dead
     meta.lastUpdated > 180 days drift   weight 0.2  reason: stale_metadata
 
@@ -47,8 +53,9 @@ PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 NPPES_DATASET = "bigquery-public-data.nppes"
 LEIE_TABLE = f"{PROJECT}.{DATASET}.oig_leie"
+SAM_TABLE = f"{PROJECT}.{DATASET}.sam_exclusions"
 RELEASE_DATE = "2026-04-09"
-METHODOLOGY_VERSION = "0.3.0"
+METHODOLOGY_VERSION = "0.4.0"
 CRITICAL_RISK_THRESHOLD = 1.5
 HIGH_RISK_THRESHOLD = 1.0
 MEDIUM_RISK_THRESHOLD = 0.5
@@ -114,6 +121,12 @@ def run() -> None:
       WHERE NPI != '' AND NPI != '0000000000'
         AND (REINDATE = '00000000' OR REINDATE IS NULL OR REINDATE = '')
     ),
+    active_sam AS (
+      SELECT DISTINCT npi
+      FROM `{SAM_TABLE}`
+      WHERE REGEXP_CONTAINS(npi, r'^[1-9]\\d{{9}}$')
+        AND record_status = 'Active'
+    ),
     nppes_join AS (
       SELECT
         p._npi,
@@ -122,12 +135,15 @@ def run() -> None:
         p._state,
         nppes.npi IS NOT NULL                                     AS in_nppes,
         nppes.npi_deactivation_date IS NOT NULL                   AS nppes_deactivated,
-        leie.NPI IS NOT NULL                                      AS oig_excluded
+        leie.NPI IS NOT NULL                                      AS oig_excluded,
+        sam.npi IS NOT NULL                                       AS sam_excluded
       FROM ndh_practitioners p
       LEFT JOIN `{NPPES_DATASET}.npi_raw` nppes
         ON p._npi = CAST(nppes.npi AS STRING)
       LEFT JOIN active_leie leie
         ON p._npi = leie.NPI
+      LEFT JOIN active_sam sam
+        ON p._npi = sam.npi
     )
     SELECT
       _npi,
@@ -136,7 +152,8 @@ def run() -> None:
       _state,
       in_nppes,
       nppes_deactivated,
-      oig_excluded
+      oig_excluded,
+      sam_excluded
     FROM nppes_join
     """
     print(f"Running composite cohort query — this may take ~3-5 min on 7.4M practitioners...")
@@ -149,6 +166,7 @@ def run() -> None:
     bucket_counts = {"critical": 0, "high": 0, "medium": 0, "clean": 0}
     reason_counts = {
         "oig_excluded": 0,
+        "sam_excluded": 0,
         "not_in_nppes": 0,
         "nppes_deactivated": 0,
         "luhn_fail": 0,
@@ -163,6 +181,11 @@ def run() -> None:
             score += 1.5
             reasons.append("oig_excluded")
             reason_counts["oig_excluded"] += 1
+
+        if r.sam_excluded:
+            score += 1.5
+            reasons.append("sam_excluded")
+            reason_counts["sam_excluded"] += 1
 
         if not luhn_check(npi):
             score += 1.0
@@ -239,9 +262,10 @@ def run() -> None:
     headline = (
         f"{flagged_n:,} of {total:,} ({100*flagged_n/total:.2f}%) NDH practitioner NPIs "
         f"score at or above the {HIGH_RISK_THRESHOLD} composite threshold, including "
-        f"{crit_n:,} at the critical {CRITICAL_RISK_THRESHOLD} threshold (LEIE-excluded). "
+        f"{crit_n:,} at the critical {CRITICAL_RISK_THRESHOLD} threshold (LEIE- or SAM-excluded). "
         f"Anchored in 42 CFR § 455.436 federal database checks. Reason codes: "
         f"oig_excluded ({reason_counts['oig_excluded']:,}), "
+        f"sam_excluded ({reason_counts['sam_excluded']:,}), "
         f"not_in_nppes ({reason_counts['not_in_nppes']:,}), "
         f"nppes_deactivated ({reason_counts['nppes_deactivated']:,}), "
         f"luhn_fail ({reason_counts['luhn_fail']:,})."
@@ -251,7 +275,7 @@ def run() -> None:
         "slug": "high-risk-cohort",
         "title": "High-risk provider cohort",
         "hypotheses": ["H23"],
-        "status": "in-progress",  # 'published' once LEIE + SAM are ingested
+        "status": "published",  # NPPES + LEIE + SAM all ingested as of v0.4.0
         "release_date": RELEASE_DATE,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "methodology_version": METHODOLOGY_VERSION,
@@ -270,14 +294,17 @@ def run() -> None:
             ],
         },
         "notes": (
-            f"v0.3 composite combines four signals: OIG LEIE active exclusion match (1.5), "
-            f"NPPES match (1.0), NPPES deactivation (0.8), and Luhn validity (1.0). "
-            f"H13 specialty mismatch (weight 0.4) wires in via the cohort_specialty_mismatch "
-            f"derived table from analysis/h10_h13_with_crosswalk.py. SAM.gov exclusion "
-            f"ingestion (weight 1.5) is the next roadmap item. Until SAM is in, state "
-            f"Medicaid agencies must run independent monthly SAM checks per 42 CFR § 455.436. "
-            f"Composite score is a data-quality flag, NOT a fraud determination — each NPI "
-            f"carries reason codes for transparent triage."
+            f"v0.4 composite combines five signals: OIG LEIE active exclusion match (1.5), "
+            f"SAM.gov active exclusion match (1.5), NPPES match (1.0), NPPES deactivation "
+            f"(0.8), and Luhn validity (1.0). H13 specialty mismatch (weight 0.4) wires in "
+            f"via the cohort_specialty_mismatch derived table from "
+            f"analysis/h10_h13_with_crosswalk.py. LEIE and SAM are scored independently — "
+            f"the HHS slice of SAM overlaps LEIE by design, but they are distinct legal "
+            f"sources under 42 CFR § 455.436, and a doubly-flagged NPI is genuinely higher "
+            f"triage confidence than a singly-flagged one. SSA-DMF (weight 2.0) is the last "
+            f"roadmap leg — until then, state Medicaid agencies must run independent monthly "
+            f"SSA-DMF checks. Composite score is a data-quality flag, NOT a fraud "
+            f"determination — each NPI carries reason codes for transparent triage."
         ),
     }
 

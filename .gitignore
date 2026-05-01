@@ -44,6 +44,13 @@ ENV/
 *.sqlite
 *.sqlite3
 
+# Large public-data extracts dropped into sample-data/
+# (provider-*.json fixtures stay tracked; multi-MB CSV/ZIP/zst extracts don't)
+sample-data/*.CSV
+sample-data/*.csv
+sample-data/*.zip
+sample-data/*.zst
+
 # Node
 node_modules/
 .next/
