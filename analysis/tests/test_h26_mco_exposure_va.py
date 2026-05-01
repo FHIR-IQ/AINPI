@@ -84,3 +84,69 @@ def test_classify_response_error_on_malformed_json():
 def test_classify_response_error_on_non_bundle_resource():
     body = '{"resourceType":"OperationOutcome","issue":[{"severity":"error"}]}'
     assert h26.classify_response(200, body) == "error"
+
+
+def test_parse_cohort_name_standard():
+    assert h26.parse_cohort_name("DOE, JANE") == ("DOE", "JANE")
+
+
+def test_parse_cohort_name_multi_given():
+    # The cohort export sometimes has multi-token given names — keep the
+    # whole given chunk; FHIR servers handle the join.
+    assert h26.parse_cohort_name("SMITH, A B") == ("SMITH", "A B")
+
+
+def test_parse_cohort_name_empty():
+    assert h26.parse_cohort_name("") == ("", "")
+    assert h26.parse_cohort_name(None) == ("", "")
+
+
+def test_parse_cohort_name_family_only():
+    # Some cohort rows may have just a last name (e.g. organizations or
+    # truncated entries). Keep family, given becomes empty.
+    assert h26.parse_cohort_name("ACME CLINIC") == ("ACME CLINIC", "")
+
+
+def test_bundle_contains_npi_match():
+    body = (
+        '{"resourceType":"Bundle","entry":[{"resource":{"resourceType":"Practitioner",'
+        '"identifier":[{"system":"http://hl7.org/fhir/sid/us-npi","value":"1234567890"}]}}]}'
+    )
+    assert h26.bundle_contains_npi(body, "1234567890") is True
+
+
+def test_bundle_contains_npi_no_match():
+    body = (
+        '{"resourceType":"Bundle","entry":[{"resource":{"resourceType":"Practitioner",'
+        '"identifier":[{"system":"http://hl7.org/fhir/sid/us-npi","value":"9999999999"}]}}]}'
+    )
+    assert h26.bundle_contains_npi(body, "1234567890") is False
+
+
+def test_bundle_contains_npi_tolerates_missing_system():
+    # Some payers omit the `system` on the NPI identifier; accept value-only.
+    body = (
+        '{"resourceType":"Bundle","entry":[{"resource":{"resourceType":"Practitioner",'
+        '"identifier":[{"value":"1234567890"}]}}]}'
+    )
+    assert h26.bundle_contains_npi(body, "1234567890") is True
+
+
+def test_bundle_contains_npi_skips_non_practitioner_resources():
+    # Cigna's name-search Bundle can include `Organization` entries; ignore
+    # any non-Practitioner.
+    body = (
+        '{"resourceType":"Bundle","entry":['
+        '{"resource":{"resourceType":"Organization",'
+        '"identifier":[{"value":"1234567890"}]}}]}'
+    )
+    assert h26.bundle_contains_npi(body, "1234567890") is False
+
+
+def test_bundle_contains_npi_empty_bundle():
+    body = '{"resourceType":"Bundle","entry":[]}'
+    assert h26.bundle_contains_npi(body, "1234567890") is False
+
+
+def test_bundle_contains_npi_malformed_json():
+    assert h26.bundle_contains_npi("not json", "1234567890") is False

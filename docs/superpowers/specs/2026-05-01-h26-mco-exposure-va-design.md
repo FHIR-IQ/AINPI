@@ -14,12 +14,23 @@ match counts as a citable finding. Anchored in 42 CFR § 455.436
 (federal database checks) and § 438.602 (Medicaid managed care
 directory oversight).
 
-**v1 endpoint set (4):** Anthem HealthKeepers Plus (the VA Medicaid
-brand), Anthem Blue Cross (broader Anthem network), Humana, and Cigna.
-Aetna and UnitedHealthcare are deliberate v1 gaps because their public
-provider-directory endpoints either require OAuth setup not yet wired
-into the analysis pipeline (Aetna) or the URL captured in our
-`ProviderDirectoryAPI` table is stale (UHC). See "Out of scope" below.
+**v1 endpoint set (2 — methodology demo):** Humana and Cigna. Both
+serve unauthenticated FHIR Provider Directory searches today; live
+probing on 2026-05-01 confirmed Humana accepts NPI-keyed
+`?identifier=` search and Cigna accepts name-keyed `?family=&given=`
+search (Cigna does not support `?identifier=` — its CapabilityStatement
+returns `OperationOutcome` with `Search param not valid for resource:
+Practitioner by identifier`). Anthem (HealthKeepersInc / AnthemBlueCross
+via Elevance TotalView), Aetna, and UnitedHealthcare are documented as
+Stage B fast-follows: each requires per-payer OAuth registration and
+client-credential storage, deferred behind this v1 ship.
+
+**Honest framing:** v1 of H26 is a *methodology demonstration*, not a
+comprehensive VA Medicaid MCO audit. Humana and Cigna are not primary
+VA Medicaid carriers; the actual VA Medicaid MCO products (Anthem
+HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara,
+Molina, Virginia Premier) all require credentialed access. The Stage B
+follow-on completes the VA-Medicaid-relevant version.
 
 ## Non-goals
 

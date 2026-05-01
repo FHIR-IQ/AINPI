@@ -508,28 +508,23 @@ Append to `analysis/tests/test_h26_mco_exposure_va.py`:
 ```python
 def test_compose_headline_zero_matches():
     per_mco = [
-        {"name": "Anthem HealthKeepers Plus", "matched": 0, "queried": 312, "errors": 0},
-        {"name": "Anthem Blue Cross",         "matched": 0, "queried": 312, "errors": 0},
-        {"name": "Humana",                    "matched": 0, "queried": 312, "errors": 0},
-        {"name": "Cigna",                     "matched": 0, "queried": 312, "errors": 0},
+        {"name": "Humana", "matched": 0, "queried": 125, "errors": 0},
+        {"name": "Cigna",  "matched": 0, "queried": 125, "errors": 0},
     ]
-    line = h26.compose_headline(numerator=0, denominator=312, per_mco=per_mco)
-    assert "0 of 312" in line
-    assert "Anthem HealthKeepers Plus 0" in line
+    line = h26.compose_headline(numerator=0, denominator=125, per_mco=per_mco)
+    assert "0 of 125" in line
     assert "Humana 0" in line
     assert "Cigna 0" in line
 
 
 def test_compose_headline_with_matches():
     per_mco = [
-        {"name": "Anthem HealthKeepers Plus", "matched": 7, "queried": 312, "errors": 0},
-        {"name": "Anthem Blue Cross",         "matched": 4, "queried": 312, "errors": 0},
-        {"name": "Humana",                    "matched": 1, "queried": 312, "errors": 0},
-        {"name": "Cigna",                     "matched": 2, "queried": 312, "errors": 1},
+        {"name": "Humana", "matched": 1, "queried": 125, "errors": 0},
+        {"name": "Cigna",  "matched": 2, "queried": 125, "errors": 1},
     ]
-    line = h26.compose_headline(numerator=12, denominator=312, per_mco=per_mco)
-    assert "12 of 312" in line
-    assert "Anthem HealthKeepers Plus 7, Anthem Blue Cross 4, Humana 1, Cigna 2" in line
+    line = h26.compose_headline(numerator=3, denominator=125, per_mco=per_mco)
+    assert "3 of 125" in line
+    assert "Humana 1, Cigna 2" in line
 
 
 def test_compose_headline_stable_with_single_payer():
