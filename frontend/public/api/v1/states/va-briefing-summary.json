@@ -4,7 +4,7 @@
   "medicaid_program": "Cardinal Care",
   "agency": "Department of Medical Assistance Services (DMAS)",
   "release_date": "2026-04-09",
-  "generated_at": "2026-05-02T01:13:33+00:00",
+  "generated_at": "2026-05-02T01:46:29+00:00",
   "methodology_version": "0.2.0",
   "denominators": {
     "practitioner": 141660,
@@ -210,7 +210,7 @@
     "all_npis_csv": "/api/v1/states/va-cohort-critical.csv"
   },
   "h26_payer_directory_exposure": {
-    "headline": "4 of 125 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 3 wired payer provider directories. Per-payer: Humana 0, Cigna 4, UnitedHealthcare 0.",
+    "headline": "4 of 125 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 4, UnitedHealthcare 0, Molina 0.",
     "numerator": 4,
     "denominator": 125,
     "per_payer": [
@@ -228,6 +228,12 @@
       },
       {
         "name": "UnitedHealthcare",
+        "matched": 0,
+        "queried": 125,
+        "errors": 0
+      },
+      {
+        "name": "Molina",
         "matched": 0,
         "queried": 125,
         "errors": 0

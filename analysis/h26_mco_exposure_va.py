@@ -45,7 +45,7 @@ FINDINGS_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
 Classification = Literal["matched", "not_in_directory", "error"]
 
 # Payer FHIR endpoint registry — base URLs + search strategy.
-# v1 wiring: 3 publicly-queryable endpoints verified working 2026-05-02.
+# v1 wiring: 4 publicly-queryable endpoints verified working 2026-05-02.
 #   - Humana          — `?identifier=NPI` directly
 #   - Cigna           — name search + post-filter (CapabilityStatement
 #                        rejects `?identifier=` with 400)
@@ -53,6 +53,10 @@ Classification = Literal["matched", "not_in_directory", "error"]
 #                        endpoint (covers UHC commercial + UHC Community
 #                        Plan / Medicaid + OptumRx in one ~1,400-plan
 #                        InsurancePlan tree)
+#   - Molina          — `?identifier=NPI` against the Azure-APIM gateway
+#                        api.interop.molinahealthcare.com fronting their
+#                        Sapphire360 backend. No auth header required even
+#                        though the dev portal is registration-gated.
 #
 # Stage B fast-follows still deferred:
 #   - Anthem HealthKeepers Plus: public Medicaid endpoint exists at
@@ -61,9 +65,8 @@ Classification = Literal["matched", "not_in_directory", "error"]
 #     as of 2026-05-02). CapabilityStatement reveals Anthem only supports
 #     family/given/name searches (no identifier), so once 500s clear we'll
 #     need a name+filter path like Cigna.
-#   - Molina Complete Care: production URL not yet discovered; dev portal
-#     at developer.interop.molinahealthcare.com requires registration.
 #   - Aetna: OAuth-required at developerportal.aetna.com.
+#   - Sentara / Virginia Premier: no public endpoint discovered.
 MCOS: list[dict[str, str]] = [
     {"name": "Humana",
      "endpoint": "https://fhir.humana.com/api",
@@ -73,6 +76,9 @@ MCOS: list[dict[str, str]] = [
      "search": "name"},
     {"name": "UnitedHealthcare",
      "endpoint": "https://flex.optum.com/fhirpublic/R4",
+     "search": "identifier"},
+    {"name": "Molina",
+     "endpoint": "https://api.interop.molinahealthcare.com/providerdirectory",
      "search": "identifier"},
 ]
 
