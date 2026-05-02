@@ -1,488 +1,358 @@
+/**
+ * POST /api/provider-search
+ *
+ * Real-time search across publicly-queryable payer FHIR provider directories.
+ * No auth required — these endpoints are CMS-9115-F-mandated public surfaces.
+ *
+ * Request body shapes:
+ *   { type: 'npi',  npi: '1234567890',  payerIds?: string[] }
+ *   { type: 'name', family: 'Smith', given?: 'John', payerIds?: string[] }
+ *
+ * `payerIds` defaults to every wired payer. Pass a subset to restrict.
+ *
+ * Each payer is queried in parallel with a 10s timeout. Cigna doesn't
+ * support `?identifier=` so the route name-searches Cigna and post-filters
+ * by NPI; this mirrors the H26 mco-exposure-va pattern.
+ */
 import { NextRequest, NextResponse } from 'next/server';
-import { getUserIdFromToken } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
 
-/**
- * Real-Time Provider Search API
- *
- * Searches connected payer APIs in real-time for provider data by NPI.
- * Does NOT store full provider directories - queries on-demand for fresh data.
- *
- * Endpoint: POST /api/provider-search
- * Body: { npi: string, include_inactive?: boolean }
- */
+export const dynamic = 'force-dynamic';
+export const maxDuration = 30;
 
-interface ProviderSearchResult {
-  payer: string;
-  found: boolean;
-  status: 'success' | 'error' | 'not_found' | 'auth_required';
-  data?: {
-    npi: string;
-    name: {
-      first: string;
-      last: string;
-      middle?: string;
-      prefix?: string;
-      suffix?: string;
-    };
-    gender?: string;
-    specialties?: Array<{
-      code: string;
-      display: string;
-      system?: string;
-    }>;
-    locations?: Array<{
-      name?: string;
-      address: {
-        line1?: string;
-        line2?: string;
-        city?: string;
-        state?: string;
-        zip?: string;
-      };
-      phone?: string;
-      fax?: string;
-    }>;
-    networks?: string[];
-    accepting_patients?: boolean;
-    languages?: string[];
-    board_certifications?: string[];
-    last_updated?: string;
-  };
-  response_time_ms: number;
-  error_message?: string;
-  raw_fhir?: any; // Optional: include raw FHIR response
+interface PayerEndpoint {
+  id: string;
+  name: string;
+  /** Display copy describing what this endpoint covers. */
+  coverage: string;
+  /** Base URL of the FHIR server. No trailing slash. */
+  base: string;
+  /** Whether this payer accepts ?identifier=NPI search natively. */
+  supportsIdentifierSearch: boolean;
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    console.log('[Provider Search] Request received');
+const PAYERS: PayerEndpoint[] = [
+  {
+    id: 'humana',
+    name: 'Humana',
+    coverage: 'Commercial + Medicare Advantage',
+    base: 'https://fhir.humana.com/api',
+    supportsIdentifierSearch: true,
+  },
+  {
+    id: 'uhc',
+    name: 'UnitedHealthcare',
+    coverage: 'UHC commercial + Medicare Advantage + UHC Community Plan + OptumRx',
+    base: 'https://flex.optum.com/fhirpublic/R4',
+    supportsIdentifierSearch: true,
+  },
+  {
+    id: 'molina',
+    name: 'Molina Healthcare',
+    coverage: 'Multi-state Medicaid (Sapphire360 backend)',
+    base: 'https://api.interop.molinahealthcare.com/providerdirectory',
+    supportsIdentifierSearch: true,
+  },
+  {
+    id: 'cigna',
+    name: 'Cigna',
+    coverage: 'Commercial + Medicare/Medicaid managed care (no identifier search; name-only)',
+    base: 'https://fhir.cigna.com/ProviderDirectory/v1',
+    supportsIdentifierSearch: false,
+  },
+];
 
-    const userId = getUserIdFromToken(request);
-    if (!userId) {
-      return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
-    }
+const NPI_RE = /^\d{10}$/;
 
-    const { npi, include_inactive = false } = await request.json();
+interface SearchResult {
+  payerId: string;
+  payerName: string;
+  coverage: string;
+  status: 'matched' | 'not_found' | 'error';
+  responseMs: number;
+  matchCount: number;
+  providers: ProviderSummary[];
+  /** Set on `error` rows. */
+  errorMessage?: string;
+}
 
-    if (!npi) {
-      return NextResponse.json(
-        { detail: 'NPI is required' },
-        { status: 400 }
-      );
-    }
+interface ProviderSummary {
+  npi: string | null;
+  family: string | null;
+  given: string | null;
+  prefix: string | null;
+  suffix: string | null;
+  gender: string | null;
+  active: boolean | null;
+  fhirId: string;
+  /** Identifier systems carried, useful for trust signal. */
+  identifierSystems: string[];
+}
 
-    // Validate NPI format
-    if (!/^\d{10}$/.test(npi)) {
-      return NextResponse.json(
-        { detail: 'Invalid NPI format. Must be 10 digits.' },
-        { status: 400 }
-      );
-    }
-
-    console.log(`[Provider Search] Searching for NPI: ${npi}`);
-
-    // Get connected payer APIs (public endpoints only - verified working)
-    const connectedAPIs = await prisma.providerDirectoryAPI.findMany({
-      where: {
-        organizationType: 'insurance_payer',
-        requiresAuth: false, // Only public endpoints
-        status: 'verified', // Only verified working endpoints
-      },
-      orderBy: {
-        organizationName: 'asc',
-      },
-    });
-
-    console.log(`[Provider Search] Found ${connectedAPIs.length} connected APIs to search`);
-
-    // Search each API in parallel
-    const searchPromises = connectedAPIs.map(api =>
-      searchPayerAPI(api, npi, include_inactive)
-    );
-
-    const results = await Promise.allSettled(searchPromises);
-
-    // Process results
-    const providerSearchResults: ProviderSearchResult[] = results.map((result, index) => {
-      if (result.status === 'fulfilled') {
-        return result.value;
-      } else {
-        // Handle rejected promise
-        return {
-          payer: connectedAPIs[index].organizationName,
-          found: false,
-          status: 'error' as const,
-          error_message: result.reason?.message || 'Unknown error',
-          response_time_ms: 0,
-        };
-      }
-    });
-
-    // Aggregate results
-    const foundResults = providerSearchResults.filter(r => r.found);
-    const totalSearched = providerSearchResults.length;
-    const totalFound = foundResults.length;
-
-    console.log(`[Provider Search] Complete: Found in ${totalFound}/${totalSearched} payers`);
-
-    // Return aggregated results
-    return NextResponse.json({
-      success: true,
-      npi,
-      summary: {
-        total_payers_searched: totalSearched,
-        found_in_payers: totalFound,
-        not_found_in_payers: totalSearched - totalFound,
-        total_search_time_ms: providerSearchResults.reduce((sum, r) => sum + r.response_time_ms, 0),
-        average_response_time_ms: Math.round(
-          providerSearchResults.reduce((sum, r) => sum + r.response_time_ms, 0) / totalSearched
-        ),
-      },
-      results: providerSearchResults,
-      searched_at: new Date().toISOString(),
-    });
-
-  } catch (error: any) {
-    console.error('[Provider Search] Error:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        detail: error.message || 'Failed to search provider directories',
-      },
-      { status: 500 }
-    );
+function pickIdentifier(idents: any[] | undefined, system: string): string | null {
+  if (!Array.isArray(idents)) return null;
+  for (const id of idents) {
+    const sys = (id?.system || '').toLowerCase();
+    const val = id?.value;
+    if (typeof val !== 'string' || !val) continue;
+    if (sys.includes(system.toLowerCase())) return val;
   }
+  return null;
 }
 
-/**
- * Search a single payer API for provider data
- */
-async function searchPayerAPI(
-  api: any,
-  npi: string,
-  includeInactive: boolean
-): Promise<ProviderSearchResult> {
-  const startTime = Date.now();
+function summarizePractitioner(resource: any): ProviderSummary {
+  const idents = Array.isArray(resource?.identifier) ? resource.identifier : [];
+  const npi = pickIdentifier(idents, 'us-npi');
+  const names = Array.isArray(resource?.name) ? resource.name : [];
+  const officialName = names.find((n: any) => n?.use === 'official') || names[0] || {};
+  const givenArr = Array.isArray(officialName?.given) ? officialName.given : [];
+  return {
+    npi,
+    family: typeof officialName?.family === 'string' ? officialName.family : null,
+    given: givenArr.length ? givenArr.filter((g: unknown) => typeof g === 'string').join(' ') : null,
+    prefix: Array.isArray(officialName?.prefix) ? officialName.prefix.join(' ') : null,
+    suffix: Array.isArray(officialName?.suffix) ? officialName.suffix.join(' ') : null,
+    gender: typeof resource?.gender === 'string' ? resource.gender : null,
+    active: typeof resource?.active === 'boolean' ? resource.active : null,
+    fhirId: typeof resource?.id === 'string' ? resource.id : '',
+    identifierSystems: idents
+      .map((i: any) => (typeof i?.system === 'string' ? i.system : ''))
+      .filter(Boolean),
+  };
+}
 
+async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
   try {
-    console.log(`[Provider Search] Searching ${api.organizationName}...`);
-
-    // Build search URL based on API endpoint and NPI
-    // FHIR standard uses: {base}/Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|{npi}
-    let searchUrl: string;
-    const npiIdentifier = `http://hl7.org/fhir/sid/us-npi|${npi}`;
-
-    // Special handling for verified endpoints
-    if (api.organizationName === 'Humana') {
-      // Humana: https://fhir.humana.com/api + /Practitioner?identifier=...
-      searchUrl = `${api.apiEndpoint}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
-    } else if (api.organizationName.includes('BlueCross') || api.organizationName.includes('BCBS')) {
-      // BCBS SC: https://fhir.bcbssc.com/r4/providerlisting + /Practitioner?identifier=...
-      searchUrl = `${api.apiEndpoint}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
-    } else {
-      // Default FHIR pattern: append /Practitioner?identifier=
-      const baseUrl = api.apiEndpoint.replace(/\/$/, ''); // Remove trailing slash
-      searchUrl = `${baseUrl}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
-    }
-
-    console.log(`[Provider Search] ${api.organizationName}: ${searchUrl}`);
-
-    // Make request with timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
-
-    const response = await fetch(searchUrl, {
+    return await fetch(url, {
       method: 'GET',
       signal: controller.signal,
       headers: {
-        'Accept': 'application/fhir+json, application/json',
-        'User-Agent': 'ProviderCard-Search/1.0',
+        Accept: 'application/fhir+json, application/json',
+        'User-Agent': 'AINPI-ProviderSearch/1.0 (+https://ainpi.dev)',
       },
     });
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
-    clearTimeout(timeoutId);
-    const responseTime = Date.now() - startTime;
-
-    if (!response.ok) {
-      if (response.status === 404) {
+async function searchOne(
+  payer: PayerEndpoint,
+  query: NormalizedQuery,
+): Promise<SearchResult> {
+  const start = Date.now();
+  try {
+    let url: string;
+    if (query.type === 'npi') {
+      const npiIdentifier = `http://hl7.org/fhir/sid/us-npi|${query.npi}`;
+      if (payer.supportsIdentifierSearch) {
+        url = `${payer.base}/Practitioner?identifier=${encodeURIComponent(npiIdentifier)}`;
+      } else {
+        // Cigna and similar — we can't NPI-search, so this row reports
+        // "use name search instead" rather than a confused empty result.
         return {
-          payer: api.organizationName,
-          found: false,
-          status: 'not_found',
-          response_time_ms: responseTime,
+          payerId: payer.id,
+          payerName: payer.name,
+          coverage: payer.coverage,
+          status: 'error',
+          responseMs: 0,
+          matchCount: 0,
+          providers: [],
+          errorMessage:
+            "this payer does not support identifier search — switch to name search to query it",
         };
       }
-
-      if (response.status === 401 || response.status === 403) {
-        return {
-          payer: api.organizationName,
-          found: false,
-          status: 'auth_required',
-          error_message: 'Authentication required',
-          response_time_ms: responseTime,
-        };
-      }
-
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-    }
-
-    // Parse FHIR response
-    const fhirData = await response.json();
-
-    // Check if we got results
-    if (fhirData.resourceType === 'Bundle') {
-      const entries = fhirData.entry || [];
-
-      if (entries.length === 0) {
-        return {
-          payer: api.organizationName,
-          found: false,
-          status: 'not_found',
-          response_time_ms: responseTime,
-        };
-      }
-
-      // Extract practitioner data from FHIR Bundle
-      const practitioner = entries[0].resource;
-
-      // Get the practitioner ID for PractitionerRole lookup
-      const practitionerId = practitioner.id;
-      const practitionerFullUrl = entries[0].fullUrl;
-
-      // Query PractitionerRole for complete provider data (locations, specialties, networks)
-      let practitionerRoles: any[] = [];
-      try {
-        const roleUrl = `${api.apiEndpoint}/PractitionerRole?practitioner=${practitionerId}`;
-        const roleResponse = await fetch(roleUrl, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/fhir+json, application/json',
-          },
-          signal: AbortSignal.timeout(5000), // 5 second timeout for role lookup
-        });
-
-        if (roleResponse.ok) {
-          const roleData = await roleResponse.json();
-          if (roleData.resourceType === 'Bundle' && roleData.entry) {
-            practitionerRoles = roleData.entry.map((e: any) => e.resource);
-          }
-        }
-      } catch (error) {
-        console.warn(`[Provider Search] Could not fetch PractitionerRole for ${api.organizationName}:`, error);
-        // Continue without role data
-      }
-
-      const providerData = await parseFHIRPractitioner(practitioner, practitionerRoles, api);
-
-      return {
-        payer: api.organizationName,
-        found: true,
-        status: 'success',
-        data: providerData,
-        response_time_ms: responseTime,
-        raw_fhir: { practitioner, roles: practitionerRoles }, // Include raw FHIR for reference
-      };
-
-    } else if (fhirData.resourceType === 'Practitioner') {
-      // Direct Practitioner resource response
-      const providerData = await parseFHIRPractitioner(fhirData, [], api);
-
-      return {
-        payer: api.organizationName,
-        found: true,
-        status: 'success',
-        data: providerData,
-        response_time_ms: responseTime,
-        raw_fhir: fhirData,
-      };
-
     } else {
-      throw new Error(`Unexpected FHIR resource type: ${fhirData.resourceType}`);
+      const params = new URLSearchParams();
+      if (query.family) params.set('family', query.family);
+      if (query.given) params.set('given', query.given);
+      params.set('_count', '20');
+      url = `${payer.base}/Practitioner?${params.toString()}`;
     }
 
-  } catch (error: any) {
-    const responseTime = Date.now() - startTime;
+    const res = await fetchWithTimeout(url, 10000);
+    const responseMs = Date.now() - start;
 
-    console.error(`[Provider Search] ${api.organizationName} error:`, error.message);
-
-    if (error.name === 'AbortError') {
+    if (!res.ok) {
+      // 404 → empty searchset; everything else is a real error
+      if (res.status === 404) {
+        return {
+          payerId: payer.id,
+          payerName: payer.name,
+          coverage: payer.coverage,
+          status: 'not_found',
+          responseMs,
+          matchCount: 0,
+          providers: [],
+        };
+      }
       return {
-        payer: api.organizationName,
-        found: false,
+        payerId: payer.id,
+        payerName: payer.name,
+        coverage: payer.coverage,
         status: 'error',
-        error_message: 'Request timeout (10s)',
-        response_time_ms: responseTime,
+        responseMs,
+        matchCount: 0,
+        providers: [],
+        errorMessage: `HTTP ${res.status}${res.statusText ? ` ${res.statusText}` : ''}`,
       };
     }
 
-    // Provide more specific error messages
-    let errorMessage = error.message;
-    if (error.cause) {
-      errorMessage += ` (${error.cause.code || error.cause})`;
+    const text = await res.text();
+    let body: any;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      return {
+        payerId: payer.id,
+        payerName: payer.name,
+        coverage: payer.coverage,
+        status: 'error',
+        responseMs,
+        matchCount: 0,
+        providers: [],
+        errorMessage: 'malformed JSON response',
+      };
+    }
+
+    if (body?.resourceType !== 'Bundle') {
+      return {
+        payerId: payer.id,
+        payerName: payer.name,
+        coverage: payer.coverage,
+        status: 'error',
+        responseMs,
+        matchCount: 0,
+        providers: [],
+        errorMessage: `unexpected resourceType: ${body?.resourceType ?? 'missing'}`,
+      };
+    }
+
+    const entries: any[] = Array.isArray(body.entry) ? body.entry : [];
+    let practitioners = entries
+      .map((e) => e?.resource)
+      .filter((r) => r?.resourceType === 'Practitioner')
+      .map(summarizePractitioner);
+
+    // For Cigna name-search → post-filter by NPI to remove false positives
+    if (query.type === 'name' && query.requireNpi) {
+      practitioners = practitioners.filter((p) => p.npi === query.requireNpi);
     }
 
     return {
-      payer: api.organizationName,
-      found: false,
+      payerId: payer.id,
+      payerName: payer.name,
+      coverage: payer.coverage,
+      status: practitioners.length > 0 ? 'matched' : 'not_found',
+      responseMs,
+      matchCount: practitioners.length,
+      providers: practitioners.slice(0, 5),
+    };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return {
+      payerId: payer.id,
+      payerName: payer.name,
+      coverage: payer.coverage,
       status: 'error',
-      error_message: errorMessage,
-      response_time_ms: responseTime,
+      responseMs: Date.now() - start,
+      matchCount: 0,
+      providers: [],
+      errorMessage: /aborted/i.test(msg) ? 'timed out after 10s' : msg,
     };
   }
 }
 
-/**
- * Parse FHIR Practitioner resource to our standardized format
- * Enhanced to include PractitionerRole data for complete provider information
- */
-async function parseFHIRPractitioner(
-  practitioner: any,
-  practitionerRoles: any[] = [],
-  api?: any
-): Promise<ProviderSearchResult['data']> {
-  // Extract name
-  const nameObj = practitioner.name?.[0] || {};
-  const name = {
-    first: nameObj.given?.[0] || '',
-    last: nameObj.family || '',
-    middle: nameObj.given?.[1] || undefined,
-    prefix: nameObj.prefix?.[0] || undefined,
-    suffix: nameObj.suffix?.[0] || undefined,
-  };
+interface NormalizedQuery {
+  type: 'npi' | 'name';
+  npi?: string;
+  family?: string;
+  given?: string;
+  /** When set, post-filter name-search results by this NPI. */
+  requireNpi?: string;
+}
 
-  // Extract NPI from identifier
-  const npiIdentifier = practitioner.identifier?.find(
-    (id: any) => id.system === 'http://hl7.org/fhir/sid/us-npi'
-  );
-  const npi = npiIdentifier?.value || '';
-
-  // Extract gender
-  const gender = practitioner.gender;
-
-  // Extract phone/fax from practitioner telecom
-  const practitionerTelecom = practitioner.telecom || [];
-  const phones = practitionerTelecom
-    .filter((t: any) => t.system === 'phone')
-    .map((t: any) => t.value);
-  const faxes = practitionerTelecom
-    .filter((t: any) => t.system === 'fax')
-    .map((t: any) => t.value);
-
-  // Extract qualifications (specialties, board certifications) from Practitioner
-  const qualifications = practitioner.qualification || [];
-  const practitionerSpecialties = qualifications.map((qual: any) => ({
-    code: qual.code?.coding?.[0]?.code || '',
-    display: qual.code?.coding?.[0]?.display || qual.code?.text || '',
-    system: qual.code?.coding?.[0]?.system || undefined,
-  }));
-
-  // Extract communication (languages)
-  const languages = practitioner.communication?.map(
-    (comm: any) => comm.coding?.[0]?.display || comm.text || ''
-  ) || [];
-
-  // Process PractitionerRole data for locations, specialties, networks
-  let allSpecialties = [...practitionerSpecialties];
-  let networks: string[] = [];
-  let acceptingPatients: boolean | undefined = undefined;
-  let locations: Array<{
-    name?: string;
-    address: {
-      line1?: string;
-      line2?: string;
-      city?: string;
-      state?: string;
-      zip?: string;
-    };
-    phone?: string;
-    fax?: string;
-  }> = [];
-
-  // Process each PractitionerRole
-  for (const role of practitionerRoles) {
-    // Extract specialties from role
-    if (role.specialty) {
-      const roleSpecialties = role.specialty.map((spec: any) => ({
-        code: spec.coding?.[0]?.code || '',
-        display: spec.coding?.[0]?.display || '',
-        system: spec.coding?.[0]?.system || undefined,
-      }));
-      allSpecialties = [...allSpecialties, ...roleSpecialties];
-    }
-
-    // Extract network information
-    const networkExtension = role.extension?.find(
-      (ext: any) => ext.url === 'http://hl7.org/fhir/us/davinci-pdex-plan-net/StructureDefinition/network-reference'
-    );
-    if (networkExtension?.valueReference?.display) {
-      networks.push(networkExtension.valueReference.display);
-    }
-
-    // Extract accepting patients status
-    const newPatientsExtension = role.extension?.find(
-      (ext: any) => ext.url === 'http://hl7.org/fhir/us/davinci-pdex-plan-net/StructureDefinition/newpatients'
-    );
-    const acceptingCode = newPatientsExtension?.extension?.[0]?.valueCodeableConcept?.coding?.[0]?.code;
-    if (acceptingCode === 'newpt' || acceptingCode === 'existptonly') {
-      acceptingPatients = acceptingCode === 'newpt';
-    }
-
-    // Extract location references
-    if (role.location && api) {
-      for (const locRef of role.location) {
-        try {
-          // Location display often has useful info
-          const locationDisplay = locRef.display || '';
-
-          // Optionally fetch full location details (commented out to avoid too many requests)
-          // In production, you might want to batch these or fetch on-demand
-          /*
-          const locationUrl = locRef.reference;
-          if (locationUrl.startsWith('http')) {
-            const locResponse = await fetch(locationUrl, {
-              headers: { 'Accept': 'application/fhir+json' },
-              signal: AbortSignal.timeout(3000),
-            });
-            if (locResponse.ok) {
-              const locData = await locResponse.json();
-              // Parse location address from locData.address
-            }
-          }
-          */
-
-          locations.push({
-            name: locationDisplay,
-            address: {}, // Would be populated from full Location resource
-            phone: phones[0] || undefined,
-            fax: faxes[0] || undefined,
-          });
-        } catch (error) {
-          // Skip this location if fetch fails
-          console.warn('Failed to fetch location:', error);
-        }
-      }
-    }
+export async function POST(req: NextRequest) {
+  let body: any;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'invalid JSON body' }, { status: 400 });
   }
 
-  // Deduplicate specialties
-  const uniqueSpecialties = Array.from(
-    new Map(allSpecialties.map(s => [s.code, s])).values()
-  ).filter(s => s.code || s.display);
+  const type = body?.type === 'name' ? 'name' : 'npi';
+  let query: NormalizedQuery;
 
-  // Deduplicate networks
-  const uniqueNetworks = Array.from(new Set(networks));
+  if (type === 'npi') {
+    const npi = String(body?.npi ?? '').trim();
+    if (!NPI_RE.test(npi)) {
+      return NextResponse.json(
+        { error: 'NPI must be exactly 10 digits' },
+        { status: 400 },
+      );
+    }
+    query = { type: 'npi', npi };
+  } else {
+    const family = String(body?.family ?? '').trim().slice(0, 100);
+    const given = String(body?.given ?? '').trim().slice(0, 100);
+    if (!family && !given) {
+      return NextResponse.json(
+        { error: 'name search requires family and/or given' },
+        { status: 400 },
+      );
+    }
+    query = { type: 'name', family: family || undefined, given: given || undefined };
+  }
 
-  return {
-    npi,
-    name,
-    gender,
-    specialties: uniqueSpecialties.length > 0 ? uniqueSpecialties : undefined,
-    languages: languages.length > 0 ? languages : undefined,
-    locations: locations.length > 0 ? locations : undefined,
-    networks: uniqueNetworks.length > 0 ? uniqueNetworks : undefined,
-    accepting_patients: acceptingPatients,
-    board_certifications: undefined, // Would need additional qualification data
-    last_updated: practitioner.meta?.lastUpdated,
-  };
+  // Resolve which payers to query.
+  const requestedIds: string[] = Array.isArray(body?.payerIds)
+    ? body.payerIds.filter((p: unknown) => typeof p === 'string')
+    : [];
+  const targets =
+    requestedIds.length > 0
+      ? PAYERS.filter((p) => requestedIds.includes(p.id))
+      : PAYERS;
+
+  if (targets.length === 0) {
+    return NextResponse.json(
+      { error: 'no valid payerIds; valid ids: ' + PAYERS.map((p) => p.id).join(', ') },
+      { status: 400 },
+    );
+  }
+
+  const startedAt = new Date();
+  const results = await Promise.all(targets.map((p) => searchOne(p, query)));
+
+  const matched = results.filter((r) => r.status === 'matched').length;
+  const errors = results.filter((r) => r.status === 'error').length;
+  const totalMs = results.reduce((s, r) => s + r.responseMs, 0);
+
+  return NextResponse.json({
+    ok: true,
+    query,
+    queriedAt: startedAt.toISOString(),
+    summary: {
+      payersQueried: results.length,
+      matched,
+      notFound: results.filter((r) => r.status === 'not_found').length,
+      errors,
+      totalMs,
+      avgMs: Math.round(totalMs / results.length),
+    },
+    results,
+  });
+}
+
+// Optional: GET returns the payer registry (so the UI can list options
+// without hardcoding them).
+export async function GET() {
+  return NextResponse.json({
+    payers: PAYERS.map(({ id, name, coverage, supportsIdentifierSearch }) => ({
+      id,
+      name,
+      coverage,
+      supportsIdentifierSearch,
+    })),
+  });
 }
