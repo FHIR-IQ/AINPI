@@ -3,9 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Navbar from '@/components/Navbar';
+import { REPORTS, DEFAULT_REPORT_ID } from '@/data/reports';
 
 export default function DownloadPage() {
   const router = useRouter();
+  const [reportId, setReportId] = useState<string>(DEFAULT_REPORT_ID);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [organization, setOrganization] = useState('');
@@ -22,7 +24,14 @@ export default function DownloadPage() {
       const res = await fetch('/api/v1/download-report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, name, organization, useCase, alsoSubscribe }),
+        body: JSON.stringify({
+          email,
+          name,
+          organization,
+          useCase,
+          alsoSubscribe,
+          reportId,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok && data?.redirect) {
@@ -42,20 +51,65 @@ export default function DownloadPage() {
       <Navbar />
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Download the AINPI v1.0 report
+          Download an AINPI report
         </h1>
-        <p className="text-gray-600 mb-2">
-          <em>The State of the National Provider Directory</em> — all six
-          pre-registered findings against the 2026-04-09 CMS NPD release,
-          in one printable document.
-        </p>
         <p className="text-sm text-gray-500 mb-8">
-          Give us a little context about how you&apos;ll use the research
-          and we&apos;ll take you straight to the report. Name, organization,
+          Pick a report below, give us a little context about how you&apos;ll use it,
+          and we&apos;ll take you straight to the document. Name, organization,
           and use-case are optional — only your email is required.
         </p>
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border p-6 space-y-6">
+          <fieldset className="space-y-3">
+            <legend className="text-sm font-semibold text-gray-900 mb-2">
+              Choose a report
+            </legend>
+            {REPORTS.map((r) => (
+              <label
+                key={r.id}
+                className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                  reportId === r.id
+                    ? 'border-primary-500 ring-1 ring-primary-500 bg-primary-50/40'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="reportId"
+                  value={r.id}
+                  checked={reportId === r.id}
+                  onChange={() => setReportId(r.id)}
+                  className="mt-1 shrink-0"
+                  disabled={status === 'submitting'}
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <span className="text-sm font-semibold text-gray-900">
+                      {r.title}
+                    </span>
+                    {r.badge && (
+                      <span
+                        className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                          r.badge === 'NEW'
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-amber-100 text-amber-800'
+                        }`}
+                      >
+                        {r.badge}
+                      </span>
+                    )}
+                    <span className="ml-auto text-xs text-gray-500 uppercase tracking-wider">
+                      {r.format} {r.length ? `· ${r.length}` : ''}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-gray-600 leading-snug">
+                    {r.description}
+                  </p>
+                </div>
+              </label>
+            ))}
+          </fieldset>
+
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email <span className="text-red-500">*</span>
@@ -146,9 +200,6 @@ export default function DownloadPage() {
 
           <p className="text-xs text-gray-500">
             Submitting this form creates one row in AINPI&apos;s Supabase (encrypted, US-east-2). We use it to understand who&apos;s reading the research and may email you about major updates. See the <a href="/privacy" className="underline">privacy policy</a>. No third-party sharing.
-          </p>
-          <p className="text-xs text-gray-500">
-            Prefer the web version? View the full report at <a href="/report" className="underline">/report</a> (same content, no download required).
           </p>
         </form>
       </main>
