@@ -1,420 +1,452 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
-import ComingSoonBanner from '@/components/ComingSoonBanner';
-import {
-  Search,
-  Loader2,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Clock,
-  Building2,
-  MapPin,
-  Phone,
-  Globe,
-  Award,
-} from 'lucide-react';
+import { Search, Loader2, CheckCircle, XCircle, AlertTriangle, Clock } from 'lucide-react';
 
-interface ProviderData {
-  npi: string;
-  name: {
-    first: string;
-    last: string;
-    middle?: string;
-    prefix?: string;
-    suffix?: string;
-  };
-  gender?: string;
-  specialties?: Array<{
-    code: string;
-    display: string;
-  }>;
-  locations?: Array<{
-    name?: string;
-    address: {
-      line1?: string;
-      city?: string;
-      state?: string;
-      zip?: string;
-    };
-    phone?: string;
-  }>;
-  networks?: string[];
-  accepting_patients?: boolean;
-  languages?: string[];
-  last_updated?: string;
+interface PayerListItem {
+  id: string;
+  name: string;
+  coverage: string;
+  supportsIdentifierSearch: boolean;
 }
 
-interface SearchResult {
-  payer: string;
-  found: boolean;
-  status: 'success' | 'error' | 'not_found' | 'auth_required';
-  data?: ProviderData;
-  response_time_ms: number;
-  error_message?: string;
+interface ProviderSummary {
+  npi: string | null;
+  family: string | null;
+  given: string | null;
+  prefix: string | null;
+  suffix: string | null;
+  gender: string | null;
+  active: boolean | null;
+  fhirId: string;
+  identifierSystems: string[];
+}
+
+interface PayerResult {
+  payerId: string;
+  payerName: string;
+  coverage: string;
+  status: 'matched' | 'not_found' | 'error';
+  responseMs: number;
+  matchCount: number;
+  providers: ProviderSummary[];
+  errorMessage?: string;
 }
 
 interface SearchResponse {
-  success: boolean;
-  npi: string;
+  ok: boolean;
+  query: { type: 'npi' | 'name'; npi?: string; family?: string; given?: string };
+  queriedAt: string;
   summary: {
-    total_payers_searched: number;
-    found_in_payers: number;
-    not_found_in_payers: number;
-    average_response_time_ms: number;
+    payersQueried: number;
+    matched: number;
+    notFound: number;
+    errors: number;
+    totalMs: number;
+    avgMs: number;
   };
-  results: SearchResult[];
-  searched_at: string;
+  results: PayerResult[];
 }
 
+type Mode = 'npi' | 'name';
+
+const NPI_RE = /^\d{10}$/;
+
 export default function ProviderSearchPage() {
-  const router = useRouter();
+  const [payers, setPayers] = useState<PayerListItem[]>([]);
+  const [selectedPayerIds, setSelectedPayerIds] = useState<Set<string>>(new Set());
+  const [mode, setMode] = useState<Mode>('npi');
   const [npi, setNpi] = useState('');
+  const [family, setFamily] = useState('');
+  const [given, setGiven] = useState('');
   const [searching, setSearching] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResponse | null>(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [results, setResults] = useState<SearchResponse | null>(null);
 
-  const handleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSearching(true);
-    setError('');
-    setSearchResults(null);
-
-    try {
-      const token = localStorage.getItem('token');
-
-      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-      if (token) headers.Authorization = `Bearer ${token}`;
-
-      const response = await fetch('/api/provider-search', {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({ npi }),
+  // Load payer registry from the API on mount
+  useEffect(() => {
+    fetch('/api/provider-search')
+      .then((r) => r.json())
+      .then((data) => {
+        const list: PayerListItem[] = data?.payers ?? [];
+        setPayers(list);
+        setSelectedPayerIds(new Set(list.map((p) => p.id))); // default: all selected
+      })
+      .catch(() => {
+        setPayers([]);
       });
+  }, []);
 
-      if (!response.ok) {
-        throw new Error('Search failed');
+  function togglePayer(id: string) {
+    setSelectedPayerIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function selectAllPayers() {
+    setSelectedPayerIds(new Set(payers.map((p) => p.id)));
+  }
+
+  function deselectAllPayers() {
+    setSelectedPayerIds(new Set());
+  }
+
+  async function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setResults(null);
+
+    if (mode === 'npi' && !NPI_RE.test(npi.trim())) {
+      setError('NPI must be exactly 10 digits.');
+      return;
+    }
+    if (mode === 'name' && !family.trim() && !given.trim()) {
+      setError('Enter a family name and/or a given name.');
+      return;
+    }
+    if (selectedPayerIds.size === 0) {
+      setError('Select at least one payer to query.');
+      return;
+    }
+
+    setSearching(true);
+    try {
+      const payload: Record<string, unknown> = {
+        type: mode,
+        payerIds: Array.from(selectedPayerIds),
+      };
+      if (mode === 'npi') payload.npi = npi.trim();
+      else {
+        payload.family = family.trim();
+        payload.given = given.trim();
       }
 
-      const data: SearchResponse = await response.json();
-      setSearchResults(data);
-    } catch (err: any) {
-      console.error('Search error:', err);
-      setError(err.message || 'Failed to search provider directories');
+      const res = await fetch('/api/provider-search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data?.error || `request failed (${res.status})`);
+      } else {
+        setResults(data);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'network error');
     } finally {
       setSearching(false);
     }
-  };
-
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'success':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            <CheckCircle className="w-3 h-3 mr-1" />
-            Found
-          </span>
-        );
-      case 'not_found':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            <XCircle className="w-3 h-3 mr-1" />
-            Not Found
-          </span>
-        );
-      case 'auth_required':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-            <AlertTriangle className="w-3 h-3 mr-1" />
-            Auth Required
-          </span>
-        );
-      case 'error':
-        return (
-          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-            <XCircle className="w-3 h-3 mr-1" />
-            Error
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
-
-  const formatName = (name: ProviderData['name']) => {
-    const parts = [
-      name.prefix,
-      name.first,
-      name.middle,
-      name.last,
-      name.suffix,
-    ].filter(Boolean);
-    return parts.join(' ');
-  };
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <ComingSoonBanner note="Payer FHIR directory reachability will be audited by ainpi-probe against external payer endpoints in a future release." />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center mb-4">
-            <Search className="w-8 h-8 text-primary-600 mr-3" />
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Real-Time Provider Search</h1>
-              <p className="mt-2 text-gray-600">
-                Search connected payer directories in real-time for fresh provider data
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="flex items-start">
-              <Building2 className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-blue-800">
-                <p className="font-semibold mb-1">How it works:</p>
-                <ul className="space-y-1 ml-4 list-disc">
-                  <li>Searches 6 major payer APIs in real-time (public endpoints)</li>
-                  <li>Returns fresh data directly from payer systems</li>
-                  <li>No data storage - always current information</li>
-                  <li>Compares provider data across multiple payers</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <Search className="w-7 h-7 text-blue-600" />
+            Real-time payer directory search
+          </h1>
+          <p className="mt-2 text-gray-600 text-sm max-w-3xl">
+            Live cross-payer query against publicly-published FHIR provider directories
+            (CMS-9115-F). Search by NPI, or by name when you don&apos;t have one. Pick
+            which payers to query, or hit them all.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Search Form */}
-          <div className="lg:col-span-1">
-            <div className="card">
-              <h2 className="text-xl font-semibold mb-4">Search by NPI</h2>
-              <form onSubmit={handleSearch} className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    NPI Number
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={10}
-                    pattern="\d{10}"
-                    value={npi}
-                    onChange={(e) => setNpi(e.target.value.replace(/\D/g, ''))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="1234567890"
-                  />
-                  <p className="mt-1 text-xs text-gray-500">10-digit National Provider Identifier</p>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={searching}
-                  className="btn-primary w-full flex items-center justify-center"
-                >
-                  {searching ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Searching...
-                    </>
-                  ) : (
-                    <>
-                      <Search className="w-4 h-4 mr-2" />
-                      Search Payer Directories
-                    </>
-                  )}
-                </button>
-              </form>
-
-              {error && (
-                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-700">
-                  {error}
-                </div>
-              )}
-            </div>
+        {/* Search form */}
+        <form
+          onSubmit={handleSearch}
+          className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-5"
+        >
+          {/* Mode toggle */}
+          <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 p-1">
+            {(['npi', 'name'] as Mode[]).map((m) => (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMode(m)}
+                className={`px-4 py-1.5 text-sm font-medium rounded-md transition ${
+                  mode === m
+                    ? 'bg-white text-gray-900 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                {m === 'npi' ? 'Search by NPI' : 'Search by name'}
+              </button>
+            ))}
           </div>
 
-          {/* Results */}
-          <div className="lg:col-span-2 space-y-6">
-            {searching && (
-              <div className="card text-center py-12">
-                <Loader2 className="w-12 h-12 animate-spin text-primary-600 mx-auto mb-4" />
-                <p className="text-gray-600">
-                  Searching 6 payer directories in real-time...
-                </p>
-                <p className="text-sm text-gray-500 mt-2">This may take 5-10 seconds</p>
+          {/* Search input(s) */}
+          {mode === 'npi' ? (
+            <div>
+              <label htmlFor="npi" className="block text-sm font-medium text-gray-700 mb-1.5">
+                NPI <span className="text-red-500">*</span>
+              </label>
+              <input
+                id="npi"
+                inputMode="numeric"
+                pattern="\d{10}"
+                value={npi}
+                onChange={(e) => setNpi(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                placeholder="10-digit NPI (e.g. 1417006842)"
+                className="w-full px-4 py-3 text-lg font-mono tracking-wide border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="family" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Family (last) name
+                </label>
+                <input
+                  id="family"
+                  value={family}
+                  onChange={(e) => setFamily(e.target.value)}
+                  placeholder="Smith"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
               </div>
-            )}
+              <div>
+                <label htmlFor="given" className="block text-sm font-medium text-gray-700 mb-1.5">
+                  Given (first) name
+                </label>
+                <input
+                  id="given"
+                  value={given}
+                  onChange={(e) => setGiven(e.target.value)}
+                  placeholder="Jane"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+          )}
 
-            {searchResults && (
-              <>
-                {/* Summary Stats */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="card text-center">
-                    <p className="text-sm text-gray-600">Payers Searched</p>
-                    <p className="text-2xl font-bold text-gray-900 mt-1">
-                      {searchResults.summary.total_payers_searched}
-                    </p>
-                  </div>
-                  <div className="card text-center">
-                    <p className="text-sm text-gray-600">Found In</p>
-                    <p className="text-2xl font-bold text-green-600 mt-1">
-                      {searchResults.summary.found_in_payers}
-                    </p>
-                  </div>
-                  <div className="card text-center">
-                    <p className="text-sm text-gray-600">Avg Response</p>
-                    <p className="text-2xl font-bold text-blue-600 mt-1">
-                      {searchResults.summary.average_response_time_ms}ms
-                    </p>
-                  </div>
-                </div>
-
-                {/* Search Results by Payer */}
-                <div className="card">
-                  <h3 className="text-lg font-semibold mb-4">Results by Payer</h3>
-                  <div className="space-y-4">
-                    {searchResults.results.map((result, index) => (
-                      <div
-                        key={index}
-                        className={`p-4 rounded-lg border ${
-                          result.found
-                            ? 'bg-green-50 border-green-200'
-                            : 'bg-gray-50 border-gray-200'
+          {/* Payer chips */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">
+                Payers ({selectedPayerIds.size}/{payers.length} selected)
+              </span>
+              <div className="flex items-center gap-3 text-xs">
+                <button
+                  type="button"
+                  onClick={selectAllPayers}
+                  className="text-blue-600 hover:text-blue-800"
+                >
+                  All
+                </button>
+                <span className="text-gray-300">·</span>
+                <button
+                  type="button"
+                  onClick={deselectAllPayers}
+                  className="text-gray-500 hover:text-gray-700"
+                >
+                  None
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {payers.map((p) => {
+                const selected = selectedPayerIds.has(p.id);
+                const incompatible = mode === 'npi' && !p.supportsIdentifierSearch;
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => togglePayer(p.id)}
+                    title={p.coverage + (incompatible ? ' · does not support NPI search' : '')}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition ${
+                      selected
+                        ? 'bg-blue-600 text-white border-blue-600 hover:bg-blue-700'
+                        : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                    } ${incompatible && selected ? 'opacity-60' : ''}`}
+                  >
+                    {selected ? '✓ ' : ''}
+                    {p.name}
+                    {incompatible && (
+                      <span
+                        className={`ml-1 text-[10px] uppercase tracking-wider ${
+                          selected ? 'text-blue-100' : 'text-gray-400'
                         }`}
                       >
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-semibold text-gray-900">{result.payer}</h4>
-                              {getStatusBadge(result.status)}
-                            </div>
-                            <div className="flex items-center text-xs text-gray-500">
-                              <Clock className="w-3 h-3 mr-1" />
-                              {result.response_time_ms}ms
-                            </div>
-                          </div>
-                        </div>
+                        name only
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
 
-                        {result.found && result.data && (
-                          <div className="mt-3 space-y-2 text-sm">
-                            <div>
-                              <p className="font-medium text-gray-900">
-                                {formatName(result.data.name)}
-                              </p>
-                              <p className="text-gray-600">NPI: {result.data.npi}</p>
-                              {result.data.gender && (
-                                <p className="text-xs text-gray-500 capitalize">
-                                  {result.data.gender}
-                                </p>
-                              )}
-                            </div>
-
-                            {result.data.specialties && result.data.specialties.length > 0 && (
-                              <div>
-                                <p className="text-xs font-medium text-gray-700 mb-1">Specialties:</p>
-                                <div className="flex flex-wrap gap-1">
-                                  {result.data.specialties.map((spec, i) => (
-                                    <span
-                                      key={i}
-                                      className="inline-block px-2 py-0.5 text-xs bg-blue-50 text-blue-700 rounded border border-blue-200"
-                                    >
-                                      {spec.display}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {result.data.networks && result.data.networks.length > 0 && (
-                              <div>
-                                <p className="text-xs font-medium text-gray-700 mb-1">Networks:</p>
-                                <div className="flex flex-wrap gap-1">
-                                  {result.data.networks.map((network, i) => (
-                                    <span
-                                      key={i}
-                                      className="inline-block px-2 py-0.5 text-xs bg-green-50 text-green-700 rounded border border-green-200"
-                                    >
-                                      {network}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {result.data.locations && result.data.locations.length > 0 && (
-                              <div>
-                                <p className="text-xs font-medium text-gray-700 mb-1">
-                                  Locations ({result.data.locations.length}):
-                                </p>
-                                <div className="space-y-1">
-                                  {result.data.locations.slice(0, 3).map((loc, i) => (
-                                    <div key={i} className="text-xs text-gray-600 flex items-start">
-                                      <Building2 className="w-3 h-3 mr-1 mt-0.5 flex-shrink-0" />
-                                      <span>{loc.name}</span>
-                                    </div>
-                                  ))}
-                                  {result.data.locations.length > 3 && (
-                                    <p className="text-xs text-gray-500 italic">
-                                      +{result.data.locations.length - 3} more locations
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-
-                            {result.data.accepting_patients !== undefined && (
-                              <div>
-                                <span
-                                  className={`inline-block px-2 py-1 text-xs font-medium rounded ${
-                                    result.data.accepting_patients
-                                      ? 'bg-green-100 text-green-800'
-                                      : 'bg-yellow-100 text-yellow-800'
-                                  }`}
-                                >
-                                  {result.data.accepting_patients
-                                    ? '✓ Accepting New Patients'
-                                    : 'Existing Patients Only'}
-                                </span>
-                              </div>
-                            )}
-
-                            {result.data.languages && result.data.languages.length > 0 && (
-                              <div>
-                                <p className="text-xs font-medium text-gray-700 mb-1">Languages:</p>
-                                <p className="text-xs text-gray-600">
-                                  {result.data.languages.join(', ')}
-                                </p>
-                              </div>
-                            )}
-
-                            {result.data.last_updated && (
-                              <div className="text-xs text-gray-500">
-                                Last updated: {new Date(result.data.last_updated).toLocaleDateString()}
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {result.error_message && (
-                          <div className="mt-2 text-xs text-red-600">
-                            {result.error_message}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
+          {/* Submit */}
+          <div className="flex items-center gap-3">
+            <button
+              type="submit"
+              disabled={searching}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors disabled:opacity-40"
+            >
+              {searching ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Searching {selectedPayerIds.size} payer{selectedPayerIds.size === 1 ? '' : 's'}…
+                </>
+              ) : (
+                <>
+                  <Search className="w-4 h-4" />
+                  Search
+                </>
+              )}
+            </button>
+            {error && (
+              <span className="text-sm text-red-600 inline-flex items-center gap-1.5">
+                <AlertTriangle className="w-4 h-4" />
+                {error}
+              </span>
             )}
           </div>
-        </div>
-      </div>
+        </form>
+
+        {/* Results */}
+        {results && (
+          <div className="mt-8 space-y-4">
+            {/* Summary strip */}
+            <div className="bg-white rounded-xl border border-gray-200 p-5 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm">
+                <span>
+                  <span className="font-semibold text-gray-900">{results.summary.matched}</span>
+                  <span className="text-gray-500"> matched</span>
+                </span>
+                <span>
+                  <span className="font-semibold text-gray-900">{results.summary.notFound}</span>
+                  <span className="text-gray-500"> not found</span>
+                </span>
+                {results.summary.errors > 0 && (
+                  <span>
+                    <span className="font-semibold text-amber-700">{results.summary.errors}</span>
+                    <span className="text-amber-700"> error{results.summary.errors === 1 ? '' : 's'}</span>
+                  </span>
+                )}
+                <span className="text-gray-500 inline-flex items-center gap-1">
+                  <Clock className="w-3.5 h-3.5" />
+                  {results.summary.avgMs} ms avg
+                </span>
+              </div>
+              <div className="text-xs text-gray-500 font-mono">
+                {results.query.type === 'npi'
+                  ? `NPI ${results.query.npi}`
+                  : `${results.query.family || ''} ${results.query.given || ''}`.trim()}
+              </div>
+            </div>
+
+            {/* Per-payer cards */}
+            {results.results.map((r) => (
+              <PayerCard key={r.payerId} result={r} />
+            ))}
+          </div>
+        )}
+      </main>
     </div>
+  );
+}
+
+function PayerCard({ result }: { result: PayerResult }) {
+  const accent =
+    result.status === 'matched'
+      ? 'border-emerald-300 bg-emerald-50/40'
+      : result.status === 'not_found'
+      ? 'border-gray-200 bg-white'
+      : 'border-amber-300 bg-amber-50/40';
+
+  return (
+    <div className={`rounded-xl border ${accent} p-5`}>
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h3 className="text-lg font-semibold text-gray-900">{result.payerName}</h3>
+            <StatusBadge status={result.status} />
+            {result.status === 'matched' && result.matchCount > 1 && (
+              <span className="text-xs text-emerald-700 font-medium">
+                {result.matchCount} match{result.matchCount === 1 ? '' : 'es'}
+              </span>
+            )}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">{result.coverage}</p>
+        </div>
+        <span className="text-xs text-gray-500 inline-flex items-center gap-1 shrink-0">
+          <Clock className="w-3 h-3" />
+          {result.responseMs} ms
+        </span>
+      </div>
+
+      {result.status === 'error' && result.errorMessage && (
+        <p className="mt-3 text-sm text-amber-800 bg-amber-100/60 border border-amber-200 rounded-md px-3 py-2">
+          {result.errorMessage}
+        </p>
+      )}
+
+      {result.status === 'matched' && result.providers.length > 0 && (
+        <ul className="mt-4 space-y-2 text-sm">
+          {result.providers.map((p, i) => (
+            <li
+              key={`${result.payerId}-${i}`}
+              className="bg-white border border-gray-200 rounded-md px-4 py-3"
+            >
+              <div className="flex items-baseline gap-2 flex-wrap">
+                <span className="font-semibold text-gray-900">
+                  {[p.prefix, p.given, p.family, p.suffix].filter(Boolean).join(' ') || '(name not in record)'}
+                </span>
+                {p.active === false && (
+                  <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded bg-gray-200 text-gray-700">
+                    inactive
+                  </span>
+                )}
+              </div>
+              <div className="mt-1 text-xs text-gray-500 flex flex-wrap gap-x-4 gap-y-1 font-mono">
+                {p.npi && (
+                  <a
+                    href={`https://npiregistry.cms.hhs.gov/provider-view/${p.npi}`}
+                    target="_blank"
+                    rel="noopener"
+                    className="hover:text-blue-600 underline-offset-2 hover:underline"
+                  >
+                    NPI {p.npi}
+                  </a>
+                )}
+                {p.gender && <span>· {p.gender}</span>}
+                <span>· FHIR id {p.fhirId}</span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function StatusBadge({ status }: { status: PayerResult['status'] }) {
+  if (status === 'matched') {
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
+        <CheckCircle className="w-3 h-3" /> Matched
+      </span>
+    );
+  }
+  if (status === 'not_found') {
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">
+        <XCircle className="w-3 h-3" /> Not in directory
+      </span>
+    );
+  }
+  return (
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800">
+      <AlertTriangle className="w-3 h-3" /> Error
+    </span>
   );
 }
