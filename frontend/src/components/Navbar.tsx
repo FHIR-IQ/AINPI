@@ -42,6 +42,9 @@ export default function Navbar() {
             >
               <FileText className="w-4 h-4 mr-2" />
               Findings
+              <span className="ml-1.5 inline-flex items-center rounded-full bg-red-500 text-white px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                H27
+              </span>
             </button>
             <button
               onClick={() => router.push('/states')}
@@ -49,6 +52,17 @@ export default function Navbar() {
             >
               <MapPin className="w-4 h-4 mr-2" />
               States
+            </button>
+            <button
+              onClick={() => router.push('/briefings/va')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+              title="Virginia State Medicaid briefing — 2026-05-04"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              VA Briefing
+              <span className="ml-1.5 inline-flex items-center rounded-full bg-emerald-100 text-emerald-800 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                New
+              </span>
             </button>
             <button
               onClick={() => router.push('/methodology')}
