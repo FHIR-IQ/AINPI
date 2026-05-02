@@ -257,13 +257,13 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H27'],
     title: 'Social Security Numbers exposed in the NDH bulk export',
     summary:
-      'Independently verifies the 2026-04-30 Washington Post finding that the 2026-04-09 CMS National Provider Directory bulk export contains provider Social Security Numbers, leaked through "incorrect entries of provider or provider-representative-supplied information in the wrong places" (CMS). AINPI scans the entire FHIR JSON of every Practitioner and Organization resource for the dashed SSN format and classifies hits by JSON location.',
+      'Independently verifies and extends the 2026-04-30 Washington Post finding that the 2026-04-09 CMS National Provider Directory bulk export contains provider Social Security Numbers, leaked through "incorrect entries of provider or provider-representative-supplied information in the wrong places" (CMS). AINPI scans every Practitioner resource for both dashed SSN format anywhere in the FHIR JSON and 9-digit-only name tokens (high-confidence undashed SSN signal); classifies hits by JSON location; surfaces NPI-as-name and DOB-as-name signals as overlays.',
     nullHypothesis:
       'Zero Practitioner or Organization resources in the NDH bulk export contain a Social Security Number anywhere in their FHIR JSON.',
     denominator:
       '7,441,213 Practitioner resources + 3,603,262 Organization resources in the 2026-04-09 NDH bulk export.',
     dataSource:
-      'BigQuery scan of `cms_npd.practitioner` and `cms_npd.organization` for the regex `\\d{3}-\\d{2}-\\d{4}` in `TO_JSON_STRING(resource)`, with classification by JSON location (`qualification[].identifier[].value` vs `name[].given[]` vs `name[].family`) and false-positive guard against international phone formats (`\\d{2}-\\d{3}-\\d{2}-\\d{4}`). Source: AINPI replication of the public Washington Post reporting (2026-04-30).',
+      'BigQuery two-pass scan of `cms_npd.practitioner` and `cms_npd.organization`: (1) dashed SSN `\\d{3}-\\d{2}-\\d{4}` anywhere in `TO_JSON_STRING(resource)`, (2) `^\\d{9}$` as an entire `name[].given[]` or `name[].family` token (undashed-SSN-as-name). Classification by JSON location (`qualification[].identifier[].value` vs `name[].given[]` vs `name[].family`); false-positive guard against international phone formats (`\\d{2}-\\d{3}-\\d{2}-\\d{4}`). DOB-as-name and 10-digit-NPI-as-name overlays computed in the same pass. Source: AINPI replication and extension of the public Washington Post reporting (2026-04-30).',
     status: 'published',
     ogTagline: 'How many SSNs are in the federal provider directory? AINPI counts.',
     implications: [

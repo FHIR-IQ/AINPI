@@ -14,15 +14,25 @@
 
 On **2026-04-30 the Washington Post reported** that the same 2026-04-09 NDH bulk export AINPI ingests contains provider SSNs. CMS attributed the leak to "incorrect entries of provider or provider-representative-supplied information in the wrong places."
 
-**AINPI independently verified and quantified this.** Scanning every Practitioner and Organization resource in `cms_npd` for the dashed SSN format `\d{3}-\d{2}-\d{4}`, after filtering international phone-format false positives:
+**AINPI independently verified and extended the WaPo finding.** A two-pass BigQuery scan over every Practitioner resource in `cms_npd`:
 
-- **46 confirmed Practitioner records carry an SSN in their FHIR JSON**
-- **42** appear in `qualification[].identifier[].value` (state-license credential slot)
-- **4** appear in `name[].given[]` — providers literally entered their SSN as a name token
-- **2 Organization records** also carry SSN-pattern strings
-- Per-state hot-spots: **IL 18, OH 6, NJ 2, TX 2, WA 2** (Virginia is not affected)
+- **Pass 1 — dashed SSN format `\d{3}-\d{2}-\d{4}`** anywhere in the FHIR JSON, with international phone-format false positives filtered out.
+- **Pass 2 — undashed 9-digit number that is itself an entire name token** (i.e. `^\d{9}$` in `name[].given[]` or `name[].family`). This is a high-confidence-it's-an-SSN signal because human names don't look like nine consecutive digits.
 
-The detection regex is the dashed format only. Undashed 9-digit SSNs are out of scope (they collide with too many other 9-digit identifiers); true coverage is therefore a lower bound.
+**Combined results — 63 confirmed SSN exposures + 21 NPI-as-name data-integrity violations + 0 DOB-as-name exposures:**
+
+| Exposure | Count | Location |
+|---|---:|---|
+| **SSN dashed** | 42 | `qualification[].identifier[].value` (state-license credential slot — provider entered SSN where the state license number belongs) |
+| **SSN dashed** | 4 | `name[].given[]` (literal name token) |
+| **SSN undashed (9 digits)** | 17 | `name[].given[]` (literal name token, no separators) |
+| **NPI as name** | 21 | `name[].given[]` or `name[].family` (10-digit NPI typed where the name belongs) |
+| **DOB as name** | 0 | (none found) |
+| **Organization records** | 2 | SSN-pattern strings |
+
+**Per-state hot-spots:** IL 20, OH 7, (unknown) 5, AZ 2, FL 2, GA 2, MI 2, NJ 2, PA 2, TN 2 (Virginia is not affected).
+
+The undashed scan is restricted to entire-name-token matches (`^\d{9}$`) to keep 9-digit false positives bounded; true coverage may still be higher.
 
 **This matters for the Virginia conversation even though no VA practitioners are flagged:**
 

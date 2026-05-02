@@ -1,22 +1,35 @@
 """H27 — PII exposure in the NDH bulk export.
 
-Independently verifies the 2026-04-30 Washington Post finding that the
-2026-04-09 CMS National Provider Directory bulk export contains
-provider Social Security Numbers, leaked through "incorrect entries
-of provider or provider-representative-supplied information in the
-wrong places" (CMS).
+Independently verifies and extends the 2026-04-30 Washington Post
+finding that the 2026-04-09 CMS National Provider Directory bulk
+export contains provider Social Security Numbers, leaked through
+"incorrect entries of provider or provider-representative-supplied
+information in the wrong places" (CMS).
 
-Scans every Practitioner and Organization resource for the dashed
-SSN format `\\d{3}-\\d{2}-\\d{4}` anywhere in the FHIR JSON, then
-classifies by JSON location:
+Scans every Practitioner resource for multiple PII / data-integrity
+patterns and classifies by JSON location:
 
-  - SSN in `qualification[].identifier[].value`  — state-license slot
-    (most common; provider entered SSN where state license number
-    was supposed to go)
-  - SSN in `name[].given[]`                       — middle-name slot
-    (provider literally listed their SSN as a given name)
-  - SSN-pattern as substring of an international phone number
-    (e.g. Italy "39-XXX-XX-XXXX") — false positive, filtered out
+  SSN exposures (PII)
+    - dashed SSN \\d{3}-\\d{2}-\\d{4} in qualification[].identifier[].value
+      (state-license credential slot — provider entered SSN where the
+      state license number was supposed to go)
+    - dashed SSN in name[].given[]              (entered as a given-name token)
+    - dashed SSN in name[].family               (entered as the family name)
+    - undashed 9-digit SSN exactly equal to a name token in name[].given[]
+      or name[].family — caught by ^\\d{9}$ where the entire name field
+      is digits-only (high confidence it's an SSN, not a coincidence)
+
+  Date-of-birth exposures (PII)
+    - ISO date \\d{4}-\\d{2}-\\d{2} in name[].given[] or name[].family
+    - US date  \\d{1,2}/\\d{1,2}/\\d{4} in name[].given[] or name[].family
+
+  Data-integrity (not PII per HIPAA but still wrong)
+    - 10-digit NPI exactly equal to a name token (provider's own or
+      someone else's NPI typed where the name belongs)
+
+  False-positive filter
+    - SSN-pattern as substring of an international phone number
+      (e.g. Italy "39-XXX-XX-XXXX") — excluded from confirmed SSN counts
 
 Privacy:
   This script publishes COUNTS, JSON locations, NPIs (which are
@@ -74,54 +87,102 @@ def run() -> None:
     client = bigquery.Client(project=PROJECT)
 
     # Practitioner-side scan with location classification.
+    # Two-pass scan: dashed-SSN net (the WaPo replication, narrow regex) +
+    # undashed-SSN/DOB/NPI-in-name net (suspicious LOCATIONS only, to keep
+    # 9-digit false positives bounded).
     pract_sql = f"""
-    WITH flagged AS (
-      SELECT
-        _id, _npi, _family_name, _given_name, _state,
-        TO_JSON_STRING(resource) AS json
+    WITH source AS (
+      SELECT _id, _npi, _family_name, _given_name, _state,
+             resource, TO_JSON_STRING(resource) AS json
       FROM `{PROJECT}.{DATASET}.practitioner`
-      WHERE REGEXP_CONTAINS(TO_JSON_STRING(resource), r'\\b\\d{{3}}-\\d{{2}}-\\d{{4}}\\b')
     ),
-    classified AS (
-      SELECT
-        _npi, _family_name, _given_name, _state,
-        REGEXP_CONTAINS(json, r'"value":"[^"]*\\d{{3}}-\\d{{2}}-\\d{{4}}"')
-          AS ssn_in_identifier_value,
-        REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*\\d{{3}}-\\d{{2}}-\\d{{4}}')
-          AS ssn_in_given_name,
-        REGEXP_CONTAINS(json, r'"family":"[^"]*\\d{{3}}-\\d{{2}}-\\d{{4}}"')
-          AS ssn_in_family_name,
-        -- Italy / other intl phone patterns: 39-XXX-XX-XXXX, 49-XXX-XX-XXXX, etc.
-        REGEXP_CONTAINS(json, r'\\d{{2}}-\\d{{3}}-\\d{{2}}-\\d{{4}}')
-          AS likely_intl_phone_fp
-      FROM flagged
+    flagged AS (
+      SELECT * FROM source
+      WHERE REGEXP_CONTAINS(json, r'\\b\\d{{3}}-\\d{{2}}-\\d{{4}}\\b')              -- dashed SSN anywhere
+         OR REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{9,10}}"')                -- 9-10 digit string AS a given-name token
+         OR REGEXP_CONTAINS(json, r'"family":"\\d{{9,10}}"')                          -- 9-10 digit string AS family name
+         OR REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{4}}-\\d{{2}}-\\d{{2}}"') -- ISO DOB AS given
+         OR REGEXP_CONTAINS(json, r'"family":"\\d{{4}}-\\d{{2}}-\\d{{2}}"')           -- ISO DOB AS family
+         OR REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{1,2}}/\\d{{1,2}}/\\d{{4}}"') -- US DOB AS given
+         OR REGEXP_CONTAINS(json, r'"family":"\\d{{1,2}}/\\d{{1,2}}/\\d{{4}}"')        -- US DOB AS family
     )
     SELECT
       _npi, _family_name, _given_name, _state,
-      ssn_in_identifier_value, ssn_in_given_name, ssn_in_family_name,
-      likely_intl_phone_fp
-    FROM classified
+      -- Dashed SSN (PII)
+      REGEXP_CONTAINS(json, r'"value":"[^"]*\\d{{3}}-\\d{{2}}-\\d{{4}}"')
+        AS ssn_dashed_in_identifier_value,
+      REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*\\d{{3}}-\\d{{2}}-\\d{{4}}')
+        AS ssn_dashed_in_given_name,
+      REGEXP_CONTAINS(json, r'"family":"[^"]*\\d{{3}}-\\d{{2}}-\\d{{4}}"')
+        AS ssn_dashed_in_family_name,
+      -- Undashed SSN: exact 9-digit name token (high confidence it's an SSN)
+      REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{9}}"')
+        AS ssn_undashed_in_given_name,
+      REGEXP_CONTAINS(json, r'"family":"\\d{{9}}"')
+        AS ssn_undashed_in_family_name,
+      -- DOB (PII)
+      REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{4}}-\\d{{2}}-\\d{{2}}"')
+        AS dob_iso_in_given_name,
+      REGEXP_CONTAINS(json, r'"family":"\\d{{4}}-\\d{{2}}-\\d{{2}}"')
+        AS dob_iso_in_family_name,
+      REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{1,2}}/\\d{{1,2}}/\\d{{4}}"')
+        AS dob_us_in_given_name,
+      REGEXP_CONTAINS(json, r'"family":"\\d{{1,2}}/\\d{{1,2}}/\\d{{4}}"')
+        AS dob_us_in_family_name,
+      -- 10-digit NPI as a name token (data integrity, not PII)
+      REGEXP_CONTAINS(json, r'"given":\\[[^\\]]*"\\d{{10}}"')
+        AS npi_in_given_name,
+      REGEXP_CONTAINS(json, r'"family":"\\d{{10}}"')
+        AS npi_in_family_name,
+      -- Italy / other intl phone patterns: 39-XXX-XX-XXXX, 49-XXX-XX-XXXX, etc.
+      REGEXP_CONTAINS(json, r'\\d{{2}}-\\d{{3}}-\\d{{2}}-\\d{{4}}')
+        AS likely_intl_phone_fp
+    FROM flagged
     """
     pract_rows = list(client.query(pract_sql).result())
 
-    # Bucket and tally.
-    real_in_qualification = []  # SSN in qualification.identifier.value
-    real_in_given_name = []     # SSN in name.given (literal middle-name slot)
-    real_in_family_name = []    # SSN in family
+    # Bucket. Each record gets at most one label per category; the SSN buckets
+    # are mutually exclusive (a record's SSN exposure is either dashed-in-qual,
+    # dashed-in-given, dashed-in-family, undashed-in-given, or
+    # undashed-in-family — first match wins, in priority order).
+    real_in_qualification = []
+    real_dashed_in_given = []
+    real_dashed_in_family = []
+    real_undashed_in_given = []
+    real_undashed_in_family = []
+    dob_in_name = []
+    npi_in_name = []
     false_positive_phones = []
 
     for r in pract_rows:
         is_phone_fp = bool(r.likely_intl_phone_fp)
-        if r.ssn_in_given_name:
-            real_in_given_name.append(r)
-        elif r.ssn_in_family_name:
-            real_in_family_name.append(r)
-        elif r.ssn_in_identifier_value and not is_phone_fp:
+        if r.ssn_dashed_in_given_name:
+            real_dashed_in_given.append(r)
+        elif r.ssn_dashed_in_family_name:
+            real_dashed_in_family.append(r)
+        elif r.ssn_dashed_in_identifier_value and not is_phone_fp:
             real_in_qualification.append(r)
+        elif r.ssn_undashed_in_given_name:
+            real_undashed_in_given.append(r)
+        elif r.ssn_undashed_in_family_name:
+            real_undashed_in_family.append(r)
         elif is_phone_fp:
             false_positive_phones.append(r)
+        # DOB and NPI-in-name are independent overlays — record both even if
+        # the same record also has an SSN exposure.
+        if r.dob_iso_in_given_name or r.dob_iso_in_family_name \
+           or r.dob_us_in_given_name or r.dob_us_in_family_name:
+            dob_in_name.append(r)
+        if r.npi_in_given_name or r.npi_in_family_name:
+            npi_in_name.append(r)
 
-    confirmed = real_in_qualification + real_in_given_name + real_in_family_name
+    confirmed_ssn = (real_in_qualification + real_dashed_in_given
+                     + real_dashed_in_family + real_undashed_in_given
+                     + real_undashed_in_family)
+    # Backwards-compat aliases for the JSON keys that already shipped.
+    real_in_given_name = real_dashed_in_given
+    real_in_family_name = real_dashed_in_family
+    confirmed = confirmed_ssn
 
     # Organization-side scan (lighter — far fewer hits historically).
     org_sql = f"""
@@ -163,17 +224,21 @@ def run() -> None:
             "nppes_lookup_url": f"https://npiregistry.cms.hhs.gov/provider-view/{r._npi}",
         })
 
+    ssn_total = len(confirmed_ssn)
     headline = (
-        f"{len(confirmed)} of {len(pract_rows):,} flagged Practitioner resources "
-        f"in the {RELEASE_DATE} NDH bulk export contain a Social Security Number, "
-        f"independently verifying the 2026-04-30 Washington Post finding. "
-        f"Of those, {len(real_in_qualification)} appear in the "
-        f"qualification[].identifier[].value slot (state-license credential), "
-        f"{len(real_in_given_name)} are embedded in the name[].given[] slot "
-        f"(literally as a name token), and {len(real_in_family_name)} in name[].family. "
-        f"{len(false_positive_phones)} additional matches are international phone-format "
-        f"false positives (e.g. Italy 39-XXX-XX-XXXX), filtered out. "
-        f"{len(org_rows)} Organization resources also carry SSN-pattern strings."
+        f"{ssn_total} confirmed SSN exposures + {len(dob_in_name)} date-of-birth "
+        f"exposures + {len(npi_in_name)} NPI-as-name data-integrity violations "
+        f"in the {RELEASE_DATE} NDH bulk export Practitioner resources, "
+        f"independently verifying and extending the 2026-04-30 Washington Post "
+        f"finding. SSN breakdown: {len(real_in_qualification)} dashed in "
+        f"qualification[].identifier[].value (state-license slot), "
+        f"{len(real_dashed_in_given)} dashed in name[].given[], "
+        f"{len(real_dashed_in_family)} dashed in name[].family, "
+        f"{len(real_undashed_in_given)} undashed-9-digit in name[].given[], "
+        f"{len(real_undashed_in_family)} undashed in name[].family. "
+        f"{len(false_positive_phones)} international phone-format false positives "
+        f"filtered out. {len(org_rows)} Organization resources also carry "
+        f"SSN-pattern strings."
     )
 
     public_payload = {
@@ -223,10 +288,14 @@ def run() -> None:
         "denominator_practitioners": 7_441_213,
         "totals": {
             "flagged_pattern_match": len(pract_rows),
-            "confirmed_ssn_exposures": len(confirmed),
-            "in_qualification_identifier_value": len(real_in_qualification),
-            "in_given_name": len(real_in_given_name),
-            "in_family_name": len(real_in_family_name),
+            "confirmed_ssn_exposures": len(confirmed_ssn),
+            "ssn_dashed_in_qualification_identifier_value": len(real_in_qualification),
+            "ssn_dashed_in_given_name": len(real_dashed_in_given),
+            "ssn_dashed_in_family_name": len(real_dashed_in_family),
+            "ssn_undashed_in_given_name": len(real_undashed_in_given),
+            "ssn_undashed_in_family_name": len(real_undashed_in_family),
+            "dob_in_name_field": len(dob_in_name),
+            "npi_in_name_field": len(npi_in_name),
             "intl_phone_false_positives": len(false_positive_phones),
             "organization_pattern_matches": len(org_rows),
         },
