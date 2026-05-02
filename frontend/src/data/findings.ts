@@ -220,13 +220,13 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H26'],
     title: 'VA payer networks containing federally excluded providers (methodology demo)',
     summary:
-      'Cross-references the AINPI federally-excluded cohort (LEIE or SAM, score >= 1.5) for Virginia against live FHIR provider directories of 2 publicly-queryable payer endpoints (Humana, Cigna). v1 is a methodology demonstration; the full VA Medicaid MCO version requires credentialed access to Anthem/Aetna/UHC and is tracked as Stage B fast-follow. Anchored in 42 CFR § 455.436 (federal database checks) and § 438.602 (Medicaid managed care directory oversight).',
+      'Cross-references the AINPI federally-excluded cohort (LEIE or SAM, score >= 1.5) for Virginia against live FHIR provider directories of 4 publicly-queryable payer endpoints: Humana, Cigna, UnitedHealthcare (Optum FLEX, covers UHC commercial + UHC Community Plan + OptumRx), and Molina Complete Care (Azure APIM → Sapphire360). Two of the six VA Medicaid MCOs (UHC Community Plan, Molina) are now wired directly. The remaining four (Anthem HealthKeepers Plus, Aetna BH of VA, Sentara Community Plan, Virginia Premier) are Stage B fast-follow. Anchored in 42 CFR § 455.436 (federal database checks) and § 438.602 (Medicaid managed care directory oversight).',
     nullHypothesis:
       'Zero federally-excluded VA-resident NPIs appear in any of the queried payer provider directories. Federal exclusion status and payer directory publication are in agreement.',
     denominator:
       'VA-resident NPIs in the AINPI high-risk cohort\'s critical bucket (composite score >= 1.5) flagged for OIG LEIE or SAM.gov active exclusion. Source: `high-risk-cohort-export.csv`, filtered to `state=VA AND bucket=critical AND (oig_excluded OR sam_excluded)`.',
     dataSource:
-      'Live FHIR `Practitioner` queries against 2 publicly-queryable Da Vinci PDex Plan-Net endpoints. Humana accepts `?identifier=NPI` directly; Cigna does not (its CapabilityStatement returns `Search param not valid for resource: Practitioner by identifier` on 400) so we name-search via `?family=&given=` and post-filter the Bundle for the target NPI in `identifier[]`. Anthem (HealthKeepersInc and AnthemBlueCross via Elevance TotalView), Aetna, and UnitedHealthcare are deferred to Stage B because each requires per-payer OAuth registration and client-credential storage.',
+      'Live FHIR `Practitioner` queries against 4 publicly-queryable Da Vinci PDex Plan-Net endpoints. Humana, UHC, and Molina accept `?identifier=NPI` directly; Cigna does not (its CapabilityStatement returns `Search param not valid for resource: Practitioner by identifier` on 400) so we name-search via `?family=&given=` and post-filter the Bundle for the target NPI in `identifier[]`. UHC is reached via Optum FLEX (`https://flex.optum.com/fhirpublic/R4`) which serves UHC commercial + UHC Community Plan (Medicaid) + OptumRx in one tree of ~1,400 InsurancePlans. Molina is reached via the Azure APIM gateway at `https://api.interop.molinahealthcare.com/providerdirectory` (Sapphire360 backend, no auth required despite registration-gated dev portal). Anthem HealthKeepers Plus has a public endpoint at `cms_mandate/mcd/` but returns 500s; Aetna requires OAuth.',
     status: 'published',
     ogTagline: 'Are federally excluded providers in VA payer networks?',
     implications: [
@@ -249,6 +249,43 @@ export const FINDINGS: Finding[] = [
         audience: 'Researchers',
         takeaway:
           'v1 reaches Humana (identifier search) and Cigna (name+filter). Neither is a primary VA Medicaid carrier; the actual VA Medicaid MCO products (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara, Molina, Virginia Premier) all require credentialed access. The Cigna name-search has a known false-negative class: cohort names are stored as "FAMILY, GIVEN" and may not exactly match payer-published names (typographic variants, hyphenated names, suffixes).',
+      },
+    ],
+  },
+  {
+    slug: 'pii-exposure-ndh',
+    hypotheses: ['H27'],
+    title: 'Social Security Numbers exposed in the NDH bulk export',
+    summary:
+      'Independently verifies the 2026-04-30 Washington Post finding that the 2026-04-09 CMS National Provider Directory bulk export contains provider Social Security Numbers, leaked through "incorrect entries of provider or provider-representative-supplied information in the wrong places" (CMS). AINPI scans the entire FHIR JSON of every Practitioner and Organization resource for the dashed SSN format and classifies hits by JSON location.',
+    nullHypothesis:
+      'Zero Practitioner or Organization resources in the NDH bulk export contain a Social Security Number anywhere in their FHIR JSON.',
+    denominator:
+      '7,441,213 Practitioner resources + 3,603,262 Organization resources in the 2026-04-09 NDH bulk export.',
+    dataSource:
+      'BigQuery scan of `cms_npd.practitioner` and `cms_npd.organization` for the regex `\\d{3}-\\d{2}-\\d{4}` in `TO_JSON_STRING(resource)`, with classification by JSON location (`qualification[].identifier[].value` vs `name[].given[]` vs `name[].family`) and false-positive guard against international phone formats (`\\d{2}-\\d{3}-\\d{2}-\\d{4}`). Source: AINPI replication of the public Washington Post reporting (2026-04-30).',
+    status: 'published',
+    ogTagline: 'How many SSNs are in the federal provider directory? AINPI counts.',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          'The NDH bulk export already shipped publicly with provider PII. CMS attributed it to "incorrect entries... in the wrong places," consistent with our JSON-location breakdown: most SSNs are in qualification.identifier.value (state-license slot), with a smaller share embedded in name.given. Validation logic at NDH submission time would have caught all 46. Treat as a directory-quality signal alongside the deactivated-but-listed and duplicate-organization flags AINPI tracks.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your provider data management platform pushes practitioner data to the NDH, audit the qualification identifier and name.given pipelines for SSN-pattern strings before serialization. The 46 AINPI flagged are the tip of the iceberg — undashed 9-digit SSNs are not detected by this scan because they collide with too many other 9-digit identifiers (EINs, account IDs, claim IDs).',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'AINPI replicates the WaPo finding using the same publicly-distributed bulk file CMS released. The value-add is a precise count, JSON-location breakdown, and per-state distribution that the WaPo article did not publish. The SSN values themselves are NOT republished by AINPI even though they remain in the public NDH bulk — responsible-disclosure posture.',
+      },
+      {
+        audience: 'Everyone using NDH',
+        takeaway:
+          'Any pipeline that consumes the NDH bulk export should run a PII scrub pass before downstream use. Specifically: regex-strip `\\d{3}-\\d{2}-\\d{4}` from `qualification[].identifier[].value` and `name[].given[]` strings; flag for human review.',
       },
     ],
   },

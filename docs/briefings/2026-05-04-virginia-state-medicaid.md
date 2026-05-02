@@ -8,6 +8,36 @@
 
 ---
 
+## Urgent / critical findings
+
+### H27 — Social Security Numbers exposed in the NDH bulk export
+
+On **2026-04-30 the Washington Post reported** that the same 2026-04-09 NDH bulk export AINPI ingests contains provider SSNs. CMS attributed the leak to "incorrect entries of provider or provider-representative-supplied information in the wrong places."
+
+**AINPI independently verified and quantified this.** Scanning every Practitioner and Organization resource in `cms_npd` for the dashed SSN format `\d{3}-\d{2}-\d{4}`, after filtering international phone-format false positives:
+
+- **46 confirmed Practitioner records carry an SSN in their FHIR JSON**
+- **42** appear in `qualification[].identifier[].value` (state-license credential slot)
+- **4** appear in `name[].given[]` — providers literally entered their SSN as a name token
+- **2 Organization records** also carry SSN-pattern strings
+- Per-state hot-spots: **IL 18, OH 6, NJ 2, TX 2, WA 2** (Virginia is not affected)
+
+The detection regex is the dashed format only. Undashed 9-digit SSNs are out of scope (they collide with too many other 9-digit identifiers); true coverage is therefore a lower bound.
+
+**This matters for the Virginia conversation even though no VA practitioners are flagged:**
+
+1. It validates the AINPI methodology — we found the same exposure WaPo did, using the same public file, in BigQuery, in a single SQL pass.
+2. It demonstrates that **directory-quality controls at the federal-publication step are missing today**. DMAS cannot rely on NDH as a clean upstream source without its own validation layer.
+3. It strengthens the SMD-letter-response posture: AINPI provides the validation layer DMAS would otherwise need to build.
+
+**Privacy posture:** AINPI publishes counts, JSON locations, NPIs (professional IDs), and state breakdowns. The SSN values themselves are not republished in our finding output, even though they remain in the public NDH bulk file CMS distributed. Remediation belongs to CMS NDH operations.
+
+Source: <https://ainpi.dev/findings/pii-exposure-ndh> · <https://ainpi.dev/api/v1/findings/pii-exposure-ndh.json>
+
+Original reporting: [Washington Post, 2026-04-30](https://www.washingtonpost.com/health/2026/04/30/medicare-portal-social-security-numbers-exposed/) · [Becker's Hospital Review summary](https://www.beckershospitalreview.com/quality/hospital-physician-relationships/cms-medicare-provider-directory-released-social-security-numbers-washington-post/)
+
+---
+
 ## TL;DR
 
 Of **141,660 Virginia-resident practitioners** in the federal NDH bulk export:
@@ -15,7 +45,7 @@ Of **141,660 Virginia-resident practitioners** in the federal NDH bulk export:
 - **125 are federally excluded today** (active OIG LEIE or SAM.gov listing) and still appear in the directory — direct 42 CFR § 455.436 flags
 - **4,657 are NPPES-deactivated** but still listed in NDH — secondary § 455.436 flags
 - **42.5% of Virginia organizations are NPI duplicates** (35,348 excess of 83,163) — directory-quality concern
-- **4 of those 125 federally excluded providers are listed in Cigna's public Practitioner directory today** — H26 methodology demonstration; the substantive VA-Medicaid version (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan) is Stage B work
+- **4 of those 125 are listed in Cigna's public Practitioner directory today; 0 in Humana's, 0 in UnitedHealthcare's, 0 in Molina Complete Care's** — across the 4 payer FHIR directories that publish unauthenticated NPI search today. The substantive Anthem HealthKeepers Plus, Aetna BH of VA, Sentara, and Virginia Premier coverage is Stage B work
 
 Every NPI cited in this briefing can be independently verified at:
 
@@ -109,12 +139,14 @@ Each is triple-flagged (OIG LEIE active + SAM.gov active + NPPES deactivated). S
 
 Source: <https://ainpi.dev/findings/mco-exposure-va>
 
-Cross-referenced the 125 VA federally-excluded NPIs against 2 publicly-queryable payer FHIR provider directories:
+Cross-referenced the 125 VA federally-excluded NPIs against 4 publicly-queryable payer FHIR provider directories:
 
-| Payer | Search method | Queried | Matched |
-| --- | --- | ---: | ---: |
-| Humana | `?identifier=NPI` direct | 125 | 0 |
-| Cigna | `?family=&given=` + post-filter | 125 | **4** |
+| Payer | Endpoint | Search method | Queried | Matched |
+| --- | --- | --- | ---: | ---: |
+| Humana | `https://fhir.humana.com/api` | `?identifier=NPI` | 125 | 0 |
+| Cigna | `https://fhir.cigna.com/ProviderDirectory/v1` | `?family=&given=` + post-filter | 125 | **4** |
+| UnitedHealthcare | `https://flex.optum.com/fhirpublic/R4` (Optum FLEX, covers UHC commercial + UHC Community Plan + OptumRx) | `?identifier=NPI` | 125 | 0 |
+| Molina Complete Care | `https://api.interop.molinahealthcare.com/providerdirectory` (Azure APIM gateway → Sapphire360 backend) | `?identifier=NPI` | 125 | 0 |
 
 The 4 Cigna matches (each NPI-confirmed via the Bundle's `identifier[]` array under `http://hl7.org/fhir/sid/us-npi`):
 
@@ -125,7 +157,15 @@ The 4 Cigna matches (each NPI-confirmed via the Bundle's `identifier[]` array un
 
 Each is listed in Cigna's public Practitioner directory today. Cigna's directory aggregates commercial + Medicaid managed care lines.
 
-**This is a methodology demonstration, not a comprehensive VA Medicaid MCO audit.** Neither Humana nor Cigna is a primary VA Medicaid carrier. The substantive cross-reference (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara, Molina, Virginia Premier) is Stage B work.
+**Three of those four zeroes are themselves meaningful negatives:**
+
+- **UHC** serves a consolidated tree across UHC commercial + UHC Medicare Advantage + **UHC Community Plan (Medicaid)** + OptumRx in ~1,400 InsurancePlans. None of the 125 appear there.
+- **Molina** is one of the six VA Medicaid MCOs DMAS contracts with directly. None of the 125 appear in their public directory either.
+- **Humana** is a multi-line carrier (commercial + MA + small Medicaid presence). None.
+
+So as of 2026-05-02, the only public payer-directory exposure surface in our 4-carrier sweep is **Cigna's 4 NPIs**.
+
+**This still under-covers the VA Medicaid landscape.** Anthem HealthKeepers Plus (the largest Cardinal Care MCO), Aetna BH of VA, Sentara Community Plan, and Virginia Premier remain Stage B work. Anthem's public Medicaid endpoint at `cms_mandate/mcd/` exists but returns HTTP 500 on every Practitioner query as of 2026-05-02 (Elevance server bug).
 
 ---
 
@@ -133,11 +173,11 @@ Each is listed in Cigna's public Practitioner directory today. Cigna's directory
 
 | Carrier | Status | What's needed |
 | --- | --- | --- |
-| Anthem HealthKeepers Plus (Anthem Medicaid in VA) | Endpoint discovered (Elevance TotalView `/registered/HealthKeepersInc/api/v1/fhir`) but auth-required | OAuth client registration via Elevance developer portal |
+| Anthem HealthKeepers Plus (Anthem Medicaid in VA) | Public PDex endpoint exists at `https://totalview.healthos.elevancehealth.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/` but returns HTTP 500 on every Practitioner query (Elevance server bug, 2026-05-02). Authenticated brand endpoints exist at `/resources/registered/HealthKeepersInc/api/v1/fhir` but require OAuth. | Wait for Elevance to fix the 500s, or register OAuth client. Search must use `family/given/name` per their CapabilityStatement (no `identifier` support); name+filter path like Cigna |
 | Aetna Better Health of Virginia | Endpoint known but OAuth-required | Free dev account at developerportal.aetna.com + client credential |
-| UHC Community Plan | Public URL drift; current URL DNS-fails | URL re-discovery via UHC interoperability page |
+| UHC Community Plan | **Now covered** via the consolidated Optum FLEX endpoint (`https://flex.optum.com/fhirpublic/R4`); 0 of 125 matched | — |
+| Molina Complete Care | **Now covered** via Azure APIM gateway (`https://api.interop.molinahealthcare.com/providerdirectory`); 0 of 125 matched. Dev-portal registration was needed to discover the gateway URL but the gateway itself accepts unauthenticated FHIR queries | — |
 | Sentara Community Plan | API delayed per parent payer notice | Wait or reach out to Sentara |
-| Molina Complete Care | Discovery not started | Probe public endpoints |
 | Virginia Premier | Discovery not started | Probe public endpoints |
 
 Estimated lift: ~half-day per carrier to register, store credentials in GitHub Actions secrets, and add a credentialed query path to the analysis pipeline. Then re-run H26 with the full 6-MCO denominator.
@@ -203,7 +243,18 @@ A: SAM aggregates HHS LEIE + OPM FEHBP debarment + DOJ + EPA + others into one f
 A: Yes — the framework is pinnable to release tags for audit reproducibility, and the citation language above is ready to paste. <https://ainpi.dev/smd-revalidation> is the methodology landing page mapped to the 5 elements of the SMD letter.
 
 **Q: What about the Anthem HealthKeepers Plus, Aetna BH of VA, and UHC Community Plan providers — does AINPI cover them too?**
-A: Not yet. Stage B will, after we register OAuth clients with each parent payer's developer portal. ~half-day per carrier. The H26 finding is currently a methodology demonstration with Humana + Cigna only; it intentionally underclaims so we don't suggest coverage we don't have.
+A: Two of six are covered as of 2026-05-02:
+
+- **UHC Community Plan**: covered via Optum's consolidated public FHIR endpoint (`https://flex.optum.com/fhirpublic/R4` — covers UHC commercial + UHC Community Plan + OptumRx in one tree of ~1,400 InsurancePlans). 0 of 125 federally excluded VA NPIs matched.
+- **Molina Complete Care**: covered via the Azure APIM gateway (`https://api.interop.molinahealthcare.com/providerdirectory`, Sapphire360 backend, no auth required despite the registration-gated dev portal). 0 of 125 matched.
+
+The remaining four:
+
+- **Anthem HealthKeepers Plus** (largest VA Medicaid MCO): public endpoint exists at `cms_mandate/mcd/` but returns HTTP 500 on every Practitioner query (Elevance server bug, 2026-05-02).
+- **Aetna BH of VA**: requires OAuth at developerportal.aetna.com.
+- **Sentara Community Plan / Virginia Premier**: no public endpoint discovered.
+
+Stage B closes the remaining gaps.
 
 **Q: Who else is using this?**
 A: AINPI is published at <https://ainpi.dev>, source at <https://github.com/FHIR-IQ/AINPI>. The repository is open. State Medicaid programs in Pennsylvania and Ohio are also catalogued (<https://ainpi.dev/states>) but Virginia has the most populated findings as of 2026-05-04.
