@@ -1,0 +1,173 @@
+{
+  "queried_at": "2026-05-02T19:28:12+00:00",
+  "denominator_practitioners": 7441213,
+  "totals": {
+    "flagged_pattern_match": 57,
+    "confirmed_ssn_exposures": 46,
+    "in_qualification_identifier_value": 42,
+    "in_given_name": 4,
+    "in_family_name": 0,
+    "intl_phone_false_positives": 5,
+    "organization_pattern_matches": 2
+  },
+  "state_breakdown": [
+    {
+      "state": "IL",
+      "count": 18
+    },
+    {
+      "state": "OH",
+      "count": 6
+    },
+    {
+      "state": "(unknown)",
+      "count": 4
+    },
+    {
+      "state": "NJ",
+      "count": 2
+    },
+    {
+      "state": "TX",
+      "count": 2
+    },
+    {
+      "state": "WA",
+      "count": 2
+    },
+    {
+      "state": "AP",
+      "count": 1
+    },
+    {
+      "state": "AZ",
+      "count": 1
+    },
+    {
+      "state": "CA",
+      "count": 1
+    },
+    {
+      "state": "DC",
+      "count": 1
+    },
+    {
+      "state": "GA",
+      "count": 1
+    },
+    {
+      "state": "MA",
+      "count": 1
+    },
+    {
+      "state": "NC",
+      "count": 1
+    },
+    {
+      "state": "ND",
+      "count": 1
+    },
+    {
+      "state": "NY",
+      "count": 1
+    },
+    {
+      "state": "PA",
+      "count": 1
+    },
+    {
+      "state": "TN",
+      "count": 1
+    },
+    {
+      "state": "WI",
+      "count": 1
+    }
+  ],
+  "samples": [
+    {
+      "npi": "1033205281",
+      "name": "RIDENOUR, KAREN",
+      "state": "WA",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033205281"
+    },
+    {
+      "npi": "1417109950",
+      "name": "TURNER, GEOFFREY",
+      "state": "OH",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417109950"
+    },
+    {
+      "npi": "1942589551",
+      "name": "KING, JAMIE",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942589551"
+    },
+    {
+      "npi": "1619009883",
+      "name": "KENT, DENNIS",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619009883"
+    },
+    {
+      "npi": "1013126325",
+      "name": "JOHNSON, CYNTHIA",
+      "state": "ND",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1013126325"
+    },
+    {
+      "npi": "1174157341",
+      "name": "SILVA, ALEXA",
+      "state": "GA",
+      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1174157341"
+    },
+    {
+      "npi": "1467155523",
+      "name": "BROOKS, DREW",
+      "state": "TX",
+      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1467155523"
+    },
+    {
+      "npi": "1215655782",
+      "name": "NWIGWE, PRECIOUS",
+      "state": "NJ",
+      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1215655782"
+    },
+    {
+      "npi": "1639811045",
+      "name": "ROBERTSON, ANDREW",
+      "state": "AZ",
+      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1639811045"
+    }
+  ],
+  "limitations": [
+    "Detection regex is the dashed SSN format \\d{3}-\\d{2}-\\d{4}. Undashed 9-digit SSNs are NOT detected here because they collide with too many other 9-digit identifiers (EINs, account numbers, claim IDs). True coverage is therefore a lower bound \u2014 actual SSN exposure may be higher.",
+    "False positive guard: international phone-number formats (Italy '39-XXX-XX-XXXX', etc.) match the same regex. We classify any record whose JSON also contains the prefix-extended pattern \\d{2}-\\d{3}-\\d{2}-\\d{4} as a phone false positive and exclude it from the confirmed total.",
+    "Privacy: the SSN values themselves are not published in this finding output, despite being in the underlying NDH bulk file CMS distributed publicly. The finding reports counts, JSON locations, NPIs (which are professional credentials, not PII per HIPAA), and state breakdowns only.",
+    "Source attribution: original reporting is by the Washington Post (2026-04-30, paywalled). AINPI's value-add is an independent, reproducible scan of the same public file, with a precise location-and-count breakdown the WaPo article did not publish.",
+    "Remediation belongs to CMS NDH operations. AINPI is a verification surface, not a notification mechanism. The 45 affected providers should be contacted by CMS or their state board, not by AINPI."
+  ],
+  "source_articles": [
+    {
+      "outlet": "Washington Post",
+      "title": "Medicare portal exposed health providers' Social Security numbers",
+      "date": "2026-04-30",
+      "url": "https://www.washingtonpost.com/health/2026/04/30/medicare-portal-social-security-numbers-exposed/"
+    },
+    {
+      "outlet": "Becker's Hospital Review",
+      "title": "CMS' Medicare provider directory released Social Security numbers: Washington Post",
+      "date": "2026-05-01",
+      "url": "https://www.beckershospitalreview.com/quality/hospital-physician-relationships/cms-medicare-provider-directory-released-social-security-numbers-washington-post/"
+    }
+  ]
+}

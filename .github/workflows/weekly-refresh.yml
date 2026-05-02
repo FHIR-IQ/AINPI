@@ -111,12 +111,20 @@ jobs:
 
       - name: Re-run H26 MCO exposure (VA pilot, methodology demo)
         # Cross-references the federally-excluded VA cohort against live
-        # FHIR provider directories of 2 publicly-queryable payer endpoints
-        # (Humana via identifier search, Cigna via name + post-filter).
+        # FHIR provider directories of 4 publicly-queryable payer endpoints
+        # (Humana, Cigna, UHC via Optum FLEX, Molina via Azure APIM).
         # Requires curl in PATH (sidesteps Akamai TLS fingerprinting that
         # blocks Python urllib). curl is on ubuntu-latest by default.
         # No new secrets — endpoints are public per CMS-9115-F.
         run: python analysis/h26_mco_exposure_va.py
+
+      - name: Re-run H27 PII exposure scan (replicates 2026-04-30 WaPo finding)
+        # Scans cms_npd.practitioner + cms_npd.organization for the dashed
+        # SSN format \d{3}-\d{2}-\d{4} in TO_JSON_STRING(resource), classifies
+        # by JSON location, filters intl-phone false positives. Privacy guard:
+        # output JSON publishes counts/locations/NPIs/state breakdown only.
+        # Source: WaPo 2026-04-30 reporting.
+        run: python analysis/h27_pii_exposure.py
 
       - name: Stamp stats.json with run metadata
         run: |

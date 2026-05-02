@@ -8,6 +8,36 @@
 
 ---
 
+## Urgent / critical findings
+
+### H27 — Social Security Numbers exposed in the NDH bulk export
+
+On **2026-04-30 the Washington Post reported** that the same 2026-04-09 NDH bulk export AINPI ingests contains provider SSNs. CMS attributed the leak to "incorrect entries of provider or provider-representative-supplied information in the wrong places."
+
+**AINPI independently verified and quantified this.** Scanning every Practitioner and Organization resource in `cms_npd` for the dashed SSN format `\d{3}-\d{2}-\d{4}`, after filtering international phone-format false positives:
+
+- **46 confirmed Practitioner records carry an SSN in their FHIR JSON**
+- **42** appear in `qualification[].identifier[].value` (state-license credential slot)
+- **4** appear in `name[].given[]` — providers literally entered their SSN as a name token
+- **2 Organization records** also carry SSN-pattern strings
+- Per-state hot-spots: **IL 18, OH 6, NJ 2, TX 2, WA 2** (Virginia is not affected)
+
+The detection regex is the dashed format only. Undashed 9-digit SSNs are out of scope (they collide with too many other 9-digit identifiers); true coverage is therefore a lower bound.
+
+**This matters for the Virginia conversation even though no VA practitioners are flagged:**
+
+1. It validates the AINPI methodology — we found the same exposure WaPo did, using the same public file, in BigQuery, in a single SQL pass.
+2. It demonstrates that **directory-quality controls at the federal-publication step are missing today**. DMAS cannot rely on NDH as a clean upstream source without its own validation layer.
+3. It strengthens the SMD-letter-response posture: AINPI provides the validation layer DMAS would otherwise need to build.
+
+**Privacy posture:** AINPI publishes counts, JSON locations, NPIs (professional IDs), and state breakdowns. The SSN values themselves are not republished in our finding output, even though they remain in the public NDH bulk file CMS distributed. Remediation belongs to CMS NDH operations.
+
+Source: <https://ainpi.dev/findings/pii-exposure-ndh> · <https://ainpi.dev/api/v1/findings/pii-exposure-ndh.json>
+
+Original reporting: [Washington Post, 2026-04-30](https://www.washingtonpost.com/health/2026/04/30/medicare-portal-social-security-numbers-exposed/) · [Becker's Hospital Review summary](https://www.beckershospitalreview.com/quality/hospital-physician-relationships/cms-medicare-provider-directory-released-social-security-numbers-washington-post/)
+
+---
+
 ## TL;DR
 
 Of **141,660 Virginia-resident practitioners** in the federal NDH bulk export:

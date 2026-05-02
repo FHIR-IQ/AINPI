@@ -253,6 +253,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'pii-exposure-ndh',
+    hypotheses: ['H27'],
+    title: 'Social Security Numbers exposed in the NDH bulk export',
+    summary:
+      'Independently verifies the 2026-04-30 Washington Post finding that the 2026-04-09 CMS National Provider Directory bulk export contains provider Social Security Numbers, leaked through "incorrect entries of provider or provider-representative-supplied information in the wrong places" (CMS). AINPI scans the entire FHIR JSON of every Practitioner and Organization resource for the dashed SSN format and classifies hits by JSON location.',
+    nullHypothesis:
+      'Zero Practitioner or Organization resources in the NDH bulk export contain a Social Security Number anywhere in their FHIR JSON.',
+    denominator:
+      '7,441,213 Practitioner resources + 3,603,262 Organization resources in the 2026-04-09 NDH bulk export.',
+    dataSource:
+      'BigQuery scan of `cms_npd.practitioner` and `cms_npd.organization` for the regex `\\d{3}-\\d{2}-\\d{4}` in `TO_JSON_STRING(resource)`, with classification by JSON location (`qualification[].identifier[].value` vs `name[].given[]` vs `name[].family`) and false-positive guard against international phone formats (`\\d{2}-\\d{3}-\\d{2}-\\d{4}`). Source: AINPI replication of the public Washington Post reporting (2026-04-30).',
+    status: 'published',
+    ogTagline: 'How many SSNs are in the federal provider directory? AINPI counts.',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          'The NDH bulk export already shipped publicly with provider PII. CMS attributed it to "incorrect entries... in the wrong places," consistent with our JSON-location breakdown: most SSNs are in qualification.identifier.value (state-license slot), with a smaller share embedded in name.given. Validation logic at NDH submission time would have caught all 46. Treat as a directory-quality signal alongside the deactivated-but-listed and duplicate-organization flags AINPI tracks.',
+      },
+      {
+        audience: 'Provider data teams',
+        takeaway:
+          'If your provider data management platform pushes practitioner data to the NDH, audit the qualification identifier and name.given pipelines for SSN-pattern strings before serialization. The 46 AINPI flagged are the tip of the iceberg — undashed 9-digit SSNs are not detected by this scan because they collide with too many other 9-digit identifiers (EINs, account IDs, claim IDs).',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'AINPI replicates the WaPo finding using the same publicly-distributed bulk file CMS released. The value-add is a precise count, JSON-location breakdown, and per-state distribution that the WaPo article did not publish. The SSN values themselves are NOT republished by AINPI even though they remain in the public NDH bulk — responsible-disclosure posture.',
+      },
+      {
+        audience: 'Everyone using NDH',
+        takeaway:
+          'Any pipeline that consumes the NDH bulk export should run a PII scrub pass before downstream use. Specifically: regex-strip `\\d{3}-\\d{2}-\\d{4}` from `qualification[].identifier[].value` and `name[].given[]` strings; flag for human review.',
+      },
+    ],
+  },
+  {
     slug: 'high-risk-cohort',
     hypotheses: ['H23'],
     title: 'High-risk provider cohort',

@@ -19,7 +19,7 @@ AINPI/
 │   │   ├── app/              Routes (pages + API, including /api/v1/*)
 │   │   ├── components/       Shared UI (Navbar, WipBanner, Footer, charts/)
 │   │   ├── contexts/         FilterContext for cross-chart filtering
-│   │   ├── data/findings.ts  Pre-registration catalog (H1-H26 → slugs)
+│   │   ├── data/findings.ts  Pre-registration catalog (H1-H27 → slugs)
 │   │   ├── lib/              bigquery.ts, prisma.ts, auth.ts, api-v1-types.ts, load-api-v1.ts
 │   │   └── utils/supabase/   SSR-safe Supabase clients
 │   ├── public/api/v1/        Static JSON contract (stats.json, findings/<slug>.json)
@@ -49,7 +49,7 @@ AINPI/
 - **ORM**: Prisma (against Supabase only; BigQuery is accessed via `@google-cloud/bigquery` SDK)
 - **Visualizations**: D3.js (+ topojson-client for US choropleth), dynamic `next/dynamic` imports so D3 stays out of SSR
 - **Testing**: Vitest (frontend) + Playwright E2E (frontend) + pytest (`analysis/tests/`, pure-function unit tests for h26)
-- **Methodology version**: `0.5.0-draft` (see `docs/methodology/index.md`)
+- **Methodology version**: `0.6.0-draft` (see `docs/methodology/index.md`)
 - **Hosting**: Vercel
 - **Auth for BigQuery in production**: service account key JSON loaded from `GCP_SERVICE_ACCOUNT_KEY` env var
 
@@ -140,9 +140,9 @@ Server Components read these via `loadStats()` / `loadFinding(slug)` in `fronten
 
 The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js route handlers — the static JSON files sit in `public/` and take precedence over same-named routes, so never name a route handler `stats/route.ts`.
 
-## Pre-registration workflow (H1–H26)
+## Pre-registration workflow (H1–H27)
 
-Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H26**, with H23 (high-risk cohort), H24 (OIG LEIE), H25 (SAM.gov), and H26 (VA payer-directory exposure, methodology demo) added in the SMD-revalidation push.
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H27**, with H23 (high-risk cohort), H24 (OIG LEIE), H25 (SAM.gov), H26 (VA payer-directory exposure), and H27 (PII exposure in NDH bulk export, replicating the 2026-04-30 Washington Post finding) added in the SMD-revalidation push.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
 2. **Compute** via `analysis/<hN>_*.py` (BigQuery-driven) or `crawler/` (endpoint probes for H1–H5, H22). Each script emits a `frontend/public/api/v1/findings/<slug>.json` conforming to `ApiV1Finding`.
@@ -160,6 +160,7 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `oig-leie-exclusions` → H24 (ingest: `analysis/ingest_oig_leie.py`, BQ: `analysis/h24_oig_exclusions.py`) — joins OIG LEIE monthly file to NDH practitioner NPIs
 - State-scoped slices → `analysis/state_findings.py <state>` writes `frontend/public/api/v1/states/<state>.json`
 - `sam-exclusions` → H25 (ingest: `analysis/ingest_sam_exclusions.py`, BQ: `analysis/h25_sam_exclusions.py`) — joins SAM.gov Public Extract V2 to NDH practitioner NPIs. Independent from LEIE: HHS slice overlaps, OPM slice is net-new. Ingest defaults to `sample-data/SAM_Exclusions_Public_Extract_V2_*.CSV`; API path requires `SAM_GOV_API_KEY` from `analysis/.env.example`.
+- `pii-exposure-ndh` → H27 (BQ: `analysis/h27_pii_exposure.py`) — independently verifies the 2026-04-30 Washington Post finding that the 2026-04-09 NDH bulk export contains provider SSNs. Scans `cms_npd.practitioner` + `cms_npd.organization` for `\d{3}-\d{2}-\d{4}` in `TO_JSON_STRING(resource)`, classifies hits by JSON location (`qualification[].identifier[].value` vs `name[].given[]`), filters intl-phone false positives. Privacy posture: publishes counts/locations/NPIs/state breakdown only; SSN values themselves are NOT republished in finding output despite being in the public NDH bulk file. As of 2026-05-02: 46 confirmed Practitioner exposures (42 in qualification slots, 4 in given-name slots) across 17 states (IL leads with 18). Undashed 9-digit SSNs are out of scope (collide with EINs / account IDs / claim IDs).
 - `mco-exposure-va` → H26 (live FHIR: `analysis/h26_mco_exposure_va.py`) — joins the VA federally-excluded cohort (125 NPIs) to 4 publicly-queryable payer FHIR endpoints: Humana (`?identifier=`), Cigna (`?family=&given=` + post-filter Bundle by NPI in `identifier[]` since Cigna rejects identifier search), UnitedHealthcare via Optum FLEX `https://flex.optum.com/fhirpublic/R4` (covers UHC commercial + UHC Community Plan + OptumRx), and Molina via Azure APIM gateway `https://api.interop.molinahealthcare.com/providerdirectory` (Sapphire360 backend, no auth despite registration-gated dev portal). 2 of 6 VA Medicaid MCOs (UHC Community Plan + Molina) are wired directly. Stage B fast-follow: Anthem HealthKeepers Plus (public `cms_mandate/mcd/` endpoint exists but returns 500s; Anthem only supports family/given/name search), Aetna BH of VA (OAuth at developerportal.aetna.com), Sentara, Virginia Premier. The script shells out to `curl` instead of `urllib` because Akamai-fronted endpoints (Humana) WAF-block Python's TLS fingerprint.
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).

@@ -1,0 +1,82 @@
+{
+  "slug": "pii-exposure-ndh",
+  "title": "Social Security Numbers exposed in the NDH bulk export",
+  "hypotheses": [
+    "H27"
+  ],
+  "status": "published",
+  "release_date": "2026-04-09",
+  "generated_at": "2026-05-02T19:28:12+00:00",
+  "methodology_version": "0.6.0",
+  "commit_sha": "b66c5ec",
+  "headline": "46 of 57 flagged Practitioner resources in the 2026-04-09 NDH bulk export contain a Social Security Number, independently verifying the 2026-04-30 Washington Post finding. Of those, 42 appear in the qualification[].identifier[].value slot (state-license credential), 4 are embedded in the name[].given[] slot (literally as a name token), and 0 in name[].family. 5 additional matches are international phone-format false positives (e.g. Italy 39-XXX-XX-XXXX), filtered out. 2 Organization resources also carry SSN-pattern strings.",
+  "numerator": 46,
+  "denominator": 7441213,
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "IL",
+        "value": 18
+      },
+      {
+        "label": "OH",
+        "value": 6
+      },
+      {
+        "label": "(unknown)",
+        "value": 4
+      },
+      {
+        "label": "NJ",
+        "value": 2
+      },
+      {
+        "label": "TX",
+        "value": 2
+      },
+      {
+        "label": "WA",
+        "value": 2
+      },
+      {
+        "label": "AP",
+        "value": 1
+      },
+      {
+        "label": "AZ",
+        "value": 1
+      },
+      {
+        "label": "CA",
+        "value": 1
+      },
+      {
+        "label": "DC",
+        "value": 1
+      },
+      {
+        "label": "GA",
+        "value": 1
+      },
+      {
+        "label": "MA",
+        "value": 1
+      },
+      {
+        "label": "NC",
+        "value": 1
+      },
+      {
+        "label": "ND",
+        "value": 1
+      },
+      {
+        "label": "NY",
+        "value": 1
+      }
+    ]
+  },
+  "notes": "Independently verifies the 2026-04-30 Washington Post finding by scanning the 2026-04-09 NDH bulk export (already loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. WaPo reported 'dozens'; the AINPI scan identifies 46 confirmed exposures across 18 states. CMS attributed the leak to 'incorrect entries of provider or provider-representative-supplied information in the wrong places' \u2014 borne out by the JSON-location breakdown: most SSNs are in qualification.identifier.value (the state-license slot), with 4 cases of providers entering their SSN literally as a name token. Privacy posture: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII), and state breakdowns. The SSN values themselves are NOT republished in this finding's output, even though they remain in the public NDH bulk file CMS distributed. State Medicaid PI teams that want to validate or remediate should contact CMS NDH operations directly."
+}

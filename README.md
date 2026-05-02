@@ -19,7 +19,7 @@ CMS released the National Provider Directory as FHIR R4 NDJSON public use files 
 | Path | What it is |
 |---|---|
 | [`/methodology`](https://ainpi.vercel.app/methodology) | Versioned audit methodology — DAMA DMBOK mapping, L0–L7 scoring, reproducibility commands |
-| [`/findings`](https://ainpi.vercel.app/findings) | Pre-registered findings (H1–H26). Each states null hypothesis + denominator *before* numbers drop |
+| [`/findings`](https://ainpi.vercel.app/findings) | Pre-registered findings (H1–H27). Each states null hypothesis + denominator *before* numbers drop |
 | [`/npd`](https://ainpi.vercel.app/npd) | Public search by NPI, name, organization, state, city |
 | [`/data-quality`](https://ainpi.vercel.app/data-quality) | D3 dashboard: choropleth, sankey, knowledge graph, drill-down, validation |
 | [`/insights`](https://ainpi.vercel.app/insights) | Provenance + variance analysis (NPD vs published org numbers) |
