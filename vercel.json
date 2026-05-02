@@ -3,5 +3,11 @@
   "devCommand": "cd frontend && npm run dev",
   "installCommand": "cd frontend && npm install",
   "framework": "nextjs",
-  "outputDirectory": "frontend/.next"
+  "outputDirectory": "frontend/.next",
+  "crons": [
+    {
+      "path": "/api/v1/admin/weekly-report",
+      "schedule": "0 9 * * 1"
+    }
+  ]
 }
