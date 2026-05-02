@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import WipBanner from '@/components/WipBanner'
 import Footer from '@/components/Footer'
+import LatestUpdates from '@/components/LatestUpdates'
 import { Analytics } from '@vercel/analytics/next'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -21,6 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <WipBanner />
+        <LatestUpdates />
         {children}
         <Footer />
         <Analytics />

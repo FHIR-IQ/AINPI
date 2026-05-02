@@ -1,4 +1,5 @@
 import { ExternalLink } from 'lucide-react';
+import SubscriberCount from './SubscriberCount';
 
 // Inline GitHub mark — lucide-react removed `Github` in 1.x for brand-licensing
 // reasons. Self-contained SVG keeps us version-agnostic across lucide bumps.
@@ -175,6 +176,7 @@ export default function Footer() {
             {' '}· <a href={REPO_URL} target="_blank" rel="noopener" className="hover:text-gray-300">FHIR-IQ/AINPI</a>
           </p>
           <div className="flex items-center gap-4">
+            <SubscriberCount className="text-gray-400 hover:text-gray-200" />
             <a
               href={REPO_URL}
               target="_blank"
