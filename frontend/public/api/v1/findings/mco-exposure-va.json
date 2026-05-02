@@ -6,10 +6,10 @@
   ],
   "status": "published",
   "release_date": "2026-04-09",
-  "generated_at": "2026-05-01T21:04:49+00:00",
+  "generated_at": "2026-05-02T01:13:23+00:00",
   "methodology_version": "0.5.0",
-  "commit_sha": "123fd98",
-  "headline": "4 of 125 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 2 wired payer provider directories. Per-payer: Humana 0, Cigna 4.",
+  "commit_sha": "5fde19a",
+  "headline": "4 of 125 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 3 wired payer provider directories. Per-payer: Humana 0, Cigna 4, UnitedHealthcare 0.",
   "numerator": 4,
   "denominator": 125,
   "chart": {
@@ -23,8 +23,12 @@
       {
         "label": "Cigna",
         "value": 4
+      },
+      {
+        "label": "UnitedHealthcare",
+        "value": 0
       }
     ]
   },
-  "notes": "v1 methodology demonstration. Cross-references the VA-resident critical-bucket cohort (LEIE or SAM, score >= 1.5) against 2 publicly-queryable payer FHIR endpoints. Humana accepts `?identifier=NPI` directly; Cigna does not (its CapabilityStatement rejects identifier search) so we name-search and post-filter the Bundle by NPI. Each match is a data-quality and triage signal aligned with 42 CFR \u00a7 455.436 and \u00a7 438.602 \u2014 investigation, hearing rights, and reinstatement claims belong to the payer and the excluding agency. Provider directory listing alone does not establish current billing privileges or active patient assignment. "
+  "notes": "v1 methodology demonstration. Cross-references the VA-resident critical-bucket cohort (LEIE or SAM, score >= 1.5) against 3 publicly-queryable payer FHIR endpoints. Humana accepts `?identifier=NPI` directly; Cigna does not (its CapabilityStatement rejects identifier search) so we name-search and post-filter the Bundle by NPI. Each match is a data-quality and triage signal aligned with 42 CFR \u00a7 455.436 and \u00a7 438.602 \u2014 investigation, hearing rights, and reinstatement claims belong to the payer and the excluding agency. Provider directory listing alone does not establish current billing privileges or active patient assignment. "
 }

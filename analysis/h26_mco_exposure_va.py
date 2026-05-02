@@ -45,13 +45,25 @@ FINDINGS_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
 Classification = Literal["matched", "not_in_directory", "error"]
 
 # Payer FHIR endpoint registry — base URLs + search strategy.
-# v1 wiring: 2 publicly-queryable endpoints verified working 2026-05-01.
-#   - Humana supports `?identifier=NPI` directly.
-#   - Cigna does not support identifier search (returns 400); we name-search
-#     `?family=&given=` and post-filter the Bundle by NPI.
-# Stage B fast-follows (deferred): Anthem (HealthKeepersInc / AnthemBlueCross
-# via Elevance TotalView /registered/* — auth-required), Aetna (OAuth-only),
-# UnitedHealthcare (URL drift in our ProviderDirectoryAPI table).
+# v1 wiring: 3 publicly-queryable endpoints verified working 2026-05-02.
+#   - Humana          — `?identifier=NPI` directly
+#   - Cigna           — name search + post-filter (CapabilityStatement
+#                        rejects `?identifier=` with 400)
+#   - UnitedHealthcare — `?identifier=NPI` against the Optum FLEX public
+#                        endpoint (covers UHC commercial + UHC Community
+#                        Plan / Medicaid + OptumRx in one ~1,400-plan
+#                        InsurancePlan tree)
+#
+# Stage B fast-follows still deferred:
+#   - Anthem HealthKeepers Plus: public Medicaid endpoint exists at
+#     totalview.healthos.elevancehealth.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/
+#     but returns HTTP 500 on every Practitioner query (Elevance server bug
+#     as of 2026-05-02). CapabilityStatement reveals Anthem only supports
+#     family/given/name searches (no identifier), so once 500s clear we'll
+#     need a name+filter path like Cigna.
+#   - Molina Complete Care: production URL not yet discovered; dev portal
+#     at developer.interop.molinahealthcare.com requires registration.
+#   - Aetna: OAuth-required at developerportal.aetna.com.
 MCOS: list[dict[str, str]] = [
     {"name": "Humana",
      "endpoint": "https://fhir.humana.com/api",
@@ -59,6 +71,9 @@ MCOS: list[dict[str, str]] = [
     {"name": "Cigna",
      "endpoint": "https://fhir.cigna.com/ProviderDirectory/v1",
      "search": "name"},
+    {"name": "UnitedHealthcare",
+     "endpoint": "https://flex.optum.com/fhirpublic/R4",
+     "search": "identifier"},
 ]
 
 
