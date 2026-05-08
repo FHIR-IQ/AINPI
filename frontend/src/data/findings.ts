@@ -270,12 +270,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Regulators',
         takeaway:
-          'The NDH bulk export already shipped publicly with provider PII. CMS attributed it to "incorrect entries... in the wrong places," consistent with our JSON-location breakdown: most SSNs are in qualification.identifier.value (state-license slot), with a smaller share embedded in name.given. Validation logic at NDH submission time would have caught all 46. Treat as a directory-quality signal alongside the deactivated-but-listed and duplicate-organization flags AINPI tracks.',
+          'The NDH bulk export already shipped publicly with provider PII in two consecutive monthly releases. CMS attributed it to "incorrect entries... in the wrong places," consistent with our JSON-location breakdown: most SSNs are in qualification.identifier.value (state-license slot). The April 2026-04-09 release carried 46 confirmed exposures; the May 2026-05-08 release dropped to 41 (CMS partially scrubbed but did not eliminate). Validation logic at NDH submission time would have caught every one of them. Treat as a directory-quality signal alongside the deactivated-but-listed and duplicate-organization flags AINPI tracks.',
       },
       {
         audience: 'Provider data teams',
         takeaway:
-          'If your provider data management platform pushes practitioner data to the NDH, audit the qualification identifier and name.given pipelines for SSN-pattern strings before serialization. The 46 AINPI flagged are the tip of the iceberg — undashed 9-digit SSNs are not detected by this scan because they collide with too many other 9-digit identifiers (EINs, account IDs, claim IDs).',
+          'If your provider data management platform pushes practitioner data to the NDH, audit the qualification identifier and name.given pipelines for SSN-pattern strings before serialization. The 41 AINPI flagged in May (down from 46 in April) are the tip of the iceberg — undashed 9-digit SSNs are not detected by this scan because they collide with too many other 9-digit identifiers (EINs, account IDs, claim IDs).',
       },
       {
         audience: 'Researchers',
