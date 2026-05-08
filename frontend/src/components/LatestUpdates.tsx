@@ -21,24 +21,29 @@ interface Update {
 
 const UPDATES: Update[] = [
   {
-    label: 'H27 — Social Security Numbers in NDH bulk export',
+    label: '2026-05-08 update — Endpoint −73%, Location −61%, SSN exposures 46 → 41',
+    href: '/reports/2026-05-08-update',
+    isNew: true,
+    date: '2026-05-08',
+  },
+  {
+    label: 'H27 — SSN exposure dropped 46 → 41 (CMS partially scrubbed in May release)',
     href: '/findings/pii-exposure-ndh',
     hypothesis: 'H27',
     isNew: true,
-    date: '2026-05-02',
+    date: '2026-05-08',
   },
   {
-    label: 'H26 — VA payer-directory exposure (4-MCO sweep, 4 of 125 in Cigna)',
+    label: 'H26 — VA payer-directory exposure: 2 of 131 in Cigna (4-MCO sweep)',
     href: '/findings/mco-exposure-va',
     hypothesis: 'H26',
     isNew: true,
-    date: '2026-05-02',
+    date: '2026-05-08',
   },
   {
-    label: 'Virginia State Medicaid briefing — 2026-05-04 review meeting',
+    label: 'Virginia State Medicaid briefing — refreshed for May NDH release',
     href: '/briefings/va',
-    isNew: true,
-    date: '2026-05-02',
+    date: '2026-05-08',
   },
   {
     label: 'H25 — SAM.gov exclusions (OPM debarment is net-new beyond LEIE)',

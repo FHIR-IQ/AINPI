@@ -186,11 +186,19 @@ async function fetchWithTimeout(url: string, ms: number): Promise<Response> {
 
 function pickIdentifier(idents: any[] | undefined, system: string): string | null {
   if (!Array.isArray(idents)) return null;
+  // Special case: NPI. Match either the legacy us-npi URL, the May 2026
+  // NamingSystem/npi URL, or any identifier with type.coding[].code = 'NPI'.
+  const wantsNpi = system.toLowerCase() === 'us-npi';
   for (const id of idents) {
     const sys = (id?.system || '').toLowerCase();
     const val = id?.value;
     if (typeof val !== 'string' || !val) continue;
     if (sys.includes(system.toLowerCase())) return val;
+    if (wantsNpi) {
+      if (sys.includes('namingsystem/npi')) return val;
+      const typeCoding = Array.isArray(id?.type?.coding) ? id.type.coding : [];
+      if (typeCoding.some((c: any) => (c?.code || '').toUpperCase() === 'NPI')) return val;
+    }
   }
   return null;
 }

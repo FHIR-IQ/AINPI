@@ -98,3 +98,5 @@ skills-lock.json
 supabase/.branches/
 supabase/.temp/
 supabase/migrations/*.local.sql
+frontend/test-results/
+persona-walkthrough-*.png
