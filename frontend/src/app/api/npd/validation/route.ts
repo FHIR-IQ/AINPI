@@ -16,14 +16,14 @@ async function runQuery(sql: string) {
   return rows;
 }
 
-// Source file record counts from CMS NPD release manifest (2026-04-09)
+// Source file record counts from CMS NPD release manifest (2026-05-08)
 const SOURCE_COUNTS: Record<string, number> = {
-  practitioner: 7_441_212,
-  organization: 3_605_261,
-  location: 3_494_239,
-  endpoint: 5_043_524,
-  practitioner_role: 7_180_732,
-  organization_affiliation: 439_599,
+  practitioner: 7_441_211,
+  organization: 3_414_375,
+  location: 1_362_869,
+  endpoint: 1_360_585,
+  practitioner_role: 7_028_001,
+  organization_affiliation: 1_086_694,
 };
 
 export async function GET() {
@@ -100,7 +100,7 @@ export async function GET() {
     const ep = endpointChecks[0];
 
     return NextResponse.json({
-      release_date: '2026-04-09',
+      release_date: '2026-05-08',
       generated_at: new Date().toISOString(),
       resource_counts: resources,
       total_expected: Object.values(SOURCE_COUNTS).reduce((a, b) => a + b, 0),

@@ -119,7 +119,7 @@ async function searchOrganizations(params: SearchParams) {
   if (params.org || params.name) {
     const q = (params.org || params.name || '').trim();
     // Match _name OR any alias in resource.alias[] (alias array is 0%-populated
-    // in the 2026-04-09 release but including it keeps us forward-compatible
+    // in the 2026-05-08 release but including it keeps us forward-compatible
     // and costs essentially nothing per query).
     where.push(
       '(LOWER(_name) LIKE LOWER(@orgName) OR EXISTS(' +
@@ -243,7 +243,7 @@ export async function GET(req: NextRequest) {
         type: 'provider_profile',
         data: profile,
         source: 'cms_npd',
-        release_date: '2026-04-09',
+        release_date: '2026-05-08',
       });
     }
 
@@ -261,12 +261,12 @@ export async function GET(req: NextRequest) {
       total_results: totalResults,
       data: results,
       source: 'cms_npd',
-      release_date: '2026-04-09',
+      release_date: '2026-05-08',
       // Hint for the UI about how we expanded the search
       search_scope_notes: [
         params.name ? 'Name matches use fuzzy multi-token + credential-suffix stripping.' : null,
         params.state ? 'State matches any address in the practitioner\'s address[] array, not just the primary one.' : null,
-        params.org ? 'Org matches both _name and Organization.alias[]. Note: alias is 0% populated in 2026-04-09 release.' : null,
+        params.org ? 'Org matches both _name and Organization.alias[]. Note: alias is 0% populated in 2026-05-08 release.' : null,
       ].filter(Boolean),
     });
   } catch (error) {
