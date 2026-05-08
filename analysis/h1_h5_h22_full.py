@@ -17,7 +17,7 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 PROBE_PARQUET = pathlib.Path(__file__).resolve().parent / ".crawl" / "ainpi-probe" / "out" / "full_liveness.parquet"
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 FINDINGS_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"

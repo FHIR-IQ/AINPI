@@ -1,12 +1,12 @@
 {
-  "queried_at": "2026-05-02T01:34:14+00:00",
-  "cohort_source": "high-risk-cohort-export.csv@305a9f6",
+  "queried_at": "2026-05-08T20:58:35+00:00",
+  "cohort_source": "high-risk-cohort-export.csv@4bee6b1",
   "mcos": [
     {
       "name": "Humana",
       "endpoint": "https://fhir.humana.com/api",
       "search": "identifier",
-      "queried": 125,
+      "queried": 131,
       "matched": 0,
       "errors": 0
     },
@@ -14,15 +14,15 @@
       "name": "Cigna",
       "endpoint": "https://fhir.cigna.com/ProviderDirectory/v1",
       "search": "name",
-      "queried": 125,
-      "matched": 4,
+      "queried": 131,
+      "matched": 2,
       "errors": 0
     },
     {
       "name": "UnitedHealthcare",
       "endpoint": "https://flex.optum.com/fhirpublic/R4",
       "search": "identifier",
-      "queried": 125,
+      "queried": 131,
       "matched": 0,
       "errors": 0
     },
@@ -30,7 +30,7 @@
       "name": "Molina",
       "endpoint": "https://api.interop.molinahealthcare.com/providerdirectory",
       "search": "identifier",
-      "queried": 125,
+      "queried": 131,
       "matched": 0,
       "errors": 0
     }
@@ -50,19 +50,6 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710496161"
     },
     {
-      "npi": "1750462008",
-      "name": "JACOBSEN, DANIEL",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1750462008"
-    },
-    {
       "npi": "1801070313",
       "name": "BREWER, STEVEN",
       "reason_codes": [
@@ -74,19 +61,6 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801070313"
-    },
-    {
-      "npi": "1942523451",
-      "name": "WHATMOUGH, RACHELLE",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942523451"
     }
   ],
   "limitations": [

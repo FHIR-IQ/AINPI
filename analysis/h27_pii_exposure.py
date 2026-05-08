@@ -50,7 +50,7 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 METHODOLOGY_VERSION = "0.6.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -187,7 +187,7 @@ def run() -> None:
         "commit_sha": get_commit_sha(),
         "headline": headline,
         "numerator": len(confirmed),
-        "denominator": 7_441_213,  # total NDH Practitioner resources
+        "denominator": 7_441_211,  # total NDH Practitioner resources
         "chart": {
             "type": "bar",
             "unit": "count",
@@ -198,7 +198,7 @@ def run() -> None:
         },
         "notes": (
             f"Independently verifies the 2026-04-30 Washington Post finding by "
-            f"scanning the 2026-04-09 NDH bulk export (already loaded into "
+            f"scanning the {RELEASE_DATE} NDH bulk export (already loaded into "
             f"BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for "
             f"the dashed SSN format \\\\d{{3}}-\\\\d{{2}}-\\\\d{{4}} in the full "
             f"resource JSON. WaPo reported 'dozens'; the AINPI scan identifies "
@@ -220,7 +220,7 @@ def run() -> None:
 
     detail_payload = {
         "queried_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "denominator_practitioners": 7_441_213,
+        "denominator_practitioners": 7_441_211,
         "totals": {
             "flagged_pattern_match": len(pract_rows),
             "confirmed_ssn_exposures": len(confirmed),

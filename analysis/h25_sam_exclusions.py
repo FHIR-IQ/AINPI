@@ -39,7 +39,7 @@ from google.cloud import bigquery
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 SAM_TABLE = f"{PROJECT}.{DATASET}.sam_exclusions"
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 METHODOLOGY_VERSION = "0.4.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent

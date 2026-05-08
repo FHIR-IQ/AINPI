@@ -45,7 +45,7 @@ NUCC_TABLE = f"{NPPES_DATASET}.healthcare_provider_taxonomy_code_set_170"
 CROSSWALK_TABLE = f"{NDH_PROJECT}.{NDH_DATASET}.medicare_taxonomy_crosswalk"
 CROSSWALK_CSV = "/tmp/crosswalk.csv"
 CROSSWALK_RELEASE = "2025-10"
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 
 
 def load_crosswalk(client: bigquery.Client) -> int:

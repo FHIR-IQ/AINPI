@@ -21,7 +21,7 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 
 NPI_PREFIX = "80840"
 NPI_RE = re.compile(r"^[12]\d{9}$")

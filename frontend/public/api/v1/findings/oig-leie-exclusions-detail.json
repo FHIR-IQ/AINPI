@@ -1,0 +1,146 @@
+{
+  "samples": [
+    {
+      "npi": "1427112325",
+      "display_name": "ROBINSON, MARK",
+      "ndh_state": "NH",
+      "leie_state": "NH",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20161020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1427112325"
+    },
+    {
+      "npi": "1225168396",
+      "display_name": "SASSEEN, LAURA",
+      "ndh_state": "AK",
+      "leie_state": "AK",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20150920",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1225168396"
+    },
+    {
+      "npi": "1588649248",
+      "display_name": "HANNA, NICOLE",
+      "ndh_state": "SC",
+      "leie_state": "AZ",
+      "exclusion_type": "1128b3",
+      "exclusion_date": "20221220",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1588649248"
+    },
+    {
+      "npi": "1598701633",
+      "display_name": "REMO, JUDITH",
+      "ndh_state": "NH",
+      "leie_state": "NY",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20180719",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1598701633"
+    },
+    {
+      "npi": "1881613362",
+      "display_name": "FRYDENBORG, CHRISTINE",
+      "ndh_state": "NH",
+      "leie_state": "CT",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20100420",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1881613362"
+    },
+    {
+      "npi": "1003048299",
+      "display_name": "EVANS, CRYSTAL",
+      "ndh_state": "MT",
+      "leie_state": "MT",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20230220",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003048299"
+    },
+    {
+      "npi": "1194155531",
+      "display_name": "PRAGER, AMY",
+      "ndh_state": "NH",
+      "leie_state": "ME",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20220818",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1194155531"
+    },
+    {
+      "npi": "1558420422",
+      "display_name": "PALERMO, CHRISTINE",
+      "ndh_state": "NE",
+      "leie_state": "NE",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20090219",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558420422"
+    },
+    {
+      "npi": "1164613691",
+      "display_name": "HO, DENNIS",
+      "ndh_state": "NH",
+      "leie_state": "OK",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20220620",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1164613691"
+    },
+    {
+      "npi": "1861843039",
+      "display_name": "HARPER, JANAE",
+      "ndh_state": "WY",
+      "leie_state": "WV",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20220320",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861843039"
+    }
+  ],
+  "state_breakdown": [
+    {
+      "state": "UNKNOWN",
+      "n": 1146
+    },
+    {
+      "state": "CA",
+      "n": 934
+    },
+    {
+      "state": "FL",
+      "n": 617
+    },
+    {
+      "state": "NY",
+      "n": 580
+    },
+    {
+      "state": "TX",
+      "n": 408
+    },
+    {
+      "state": "PA",
+      "n": 332
+    },
+    {
+      "state": "MI",
+      "n": 330
+    },
+    {
+      "state": "OH",
+      "n": 292
+    },
+    {
+      "state": "IL",
+      "n": 212
+    },
+    {
+      "state": "TN",
+      "n": 175
+    }
+  ]
+}
