@@ -161,7 +161,7 @@ export default function InsightsPage() {
               <p className="text-gray-700 mt-2">
                 NPD today is an NPPES pass-through enriched with PECOS reassignment data and CEHRT vendor submissions.
                 CAQH is not in the pipeline. That means the same stale, self-attested data that plagued NPPES is
-                inherited intact — in a cleaner FHIR wrapper. Here&apos;s what we can verify by looking at 27.2M
+                inherited intact — in a cleaner FHIR wrapper. Here&apos;s what we can verify by looking at 21.7M
                 ingested records.
               </p>
             </div>
@@ -328,7 +328,7 @@ export default function InsightsPage() {
             defaultOpen
           >
             <p className="text-sm text-gray-600 mb-4">
-              Working through the NDH release specs against what&apos;s actually visible in the 2026-04-09 NPD release:
+              Working through the NDH release specs against what&apos;s actually visible in the 2026-05-08 NPD release:
             </p>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -386,7 +386,7 @@ export default function InsightsPage() {
               <div className="bg-gray-50 rounded-lg p-4">
                 <p className="text-xs font-semibold text-gray-500 uppercase">meta.lastUpdated</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">100%</p>
-                <p className="text-xs text-gray-600 mt-1">of practitioners carry the same 2026-04-09 release timestamp. There is no per-provider attestation date.</p>
+                <p className="text-xs text-gray-600 mt-1">of practitioners carry the same 2026-05-08 release timestamp. There is no per-provider attestation date.</p>
               </div>
               <div className="bg-gray-50 rounded-lg p-4">
                 <p className="text-xs font-semibold text-gray-500 uppercase">qualification.period</p>
@@ -425,7 +425,7 @@ export default function InsightsPage() {
               <code className="text-xs bg-gray-100 px-1 py-0.5 rounded mx-1">VerificationResult</code> with
               <code className="text-xs bg-gray-100 px-1 py-0.5 rounded mx-1">attestation-who</code> and
               <code className="text-xs bg-gray-100 px-1 py-0.5 rounded mx-1">primarysource-who</code> extensions, but
-              these are aspirational — no one is populating them in the 2026-04-09 release.
+              these are aspirational — no one is populating them in the 2026-05-08 release.
             </p>
             <p className="text-sm text-gray-600">
               A CAQH-derived feed could theoretically enter NPD indirectly via the payer submission channel: a payer
@@ -444,7 +444,7 @@ export default function InsightsPage() {
         <div className="card mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-3">Sources</h2>
           <ul className="text-sm space-y-1">
-            <li><a className="text-primary-600 hover:underline" href="https://directory.cms.gov/" target="_blank" rel="noreferrer">CMS NPD Public Use Files (2026-04-09 release)</a></li>
+            <li><a className="text-primary-600 hover:underline" href="https://directory.cms.gov/" target="_blank" rel="noreferrer">CMS NPD Public Use Files (2026-05-08 release)</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://github.com/ftrotter-gov/HTE_data_release_specifications" target="_blank" rel="noreferrer">HTE Data Release Specifications (GitHub)</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://build.fhir.org/ig/HL7/fhir-us-ndh/" target="_blank" rel="noreferrer">NDH FHIR IG v2.0.0</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://www.upmc.com/about/facts/numbers" target="_blank" rel="noreferrer">UPMC Facts & Figures</a></li>

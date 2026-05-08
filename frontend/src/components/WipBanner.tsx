@@ -20,7 +20,7 @@ export default function WipBanner() {
         <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
         <p className="text-xs sm:text-sm text-amber-900 flex-1">
           <strong>Work in progress.</strong> AINPI is an experimental exploration of the CMS National Provider Directory
-          (2026-04-09 release). Data may be incomplete, stale, or incorrect — numbers should be independently verified
+          (2026-05-08 release). Data may be incomplete, stale, or incorrect — numbers should be independently verified
           before any business or clinical decision.{' '}
           <a href="/insights" className="underline font-medium hover:text-amber-700">See provenance analysis →</a>
         </p>

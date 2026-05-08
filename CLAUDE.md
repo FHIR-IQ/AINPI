@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-AINPI is an experimental exploration of the CMS National Provider Directory (NPD) public use files (2026-04-09 release). It ingests the 27.2M-record FHIR R4 dataset from directory.cms.gov into Google BigQuery, serves interactive exploration via a Next.js 14 app on Vercel, and backs the app with Supabase Postgres for session-scoped state.
+AINPI is an experimental exploration of the CMS National Provider Directory (NPD) public use files (2026-05-08 release; April 2026-04-09 also archived). It ingests the 21.7M-record FHIR R4 dataset from directory.cms.gov into Google BigQuery, serves interactive exploration via a Next.js 14 app on Vercel, and backs the app with Supabase Postgres for session-scoped state.
 
 Live: <https://ainpi.vercel.app>
 
@@ -160,7 +160,7 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `oig-leie-exclusions` → H24 (ingest: `analysis/ingest_oig_leie.py`, BQ: `analysis/h24_oig_exclusions.py`) — joins OIG LEIE monthly file to NDH practitioner NPIs
 - State-scoped slices → `analysis/state_findings.py <state>` writes `frontend/public/api/v1/states/<state>.json`
 - `sam-exclusions` → H25 (ingest: `analysis/ingest_sam_exclusions.py`, BQ: `analysis/h25_sam_exclusions.py`) — joins SAM.gov Public Extract V2 to NDH practitioner NPIs. Independent from LEIE: HHS slice overlaps, OPM slice is net-new. Ingest defaults to `sample-data/SAM_Exclusions_Public_Extract_V2_*.CSV`; API path requires `SAM_GOV_API_KEY` from `analysis/.env.example`.
-- `pii-exposure-ndh` → H27 (BQ: `analysis/h27_pii_exposure.py`) — independently verifies the 2026-04-30 Washington Post finding that the 2026-04-09 NDH bulk export contains provider SSNs. Scans `cms_npd.practitioner` + `cms_npd.organization` for `\d{3}-\d{2}-\d{4}` in `TO_JSON_STRING(resource)`, classifies hits by JSON location (`qualification[].identifier[].value` vs `name[].given[]`), filters intl-phone false positives. Privacy posture: publishes counts/locations/NPIs/state breakdown only; SSN values themselves are NOT republished in finding output despite being in the public NDH bulk file. As of 2026-05-02: 46 confirmed Practitioner exposures (42 in qualification slots, 4 in given-name slots) across 17 states (IL leads with 18). Undashed 9-digit SSNs are out of scope (collide with EINs / account IDs / claim IDs).
+- `pii-exposure-ndh` → H27 (BQ: `analysis/h27_pii_exposure.py`) — independently verifies the 2026-04-30 Washington Post finding that the NDH bulk export contains provider SSNs. Scans `cms_npd.practitioner` + `cms_npd.organization` for `\d{3}-\d{2}-\d{4}` in `TO_JSON_STRING(resource)`, classifies hits by JSON location (`qualification[].identifier[].value` vs `name[].given[]`), filters intl-phone false positives. Privacy posture: publishes counts/locations/NPIs/state breakdown only; SSN values themselves are NOT republished in finding output despite being in the public NDH bulk file. April 2026-04-09: 46 confirmed exposures across 17 states. May 2026-05-08: 41 confirmed (CMS partially scrubbed but did not eliminate); IL still leads with 13. Undashed 9-digit SSNs are out of scope (collide with EINs / account IDs / claim IDs).
 - `mco-exposure-va` → H26 (live FHIR: `analysis/h26_mco_exposure_va.py`) — joins the VA federally-excluded cohort (125 NPIs) to 4 publicly-queryable payer FHIR endpoints: Humana (`?identifier=`), Cigna (`?family=&given=` + post-filter Bundle by NPI in `identifier[]` since Cigna rejects identifier search), UnitedHealthcare via Optum FLEX `https://flex.optum.com/fhirpublic/R4` (covers UHC commercial + UHC Community Plan + OptumRx), and Molina via Azure APIM gateway `https://api.interop.molinahealthcare.com/providerdirectory` (Sapphire360 backend, no auth despite registration-gated dev portal). 2 of 6 VA Medicaid MCOs (UHC Community Plan + Molina) are wired directly. Stage B fast-follow: Anthem HealthKeepers Plus (public `cms_mandate/mcd/` endpoint exists but returns 500s; Anthem only supports family/given/name search), Aetna BH of VA (OAuth at developerportal.aetna.com), Sentara, Virginia Premier. The script shells out to `curl` instead of `urllib` because Akamai-fronted endpoints (Humana) WAF-block Python's TLS fingerprint.
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).
@@ -188,20 +188,20 @@ JOIN organization o ON pr._org_id = CONCAT('Organization/', o._id)
 
 ### Known data quality baseline
 
-Measured on the 2026-04-09 release after ingestion + dedup:
+Measured on the 2026-05-08 release after ingestion via `analysis/fast_ingest_ndh.py` (bq load):
 
 ```text
-Resource                      Expected       Actual      Delta   Completeness
-practitioner                 7,441,212    7,441,213         +1    100.000%
-organization                 3,605,261    3,603,262     −1,999     99.945%
-location                     3,494,239    3,494,239          0    100.000%
-endpoint                     5,043,524    5,043,524          0    100.000%
-practitioner_role            7,180,732    7,178,732     −2,000     99.972%
-organization_affiliation       439,599      439,599          0    100.000%
-TOTAL                       27,204,567   27,200,569     −3,998     99.985%
+Resource                       April-09     May-08         Δ
+practitioner                  7,441,213   7,441,211       flat
+organization                  3,603,262   3,414,375    −5.2%
+location                      3,494,239   1,362,869    −61%
+endpoint                      5,043,524   1,360,585    −73%
+practitioner_role             7,178,732   7,028,001    −2.1%
+organization_affiliation        439,599   1,086,694    +147%
+TOTAL                        27,200,569  21,693,735    −20%
 ```
 
-The ~4k delta is legitimate ingestion errors (malformed records, size limits), not duplicates. Dedup has already been applied to `practitioner` (removed 4.6M dups) and `organization` (383k dups) from retry-during-streaming.
+Significant compositional shift in the May release: Endpoint and Location dropped sharply (CMS appears to have deduped multi-address rows), while OrganizationAffiliation more than doubled. Two source-side schema changes broke ingestion until the extractor was patched: NPI identifier system URL changed from `http://hl7.org/fhir/sid/us-npi` to `http://terminology.hl7.org/NamingSystem/npi`, and `PractitionerRole.specialty` codes shifted from CMS Medicare format (`14-50`) to NUCC taxonomy codes (`207R00000X`).
 
 ## Supabase Prisma Schema (app database)
 
@@ -290,7 +290,7 @@ Practical consequences:
 
 ## Domain Context
 
-- **NPD** (CMS National Provider Directory): 2026-04-09 public use release, 6 FHIR R4 resource types: Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint. Distributed as NDJSON compressed with zstd from directory.cms.gov
+- **NPD** (CMS National Provider Directory): 2026-05-08 public use release (April 2026-04-09 also archived locally), 6 FHIR R4 resource types: Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint. Distributed as NDJSON compressed with zstd from directory.cms.gov
 - **NDH IG** (National Directory of Healthcare, HL7): FHIR implementation guide that NPD adheres to — <https://build.fhir.org/ig/HL7/fhir-us-ndh/>
 - **NPPES**: National Plan and Provider Enumeration System — upstream source of ~90% of Practitioner/Organization fields. Self-attested, no enforcement.
 - **PECOS**: Medicare enrollment; enriches NPPES with Medicare-enrolled provider data

@@ -257,11 +257,11 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H27'],
     title: 'Social Security Numbers exposed in the NDH bulk export',
     summary:
-      'Independently verifies the 2026-04-30 Washington Post finding that the 2026-04-09 CMS National Provider Directory bulk export contains provider Social Security Numbers, leaked through "incorrect entries of provider or provider-representative-supplied information in the wrong places" (CMS). AINPI scans the entire FHIR JSON of every Practitioner and Organization resource for the dashed SSN format and classifies hits by JSON location.',
+      'Independently verifies the 2026-04-30 Washington Post finding that the 2026-05-08 CMS National Provider Directory bulk export contains provider Social Security Numbers, leaked through "incorrect entries of provider or provider-representative-supplied information in the wrong places" (CMS). AINPI scans the entire FHIR JSON of every Practitioner and Organization resource for the dashed SSN format and classifies hits by JSON location.',
     nullHypothesis:
       'Zero Practitioner or Organization resources in the NDH bulk export contain a Social Security Number anywhere in their FHIR JSON.',
     denominator:
-      '7,441,213 Practitioner resources + 3,603,262 Organization resources in the 2026-04-09 NDH bulk export.',
+      '7,441,211 Practitioner resources + 3,414,375 Organization resources in the 2026-05-08 NDH bulk export.',
     dataSource:
       'BigQuery scan of `cms_npd.practitioner` and `cms_npd.organization` for the regex `\\d{3}-\\d{2}-\\d{4}` in `TO_JSON_STRING(resource)`, with classification by JSON location (`qualification[].identifier[].value` vs `name[].given[]` vs `name[].family`) and false-positive guard against international phone formats (`\\d{2}-\\d{3}-\\d{2}-\\d{4}`). Source: AINPI replication of the public Washington Post reporting (2026-04-30).',
     status: 'published',

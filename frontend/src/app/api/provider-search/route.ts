@@ -48,7 +48,7 @@ const SOURCES: SourceMeta[] = [
     id: 'ndh',
     name: 'CMS NDH (AINPI BigQuery)',
     category: 'directory',
-    coverage: 'CMS National Provider Directory bulk export, 2026-04-09',
+    coverage: 'CMS National Provider Directory bulk export, 2026-05-08',
     npiSearchable: true,
     nameSearchable: true,
   },

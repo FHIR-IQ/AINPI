@@ -227,7 +227,7 @@ export default function NpdSearchPage() {
             Check any NPI against the NPD.
           </h1>
           <p className="text-gray-300 mb-8 max-w-xl mx-auto">
-            27.2M FHIR R4 records from the 2026-04-09 bulk public-use release.
+            21.7M FHIR R4 records from the 2026-05-08 bulk public-use release.
             Six pre-registered findings, reproducible from open source.
           </p>
           <form onSubmit={handleNpiHero} className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">

@@ -37,7 +37,7 @@ export const REPORTS: ReportOption[] = [
     version: 'state-of-ndh-v1.0.0',
     title: 'State of the National Provider Directory (v1.0)',
     description:
-      'The full white paper — pre-registered findings against the 2026-04-09 CMS NPD release. Printable.',
+      'The full white paper — pre-registered findings against the 2026-05-08 CMS NPD release. Printable.',
     format: 'pdf',
     url: '/downloads/ainpi-state-of-ndh-v1.0.0.pdf',
     length: '~30 pages',

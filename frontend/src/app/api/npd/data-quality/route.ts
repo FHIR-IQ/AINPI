@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const view = url.searchParams.get('view') || 'summary';
-    const releaseDate = url.searchParams.get('release') || '2026-04-09';
+    const releaseDate = url.searchParams.get('release') || '2026-05-08';
 
     switch (view) {
       case 'summary': {

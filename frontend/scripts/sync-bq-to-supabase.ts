@@ -14,7 +14,7 @@ import { PrismaClient } from '@prisma/client';
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
-const RELEASE_DATE = process.env.NPD_RELEASE_DATE || '2026-04-09';
+const RELEASE_DATE = process.env.NPD_RELEASE_DATE || '2026-05-08';
 
 const bigquery = new BigQuery({ projectId: PROJECT_ID });
 const prisma = new PrismaClient();
