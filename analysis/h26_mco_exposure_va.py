@@ -28,7 +28,7 @@ import urllib.request
 from datetime import datetime, timezone
 from typing import Iterable, Literal
 
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 METHODOLOGY_VERSION = "0.5.0"
 USER_AGENT = (
     "AINPI-DirectoryQualityBot/1.0 "

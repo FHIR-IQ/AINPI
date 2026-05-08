@@ -23,7 +23,7 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-04-09"
+RELEASE_DATE = "2026-05-08"
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 PILOT_N = 300
 

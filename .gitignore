@@ -82,7 +82,8 @@ logs/
 
 # Environment
 .env
-.env.local
+.env.*
+!.env.example
 
 # Local agent / skill tooling (not part of application code)
 .agents/

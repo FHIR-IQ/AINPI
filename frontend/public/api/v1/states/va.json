@@ -2,14 +2,14 @@
   "state": "VA",
   "state_name": "Virginia",
   "status": "published",
-  "release_date": "2026-04-09",
-  "generated_at": "2026-05-01T23:03:34+00:00",
+  "release_date": "2026-05-08",
+  "generated_at": "2026-05-08T20:58:48+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "39d0590",
+  "commit_sha": "4bee6b1",
   "denominators": {
-    "practitioner": 141660,
-    "organization": 83163,
-    "location": 84640
+    "practitioner": 130127,
+    "organization": 67291,
+    "location": 34157
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 140794,
-      "state_denominator": 141660,
-      "state_pct": 99.3887,
-      "national_pct": 85.7923,
-      "state_headline": "140,794 of 141,660 VA practitioner NPIs (99.3887%) match NPPES; 4,657 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 129470,
+      "state_denominator": 130127,
+      "state_pct": 99.4951,
+      "national_pct": null,
+      "state_headline": "129,470 of 130,127 VA practitioner NPIs (99.4951%) match NPPES; 4,090 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 35348,
-      "state_denominator": 83163,
-      "state_pct": 42.5045,
-      "national_pct": 13.3485,
-      "state_headline": "VA has 83,163 Organization resources covering 47,815 unique NPIs \u2014 35,348 excess resources (42.5045%) appear duplicated.",
+      "state_numerator": 27458,
+      "state_denominator": 67291,
+      "state_pct": 40.8049,
+      "national_pct": 13.5464,
+      "state_headline": "VA has 67,291 Organization resources covering 39,833 unique NPIs \u2014 27,458 excess resources (40.8049%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 309463,
-      "state_denominator": 309463,
-      "state_pct": 100.0,
-      "national_pct": 99.9996,
-      "state_headline": "309,463 of 309,463 VA-resident resources carry a meta.lastUpdated on the 2026-04-09 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 0,
+      "state_denominator": 231575,
+      "state_pct": 0.0,
+      "national_pct": 0.0,
+      "state_headline": "0 of 231,575 VA-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -110,40 +110,40 @@
   ],
   "verify_samples": [
     {
-      "npi": "1710831599",
-      "display_name": "YATCHAK, SYDNEY",
+      "npi": "1992651053",
+      "display_name": "COLLIVER, SAMANTHA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710831599"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992651053"
     },
     {
-      "npi": "1679425037",
-      "display_name": "REDD, MARTHA",
+      "npi": "1497601843",
+      "display_name": "MAHONEY, KATHRYN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1679425037"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1497601843"
     },
     {
-      "npi": "1033065156",
-      "display_name": "BANKSWYRICK, AVIS",
+      "npi": "1255289013",
+      "display_name": "LIBICKI, ARIELLA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033065156"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1255289013"
     },
     {
-      "npi": "1104771971",
-      "display_name": "JACKSON, SANDRA",
+      "npi": "1841147360",
+      "display_name": "WOODY, KATIE",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104771971"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841147360"
     },
     {
-      "npi": "1124975610",
-      "display_name": "LEWIS, DIAMOND",
+      "npi": "1851244834",
+      "display_name": "ADDAIR, ROSLY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124975610"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1851244834"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-04-09 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

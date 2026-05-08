@@ -3,51 +3,51 @@
   "state_name": "Virginia",
   "medicaid_program": "Cardinal Care",
   "agency": "Department of Medical Assistance Services (DMAS)",
-  "release_date": "2026-04-09",
-  "generated_at": "2026-05-02T01:46:29+00:00",
+  "release_date": "2026-05-08",
+  "generated_at": "2026-05-08T21:12:22+00:00",
   "methodology_version": "0.2.0",
   "denominators": {
-    "practitioner": 141660,
-    "organization": 83163,
-    "location": 84640
+    "practitioner": 130127,
+    "organization": 67291,
+    "location": 34157
   },
   "findings": {
     "npi-taxonomy-correctness": {
-      "headline": "140,794 of 141,660 VA practitioner NPIs (99.3887%) match NPPES; 4,657 are flagged deactivated in NPPES while still active in the federal NDH.",
-      "state_pct": 99.3887,
-      "state_numerator": 140794,
-      "state_denominator": 141660
+      "headline": "129,470 of 130,127 VA practitioner NPIs (99.4951%) match NPPES; 4,090 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_pct": 99.4951,
+      "state_numerator": 129470,
+      "state_denominator": 130127
     },
     "duplicate-detection": {
-      "headline": "VA has 83,163 Organization resources covering 47,815 unique NPIs \u2014 35,348 excess resources (42.5045%) appear duplicated.",
-      "state_pct": 42.5045,
-      "state_numerator": 35348,
-      "state_denominator": 83163
+      "headline": "VA has 67,291 Organization resources covering 39,833 unique NPIs \u2014 27,458 excess resources (40.8049%) appear duplicated.",
+      "state_pct": 40.8049,
+      "state_numerator": 27458,
+      "state_denominator": 67291
     },
     "temporal-staleness": {
-      "headline": "309,463 of 309,463 VA-resident resources carry a meta.lastUpdated on the 2026-04-09 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
-      "state_pct": 100.0,
-      "state_numerator": 309463,
-      "state_denominator": 309463
+      "headline": "0 of 231,575 VA-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_pct": 0.0,
+      "state_numerator": 0,
+      "state_denominator": 231575
     }
   },
   "federally_excluded_cohort": {
-    "total_critical": 125,
+    "total_critical": 131,
     "reason_breakdown": [
       {
         "reasons": [
           "oig_excluded",
           "sam_excluded"
         ],
-        "count": 56,
-        "pct_of_critical": 44.8
+        "count": 64,
+        "pct_of_critical": 48.85
       },
       {
         "reasons": [
           "oig_excluded"
         ],
-        "count": 53,
-        "pct_of_critical": 42.4
+        "count": 50,
+        "pct_of_critical": 38.17
       },
       {
         "reasons": [
@@ -55,16 +55,16 @@
           "oig_excluded",
           "sam_excluded"
         ],
-        "count": 13,
-        "pct_of_critical": 10.4
+        "count": 14,
+        "pct_of_critical": 10.69
       },
       {
         "reasons": [
           "nppes_deactivated",
           "oig_excluded"
         ],
-        "count": 2,
-        "pct_of_critical": 1.6
+        "count": 1,
+        "pct_of_critical": 0.76
       },
       {
         "reasons": [
@@ -72,7 +72,14 @@
           "sam_excluded"
         ],
         "count": 1,
-        "pct_of_critical": 0.8
+        "pct_of_critical": 0.76
+      },
+      {
+        "reasons": [
+          "sam_excluded"
+        ],
+        "count": 1,
+        "pct_of_critical": 0.76
       }
     ],
     "top_samples": [
@@ -129,19 +136,6 @@
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1184683120"
       },
       {
-        "npi": "1194927277",
-        "name": "HONEYCUTT, SHARON",
-        "score": 3.8,
-        "reason_codes": [
-          "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
-        ],
-        "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-        "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1194927277"
-      },
-      {
         "npi": "1265531388",
         "name": "PUJOL, JACKIE",
         "score": 3.8,
@@ -194,6 +188,19 @@
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558315341"
       },
       {
+        "npi": "1558356907",
+        "name": "RODRIGUEZ CAYRO, N",
+        "score": 3.8,
+        "reason_codes": [
+          "oig_excluded",
+          "sam_excluded",
+          "nppes_deactivated"
+        ],
+        "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+        "sam_lookup_url": "https://sam.gov/search/?index=ex",
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558356907"
+      },
+      {
         "npi": "1619056124",
         "name": "MORGAN, DAVID",
         "score": 3.8,
@@ -210,32 +217,32 @@
     "all_npis_csv": "/api/v1/states/va-cohort-critical.csv"
   },
   "h26_payer_directory_exposure": {
-    "headline": "4 of 125 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 4, UnitedHealthcare 0, Molina 0.",
-    "numerator": 4,
-    "denominator": 125,
+    "headline": "2 of 131 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 2, UnitedHealthcare 0, Molina 0.",
+    "numerator": 2,
+    "denominator": 131,
     "per_payer": [
       {
         "name": "Humana",
         "matched": 0,
-        "queried": 125,
+        "queried": 131,
         "errors": 0
       },
       {
         "name": "Cigna",
-        "matched": 4,
-        "queried": 125,
+        "matched": 2,
+        "queried": 131,
         "errors": 0
       },
       {
         "name": "UnitedHealthcare",
         "matched": 0,
-        "queried": 125,
+        "queried": 131,
         "errors": 0
       },
       {
         "name": "Molina",
         "matched": 0,
-        "queried": 125,
+        "queried": 131,
         "errors": 0
       }
     ],
@@ -249,28 +256,12 @@
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710496161"
       },
       {
-        "npi": "1750462008",
-        "name": "JACOBSEN, DANIEL",
-        "matched_in": [
-          "Cigna"
-        ],
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1750462008"
-      },
-      {
         "npi": "1801070313",
         "name": "BREWER, STEVEN",
         "matched_in": [
           "Cigna"
         ],
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801070313"
-      },
-      {
-        "npi": "1942523451",
-        "name": "WHATMOUGH, RACHELLE",
-        "matched_in": [
-          "Cigna"
-        ],
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942523451"
       }
     ]
   },

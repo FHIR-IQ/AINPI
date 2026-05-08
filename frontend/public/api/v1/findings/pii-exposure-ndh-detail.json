@@ -1,43 +1,27 @@
 {
-  "queried_at": "2026-05-02T19:28:12+00:00",
-  "denominator_practitioners": 7441213,
+  "queried_at": "2026-05-08T21:14:37+00:00",
+  "denominator_practitioners": 7441211,
   "totals": {
-    "flagged_pattern_match": 57,
-    "confirmed_ssn_exposures": 46,
-    "in_qualification_identifier_value": 42,
-    "in_given_name": 4,
+    "flagged_pattern_match": 50,
+    "confirmed_ssn_exposures": 41,
+    "in_qualification_identifier_value": 41,
+    "in_given_name": 0,
     "in_family_name": 0,
     "intl_phone_false_positives": 5,
-    "organization_pattern_matches": 2
+    "organization_pattern_matches": 0
   },
   "state_breakdown": [
     {
       "state": "IL",
-      "count": 18
+      "count": 13
+    },
+    {
+      "state": "(unknown)",
+      "count": 10
     },
     {
       "state": "OH",
       "count": 6
-    },
-    {
-      "state": "(unknown)",
-      "count": 4
-    },
-    {
-      "state": "NJ",
-      "count": 2
-    },
-    {
-      "state": "TX",
-      "count": 2
-    },
-    {
-      "state": "WA",
-      "count": 2
-    },
-    {
-      "state": "AP",
-      "count": 1
     },
     {
       "state": "AZ",
@@ -48,11 +32,7 @@
       "count": 1
     },
     {
-      "state": "DC",
-      "count": 1
-    },
-    {
-      "state": "GA",
+      "state": "CO",
       "count": 1
     },
     {
@@ -60,11 +40,11 @@
       "count": 1
     },
     {
-      "state": "NC",
+      "state": "MN",
       "count": 1
     },
     {
-      "state": "ND",
+      "state": "NC",
       "count": 1
     },
     {
@@ -72,11 +52,19 @@
       "count": 1
     },
     {
+      "state": "OR",
+      "count": 1
+    },
+    {
       "state": "PA",
       "count": 1
     },
     {
-      "state": "TN",
+      "state": "PR",
+      "count": 1
+    },
+    {
+      "state": "WA",
       "count": 1
     },
     {
@@ -86,18 +74,25 @@
   ],
   "samples": [
     {
-      "npi": "1033205281",
-      "name": "RIDENOUR, KAREN",
-      "state": "WA",
+      "npi": "1851328371",
+      "name": "SHIM, KYUNGRAN",
+      "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033205281"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1851328371"
     },
     {
-      "npi": "1417109950",
-      "name": "TURNER, GEOFFREY",
-      "state": "OH",
+      "npi": "1306963327",
+      "name": "HUDSON, PATRICIA",
+      "state": "",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417109950"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306963327"
+    },
+    {
+      "npi": "1841702693",
+      "name": "RUMMELHART, PATRICIA",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841702693"
     },
     {
       "npi": "1942589551",
@@ -107,46 +102,11 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942589551"
     },
     {
-      "npi": "1619009883",
-      "name": "KENT, DENNIS",
+      "npi": "1821002098",
+      "name": "MCDUNN, SUSAN",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619009883"
-    },
-    {
-      "npi": "1013126325",
-      "name": "JOHNSON, CYNTHIA",
-      "state": "ND",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1013126325"
-    },
-    {
-      "npi": "1174157341",
-      "name": "SILVA, ALEXA",
-      "state": "GA",
-      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1174157341"
-    },
-    {
-      "npi": "1467155523",
-      "name": "BROOKS, DREW",
-      "state": "TX",
-      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1467155523"
-    },
-    {
-      "npi": "1215655782",
-      "name": "NWIGWE, PRECIOUS",
-      "state": "NJ",
-      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1215655782"
-    },
-    {
-      "npi": "1639811045",
-      "name": "ROBERTSON, ANDREW",
-      "state": "AZ",
-      "exposure_location": "name[].given[] (literal first/middle name slot \u2014 provider entered SSN as a name token)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1639811045"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1821002098"
     }
   ],
   "limitations": [
