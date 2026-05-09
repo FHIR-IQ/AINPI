@@ -145,12 +145,21 @@ def run() -> None:
         })
 
     total_matches = len(pract_matches) + len(org_matches)
+    # Distinct LEIE NPIs that surfaced anywhere in NDH (an excluded individual
+    # may appear as both a Practitioner and an Organization resource — count
+    # the union, not the sum, so the percentage stays in [0, 100]).
+    distinct_leie_npis_in_ndh = len(
+        {r["npi"] for r in pract_matches} | {r["npi"] for r in org_matches}
+    )
+    appearance_rate = 100 * distinct_leie_npis_in_ndh / leie_active_with_npi if leie_active_with_npi else 0
     headline = (
-        f"{total_matches:,} of {leie_active_with_npi:,} actively-excluded LEIE NPIs "
-        f"({100*total_matches/leie_active_with_npi:.2f}%) appear in the {RELEASE_DATE} "
-        f"NDH bulk export — {len(pract_matches):,} as Practitioner resources, "
-        f"{len(org_matches):,} as Organization resources. Each match warrants "
-        f"immediate state Medicaid revalidation under 42 CFR § 455.436."
+        f"{distinct_leie_npis_in_ndh:,} of {leie_active_with_npi:,} actively-excluded LEIE NPIs "
+        f"({appearance_rate:.2f}%) appear in the {RELEASE_DATE} NDH bulk export — "
+        f"{len(pract_matches):,} as Practitioner resources, "
+        f"{len(org_matches):,} as Organization resources "
+        f"({total_matches:,} total NDH appearances; some excluded individuals are listed "
+        f"as both a Practitioner and an Organization). Each match warrants immediate state "
+        f"Medicaid revalidation under 42 CFR § 455.436."
     )
 
     payload = {

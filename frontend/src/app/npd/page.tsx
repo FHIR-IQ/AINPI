@@ -289,6 +289,113 @@ export default function NpdSearchPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-10">
 
+        {/* RELEASE-UPDATE TILE */}
+        <a
+          href="/reports/2026-05-08-update"
+          className="block mb-10 rounded-xl overflow-hidden relative group"
+          style={{ background: '#06080d' }}
+          aria-label="Read the 2026-05-08 release update"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)',
+              backgroundSize: '28px 28px',
+              maskImage:
+                'radial-gradient(ellipse 90% 100% at 50% 50%, #000 40%, transparent 100%)',
+              WebkitMaskImage:
+                'radial-gradient(ellipse 90% 100% at 50% 50%, #000 40%, transparent 100%)',
+            }}
+          />
+          <div
+            aria-hidden
+            className="absolute pointer-events-none"
+            style={{
+              left: '-10%',
+              top: '-30%',
+              width: '60%',
+              height: '160%',
+              background:
+                'radial-gradient(circle, rgba(91,157,255,0.18) 0%, transparent 60%)',
+            }}
+          />
+          <div className="relative grid grid-cols-1 md:grid-cols-[1fr_auto] gap-6 items-center px-6 sm:px-10 py-8 sm:py-10">
+            <div className="text-white">
+              <div
+                className="text-[10px] sm:text-xs uppercase mb-2"
+                style={{
+                  fontFamily:
+                    "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+                  color: '#5b9dff',
+                  letterSpacing: '0.18em',
+                }}
+              >
+                NEW · 2026-05-08 release update
+              </div>
+              <h2
+                className="text-2xl sm:text-4xl font-bold leading-none mb-4"
+                style={{ letterSpacing: '-0.03em' }}
+              >
+                The shape{' '}
+                <span style={{ color: '#5b9dff' }}>changed.</span>
+              </h2>
+              <div
+                className="flex flex-wrap gap-x-6 gap-y-2 mt-3 text-sm sm:text-base tabular-nums"
+                style={{
+                  fontFamily:
+                    "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+                }}
+              >
+                <span>
+                  <span className="opacity-60">Endpoint</span>{' '}
+                  <span style={{ color: '#ff5d6c' }} className="font-semibold">
+                    −73%
+                  </span>
+                </span>
+                <span>
+                  <span className="opacity-60">Location</span>{' '}
+                  <span style={{ color: '#ff5d6c' }} className="font-semibold">
+                    −61%
+                  </span>
+                </span>
+                <span>
+                  <span className="opacity-60">OrgAffil</span>{' '}
+                  <span style={{ color: '#4ade80' }} className="font-semibold">
+                    +147%
+                  </span>
+                </span>
+                <span>
+                  <span className="opacity-60">SSN exposures</span>{' '}
+                  <span className="font-semibold">46 → 41</span>
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col items-start md:items-end gap-3">
+              <span
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md border"
+                style={{
+                  background: 'rgba(91,157,255,0.12)',
+                  color: '#5b9dff',
+                  borderColor: 'rgba(91,157,255,0.4)',
+                  fontFamily:
+                    "'JetBrains Mono', ui-monospace, SFMono-Regular, monospace",
+                  letterSpacing: '0.08em',
+                }}
+              >
+                <svg width="11" height="11" viewBox="0 0 14 14" aria-hidden>
+                  <path d="M3 1.5v11l9-5.5-9-5.5z" fill="currentColor" />
+                </svg>
+                48-SEC VIDEO
+              </span>
+              <span className="text-white/70 text-xs sm:text-sm group-hover:text-white transition-colors">
+                Read the report →
+              </span>
+            </div>
+          </div>
+        </a>
+
         {/* FINDING CARDS */}
         <div className="mb-10">
           <div className="flex items-baseline justify-between mb-4">

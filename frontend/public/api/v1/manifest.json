@@ -1,0 +1,751 @@
+{
+  "service": "AINPI",
+  "tagline": "Audit of the CMS National Provider Directory bulk public-use export.",
+  "site": "https://ainpi.dev",
+  "license": {
+    "code": "Apache-2.0",
+    "data": "Public domain (US federal government work)",
+    "citation": "https://ainpi.dev/api/v1/manifest.json + CITATION.cff"
+  },
+  "release_date": "2026-05-08",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "pending",
+  "generated_at": "2026-05-09T00:40:07+00:00",
+  "endpoints": {
+    "static_contract": [
+      {
+        "path": "/api/v1/stats.json",
+        "summary": "Site-wide counters"
+      },
+      {
+        "path": "/api/v1/manifest.json",
+        "summary": "This document \u2014 discovery index"
+      },
+      {
+        "path": "/api/v1/findings/{slug}.json",
+        "summary": "Per-finding detail (see findings list below)"
+      },
+      {
+        "path": "/api/v1/states/{state}.json",
+        "summary": "State-scoped findings (see states list below)"
+      }
+    ],
+    "live_api": [
+      {
+        "path": "/api/npd/search?npi={npi}",
+        "summary": "NDH-only NPI lookup"
+      },
+      {
+        "path": "/api/npd/search?family={name}&state={XX}",
+        "summary": "NDH name search"
+      },
+      {
+        "path": "/api/provider-search",
+        "summary": "Cross-source merged search (POST)",
+        "method": "POST"
+      },
+      {
+        "path": "/api/npd/data-quality?view={summary|states|specialties|endpoints}",
+        "summary": "Pre-aggregated quality summary"
+      },
+      {
+        "path": "/api/npd/validation",
+        "summary": "Live BigQuery vs source manifest reconciliation"
+      }
+    ]
+  },
+  "ai_agent_tools": {
+    "lookup_npi": {
+      "description": "Look up a provider by 10-digit NPI in the federal NDH bulk export.",
+      "endpoint": "GET /api/npd/search?npi={npi}",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "npi": {
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          }
+        },
+        "required": [
+          "npi"
+        ]
+      }
+    },
+    "cross_source_search": {
+      "description": "Compare a provider record across NDH + NPPES + 4 payer FHIR directories.",
+      "endpoint": "POST /api/provider-search",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "npi": {
+            "type": "string",
+            "pattern": "^\\d{10}$"
+          },
+          "family": {
+            "type": "string"
+          },
+          "given": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          }
+        }
+      }
+    },
+    "get_finding": {
+      "description": "Read a published finding's headline + denominator + chart.",
+      "endpoint": "GET /api/v1/findings/{slug}.json",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug"
+        ]
+      }
+    },
+    "get_state_audit": {
+      "description": "Read a state-scoped audit slice (denominators + state-vs-national table + verify-yourself sample NPIs).",
+      "endpoint": "GET /api/v1/states/{state}.json",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "state": {
+            "type": "string",
+            "pattern": "^[a-z]{2}$"
+          }
+        },
+        "required": [
+          "state"
+        ]
+      }
+    }
+  },
+  "findings": [
+    {
+      "slug": "duplicate-detection",
+      "title": "Duplicate detection",
+      "hypotheses": [
+        "H14",
+        "H15"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/duplicate-detection.json",
+      "html_url": "https://ainpi.dev/findings/duplicate-detection",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "endpoint-liveness",
+      "title": "Endpoint liveness",
+      "hypotheses": [
+        "H1",
+        "H2",
+        "H3",
+        "H4",
+        "H5"
+      ],
+      "status": "published",
+      "release_date": "2026-04-09",
+      "url": "https://ainpi.dev/api/v1/findings/endpoint-liveness.json",
+      "html_url": "https://ainpi.dev/findings/endpoint-liveness",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "endpoint-url-validity",
+      "title": "Endpoint URL validity + machine-readable share",
+      "hypotheses": [
+        "H28"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/endpoint-url-validity.json",
+      "html_url": "https://ainpi.dev/findings/endpoint-url-validity",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "high-risk-cohort",
+      "title": "High-risk provider cohort",
+      "hypotheses": [
+        "H23"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/high-risk-cohort.json",
+      "html_url": "https://ainpi.dev/findings/high-risk-cohort",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "mco-exposure-va-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/mco-exposure-va-detail.json",
+      "html_url": "https://ainpi.dev/findings/mco-exposure-va-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "mco-exposure-va",
+      "title": "VA payer networks containing federally excluded providers (methodology demo)",
+      "hypotheses": [
+        "H26"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/mco-exposure-va.json",
+      "html_url": "https://ainpi.dev/findings/mco-exposure-va",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "network-adequacy-gauge",
+      "title": "Network adequacy gauge",
+      "hypotheses": [
+        "H22"
+      ],
+      "status": "published",
+      "release_date": "2026-04-09",
+      "url": "https://ainpi.dev/api/v1/findings/network-adequacy-gauge.json",
+      "html_url": "https://ainpi.dev/findings/network-adequacy-gauge",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "npi-taxonomy-correctness",
+      "title": "NPI and taxonomy correctness",
+      "hypotheses": [
+        "H9",
+        "H10",
+        "H11",
+        "H12",
+        "H13"
+      ],
+      "status": "in-progress",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/npi-taxonomy-correctness.json",
+      "html_url": "https://ainpi.dev/findings/npi-taxonomy-correctness",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "oig-leie-exclusions-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/oig-leie-exclusions-detail.json",
+      "html_url": "https://ainpi.dev/findings/oig-leie-exclusions-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "oig-leie-exclusions",
+      "title": "OIG LEIE excluded providers in NDH",
+      "hypotheses": [
+        "H24"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/oig-leie-exclusions.json",
+      "html_url": "https://ainpi.dev/findings/oig-leie-exclusions",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pii-exposure-ndh-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/pii-exposure-ndh-detail.json",
+      "html_url": "https://ainpi.dev/findings/pii-exposure-ndh-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pii-exposure-ndh",
+      "title": "Social Security Numbers exposed in the NDH bulk export",
+      "hypotheses": [
+        "H27"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/pii-exposure-ndh.json",
+      "html_url": "https://ainpi.dev/findings/pii-exposure-ndh",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "referential-integrity",
+      "title": "Referential integrity",
+      "hypotheses": [
+        "H6",
+        "H7",
+        "H8"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/referential-integrity.json",
+      "html_url": "https://ainpi.dev/findings/referential-integrity",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "sam-exclusions-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/sam-exclusions-detail.json",
+      "html_url": "https://ainpi.dev/findings/sam-exclusions-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "sam-exclusions",
+      "title": "SAM.gov excluded providers in NDH",
+      "hypotheses": [
+        "H25"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/sam-exclusions.json",
+      "html_url": "https://ainpi.dev/findings/sam-exclusions",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "temporal-staleness",
+      "title": "Temporal staleness",
+      "hypotheses": [
+        "H18"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/temporal-staleness.json",
+      "html_url": "https://ainpi.dev/findings/temporal-staleness",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    }
+  ],
+  "states": [
+    {
+      "state": "AK",
+      "state_name": "Alaska",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ak.json",
+      "html_url": "https://ainpi.dev/states/ak",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "AL",
+      "state_name": "Alabama",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/al.json",
+      "html_url": "https://ainpi.dev/states/al",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "AR",
+      "state_name": "Arkansas",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ar.json",
+      "html_url": "https://ainpi.dev/states/ar",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "AZ",
+      "state_name": "Arizona",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/az.json",
+      "html_url": "https://ainpi.dev/states/az",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "CA",
+      "state_name": "California",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ca.json",
+      "html_url": "https://ainpi.dev/states/ca",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "CO",
+      "state_name": "Colorado",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/co.json",
+      "html_url": "https://ainpi.dev/states/co",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "CT",
+      "state_name": "Connecticut",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ct.json",
+      "html_url": "https://ainpi.dev/states/ct",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "DC",
+      "state_name": "District of Columbia",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/dc.json",
+      "html_url": "https://ainpi.dev/states/dc",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "DE",
+      "state_name": "Delaware",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/de.json",
+      "html_url": "https://ainpi.dev/states/de",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "FL",
+      "state_name": "Florida",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/fl.json",
+      "html_url": "https://ainpi.dev/states/fl",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "GA",
+      "state_name": "Georgia",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ga.json",
+      "html_url": "https://ainpi.dev/states/ga",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "HI",
+      "state_name": "Hawaii",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/hi.json",
+      "html_url": "https://ainpi.dev/states/hi",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "IA",
+      "state_name": "Iowa",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ia.json",
+      "html_url": "https://ainpi.dev/states/ia",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "ID",
+      "state_name": "Idaho",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/id.json",
+      "html_url": "https://ainpi.dev/states/id",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "IL",
+      "state_name": "Illinois",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/il.json",
+      "html_url": "https://ainpi.dev/states/il",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "IN",
+      "state_name": "Indiana",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/in.json",
+      "html_url": "https://ainpi.dev/states/in",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "KS",
+      "state_name": "Kansas",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ks.json",
+      "html_url": "https://ainpi.dev/states/ks",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "KY",
+      "state_name": "Kentucky",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ky.json",
+      "html_url": "https://ainpi.dev/states/ky",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "LA",
+      "state_name": "Louisiana",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/la.json",
+      "html_url": "https://ainpi.dev/states/la",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MA",
+      "state_name": "Massachusetts",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ma.json",
+      "html_url": "https://ainpi.dev/states/ma",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MD",
+      "state_name": "Maryland",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/md.json",
+      "html_url": "https://ainpi.dev/states/md",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "ME",
+      "state_name": "Maine",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/me.json",
+      "html_url": "https://ainpi.dev/states/me",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MI",
+      "state_name": "Michigan",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/mi.json",
+      "html_url": "https://ainpi.dev/states/mi",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MN",
+      "state_name": "Minnesota",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/mn.json",
+      "html_url": "https://ainpi.dev/states/mn",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MO",
+      "state_name": "Missouri",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/mo.json",
+      "html_url": "https://ainpi.dev/states/mo",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MS",
+      "state_name": "Mississippi",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ms.json",
+      "html_url": "https://ainpi.dev/states/ms",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "MT",
+      "state_name": "Montana",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/mt.json",
+      "html_url": "https://ainpi.dev/states/mt",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NC",
+      "state_name": "North Carolina",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/nc.json",
+      "html_url": "https://ainpi.dev/states/nc",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "ND",
+      "state_name": "North Dakota",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/nd.json",
+      "html_url": "https://ainpi.dev/states/nd",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NE",
+      "state_name": "Nebraska",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ne.json",
+      "html_url": "https://ainpi.dev/states/ne",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NH",
+      "state_name": "New Hampshire",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/nh.json",
+      "html_url": "https://ainpi.dev/states/nh",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NJ",
+      "state_name": "New Jersey",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/nj.json",
+      "html_url": "https://ainpi.dev/states/nj",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NM",
+      "state_name": "New Mexico",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/nm.json",
+      "html_url": "https://ainpi.dev/states/nm",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NV",
+      "state_name": "Nevada",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/nv.json",
+      "html_url": "https://ainpi.dev/states/nv",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "NY",
+      "state_name": "New York",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ny.json",
+      "html_url": "https://ainpi.dev/states/ny",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "OH",
+      "state_name": "Ohio",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/oh.json",
+      "html_url": "https://ainpi.dev/states/oh",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "OK",
+      "state_name": "Oklahoma",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ok.json",
+      "html_url": "https://ainpi.dev/states/ok",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "OR",
+      "state_name": "Oregon",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/or.json",
+      "html_url": "https://ainpi.dev/states/or",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "PA",
+      "state_name": "Pennsylvania",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/pa.json",
+      "html_url": "https://ainpi.dev/states/pa",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "RI",
+      "state_name": "Rhode Island",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ri.json",
+      "html_url": "https://ainpi.dev/states/ri",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "SC",
+      "state_name": "South Carolina",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/sc.json",
+      "html_url": "https://ainpi.dev/states/sc",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "SD",
+      "state_name": "South Dakota",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/sd.json",
+      "html_url": "https://ainpi.dev/states/sd",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "TN",
+      "state_name": "Tennessee",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/tn.json",
+      "html_url": "https://ainpi.dev/states/tn",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "TX",
+      "state_name": "Texas",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/tx.json",
+      "html_url": "https://ainpi.dev/states/tx",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "UT",
+      "state_name": "Utah",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/ut.json",
+      "html_url": "https://ainpi.dev/states/ut",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "VA",
+      "state_name": "Virginia",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/va-briefing-summary.json",
+      "html_url": "https://ainpi.dev/states/va-briefing-summary",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "VA",
+      "state_name": "Virginia",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/va.json",
+      "html_url": "https://ainpi.dev/states/va",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "VT",
+      "state_name": "Vermont",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/vt.json",
+      "html_url": "https://ainpi.dev/states/vt",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "WA",
+      "state_name": "Washington",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/wa.json",
+      "html_url": "https://ainpi.dev/states/wa",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "WI",
+      "state_name": "Wisconsin",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/wi.json",
+      "html_url": "https://ainpi.dev/states/wi",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "WV",
+      "state_name": "West Virginia",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/wv.json",
+      "html_url": "https://ainpi.dev/states/wv",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    },
+    {
+      "state": "WY",
+      "state_name": "Wyoming",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/states/wy.json",
+      "html_url": "https://ainpi.dev/states/wy",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
+    }
+  ],
+  "downloads_csv": [
+    {
+      "name": "va-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/va-cohort-critical.csv",
+      "format": "csv"
+    }
+  ]
+}

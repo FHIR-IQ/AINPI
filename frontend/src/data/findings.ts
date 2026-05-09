@@ -41,6 +41,43 @@ export interface Finding {
 
 export const FINDINGS: Finding[] = [
   {
+    slug: 'endpoint-url-validity',
+    hypotheses: ['H28'],
+    title: 'Endpoint URL validity + machine-readable share',
+    summary:
+      'Of the 1.36M Endpoint resources in the NDH bulk export, only 8.4% are FHIR REST URLs an integrator can GET. The other 91.6% are Direct Trust HISP messaging addresses, which solve a different problem entirely. The right denominator for any "find FHIR endpoint by NPI" feature is the FHIR REST subset — not the full Endpoint resource count.',
+    nullHypothesis:
+      '100% of NDH `Endpoint.address` values are well-formed for their declared `connectionType`. There is no surprising shape mismatch between connection-type-by-count and machine-readable share.',
+    denominator:
+      'All `Endpoint` resources in the pinned NDH bulk export.',
+    dataSource:
+      'BigQuery scan of `cms_npd.endpoint`, partitioned by `_connection_type` and validated against `_address` regex by type.',
+    status: 'published',
+    ogTagline: '8.4%. That is the share of NDH Endpoints you can actually GET.',
+    implications: [
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'When sizing a "find this provider\'s FHIR endpoint" product, the right population is 114K hl7-fhir-rest endpoints — not 1.36M total. Direct Trust HISP addresses (provider@hisp.example.com) are clinical-messaging routes, not API URLs; treating them as substitutable will fail at integration time.',
+      },
+      {
+        audience: 'Payer ops teams',
+        takeaway:
+          'CMS-9115-F adequacy reads against the FHIR REST subset only. The 8.4% machine-readable share is your effective denominator for compliance reporting, not the headline 1.36M total Endpoint count.',
+      },
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'Two values share one Endpoint resource shape today. Splitting the published count by `connectionType` (or publishing a top-level "machine-readable endpoints" counter) would make the resource census far less misleading at a glance.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'Reports that compare "endpoint counts across releases" should split by connection type. The 73% drop in raw Endpoint count between April 2026-04-09 and May 2026-05-08 is dominated by Direct Trust dedup; the FHIR REST count is much steadier.',
+      },
+    ],
+  },
+  {
     slug: 'endpoint-liveness',
     hypotheses: ['H1', 'H2', 'H3', 'H4', 'H5'],
     title: 'Endpoint liveness',
