@@ -14,11 +14,14 @@ export type FindingStatus = 'pre-registered' | 'in-progress' | 'published';
 
 export type ImplicationAudience =
   | 'Payer data teams'
+  | 'Payer ops teams'
   | 'Provider data teams'
   | 'Regulators'
   | 'Researchers'
   | 'FHIR implementers'
-  | 'Everyone using NDH';
+  | 'Everyone using NDH'
+  | 'Startups + integrators'
+  | 'CMS publishing the data';
 
 export interface Implication {
   audience: ImplicationAudience;
