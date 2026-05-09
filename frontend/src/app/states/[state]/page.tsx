@@ -219,39 +219,55 @@ export default function StatePage({ params }: { params: { state: string } }) {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
-            {entry.name} program context
-          </h2>
-          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
-            <div>
-              <dt className="text-gray-500">Program</dt>
-              <dd className="text-gray-900">{entry.medicaid_program_name}</dd>
-            </div>
-            <div>
-              <dt className="text-gray-500">State agency</dt>
-              <dd className="text-gray-900">{entry.agency}</dd>
-            </div>
-            <div>
-              <dt className="text-gray-500">Approximate enrollment</dt>
-              <dd className="text-gray-900">{entry.enrollment_approx}</dd>
-            </div>
-            <div>
-              <dt className="text-gray-500">Managed care plans</dt>
-              <dd className="text-gray-900">{entry.mcos.length} plans</dd>
-            </div>
-          </dl>
-          <details className="mt-3 text-sm">
-            <summary className="cursor-pointer text-primary-600 hover:underline">
-              View MCOs
-            </summary>
-            <ul className="mt-2 list-disc list-inside text-gray-700 space-y-0.5">
-              {entry.mcos.map((m) => (
-                <li key={m}>{m}</li>
-              ))}
-            </ul>
-          </details>
-        </section>
+        {entry.medicaid_program_name ? (
+          <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
+            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+              {entry.name} program context
+            </h2>
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
+              <div>
+                <dt className="text-gray-500">Program</dt>
+                <dd className="text-gray-900">{entry.medicaid_program_name}</dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">State agency</dt>
+                <dd className="text-gray-900">{entry.agency}</dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">Approximate enrollment</dt>
+                <dd className="text-gray-900">{entry.enrollment_approx}</dd>
+              </div>
+              <div>
+                <dt className="text-gray-500">Managed care plans</dt>
+                <dd className="text-gray-900">{entry.mcos.length} plans</dd>
+              </div>
+            </dl>
+            <details className="mt-3 text-sm">
+              <summary className="cursor-pointer text-primary-600 hover:underline">
+                View MCOs
+              </summary>
+              <ul className="mt-2 list-disc list-inside text-gray-700 space-y-0.5">
+                {entry.mcos.map((m) => (
+                  <li key={m}>{m}</li>
+                ))}
+              </ul>
+            </details>
+          </section>
+        ) : (
+          <section className="mt-6 bg-amber-50 border border-amber-200 rounded-lg p-5 text-sm text-amber-900">
+            <p className="font-semibold mb-1">{entry.name}: state slice published, program brief pending.</p>
+            <p>
+              The NPD-derived data quality numbers below are computed for {entry.name}.
+              The Medicaid program / agency / MCO context block is populated for the
+              states AINPI has briefed directly (VA, PA, OH today). To request a
+              briefing for {entry.name}, open an issue at{' '}
+              <a className="underline" href="https://github.com/FHIR-IQ/AINPI/issues">
+                github.com/FHIR-IQ/AINPI/issues
+              </a>
+              .
+            </p>
+          </section>
+        )}
 
         <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">

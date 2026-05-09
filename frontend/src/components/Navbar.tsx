@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Sparkles, Search, Database, BarChart3, Lightbulb, FileText, BookOpen, MapPin } from 'lucide-react';
+import { LogOut, User, Sparkles, Search, Database, BarChart3, Lightbulb, FileText, BookOpen, MapPin, Code2 } from 'lucide-react';
 
 export default function Navbar() {
   const router = useRouter();
@@ -77,6 +77,13 @@ export default function Navbar() {
             >
               <Lightbulb className="w-4 h-4 mr-2" />
               Insights
+            </button>
+            <button
+              onClick={() => router.push('/developer')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <Code2 className="w-4 h-4 mr-2" />
+              Developer
             </button>
             <button
               onClick={() => router.push('/provider-search')}

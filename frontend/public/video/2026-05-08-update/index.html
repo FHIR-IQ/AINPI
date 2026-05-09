@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AINPI · 2026-05-08 update video</title>
+<meta name="description" content="48-second viral data video of the 2026-05-08 CMS National Provider Directory release: Endpoint −73%, Location −61%, OrgAffiliation +147%. SSN exposures 46 → 41." />
+<meta property="og:type" content="video.other" />
+<meta property="og:title" content="AINPI · 2026-05-08 release update video" />
+<meta property="og:description" content="The shape changed. Endpoint −73%, Location −61%, OrgAffiliation +147%. CMS partially scrubbed SSN exposures: 46 → 41." />
+<meta property="og:url" content="https://ainpi.dev/video/2026-05-08-update/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AINPI · 2026-05-08 update" />
+<meta name="twitter:description" content="The shape of the federal NPD changed. Endpoint −73%, Location −61%, OrgAffiliation +147%. SSN exposures 46 → 41." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --bg: #06080d;
+    --fg: #f6f4ef;
+    --accent: #5b9dff;
+    --loss: #ff5d6c;
+    --gain: #4ade80;
+  }
+  html, body, #root { height: 100%; margin: 0; padding: 0; background: #000; }
+  body { color: var(--fg); font-family: 'Inter Tight', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="animations.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="scenes.jsx"></script>
+
+<script type="text/babel">
+const TWEAKS = /*EDITMODE-BEGIN*/{
+  "format": "1:1",
+  "palette": [
+    "#a78bfa",
+    "#0a0814",
+    "#f472b6",
+    "#34d399"
+  ],
+  "speed": 1,
+  "showCaptions": true,
+  "showFooter": true
+}/*EDITMODE-END*/;
+
+const FORMATS = {
+  "9:16": { w: 1080, h: 1920, label: "Vertical (Reels / Shorts)" },
+  "1:1":  { w: 1200, h: 1200, label: "Square (LinkedIn / X)"     },
+  "16:9": { w: 1920, h: 1080, label: "Landscape (X / YouTube)"   },
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAKS);
+
+  // Stage's initial auto-scale measure can clamp to the 0.05 floor when
+  // it runs before the parent has its dimensions. Kick it on next frames
+  // so the canvas resolves to the right scale on first paint.
+  React.useEffect(() => {
+    const fire = () => window.dispatchEvent(new Event('resize'));
+    requestAnimationFrame(fire);
+    requestAnimationFrame(() => requestAnimationFrame(fire));
+    const id = setTimeout(fire, 100);
+    return () => clearTimeout(id);
+  }, []);
+  const fmt = FORMATS[t.format] || FORMATS["9:16"];
+  const accent = t.palette[0];
+  const bg     = t.palette[1];
+  const loss   = t.palette[2];
+  const gain   = t.palette[3];
+
+  // Apply theme to root CSS vars
+  React.useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--accent', accent);
+    r.style.setProperty('--bg', bg);
+    r.style.setProperty('--loss', loss);
+    r.style.setProperty('--gain', gain);
+  }, [accent, bg, loss, gain]);
+
+  // Speed: scale the duration. Stage doesn't expose a rate, so we re-mount
+  // it on speed change with adjusted duration. 48s baseline.
+  const baseDuration = 48;
+  const duration = baseDuration / t.speed;
+
+  // Hide footer/captions at the CSS level so we don't have to thread props.
+  React.useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--footer-display', t.showFooter ? 'flex' : 'none');
+  }, [t.showFooter]);
+
+  return (
+    <div data-screen-label="AINPI Viral Update" style={{ position: 'absolute', inset: 0 }}>
+      <Stage
+        key={`${t.format}-${t.speed}`}
+        width={fmt.w}
+        height={fmt.h}
+        duration={duration}
+        background={bg}
+        loop={true}
+        autoplay={true}
+        persistKey={`ainpi-vid-${t.format}`}
+      >
+        <ScaledComposition width={fmt.w} height={fmt.h} accent={accent} speed={t.speed} />
+      </Stage>
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Format">
+          <TweakSelect label="Aspect ratio" value={t.format}
+                       options={Object.entries(FORMATS).map(([v, o]) => ({ value: v, label: `${v} · ${o.label}` }))}
+                       onChange={(v) => setTweak('format', v)} />
+        </TweakSection>
+        <TweakSection label="Palette">
+          <TweakColor label="Theme" value={t.palette}
+            options={[
+              ['#5b9dff', '#06080d', '#ff5d6c', '#4ade80'], // electric blue · default
+              ['#fb923c', '#0d0a06', '#ef4444', '#84cc16'], // amber alarm
+              ['#a78bfa', '#0a0814', '#f472b6', '#34d399'], // synth violet
+              ['#22d3ee', '#031318', '#f87171', '#fbbf24'], // cyan terminal
+              ['#facc15', '#0c0a08', '#ef4444', '#22d3ee'], // bloomberg yellow
+              ['#10b981', '#020807', '#ef4444', '#facc15'], // green terminal
+            ]}
+            onChange={(v) => setTweak('palette', v)} />
+        </TweakSection>
+        <TweakSection label="Playback">
+          <TweakSlider label="Speed" value={t.speed} min={0.5} max={2.0} step={0.1} unit="×"
+                       onChange={(v) => setTweak('speed', v)} />
+        </TweakSection>
+        <TweakSection label="Chrome">
+          <TweakToggle label="Show footer rail" value={t.showFooter}
+                       onChange={(v) => setTweak('showFooter', v)} />
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+// Inner composition. We pass speed only to scale Sprite end times in case
+// we eventually want non-uniform speedup; for now we just rely on duration.
+function ScaledComposition({ width, height, accent, speed }) {
+  // Recompute scene boundaries proportional to speed-adjusted duration.
+  // Base totals 48s; sprite starts/ends in scenes.jsx are baked in seconds,
+  // so we scale them when speed != 1 by wrapping the whole thing in a
+  // time-warp via a custom TimelineContext override.
+  //
+  // Easiest: when speed != 1, render a subprovider that maps the outer
+  // time onto the original 0..48 timeline so VideoComposition stays as-is.
+  const outer = useTimeline();
+  const baseDuration = 48;
+  const scaledTime = outer.duration > 0
+    ? (outer.time / outer.duration) * baseDuration
+    : 0;
+
+  const ctx = React.useMemo(() => ({
+    ...outer, time: scaledTime, duration: baseDuration,
+  }), [scaledTime]);
+
+  return (
+    <TimelineContext.Provider value={ctx}>
+      <VideoComposition width={width} height={height} accent={accent} />
+    </TimelineContext.Provider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

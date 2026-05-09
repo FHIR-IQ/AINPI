@@ -75,11 +75,58 @@ export const SEED_STATES: StateEntry[] = [
   },
 ];
 
+/**
+ * Every US state + DC where AINPI publishes a state-scoped JSON slice.
+ * Code → display name only. SEED_STATES is the richer "we have a Medicaid
+ * program brief for this state" subset; ALL_STATE_NAMES drives static
+ * param generation and friendly-name lookup for the rest.
+ */
+export const ALL_STATE_NAMES: Record<string, string> = {
+  AL: 'Alabama', AK: 'Alaska', AZ: 'Arizona', AR: 'Arkansas',
+  CA: 'California', CO: 'Colorado', CT: 'Connecticut', DE: 'Delaware',
+  DC: 'District of Columbia', FL: 'Florida', GA: 'Georgia',
+  HI: 'Hawaii', ID: 'Idaho', IL: 'Illinois', IN: 'Indiana',
+  IA: 'Iowa', KS: 'Kansas', KY: 'Kentucky', LA: 'Louisiana',
+  ME: 'Maine', MD: 'Maryland', MA: 'Massachusetts', MI: 'Michigan',
+  MN: 'Minnesota', MS: 'Mississippi', MO: 'Missouri', MT: 'Montana',
+  NE: 'Nebraska', NV: 'Nevada', NH: 'New Hampshire', NJ: 'New Jersey',
+  NM: 'New Mexico', NY: 'New York', NC: 'North Carolina',
+  ND: 'North Dakota', OH: 'Ohio', OK: 'Oklahoma', OR: 'Oregon',
+  PA: 'Pennsylvania', RI: 'Rhode Island', SC: 'South Carolina',
+  SD: 'South Dakota', TN: 'Tennessee', TX: 'Texas', UT: 'Utah',
+  VT: 'Vermont', VA: 'Virginia', WA: 'Washington',
+  WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming',
+};
+
 export function findStateByCode(code: string): StateEntry | undefined {
   const upper = code.toUpperCase();
-  return SEED_STATES.find((s) => s.code === upper);
+  const seeded = SEED_STATES.find((s) => s.code === upper);
+  if (seeded) return seeded;
+  const name = ALL_STATE_NAMES[upper];
+  if (!name) return undefined;
+  // Lightweight entry for non-seeded states. Fields we don't have rich data
+  // for fall back to placeholders the state page handles gracefully.
+  return {
+    code: upper,
+    name,
+    medicaid_program_name: '',
+    agency: '',
+    enrollment_approx: '',
+    mcos: [],
+  };
 }
 
+/**
+ * State codes for which a /states/<code> page should be generated.
+ * Returns lowercase codes (matching the JSON file naming).
+ */
 export function allStateCodes(): string[] {
+  return Object.keys(ALL_STATE_NAMES).map((c) => c.toLowerCase());
+}
+
+/**
+ * The richer subset that gets nav-promoted as a state-Medicaid briefing.
+ */
+export function seededStateCodes(): string[] {
   return SEED_STATES.map((s) => s.code.toLowerCase());
 }

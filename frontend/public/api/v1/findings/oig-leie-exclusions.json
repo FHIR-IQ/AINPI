@@ -9,9 +9,10 @@
   "generated_at": "2026-05-08T20:47:49+00:00",
   "methodology_version": "0.3.0",
   "commit_sha": "4bee6b1",
-  "headline": "9,006 of 8,551 actively-excluded LEIE NPIs (105.32%) appear in the 2026-05-08 NDH bulk export \u2014 8,008 as Practitioner resources, 998 as Organization resources. Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
+  "headline": "Of 8,551 actively-excluded LEIE NPIs, the 2026-05-08 NDH bulk export contains 9,006 matching resource appearances \u2014 8,008 as Practitioner resources and 998 as Organization resources (some excluded individuals are listed under both). Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
   "numerator": 9006,
   "denominator": 8551,
+  "denominator_note": "8,551 is the count of distinct active LEIE NPIs; 9,006 is the count of NDH resource appearances (an excluded individual may appear as both a Practitioner and an Organization, so resource appearances can exceed distinct NPIs).",
   "chart": {
     "type": "bar",
     "unit": "count",
