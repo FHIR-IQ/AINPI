@@ -1,0 +1,11 @@
+npi,name,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1619226438,"FUSSELL, LUCAS",VA,714256.94,4549,376,117,2001.24,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1619226438
+1801070313,"BREWER, STEVEN",VA,377566.4,5853,831,2576,101617.18,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1801070313
+1598134173,"VAN AUKEN, JESSICA",VA,106922.54,1258,108,11,242.96,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1598134173
+1114918752,"DIXON, DUANE",VA,76327.23,418,90,241,72947.2,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114918752
+1902856065,"RANDALL, W",NC,37675.99,349,50,195,30095.57,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1902856065
+1992148100,"CLANTON, SAMUEL",VA,26165.9,497,136,15,33.69,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1992148100
+1538229497,"ALLIGHAM, DAVID",VA,18294.24,399,32,116,2392.85,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1538229497
+1659439651,"JENKINS, DAPHNE",VA,4925.51,35,22,0,,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1659439651
+1154483931,"JAWORSKI, MAVIS",MA,673.05,29,21,0,,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1154483931
+1831248731,"MONTILLA, LINO",VA,192.57,11,,,,oig_excluded,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1831248731

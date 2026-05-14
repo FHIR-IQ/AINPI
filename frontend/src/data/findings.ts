@@ -78,18 +78,34 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
-    slug: 'excluded-billing-medicare',
-    hypotheses: ['H30', 'H30a', 'H30b'],
-    title: 'Federally excluded providers still billing Medicare (Part B + Part D)',
+    slug: 'excluded-billing-medicare-partb',
+    hypotheses: ['H30', 'H30a'],
+    title: 'Federally excluded VA-resident NPIs billing Medicare Part B (CY 2023)',
     summary:
-      'LEIE exclusions bind across all federal programs (42 USC § 1320a-7). H30 cross-corroborates H29 by joining the same exclusion cohort against the Medicare Physician & Other Practitioners file (Part B) and the Medicare Part D Prescribers file. Part D adds the prescribing dimension: an excluded prescriber writing reimbursed prescriptions.',
+      'LEIE exclusions bind across all federal programs (42 USC § 1320a-7). H30a joins the 125-NPI VA federally-excluded cohort against the CMS Medicare Physician & Other Practitioners by Provider file (CY 2023, NPI-aggregated). Any match is a direct federal compliance signal regardless of which state Medicaid program also paid them (see H29).',
     nullHypothesis:
-      'Zero currently-LEIE/SAM-excluded NPIs appear in the latest Medicare Physician & Other Practitioners file (CY 2023, H30a) or Medicare Part D Prescribers file (H30b).',
+      'Zero currently-LEIE/SAM-excluded VA-resident NPIs appear as billing providers in the CMS Medicare Physician & Other Practitioners by Provider file for CY 2023.',
     denominator:
-      'Active LEIE rows with a populated NPI ∪ active SAM rows with a real NPI, joined against every NPI in the published Medicare Part B and Part D provider files for the latest available calendar year.',
+      'VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part B by-Provider file.',
     dataSource:
-      'OIG LEIE + SAM × Medicare Physician & Other Practitioners — by Provider and Service + Medicare Part D Prescribers — by Provider (data.cms.gov, annual cadence, NPI-keyed).',
-    status: 'pre-registered',
+      'CMS Medicare Physician & Other Practitioners — by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, ~270 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partb.py`.',
+    status: 'published',
+    ogTagline: '8 of 125 federally-excluded VA NPIs are still billing Medicare Part B.',
+  },
+  {
+    slug: 'excluded-prescribing-medicare-partd',
+    hypotheses: ['H30', 'H30b'],
+    title: 'Federally excluded VA-resident NPIs prescribing Medicare Part D (CY 2023)',
+    summary:
+      'Part D adds the prescribing dimension: an excluded prescriber writing reimbursed prescriptions. H30b joins the same 125-NPI VA cohort against the CMS Medicare Part D Prescribers by Provider file. Opioid prescribing by federally-excluded NPIs is a particularly elevated signal — the 21st Century Cures Act and 2018 SUPPORT Act extended controlled-substance enforcement to specifically cover Medicare/Medicaid prescribers.',
+    nullHypothesis:
+      'Zero currently-LEIE/SAM-excluded VA-resident NPIs appear as prescribers in the CMS Medicare Part D Prescribers by Provider file for CY 2023.',
+    denominator:
+      'VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part D by-Provider file.',
+    dataSource:
+      'CMS Medicare Part D Prescribers — by Provider (MUP_DPR_RY25_P04_V10_DY23_NPI.csv, ~130 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partd.py`.',
+    status: 'published',
+    ogTagline: '10 of 125 federally-excluded VA NPIs are still prescribing Part D drugs.',
   },
   {
     slug: 'deactivated-still-billing',
@@ -124,14 +140,15 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H33'],
     title: 'DMEPOS suppliers on federal exclusion lists',
     summary:
-      'DMEPOS has historically been the highest-fraud category in Medicare. CMS imposed moratoria in multiple states (most recently Florida, March 2026). Cross-checking the active supplier directory against federal exclusion lists is a direct state and federal PI signal.',
+      'DMEPOS has historically been the highest-fraud category in Medicare. CMS imposed enrollment moratoria in multiple states (most recently Florida, March 2026). Cross-checking the active supplier directory against federal exclusion lists is a direct state and federal PI signal. **Result: 0 matches across 63,988 active DMEPOS suppliers** — the federal enrollment gate is working. Worth publishing as the comparison baseline against the H24, H25, H29, H30a, H30b non-zero findings.',
     nullHypothesis:
       'Zero NPIs in the current CMS DMEPOS Supplier Directory appear on the OIG LEIE or SAM.gov active exclusion lists.',
     denominator:
-      'Every NPI in the most recent CMS DMEPOS Supplier Directory release (quarterly cadence), joined against active LEIE + SAM rows with a populated NPI.',
+      'Every NPI in the most recent CMS DMEPOS Supplier Directory release (DY 2023, 63,988 suppliers), joined against the 8,619-NPI active LEIE ∪ SAM exclusion set.',
+    status: 'published',
+    ogTagline: '0 of 63,988 active DMEPOS suppliers are on federal exclusion lists. The enrollment gate works.',
     dataSource:
-      'CMS DMEPOS Supplier Directory (data.cms.gov, quarterly) × `cms_npd.oig_leie` + `cms_npd.sam_exclusions`.',
-    status: 'pre-registered',
+      'CMS DMEPOS Supplier Directory (DY 2023, mup_dme_ry25_p05_v10_dy23_supr.csv) × `cms_npd.oig_leie` + `cms_npd.sam_exclusions`. See `analysis/claims_sources/dmepos.py`.',
   },
   {
     slug: 'pos-deactivated-contradiction',

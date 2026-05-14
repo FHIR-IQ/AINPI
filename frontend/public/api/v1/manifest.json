@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "generated_at": "2026-05-14T21:16:15+00:00",
+  "generated_at": "2026-05-14T21:28:15+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -128,6 +128,28 @@
   },
   "findings": [
     {
+      "slug": "dmepos-excluded-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/dmepos-excluded-detail.json",
+      "html_url": "https://ainpi.dev/findings/dmepos-excluded-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "dmepos-excluded",
+      "title": "DMEPOS suppliers on federal exclusion lists",
+      "hypotheses": [
+        "H33"
+      ],
+      "status": "published",
+      "release_date": "DY 2023 (RY2025 P05)",
+      "url": "https://ainpi.dev/api/v1/findings/dmepos-excluded.json",
+      "html_url": "https://ainpi.dev/findings/dmepos-excluded",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "duplicate-detection",
       "title": "Duplicate detection",
       "hypotheses": [
@@ -169,6 +191,19 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
+      "slug": "excluded-billing-medicare-partb",
+      "title": "Federally excluded VA-resident NPIs billing Medicare Part B (CY 2023)",
+      "hypotheses": [
+        "H30",
+        "H30a"
+      ],
+      "status": "published",
+      "release_date": "CY 2023 (RY2025 P05)",
+      "url": "https://ainpi.dev/api/v1/findings/excluded-billing-medicare-partb.json",
+      "html_url": "https://ainpi.dev/findings/excluded-billing-medicare-partb",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "excluded-paid-by-medicaid-detail",
       "title": null,
       "hypotheses": [],
@@ -188,6 +223,19 @@
       "release_date": "2026-02-09",
       "url": "https://ainpi.dev/api/v1/findings/excluded-paid-by-medicaid.json",
       "html_url": "https://ainpi.dev/findings/excluded-paid-by-medicaid",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "excluded-prescribing-medicare-partd",
+      "title": "Federally excluded VA-resident NPIs prescribing Medicare Part D (CY 2023)",
+      "hypotheses": [
+        "H30",
+        "H30b"
+      ],
+      "status": "published",
+      "release_date": "CY 2023 (RY2025 P04)",
+      "url": "https://ainpi.dev/api/v1/findings/excluded-prescribing-medicare-partd.json",
+      "html_url": "https://ainpi.dev/findings/excluded-prescribing-medicare-partd",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {

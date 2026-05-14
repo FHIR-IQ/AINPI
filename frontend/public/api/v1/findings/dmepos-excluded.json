@@ -1,0 +1,23 @@
+{
+  "slug": "dmepos-excluded",
+  "title": "DMEPOS suppliers on federal exclusion lists",
+  "hypotheses": [
+    "H33"
+  ],
+  "status": "published",
+  "release_date": "DY 2023 (RY2025 P05)",
+  "generated_at": "2026-05-14T21:26:39+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "0d15702",
+  "headline": "0 of 63,988 active DMEPOS suppliers in the CMS Medicare DME, Devices & Supplies by Supplier file (DY 2023) appear on the active OIG LEIE \u222a SAM.gov exclusion list (8,619 excluded NPIs). This is the system working correctly: DMEPOS enrollment screens federally-excluded NPIs at the gate, which is what 42 CFR \u00a7 424.530(a)(2) and CMS DMEPOS Supplier Standard 11 require. Worth publishing as a reference point \u2014 when other federal program directories (NDH, see H24/H25; state Medicaid spending, see H29) show non-zero exposure, the DMEPOS zero is the comparison baseline.",
+  "numerator": 0,
+  "denominator": 63988,
+  "data_source_release": "DY 2023 (RY2025 P05)",
+  "data_source_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-durable-medical-equipment-devices-supplies-by-supplier",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": []
+  },
+  "notes": "This is a national finding \u2014 DMEPOS supplier directory is itself the population, joined against the active LEIE \u222a SAM NPI set (8619 NPIs). Per-state breakdown chart shows the top 10 states by matched supplier count. VA-state slice at /api/v1/states/va/h33-dmepos-excluded-va.csv (0 rows) for DMAS triage. Full national CSV with all 0 matched suppliers at /api/v1/findings/dmepos-excluded-detail.csv."
+}

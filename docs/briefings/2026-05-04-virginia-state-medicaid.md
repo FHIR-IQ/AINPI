@@ -216,11 +216,22 @@ Top 5 matched NPIs by paid amount (full list in the CSV):
 | 1609825553 | BUGARIN, LOPITO | $490,237 | 7,960 | 6,496 | 2018-01 | 2021-03 |
 | 1588611610 | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) |
 
-### DMAS deliverable
+### Phase 1 deliverables — all published 2026-05-14
 
-- **`/api/v1/states/va/h29-excluded-paid.csv`** — one row per matched NPI with directory-side context columns (`top_hcpcs_codes`, `exclusion_source`, `billing_or_servicing`, `first_paid_month`, `last_paid_month`, score) anchoring the paid-amount headline. MMIS-ready. DMAS gets a 5-business-day review courtesy on this file before each refresh — operational courtesy, not a publication gate.
-- **`/api/v1/states/va/h31-deactivated-paid.csv`** — same join shape against NPPES-deactivated providers (~4,090 statewide). Phase 1 module shipping June 2026.
-- **`/api/v1/states/va/h35-nh-ownership-flags.csv`** — nursing-home, hospice, home-health facilities operating in VA whose listed owners appear on federal exclusion lists. Phase 2 module shipping July–August 2026.
+| Finding | Per-state CSV | VA-cohort matches | Headline |
+| --- | --- | ---: | --- |
+| H29 — Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | 28 of 125 | $8.5M paid across state Medicaid programs, T-MSIS 2018–2024 |
+| H30a — Medicare Part B | `/api/v1/states/va/h30a-excluded-billing-partb.csv` | 8 of 125 | Excluded providers still billing Part B in CY 2023 |
+| H30b — Medicare Part D | `/api/v1/states/va/h30b-excluded-prescribing-partd.csv` | 10 of 125 | Excluded prescribers writing Part D scripts in CY 2023; 6 of those wrote opioid claims (1 with 2,576 opioid claims totaling $101K opioid cost) |
+| H33 — DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | 0 of 63,988 nationally | Federal enrollment gate works; null result is the baseline reference for the other findings |
+
+**Top compounding signal:** BREWER, STEVEN (NPI 1801070313) appears in H26 (listed in Cigna's directory today), H29 (paid by Medicaid), H30a (billing Medicare Part B in CY 2023, \$134K), and H30b (prescribing Part D, 2,576 opioid claims at \$101K opioid cost). One NPI flagged in four independent public-data joins is the strongest possible audit signal short of a CMS Preclusion List lookup.
+
+### Coming next
+
+- **`/api/v1/states/va/h31-deactivated-paid.csv`** — Phase 2 module (NPPES-deactivated providers billing Medicaid / Medicare). ~4,090 candidates statewide.
+- **`/api/v1/states/va/h35-nh-ownership-flags.csv`** — Phase 2 module (NH / hospice / HH facilities operating in VA whose listed owners are on federal exclusion lists).
+- **`/api/v1/states/va/h29-excluded-paid.csv`** refresh with per-NPI exclusion-effective dates as the H23 cohort exporter is enhanced.
 
 ### What DMAS gains for the SMD response
 
