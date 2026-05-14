@@ -228,7 +228,7 @@ The H23 cohort export now carries per-NPI `leie_excldate` and `sam_active_date` 
 | **H33** DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | n/a | 0 of 63,988 nationally |
 | **H31** NPPES-deactivated × any billing | `/api/v1/states/va/h31-deactivated-paid.csv` | 3 of 1,495 | (same — H31 was strict-filtered from the start) |
 | **H32** Industry payments (Sunshine Act) | `/api/v1/states/va/h32-excluded-industry-payments-va.csv` | **198 of 8,619 nationally** ($167K) · **2 VA** | 350 of 8,619 ($3.8M PY 2024) · 9 VA |
-| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | n/a | 0 demographic matches |
+| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | n/a | **0 confirmed-NPI / 17 candidate-demographic (VA)** — 0 confirmed-NPI / 1,779 candidate-demographic nationally |
 
 ### What the strict-filter shift means for DMAS
 
@@ -251,9 +251,9 @@ The earlier "28 of 125 paid \$8.5M" (H29 full-window) framing was technically tr
 
 ### Open methodology items
 
-- Cohort exporter enhancement to carry per-NPI `leie_excldate` and `sam_active_date` — lifts H29 from "paid 2018–2024 somewhere" to "paid strictly after exclusion date."
-- Stage B for H35 = NPI cross-walk via PECOS owner-NPI fields (requires PECOS extract; not currently in scope).
-- Phase 3 (H34 POS-deactivated-contradiction, H36 NDH-completeness-gap) still on the 12+ week timeline.
+- Cohort exporter enhancement to carry per-NPI `leie_excldate` and `sam_active_date` — lifts H29 from "paid 2018–2024 somewhere" to "paid strictly after exclusion date." **Shipped 2026-05-14 (methodology #1).**
+- Stage B for H35 = NPI cross-walk via the CMS Medicare Fee-For-Service Public Provider Enrollment File (PPEF). PPEF publishes NPI ↔ PECOS_ASCT_CNTL_ID for 2.47M individual NPIs; the All Owners files publish ASSOCIATE ID - OWNER (same identifier space). **Shipped 2026-05-14 (methodology #2).** Result: 0 confirmed-NPI matches (exclusion forces Medicare revocation, so most excluded NPIs are not in PPEF) + 1,779 candidate-demographic matches via (LAST, FIRST, FACILITY_STATE). Methodology #2 also fixed the v1 structural-null caused by joining on owner STATE, which is 100% empty for individual owners in the source files.
+- Phase 3 (H34 POS-deactivated-contradiction) still blocked on CCN ↔ NPI cross-walk (the CMS POS files are CCN-keyed and do not carry NPI). H36 NDH-completeness-gap **shipped 2026-05-14**: 99.99984% NDH completeness against material Medicare Part B billers (2 of 1.26M individual NPIs missing).
 
 ### What DMAS gains for the SMD response
 
