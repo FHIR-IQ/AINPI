@@ -364,6 +364,37 @@ model Subscriber {
   @@map("subscribers")
 }
 
+// Community survey capturing what payers (and adjacent integrators) currently
+// publish for FHIR HealthcareService resources, what's missing, and what they
+// want standardized. Surfaced at /payer-healthcare-service-survey; admins are
+// alerted on every submission via lib/admin-email.ts. Aggregate-only public
+// results page (per-response identity stays internal).
+model HealthcareServiceSurveyResponse {
+  id                String   @id @default(uuid())
+  email             String?  // optional — anonymous responses allowed
+  name              String?
+  organization      String?
+  roleType          String?  @map("role_type")
+  // JSON arrays so multi-select scales without schema churn.
+  categoriesUsed    Json?    @map("categories_used")     // string[] of HealthcareServiceCategoryVS codes
+  categoriesPain    Json?    @map("categories_pain")     // string[] of codes that cause the most rework
+  mustSupportFields Json?    @map("must_support_fields") // string[] of NDH must-support field names populated today
+  fhirProfile       String?  @map("fhir_profile")        // 'ndh' | 'davinci-plan-net' | 'us-core' | 'custom' | 'none'
+  identifierSystem  String?  @map("identifier_system")   // free text — what URL/OID is used for HealthcareService.identifier
+  publishCadence    String?  @map("publish_cadence")     // 'daily' | 'weekly' | 'monthly' | 'release' | 'unknown'
+  consumerOf        Json?    @map("consumer_of")         // string[] of upstream sources they ingest
+  painPoints        String?  @map("pain_points") @db.Text
+  recommendations   String?  @db.Text
+  wantsFollowUp     Boolean  @default(false) @map("wants_followup")
+  ipAddress         String?  @map("ip_address")
+  userAgent         String?  @map("user_agent") @db.Text
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([roleType])
+  @@map("hcs_survey_responses")
+}
+
 // Email capture gating the downloadable white paper at /download.
 // Captures role/org context so we understand who's using the research.
 model ReportDownload {

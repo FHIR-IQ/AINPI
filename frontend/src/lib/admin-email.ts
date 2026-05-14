@@ -132,6 +132,97 @@ export interface DownloadAlertArgs {
   totalAfter?: number;
 }
 
+export interface SurveyAlertArgs {
+  survey: 'healthcare-service';
+  email: string | null;
+  name: string | null;
+  organization: string | null;
+  roleType: string | null;
+  categoriesUsed: string[];
+  fhirProfile: string | null;
+  painPoints: string | null;
+  recommendations: string | null;
+  wantsFollowUp: boolean;
+  totalAfter?: number;
+}
+
+export async function sendSurveyAlert(args: SurveyAlertArgs): Promise<void> {
+  const {
+    survey,
+    email,
+    name,
+    organization,
+    roleType,
+    categoriesUsed,
+    fhirProfile,
+    painPoints,
+    recommendations,
+    wantsFollowUp,
+    totalAfter,
+  } = args;
+
+  const subject = `[AINPI admin] Survey response (${survey}) · ${organization || email || 'anonymous'}`;
+
+  const text = [
+    `New ${survey} survey response on AINPI.`,
+    ``,
+    `Email:        ${email || '(anonymous)'}`,
+    `Name:         ${name || '(none)'}`,
+    `Organization: ${organization || '(none)'}`,
+    `Role:         ${roleType || '(unspecified)'}`,
+    `FHIR profile: ${fhirProfile || '(unspecified)'}`,
+    `Categories:   ${categoriesUsed.length > 0 ? categoriesUsed.join(', ') : '(none selected)'}`,
+    `Wants follow-up: ${wantsFollowUp ? 'yes' : 'no'}`,
+    totalAfter != null ? `Total responses: ${totalAfter}` : '',
+    ``,
+    `--- Pain points ---`,
+    painPoints || '(none)',
+    ``,
+    `--- Recommendations ---`,
+    recommendations || '(none)',
+  ]
+    .filter(Boolean)
+    .join('\n');
+
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#1f2937;line-height:1.5;">
+      <div style="border-left:4px solid #7c3aed;padding:14px 18px;background:#f5f3ff;margin-bottom:20px;">
+        <p style="margin:0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5b21b6;">AINPI Admin · Survey response</p>
+        <h1 style="margin:6px 0 0 0;font-size:18px;color:#4c1d95;">${esc(survey)} · ${esc(organization || email || 'anonymous')}</h1>
+      </div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:18px;">
+        <tr><td style="padding:6px 0;color:#6b7280;width:140px;">Email</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">${esc(email || '(anonymous)')}</td></tr>
+        ${name ? `<tr><td style="padding:6px 0;color:#6b7280;">Name</td><td style="padding:6px 0;">${esc(name)}</td></tr>` : ''}
+        ${organization ? `<tr><td style="padding:6px 0;color:#6b7280;">Organization</td><td style="padding:6px 0;">${esc(organization)}</td></tr>` : ''}
+        <tr><td style="padding:6px 0;color:#6b7280;">Role</td><td style="padding:6px 0;">${esc(roleType || '(unspecified)')}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;">FHIR profile</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;">${esc(fhirProfile || '(unspecified)')}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;">Categories</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;">${categoriesUsed.length > 0 ? esc(categoriesUsed.join(', ')) : '(none selected)'}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;">Follow-up</td><td style="padding:6px 0;font-weight:${wantsFollowUp ? 600 : 400};color:${wantsFollowUp ? '#059669' : '#9ca3af'};">${wantsFollowUp ? 'yes — wants to talk' : 'no'}</td></tr>
+        ${totalAfter != null ? `<tr><td style="padding:6px 0;color:#6b7280;">Total responses</td><td style="padding:6px 0;font-weight:600;">${totalAfter}</td></tr>` : ''}
+      </table>
+      ${
+        painPoints
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#b91c1c;">Pain points</p>
+              <blockquote style="margin:0;padding:10px 14px;background:#fef2f2;border-left:3px solid #fca5a5;font-size:13px;color:#374151;white-space:pre-wrap;">${esc(painPoints.slice(0, 1500))}${painPoints.length > 1500 ? '…' : ''}</blockquote>
+            </div>`
+          : ''
+      }
+      ${
+        recommendations
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#065f46;">Recommendations</p>
+              <blockquote style="margin:0;padding:10px 14px;background:#f0fdf4;border-left:3px solid #86efac;font-size:13px;color:#374151;white-space:pre-wrap;">${esc(recommendations.slice(0, 1500))}${recommendations.length > 1500 ? '…' : ''}</blockquote>
+            </div>`
+          : ''
+      }
+      <p style="margin:0;font-size:11px;color:#9ca3af;">Admin alerts only · sent by /api/v1/${esc(survey)}-survey</p>
+    </div>
+  `.trim();
+
+  await sendOnce({ subject, text, html, tag: `survey-${survey}` });
+}
+
 export async function sendDownloadAlert(
   args: DownloadAlertArgs,
 ): Promise<void> {

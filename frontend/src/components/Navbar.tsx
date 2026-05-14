@@ -79,6 +79,16 @@ export default function Navbar() {
               Insights
             </button>
             <button
+              onClick={() => router.push('/payer-healthcare-service-survey')}
+              className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+            >
+              <FileText className="w-4 h-4 mr-2" />
+              HCS Survey
+              <span className="ml-1.5 inline-flex items-center rounded-full bg-violet-100 text-violet-800 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                New
+              </span>
+            </button>
+            <button
               onClick={() => router.push('/developer')}
               className="flex items-center text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
             >

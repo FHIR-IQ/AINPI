@@ -35,6 +35,7 @@ export default function Footer() {
               <li><a href="/data-sources" className="hover:text-white">Data sources</a></li>
               <li><a href="/npd" className="hover:text-white">NPI search</a></li>
               <li><a href="/developer" className="hover:text-white">Developer</a></li>
+              <li><a href="/payer-healthcare-service-survey" className="hover:text-white">HealthcareService survey <span className="text-violet-400 text-[10px] font-bold uppercase ml-1">New</span></a></li>
               <li><a href="/reports/2026-05-08-update" className="hover:text-white">2026-05-08 update <span className="text-emerald-400 text-[10px] font-bold uppercase ml-1">New</span></a></li>
               <li><a href="/api/v1/stats.json" className="hover:text-white font-mono text-xs">/api/v1/stats.json</a></li>
               <li><a href="/api/v1/manifest.json" className="hover:text-white font-mono text-xs">/api/v1/manifest.json</a></li>
