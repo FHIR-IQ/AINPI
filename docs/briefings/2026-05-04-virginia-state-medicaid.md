@@ -216,22 +216,32 @@ Top 5 matched NPIs by paid amount (full list in the CSV):
 | 1609825553 | BUGARIN, LOPITO | $490,237 | 7,960 | 6,496 | 2018-01 | 2021-03 |
 | 1588611610 | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) |
 
-### Phase 1 deliverables — all published 2026-05-14
+### Phase 1 + Phase 2 deliverables — all published 2026-05-14
 
-| Finding | Per-state CSV | VA-cohort matches | Headline |
+| Finding | Per-state CSV | Match | Headline |
 | --- | --- | ---: | --- |
-| H29 — Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | 28 of 125 | $8.5M paid across state Medicaid programs, T-MSIS 2018–2024 |
-| H30a — Medicare Part B | `/api/v1/states/va/h30a-excluded-billing-partb.csv` | 8 of 125 | Excluded providers still billing Part B in CY 2023 |
-| H30b — Medicare Part D | `/api/v1/states/va/h30b-excluded-prescribing-partd.csv` | 10 of 125 | Excluded prescribers writing Part D scripts in CY 2023; 6 of those wrote opioid claims (1 with 2,576 opioid claims totaling $101K opioid cost) |
-| H33 — DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | 0 of 63,988 nationally | Federal enrollment gate works; null result is the baseline reference for the other findings |
+| **H29** Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | 28 of 125 | \$8.5M paid across state Medicaid programs, T-MSIS 2018–2024 |
+| **H30a** Medicare Part B | `/api/v1/states/va/h30a-excluded-billing-partb.csv` | 8 of 125 | Excluded providers still billing Part B in CY 2023 |
+| **H30b** Medicare Part D | `/api/v1/states/va/h30b-excluded-prescribing-partd.csv` | 10 of 125 | 6 of those wrote opioid claims (BREWER alone wrote 2,576 opioid claims at \$101K opioid cost) |
+| **H33** DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | 0 of 63,988 nationally | Federal DMEPOS enrollment gate works; null result is the baseline |
+| **H31** NPPES-deactivated × any billing | `/api/v1/states/va/h31-deactivated-paid.csv` | 3 of 1,495 | SHAHID (deactivated 2015) billed all three sources strictly post-deactivation: Medicaid \$57K + Part B \$178K + Part D \$32K |
+| **H32** Industry payments (Sunshine Act) | `/api/v1/states/va/h32-excluded-industry-payments-va.csv` | 9 VA of 350 nat'l | 350 LEIE/SAM-excluded NPIs took \$3.8M from manufacturers in PY 2024; 9 are VA-resident (\$1,547 in VA) |
+| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | 0 demographic matches | Null result on (LAST, FIRST, STATE) match against 78,688 LEIE keys; Stage B = PECOS owner-NPI cross-walk |
 
-**Top compounding signal:** BREWER, STEVEN (NPI 1801070313) appears in H26 (listed in Cigna's directory today), H29 (paid by Medicaid), H30a (billing Medicare Part B in CY 2023, \$134K), and H30b (prescribing Part D, 2,576 opioid claims at \$101K opioid cost). One NPI flagged in four independent public-data joins is the strongest possible audit signal short of a CMS Preclusion List lookup.
+**Top compounding signal:** BREWER, STEVEN (NPI 1801070313) is flagged in **five** independent public-data joins — H26 (listed in Cigna's directory today), H29 (paid by Medicaid 2018–2024), H30a (billing Medicare Part B in CY 2023, \$134K), H30b (prescribing Part D, 2,576 opioid claims, \$101K opioid cost), plus the original H23/H24 LEIE-excluded flag that anchors the cohort. One NPI in five independent public-data cross-references is the strongest possible audit signal short of a CMS Preclusion List lookup.
 
-### Coming next
+### How DMAS triage should read these files
 
-- **`/api/v1/states/va/h31-deactivated-paid.csv`** — Phase 2 module (NPPES-deactivated providers billing Medicaid / Medicare). ~4,090 candidates statewide.
-- **`/api/v1/states/va/h35-nh-ownership-flags.csv`** — Phase 2 module (NH / hospice / HH facilities operating in VA whose listed owners are on federal exclusion lists).
-- **`/api/v1/states/va/h29-excluded-paid.csv`** refresh with per-NPI exclusion-effective dates as the H23 cohort exporter is enhanced.
+1. **Multi-source matches first.** Any NPI flagged in H29 + H30a + H30b + H31 is by definition stronger than a single-source match.
+2. **Opioid prescribers (H30b non-zero `opioid_claims_2023`) second.** Federal opioid-prescriber enforcement under the SUPPORT Act is its own referral path; DEA-OD coordination matters.
+3. **NPPES-deactivated billers (H31) third.** Each match is a closed identifier still in circulation — a discovery the MMIS reconciliation queue might miss without the H10 directory-side anchor.
+4. **Industry payments (H32) for context, not action.** A LEIE-excluded NPI receiving \$X in industry payments is a compliance signal for the manufacturer, not a state PI signal for DMAS specifically.
+
+### Open methodology items
+
+- Cohort exporter enhancement to carry per-NPI `leie_excldate` and `sam_active_date` — lifts H29 from "paid 2018–2024 somewhere" to "paid strictly after exclusion date."
+- Stage B for H35 = NPI cross-walk via PECOS owner-NPI fields (requires PECOS extract; not currently in scope).
+- Phase 3 (H34 POS-deactivated-contradiction, H36 NDH-completeness-gap) still on the 12+ week timeline.
 
 ### What DMAS gains for the SMD response
 

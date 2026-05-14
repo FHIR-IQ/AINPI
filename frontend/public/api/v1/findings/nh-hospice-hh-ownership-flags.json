@@ -1,0 +1,43 @@
+{
+  "slug": "nh-hospice-hh-ownership-flags",
+  "title": "Nursing home, hospice, home health, hospital owners on federal exclusion lists",
+  "hypotheses": [
+    "H35"
+  ],
+  "status": "published",
+  "release_date": "CMS Quarterly All Owners files (2026-04-01)",
+  "generated_at": "2026-05-14T22:06:49+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "7d8304a",
+  "data_confidence": "candidate",
+  "data_confidence_note": "Demographic match on (last_name, first_name, state). Owner records do not carry NPI; LEIE records carry NPI inconsistently. This is a candidate-match surface, NOT a confirmed match. Verify each row against the LEIE portal directly before acting.",
+  "headline": "0 (LAST, FIRST, STATE) demographic matches between owners of Medicare-enrolled nursing homes (SNFs), hospices, home health agencies, and hospitals (CMS Quarterly All Owners files, 2026-04-01 release) and the 78,688 active OIG LEIE demographic keys. This NULL RESULT is meaningful but limited: the demographic-match key catches obvious cases (full name + state alignment) but not aliases, DBA names listed in the owner slot, name variants, or anyone whose listed owner state differs from their LEIE state. The right next step is the Stage B NPI-keyed match against PECOS owner-NPI fields once those are in scope. By facility type: Skilled Nursing Facilities 0, Hospices 0, Home Health Agencies 0, Hospitals 0.",
+  "numerator": 0,
+  "denominator": null,
+  "denominator_note": "Denominator is not pinned because the CMS All Owners files are owner-record-level (multiple rows per owner if they hold interests in multiple facilities); the right denominator depends on the consuming workflow. Total owner records scanned across the four files is in the millions; per-LEIE-key match rate is what should be cited rather than a single percentage.",
+  "data_source_release": "CMS Quarterly All Owners files (2026-04-01)",
+  "data_source_url": "https://data.cms.gov/provider-characteristics",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Skilled Nursing Facilities",
+        "value": 0
+      },
+      {
+        "label": "Hospices",
+        "value": 0
+      },
+      {
+        "label": "Home Health Agencies",
+        "value": 0
+      },
+      {
+        "label": "Hospitals",
+        "value": 0
+      }
+    ]
+  },
+  "notes": "Methodology: demographic match on UPPER(LAST_NAME) || '|' || UPPER(FIRST_NAME) || '|' || UPPER(STATE) between the CMS All Owners files and OIG LEIE active exclusions. False-positive rate is non-trivial because common-name pairs in large states (e.g., SMITH, JOHN, CA) will inevitably collide. Each candidate match row in the per-state CSV carries the LEIE state, exclusion date, exclusion type, and LEIE category so DMAS / state survey agency staff can verify in seconds. Per the cross-audit roadmap \u00a78 (\"not fraud determinations\") and \u00a710 (\"publish when available and high confidence\") this finding is published as a verification surface for human review, not as a confirmed ownership-by-excluded-individual claim. Stage B work: cross-walk LEIE NPI (where present) to CMS PECOS owner-NPI fields to lift the confidence tier; that requires PECOS owner-NPI data which is not currently in scope."
+}

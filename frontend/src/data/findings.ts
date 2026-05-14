@@ -110,30 +110,32 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'deactivated-still-billing',
     hypotheses: ['H31'],
-    title: 'NPPES-deactivated providers with active billing in public claims data',
+    title: 'NPPES-deactivated VA-state NPIs still billing public claims data',
     summary:
-      'NPPES deactivation should mean the provider is no longer in practice. Billing after deactivation is either a data quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier — both are state PI flags. Date-matching is strict: a claim or paid amount must post-date the NPPES deactivation date.',
+      'NPPES deactivation should mean the provider is no longer in practice. Billing strictly after deactivation is either a data quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier — both are state PI flags. **Result: 3 of 1,495 VA-state NPPES-deactivated NPIs billed at least one public claims source strictly after their NPPES deactivation date.** Top: SHAHID, MUHAMMAD (deactivated 2015) — Medicaid \\$57K + Part B \\$178K + Part D \\$32K, all three sources, all post-deactivation.',
     nullHypothesis:
-      'Zero NPPES-deactivated NPIs appear in Medicaid Provider Spending, Medicare Part B, or Medicare Part D for the calendar year matching or following the deactivation date.',
+      'Zero NPPES-deactivated VA-state NPIs appear in Medicaid Provider Spending, Medicare Part B, or Medicare Part D for the calendar month/year strictly following the NPPES deactivation date.',
     denominator:
-      '~260,551 NPPES-deactivated NPIs (per H10 against the 2026-05-08 NDH release) × the three public claims datasets, filtered to claim-year ≥ NPPES deactivation-year.',
+      '1,495 VA-state NPPES-deactivated NPIs = NDH practitioner._state=\'VA\' ∩ NPPES npi_deactivation_date IS NOT NULL ∩ npi_reactivation_date IS NULL. NPPES nulls practice address on deactivation, so VA-state attribution comes from the NDH side (the H10 "NPPES-deactivated but still listed in NDH" signal extended to its claims-side consequence).',
     dataSource:
-      'NPPES monthly dissemination file × HHS Medicaid Provider Spending + Medicare Part B + Medicare Part D. State-scoped CSV at `/api/v1/states/<state>/h31-deactivated-paid.csv`.',
-    status: 'pre-registered',
+      'NPPES (BigQuery bigquery-public-data.nppes.npi_optimized) × HHS Medicaid Provider Spending + Medicare Part B + Medicare Part D. Match rule: claim month/year > NPPES deactivation month/year (strict post-deactivation). See `analysis/claims_sources/nppes_deactivation_join.py`.',
+    status: 'published',
+    ogTagline: '3 of 1,495 NPPES-deactivated VA NPIs are still billing public claims data. Top match billed all three sources.',
   },
   {
     slug: 'excluded-receiving-industry-payments',
     hypotheses: ['H32'],
     title: 'Federally excluded NPIs receiving industry payments (Open Payments)',
     summary:
-      'Pharmaceutical and device manufacturers report payments to physicians and teaching hospitals under the Sunshine Act. If a manufacturer is paying a federally excluded provider, that is an industry-side compliance gap. Open Payments is already public and individually searchable; AINPI\'s contribution is the systematic cross-join with exclusion lists, which has not been published.',
+      'Pharmaceutical and device manufacturers report payments to physicians and teaching hospitals under the Sunshine Act. If a manufacturer is paying a federally excluded provider, that is an industry-side compliance gap. **Result: 350 of 8,619 currently-active LEIE/SAM-excluded NPIs received industry payments in PY 2024, totaling \\$3.8M.** 9 of those 350 are VA-resident per NDH. One NPI (FRANK, ALEXANDER, OK) alone accounts for \\$3.08M.',
     nullHypothesis:
-      'Zero LEIE/SAM-excluded NPIs appear as covered recipients in CMS Open Payments for the year of exclusion or later.',
+      'Zero LEIE/SAM-excluded NPIs appear as covered recipients in CMS Open Payments General Payment Data.',
     denominator:
-      'Active LEIE + SAM rows with a populated NPI, joined against every Covered Recipient NPI in the published CMS Open Payments General Payments + Research Payments files, filtered to payment_year ≥ exclusion_effective_year.',
+      '8,619 active LEIE ∪ SAM NPIs (LEIE: NPI != 0000000000 AND REINDATE = 00000000; SAM: NPI matches ^[0-9]{10}$).',
     dataSource:
-      'OIG LEIE + SAM × CMS Open Payments (openpaymentsdata.cms.gov, annual + quarterly refresh).',
-    status: 'pre-registered',
+      'OIG LEIE + SAM (cms_npd BQ tables) × CMS Open Payments PY 2024 aggregate file (PBLCTN_SMRY_BY_CR_BY_NTR_OF_PYMT_PGYR2024_P01232026_01102026.csv, ~98 MB, recipient × nature-of-payment grouping). See `analysis/claims_sources/open_payments.py`.',
+    status: 'published',
+    ogTagline: '350 of 8,619 LEIE/SAM-excluded NPIs took $3.8M from drug + device manufacturers in PY 2024.',
   },
   {
     slug: 'dmepos-excluded',
@@ -167,17 +169,17 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'nh-hospice-hh-ownership-flags',
     hypotheses: ['H35'],
-    title: 'Nursing home, hospice, home health owners on federal exclusion lists',
+    title: 'SNF, hospice, HHA, hospital owners on federal exclusion lists (candidate match)',
     summary:
-      'Highest-impact finding for vulnerable populations. The CMS Disclosure of Ownership and Additional Disclosable Parties Interim Final Rule (2023) expanded ownership transparency precisely to surface concerning ownership structures. Cross-referencing this against federal exclusion lists is what the rule was designed to enable. State survey agencies have direct authority to act on matches. Consumer-facing search ("is the nursing home for my parent owned by someone with sanctions?") becomes possible.',
+      'Highest-stakes finding for vulnerable populations — the CMS Disclosure of Ownership IFR (2023) expanded ownership transparency precisely to surface concerning ownership structures. **Result: 0 demographic matches between owners in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital) and the 78,688 OIG LEIE active demographic keys.** This null result is meaningful but limited — the (LAST, FIRST, STATE) demographic key catches the obvious cases but not aliases, DBA names listed in the owner slot, or anyone whose listed owner state differs from their LEIE state. Stage B is the NPI-keyed match against PECOS owner-NPI fields once those are in scope.',
     nullHypothesis:
-      'Zero owners listed in CMS Nursing Home Compare ownership data, Hospice Compare, or Home Health Compare appear on the OIG LEIE or SAM.gov active exclusion lists.',
+      'Zero owners listed in CMS SNF / Hospice / HHA / Hospital All Owners files (2026-04-01) appear on the OIG LEIE active exclusion list under a (LAST_NAME, FIRST_NAME, STATE) demographic match.',
     denominator:
-      'Every owner row in the current Nursing Home Compare / Hospice Compare / Home Health Compare ownership files, joined against active LEIE + SAM exclusion lists. Owner NPI cross-walk applied where available; otherwise (owner_name, owner_state) deterministic match against LEIE.',
+      '78,688 active OIG LEIE demographic keys (LASTNAME, FIRSTNAME, STATE; REINDATE = 0) × all owner rows in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital, 2026-04-01 release). Owner NPI cross-walk NOT applied — the All Owners files do not carry an owner-NPI column.',
     dataSource:
-      'CMS Nursing Home Compare ownership data (data.cms.gov, monthly) + Hospice Compare + Home Health Compare × `cms_npd.oig_leie` + `cms_npd.sam_exclusions`. State-scoped CSV at `/api/v1/states/<state>/h35-nh-ownership-flags.csv`.',
-    status: 'pre-registered',
-    ogTagline: 'Does a federally excluded operator run the nursing home for your parent? AINPI checks.',
+      'OIG LEIE active rows × CMS Quarterly All Owners files (SNF_All_Owners + Hospice_All_Owners + HHA_All_Owners + Hospital_All_Owners, 2026-04-01 release, ~100 MB combined). Demographic match key = UPPER(LAST) || \'|\' || UPPER(FIRST) || \'|\' || UPPER(STATE). See `analysis/claims_sources/nh_compare_ownership.py`.',
+    status: 'published',
+    ogTagline: '0 demographic matches — the obvious cases aren\'t there. Stage B: PECOS owner-NPI cross-walk.',
   },
   {
     slug: 'ndh-completeness-gap',

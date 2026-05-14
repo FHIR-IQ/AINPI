@@ -1,0 +1,10 @@
+npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1801070313,"BREWER, STEVEN",VA,Covered Recipient Non-Physician Practitioner,leie,20260120,812.32,47,6=$812,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1801070313
+1518967207,"RALEY, THOMAS",VA,Covered Recipient Physician,leie,20231220,354.75,3,6=$355,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1518967207
+1114918752,"DIXON, DUANE",VA,Covered Recipient Physician,leie,20251020,126.58,4,6=$127,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114918752
+1831248731,"MONTILLA, LINO",VA,Covered Recipient Physician,leie,20250120,91.35,4,6=$91,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1831248731
+1316163579,"HARTMAN, GARY",VA,Covered Recipient Physician,leie,20200618,45.87,1,6=$46,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1316163579
+1538229497,"ALLIGHAM, DAVID",VA,Covered Recipient Physician,leie,20260120,44.88,2,6=$45,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1538229497
+1316947310,"COOLONG, KEVIN",VA,Covered Recipient Non-Physician Practitioner,leie,20260120,33.85,1,6=$34,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1316947310
+1619226438,"FUSSELL, LUCAS",VA,Covered Recipient Non-Physician Practitioner,leie,20260420,21.53,1,6=$22,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1619226438
+1245594282,"SCHASSE, CRISTINA",VA,Covered Recipient Non-Physician Practitioner,leie,20260120,15.88,1,6=$16,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245594282

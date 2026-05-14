@@ -1,0 +1,53 @@
+{
+  "queried_at": "2026-05-14T21:59:49+00:00",
+  "denominator_cohort_size": 1495,
+  "matches_post_deactivation_billing": 3,
+  "multi_source_matches": 1,
+  "totals": {
+    "medicaid_paid_post_deactivation": 74555.65,
+    "partb_paid_cy2023_post_deactivation": 177702.94,
+    "partd_drug_cost_cy2023_post_deactivation": 32116.420000000002
+  },
+  "top_10_by_combined_amount": [
+    {
+      "npi": "1700273794",
+      "name": "SHAHID, MUHAMMAD",
+      "deactivation_date": "2015-11-16",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partb|medicare_partd",
+      "medicaid_post_deactivation_paid": 56681.68,
+      "medicaid_post_deactivation_claims": 1633,
+      "partb_2023_paid": 177702.94,
+      "partb_2023_services": 2031,
+      "partd_2023_drug_cost": 31877.15,
+      "partd_2023_opioid_claims": 30
+    },
+    {
+      "npi": "1043396328",
+      "name": "THURMAN, CECILIA",
+      "deactivation_date": "2019-03-27",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid",
+      "medicaid_post_deactivation_paid": 17873.97,
+      "medicaid_post_deactivation_claims": 251,
+      "partb_2023_paid": 0,
+      "partb_2023_services": 0,
+      "partd_2023_drug_cost": 0,
+      "partd_2023_opioid_claims": 0
+    },
+    {
+      "npi": "1164874087",
+      "name": "BAHRAMIAN, NAGHMEH",
+      "deactivation_date": "2018-07-18",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicare_partd",
+      "medicaid_post_deactivation_paid": 0.0,
+      "medicaid_post_deactivation_claims": 0,
+      "partb_2023_paid": 0,
+      "partb_2023_services": 0,
+      "partd_2023_drug_cost": 239.27,
+      "partd_2023_opioid_claims": 18
+    }
+  ],
+  "csv_url": "/api/v1/states/va/h31-deactivated-paid.csv"
+}
