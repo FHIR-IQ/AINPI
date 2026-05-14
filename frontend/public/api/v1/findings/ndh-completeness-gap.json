@@ -1,0 +1,36 @@
+{
+  "slug": "ndh-completeness-gap",
+  "title": "High-volume Medicare billers absent from NDH (directory completeness)",
+  "hypotheses": [
+    "H36"
+  ],
+  "status": "published",
+  "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-05-08",
+  "generated_at": "2026-05-14T23:06:58+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "a987cd7",
+  "headline": "2 of 1,259,343 Medicare Part B billing NPIs in CY 2023 (0.00%) are absent from NDH (practitioner \u222a organization tables, 2026-05-08 release) AND billed \u2265 $10,000 in Medicare Part B. Combined paid amount: $840,826. The NDH is the federal source of truth on provider identity; material Medicare billers absent from NDH are a directory-side completeness gap distinct from H10's NPPES-match-rate signal. 0 of the material absences bill from a VA-state address. Entity-type breakdown in the material cohort: {'I': 2} (O=organization, I=individual).",
+  "numerator": 2,
+  "denominator": 1259343,
+  "denominator_note": "Denominator = every NPI in the Medicare Physician & Other Practitioners by Provider file for CY 2023 (1,259,343). Numerator = NPIs absent from NDH with Medicare paid amount \u2265 $10,000 in CY 2023. The full absent set (any paid amount) is 3 NPIs \u2014 the material threshold filter removes the long tail of small-volume absences that are mostly NDH-out-of-scope provider types.",
+  "data_source_release": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-05-08",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Part B NPIs absent from NDH (material)",
+        "value": 2
+      },
+      {
+        "label": "of which entity_type=2 (org)",
+        "value": 0
+      },
+      {
+        "label": "of which entity_type=1 (individual)",
+        "value": 2
+      }
+    ]
+  },
+  "notes": "NDH NPI set = UNION of cms_npd.practitioner._npi and cms_npd.organization._npi. Part B billing NPIs can be either individuals (entity_type=1, NDH practitioner table) or organizations (entity_type=2, NDH organization table \u2014 big labs, IDTFs, group practices billing in aggregate). Joining against just practitioners would over-count absences with entity_type=2 NPIs that ARE in NDH-organization. The union join produces the honest completeness gap. Per-state CSV at /api/v1/states/va/h36-billers-absent-from-ndh.csv carries the VA subset for DMAS triage; national rollup at /api/v1/findings/ndh-completeness-gap-detail.csv. Verify individual NPIs at the NPPES Registry to distinguish true directory-completeness gaps from out-of-scope billers."
+}

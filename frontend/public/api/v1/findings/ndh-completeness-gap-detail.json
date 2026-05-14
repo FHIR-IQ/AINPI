@@ -1,0 +1,47 @@
+{
+  "queried_at": "2026-05-14T23:06:58+00:00",
+  "part_b_total_npis": 1259343,
+  "absent_from_ndh_any": 3,
+  "absent_from_ndh_material": 2,
+  "material_threshold_usd": 10000,
+  "total_paid_absent_any": 845279.6,
+  "total_paid_absent_material": 840825.72,
+  "entity_type_breakdown_material": {
+    "I": 2
+  },
+  "top_states_by_material_absences": [
+    {
+      "state": "UT",
+      "matches": 1
+    },
+    {
+      "state": "MT",
+      "matches": 1
+    }
+  ],
+  "top_10_material_absences_nationally": [
+    {
+      "npi": "1215977517",
+      "name": "Thomas Richard",
+      "billing_state": "UT",
+      "provider_type": "General Surgery",
+      "entity_type": "I",
+      "medicare_paid_2023": 764132.21,
+      "services_2023": 179,
+      "beneficiaries_2023": 47
+    },
+    {
+      "npi": "1417342601",
+      "name": "Shepard Jennifer",
+      "billing_state": "MT",
+      "provider_type": "Internal Medicine",
+      "entity_type": "I",
+      "medicare_paid_2023": 76693.51,
+      "services_2023": 968,
+      "beneficiaries_2023": 401
+    }
+  ],
+  "va_material_absences": 0,
+  "csv_url_national": "/api/v1/findings/ndh-completeness-gap-detail.csv",
+  "csv_url_va": "/api/v1/states/va/h36-billers-absent-from-ndh.csv"
+}

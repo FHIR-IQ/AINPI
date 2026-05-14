@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "generated_at": "2026-05-14T22:56:40+00:00",
+  "generated_at": "2026-05-14T23:07:59+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -314,6 +314,28 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/findings/mco-exposure-va.json",
       "html_url": "https://ainpi.dev/findings/mco-exposure-va",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "ndh-completeness-gap-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/ndh-completeness-gap-detail.json",
+      "html_url": "https://ainpi.dev/findings/ndh-completeness-gap-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "ndh-completeness-gap",
+      "title": "High-volume Medicare billers absent from NDH (directory completeness)",
+      "hypotheses": [
+        "H36"
+      ],
+      "status": "published",
+      "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/ndh-completeness-gap.json",
+      "html_url": "https://ainpi.dev/findings/ndh-completeness-gap",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
