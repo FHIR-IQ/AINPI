@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "generated_at": "2026-05-09T00:40:07+00:00",
+  "generated_at": "2026-05-14T21:16:15+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -166,6 +166,28 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/findings/endpoint-url-validity.json",
       "html_url": "https://ainpi.dev/findings/endpoint-url-validity",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "excluded-paid-by-medicaid-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/excluded-paid-by-medicaid-detail.json",
+      "html_url": "https://ainpi.dev/findings/excluded-paid-by-medicaid-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "excluded-paid-by-medicaid",
+      "title": "Federally excluded providers paid by Medicaid (HHS spending dataset)",
+      "hypotheses": [
+        "H29"
+      ],
+      "status": "published",
+      "release_date": "2026-02-09",
+      "url": "https://ainpi.dev/api/v1/findings/excluded-paid-by-medicaid.json",
+      "html_url": "https://ainpi.dev/findings/excluded-paid-by-medicaid",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {

@@ -1,0 +1,33 @@
+{
+  "slug": "excluded-paid-by-medicaid",
+  "title": "Federally excluded providers paid by Medicaid (HHS spending dataset)",
+  "hypotheses": [
+    "H29"
+  ],
+  "status": "published",
+  "release_date": "2026-02-09",
+  "generated_at": "2026-05-14T21:15:17+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "66897cc",
+  "headline": "28 of 125 currently-active federally-excluded VA-resident NPIs (per NPPES practice state) received Medicaid payments somewhere in T-MSIS 2018\u20132024, per the HHS Medicaid Provider Spending dataset (2026-02-09 release). Combined paid amount across all state Medicaid programs: $8,487,744 over 217,655 claim lines. Each match is a 42 CFR \u00a7 455.436 audit-referral candidate that a state PI unit can pull and validate against the per-NPI exclusion-effective date in the LEIE / SAM sources. Two source-data limits to read carefully: (1) the HHS file has no state-of-payment column, so paid amounts aggregate across every state Medicaid program that paid the NPI \u2014 the VA-resident cohort is per NPPES practice state, NOT per state of payment; (2) the cohort's exclusion-effective dates are not pinned in the cohort export, so a row's paid amounts may include claim months that pre-date the exclusion. Per-NPI MMIS triage should reconcile against the LEIE / SAM effective date via the verification URLs in the per-state CSV.",
+  "numerator": 28,
+  "denominator": 125,
+  "denominator_note": "Phase 1 pilot scope = the 125-NPI Virginia federally-excluded cohort (active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state). All-50-states roll-up follows once VA methodology clears DMAS review. Two source-data limits readers must keep in mind: the HHS source file does NOT carry a state-of-payment column (so paid amounts aggregate across every state Medicaid program that paid the NPI), and the cohort export does not currently pin per-NPI exclusion-effective dates (so a row's paid amount may include claim months that pre-date the exclusion; MMIS triage should reconcile each NPI's paid period against the LEIE / SAM effective date).",
+  "data_source_release": "2026-02-09",
+  "data_source_url": "https://opendata.hhs.gov/datasets/medicaid-provider-spending/",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "VA cohort NPIs paid by Medicaid",
+        "value": 28
+      },
+      {
+        "label": "VA cohort NPIs not paid (in this dataset)",
+        "value": 97
+      }
+    ]
+  },
+  "notes": "Pilot state: Virginia. Per-state CSV at /api/v1/states/va/h29-excluded-paid.csv carries one row per matched NPI with the directory-side context columns (top_hcpcs_codes, exclusion_source, billing-or-servicing axis, first/last paid month) needed to interpret the paid-amount headline. Source-file schema: 7 columns (billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount), 238M rows, no state-of-payment column. State attribution comes from NPPES practice state, not the spending file. The HHS source aggregates fee-for-service, managed care, and CHIP; matches catch MCO-side exposures that AINPI's H26 4-payer sweep currently misses behind authentication walls. Disclosure timing: publish when available and high confidence (locked-in 2026-05-14 per roadmap \u00a710). DMAS receives 5-business-day review courtesy on VA-attributed rows before each refresh \u2014 operational courtesy, not a publication gate."
+}
