@@ -157,13 +157,13 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H34'],
     title: 'Internal CMS contradiction: POS-certified providers also flagged NPPES-deactivated',
     summary:
-      'Medicare Provider of Services (POS) says the provider is enrolled; NPPES says they are deactivated. This is a federal data quality finding that should never be true — the two CMS systems contradict each other on the same NPI.',
+      'Medicare Provider of Services (POS) says the facility is certified; NPPES says the provider is deactivated. Would be a federal data quality finding that should never be true — but **blocked on a join-key problem**. The POS files (data.cms.gov: iQIES, CLIA, Hospital_and_other) are CCN-keyed and do not carry an NPI column, so the NPPES-NPI × POS-certification join cannot be computed without a CCN ↔ NPI cross-walk. PECOS publishes a partial cross-walk for facility owners (which we touch in H35); a comprehensive CCN→NPI cross-walk for all certified facilities is the missing piece.',
     nullHypothesis:
       'Zero NPPES-deactivated NPIs appear in the current Medicare Provider of Services file as actively certified.',
     denominator:
-      '~260,551 NPPES-deactivated NPIs × every NPI appearing as actively certified in the latest POS quarterly release.',
+      '~260,551 NPPES-deactivated NPIs × every NPI appearing as actively certified in the latest POS quarterly release. Currently uncomputable — POS files are CCN-keyed and lack an NPI column.',
     dataSource:
-      'NPPES × CMS Provider of Services file (data.cms.gov, quarterly).',
+      'NPPES × CMS POS Files (data.cms.gov, quarterly). Files identified: POS_File_iQIES_Q1_2026.csv (post-acute care, 77K rows, CCN-keyed); Hospital_and_other.DATA.Q1_2026.csv (hospitals etc., 473 columns, CCN-keyed); CLIA.DATA.Q1_2026.csv (labs). None carries an NPI column. Stage B = build CCN↔NPI cross-walk via PECOS owner data or an authorized CMS source.',
     status: 'pre-registered',
   },
   {
@@ -186,14 +186,15 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H36'],
     title: 'High-volume Medicare billers absent from NDH (directory completeness)',
     summary:
-      'The NDH is meant to be the federal source of truth on provider identity. Material billers absent from NDH are a directory-side failure of the federal system, distinct from H10 (NPPES match rate). This is the most computationally expensive finding (full join across the NDH and Medicare Part B universes), so it ships last.',
+      'The NDH is meant to be the federal source of truth on provider identity. Material billers absent from NDH are a directory-side failure of the federal system, distinct from H10 (NPPES match rate). **Result: 2 of 1,259,343 Medicare Part B billing NPIs in CY 2023 (0.00016%) are absent from NDH (practitioner ∪ organization tables, 2026-05-08 release) AND billed ≥ \\$10K in Medicare Part B.** Both are individual practitioners (entity_type=I) with material billing — \\$764K and \\$77K respectively. The 99.99984% NDH completeness rate against the Medicare Part B universe is a strong positive finding for the federal directory: when a provider bills Medicare materially, they are almost certainly in NDH.',
     nullHypothesis:
       'The NDH is exhaustive — no NPI with material Medicare Part B billing in CY 2023 is missing from the pinned NDH bulk export.',
     denominator:
-      'Every NPI in the latest Medicare Physician & Other Practitioners file with paid Medicare Part B service counts above a material threshold (definition pinned at pre-publication time), checked for presence in `cms_npd.practitioner._npi`.',
+      '1,259,343 NPIs in the CMS Medicare Physician & Other Practitioners by Provider file for CY 2023. Numerator = NPIs absent from NDH (cms_npd.practitioner ∪ cms_npd.organization, 9,440,285 NPIs) AND paid amount ≥ \\$10K in CY 2023.',
     dataSource:
-      'CMS NDH bulk export × Medicare Physician & Other Practitioners — by Provider and Service.',
-    status: 'pre-registered',
+      'CMS NDH bulk export (2026-05-08 release) × Medicare Physician & Other Practitioners by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, CY 2023, ~270 MB, NPI-aggregated). NDH NPI set = UNION of practitioner._npi and organization._npi — joining against just the practitioner table would over-count organizations (labs, IDTFs) that ARE in NDH-organization. See `analysis/claims_sources/ndh_completeness.py`.',
+    status: 'published',
+    ogTagline: '99.99984% NDH completeness for material Medicare Part B billers — only 2 of 1.26M individual NPIs missing.',
   },
   {
     slug: 'endpoint-url-validity',
