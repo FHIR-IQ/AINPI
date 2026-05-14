@@ -38,9 +38,6 @@ export const dynamic = 'force-dynamic';
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'gene@fhiriq.com';
 const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS || 'AINPI <onboarding@resend.dev>';
-const VERCEL_DASHBOARD_URL =
-  process.env.VERCEL_DASHBOARD_URL ||
-  'https://vercel.com/aks129s-projects/ainpi/analytics';
 
 function unauthorized() {
   return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
@@ -116,18 +113,19 @@ export async function GET(req: NextRequest) {
   const newLast7 = subscribers.filter((s) => s.createdAt >= sevenDaysAgo).length;
   const newLast30 = subscribers.filter((s) => s.createdAt >= thirtyDaysAgo).length;
 
-  // Vercel Analytics 7-day window across EVERY project the token can read.
-  // Never throws — degrades to dashboard link.
+  // Enumerate every project + its dashboard deep-link. Vercel doesn't
+  // expose a public REST API for Web Analytics data (zero endpoints in
+  // the OpenAPI spec), so the email surfaces one-click links per project
+  // instead of pretending to fetch counts. Never throws.
   let analytics: AllProjectsAnalytics;
   try {
-    analytics = await fetchAllProjectsAnalytics(7);
+    analytics = await fetchAllProjectsAnalytics();
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    console.error('[weekly-report] analytics fetch failed:', msg);
+    console.error('[weekly-report] project listing failed:', msg);
     analytics = {
-      configured: false, ok: false, windowDays: 7,
-      projectsDiscovered: 0, projects: [], emptyProjects: [],
-      totals: { pageviews: 0, visitors: 0 },
+      configured: false, ok: false,
+      projectsDiscovered: 0, projectsWithAnalytics: [], projectsWithoutAnalytics: [],
       note: msg,
     };
   }
@@ -139,10 +137,10 @@ export async function GET(req: NextRequest) {
   }
   const sourceRows = Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]);
 
-  const pvSuffix = analytics.ok
-    ? `, ${analytics.totals.pageviews.toLocaleString()} pageviews across ${analytics.projects.length} projects`
+  const projSuffix = analytics.ok
+    ? `, ${analytics.projectsWithAnalytics.length} of ${analytics.projectsDiscovered} projects with analytics`
     : '';
-  const subject = `AINPI weekly admin report — ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads${pvSuffix}`;
+  const subject = `AINPI weekly admin report — ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads${projSuffix}`;
 
   // Plain text version.
   const text = [
@@ -172,29 +170,31 @@ export async function GET(req: NextRequest) {
         `  ${fmtDate(s.createdAt)}  ${s.email.padEnd(40)}  ${s.source || '(unspecified)'}`,
     ),
     ``,
-    `WEB TRAFFIC (last 7 days, via Vercel Analytics API)`,
+    `PROJECTS + ANALYTICS DASHBOARDS`,
+    `  (Vercel has no public Web Analytics REST API — programmatic`,
+    `   pageview/visitor numbers aren't reachable from this cron. Below`,
+    `   is every project + a one-click dashboard link.)`,
+    ``,
     analytics.ok
       ? [
-          `  Total pageviews:        ${analytics.totals.pageviews.toLocaleString()}`,
-          `  Total unique visitors:  ${analytics.totals.visitors.toLocaleString()}`,
-          `  Projects with data:     ${analytics.projects.length} of ${analytics.projectsDiscovered} discovered`,
-          analytics.emptyProjects.length > 0
-            ? `  Projects with no data:  ${analytics.emptyProjects.join(', ')}`
+          `  Projects with analytics enabled (${analytics.projectsWithAnalytics.length}):`,
+          ...analytics.projectsWithAnalytics.map(
+            (p) =>
+              `    ${p.projectName.padEnd(28)} ${p.primaryDomain ?? '(no prod domain)'}\n      → ${p.dashboardUrl}`,
+          ),
+          analytics.projectsWithoutAnalytics.length > 0
+            ? `\n  Projects without analytics (${analytics.projectsWithoutAnalytics.length}):\n${analytics.projectsWithoutAnalytics
+                .map((p) => `    ${p.projectName}`)
+                .join('\n')}`
             : '',
-          ``,
-          ...analytics.projects.flatMap((p) => [
-            `─── ${p.projectName} ─── (${p.totals.pageviews?.toLocaleString() ?? 0} views, ${p.totals.visitors?.toLocaleString() ?? 0} visitors)`,
-            ...p.topPages.slice(0, 5).map((page) =>
-              `    ${String(page.views).padStart(5)}  ${page.path}`,
-            ),
-            ``,
-          ]),
-        ].filter(Boolean).join('\n')
+        ]
+          .filter(Boolean)
+          .join('\n')
       : analytics.configured
-        ? `  Analytics API responded with no rows. Note: ${analytics.note ?? 'unknown'}`
-        : `  VERCEL_API_TOKEN not set on production.\n  Run: vercel env add VERCEL_API_TOKEN production\n       vercel env add VERCEL_TEAM_ID production (if team-owned)`,
+        ? `  Project listing returned 0 rows. Note: ${analytics.note ?? 'unknown'}`
+        : `  VERCEL_API_TOKEN not set on production. Set via:\n  vercel env add VERCEL_API_TOKEN production`,
     ``,
-    `  Dashboard: https://vercel.com/${process.env.VERCEL_TEAM_ID ?? 'aks129s-projects'}`,
+    `  Team dashboard: https://vercel.com/${process.env.VERCEL_TEAM_SLUG || process.env.VERCEL_TEAM_ID || 'aks129s-projects'}`,
   ].join('\n');
 
   // HTML version.
@@ -269,93 +269,59 @@ export async function GET(req: NextRequest) {
         <tbody>${subscriberRows}</tbody>
       </table>
 
-      <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Web traffic — all projects (last 7 days)</h2>
+      <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Projects + analytics dashboards</h2>
+      <p style="margin: 0 0 14px 0; font-size: 12px; color: #6b7280;">
+        Vercel has no public Web Analytics REST API, so this digest can't pull
+        pageview / visitor counts directly. Below is every project the API
+        token can see + a one-click link to its Analytics tab.
+      </p>
       ${
         analytics.ok
           ? `
         <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;">
           <tr>
-            <td style="padding:6px 0;">Total pageviews (${analytics.projects.length} projects)</td>
-            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.pageviews.toLocaleString()}</td>
+            <td style="padding:6px 0;">Projects discovered</td>
+            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.projectsDiscovered}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;">Total unique visitors</td>
-            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.visitors.toLocaleString()}</td>
-          </tr>
-          <tr>
-            <td style="padding:6px 0;font-size:12px;color:#6b7280;">Projects discovered</td>
-            <td style="padding:6px 0;text-align:right;font-size:12px;color:#6b7280;">${analytics.projectsDiscovered} (${analytics.emptyProjects.length} without data)</td>
+            <td style="padding:6px 0;">With analytics enabled</td>
+            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#059669;">${analytics.projectsWithAnalytics.length}</td>
           </tr>
         </table>
-
-        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:14px;">
-          <thead><tr style="border-bottom:1px solid #e5e7eb;color:#6b7280;text-align:left;">
-            <th style="padding:6px 6px;">Project</th>
-            <th style="padding:6px 6px;text-align:right;">Pageviews</th>
-            <th style="padding:6px 6px;text-align:right;">Visitors</th>
-          </tr></thead>
-          <tbody>${analytics.projects
-            .map(
-              (p) => `<tr>
-                <td style="padding:6px 6px;font-weight:600;color:#111827;">${escHtml(p.projectName)}</td>
-                <td style="padding:6px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${p.totals.pageviews?.toLocaleString() ?? '—'}</td>
-                <td style="padding:6px 6px;text-align:right;font-variant-numeric:tabular-nums;">${p.totals.visitors?.toLocaleString() ?? '—'}</td>
-              </tr>`,
-            )
-            .join('')}</tbody>
-        </table>
-
-        ${analytics.projects
-          .map(
-            (p) => `
-            <div style="margin:18px 0; padding:14px 16px; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px;">
-              <h3 style="margin:0 0 8px 0; font-size:14px; color:#111827;">
-                ${escHtml(p.projectName)}
-                <span style="font-size:12px;font-weight:400;color:#6b7280;font-variant-numeric:tabular-nums;">
-                  · ${p.totals.pageviews?.toLocaleString() ?? 0} views · ${p.totals.visitors?.toLocaleString() ?? 0} visitors
-                </span>
-              </h3>
-              ${
-                p.topPages.length > 0
-                  ? `<div style="font-size:11px;color:#6b7280;margin:8px 0 4px 0;text-transform:uppercase;letter-spacing:0.04em;">Top pages</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                      ${p.topPages
-                        .slice(0, 5)
-                        .map(
-                          (pg) => `<tr>
-                            <td style="padding:2px 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#374151;">${escHtml(pg.path)}</td>
-                            <td style="padding:2px 4px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${pg.views.toLocaleString()}</td>
-                          </tr>`,
-                        )
-                        .join('')}
-                    </table>`
-                  : ''
-              }
-              ${
-                p.topReferrers.length > 0
-                  ? `<div style="font-size:11px;color:#6b7280;margin:12px 0 4px 0;text-transform:uppercase;letter-spacing:0.04em;">Top referrers</div>
-                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-                      ${p.topReferrers
-                        .slice(0, 5)
-                        .map(
-                          (ref) => `<tr>
-                            <td style="padding:2px 4px;color:#374151;">${escHtml(ref.source)}</td>
-                            <td style="padding:2px 4px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${ref.views.toLocaleString()}</td>
-                          </tr>`,
-                        )
-                        .join('')}
-                    </table>`
-                  : ''
-              }
-            </div>`,
-          )
-          .join('')}
 
         ${
-          analytics.emptyProjects.length > 0
-            ? `<p style="font-size:11px;color:#9ca3af;margin:14px 0 0 0;">
-                Projects with no analytics data this window: ${analytics.emptyProjects.map((n) => escHtml(n)).join(', ')}
-              </p>`
+          analytics.projectsWithAnalytics.length > 0
+            ? `<h3 style="font-size:12px;margin:18px 0 8px 0;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em;">With analytics</h3>
+              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;">
+                ${analytics.projectsWithAnalytics
+                  .map(
+                    (p) => `<tr style="border-bottom:1px solid #f3f4f6;">
+                      <td style="padding:8px 6px;">
+                        <div style="font-weight:600;color:#111827;">${escHtml(p.projectName)}</div>
+                        ${p.primaryDomain ? `<div style="font-size:11px;color:#6b7280;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">${escHtml(p.primaryDomain)}</div>` : ''}
+                      </td>
+                      <td style="padding:8px 6px;text-align:right;">
+                        <a href="${p.dashboardUrl}" style="display:inline-block;padding:6px 12px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:5px;font-size:12px;font-weight:600;">Open analytics →</a>
+                      </td>
+                    </tr>`,
+                  )
+                  .join('')}
+              </table>`
+            : `<p style="font-size:12px;color:#9ca3af;">No projects have analytics enabled yet.</p>`
+        }
+
+        ${
+          analytics.projectsWithoutAnalytics.length > 0
+            ? `<details style="margin:14px 0;">
+                <summary style="cursor:pointer;font-size:12px;color:#6b7280;">
+                  ${analytics.projectsWithoutAnalytics.length} project${analytics.projectsWithoutAnalytics.length === 1 ? '' : 's'} without analytics enabled
+                </summary>
+                <ul style="margin:8px 0 0 0;padding-left:18px;font-size:12px;color:#6b7280;">
+                  ${analytics.projectsWithoutAnalytics
+                    .map((p) => `<li>${escHtml(p.projectName)}${p.primaryDomain ? ` · <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;">${escHtml(p.primaryDomain)}</span>` : ''}</li>`)
+                    .join('')}
+                </ul>
+              </details>`
             : ''
         }
       `
@@ -363,21 +329,19 @@ export async function GET(req: NextRequest) {
         <p style="margin:0 0 12px 0;font-size:13px;color:#6b7280;">
           ${
             analytics.configured
-              ? `Analytics API responded with no rows. ${analytics.note ? `Note: ${escHtml(analytics.note)}` : ''}`
-              : 'Programmatic Vercel Analytics not configured yet. Run on production:'
+              ? `Project listing returned 0 rows. ${analytics.note ? `Note: ${escHtml(analytics.note)}` : ''}`
+              : 'VERCEL_API_TOKEN not set on production. Set it via:'
           }
         </p>
         ${
           !analytics.configured
-            ? `<pre style="background:#f9fafb;border:1px solid #e5e7eb;padding:10px;font-size:12px;color:#374151;border-radius:6px;margin:0 0 14px 0;">vercel env add VERCEL_API_TOKEN production
-vercel env add VERCEL_PROJECT_ID production
-vercel env add VERCEL_TEAM_ID    production   # if team-owned</pre>`
+            ? `<pre style="background:#f9fafb;border:1px solid #e5e7eb;padding:10px;font-size:12px;color:#374151;border-radius:6px;margin:0 0 14px 0;">vercel env add VERCEL_API_TOKEN production</pre>`
             : ''
         }
       `
       }
       <p style="margin: 0 0 24px 0; font-size: 13px;">
-        <a href="${VERCEL_DASHBOARD_URL}" style="color:#2563eb;">Open the Vercel Analytics dashboard →</a>
+        <a href="https://vercel.com/${process.env.VERCEL_TEAM_SLUG || process.env.VERCEL_TEAM_ID || 'aks129s-projects'}" style="color:#2563eb;">Open the team dashboard →</a>
       </p>
 
       <p style="margin: 24px 0 0 0; font-size: 11px; color: #9ca3af;">
