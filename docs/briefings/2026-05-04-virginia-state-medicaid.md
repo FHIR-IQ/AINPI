@@ -193,6 +193,21 @@ Estimated lift: ~half-day per carrier to register, store credentials in GitHub A
 
 ---
 
+## 6b. Coming next — claims-side cross-audit (Phase 1, June 2026)
+
+Virginia is the Phase 1 pilot state for the AINPI × public claims data cross-audit (pre-registered 2026-05-14; roadmap at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap>). The first deliverable joins this same 131-NPI cohort against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public) and answers: **which of these federally excluded providers were paid by Virginia Medicaid, when, and for what.**
+
+What DMAS can expect:
+
+- **`/api/v1/states/va/h29-excluded-paid.csv`** in June 2026 — one row per excluded NPI paid by VA Medicaid, with `paid_amount_post_exclusion`, `claim_count_post_exclusion`, `top_hcpcs_codes`, and the directory-side context (entity type, NPPES status, NDH active flag, exclusion source + date) anchoring the spending headline.
+- **DMAS gets a 5-business-day review courtesy** on the VA-attributed rows before each refresh publishes. This is a pilot-relationship operational courtesy; it doesn't gate publication of the aggregate VA number.
+- **`/api/v1/states/va/h31-deactivated-paid.csv`** — same join shape against NPPES-deactivated providers (statewide ~4,090 today).
+- **`/api/v1/states/va/h35-nh-ownership-flags.csv`** — nursing-home, hospice, home-health facilities operating in VA whose listed owners appear on federal exclusion lists.
+
+The pre-registration is itself an Element 2 deliverable today: DMAS can cite the forthcoming claims-side metrics as "public-facing data or reporting" in its SMD response, with the methodology pinned at <https://ainpi.dev/findings/excluded-paid-by-medicaid> (pre-registered) and the per-row schema at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap#10b-virginia-pilot-scope-decided-2026-05-14>.
+
+---
+
 ## 7. Citation language for DMAS use
 
 > The Virginia Department of Medical Assistance Services has reviewed the AINPI framework (<https://github.com/FHIR-IQ/AINPI>, methodology version 0.6.0-draft, NDH release 2026-05-08) and is incorporating it as one of the inputs to a broader program-integrity strategy that includes monthly OIG LEIE and SAM.gov exclusion checks per 42 CFR § 455.436, MFCU coordination per 42 CFR § 1002, and managed-care directory oversight per 42 CFR § 438.602. The framework is independent, reproducible, and pinned to specific release tags for audit reproducibility.
