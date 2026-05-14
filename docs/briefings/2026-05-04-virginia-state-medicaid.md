@@ -193,18 +193,40 @@ Estimated lift: ~half-day per carrier to register, store credentials in GitHub A
 
 ---
 
-## 6b. Coming next — claims-side cross-audit (Phase 1, June 2026)
+## 6b. Claims-side cross-audit — H29 published 2026-05-14 (VA pilot)
 
-Virginia is the Phase 1 pilot state for the AINPI × public claims data cross-audit (pre-registered 2026-05-14; roadmap at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap>). The first deliverable joins this same 131-NPI cohort against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public) and answers: **which of these federally excluded providers were paid by Virginia Medicaid, when, and for what.**
+Virginia is the Phase 1 pilot state for the AINPI × public claims data cross-audit (pre-registered 2026-05-14; roadmap at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap>). H29 — the first claims-side finding — published the same day against the HHS Medicaid Provider Spending dataset (2026-02-09 release, T-MSIS 2018–2024, NPI-keyed, public).
 
-What DMAS can expect:
+### Headline (per <https://ainpi.dev/findings/excluded-paid-by-medicaid>)
 
-- **`/api/v1/states/va/h29-excluded-paid.csv`** in June 2026 — one row per excluded NPI paid by VA Medicaid, with `paid_amount_post_exclusion`, `claim_count_post_exclusion`, `top_hcpcs_codes`, and the directory-side context (entity type, NPPES status, NDH active flag, exclusion source + date) anchoring the spending headline.
-- **DMAS gets a 5-business-day review courtesy** on the VA-attributed rows before each refresh publishes. This is a pilot-relationship operational courtesy; it doesn't gate publication of the aggregate VA number.
-- **`/api/v1/states/va/h31-deactivated-paid.csv`** — same join shape against NPPES-deactivated providers (statewide ~4,090 today).
-- **`/api/v1/states/va/h35-nh-ownership-flags.csv`** — nursing-home, hospice, home-health facilities operating in VA whose listed owners appear on federal exclusion lists.
+**28 of 125 currently-active federally-excluded VA-resident NPIs (per NPPES practice state) received Medicaid payments somewhere in T-MSIS 2018–2024. Combined paid amount across all state Medicaid programs: $8,487,744 over 217,655 claim lines.**
 
-The pre-registration is itself an Element 2 deliverable today: DMAS can cite the forthcoming claims-side metrics as "public-facing data or reporting" in its SMD response, with the methodology pinned at <https://ainpi.dev/findings/excluded-paid-by-medicaid> (pre-registered) and the per-row schema at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap#10b-virginia-pilot-scope-decided-2026-05-14>.
+Two source-data limits DMAS staff should keep in mind when reading the per-row CSV:
+
+1. **The HHS file has no state-of-payment column.** Paid amounts aggregate across every state Medicaid program that paid the NPI. The VA-resident cohort is per NPPES practice state, not per state of payment — some matches may reflect billing in other states.
+2. **The cohort export does not currently pin per-NPI exclusion-effective dates.** A row's paid amounts may include claim months that pre-date the exclusion. Per-NPI MMIS triage should reconcile against the LEIE / SAM effective date via the verification URLs in the CSV.
+
+Top 5 matched NPIs by paid amount (full list in the CSV):
+
+| NPI | Name | Paid amount | Claim lines | Patients | First paid | Last paid |
+| --- | --- | ---: | ---: | ---: | --- | --- |
+| 1902856065 | RANDALL, W | $4,025,102 | 67,341 | 46,519 | 2018-01 | 2023-08 |
+| 1114918752 | DIXON, DUANE | $1,754,355 | 25,016 | 20,970 | 2018-01 | 2022-10 |
+| 1518967207 | RALEY, THOMAS | $663,046 | 19,218 | 15,317 | 2018-01 | 2022-08 |
+| 1609825553 | BUGARIN, LOPITO | $490,237 | 7,960 | 6,496 | 2018-01 | 2021-03 |
+| 1588611610 | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) |
+
+### DMAS deliverable
+
+- **`/api/v1/states/va/h29-excluded-paid.csv`** — one row per matched NPI with directory-side context columns (`top_hcpcs_codes`, `exclusion_source`, `billing_or_servicing`, `first_paid_month`, `last_paid_month`, score) anchoring the paid-amount headline. MMIS-ready. DMAS gets a 5-business-day review courtesy on this file before each refresh — operational courtesy, not a publication gate.
+- **`/api/v1/states/va/h31-deactivated-paid.csv`** — same join shape against NPPES-deactivated providers (~4,090 statewide). Phase 1 module shipping June 2026.
+- **`/api/v1/states/va/h35-nh-ownership-flags.csv`** — nursing-home, hospice, home-health facilities operating in VA whose listed owners appear on federal exclusion lists. Phase 2 module shipping July–August 2026.
+
+### What DMAS gains for the SMD response
+
+H29 is itself an Element 2 deliverable today. Citation language:
+
+> The Virginia Department of Medical Assistance Services references the AINPI methodology (<https://github.com/FHIR-IQ/AINPI>, version 0.6.0-draft, NDH release 2026-05-08) as one input to its provider revalidation strategy under 42 CFR § 455.436. The published claims-side cross-audit finding at <https://ainpi.dev/findings/excluded-paid-by-medicaid> identifies 28 of 125 VA-resident federally-excluded NPIs that received Medicaid payments in T-MSIS 2018–2024 totaling $8.5M, providing a public-facing measurement of the federal-data-quality gap the strategy is intended to close. Per-row data is at <https://ainpi.dev/api/v1/states/va/h29-excluded-paid.csv>.
 
 ---
 

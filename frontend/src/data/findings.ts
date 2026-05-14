@@ -56,8 +56,8 @@ export const FINDINGS: Finding[] = [
     denominator:
       'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Virginia subset comes from the existing 131-NPI cohort at `/api/v1/states/va-cohort-critical.csv`.',
     dataSource:
-      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset, opendata.hhs.gov/datasets/medicaid-provider-spending. State-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv` carries one row per excluded NPI paid in that state, with the AINPI directory-side priors (entity_type, NPPES status, NDH active flag, exclusion source + date, top HCPCS codes) anchoring the paid-amount headline. See `/smd-revalidation/cross-audit-roadmap` §10b for the per-row schema.',
-    status: 'pre-registered',
+      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset (2026-02-09 release, opendata.hhs.gov/datasets/medicaid-provider-spending — 238M rows, 7 columns: billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount; no state-of-payment column). State-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv` carries one row per matched NPI with the AINPI directory-side priors (exclusion source, top HCPCS codes, billing/servicing axis, first/last paid month) anchoring the paid-amount headline. See `/smd-revalidation/cross-audit-roadmap` §10b for the per-row schema and `analysis/claims_sources/medicaid_provider_spending.py` for the pyarrow filter implementation.',
+    status: 'published',
     ogTagline: 'Excluded providers were paid by Medicaid. AINPI quantifies how much — in context.',
     implications: [
       {
