@@ -1,0 +1,34 @@
+{
+  "slug": "excluded-billing-medicare-partb",
+  "title": "Federally excluded VA-resident NPIs billing Medicare Part B (CY 2023)",
+  "hypotheses": [
+    "H30",
+    "H30a"
+  ],
+  "status": "published",
+  "release_date": "CY 2023 (RY2025 P05)",
+  "generated_at": "2026-05-14T21:23:19+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "0d15702",
+  "headline": "8 of 125 currently-active federally-excluded VA-resident NPIs billed Medicare Part B in CY 2023 \u2014 total paid $337,191 on 10,586 services, per the CMS Medicare Physician & Other Practitioners by Provider file (CY 2023 (RY2025 P05)). LEIE exclusions bind across all federal programs (42 USC \u00a7 1320a-7), so any Part B billing by these NPIs is a direct federal compliance signal regardless of which state Medicaid program also paid them (see H29).",
+  "numerator": 8,
+  "denominator": 125,
+  "denominator_note": "VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state). The Part B file is itself national; VA-cohort matches reflect billing anywhere in the US, not VA-specific billing.",
+  "data_source_release": "CY 2023 (RY2025 P05)",
+  "data_source_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "VA cohort NPIs billing Part B",
+        "value": 8
+      },
+      {
+        "label": "VA cohort NPIs not billing Part B",
+        "value": 117
+      }
+    ]
+  },
+  "notes": "Per-state CSV at /api/v1/states/va/h30a-excluded-billing-partb.csv carries one row per matched NPI with paid + allowed + services + beneficiaries + provider type + exclusion source. Same VA-pilot operational courtesy as H29: DMAS gets 5-business-day review before each refresh \u2014 operational, not a publication gate."
+}

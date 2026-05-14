@@ -1,0 +1,12 @@
+{
+  "queried_at": "2026-05-14T21:26:39+00:00",
+  "total_suppliers": 63988,
+  "matched_suppliers": 0,
+  "matched_va_suppliers": 0,
+  "total_paid_2023": 0,
+  "total_va_paid_2023": 0,
+  "top_states_by_matches": [],
+  "top_10_matched_nationally": [],
+  "csv_url_national": "/api/v1/findings/dmepos-excluded-detail.csv",
+  "csv_url_va": "/api/v1/states/va/h33-dmepos-excluded-va.csv"
+}
