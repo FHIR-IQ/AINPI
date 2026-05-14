@@ -222,13 +222,64 @@ Add:
 
 ---
 
-## 10. Open decisions
+## 10. Decisions resolved 2026-05-14
 
-1. **Per-NPI publication policy for spending outliers.** H29 lists every excluded NPI that was paid. But should we publish individual paid amounts, or only count of claims? The KFF caveat about non-comparable procedures and entity types argues for showing amounts with context, not as a ranking.
-2. **State partner co-authorship.** Virginia (via Greg) is one candidate. South Carolina is a possible second. A state co-author strengthens the finding's credibility and gives the state an early read; it also creates obligations on cadence and review.
-3. **Methodology pre-registration template extension.** The existing AINPI template assumes directory-side findings with stable denominators. Claims-side findings need additional fields: source dataset version, attribution rules for billing vs servicing NPI, date-range scope.
-4. **Disclosure timing.** For H29 and H35 specifically — should the relevant state Medicaid agency and CMS Center for Program Integrity get a 14-day pre-publication notice for any state-attributed findings, or do we publish immediately on the pre-registered date? The pre-notice posture is more conservative and matches responsible disclosure norms; immediate publication matches the transparency posture of the existing AINPI findings. Decision needed before H29 ships.
-5. **Funding pathway.** Phase 1 is feasible inside current FHIR-IQ time. Phase 2 and 3 likely benefit from state contract revenue (state PI engagements citing AINPI findings) or foundation funding (RWJF, Arnold Ventures have funded comparable transparency work).
+The roadmap was reviewed and three decisions locked in. The other two stay open as ongoing operational questions.
+
+1. **Per-NPI publication policy for spending outliers — DECIDED: amount with context.** Aggregate paid amount per excluded NPI is published, and every row carries the AINPI directory-side priors the reader needs to interpret the number — exclusion source (LEIE / SAM / both), exclusion effective date, NPPES deactivation status, NDH active flag, entity type. The existing H1–H28 findings act as the context layer: an H29 row is presented next to what AINPI already knows about that NPI's directory record, so the spending headline is never read in isolation. This matters because the source file mixes individual practitioners, state and county health agencies, and high-volume entity-NPIs that bill across wide procedure ranges — without the directory-side context, a paid-amount ranking would over-index on the entity-NPIs that aren't comparable to individual practitioners in the first place.
+
+2. **State partner co-authorship — DECIDED: Virginia as the pilot.** Pilot state for the cross-audit work is Virginia (via the warm DMAS relationship behind the existing 131-NPI federally-excluded cohort and the 2026-05-04 briefing). South Carolina remains a Phase 2 candidate if the SC referral lands. Virginia gets the first state-scoped CSV at `/api/v1/states/va/h29-excluded-paid.csv` and Virginia DMAS gets review-before-publish courtesy on the VA-attributed rows (operational courtesy, not a publication gate — see decision 4).
+
+3. **Methodology pre-registration template extension — still open.** Claims-side findings need additional fields on top of the directory-side template: source dataset version, attribution rules for billing vs servicing NPI, date-range scope, entity-type filter applied. To be addressed when the first ingestion module ships in June.
+
+4. **Disclosure timing — DECIDED: publish when available and high confidence; no pre-publication notice gate.** Findings ship the moment the ingestion module finishes a clean run against a pinned source release and the result has been internally cross-checked against the directory-side priors. This matches the transparency posture of the existing AINPI findings (H1–H28). Virginia DMAS gets review-before-publish courtesy on VA-attributed rows because of the pilot relationship; that's a one-state operational courtesy, not a precedent for delayed publication elsewhere.
+
+5. **Funding pathway — still open.** Phase 1 is feasible inside current FHIR-IQ time. Phase 2 and Phase 3 likely benefit from state contract revenue (state PI engagements citing AINPI findings) or foundation funding (RWJF, Arnold Ventures have funded comparable transparency work).
+
+---
+
+## 10b. Virginia pilot scope (decided 2026-05-14)
+
+Virginia is the Phase 1 co-author state. The existing infrastructure makes this the lowest-friction path:
+
+- **131-NPI cohort already enumerated.** `/api/v1/states/va-cohort-critical.csv` contains every VA-resident NPI currently active on LEIE or SAM. H29 joins this exact set against the HHS Medicaid Provider Spending dataset filtered to VA — no separate cohort construction needed.
+- **DMAS relationship is warm.** The 2026-05-04 briefing established the working pattern (cite AINPI as one input to the state's broader program-integrity strategy under 42 CFR § 455.436). The cross-audit Phase 1 output extends that pattern from directory-side flags to claims-side spending exposure on the same NPIs.
+- **MMIS reconciliation workflow already exists.** The VA-cohort CSV format and verification-URL convention from H23 (LEIE / SAM / NPPES portal links) carries forward to H29. State PI staff don't learn a new file shape.
+
+### What VA gets in Phase 1
+
+| Deliverable | URL | When |
+| --- | --- | --- |
+| `/api/v1/states/va/h29-excluded-paid.csv` | DMAS-shareable, MMIS-ready | June 2026, with DMAS review-before-publish courtesy |
+| Updated `/briefings/va` | Cross-audit story added | June 2026 |
+| Updated `/states/va` | Element 2 cross-audit panel | June 2026 |
+| Citation language update on `/smd-revalidation` | Element 2 references the live VA cross-audit CSV | June 2026 |
+
+### Per-row schema for `/api/v1/states/va/h29-excluded-paid.csv`
+
+Anchoring the spending headline in AINPI's directory-side priors per decision 1 above:
+
+| Column | Source | Purpose |
+| --- | --- | --- |
+| `npi` | HHS Medicaid Provider Spending | Join key |
+| `entity_type` | NPPES | 1 (individual) vs 2 (organization). Read entity-2 rows with care — high-volume entity-NPIs span wide procedure ranges. |
+| `name` | NPPES | Display |
+| `nppes_active` | NPPES | true / false / deactivated_date |
+| `ndh_active` | `cms_npd.practitioner._active` (2026-05-08 release) | true / false |
+| `exclusion_source` | OIG LEIE + SAM.gov | `leie` / `sam` / `leie+sam` |
+| `exclusion_effective_date` | OIG LEIE EXCLDATE / SAM ActiveDate | When the exclusion took effect |
+| `paid_amount_post_exclusion` | HHS spending file, filtered to month/year ≥ exclusion_effective_date | The headline number, in context |
+| `claim_count_post_exclusion` | HHS spending file | Count for readers who want the lower-bound signal |
+| `top_hcpcs_codes` | HHS spending file | Top 3 procedure codes by paid amount — surfaces the wide-range entity-NPI case |
+| `leie_lookup_url` | derived | `https://exclusions.oig.hhs.gov/` |
+| `sam_lookup_url` | derived | `https://sam.gov/search/?index=ex` |
+| `nppes_lookup_url` | derived | `https://npiregistry.cms.hhs.gov/provider-view/<npi>` |
+
+The `paid_amount_post_exclusion` column is the H29 headline. Every other column is the context the reader needs to decide whether the headline is load-bearing or whether the row is a non-individual entity that mixes a wide procedure range into one NPI.
+
+### Pilot governance
+
+DMAS gets a 5-business-day review window on the VA-attributed rows before each refresh publishes. Their feedback updates the row-level context columns (e.g., entity-type misclassification, MMIS reconciliation already-resolved cases) but does not gate publication of the aggregate number. This is the one-state pilot courtesy from decision 4; it does not extend to other states.
 
 ---
 

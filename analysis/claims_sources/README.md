@@ -30,11 +30,12 @@ Each module should:
 
 1. **Cite the source release tag** in the module docstring and in the emitted JSON `data_source_release` field.
 2. **Cap the join to public-only data.** TAF, full DMF, CMS Preclusion List are out of scope; do not load these even if available.
-3. **Filter non-individual entities** (state and county health agencies appearing as billing NPIs) via NPPES entity type before publishing aggregate spending totals.
+3. **Filter non-individual entities** (state and county health agencies appearing as billing NPIs) via NPPES entity type before publishing aggregate spending totals. Don't drop entity-2 rows entirely — surface them in the per-row CSV with `entity_type=2` so the reader can see them in context — but exclude them from the aggregate headline count.
 4. **Apply the H27 privacy pattern** — count and locate, never republish individual claims-level PII. Beneficiary identifiers, dates of birth, addresses other than the provider's own published address are out of scope.
-5. **Emit a state-scoped CSV** under `frontend/public/api/v1/states/<state>/h<N>-<slug>.csv` with verification URLs for every flagged NPI.
-6. **Write per-finding JSON** to `frontend/public/api/v1/findings/<slug>.json` matching the existing `ApiV1Finding` schema (`frontend/src/lib/api-v1-types.ts`).
-7. **Stamp every payload** with `methodology_version`, `commit_sha`, and `generated_at` — same as the directory-side findings.
+5. **Anchor every claims-side number in AINPI's directory-side priors.** The existing H1–H28 findings are the context layer. Each per-row CSV must include the directory-side columns the reader needs to interpret the claims-side headline — at minimum: `entity_type` (NPPES 1 vs 2), `nppes_active`, `ndh_active` (from `cms_npd.practitioner._active`), `exclusion_source`, `exclusion_effective_date`. Where the procedure mix matters (H29 specifically), add `top_hcpcs_codes` so the reader can see when one NPI mixes wide-ranging procedures. The aggregate-data sources (HHS Medicaid Provider Spending, Medicare Part B) include rows that are not comparable to individual-practitioner billing; the directory-side priors are the de-noise layer that prevents out-of-context citation. See [`docs/smd-revalidation/cross-audit-roadmap.md`](../../docs/smd-revalidation/cross-audit-roadmap.md) §10b for the H29 schema.
+6. **Emit a state-scoped CSV** under `frontend/public/api/v1/states/<state>/h<N>-<slug>.csv` with verification URLs for every flagged NPI.
+7. **Write per-finding JSON** to `frontend/public/api/v1/findings/<slug>.json` matching the existing `ApiV1Finding` schema (`frontend/src/lib/api-v1-types.ts`).
+8. **Stamp every payload** with `methodology_version`, `commit_sha`, and `generated_at` — same as the directory-side findings.
 
 ## Refresh cadence
 
@@ -54,3 +55,9 @@ Each source has its own publication rhythm. The repo's weekly GitHub Actions cro
 This README is Phase 0. No module ships in this PR. The findings are pre-registered in `frontend/src/data/findings.ts` with `status: 'pre-registered'`, the roadmap is published at `/smd-revalidation/cross-audit-roadmap`, and the tracking issue is open at <https://github.com/FHIR-IQ/AINPI/issues>.
 
 State agencies writing their SMD response between now and 2026-05-23 can cite the pre-registered findings as "metrics with public-facing data or reporting (forthcoming, methodology pinned)" for Element 2 of the strategy submission.
+
+## Decisions locked in 2026-05-14 (see roadmap §10)
+
+- **Per-NPI publication policy (H29):** paid amount with context, anchored in AINPI's directory-side priors. Every row carries `entity_type`, `nppes_active`, `ndh_active`, `exclusion_source`, `exclusion_effective_date`, `top_hcpcs_codes`. No state-comparative ranking; per-state slices only.
+- **Disclosure timing:** publish when available and high confidence. No pre-publication notice gate. Virginia gets a 5-business-day review courtesy on VA-attributed rows as the pilot relationship; that's one-state, not a precedent.
+- **Pilot state:** Virginia. The first state-scoped CSV is `/api/v1/states/va/h29-excluded-paid.csv`. The 131-NPI cohort already at `/api/v1/states/va-cohort-critical.csv` is the input set.

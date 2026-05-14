@@ -50,30 +50,30 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H29'],
     title: 'Federally excluded providers paid by Medicaid (HHS spending dataset)',
     summary:
-      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred — and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls.',
+      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred — and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls. Virginia is the Phase 1 pilot state.',
     nullHypothesis:
       'Zero NPIs currently active on OIG LEIE or SAM.gov appear as Billing NPI or Servicing NPI in the HHS Medicaid Provider Spending dataset (2018–2024).',
     denominator:
-      'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Entity-type filter applied to drop state/county health agencies that NPPES classifies as non-individual providers.',
+      'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Virginia subset comes from the existing 131-NPI cohort at `/api/v1/states/va-cohort-critical.csv`.',
     dataSource:
-      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset, opendata.hhs.gov/datasets/medicaid-provider-spending. Refresh follows the HHS file cadence (TBD); state-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv`.',
+      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset, opendata.hhs.gov/datasets/medicaid-provider-spending. State-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv` carries one row per excluded NPI paid in that state, with the AINPI directory-side priors (entity_type, NPPES status, NDH active flag, exclusion source + date, top HCPCS codes) anchoring the paid-amount headline. See `/smd-revalidation/cross-audit-roadmap` §10b for the per-row schema.',
     status: 'pre-registered',
-    ogTagline: 'Excluded providers were paid by Medicaid. AINPI quantifies how much.',
+    ogTagline: 'Excluded providers were paid by Medicaid. AINPI quantifies how much — in context.',
     implications: [
       {
         audience: 'Regulators',
         takeaway:
-          'Direct § 455.436 audit-referral signal. State PI units can pull the per-state CSV and feed it into the MMIS reconciliation queue. CMS Center for Program Integrity gets a federal-aggregate view.',
+          'Direct § 455.436 audit-referral signal. State PI units can pull the per-state CSV and feed it into the MMIS reconciliation queue. Every row carries the directory-side context (entity type, NPPES status, exclusion source + date, top HCPCS codes) so MMIS triage doesn\'t over-index on entity-NPIs that mix wide procedure ranges into one identifier.',
       },
       {
         audience: 'Payer ops teams',
         takeaway:
-          'The HHS file aggregates fee-for-service and managed care. Matches in your state\'s slice are operationally yours to investigate even when the payment flowed through an MCO.',
+          'The HHS file aggregates fee-for-service and managed care. Matches in your state\'s slice are operationally yours to investigate even when the payment flowed through an MCO. The row-level context columns are the de-noise layer — read entity_type=2 and high top_hcpcs_codes diversity together before treating a paid_amount as comparable.',
       },
       {
         audience: 'Researchers',
         takeaway:
-          'Per-NPI publication policy (paid amount vs claim count vs presence flag) is an open methodology question — the KFF 2026-02-20 caveat about non-comparable procedure codes argues for showing amounts with context, not as a ranking.',
+          'Publication policy resolved 2026-05-14: paid amount with context, anchored in AINPI\'s directory-side priors (H10 NPPES match, H14/H15 duplicates, H22 endpoint liveness for the entity\'s parent organization where applicable). No state-comparative ranking; per-state slices only. KFF 2026-02-20 caveat about non-comparable procedure codes is addressed by the row-level top_hcpcs_codes column rather than by aggregating amounts upward.',
       },
     ],
   },
