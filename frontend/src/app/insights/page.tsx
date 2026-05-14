@@ -446,7 +446,7 @@ export default function InsightsPage() {
           <ul className="text-sm space-y-1">
             <li><a className="text-primary-600 hover:underline" href="https://directory.cms.gov/" target="_blank" rel="noreferrer">CMS NPD Public Use Files (2026-05-08 release)</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://github.com/ftrotter-gov/HTE_data_release_specifications" target="_blank" rel="noreferrer">HTE Data Release Specifications (GitHub)</a></li>
-            <li><a className="text-primary-600 hover:underline" href="https://build.fhir.org/ig/HL7/fhir-us-ndh/" target="_blank" rel="noreferrer">NDH FHIR IG v2.0.0</a></li>
+            <li><a className="text-primary-600 hover:underline" href="https://hl7.org/fhir/us/ndh/STU1/" target="_blank" rel="noopener noreferrer">NDH FHIR IG STU1 (v1.0.0, published)</a> · <a className="text-gray-500 hover:underline" href="https://build.fhir.org/ig/HL7/fhir-us-ndh/" target="_blank" rel="noopener noreferrer">STU2 CI build</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://www.upmc.com/about/facts/numbers" target="_blank" rel="noreferrer">UPMC Facts & Figures</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://www.upmchealthplan.com/individuals/health-care-benefits/network-and-access" target="_blank" rel="noreferrer">UPMC Health Plan Network & Access</a></li>
             <li><a className="text-primary-600 hover:underline" href="https://www.mimilabs.ai/report/69e26d7d9697d7ef606ff123" target="_blank" rel="noreferrer">mimilabs &mdash; NPPES vs CMS NPD</a></li>

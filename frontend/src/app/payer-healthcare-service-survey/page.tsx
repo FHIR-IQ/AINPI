@@ -166,24 +166,36 @@ export default function PayerHealthcareServiceSurveyPage() {
           </p>
           <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-gray-600">
             <a
-              href="https://build.fhir.org/ig/HL7/fhir-us-ndh/en/StructureDefinition-ndh-HealthcareService.html"
+              href="https://hl7.org/fhir/us/ndh/STU1/StructureDefinition-ndh-HealthcareService.html"
               target="_blank"
               rel="noopener noreferrer"
               className="block bg-white border rounded-md p-3 hover:border-primary-400"
             >
-              <p className="font-mono text-primary-600 mb-1">NDH HealthcareService profile →</p>
-              <p>Reference for must-support fields below.</p>
+              <p className="font-mono text-primary-600 mb-1">NDH STU1 · HealthcareService profile →</p>
+              <p>Reference for must-support fields below. (NDH IG v1.0.0 — STU1.)</p>
             </a>
             <a
-              href="https://build.fhir.org/ig/HL7/fhir-directory-query/ValueSet-HealthcareServiceCategoryVS.html"
+              href="https://hl7.org/fhir/us/ndh/STU1/ValueSet-HealthcareServiceCategoryVS.html"
               target="_blank"
               rel="noopener noreferrer"
               className="block bg-white border rounded-md p-3 hover:border-primary-400"
             >
-              <p className="font-mono text-primary-600 mb-1">HealthcareServiceCategoryVS →</p>
+              <p className="font-mono text-primary-600 mb-1">NDH STU1 · HealthcareServiceCategoryVS →</p>
               <p>The 15 codes the form asks about.</p>
             </a>
           </div>
+          <p className="mt-3 text-xs text-gray-500">
+            Tracking{' '}
+            <a
+              href="https://build.fhir.org/ig/HL7/fhir-us-ndh/"
+              className="text-primary-600 hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              the STU2 CI build
+            </a>{' '}
+            for upcoming changes; survey responses inform the STU1 → STU2 transition.
+          </p>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-10">

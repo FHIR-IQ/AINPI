@@ -132,4 +132,4 @@ Covers FHIR reference extraction, API parameter parsing, validation contract, fi
 
 - [CMS National Provider Directory](https://directory.cms.gov/)
 - [HTE Data Release Specifications](https://github.com/ftrotter-gov/HTE_data_release_specifications)
-- [NDH FHIR IG v2.0.0](https://build.fhir.org/ig/HL7/fhir-us-ndh/)
+- [NDH FHIR IG STU1 v1.0.0 (published)](https://hl7.org/fhir/us/ndh/STU1/) · [STU2 CI build](https://build.fhir.org/ig/HL7/fhir-us-ndh/) (tracked for upcoming changes; not authoritative)

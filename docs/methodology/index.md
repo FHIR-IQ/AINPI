@@ -18,7 +18,7 @@ AINPI audits the CMS National Provider Directory (NPD) bulk public-use release a
 - **Artifact:** CMS NPD local bulk export, `directory.cms.gov`, as `zstd`-compressed NDJSON files following the HTE data-release specifications.
 - **Vintage:** *(pinned per release — fill checksum, file count, uncompressed size, resource counts)*
 - **Resources processed:** Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint.
-- **NDH IG version pinned:** *(see `build.fhir.org/ig/HL7/fhir-us-ndh/` — fill current pinned version)*
+- **NDH IG version pinned:** **STU1 v1.0.0** (published at <https://hl7.org/fhir/us/ndh/STU1/>). The CI build at `build.fhir.org/ig/HL7/fhir-us-ndh/` is the STU2 work-in-progress, tracked for forward-looking analysis but not used as the conformance reference.
 
 Dependent external sources:
 

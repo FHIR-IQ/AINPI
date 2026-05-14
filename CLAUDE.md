@@ -342,7 +342,7 @@ Practical consequences:
 ## Domain Context
 
 - **NPD** (CMS National Provider Directory): 2026-05-08 public use release (April 2026-04-09 also archived locally), 6 FHIR R4 resource types: Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint. Distributed as NDJSON compressed with zstd from directory.cms.gov
-- **NDH IG** (National Directory of Healthcare, HL7): FHIR implementation guide that NPD adheres to — <https://build.fhir.org/ig/HL7/fhir-us-ndh/>
+- **NDH IG** (National Directory of Healthcare, HL7): FHIR implementation guide that NPD adheres to. **Cite the published STU1** at <https://hl7.org/fhir/us/ndh/STU1/> (v1.0.0). The CI build at <https://build.fhir.org/ig/HL7/fhir-us-ndh/> is the STU2 work-in-progress — track it for upcoming changes but never link to it as the authoritative spec. Per Ming Dunajick (STU1 co-author, currently editing STU2) the ballot/CI URLs are not stable references.
 - **NPPES**: National Plan and Provider Enumeration System — upstream source of ~90% of Practitioner/Organization fields. Self-attested, no enforcement.
 - **PECOS**: Medicare enrollment; enriches NPPES with Medicare-enrolled provider data
 - **CAQH**: Commercial-payer credentialing source. Currently **not** in the NPD ingestion pipeline. See `/insights` for full provenance analysis.

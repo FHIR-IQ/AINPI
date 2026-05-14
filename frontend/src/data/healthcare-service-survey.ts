@@ -1,11 +1,18 @@
 /**
  * Single source of truth for the HealthcareService survey vocabulary.
  *
- * Categories: HL7 Da Vinci HealthcareServiceCategoryVS, 15 codes
- *   https://build.fhir.org/ig/HL7/fhir-directory-query/ValueSet-HealthcareServiceCategoryVS.html
+ * Cite the published NDH STU1 (v1.0.0), NOT the CI build at build.fhir.org.
+ * Thanks to Ming Dunajick (NDH STU1 co-author) for catching the earlier
+ * draft pointing at the ballot/STU2 CI URLs.
  *
- * Must-support fields: NDH HealthcareService profile S-flagged elements
- *   https://build.fhir.org/ig/HL7/fhir-us-ndh/en/StructureDefinition-ndh-HealthcareService.html
+ * Categories: NDH STU1 HealthcareServiceCategoryVS, 15 codes
+ *   https://hl7.org/fhir/us/ndh/STU1/ValueSet-HealthcareServiceCategoryVS.html
+ *
+ * Must-support fields: NDH STU1 HealthcareService profile S-flagged elements
+ *   https://hl7.org/fhir/us/ndh/STU1/StructureDefinition-ndh-HealthcareService.html
+ *
+ * STU2 CI build (tracked but not authoritative):
+ *   https://build.fhir.org/ig/HL7/fhir-us-ndh/
  *
  * Edit here; both the form and the public results page read from these.
  */
@@ -54,7 +61,8 @@ export const HCS_MUST_SUPPORT_FIELDS: CodeDisplay[] = [
 
 /** Common FHIR profile choices payers + integrators publish against. */
 export const HCS_FHIR_PROFILES: CodeDisplay[] = [
-  { code: 'ndh', display: 'HL7 NDH (build.fhir.org/ig/HL7/fhir-us-ndh)' },
+  { code: 'ndh-stu1', display: 'HL7 NDH STU1 (hl7.org/fhir/us/ndh/STU1, v1.0.0)' },
+  { code: 'ndh-stu2', display: 'HL7 NDH STU2 CI build (build.fhir.org, pre-publication)' },
   { code: 'davinci-plan-net', display: 'Da Vinci PDex Plan-Net' },
   { code: 'us-core', display: 'US Core 6.x (baseline only)' },
   { code: 'custom', display: 'Custom internal profile' },
