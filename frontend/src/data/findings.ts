@@ -43,6 +43,139 @@ export interface Finding {
 }
 
 export const FINDINGS: Finding[] = [
+  // ── Claims-side cross-audit (Phase 1–3). Pre-registered 2026-05-14;
+  // results land per the roadmap at /smd-revalidation/cross-audit-roadmap.
+  {
+    slug: 'excluded-paid-by-medicaid',
+    hypotheses: ['H29'],
+    title: 'Federally excluded providers paid by Medicaid (HHS spending dataset)',
+    summary:
+      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred — and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls.',
+    nullHypothesis:
+      'Zero NPIs currently active on OIG LEIE or SAM.gov appear as Billing NPI or Servicing NPI in the HHS Medicaid Provider Spending dataset (2018–2024).',
+    denominator:
+      'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Entity-type filter applied to drop state/county health agencies that NPPES classifies as non-individual providers.',
+    dataSource:
+      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset, opendata.hhs.gov/datasets/medicaid-provider-spending. Refresh follows the HHS file cadence (TBD); state-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv`.',
+    status: 'pre-registered',
+    ogTagline: 'Excluded providers were paid by Medicaid. AINPI quantifies how much.',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          'Direct § 455.436 audit-referral signal. State PI units can pull the per-state CSV and feed it into the MMIS reconciliation queue. CMS Center for Program Integrity gets a federal-aggregate view.',
+      },
+      {
+        audience: 'Payer ops teams',
+        takeaway:
+          'The HHS file aggregates fee-for-service and managed care. Matches in your state\'s slice are operationally yours to investigate even when the payment flowed through an MCO.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'Per-NPI publication policy (paid amount vs claim count vs presence flag) is an open methodology question — the KFF 2026-02-20 caveat about non-comparable procedure codes argues for showing amounts with context, not as a ranking.',
+      },
+    ],
+  },
+  {
+    slug: 'excluded-billing-medicare',
+    hypotheses: ['H30', 'H30a', 'H30b'],
+    title: 'Federally excluded providers still billing Medicare (Part B + Part D)',
+    summary:
+      'LEIE exclusions bind across all federal programs (42 USC § 1320a-7). H30 cross-corroborates H29 by joining the same exclusion cohort against the Medicare Physician & Other Practitioners file (Part B) and the Medicare Part D Prescribers file. Part D adds the prescribing dimension: an excluded prescriber writing reimbursed prescriptions.',
+    nullHypothesis:
+      'Zero currently-LEIE/SAM-excluded NPIs appear in the latest Medicare Physician & Other Practitioners file (CY 2023, H30a) or Medicare Part D Prescribers file (H30b).',
+    denominator:
+      'Active LEIE rows with a populated NPI ∪ active SAM rows with a real NPI, joined against every NPI in the published Medicare Part B and Part D provider files for the latest available calendar year.',
+    dataSource:
+      'OIG LEIE + SAM × Medicare Physician & Other Practitioners — by Provider and Service + Medicare Part D Prescribers — by Provider (data.cms.gov, annual cadence, NPI-keyed).',
+    status: 'pre-registered',
+  },
+  {
+    slug: 'deactivated-still-billing',
+    hypotheses: ['H31'],
+    title: 'NPPES-deactivated providers with active billing in public claims data',
+    summary:
+      'NPPES deactivation should mean the provider is no longer in practice. Billing after deactivation is either a data quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier — both are state PI flags. Date-matching is strict: a claim or paid amount must post-date the NPPES deactivation date.',
+    nullHypothesis:
+      'Zero NPPES-deactivated NPIs appear in Medicaid Provider Spending, Medicare Part B, or Medicare Part D for the calendar year matching or following the deactivation date.',
+    denominator:
+      '~260,551 NPPES-deactivated NPIs (per H10 against the 2026-05-08 NDH release) × the three public claims datasets, filtered to claim-year ≥ NPPES deactivation-year.',
+    dataSource:
+      'NPPES monthly dissemination file × HHS Medicaid Provider Spending + Medicare Part B + Medicare Part D. State-scoped CSV at `/api/v1/states/<state>/h31-deactivated-paid.csv`.',
+    status: 'pre-registered',
+  },
+  {
+    slug: 'excluded-receiving-industry-payments',
+    hypotheses: ['H32'],
+    title: 'Federally excluded NPIs receiving industry payments (Open Payments)',
+    summary:
+      'Pharmaceutical and device manufacturers report payments to physicians and teaching hospitals under the Sunshine Act. If a manufacturer is paying a federally excluded provider, that is an industry-side compliance gap. Open Payments is already public and individually searchable; AINPI\'s contribution is the systematic cross-join with exclusion lists, which has not been published.',
+    nullHypothesis:
+      'Zero LEIE/SAM-excluded NPIs appear as covered recipients in CMS Open Payments for the year of exclusion or later.',
+    denominator:
+      'Active LEIE + SAM rows with a populated NPI, joined against every Covered Recipient NPI in the published CMS Open Payments General Payments + Research Payments files, filtered to payment_year ≥ exclusion_effective_year.',
+    dataSource:
+      'OIG LEIE + SAM × CMS Open Payments (openpaymentsdata.cms.gov, annual + quarterly refresh).',
+    status: 'pre-registered',
+  },
+  {
+    slug: 'dmepos-excluded',
+    hypotheses: ['H33'],
+    title: 'DMEPOS suppliers on federal exclusion lists',
+    summary:
+      'DMEPOS has historically been the highest-fraud category in Medicare. CMS imposed moratoria in multiple states (most recently Florida, March 2026). Cross-checking the active supplier directory against federal exclusion lists is a direct state and federal PI signal.',
+    nullHypothesis:
+      'Zero NPIs in the current CMS DMEPOS Supplier Directory appear on the OIG LEIE or SAM.gov active exclusion lists.',
+    denominator:
+      'Every NPI in the most recent CMS DMEPOS Supplier Directory release (quarterly cadence), joined against active LEIE + SAM rows with a populated NPI.',
+    dataSource:
+      'CMS DMEPOS Supplier Directory (data.cms.gov, quarterly) × `cms_npd.oig_leie` + `cms_npd.sam_exclusions`.',
+    status: 'pre-registered',
+  },
+  {
+    slug: 'pos-deactivated-contradiction',
+    hypotheses: ['H34'],
+    title: 'Internal CMS contradiction: POS-certified providers also flagged NPPES-deactivated',
+    summary:
+      'Medicare Provider of Services (POS) says the provider is enrolled; NPPES says they are deactivated. This is a federal data quality finding that should never be true — the two CMS systems contradict each other on the same NPI.',
+    nullHypothesis:
+      'Zero NPPES-deactivated NPIs appear in the current Medicare Provider of Services file as actively certified.',
+    denominator:
+      '~260,551 NPPES-deactivated NPIs × every NPI appearing as actively certified in the latest POS quarterly release.',
+    dataSource:
+      'NPPES × CMS Provider of Services file (data.cms.gov, quarterly).',
+    status: 'pre-registered',
+  },
+  {
+    slug: 'nh-hospice-hh-ownership-flags',
+    hypotheses: ['H35'],
+    title: 'Nursing home, hospice, home health owners on federal exclusion lists',
+    summary:
+      'Highest-impact finding for vulnerable populations. The CMS Disclosure of Ownership and Additional Disclosable Parties Interim Final Rule (2023) expanded ownership transparency precisely to surface concerning ownership structures. Cross-referencing this against federal exclusion lists is what the rule was designed to enable. State survey agencies have direct authority to act on matches. Consumer-facing search ("is the nursing home for my parent owned by someone with sanctions?") becomes possible.',
+    nullHypothesis:
+      'Zero owners listed in CMS Nursing Home Compare ownership data, Hospice Compare, or Home Health Compare appear on the OIG LEIE or SAM.gov active exclusion lists.',
+    denominator:
+      'Every owner row in the current Nursing Home Compare / Hospice Compare / Home Health Compare ownership files, joined against active LEIE + SAM exclusion lists. Owner NPI cross-walk applied where available; otherwise (owner_name, owner_state) deterministic match against LEIE.',
+    dataSource:
+      'CMS Nursing Home Compare ownership data (data.cms.gov, monthly) + Hospice Compare + Home Health Compare × `cms_npd.oig_leie` + `cms_npd.sam_exclusions`. State-scoped CSV at `/api/v1/states/<state>/h35-nh-ownership-flags.csv`.',
+    status: 'pre-registered',
+    ogTagline: 'Does a federally excluded operator run the nursing home for your parent? AINPI checks.',
+  },
+  {
+    slug: 'ndh-completeness-gap',
+    hypotheses: ['H36'],
+    title: 'High-volume Medicare billers absent from NDH (directory completeness)',
+    summary:
+      'The NDH is meant to be the federal source of truth on provider identity. Material billers absent from NDH are a directory-side failure of the federal system, distinct from H10 (NPPES match rate). This is the most computationally expensive finding (full join across the NDH and Medicare Part B universes), so it ships last.',
+    nullHypothesis:
+      'The NDH is exhaustive — no NPI with material Medicare Part B billing in CY 2023 is missing from the pinned NDH bulk export.',
+    denominator:
+      'Every NPI in the latest Medicare Physician & Other Practitioners file with paid Medicare Part B service counts above a material threshold (definition pinned at pre-publication time), checked for presence in `cms_npd.practitioner._npi`.',
+    dataSource:
+      'CMS NDH bulk export × Medicare Physician & Other Practitioners — by Provider and Service.',
+    status: 'pre-registered',
+  },
   {
     slug: 'endpoint-url-validity',
     hypotheses: ['H28'],

@@ -246,7 +246,19 @@ export default function SmdRevalidationPage() {
                   finding carries <code>methodology_version</code>,{' '}
                   <code>commit_sha</code>, and <code>generated_at</code> for
                   audit. State-scoped slices live at{' '}
-                  <a href="/states" className="underline">/states/&lt;state&gt;</a>.
+                  <a href="/states" className="underline">/states/&lt;state&gt;</a>.{' '}
+                  <strong>
+                    Claims-side cross-audit (H29–H36, pre-registered 2026-05-14)
+                  </strong>{' '}
+                  extends Element 2 with public Medicaid + Medicare spending +
+                  Open Payments + DMEPOS + nursing home ownership joins —{' '}
+                  <a
+                    href="/smd-revalidation/cross-audit-roadmap"
+                    className="underline"
+                  >
+                    see the roadmap
+                  </a>
+                  .
                 </td>
               </tr>
               <tr className="align-top">
