@@ -44,16 +44,22 @@ def main() -> None:
     ]
     va_critical.sort(key=lambda r: (-float(r["score"]), r["npi"]))
 
-    # 1. Per-NPI export with verification URLs.
+    # 1. Per-NPI export with verification URLs + exclusion-effective dates
+    #    so claims-side joins (H29-H32) can attribute paid amounts to
+    #    strictly post-exclusion months instead of "paid anywhere in window."
     with open(OUT_CSV, "w", newline="", encoding="utf-8") as fh:
         w = csv.writer(fh)
         w.writerow([
             "npi", "name", "state", "score", "bucket", "reasons",
+            "leie_excldate", "sam_active_date", "nppes_deactivation_date",
             "leie_lookup_url", "sam_lookup_url", "nppes_lookup_url",
         ])
         for r in va_critical:
             w.writerow([
                 r["npi"], r["name"], r["state"], r["score"], r["bucket"], r["reasons"],
+                r.get("leie_excldate", ""),
+                r.get("sam_active_date", ""),
+                r.get("nppes_deactivation_date", ""),
                 "https://exclusions.oig.hhs.gov/",
                 "https://sam.gov/search/?index=ex",
                 f"https://npiregistry.cms.hhs.gov/provider-view/{r['npi']}",

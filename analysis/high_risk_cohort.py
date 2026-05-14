@@ -116,16 +116,20 @@ def run() -> None:
       WHERE _npi IS NOT NULL
     ),
     active_leie AS (
-      SELECT NPI
+      SELECT NPI, MIN(EXCLDATE) AS leie_excldate
       FROM `{LEIE_TABLE}`
       WHERE NPI != '' AND NPI != '0000000000'
         AND (REINDATE = '00000000' OR REINDATE IS NULL OR REINDATE = '')
+      GROUP BY NPI
     ),
     active_sam AS (
-      SELECT DISTINCT npi
+      SELECT
+        npi,
+        CAST(MIN(active_date) AS STRING) AS sam_active_date
       FROM `{SAM_TABLE}`
       WHERE REGEXP_CONTAINS(npi, r'^[1-9]\\d{{9}}$')
         AND record_status = 'Active'
+      GROUP BY npi
     ),
     nppes_join AS (
       SELECT
@@ -133,10 +137,13 @@ def run() -> None:
         p._family_name,
         p._given_name,
         p._state,
-        nppes.npi IS NOT NULL                                     AS in_nppes,
-        nppes.npi_deactivation_date IS NOT NULL                   AS nppes_deactivated,
-        leie.NPI IS NOT NULL                                      AS oig_excluded,
-        sam.npi IS NOT NULL                                       AS sam_excluded
+        nppes.npi IS NOT NULL                       AS in_nppes,
+        nppes.npi_deactivation_date IS NOT NULL     AS nppes_deactivated,
+        CAST(nppes.npi_deactivation_date AS STRING) AS nppes_deactivation_date,
+        leie.NPI IS NOT NULL                        AS oig_excluded,
+        leie.leie_excldate                          AS leie_excldate,
+        sam.npi IS NOT NULL                         AS sam_excluded,
+        sam.sam_active_date                         AS sam_active_date
       FROM ndh_practitioners p
       LEFT JOIN `{NPPES_DATASET}.npi_raw` nppes
         ON p._npi = CAST(nppes.npi AS STRING)
@@ -152,8 +159,11 @@ def run() -> None:
       _state,
       in_nppes,
       nppes_deactivated,
+      nppes_deactivation_date,
       oig_excluded,
-      sam_excluded
+      leie_excldate,
+      sam_excluded,
+      sam_active_date
     FROM nppes_join
     """
     print(f"Running composite cohort query — this may take ~3-5 min on 7.4M practitioners...")
@@ -218,6 +228,10 @@ def run() -> None:
         if bucket != "clean":
             family = (r._family_name or "").strip()
             given = (r._given_name or "").strip()
+            # Format LEIE date: YYYYMMDD string → YYYY-MM-DD
+            leie_dt = ""
+            if r.leie_excldate and len(r.leie_excldate) == 8:
+                leie_dt = f"{r.leie_excldate[:4]}-{r.leie_excldate[4:6]}-{r.leie_excldate[6:8]}"
             cohort.append({
                 "npi": npi,
                 "name": f"{family}, {given}".strip(", "),
@@ -225,6 +239,9 @@ def run() -> None:
                 "score": round(score, 2),
                 "reasons": reasons,
                 "bucket": bucket,
+                "leie_excldate": leie_dt,
+                "sam_active_date": r.sam_active_date or "",
+                "nppes_deactivation_date": r.nppes_deactivation_date or "",
             })
 
     cohort.sort(key=lambda c: (-c["score"], c["npi"]))
@@ -242,10 +259,17 @@ def run() -> None:
     for k, v in reason_counts.items():
         print(f"  {k:<22} {v:>10,}  ({100*v/total:.4f}%)")
 
-    # Write CSV export (top N by score, deduplicated by NPI).
+    # Write CSV export (top N by score, deduplicated by NPI). Includes
+    # per-NPI exclusion-effective dates (leie_excldate, sam_active_date,
+    # nppes_deactivation_date) so downstream claims-side joins (H29-H32)
+    # can attribute paid amounts to strictly-post-exclusion claim months
+    # instead of "paid anywhere in 2018-2024."
     csv_path = FINDINGS_DIR / "high-risk-cohort-export.csv"
     with open(csv_path, "w", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=["npi", "name", "state", "score", "bucket", "reasons"])
+        w = csv.DictWriter(fh, fieldnames=[
+            "npi", "name", "state", "score", "bucket", "reasons",
+            "leie_excldate", "sam_active_date", "nppes_deactivation_date",
+        ])
         w.writeheader()
         for c in cohort[:EXPORT_TOP_N]:
             w.writerow({
@@ -255,6 +279,9 @@ def run() -> None:
                 "score": c["score"],
                 "bucket": c["bucket"],
                 "reasons": "|".join(c["reasons"]),
+                "leie_excldate": c["leie_excldate"],
+                "sam_active_date": c["sam_active_date"],
+                "nppes_deactivation_date": c["nppes_deactivation_date"],
             })
     print(f"\nWrote {csv_path} ({min(len(cohort), EXPORT_TOP_N):,} rows)")
 

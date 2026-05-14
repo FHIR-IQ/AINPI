@@ -110,12 +110,19 @@ def load_cohort(csv_path: pathlib.Path) -> list[dict]:
         return list(csv.DictReader(fh))
 
 
-def filter_parquet_for_npis(npis: set[str]) -> dict[str, dict]:
+def filter_parquet_for_npis(
+    npis: set[str], cutoff_by_npi: dict[str, str] | None = None,
+) -> dict[str, dict]:
     """Single pass over the parquet, filtering on (billing|servicing) ∈ npis.
 
     Returns a dict keyed by NPI with aggregated paid amount, claim line count,
     top HCPCS by paid amount, first/last claim month, and which axis the NPI
     matched on (billing vs servicing).
+
+    `cutoff_by_npi` maps NPI → 'YYYY-MM' (or empty/None). When provided, we
+    additionally accumulate `post_exclusion_paid` and `post_exclusion_claims`
+    for claim months strictly after the NPI's cutoff. The top-level totals
+    (`paid`, `claims`) still cover the full window.
     """
     if not PARQUET_PATH.exists():
         raise SystemExit(
@@ -126,10 +133,16 @@ def filter_parquet_for_npis(npis: set[str]) -> dict[str, dict]:
     pf = pq.ParquetFile(PARQUET_PATH)
     print(f"Scanning {PARQUET_PATH.name} — {pf.metadata.num_rows:,} rows · {pf.num_row_groups} row groups")
 
+    cutoff_by_npi = cutoff_by_npi or {}
+
     per_npi: dict[str, dict] = defaultdict(lambda: {
         "paid": 0.0,
         "claims": 0,
         "patients": 0,
+        "post_exclusion_paid": 0.0,
+        "post_exclusion_claims": 0,
+        "post_exclusion_first_month": None,
+        "post_exclusion_last_month": None,
         "axes": set(),
         "first_month": None,
         "last_month": None,
@@ -180,6 +193,17 @@ def filter_parquet_for_npis(npis: set[str]) -> dict[str, dict]:
                     slot["first_month"] = month
                 if slot["last_month"] is None or month > slot["last_month"]:
                     slot["last_month"] = month
+                # Strict post-exclusion accumulator
+                cutoff = cutoff_by_npi.get(npi, "")
+                if cutoff and month and month > cutoff[:7]:
+                    slot["post_exclusion_paid"] += paid
+                    slot["post_exclusion_claims"] += claims
+                    if (slot["post_exclusion_first_month"] is None
+                            or month < slot["post_exclusion_first_month"]):
+                        slot["post_exclusion_first_month"] = month
+                    if (slot["post_exclusion_last_month"] is None
+                            or month > slot["post_exclusion_last_month"]):
+                        slot["post_exclusion_last_month"] = month
 
         if (i + 1) % 50 == 0:
             print(f"  scanned {(i + 1) * 200_000:>12,} rows · {len(per_npi)} NPIs matched so far")
@@ -188,30 +212,65 @@ def filter_parquet_for_npis(npis: set[str]) -> dict[str, dict]:
     return dict(per_npi)
 
 
+def cutoff_for_cohort_row(row: dict) -> str:
+    """Compute the strict-post-exclusion cutoff for one cohort row.
+
+    Uses LEIE / SAM exclusion-effective dates only — NPPES deactivation
+    is NOT an exclusion (can be triggered by retirement, death, voluntary
+    closure of practice, etc.) so it's not load-bearing for the
+    post-exclusion attribution claim. Returns the EARLIEST of the LEIE
+    or SAM dates if either is present. Format: 'YYYY-MM-DD'.
+    """
+    candidates = [
+        (row.get("leie_excldate") or "").strip(),
+        (row.get("sam_active_date") or "").strip(),
+    ]
+    candidates = [c for c in candidates if c and len(c) >= 10]
+    return min(candidates) if candidates else ""
+
+
 def compose_rows(cohort: list[dict], hits: dict[str, dict]) -> list[dict]:
     by_npi = {r["npi"]: r for r in cohort if r.get("npi")}
     out = []
     for npi, agg in hits.items():
         cohort_row = by_npi.get(npi, {})
+        cutoff = cutoff_for_cohort_row(cohort_row)
         top_hcpcs = sorted(
             agg["hcpcs"].items(), key=lambda kv: kv[1], reverse=True
         )[:3]
+        # Use post-exclusion amount as the strict headline when we have a
+        # cutoff; otherwise fall back to total paid (back-compat).
+        if cutoff:
+            headline_paid = round(agg["post_exclusion_paid"], 2)
+            headline_claims = agg["post_exclusion_claims"]
+            first = agg["post_exclusion_first_month"] or ""
+            last = agg["post_exclusion_last_month"] or ""
+        else:
+            headline_paid = round(agg["paid"], 2)
+            headline_claims = agg["claims"]
+            first = agg["first_month"] or ""
+            last = agg["last_month"] or ""
         out.append({
             "npi": npi,
             "name": cohort_row.get("name", ""),
-            "paid_amount_post_exclusion": round(agg["paid"], 2),
-            "claim_lines_total": agg["claims"],
+            "paid_amount_post_exclusion": headline_paid,
+            "claim_lines_post_exclusion": headline_claims,
+            "paid_amount_full_window": round(agg["paid"], 2),
+            "claim_lines_full_window": agg["claims"],
             "patients_total": agg["patients"],
             "top_hcpcs_codes": "; ".join(f"{c}=${a:,.0f}" for c, a in top_hcpcs if c),
             "exclusion_source": cohort_row.get("reasons", ""),
+            "exclusion_effective_date": cutoff,
             "score": cohort_row.get("score", ""),
-            "first_paid_month": agg["first_month"] or "",
-            "last_paid_month": agg["last_month"] or "",
+            "first_paid_month": first,
+            "last_paid_month": last,
             "billing_or_servicing": ", ".join(sorted(agg["axes"])),
             "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
             "sam_lookup_url": "https://sam.gov/search/?index=ex",
             "nppes_lookup_url": f"https://npiregistry.cms.hhs.gov/provider-view/{npi}",
         })
+    # Sort by strict post-exclusion paid amount when available; cohort rows
+    # with no cutoff will have it == full_window paid.
     out.sort(key=lambda r: r["paid_amount_post_exclusion"], reverse=True)
     return out
 
@@ -221,8 +280,11 @@ def write_state_csv(state: str, rows: list[dict]) -> pathlib.Path:
     out_dir.mkdir(parents=True, exist_ok=True)
     out = out_dir / "h29-excluded-paid.csv"
     fieldnames = [
-        "npi", "name", "paid_amount_post_exclusion", "claim_lines_total",
-        "patients_total", "top_hcpcs_codes", "exclusion_source", "score",
+        "npi", "name",
+        "paid_amount_post_exclusion", "claim_lines_post_exclusion",
+        "paid_amount_full_window", "claim_lines_full_window",
+        "patients_total", "top_hcpcs_codes",
+        "exclusion_source", "exclusion_effective_date", "score",
         "first_paid_month", "last_paid_month", "billing_or_servicing",
         "leie_lookup_url", "sam_lookup_url", "nppes_lookup_url",
     ]
@@ -236,26 +298,33 @@ def write_state_csv(state: str, rows: list[dict]) -> pathlib.Path:
 
 
 def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
-    total_paid = sum(r["paid_amount_post_exclusion"] for r in rows)
-    total_claims = sum(r["claim_lines_total"] for r in rows)
+    total_paid_post = sum(r["paid_amount_post_exclusion"] for r in rows if r["exclusion_effective_date"])
+    total_paid_window = sum(r["paid_amount_full_window"] for r in rows)
+    total_claims_window = sum(r["claim_lines_full_window"] for r in rows)
+    post_exclusion_rows = [
+        r for r in rows
+        if r["paid_amount_post_exclusion"] > 0 and r["exclusion_effective_date"]
+    ]
     top_rows = rows[:5]
 
     headline = (
-        f"{len(rows)} of {total_cohort} currently-active federally-excluded "
-        f"{state.upper()}-resident NPIs (per NPPES practice state) received Medicaid "
-        f"payments somewhere in T-MSIS 2018–2024, per the HHS Medicaid Provider "
-        f"Spending dataset ({DATA_SOURCE_RELEASE} release). Combined paid amount "
-        f"across all state Medicaid programs: ${total_paid:,.0f} over {total_claims:,} "
-        f"claim lines. Each match is a 42 CFR § 455.436 audit-referral candidate that "
-        f"a state PI unit can pull and validate against the per-NPI exclusion-effective "
-        f"date in the LEIE / SAM sources. Two source-data limits to read carefully: "
+        f"Of {total_cohort} currently-active federally-excluded {state.upper()}-resident NPIs "
+        f"(per NPPES practice state), {len(rows)} received Medicaid payments somewhere "
+        f"in T-MSIS 2018–2024 totalling ${total_paid_window:,.0f} across "
+        f"{total_claims_window:,} claim lines — but only {len(post_exclusion_rows)} of those "
+        f"{len(rows)} matches received payment STRICTLY AFTER the earliest of their LEIE / SAM "
+        f"exclusion-effective dates, totalling ${total_paid_post:,.0f} in strict "
+        f"post-exclusion payments. The strict-filter result is the regulatorily significant "
+        f"signal — pre-exclusion billing reflects work the provider was legitimately "
+        f"authorized to do at the time, while post-exclusion billing is a direct 42 CFR § 455.436 "
+        f"audit-referral candidate. Source: HHS Medicaid Provider Spending dataset "
+        f"({DATA_SOURCE_RELEASE} release). Per-NPI exclusion-effective dates carried in the "
+        f"H23 cohort export as of methodology v0.6.0-draft. Two source-data limits: "
         f"(1) the HHS file has no state-of-payment column, so paid amounts aggregate "
-        f"across every state Medicaid program that paid the NPI — the VA-resident "
-        f"cohort is per NPPES practice state, NOT per state of payment; "
-        f"(2) the cohort's exclusion-effective dates are not pinned in the cohort "
-        f"export, so a row's paid amounts may include claim months that pre-date "
-        f"the exclusion. Per-NPI MMIS triage should reconcile against the LEIE / SAM "
-        f"effective date via the verification URLs in the per-state CSV."
+        f"across every state Medicaid program that paid the NPI — the VA-resident cohort "
+        f"is per NPPES practice state, not per state of payment; (2) NPPES deactivation "
+        f"is NOT used as an exclusion-effective date because it can be triggered by "
+        f"retirement / death / voluntary closure of practice."
     )
 
     payload = {
@@ -268,8 +337,14 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
         "headline": headline,
-        "numerator": len(rows),
+        "numerator": len(post_exclusion_rows),
         "denominator": total_cohort,
+        "numerator_full_window": len(rows),
+        "numerator_note": (
+            f"Numerator = NPIs with payments STRICTLY AFTER their LEIE/SAM "
+            f"exclusion-effective date. Full-window numerator (any payment "
+            f"2018-2024, regardless of pre/post exclusion) = {len(rows)}."
+        ),
         "denominator_note": (
             f"Phase 1 pilot scope = the {total_cohort}-NPI Virginia federally-"
             f"excluded cohort (active LEIE or SAM, score >= 1.5; VA-resident per "
@@ -321,8 +396,10 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
         "pilot_state": state.upper(),
         "denominator_cohort_size": total_cohort,
         "matches": len(rows),
-        "total_paid_post_exclusion": total_paid,
-        "total_claim_lines": total_claims,
+        "total_paid_post_exclusion": total_paid_post,
+        "total_paid_full_window": total_paid_window,
+        "total_claim_lines_full_window": total_claims_window,
+        "matches_with_post_exclusion_payment": len(post_exclusion_rows),
         "source_file_schema_note": (
             "HHS Medicaid Provider Spending has no state-of-payment column. "
             "State attribution (VA in this slice) is via NPPES practice state, "
@@ -358,7 +435,13 @@ def main() -> None:
     npis = {r["npi"].strip() for r in cohort if r.get("npi")}
     print(f"VA cohort: {len(npis)} NPIs")
 
-    hits = filter_parquet_for_npis(npis)
+    cutoff_by_npi = {
+        r["npi"]: cutoff_for_cohort_row(r) for r in cohort if r.get("npi")
+    }
+    with_cutoff = sum(1 for v in cutoff_by_npi.values() if v)
+    print(f"  with exclusion-effective date: {with_cutoff} ({100*with_cutoff/len(npis):.1f}%)")
+
+    hits = filter_parquet_for_npis(npis, cutoff_by_npi=cutoff_by_npi)
     rows = compose_rows(cohort, hits)
     write_state_csv(state, rows)
     write_finding_json(rows, state, total_cohort=len(npis))
