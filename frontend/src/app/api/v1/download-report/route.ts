@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendDownloadThanks, sendSubscribeWelcome } from '@/lib/email';
+import { sendDownloadAlert, sendSubscriptionAlert } from '@/lib/admin-email';
 import { findReport, DEFAULT_REPORT_ID } from '@/data/reports';
 
 export const dynamic = 'force-dynamic';
@@ -57,19 +58,21 @@ export async function POST(req: NextRequest) {
   // Best-effort capture of contact info; a DB failure should still let
   // the user read the report (fail open), since failing closed would
   // reward a misconfigured deploy by blocking public research.
+  const cleanOrg =
+    typeof organization === 'string' && organization.trim()
+      ? organization.trim().slice(0, 200)
+      : null;
+  const cleanUseCase =
+    typeof useCase === 'string' && useCase.trim()
+      ? useCase.trim().slice(0, 2000)
+      : null;
   try {
     await prisma.reportDownload.create({
       data: {
         email: normalizedEmail,
         name: cleanName,
-        organization:
-          typeof organization === 'string' && organization.trim()
-            ? organization.trim().slice(0, 200)
-            : null,
-        useCase:
-          typeof useCase === 'string' && useCase.trim()
-            ? useCase.trim().slice(0, 2000)
-            : null,
+        organization: cleanOrg,
+        useCase: cleanUseCase,
         reportVersion: report.version,
         ipAddress: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || null,
         userAgent: req.headers.get('user-agent')?.slice(0, 500) || null,
@@ -88,8 +91,36 @@ export async function POST(req: NextRequest) {
       });
       if (!existing) {
         void sendSubscribeWelcome(normalizedEmail);
+        void prisma.subscriber
+          .count()
+          .catch(() => undefined)
+          .then((totalAfter) =>
+            sendSubscriptionAlert({
+              email: normalizedEmail,
+              source: 'download_gate',
+              totalAfter: typeof totalAfter === 'number' ? totalAfter : undefined,
+            }),
+          );
       }
     }
+
+    // Realtime admin alert for the download event itself.
+    void prisma.reportDownload
+      .count()
+      .catch(() => undefined)
+      .then((totalAfter) =>
+        sendDownloadAlert({
+          email: normalizedEmail,
+          name: cleanName,
+          organization: cleanOrg,
+          useCase: cleanUseCase,
+          reportId: report.id,
+          reportTitle: report.title,
+          reportVersion: report.version,
+          alsoSubscribed: !!alsoSubscribe,
+          totalAfter: typeof totalAfter === 'number' ? totalAfter : undefined,
+        }),
+      );
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[download-report] capture failed:', msg);

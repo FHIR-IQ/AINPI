@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { sendSubscribeWelcome } from '@/lib/email';
+import { sendSubscriptionAlert } from '@/lib/admin-email';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,6 +47,18 @@ export async function POST(req: NextRequest) {
     if (!existing) {
       // Fire-and-forget; the response shouldn't wait on SMTP
       void sendSubscribeWelcome(normalizedEmail);
+      // Realtime admin alert. Skip the totalAfter count if it errors —
+      // the alert itself is more important than the count enrichment.
+      void prisma.subscriber
+        .count()
+        .catch(() => undefined)
+        .then((totalAfter) =>
+          sendSubscriptionAlert({
+            email: normalizedEmail,
+            source: normalizedSource,
+            totalAfter: typeof totalAfter === 'number' ? totalAfter : undefined,
+          }),
+        );
     }
     return NextResponse.json({ ok: true });
   } catch (err) {
