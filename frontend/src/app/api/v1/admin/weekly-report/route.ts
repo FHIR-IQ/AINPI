@@ -29,6 +29,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
+import { fetchAnalyticsSummary, type AnalyticsSummary } from '@/lib/vercel-analytics';
 
 export const dynamic = 'force-dynamic';
 
@@ -112,6 +113,22 @@ export async function GET(req: NextRequest) {
   const newLast7 = subscribers.filter((s) => s.createdAt >= sevenDaysAgo).length;
   const newLast30 = subscribers.filter((s) => s.createdAt >= thirtyDaysAgo).length;
 
+  // Vercel Analytics 7-day window. Never throws — degrades to dashboard link.
+  let analytics: AnalyticsSummary;
+  try {
+    analytics = await fetchAnalyticsSummary(7);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[weekly-report] analytics fetch failed:', msg);
+    analytics = {
+      configured: false, ok: false, windowDays: 7,
+      totals: { pageviews: null, visitors: null },
+      series: [], topPages: [], topReferrers: [],
+      dashboardUrl: VERCEL_DASHBOARD_URL,
+      note: msg,
+    };
+  }
+
   const sourceCounts: Record<string, number> = {};
   for (const s of subscribers) {
     const k = s.source || '(unspecified)';
@@ -119,7 +136,11 @@ export async function GET(req: NextRequest) {
   }
   const sourceRows = Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]);
 
-  const subject = `AINPI weekly admin report — ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads`;
+  const pvSuffix =
+    analytics.ok && analytics.totals.pageviews != null
+      ? `, ${analytics.totals.pageviews.toLocaleString()} pageviews`
+      : '';
+  const subject = `AINPI weekly admin report — ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads${pvSuffix}`;
 
   // Plain text version.
   const text = [
@@ -149,11 +170,33 @@ export async function GET(req: NextRequest) {
         `  ${fmtDate(s.createdAt)}  ${s.email.padEnd(40)}  ${s.source || '(unspecified)'}`,
     ),
     ``,
-    `PAGEVIEWS / VISITORS`,
-    `  Vercel Analytics dashboard: ${VERCEL_DASHBOARD_URL}`,
-    `  (Programmatic access requires a paid Vercel Insights API token.`,
-    `   Set VERCEL_API_TOKEN + VERCEL_PROJECT_ID env vars and extend`,
-    `   this route to fetch counts via /v1/web-vitals/views.)`,
+    `WEB TRAFFIC (last 7 days, via Vercel Analytics API)`,
+    analytics.ok
+      ? [
+          `  Pageviews:        ${analytics.totals.pageviews?.toLocaleString() ?? '—'}`,
+          `  Unique visitors:  ${analytics.totals.visitors?.toLocaleString() ?? '—'}`,
+          ``,
+          `  Daily series`,
+          ...analytics.series.map(
+            (r) =>
+              `    ${r.date}  views=${String(r.views).padStart(5)}  visitors=${String(r.visitors).padStart(5)}`,
+          ),
+          ``,
+          `  Top pages`,
+          ...analytics.topPages
+            .slice(0, 10)
+            .map((p) => `    ${String(p.views).padStart(5)}  ${p.path}`),
+          ``,
+          `  Top referrers`,
+          ...analytics.topReferrers
+            .slice(0, 10)
+            .map((r) => `    ${String(r.views).padStart(5)}  ${r.source}`),
+        ].join('\n')
+      : analytics.configured
+        ? `  Analytics API responded with no rows. Note: ${analytics.note ?? 'unknown'}`
+        : `  VERCEL_API_TOKEN + VERCEL_PROJECT_ID not set on production.\n  Run: vercel env add VERCEL_API_TOKEN production\n       vercel env add VERCEL_PROJECT_ID production\n       vercel env add VERCEL_TEAM_ID production (if team-owned)`,
+    ``,
+    `  Dashboard: ${analytics.dashboardUrl}`,
   ].join('\n');
 
   // HTML version.
@@ -228,19 +271,96 @@ export async function GET(req: NextRequest) {
         <tbody>${subscriberRows}</tbody>
       </table>
 
-      <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Pageviews / visitors</h2>
-      <p style="margin: 0 0 12px 0; font-size: 14px;">
-        <a href="${VERCEL_DASHBOARD_URL}" style="color:#2563eb;">Open the Vercel Analytics dashboard →</a>
-      </p>
-      <p style="margin: 0 0 24px 0; font-size: 12px; color: #6b7280;">
-        Programmatic access requires a paid Vercel Insights API token.
-        Set <code>VERCEL_API_TOKEN</code> + <code>VERCEL_PROJECT_ID</code> and
-        extend this route's handler to fetch counts via the
-        <code>/v1/web-vitals/views</code> endpoint.
+      <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Web traffic (last 7 days)</h2>
+      ${
+        analytics.ok
+          ? `
+        <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;">
+          <tr>
+            <td style="padding:6px 0;">Pageviews</td>
+            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.pageviews?.toLocaleString() ?? '—'}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0;">Unique visitors</td>
+            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.visitors?.toLocaleString() ?? '—'}</td>
+          </tr>
+        </table>
+        ${
+          analytics.series.length > 0
+            ? `<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:18px;">
+                <thead><tr style="border-bottom:1px solid #e5e7eb;color:#6b7280;text-align:left;">
+                  <th style="padding:6px 6px;">Day</th>
+                  <th style="padding:6px 6px;text-align:right;">Views</th>
+                  <th style="padding:6px 6px;text-align:right;">Visitors</th>
+                </tr></thead>
+                <tbody>${analytics.series
+                  .map(
+                    (r) => `<tr>
+                      <td style="padding:4px 6px;font-variant-numeric:tabular-nums;">${escHtml(r.date)}</td>
+                      <td style="padding:4px 6px;text-align:right;font-variant-numeric:tabular-nums;">${r.views.toLocaleString()}</td>
+                      <td style="padding:4px 6px;text-align:right;font-variant-numeric:tabular-nums;">${r.visitors.toLocaleString()}</td>
+                    </tr>`,
+                  )
+                  .join('')}</tbody>
+              </table>`
+            : ''
+        }
+        ${
+          analytics.topPages.length > 0
+            ? `<h3 style="font-size:12px;margin:18px 0 6px 0;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em;">Top pages</h3>
+              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;">
+                ${analytics.topPages
+                  .slice(0, 10)
+                  .map(
+                    (p) => `<tr>
+                      <td style="padding:3px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;">${escHtml(p.path)}</td>
+                      <td style="padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${p.views.toLocaleString()}</td>
+                    </tr>`,
+                  )
+                  .join('')}
+              </table>`
+            : ''
+        }
+        ${
+          analytics.topReferrers.length > 0
+            ? `<h3 style="font-size:12px;margin:14px 0 6px 0;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em;">Top referrers</h3>
+              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;">
+                ${analytics.topReferrers
+                  .slice(0, 10)
+                  .map(
+                    (r) => `<tr>
+                      <td style="padding:3px 6px;">${escHtml(r.source)}</td>
+                      <td style="padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${r.views.toLocaleString()}</td>
+                    </tr>`,
+                  )
+                  .join('')}
+              </table>`
+            : ''
+        }
+      `
+          : `
+        <p style="margin:0 0 12px 0;font-size:13px;color:#6b7280;">
+          ${
+            analytics.configured
+              ? `Analytics API responded with no rows. ${analytics.note ? `Note: ${escHtml(analytics.note)}` : ''}`
+              : 'Programmatic Vercel Analytics not configured yet. Run on production:'
+          }
+        </p>
+        ${
+          !analytics.configured
+            ? `<pre style="background:#f9fafb;border:1px solid #e5e7eb;padding:10px;font-size:12px;color:#374151;border-radius:6px;margin:0 0 14px 0;">vercel env add VERCEL_API_TOKEN production
+vercel env add VERCEL_PROJECT_ID production
+vercel env add VERCEL_TEAM_ID    production   # if team-owned</pre>`
+            : ''
+        }
+      `
+      }
+      <p style="margin: 0 0 24px 0; font-size: 13px;">
+        <a href="${analytics.dashboardUrl}" style="color:#2563eb;">Open the Vercel Analytics dashboard →</a>
       </p>
 
       <p style="margin: 24px 0 0 0; font-size: 11px; color: #9ca3af;">
-        Sent automatically by /api/v1/admin/weekly-report (Vercel Cron, Monday 09:00 UTC). Admin-only.
+        Sent automatically by /api/v1/admin/weekly-report (Vercel Cron, weekly). Admin-only.
       </p>
     </div>
   `;
