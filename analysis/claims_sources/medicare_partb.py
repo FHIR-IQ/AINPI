@@ -46,6 +46,16 @@ def get_commit_sha() -> str:
     return "pending"
 
 
+def cutoff_year(row: dict) -> int | None:
+    """Earliest LEIE or SAM exclusion year for this cohort row (or None)."""
+    candidates = []
+    for k in ("leie_excldate", "sam_active_date"):
+        v = (row.get(k) or "").strip()
+        if v and len(v) >= 4 and v[:4].isdigit():
+            candidates.append(int(v[:4]))
+    return min(candidates) if candidates else None
+
+
 def main() -> None:
     cohort_csv = STATES_DIR / "va-cohort-critical.csv"
     cohort = {r["npi"]: r for r in csv.DictReader(open(cohort_csv)) if r.get("npi")}
@@ -64,6 +74,11 @@ def main() -> None:
             allowed = float(row.get("Tot_Mdcr_Alowd_Amt") or 0)
             services = int(float(row.get("Tot_Srvcs") or 0)) if row.get("Tot_Srvcs") else None
             benes = int(float(row.get("Tot_Benes") or 0)) if row.get("Tot_Benes") else None
+            cy = cutoff_year(cohort_row)
+            # 2023 billing is "post-exclusion" only when exclusion took effect
+            # in 2022 or earlier. Per-row flag so the published headline can
+            # split into strict-post-exclusion vs full-window.
+            post_excl = cy is not None and cy < 2023
             matches.append({
                 "npi": npi,
                 "name": cohort_row.get("name", ""),
@@ -74,6 +89,8 @@ def main() -> None:
                 "beneficiaries_2023": benes if benes is not None else "",
                 "provider_type": row.get("Rndrng_Prvdr_Type", ""),
                 "exclusion_source": cohort_row.get("reasons", ""),
+                "exclusion_effective_year": cy if cy is not None else "",
+                "post_exclusion_2023_billing": "yes" if post_excl else "no",
                 "score": cohort_row.get("score", ""),
                 "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
                 "sam_lookup_url": "https://sam.gov/search/?index=ex",
@@ -82,6 +99,8 @@ def main() -> None:
 
     matches.sort(key=lambda r: r["medicare_paid_2023"], reverse=True)
     print(f"VA-cohort NPIs billing Medicare Part B in CY 2023: {len(matches)}")
+    strict_post = [r for r in matches if r["post_exclusion_2023_billing"] == "yes"]
+    print(f"  of which billing strictly POST-EXCLUSION (excldate < 2023): {len(strict_post)}")
 
     # State CSV
     out_dir = STATES_DIR / "va"
@@ -90,7 +109,8 @@ def main() -> None:
     fields = [
         "npi", "name", "billing_state", "medicare_paid_2023", "medicare_allowed_2023",
         "services_2023", "beneficiaries_2023", "provider_type",
-        "exclusion_source", "score",
+        "exclusion_source", "exclusion_effective_year", "post_exclusion_2023_billing",
+        "score",
         "leie_lookup_url", "sam_lookup_url", "nppes_lookup_url",
     ]
     with open(csv_out, "w", newline="") as fh:
@@ -101,16 +121,20 @@ def main() -> None:
     print(f"Wrote {csv_out}")
 
     total_paid = sum(r["medicare_paid_2023"] for r in matches)
+    total_paid_strict = sum(r["medicare_paid_2023"] for r in strict_post)
     total_services = sum(int(r["services_2023"] or 0) for r in matches if r["services_2023"])
+    total_services_strict = sum(int(r["services_2023"] or 0) for r in strict_post if r["services_2023"])
     headline = (
         f"{len(matches)} of {len(npis)} currently-active federally-excluded "
-        f"VA-resident NPIs billed Medicare Part B in CY 2023 — total paid "
-        f"${total_paid:,.0f} on {total_services:,} services, per the CMS "
-        f"Medicare Physician & Other Practitioners by Provider file "
-        f"({DATA_SOURCE_RELEASE}). LEIE exclusions bind across all federal "
-        f"programs (42 USC § 1320a-7), so any Part B billing by these NPIs "
-        f"is a direct federal compliance signal regardless of which state "
-        f"Medicaid program also paid them (see H29)."
+        f"VA-resident NPIs billed Medicare Part B in CY 2023 (full-window "
+        f"total paid ${total_paid:,.0f} on {total_services:,} services). "
+        f"Of those {len(matches)} matches, **{len(strict_post)} were billing "
+        f"STRICTLY POST-EXCLUSION** (LEIE or SAM exclusion-effective year "
+        f"before 2023), with ${total_paid_strict:,.0f} paid on "
+        f"{total_services_strict:,} services. The strict-post-exclusion "
+        f"subset is the regulatorily significant signal under 42 USC § 1320a-7 "
+        f"(LEIE binding across all federal programs) — pre-exclusion billing "
+        f"reflects work the provider was authorized to do at the time."
     )
 
     payload = {
@@ -123,8 +147,15 @@ def main() -> None:
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
         "headline": headline,
-        "numerator": len(matches),
+        "numerator": len(strict_post),
         "denominator": len(npis),
+        "numerator_full_window": len(matches),
+        "numerator_note": (
+            f"Numerator = NPIs billing Part B in CY 2023 with LEIE/SAM "
+            f"exclusion-effective year < 2023 (strict post-exclusion). "
+            f"Full-window numerator (any 2023 billing, regardless of when "
+            f"exclusion took effect) = {len(matches)}."
+        ),
         "denominator_note": (
             f"VA federally-excluded cohort (125 NPIs, active LEIE or SAM, "
             f"score >= 1.5; VA-resident per NPPES practice state). The Part B "

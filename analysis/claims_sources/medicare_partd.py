@@ -44,6 +44,15 @@ def get_commit_sha() -> str:
     return "pending"
 
 
+def cutoff_year(row: dict) -> int | None:
+    candidates = []
+    for k in ("leie_excldate", "sam_active_date"):
+        v = (row.get(k) or "").strip()
+        if v and len(v) >= 4 and v[:4].isdigit():
+            candidates.append(int(v[:4]))
+    return min(candidates) if candidates else None
+
+
 def main() -> None:
     cohort_csv = STATES_DIR / "va-cohort-critical.csv"
     cohort = {r["npi"]: r for r in csv.DictReader(open(cohort_csv)) if r.get("npi")}
@@ -63,6 +72,8 @@ def main() -> None:
             benes = int(float(row.get("Tot_Benes") or 0)) if row.get("Tot_Benes") else None
             opioid_claims = int(float(row.get("Opioid_Tot_Clms") or 0)) if row.get("Opioid_Tot_Clms") else None
             opioid_cost = float(row.get("Opioid_Tot_Drug_Cst") or 0)
+            cy = cutoff_year(cohort_row)
+            post_excl = cy is not None and cy < 2023
             matches.append({
                 "npi": npi,
                 "name": cohort_row.get("name", ""),
@@ -73,6 +84,8 @@ def main() -> None:
                 "opioid_claims_2023": opioid_claims if opioid_claims is not None else "",
                 "opioid_cost_2023": round(opioid_cost, 2) if opioid_cost else "",
                 "exclusion_source": cohort_row.get("reasons", ""),
+                "exclusion_effective_year": cy if cy is not None else "",
+                "post_exclusion_2023_prescribing": "yes" if post_excl else "no",
                 "score": cohort_row.get("score", ""),
                 "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
                 "sam_lookup_url": "https://sam.gov/search/?index=ex",
@@ -81,6 +94,8 @@ def main() -> None:
 
     matches.sort(key=lambda r: r["drug_cost_2023"], reverse=True)
     print(f"VA-cohort NPIs prescribing Medicare Part D in CY 2023: {len(matches)}")
+    strict_post = [r for r in matches if r["post_exclusion_2023_prescribing"] == "yes"]
+    print(f"  of which prescribing strictly POST-EXCLUSION (excldate < 2023): {len(strict_post)}")
 
     out_dir = STATES_DIR / "va"
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -88,7 +103,8 @@ def main() -> None:
     fields = [
         "npi", "name", "prescribing_state", "drug_cost_2023", "claims_2023",
         "beneficiaries_2023", "opioid_claims_2023", "opioid_cost_2023",
-        "exclusion_source", "score",
+        "exclusion_source", "exclusion_effective_year", "post_exclusion_2023_prescribing",
+        "score",
         "leie_lookup_url", "sam_lookup_url", "nppes_lookup_url",
     ]
     with open(csv_out, "w", newline="") as fh:
@@ -99,18 +115,24 @@ def main() -> None:
     print(f"Wrote {csv_out}")
 
     total_cost = sum(r["drug_cost_2023"] for r in matches)
+    total_cost_strict = sum(r["drug_cost_2023"] for r in strict_post)
     total_opioid_claims = sum(int(r["opioid_claims_2023"] or 0) for r in matches if r["opioid_claims_2023"])
+    total_opioid_claims_strict = sum(int(r["opioid_claims_2023"] or 0) for r in strict_post if r["opioid_claims_2023"])
     opioid_prescribers = sum(1 for r in matches if r["opioid_claims_2023"])
+    opioid_prescribers_strict = sum(1 for r in strict_post if r["opioid_claims_2023"])
 
     headline = (
         f"{len(matches)} of {len(npis)} currently-active federally-excluded "
-        f"VA-resident NPIs prescribed Medicare Part D in CY 2023 — total "
-        f"drug cost ${total_cost:,.0f}. {opioid_prescribers} of those "
-        f"{len(matches)} were opioid prescribers, writing {total_opioid_claims:,} "
-        f"opioid claims for the year, per the CMS Medicare Part D Prescribers "
-        f"by Provider file ({DATA_SOURCE_RELEASE}). LEIE binds across all "
-        f"federal programs (42 USC § 1320a-7) — a Part D prescribing match "
-        f"is a federal compliance signal regardless of state of practice."
+        f"VA-resident NPIs prescribed Medicare Part D in CY 2023 (full-window "
+        f"drug cost ${total_cost:,.0f}; {opioid_prescribers} of {len(matches)} "
+        f"were opioid prescribers with {total_opioid_claims:,} opioid claims). "
+        f"Of those {len(matches)} matches, **{len(strict_post)} were "
+        f"prescribing STRICTLY POST-EXCLUSION** (LEIE or SAM exclusion-"
+        f"effective year before 2023), with ${total_cost_strict:,.0f} drug "
+        f"cost and {opioid_prescribers_strict} opioid prescribers writing "
+        f"{total_opioid_claims_strict:,} opioid claims. The strict-post-"
+        f"exclusion subset is the regulatorily significant signal — "
+        f"pre-exclusion prescribing was authorized at the time."
     )
 
     payload = {
@@ -123,8 +145,14 @@ def main() -> None:
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
         "headline": headline,
-        "numerator": len(matches),
+        "numerator": len(strict_post),
         "denominator": len(npis),
+        "numerator_full_window": len(matches),
+        "numerator_note": (
+            f"Numerator = NPIs prescribing Part D in CY 2023 with LEIE/SAM "
+            f"exclusion-effective year < 2023 (strict post-exclusion). "
+            f"Full-window numerator = {len(matches)}."
+        ),
         "denominator_note": (
             f"VA federally-excluded cohort (125 NPIs, active LEIE or SAM, "
             f"score >= 1.5; VA-resident per NPPES practice state). The Part D "

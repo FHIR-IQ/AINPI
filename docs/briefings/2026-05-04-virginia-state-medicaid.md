@@ -218,17 +218,29 @@ Top 5 matched NPIs by paid amount (full list in the CSV):
 
 ### Phase 1 + Phase 2 deliverables — all published 2026-05-14
 
-| Finding | Per-state CSV | Match | Headline |
-| --- | --- | ---: | --- |
-| **H29** Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | 28 of 125 | \$8.5M paid across state Medicaid programs, T-MSIS 2018–2024 |
-| **H30a** Medicare Part B | `/api/v1/states/va/h30a-excluded-billing-partb.csv` | 8 of 125 | Excluded providers still billing Part B in CY 2023 |
-| **H30b** Medicare Part D | `/api/v1/states/va/h30b-excluded-prescribing-partd.csv` | 10 of 125 | 6 of those wrote opioid claims (BREWER alone wrote 2,576 opioid claims at \$101K opioid cost) |
-| **H33** DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | 0 of 63,988 nationally | Federal DMEPOS enrollment gate works; null result is the baseline |
-| **H31** NPPES-deactivated × any billing | `/api/v1/states/va/h31-deactivated-paid.csv` | 3 of 1,495 | SHAHID (deactivated 2015) billed all three sources strictly post-deactivation: Medicaid \$57K + Part B \$178K + Part D \$32K |
-| **H32** Industry payments (Sunshine Act) | `/api/v1/states/va/h32-excluded-industry-payments-va.csv` | 9 VA of 350 nat'l | 350 LEIE/SAM-excluded NPIs took \$3.8M from manufacturers in PY 2024; 9 are VA-resident (\$1,547 in VA) |
-| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | 0 demographic matches | Null result on (LAST, FIRST, STATE) match against 78,688 LEIE keys; Stage B = PECOS owner-NPI cross-walk |
+The H23 cohort export now carries per-NPI `leie_excldate` and `sam_active_date` so each claims-side finding can be split into **strict post-exclusion** (claim date > exclusion-effective date) vs **full-window** (any claim in the source-file window). The strict-post-exclusion result is the regulatorily significant signal under 42 CFR § 455.436 / 42 USC § 1320a-7 — pre-exclusion billing reflects work the provider was authorized to do at the time.
 
-**Top compounding signal:** BREWER, STEVEN (NPI 1801070313) is flagged in **five** independent public-data joins — H26 (listed in Cigna's directory today), H29 (paid by Medicaid 2018–2024), H30a (billing Medicare Part B in CY 2023, \$134K), H30b (prescribing Part D, 2,576 opioid claims, \$101K opioid cost), plus the original H23/H24 LEIE-excluded flag that anchors the cohort. One NPI in five independent public-data cross-references is the strongest possible audit signal short of a CMS Preclusion List lookup.
+| Finding | Per-state CSV | Strict post-excl | Full window |
+| --- | --- | ---: | ---: |
+| **H29** Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | **0 of 125** ($0) | 28 of 125 ($8.5M, 2018–2024) |
+| **H30a** Medicare Part B | `/api/v1/states/va/h30a-excluded-billing-partb.csv` | **0 of 125** ($0) | 8 of 125 (CY 2023) |
+| **H30b** Medicare Part D | `/api/v1/states/va/h30b-excluded-prescribing-partd.csv` | **0 of 125** ($0) | 10 of 125 ($1.4M drug cost; 6 opioid prescribers) |
+| **H33** DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | n/a | 0 of 63,988 nationally |
+| **H31** NPPES-deactivated × any billing | `/api/v1/states/va/h31-deactivated-paid.csv` | 3 of 1,495 | (same — H31 was strict-filtered from the start) |
+| **H32** Industry payments (Sunshine Act) | `/api/v1/states/va/h32-excluded-industry-payments-va.csv` | **198 of 8,619 nationally** ($167K) · **2 VA** | 350 of 8,619 ($3.8M PY 2024) · 9 VA |
+| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | n/a | 0 demographic matches |
+
+### What the strict-filter shift means for DMAS
+
+The earlier "28 of 125 paid \$8.5M" (H29 full-window) framing was technically true but regulatorily incorrect — it was capturing **pre-exclusion legitimate billing**, not § 455.436 violations. The strict-post-exclusion column corrects this:
+
+- **For H29 / H30a / H30b**: 0 VA-cohort NPIs received Medicaid, Part B, or Part D payment in a calendar period strictly after their LEIE/SAM exclusion took effect. The system actually worked — once excluded, federal-program billing stopped in the data.
+- **For H32**: 198 of 350 industry-payment matches were strictly post-exclusion (\$167K — much smaller than the full-window \$3.8M because the \$3M FRANK, ALEXANDER payment was pre-exclusion). 2 of the 9 VA matches were strict post-exclusion.
+- **For H31**: was strict-filtered from the start (3 of 1,495 billed strictly after their NPPES deactivation date).
+
+**The remaining directory-side problem persists** (H10: NPPES-deactivated still listed in NDH; H24/H25: federally-excluded still appearing in NDH bulk export). But the claims-side data shows the federal-program payment gate is mostly holding once exclusions take effect.
+
+**The compounding signal pattern still holds**: BREWER, STEVEN (NPI 1801070313) is in five independent public-data cross-references (H23/H24 + H26 + H29 + H30a + H30b) — those are all full-window matches in the regions before his current exclusion took effect. The directory-side flag (currently LEIE-excluded) is real and current; the claims-side billing patterns reflect his pre-exclusion practice. This is what makes the cohort itself actionable — these NPIs are *currently* excluded, even if their historical billing is technically pre-exclusion.
 
 ### How DMAS triage should read these files
 

@@ -4,7 +4,7 @@
   "medicaid_program": "Cardinal Care",
   "agency": "Department of Medical Assistance Services (DMAS)",
   "release_date": "2026-05-08",
-  "generated_at": "2026-05-08T21:12:22+00:00",
+  "generated_at": "2026-05-14T22:26:21+00:00",
   "methodology_version": "0.2.0",
   "denominators": {
     "practitioner": 130127,
@@ -32,22 +32,22 @@
     }
   },
   "federally_excluded_cohort": {
-    "total_critical": 131,
+    "total_critical": 125,
     "reason_breakdown": [
       {
         "reasons": [
           "oig_excluded",
           "sam_excluded"
         ],
-        "count": 64,
-        "pct_of_critical": 48.85
+        "count": 59,
+        "pct_of_critical": 47.2
       },
       {
         "reasons": [
           "oig_excluded"
         ],
-        "count": 50,
-        "pct_of_critical": 38.17
+        "count": 49,
+        "pct_of_critical": 39.2
       },
       {
         "reasons": [
@@ -56,7 +56,7 @@
           "sam_excluded"
         ],
         "count": 14,
-        "pct_of_critical": 10.69
+        "pct_of_critical": 11.2
       },
       {
         "reasons": [
@@ -64,7 +64,7 @@
           "oig_excluded"
         ],
         "count": 1,
-        "pct_of_critical": 0.76
+        "pct_of_critical": 0.8
       },
       {
         "reasons": [
@@ -72,14 +72,14 @@
           "sam_excluded"
         ],
         "count": 1,
-        "pct_of_critical": 0.76
+        "pct_of_critical": 0.8
       },
       {
         "reasons": [
           "sam_excluded"
         ],
         "count": 1,
-        "pct_of_critical": 0.76
+        "pct_of_critical": 0.8
       }
     ],
     "top_samples": [

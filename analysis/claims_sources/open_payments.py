@@ -59,42 +59,51 @@ def get_commit_sha() -> str:
 
 
 def load_exclusion_npis_with_state(client: bigquery.Client) -> dict[str, dict]:
-    """LEIE ∪ SAM active exclusion NPIs with NDH practice state attribution."""
+    """LEIE ∪ SAM active exclusion NPIs with effective dates + NDH practice state."""
     sql = f"""
-    WITH excl AS (
-      SELECT NPI, MIN(CAST(EXCLDATE AS STRING)) AS leie_excldate, 'leie' AS source
+    WITH leie AS (
+      SELECT NPI, MIN(EXCLDATE) AS leie_excldate
       FROM `{PROJECT}.cms_npd.oig_leie`
       WHERE NPI IS NOT NULL AND NPI != '0000000000' AND IFNULL(REINDATE, '00000000') = '00000000'
       GROUP BY NPI
-      UNION ALL
-      SELECT NPI, NULL AS leie_excldate, 'sam'
-      FROM `{PROJECT}.cms_npd.sam_exclusions`
-      WHERE NPI IS NOT NULL AND REGEXP_CONTAINS(NPI, r'^\\d{{10}}$')
     ),
-    grouped AS (
-      SELECT
-        NPI,
-        STRING_AGG(DISTINCT source ORDER BY source) AS sources,
-        ANY_VALUE(leie_excldate) AS leie_excldate
-      FROM excl
-      GROUP BY NPI
+    sam AS (
+      SELECT npi AS NPI, CAST(MIN(active_date) AS STRING) AS sam_active_date
+      FROM `{PROJECT}.cms_npd.sam_exclusions`
+      WHERE npi IS NOT NULL AND REGEXP_CONTAINS(npi, r'^\\d{{10}}$')
+      GROUP BY npi
+    ),
+    merged AS (
+      SELECT COALESCE(leie.NPI, sam.NPI) AS NPI, leie.leie_excldate, sam.sam_active_date
+      FROM leie FULL OUTER JOIN sam USING (NPI)
     )
     SELECT
-      g.NPI AS npi,
-      g.sources,
-      g.leie_excldate,
+      m.NPI AS npi,
+      m.leie_excldate,
+      m.sam_active_date,
       p._state AS ndh_state,
       p._family_name,
       p._given_name
-    FROM grouped g
-    LEFT JOIN `{PROJECT}.cms_npd.practitioner` p ON g.NPI = p._npi
+    FROM merged m
+    LEFT JOIN `{PROJECT}.cms_npd.practitioner` p ON m.NPI = p._npi
     """
     out: dict[str, dict] = {}
     for row in client.query(sql).result():
+        # Earliest exclusion year — format EXCLDATE YYYYMMDD → year int
+        years: list[int] = []
+        if row.leie_excldate and len(row.leie_excldate) >= 4 and row.leie_excldate[:4].isdigit():
+            years.append(int(row.leie_excldate[:4]))
+        if row.sam_active_date and len(row.sam_active_date) >= 4 and row.sam_active_date[:4].isdigit():
+            years.append(int(row.sam_active_date[:4]))
+        sources = []
+        if row.leie_excldate: sources.append("leie")
+        if row.sam_active_date: sources.append("sam")
         out[row.npi] = {
             "npi": row.npi,
-            "sources": row.sources,
+            "sources": "+".join(sources) or "unknown",
             "leie_excldate": row.leie_excldate,
+            "sam_active_date": row.sam_active_date,
+            "earliest_exclusion_year": min(years) if years else None,
             "ndh_state": row.ndh_state or "",
             "name": f"{(row._family_name or '').strip()}, {(row._given_name or '').strip()}".strip(", "),
         }
@@ -151,6 +160,8 @@ def main() -> None:
     for npi, agg in per_npi.items():
         cohort_row = excl[npi]
         top_nature = sorted(agg["nature_breakdown"].items(), key=lambda kv: kv[1], reverse=True)[:3]
+        excl_year = cohort_row["earliest_exclusion_year"]
+        post_excl = excl_year is not None and excl_year < PROGRAM_YEAR
         rows.append({
             "npi": npi,
             "name": (cohort_row["name"] or f"{agg['last_name']}, {agg['first_name']}").strip(", "),
@@ -158,6 +169,9 @@ def main() -> None:
             "recipient_type": agg["recipient_type"],
             "exclusion_source": cohort_row["sources"],
             "leie_excldate": cohort_row["leie_excldate"] or "",
+            "sam_active_date": cohort_row["sam_active_date"] or "",
+            "earliest_exclusion_year": excl_year if excl_year is not None else "",
+            "post_exclusion_pgyr2024": "yes" if post_excl else "no",
             "industry_payments_2024_total": round(agg["total_amount"], 2),
             "industry_payments_2024_transactions": agg["transactions"],
             "top_nature_codes": "; ".join(f"{c}=${a:,.0f}" for c, a in top_nature),
@@ -169,15 +183,23 @@ def main() -> None:
     rows.sort(key=lambda r: r["industry_payments_2024_total"], reverse=True)
     print(f"\nTotal matched: {len(rows)}")
     va_rows = [r for r in rows if r["ndh_state"] == "VA"]
+    strict_post = [r for r in rows if r["post_exclusion_pgyr2024"] == "yes"]
+    strict_va = [r for r in va_rows if r["post_exclusion_pgyr2024"] == "yes"]
+    print(f"  of which strictly POST-EXCLUSION (excl year < {PROGRAM_YEAR}): {len(strict_post)}")
     print(f"  of which VA-state per NDH: {len(va_rows)}")
+    print(f"  of which VA + strict post-exclusion: {len(strict_va)}")
     total_paid = sum(r["industry_payments_2024_total"] for r in rows)
+    total_paid_strict = sum(r["industry_payments_2024_total"] for r in strict_post)
     total_va_paid = sum(r["industry_payments_2024_total"] for r in va_rows)
-    print(f"Total 2024 industry payments to LEIE/SAM-excluded NPIs: ${total_paid:,.0f}")
+    print(f"Total {PROGRAM_YEAR} industry payments to LEIE/SAM-excluded NPIs: ${total_paid:,.0f}")
+    print(f"  strict post-exclusion subset: ${total_paid_strict:,.0f}")
     print(f"  to VA-resident: ${total_va_paid:,.0f}")
 
     # CSV writes
     fields = [
-        "npi", "name", "ndh_state", "recipient_type", "exclusion_source", "leie_excldate",
+        "npi", "name", "ndh_state", "recipient_type", "exclusion_source",
+        "leie_excldate", "sam_active_date", "earliest_exclusion_year",
+        "post_exclusion_pgyr2024",
         "industry_payments_2024_total", "industry_payments_2024_transactions",
         "top_nature_codes", "leie_lookup_url", "sam_lookup_url", "nppes_lookup_url",
     ]
@@ -200,17 +222,18 @@ def main() -> None:
     print(f"Wrote national: {national_csv} ({len(rows)} rows)")
 
     headline = (
-        f"{len(rows)} of {len(excl):,} active LEIE / SAM-excluded NPIs received "
-        f"reportable industry payments from drug and device manufacturers in "
+        f"{len(rows)} of {len(excl):,} currently-active LEIE / SAM-excluded NPIs "
+        f"received industry payments from drug and device manufacturers in "
         f"program year {PROGRAM_YEAR} per CMS Open Payments. Combined paid "
-        f"amount: ${total_paid:,.0f} across {sum(r['industry_payments_2024_transactions'] for r in rows):,} "
-        f"reported transactions. Of those, {len(va_rows)} are VA-resident per NDH "
-        f"practice state, with ${total_va_paid:,.0f} in industry payments. "
-        f"Open Payments is itself public and individually searchable — the "
-        f"systematic cross-join with federal exclusion lists is what AINPI adds. "
-        f"Each match is an industry-side compliance signal: a manufacturer "
-        f"transferred value to an NPI that is federally excluded from receiving "
-        f"federal program reimbursement."
+        f"amount: ${total_paid:,.0f}. Of those {len(rows)} matches, "
+        f"**{len(strict_post)} were paid STRICTLY POST-EXCLUSION** (earliest "
+        f"LEIE/SAM exclusion year before {PROGRAM_YEAR}), with "
+        f"${total_paid_strict:,.0f} in strict post-exclusion industry payments. "
+        f"{len(va_rows)} of the {len(rows)} matches are VA-resident per NDH; "
+        f"{len(strict_va)} of those VA-resident matches are also strict "
+        f"post-exclusion. The strict-post-exclusion subset is the regulatorily "
+        f"significant signal — pre-exclusion industry payments reflect work "
+        f"the provider was authorized to do at the time."
     )
 
     payload = {
@@ -223,8 +246,15 @@ def main() -> None:
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
         "headline": headline,
-        "numerator": len(rows),
+        "numerator": len(strict_post),
         "denominator": len(excl),
+        "numerator_full_window": len(rows),
+        "numerator_note": (
+            f"Numerator = NPIs receiving industry payments in PY {PROGRAM_YEAR} "
+            f"with LEIE/SAM exclusion-effective year < {PROGRAM_YEAR}. "
+            f"Full-window numerator (any {PROGRAM_YEAR} payment, regardless of "
+            f"when exclusion took effect) = {len(rows)}."
+        ),
         "data_source_release": DATA_SOURCE_RELEASE,
         "data_source_url": "https://openpaymentsdata.cms.gov/",
         "chart": {
