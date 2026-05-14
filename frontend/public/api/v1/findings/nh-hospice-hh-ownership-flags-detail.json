@@ -1,18 +1,279 @@
 {
-  "queried_at": "2026-05-14T22:06:49+00:00",
-  "data_confidence": "candidate",
-  "data_confidence_note": "Demographic match on (last_name, first_name, state). Owner records do not carry NPI; LEIE records carry NPI inconsistently. This is a candidate-match surface, NOT a confirmed match. Verify each row against the LEIE portal directly before acting.",
-  "leie_demographic_keys": 78688,
-  "candidate_matches_total": 0,
-  "candidate_matches_va": 0,
+  "queried_at": "2026-05-14T23:47:28+00:00",
+  "methodology_version": "0.6.1-draft",
+  "stage": "B",
+  "confirmed_npi_total": 0,
+  "candidate_demographic_total": 1779,
+  "va_confirmed_npi": 0,
+  "va_candidate_demographic": 17,
   "by_facility_type": {
-    "Skilled Nursing Facilities": 0,
-    "Hospices": 0,
-    "Home Health Agencies": 0,
-    "Hospitals": 0
+    "Skilled Nursing Facilities": {
+      "confirmed_npi": 0,
+      "candidate_demographic": 716
+    },
+    "Hospices": {
+      "confirmed_npi": 0,
+      "candidate_demographic": 226
+    },
+    "Home Health Agencies": {
+      "confirmed_npi": 0,
+      "candidate_demographic": 322
+    },
+    "Hospitals": {
+      "confirmed_npi": 0,
+      "candidate_demographic": 515
+    }
   },
-  "top_states_by_matches": [],
-  "sample_va_rows": [],
+  "ppef_assoc_id_size": 2470908,
+  "ppef_enrlmt_id_size": 2981799,
+  "leie_npis_active": 7892,
+  "sam_npis_active": 4707,
+  "leie_demographic_keys": 78688,
+  "top_states": [
+    {
+      "state": "CA",
+      "confirmed_npi": 0,
+      "candidate_demographic": 487
+    },
+    {
+      "state": "TX",
+      "confirmed_npi": 0,
+      "candidate_demographic": 200
+    },
+    {
+      "state": "FL",
+      "confirmed_npi": 0,
+      "candidate_demographic": 193
+    },
+    {
+      "state": "PA",
+      "confirmed_npi": 0,
+      "candidate_demographic": 99
+    },
+    {
+      "state": "OH",
+      "confirmed_npi": 0,
+      "candidate_demographic": 92
+    },
+    {
+      "state": "NY",
+      "confirmed_npi": 0,
+      "candidate_demographic": 78
+    },
+    {
+      "state": "MI",
+      "confirmed_npi": 0,
+      "candidate_demographic": 62
+    },
+    {
+      "state": "OK",
+      "confirmed_npi": 0,
+      "candidate_demographic": 57
+    },
+    {
+      "state": "UT",
+      "confirmed_npi": 0,
+      "candidate_demographic": 48
+    },
+    {
+      "state": "NC",
+      "confirmed_npi": 0,
+      "candidate_demographic": 41
+    },
+    {
+      "state": "WA",
+      "confirmed_npi": 0,
+      "candidate_demographic": 39
+    },
+    {
+      "state": "IN",
+      "confirmed_npi": 0,
+      "candidate_demographic": 38
+    },
+    {
+      "state": "MO",
+      "confirmed_npi": 0,
+      "candidate_demographic": 30
+    },
+    {
+      "state": "GA",
+      "confirmed_npi": 0,
+      "candidate_demographic": 27
+    },
+    {
+      "state": "LA",
+      "confirmed_npi": 0,
+      "candidate_demographic": 24
+    }
+  ],
+  "sample_confirmed_npi_rows": [],
+  "sample_va_rows": [
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "SNF",
+      "facility_name": "LAKE PRINCE CENTER, INC.",
+      "facility_state": "VA",
+      "owner_last_name": "SMITH",
+      "owner_first_name": "SHANE",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20190620"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "SNF",
+      "facility_name": "LAKE PRINCE CENTER, INC.",
+      "facility_state": "VA",
+      "owner_last_name": "SMITH",
+      "owner_first_name": "SHANE",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20190620"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "SNF",
+      "facility_name": "STAUNTON SNF OPERATIONS LLC",
+      "facility_state": "VA",
+      "owner_last_name": "JACKSON",
+      "owner_first_name": "KAREN",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20160120"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "SNF",
+      "facility_name": "VIRGINIA UNITED METHODIST HOMES, INC.",
+      "facility_state": "VA",
+      "owner_last_name": "TAYLOR",
+      "owner_first_name": "DAVID",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20000820"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "SNF",
+      "facility_name": "VIRGINIA UNITED METHODIST HOMES, INC.",
+      "facility_state": "VA",
+      "owner_last_name": "TAYLOR",
+      "owner_first_name": "DAVID",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20000820"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "Hospice",
+      "facility_name": "RIVERSIDE MIDDLE PENINSULA HOSPITAL INC",
+      "facility_state": "VA",
+      "owner_last_name": "NAGEL",
+      "owner_first_name": "DOUGLAS",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20160519"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "Hospice",
+      "facility_name": "MARY WASHINGTON HEALTHCARE CLINICAL SERVICES, INC.",
+      "facility_state": "VA",
+      "owner_last_name": "YOUNG",
+      "owner_first_name": "KIMBERLY",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20101220"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "Hospice",
+      "facility_name": "TRINITY HOSPICE 2 LLC",
+      "facility_state": "VA",
+      "owner_last_name": "JONES",
+      "owner_first_name": "SHANNON",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20130620"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "Hospice",
+      "facility_name": "LAKE PRINCE AT HOME LLC",
+      "facility_state": "VA",
+      "owner_last_name": "SMITH",
+      "owner_first_name": "SHANE",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20190620"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "HHA",
+      "facility_name": "MARY WASHINGTON HOSPITAL INC",
+      "facility_state": "VA",
+      "owner_last_name": "YOUNG",
+      "owner_first_name": "KIMBERLY",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20101220"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "HHA",
+      "facility_name": "VIRGINIA HOMECARE, LLC",
+      "facility_state": "VA",
+      "owner_last_name": "CARTER",
+      "owner_first_name": "AMY",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20231120"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "HHA",
+      "facility_name": "GOOD SAMARITAN HOSPICE INC",
+      "facility_state": "VA",
+      "owner_last_name": "SIMMONS",
+      "owner_first_name": "JENNIFER",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "19990120"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "HHA",
+      "facility_name": "GOOD SAMARITAN HOSPICE INC",
+      "facility_state": "VA",
+      "owner_last_name": "SIMMONS",
+      "owner_first_name": "JENNIFER",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "19990120"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "Hospital",
+      "facility_name": "MARY WASHINGTON HOSPITAL INC",
+      "facility_state": "VA",
+      "owner_last_name": "YOUNG",
+      "owner_first_name": "KIMBERLY",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20101220"
+    },
+    {
+      "match_tier": "candidate_demographic",
+      "facility_type": "Hospital",
+      "facility_name": "CENTRAL VIRGINIA HOSPITAL FOR RESTORATIVE AND REHABILITATIVE CARE LLC",
+      "facility_state": "VA",
+      "owner_last_name": "THOMAS",
+      "owner_first_name": "JAMES",
+      "owner_npi": "",
+      "exclusion_source": "LEIE",
+      "exclusion_date": "20020418"
+    }
+  ],
   "csv_url_national": "/api/v1/findings/nh-hospice-hh-ownership-flags-detail.csv",
   "csv_url_va": "/api/v1/states/va/h35-nh-ownership-flags.csv"
 }

@@ -169,17 +169,17 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'nh-hospice-hh-ownership-flags',
     hypotheses: ['H35'],
-    title: 'SNF, hospice, HHA, hospital owners on federal exclusion lists (candidate match)',
+    title: 'SNF, hospice, HHA, hospital owners on federal exclusion lists (Stage B: NPI-keyed + facility-state demographic)',
     summary:
-      'Highest-stakes finding for vulnerable populations — the CMS Disclosure of Ownership IFR (2023) expanded ownership transparency precisely to surface concerning ownership structures. **Result: 0 demographic matches between owners in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital) and the 78,688 OIG LEIE active demographic keys.** This null result is meaningful but limited — the (LAST, FIRST, STATE) demographic key catches the obvious cases but not aliases, DBA names listed in the owner slot, or anyone whose listed owner state differs from their LEIE state. Stage B is the NPI-keyed match against PECOS owner-NPI fields once those are in scope.',
+      'Highest-stakes finding for vulnerable populations — the CMS Disclosure of Ownership IFR (2023) expanded ownership transparency precisely to surface concerning ownership structures. **Stage B result: 0 CONFIRMED-NPI matches and 1,779 CANDIDATE-DEMOGRAPHIC matches between owners in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital) and federal exclusion lists (OIG LEIE + SAM.gov, active).** Tier 1 NPI-keyed match resolves owner ASSOCIATE_ID → NPI via the CMS PPEF (Public Provider Enrollment File, 2.47M individual NPIs) and returns 0 because exclusion forces revocation of Medicare enrollment — only 25 of 8,619 LEIE∪SAM-active NPIs are still in PPEF, and none are listed as owners. The null is itself evidence that CMS\'s exclusion-revocation pipeline is working for the active cohort. Tier 2 demographic match uses (LAST, FIRST, FACILITY_STATE) — facility state stands in for owner state, which the All Owners files do not populate for individuals. 17 of the 1,779 candidate matches are VA-state facilities. **Methodology #2 fix vs v1**: v1 joined on owner STATE which is 100% empty for individual owners in the source files — that v1 "0 demographic matches" result was a structural null, not a true zero.',
     nullHypothesis:
-      'Zero owners listed in CMS SNF / Hospice / HHA / Hospital All Owners files (2026-04-01) appear on the OIG LEIE active exclusion list under a (LAST_NAME, FIRST_NAME, STATE) demographic match.',
+      'Zero owners listed in the CMS SNF / Hospice / HHA / Hospital All Owners files (2026-04-01) resolve to an NPI on OIG LEIE active or SAM.gov active. Secondary: zero owners under a (LAST, FIRST, FACILITY_STATE) demographic match against LEIE.',
     denominator:
-      '78,688 active OIG LEIE demographic keys (LASTNAME, FIRSTNAME, STATE; REINDATE = 0) × all owner rows in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital, 2026-04-01 release). Owner NPI cross-walk NOT applied — the All Owners files do not carry an owner-NPI column.',
+      '444,106 individual-owner rows across SNF (185,329) + Hospice (53,536) + HHA (80,208) + Hospital (125,033) in the 2026-04-01 release. PPEF cross-walk covers 2.47M individual NPIs; LEIE NPI-populated = 8,608; SAM-active with NPI = 4,707; LEIE demographic keys (LAST, FIRST, STATE) = 78,688. Tier 1 ceiling is bounded by the 25 LEIE∪SAM-active NPIs still in PPEF — most excluded providers are revoked and therefore not in PPEF.',
     dataSource:
-      'OIG LEIE active rows × CMS Quarterly All Owners files (SNF_All_Owners + Hospice_All_Owners + HHA_All_Owners + Hospital_All_Owners, 2026-04-01 release, ~100 MB combined). Demographic match key = UPPER(LAST) || \'|\' || UPPER(FIRST) || \'|\' || UPPER(STATE). See `analysis/claims_sources/nh_compare_ownership.py`.',
+      'CMS Quarterly All Owners files × CMS Medicare Fee-For-Service Public Provider Enrollment File (PPEF, 2026-04-01, 2.98M rows) × OIG LEIE active × SAM.gov active. Tier 1: ASSOCIATE ID - OWNER → PECOS_ASCT_CNTL_ID → NPI → check against LEIE.NPI ∪ SAM.npi. Tier 2: (LAST, FIRST, FACILITY_STATE) demographic match against LEIE, with facility state resolved via PPEF ENRLMT_ID (100% lookup hit). See `analysis/claims_sources/nh_compare_ownership.py`.',
     status: 'published',
-    ogTagline: '0 demographic matches — the obvious cases aren\'t there. Stage B: PECOS owner-NPI cross-walk.',
+    ogTagline: '0 confirmed-NPI / 1,779 candidate-demographic owner matches across SNF + hospice + HHA + hospital. Tier 1 null is itself evidence the revocation pipeline works.',
   },
   {
     slug: 'ndh-completeness-gap',

@@ -5,39 +5,33 @@
     "H35"
   ],
   "status": "published",
-  "release_date": "CMS Quarterly All Owners files (2026-04-01)",
-  "generated_at": "2026-05-14T22:06:49+00:00",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "7d8304a",
-  "data_confidence": "candidate",
-  "data_confidence_note": "Demographic match on (last_name, first_name, state). Owner records do not carry NPI; LEIE records carry NPI inconsistently. This is a candidate-match surface, NOT a confirmed match. Verify each row against the LEIE portal directly before acting.",
-  "headline": "0 (LAST, FIRST, STATE) demographic matches between owners of Medicare-enrolled nursing homes (SNFs), hospices, home health agencies, and hospitals (CMS Quarterly All Owners files, 2026-04-01 release) and the 78,688 active OIG LEIE demographic keys. This NULL RESULT is meaningful but limited: the demographic-match key catches obvious cases (full name + state alignment) but not aliases, DBA names listed in the owner slot, name variants, or anyone whose listed owner state differs from their LEIE state. The right next step is the Stage B NPI-keyed match against PECOS owner-NPI fields once those are in scope. By facility type: Skilled Nursing Facilities 0, Hospices 0, Home Health Agencies 0, Hospitals 0.",
+  "release_date": "CMS Quarterly All Owners + PPEF (both 2026-04-01)",
+  "generated_at": "2026-05-14T23:47:28+00:00",
+  "methodology_version": "0.6.1-draft",
+  "commit_sha": "bdaceab",
+  "data_confidence": "two-tier",
+  "data_confidence_note": "Two-tier methodology (Stage B, 0.6.1-draft). Tier 1 (confirmed_npi, 0 rows): NPI-keyed match via CMS Medicare Fee-For-Service Public Provider Enrollment File (ASSOCIATE ID - OWNER \u2192 PECOS_ASCT_CNTL_ID \u2192 NPI), checked against LEIE.NPI and SAM.npi. Authoritative \u2014 same NPI, same person. Tier 2 (candidate_demographic, 1,779 rows): (LAST_NAME, FIRST_NAME, FACILITY_STATE) match against LEIE. Facility state used because owner-side state is structurally empty for individual owners in the All Owners files. Carries known false-positive risk; published as a verification surface, NOT a fraud determination.",
+  "headline": "AINPI identifies 1779 CANDIDATE-DEMOGRAPHIC matches and 0 CONFIRMED-NPI matches between owners of Medicare-enrolled SNFs, hospices, home health agencies, and hospitals (CMS All Owners 2026-04-01) and OIG LEIE active exclusions. Tier 1 (NPI-keyed) returns 0 because exclusion forces Medicare revocation \u2014 only 25 of 8,619 LEIE\u222aSAM-active NPIs are still in the CMS PPEF cross-walk, and none of those 25 are listed as owners. Tier 2 ((LAST, FIRST, FACILITY_STATE) demographic match) surfaces 1779 candidate rows: 17 are VA-state facilities. Skilled Nursing Facilities: 0 confirmed / 716 candidate; Hospices: 0 confirmed / 226 candidate; Home Health Agencies: 0 confirmed / 322 candidate; Hospitals: 0 confirmed / 515 candidate. Every candidate row must be verified against the LEIE portal before any state survey agency action.",
   "numerator": 0,
+  "numerator_full_window": 1779,
   "denominator": null,
-  "denominator_note": "Denominator is not pinned because the CMS All Owners files are owner-record-level (multiple rows per owner if they hold interests in multiple facilities); the right denominator depends on the consuming workflow. Total owner records scanned across the four files is in the millions; per-LEIE-key match rate is what should be cited rather than a single percentage.",
-  "data_source_release": "CMS Quarterly All Owners files (2026-04-01)",
+  "numerator_note": "Headline numerator = confirmed_npi tier only (0). Full-window numerator (confirmed + candidate) = 1779.",
+  "denominator_note": "Denominator is not pinned because the All Owners files are owner-record-level (multiple rows per owner if they hold interests in multiple facilities). Reach context: 444,106 individual-owner rows scanned across 4 facility types; PPEF ENRLMT_ID \u2192 STATE lookup hits 100% of those rows (facility state always resolved). LEIE active demographic keys = 78,688; LEIE NPI-populated = 8,608; SAM-active with NPI = 4,707. Tier 1 ceiling is bounded by the 25 LEIE\u222aSAM-active NPIs still in PPEF (most excluded providers are revoked and therefore not in PPEF).",
+  "data_source_release": "CMS Quarterly All Owners + PPEF (both 2026-04-01)",
   "data_source_url": "https://data.cms.gov/provider-characteristics",
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
-        "label": "Skilled Nursing Facilities",
+        "label": "Confirmed-NPI matches",
         "value": 0
       },
       {
-        "label": "Hospices",
-        "value": 0
-      },
-      {
-        "label": "Home Health Agencies",
-        "value": 0
-      },
-      {
-        "label": "Hospitals",
-        "value": 0
+        "label": "Candidate-demographic matches",
+        "value": 1779
       }
     ]
   },
-  "notes": "Methodology: demographic match on UPPER(LAST_NAME) || '|' || UPPER(FIRST_NAME) || '|' || UPPER(STATE) between the CMS All Owners files and OIG LEIE active exclusions. False-positive rate is non-trivial because common-name pairs in large states (e.g., SMITH, JOHN, CA) will inevitably collide. Each candidate match row in the per-state CSV carries the LEIE state, exclusion date, exclusion type, and LEIE category so DMAS / state survey agency staff can verify in seconds. Per the cross-audit roadmap \u00a78 (\"not fraud determinations\") and \u00a710 (\"publish when available and high confidence\") this finding is published as a verification surface for human review, not as a confirmed ownership-by-excluded-individual claim. Stage B work: cross-walk LEIE NPI (where present) to CMS PECOS owner-NPI fields to lift the confidence tier; that requires PECOS owner-NPI data which is not currently in scope."
+  "notes": "Stage B methodology (0.6.1-draft) introduces NPI-keyed matching via the CMS PPEF (Medicare Fee-For-Service Public Provider Enrollment File, 2026-04-01). PPEF publishes NPI \u2194 PECOS_ASCT_CNTL_ID for 2.47M individual NPIs; the All Owners files publish ASSOCIATE ID - OWNER (same identifier space) for every individual-owner record. Two source-data-shape facts drive the tier design: (1) CMS does NOT populate STATE - OWNER for individuals (100% empty in the 2026-04-01 release) \u2014 the v1 demographic match joined on this empty field and therefore produced a structural-null result. Stage B substitutes the facility's STATE_CD (resolved via PPEF ENRLMT_ID, 100% lookup hit). (2) Exclusion under 42 USC \u00a7 1320a-7 forces revocation of Medicare enrollment, so most excluded NPIs are not in PPEF (25 of 8,619 LEIE\u222aSAM-active NPIs remain in PPEF \u2014 likely recent exclusions not yet processed out). Tier 1 is therefore inherently small-N; the null is itself evidence that CMS's exclusion-revocation pipeline is working. Per-state CSV at /api/v1/states/va/h35-nh-ownership-flags.csv carries both tiers with match_tier column."
 }

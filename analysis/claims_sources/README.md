@@ -50,6 +50,15 @@ Each source has its own publication rhythm. The repo's weekly GitHub Actions cro
 | Nursing Home Compare ownership | Monthly |
 | Provider of Services | Quarterly |
 
+## Shared cross-walk: CMS Medicare Fee-For-Service Public Provider Enrollment (PPEF)
+
+`frontend/data/cms-claims/PPEF_Enrollment_Extract_2026.04.01.csv` (321 MB, 2.98M rows, 2026-04-01 release). Published quarterly at <https://data.cms.gov> as dataset `2457ea29-fc82-48b0-86ec-3b0755de7515`. Provides the two cross-walks the All Owners files need:
+
+- `PECOS_ASCT_CNTL_ID` ↔ `NPI` — used by `nh_compare_ownership.py` Stage B (methodology #2, 2026-05-14) to resolve owner NPI from the All Owners file's "ASSOCIATE ID - OWNER" column. Reach: 2,470,908 individual NPIs.
+- `ENRLMT_ID` ↔ `STATE_CD` — facility-state lookup for owner records whose owner-side STATE is structurally empty (100% empty for TYPE='I' individual owners in the All Owners files). 2,981,799 enrollment IDs covered; lookup hits 100% of owner rows.
+
+The same cross-walk is a candidate enabler for H34 (POS-deactivated × NPPES-active) — PPEF carries `ENRLMT_ID` for individual + organization enrollments but does NOT carry the facility CCN that the POS files key on, so the H34 blocker (CCN ↔ NPI) remains open.
+
 ## Phase 0 (now, 2026-05-14)
 
 This README is Phase 0. No module ships in this PR. The findings are pre-registered in `frontend/src/data/findings.ts` with `status: 'pre-registered'`, the roadmap is published at `/smd-revalidation/cross-audit-roadmap`, and the tracking issue is open at <https://github.com/FHIR-IQ/AINPI/issues>.

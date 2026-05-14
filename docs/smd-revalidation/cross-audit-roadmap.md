@@ -283,6 +283,17 @@ DMAS gets a 5-business-day review window on the VA-attributed rows before each r
 
 ---
 
+## 10c. Methodology updates shipped post-decisions
+
+Tracks improvements adopted after the 2026-05-14 decisions, with the why and the result-shape effect.
+
+| Date | Improvement | Effect |
+| --- | --- | --- |
+| 2026-05-14 | **#1: Strict post-exclusion attribution.** H23 cohort exporter carries per-NPI `leie_excldate`, `sam_active_date`, `nppes_deactivation_date`. H29/H30a/H30b/H32 reframed with strict-post-exclusion as the regulatory headline and full-window as a sidecar field. | H29 0/28 strict (was 28 full-window $8.5M); H30a 0/8 strict; H30b 0/10 strict; H32 198/350 strict ($167K vs $3.8M full-window). The strict number is what § 455.436 actually asks. |
+| 2026-05-14 | **#2: H35 Stage B — NPI-keyed match via PPEF + facility-state demographic match.** Owner ASSOCIATE_ID → NPI resolved through the CMS Medicare Fee-For-Service Public Provider Enrollment File (PPEF, 2026-04-01, 2.47M individual NPIs). Resolved NPI checked against LEIE.NPI ∪ SAM.npi (Tier 1, confirmed). Demographic match now uses facility STATE (resolved via PPEF ENRLMT_ID) because owner-side STATE is structurally 100% empty for individual owners in the All Owners files (Tier 2, candidate). | 0 confirmed-NPI nationally — exclusion forces Medicare revocation, so only 25 of 8,619 LEIE∪SAM-active NPIs remain in PPEF and none of those 25 are listed as owners. 1,779 candidate-demographic nationally / 17 in VA. The v1 "0 demographic matches" finding was a structural null caused by joining on empty owner-state — Stage B corrects this. |
+
+---
+
 ## 11. Sequencing against the May 23 SMD deadline
 
 The SMD letter deadline is 2026-05-23 (9 days from this draft). Phase 1 findings ship after the deadline. Two ways to make this plan useful to states writing their SMD response right now:
