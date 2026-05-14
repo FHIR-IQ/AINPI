@@ -236,7 +236,9 @@ Two-layer admin-visibility stack, all keyed off `ADMIN_EMAIL` (default `gene@fhi
    - `sendSubscriptionAlert()` fires from `/api/v1/subscribe` on every newly-created subscriber (re-subscribes don't re-alert). Also fires from `/api/v1/download-report` when `alsoSubscribe: true` produces a new subscriber row.
    - `sendDownloadAlert()` fires from `/api/v1/download-report` on every successful download capture.
    - Both are fire-and-forget (`void ...`) so the response doesn't block on SMTP. Errors are logged, never thrown. Skipped if `RESEND_API_KEY` is unset.
-2. **Weekly digest** at `/api/v1/admin/weekly-report` — Vercel Cron Thursday 13:42 UTC. Combines subscriber + download stats from Supabase with a 7-day Vercel Analytics window (pageviews, unique visitors, top pages, top referrers) via the Vercel Web Analytics REST API. Wrapper in `frontend/src/lib/vercel-analytics.ts` — gracefully degrades to a dashboard link if `VERCEL_API_TOKEN` is missing or the API returns no rows.
+2. **Weekly digest** at `/api/v1/admin/weekly-report` — Vercel Cron Thursday 13:42 UTC. Combines subscriber + download stats from Supabase with a **project listing** for every project the `VERCEL_API_TOKEN` can read. Each project gets a deep-link button to its Vercel Analytics dashboard. Wrapper in `frontend/src/lib/vercel-analytics.ts`.
+
+**Important: Vercel has no public Web Analytics REST API.** Confirmed against `openapi.vercel.sh` (zero analytics endpoints across 234 documented routes) and direct probing — every guess at `/v1/web-analytics/*`, `/v1/insights/*`, `/v1/analytics/*` returns 404. The dashboard fetches from internal `vercel.com/api/web/insights/*` routes with cookie auth, which are not stable or token-accessible. **Don't reinvent the broken fetch.** The cron renders dashboard deep-links instead; pageview/visitor numbers have to be read in-browser. If Vercel ships a public analytics API later, that's a new function in `vercel-analytics.ts` — not a fix to the old broken paths.
 
 When changing the cron cadence, edit `vercel.json#crons[0].schedule`. The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.vercel.app/api/v1/admin/weekly-report`.
 
@@ -270,10 +272,11 @@ RESEND_FROM_ADDRESS          'AINPI <reports@ainpi.dev>' (ainpi.dev domain verif
 ADMIN_EMAIL                  gene@fhiriq.com — where admin alerts + weekly digest land
 CRON_SECRET                  Shared secret Vercel Cron injects as Bearer auth for /api/v1/admin/weekly-report
 
-# Vercel Analytics (for the weekly admin digest's traffic section)
-VERCEL_API_TOKEN             User must generate at https://vercel.com/account/tokens. Without it, weekly report falls back to dashboard link.
-VERCEL_PROJECT_ID            prj_lNspRMthCJiD4iv77DFooZhLHGkd
+# Vercel Analytics (for the weekly admin digest's project list + deep-links)
+VERCEL_API_TOKEN             User-generated at https://vercel.com/account/tokens. Used to list every project the user has access to (/v9/projects). Does NOT enable live pageview/visitor numbers — Vercel has no public Web Analytics REST API.
+VERCEL_PROJECT_ID            prj_lNspRMthCJiD4iv77DFooZhLHGkd (kept for backwards compat with single-project helper; not used by the multi-project weekly digest)
 VERCEL_TEAM_ID               team_F3iDzgf6olA4mjXfKAeEB1In
+VERCEL_TEAM_SLUG             aks129s-projects (human-readable slug used in dashboard deep-link URLs; falls back to VERCEL_TEAM_ID if unset)
 
 # Optional release-override for the BigQuery→Supabase sync
 NPD_RELEASE_DATE             Defaults to 2026-05-08 in scripts/sync-bq-to-supabase.ts
@@ -308,7 +311,7 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 | `.github/workflows/weekly-refresh.yml` | Mon 09:00 UTC + manual | Runs all `analysis/h*.py` scripts, regenerates `frontend/public/api/v1/*.json`, commits directly to `main`. Requires `GCP_SERVICE_ACCOUNT_KEY` secret (BQ jobUser + dataViewer on `cms_npd` and `bigquery-public-data.nppes`). |
 | `.github/workflows/release.yml` | tag `v*` | Cuts GitHub release |
 
-**Vercel Cron** (in `vercel.json`, not GitHub Actions): `GET /api/v1/admin/weekly-report` fires weekly at **Thursday 13:42 UTC** (`42 13 * * 4`). Sends the consolidated admin digest — subscriber list, recent downloads, source mix, and Vercel Analytics 7-day traffic — to `ADMIN_EMAIL`. Auth via `Authorization: Bearer ${CRON_SECRET}` header. Cron-triggered requests are authorized by Vercel automatically.
+**Vercel Cron** (in `vercel.json`, not GitHub Actions): `GET /api/v1/admin/weekly-report` fires weekly at **Thursday 13:42 UTC** (`42 13 * * 4`). Sends the consolidated admin digest — subscriber list, recent downloads, source mix, and a per-project Vercel Analytics dashboard deep-link list — to `ADMIN_EMAIL`. Auth via `Authorization: Bearer ${CRON_SECRET}` header. Cron-triggered requests are authorized by Vercel automatically.
 
 **Weekly-refresh pushes straight to main** (not a PR) because the org policy disallows Actions from opening PRs without a PAT, and refresh outputs are deterministic. If merge queue/signatures block the bot push, add `github-actions[bot]` to the ruleset bypass list — do not add a PAT.
 
