@@ -29,7 +29,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-import { fetchAnalyticsSummary, type AnalyticsSummary } from '@/lib/vercel-analytics';
+import {
+  fetchAllProjectsAnalytics,
+  type AllProjectsAnalytics,
+} from '@/lib/vercel-analytics';
 
 export const dynamic = 'force-dynamic';
 
@@ -113,18 +116,18 @@ export async function GET(req: NextRequest) {
   const newLast7 = subscribers.filter((s) => s.createdAt >= sevenDaysAgo).length;
   const newLast30 = subscribers.filter((s) => s.createdAt >= thirtyDaysAgo).length;
 
-  // Vercel Analytics 7-day window. Never throws — degrades to dashboard link.
-  let analytics: AnalyticsSummary;
+  // Vercel Analytics 7-day window across EVERY project the token can read.
+  // Never throws — degrades to dashboard link.
+  let analytics: AllProjectsAnalytics;
   try {
-    analytics = await fetchAnalyticsSummary(7);
+    analytics = await fetchAllProjectsAnalytics(7);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[weekly-report] analytics fetch failed:', msg);
     analytics = {
       configured: false, ok: false, windowDays: 7,
-      totals: { pageviews: null, visitors: null },
-      series: [], topPages: [], topReferrers: [],
-      dashboardUrl: VERCEL_DASHBOARD_URL,
+      projectsDiscovered: 0, projects: [], emptyProjects: [],
+      totals: { pageviews: 0, visitors: 0 },
       note: msg,
     };
   }
@@ -136,10 +139,9 @@ export async function GET(req: NextRequest) {
   }
   const sourceRows = Object.entries(sourceCounts).sort((a, b) => b[1] - a[1]);
 
-  const pvSuffix =
-    analytics.ok && analytics.totals.pageviews != null
-      ? `, ${analytics.totals.pageviews.toLocaleString()} pageviews`
-      : '';
+  const pvSuffix = analytics.ok
+    ? `, ${analytics.totals.pageviews.toLocaleString()} pageviews across ${analytics.projects.length} projects`
+    : '';
   const subject = `AINPI weekly admin report — ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads${pvSuffix}`;
 
   // Plain text version.
@@ -173,30 +175,26 @@ export async function GET(req: NextRequest) {
     `WEB TRAFFIC (last 7 days, via Vercel Analytics API)`,
     analytics.ok
       ? [
-          `  Pageviews:        ${analytics.totals.pageviews?.toLocaleString() ?? '—'}`,
-          `  Unique visitors:  ${analytics.totals.visitors?.toLocaleString() ?? '—'}`,
+          `  Total pageviews:        ${analytics.totals.pageviews.toLocaleString()}`,
+          `  Total unique visitors:  ${analytics.totals.visitors.toLocaleString()}`,
+          `  Projects with data:     ${analytics.projects.length} of ${analytics.projectsDiscovered} discovered`,
+          analytics.emptyProjects.length > 0
+            ? `  Projects with no data:  ${analytics.emptyProjects.join(', ')}`
+            : '',
           ``,
-          `  Daily series`,
-          ...analytics.series.map(
-            (r) =>
-              `    ${r.date}  views=${String(r.views).padStart(5)}  visitors=${String(r.visitors).padStart(5)}`,
-          ),
-          ``,
-          `  Top pages`,
-          ...analytics.topPages
-            .slice(0, 10)
-            .map((p) => `    ${String(p.views).padStart(5)}  ${p.path}`),
-          ``,
-          `  Top referrers`,
-          ...analytics.topReferrers
-            .slice(0, 10)
-            .map((r) => `    ${String(r.views).padStart(5)}  ${r.source}`),
-        ].join('\n')
+          ...analytics.projects.flatMap((p) => [
+            `─── ${p.projectName} ─── (${p.totals.pageviews?.toLocaleString() ?? 0} views, ${p.totals.visitors?.toLocaleString() ?? 0} visitors)`,
+            ...p.topPages.slice(0, 5).map((page) =>
+              `    ${String(page.views).padStart(5)}  ${page.path}`,
+            ),
+            ``,
+          ]),
+        ].filter(Boolean).join('\n')
       : analytics.configured
         ? `  Analytics API responded with no rows. Note: ${analytics.note ?? 'unknown'}`
-        : `  VERCEL_API_TOKEN + VERCEL_PROJECT_ID not set on production.\n  Run: vercel env add VERCEL_API_TOKEN production\n       vercel env add VERCEL_PROJECT_ID production\n       vercel env add VERCEL_TEAM_ID production (if team-owned)`,
+        : `  VERCEL_API_TOKEN not set on production.\n  Run: vercel env add VERCEL_API_TOKEN production\n       vercel env add VERCEL_TEAM_ID production (if team-owned)`,
     ``,
-    `  Dashboard: ${analytics.dashboardUrl}`,
+    `  Dashboard: https://vercel.com/${process.env.VERCEL_TEAM_ID ?? 'aks129s-projects'}`,
   ].join('\n');
 
   // HTML version.
@@ -271,70 +269,93 @@ export async function GET(req: NextRequest) {
         <tbody>${subscriberRows}</tbody>
       </table>
 
-      <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Web traffic (last 7 days)</h2>
+      <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Web traffic — all projects (last 7 days)</h2>
       ${
         analytics.ok
           ? `
         <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:14px;">
           <tr>
-            <td style="padding:6px 0;">Pageviews</td>
-            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.pageviews?.toLocaleString() ?? '—'}</td>
+            <td style="padding:6px 0;">Total pageviews (${analytics.projects.length} projects)</td>
+            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.pageviews.toLocaleString()}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;">Unique visitors</td>
-            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.visitors?.toLocaleString() ?? '—'}</td>
+            <td style="padding:6px 0;">Total unique visitors</td>
+            <td style="padding:6px 0;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;font-size:18px;color:#111827;">${analytics.totals.visitors.toLocaleString()}</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0;font-size:12px;color:#6b7280;">Projects discovered</td>
+            <td style="padding:6px 0;text-align:right;font-size:12px;color:#6b7280;">${analytics.projectsDiscovered} (${analytics.emptyProjects.length} without data)</td>
           </tr>
         </table>
+
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:14px;">
+          <thead><tr style="border-bottom:1px solid #e5e7eb;color:#6b7280;text-align:left;">
+            <th style="padding:6px 6px;">Project</th>
+            <th style="padding:6px 6px;text-align:right;">Pageviews</th>
+            <th style="padding:6px 6px;text-align:right;">Visitors</th>
+          </tr></thead>
+          <tbody>${analytics.projects
+            .map(
+              (p) => `<tr>
+                <td style="padding:6px 6px;font-weight:600;color:#111827;">${escHtml(p.projectName)}</td>
+                <td style="padding:6px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${p.totals.pageviews?.toLocaleString() ?? '—'}</td>
+                <td style="padding:6px 6px;text-align:right;font-variant-numeric:tabular-nums;">${p.totals.visitors?.toLocaleString() ?? '—'}</td>
+              </tr>`,
+            )
+            .join('')}</tbody>
+        </table>
+
+        ${analytics.projects
+          .map(
+            (p) => `
+            <div style="margin:18px 0; padding:14px 16px; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px;">
+              <h3 style="margin:0 0 8px 0; font-size:14px; color:#111827;">
+                ${escHtml(p.projectName)}
+                <span style="font-size:12px;font-weight:400;color:#6b7280;font-variant-numeric:tabular-nums;">
+                  · ${p.totals.pageviews?.toLocaleString() ?? 0} views · ${p.totals.visitors?.toLocaleString() ?? 0} visitors
+                </span>
+              </h3>
+              ${
+                p.topPages.length > 0
+                  ? `<div style="font-size:11px;color:#6b7280;margin:8px 0 4px 0;text-transform:uppercase;letter-spacing:0.04em;">Top pages</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                      ${p.topPages
+                        .slice(0, 5)
+                        .map(
+                          (pg) => `<tr>
+                            <td style="padding:2px 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#374151;">${escHtml(pg.path)}</td>
+                            <td style="padding:2px 4px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${pg.views.toLocaleString()}</td>
+                          </tr>`,
+                        )
+                        .join('')}
+                    </table>`
+                  : ''
+              }
+              ${
+                p.topReferrers.length > 0
+                  ? `<div style="font-size:11px;color:#6b7280;margin:12px 0 4px 0;text-transform:uppercase;letter-spacing:0.04em;">Top referrers</div>
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                      ${p.topReferrers
+                        .slice(0, 5)
+                        .map(
+                          (ref) => `<tr>
+                            <td style="padding:2px 4px;color:#374151;">${escHtml(ref.source)}</td>
+                            <td style="padding:2px 4px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${ref.views.toLocaleString()}</td>
+                          </tr>`,
+                        )
+                        .join('')}
+                    </table>`
+                  : ''
+              }
+            </div>`,
+          )
+          .join('')}
+
         ${
-          analytics.series.length > 0
-            ? `<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:18px;">
-                <thead><tr style="border-bottom:1px solid #e5e7eb;color:#6b7280;text-align:left;">
-                  <th style="padding:6px 6px;">Day</th>
-                  <th style="padding:6px 6px;text-align:right;">Views</th>
-                  <th style="padding:6px 6px;text-align:right;">Visitors</th>
-                </tr></thead>
-                <tbody>${analytics.series
-                  .map(
-                    (r) => `<tr>
-                      <td style="padding:4px 6px;font-variant-numeric:tabular-nums;">${escHtml(r.date)}</td>
-                      <td style="padding:4px 6px;text-align:right;font-variant-numeric:tabular-nums;">${r.views.toLocaleString()}</td>
-                      <td style="padding:4px 6px;text-align:right;font-variant-numeric:tabular-nums;">${r.visitors.toLocaleString()}</td>
-                    </tr>`,
-                  )
-                  .join('')}</tbody>
-              </table>`
-            : ''
-        }
-        ${
-          analytics.topPages.length > 0
-            ? `<h3 style="font-size:12px;margin:18px 0 6px 0;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em;">Top pages</h3>
-              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;">
-                ${analytics.topPages
-                  .slice(0, 10)
-                  .map(
-                    (p) => `<tr>
-                      <td style="padding:3px 6px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;">${escHtml(p.path)}</td>
-                      <td style="padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${p.views.toLocaleString()}</td>
-                    </tr>`,
-                  )
-                  .join('')}
-              </table>`
-            : ''
-        }
-        ${
-          analytics.topReferrers.length > 0
-            ? `<h3 style="font-size:12px;margin:14px 0 6px 0;color:#6b7280;text-transform:uppercase;letter-spacing:0.04em;">Top referrers</h3>
-              <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:18px;">
-                ${analytics.topReferrers
-                  .slice(0, 10)
-                  .map(
-                    (r) => `<tr>
-                      <td style="padding:3px 6px;">${escHtml(r.source)}</td>
-                      <td style="padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;">${r.views.toLocaleString()}</td>
-                    </tr>`,
-                  )
-                  .join('')}
-              </table>`
+          analytics.emptyProjects.length > 0
+            ? `<p style="font-size:11px;color:#9ca3af;margin:14px 0 0 0;">
+                Projects with no analytics data this window: ${analytics.emptyProjects.map((n) => escHtml(n)).join(', ')}
+              </p>`
             : ''
         }
       `
@@ -356,7 +377,7 @@ vercel env add VERCEL_TEAM_ID    production   # if team-owned</pre>`
       `
       }
       <p style="margin: 0 0 24px 0; font-size: 13px;">
-        <a href="${analytics.dashboardUrl}" style="color:#2563eb;">Open the Vercel Analytics dashboard →</a>
+        <a href="${VERCEL_DASHBOARD_URL}" style="color:#2563eb;">Open the Vercel Analytics dashboard →</a>
       </p>
 
       <p style="margin: 24px 0 0 0; font-size: 11px; color: #9ca3af;">
