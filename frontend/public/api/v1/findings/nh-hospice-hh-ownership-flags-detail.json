@@ -1,0 +1,18 @@
+{
+  "queried_at": "2026-05-14T22:06:49+00:00",
+  "data_confidence": "candidate",
+  "data_confidence_note": "Demographic match on (last_name, first_name, state). Owner records do not carry NPI; LEIE records carry NPI inconsistently. This is a candidate-match surface, NOT a confirmed match. Verify each row against the LEIE portal directly before acting.",
+  "leie_demographic_keys": 78688,
+  "candidate_matches_total": 0,
+  "candidate_matches_va": 0,
+  "by_facility_type": {
+    "Skilled Nursing Facilities": 0,
+    "Hospices": 0,
+    "Home Health Agencies": 0,
+    "Hospitals": 0
+  },
+  "top_states_by_matches": [],
+  "sample_va_rows": [],
+  "csv_url_national": "/api/v1/findings/nh-hospice-hh-ownership-flags-detail.csv",
+  "csv_url_va": "/api/v1/states/va/h35-nh-ownership-flags.csv"
+}

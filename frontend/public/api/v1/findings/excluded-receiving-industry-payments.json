@@ -1,0 +1,32 @@
+{
+  "slug": "excluded-receiving-industry-payments",
+  "title": "Federally excluded NPIs receiving industry payments (Open Payments)",
+  "hypotheses": [
+    "H32"
+  ],
+  "status": "published",
+  "release_date": "PGYR2024 P01232026 (released 2026-01-10)",
+  "generated_at": "2026-05-14T22:02:47+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "7d8304a",
+  "headline": "350 of 8,619 active LEIE / SAM-excluded NPIs received reportable industry payments from drug and device manufacturers in program year 2024 per CMS Open Payments. Combined paid amount: $3,826,596 across 3,337 reported transactions. Of those, 9 are VA-resident per NDH practice state, with $1,547 in industry payments. Open Payments is itself public and individually searchable \u2014 the systematic cross-join with federal exclusion lists is what AINPI adds. Each match is an industry-side compliance signal: a manufacturer transferred value to an NPI that is federally excluded from receiving federal program reimbursement.",
+  "numerator": 350,
+  "denominator": 8619,
+  "data_source_release": "PGYR2024 P01232026 (released 2026-01-10)",
+  "data_source_url": "https://openpaymentsdata.cms.gov/",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "LEIE/SAM NPIs receiving industry payments",
+        "value": 350
+      },
+      {
+        "label": "of which VA-resident",
+        "value": 9
+      }
+    ]
+  },
+  "notes": "Aggregate file (PBLCTN_SMRY_BY_CR_BY_NTR_OF_PYMT) used rather than the line-detail file (~10M rows) \u2014 the aggregate gives per-NPI \u00d7 per-nature-code totals which is the right granularity for the exclusion join. Open Payments is itself public \u2014 drug and device manufacturers are required to report by the Sunshine Act / Physician Payments Sunshine Act (42 USC \u00a7 1320a-7h). AINPI's contribution is the systematic cross-join with the LEIE \u222a SAM active exclusion set, which has not been published. VA-state slice at /api/v1/states/va/h32-excluded-industry-payments-va.csv. Full national list at /api/v1/findings/excluded-receiving-industry-payments-detail.csv."
+}

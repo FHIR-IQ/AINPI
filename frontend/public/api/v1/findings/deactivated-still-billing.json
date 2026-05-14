@@ -1,0 +1,36 @@
+{
+  "slug": "deactivated-still-billing",
+  "title": "NPPES-deactivated VA-state NPIs still billing public claims data",
+  "hypotheses": [
+    "H31"
+  ],
+  "status": "published",
+  "release_date": "2026-05-14",
+  "generated_at": "2026-05-14T21:59:49+00:00",
+  "methodology_version": "0.6.0-draft",
+  "commit_sha": "7d8304a",
+  "headline": "3 of 1495 NPPES-deactivated VA-state NPIs (per NDH practice-state retention; NPPES nulls practice state on deactivation) billed at least one public claims source STRICTLY AFTER their NPPES deactivation date. Post-deactivation totals: Medicaid $74,556, Medicare Part B $177,703 (CY 2023), Medicare Part D $32,116 drug cost (CY 2023). 1 of 3 matched NPIs appear in MULTIPLE post-deactivation billing sources, which is a stronger signal than any single source. Match rule: claim month/year > NPPES deactivation month/year. Each match is either a data-quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier \u2014 both are state PI triage flags.",
+  "numerator": 3,
+  "denominator": 1495,
+  "denominator_note": "Cohort = 1495 NPIs that are NPPES-deactivated (npi_deactivation_date IS NOT NULL, npi_reactivation_date IS NULL) AND appear in NDH practitioner with _state='VA'. NPPES nulls practice address fields on deactivation, so VA-state attribution comes from the NDH side (the H10 \"NPPES-deactivated but still listed in NDH\" signal extended to its claims-side consequence).",
+  "data_source_release": "HHS 2026-02-09 + Medicare CY 2023 + NPPES (BigQuery public dataset)",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Cohort NPIs billing post-deactivation",
+        "value": 3
+      },
+      {
+        "label": "Cohort NPIs in \u22652 sources",
+        "value": 1
+      },
+      {
+        "label": "Cohort with no billing match",
+        "value": 1492
+      }
+    ]
+  },
+  "notes": "Per-state CSV at /api/v1/states/va/h31-deactivated-paid.csv. Match rule for Medicaid: CLAIM_FROM_MONTH > deactivation month/year (month-level precision). For Medicare Part B / Part D: deactivation_year < 2023 (year-level precision since the source files are CY 2023 aggregates). Multi-source matches are the strongest signal \u2014 same NPI billing across Medicaid + Medicare after NPPES deactivation is direct evidence of work being done under a closed identifier. State PI triage priority order: (1) multi-source matches, (2) Part D opioid prescribers, (3) high-dollar single-source matches."
+}

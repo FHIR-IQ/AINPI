@@ -1,0 +1,112 @@
+{
+  "queried_at": "2026-05-14T22:02:47+00:00",
+  "denominator_cohort_size": 8619,
+  "matched_nationally": 350,
+  "matched_va": 9,
+  "total_paid_2024": 3826595.65,
+  "total_va_paid_2024": 1547.01,
+  "top_10_nationally": [
+    {
+      "npi": "1164450573",
+      "name": "FRANK, ALEXANDER",
+      "ndh_state": "OK",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 3082225.0,
+      "industry_payments_2024_transactions": 1,
+      "top_nature_codes": "17=$3,082,225"
+    },
+    {
+      "npi": "1063418580",
+      "name": "PAPPACHEN, STEPHEN",
+      "ndh_state": "FL",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 303604.37,
+      "industry_payments_2024_transactions": 382,
+      "top_nature_codes": "1=$303,604"
+    },
+    {
+      "npi": "1982679544",
+      "name": "MOLINA, HECTOR",
+      "ndh_state": "TX",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 114040.0,
+      "industry_payments_2024_transactions": 1,
+      "top_nature_codes": "17=$114,040"
+    },
+    {
+      "npi": "1437169034",
+      "name": "KORDISH, THERESA",
+      "ndh_state": "IN",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 86066.6,
+      "industry_payments_2024_transactions": 57,
+      "top_nature_codes": "1=$86,067"
+    },
+    {
+      "npi": "1396085015",
+      "name": "LUND, M",
+      "ndh_state": "MS",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 45120.0,
+      "industry_payments_2024_transactions": 18,
+      "top_nature_codes": "17=$45,120"
+    },
+    {
+      "npi": "1942208715",
+      "name": "MALIK, AZFAR",
+      "ndh_state": "MO",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 35708.81,
+      "industry_payments_2024_transactions": 69,
+      "top_nature_codes": "2=$32,536; 6=$1,598; 7=$1,563"
+    },
+    {
+      "npi": "1083680003",
+      "name": "MITTAL, NIRANJAN",
+      "ndh_state": "NY",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 17083.33,
+      "industry_payments_2024_transactions": 1,
+      "top_nature_codes": "18=$17,083"
+    },
+    {
+      "npi": "1144473208",
+      "name": "DAVIS, CHRISTOPHER",
+      "ndh_state": "PA",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 15688.25,
+      "industry_payments_2024_transactions": 28,
+      "top_nature_codes": "2=$13,870; 7=$1,280; 6=$539"
+    },
+    {
+      "npi": "1396067682",
+      "name": "SHAH, AMIT",
+      "ndh_state": "NY",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 14449.21,
+      "industry_payments_2024_transactions": 17,
+      "top_nature_codes": "1=$13,400; 6=$581; 7=$468"
+    },
+    {
+      "npi": "1194956326",
+      "name": "GERBAKHER, ALEXANDER",
+      "ndh_state": "CA",
+      "recipient_type": "Covered Recipient Physician",
+      "exclusion_source": "leie",
+      "industry_payments_2024_total": 12866.44,
+      "industry_payments_2024_transactions": 2,
+      "top_nature_codes": "17=$12,866"
+    }
+  ],
+  "csv_url_national": "/api/v1/findings/excluded-receiving-industry-payments-detail.csv",
+  "csv_url_va": "/api/v1/states/va/h32-excluded-industry-payments-va.csv"
+}
