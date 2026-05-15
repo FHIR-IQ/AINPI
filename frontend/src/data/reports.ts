@@ -43,6 +43,17 @@ export const REPORTS: ReportOption[] = [
     length: '~30 pages',
   },
   {
+    id: 'may-2026-05-14-update',
+    version: '2026-05-14-update',
+    title: '2026-05-14 update — claims-side cross-audit shipped',
+    description:
+      '8 new findings (H29-H36) link AINPI\'s directory cohort to Medicaid spending, Medicare Part B / Part D, Open Payments, DMEPOS, nursing-home ownership, and NDH completeness. Strict-post-exclusion attribution and the H35 Stage B PPEF cross-walk fix shipped this week.',
+    format: 'web',
+    url: '/reports/2026-05-14-update',
+    badge: 'NEW',
+    length: '~6 min read',
+  },
+  {
     id: 'may-2026-05-08-update',
     version: '2026-05-08-update',
     title: '2026-05-08 update — first comparable-release deltas',
@@ -50,7 +61,6 @@ export const REPORTS: ReportOption[] = [
       'CMS pushed a new NDH bulk export. Endpoint −73%, Location −61%, OrgAffiliation +147%; total 27.2M → 21.7M. SSN exposures 46 → 41 (CMS partially scrubbed). Organization NPI-duplicate excess 383K → 1.41M. Two source-side schema breaks AINPI caught.',
     format: 'web',
     url: '/reports/2026-05-08-update',
-    badge: 'NEW',
     length: '~5 min read',
   },
   {
