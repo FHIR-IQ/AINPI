@@ -1,4 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1700273794,"SHAHID, MUHAMMAD",VA,2015-11-16,true,medicaid|medicare_partb|medicare_partd,56681.68,1633,2020-10,2024-08,177702.94,2031,31877.15,30,156.74,https://npiregistry.cms.hhs.gov/provider-view/1700273794
-1043396328,"THURMAN, CECILIA",VA,2019-03-27,true,medicaid,17873.97,251,2023-06,2024-05,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1043396328
-1164874087,"BAHRAMIAN, NAGHMEH",VA,2018-07-18,true,medicare_partd,0.0,0,2018-03,2018-04,0,0,239.27,18,59.74,https://npiregistry.cms.hhs.gov/provider-view/1164874087

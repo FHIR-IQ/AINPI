@@ -1,7 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1619025301,"BLOINK, JOSEPH",MI,2018-12-12,false,medicaid,36588.04,2260,2018-01,2019-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1619025301
-1346321312,"RAHMAN, S",MI,2015-09-25,false,medicaid,33690.8,830,2018-01,2019-01,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1346321312
-1548705965,"PABICH, VERONICA",MI,2018-10-03,true,medicare_partb,0,0,,,14257.48,645,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1548705965
-1497161285,"CALDERON, EMANUEL",MI,2015-05-19,true,medicare_partb,0,0,,,12082.27,509,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1497161285
-1427597665,"NOSEWICZ, JACOB",MI,2017-07-18,true,medicare_partd,0,0,,,0,0,1061.73,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1427597665
-1265544308,"MOGERMAN, RICHARD",MI,2017-03-08,true,medicare_partd,0,0,,,0,0,524.81,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1265544308

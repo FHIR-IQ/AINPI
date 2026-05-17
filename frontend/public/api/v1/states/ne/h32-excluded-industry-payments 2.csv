@@ -1,2 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1790792380,"FRASER, JEFFREY",NE,Covered Recipient Physician,leie+sam,20210819,2021-08-19,2021,yes,23.72,1,6=$24,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1790792380

@@ -1,6 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1245728401,"JAGPAL, NITISH",WA,2018-11-29,true,medicaid,286821.65,37742,2021-09,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1245728401
-1861433914,"PARKINSON, CHRISTOPHER",WA,2019-01-18,false,medicaid,18033.62,71,2018-01,2019-03,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1861433914
-1396016598,"BARRON, BROCK",WA,2018-10-15,true,medicaid,13064.12,88,2021-09,2021-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1396016598
-1083874085,"MORELAND, MELISSA",WA,2019-03-27,true,medicaid,967.02,26,2019-07,2019-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1083874085
-1689117996,"ALAMWALA, MANDEEP MANDY",WA,2019-02-27,true,medicare_partd,0,0,,,0,0,409.82,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1689117996

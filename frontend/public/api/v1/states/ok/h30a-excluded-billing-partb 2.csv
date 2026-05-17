@@ -1,5 +1,0 @@
-npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1164450573,"FRANK, ALEXANDER",OK,OK,4175104.03,5336535.23,14311,2391,Family Practice,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1164450573
-1063436947,"RICH, BRIAN",OK,TX,723285.39,922942.75,8241,369,Interventional Pain Management,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1063436947
-1073977302,"NEDZA, JOHN",OK,OK,23180.07,29366.42,179,157,Anesthesiology,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1073977302
-1114913431,"HARDER, ROBERT",OK,OR,1263.78,1869.7,17,12,Obstetrics & Gynecology,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114913431

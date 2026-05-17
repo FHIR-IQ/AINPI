@@ -1,2 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1295935427,"PICCINI, JEAN",ME,2009-09-10,true,medicaid,20381.89,234,2024-07,2024-12,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1295935427

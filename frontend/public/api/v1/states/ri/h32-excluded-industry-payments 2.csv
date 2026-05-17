@@ -1,2 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1982713020,"CULLEN, EDWARD",RI,Covered Recipient Physician,sam,,2012-12-20,2012,yes,29.87,1,6=$30,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1982713020

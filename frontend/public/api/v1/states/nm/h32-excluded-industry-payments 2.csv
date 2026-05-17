@@ -1,3 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1871571406,"ASWAD, MOHAMED",NM,Covered Recipient Physician,leie+sam,20160120,2016-01-20,2016,yes,525.0,1,1=$525,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1871571406
-1366482358,"HENDERSON, J",NM,Covered Recipient Physician,leie+sam,20160620,2016-06-20,2016,yes,34.92,1,6=$35,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366482358

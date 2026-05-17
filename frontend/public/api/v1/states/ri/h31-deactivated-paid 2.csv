@@ -1,2 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1427300367,"SCUNGIO, TARA",RI,2018-08-22,true,medicaid|medicare_partd,38304.14,714,2023-06,2024-01,0,0,16415.61,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1427300367

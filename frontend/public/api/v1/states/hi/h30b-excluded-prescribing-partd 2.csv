@@ -1,2 +1,0 @@
-npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1497874705,"BOULANGE, CHRIS",HI,HI,3980.67,97,17,39,2275.76,oig_excluded|nppes_deactivated,2025,no,2.3,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1497874705

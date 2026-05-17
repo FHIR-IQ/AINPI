@@ -1,7 +1,0 @@
-npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1376723684,"FLOREA, ROBERT",OH,OH,17155.1,22292.79,256,21,Family Practice,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376723684
-1033111000,"JENKINS, OLIVER",OH,GA,15368.43,24417.25,475,98,Otolaryngology,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033111000
-1619069739,"PAOLONE, VINCE",OH,OH,14868.45,22603.45,189,47,Psychiatry,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1619069739
-1104921949,"BALGO, TROY",OH,OH,4928.59,6620.08,229,14,Pain Management,sam_excluded,2020,yes,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1104921949
-1992932941,"GROSS, IRINA",OH,OH,3154.05,4032.69,112,77,Podiatry,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1992932941
-1851353866,"WAHIB, SAMIR",OH,IN,3015.61,3824.4,36,15,Obstetrics & Gynecology,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1851353866

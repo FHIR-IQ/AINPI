@@ -1,2 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1689735177,"ROLDAN, WILMER",PR,2018-03-07,false,medicaid,104396.08,28098,2018-01,2019-04,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1689735177

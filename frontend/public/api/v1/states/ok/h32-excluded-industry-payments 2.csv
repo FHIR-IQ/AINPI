@@ -1,4 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1164450573,"FRANK, ALEXANDER",OK,Covered Recipient Physician,leie,20250820,,2025,no,3082225.0,1,"17=$3,082,225",https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1164450573
-1063436947,"RICH, BRIAN",OK,Covered Recipient Physician,leie,20250320,,2025,no,546.72,8,6=$415; 8=$132,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1063436947
-1689049355,"WISEMAN, PATSY",OK,Covered Recipient Non-Physician Practitioner,leie,20221020,,2022,yes,19.29,1,6=$19,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1689049355

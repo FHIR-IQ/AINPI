@@ -1,2 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1225144264,"ALLDREDGE, O",UT,Covered Recipient Physician,leie+sam,20161220,2016-12-20,2016,yes,17.54,1,6=$18,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1225144264

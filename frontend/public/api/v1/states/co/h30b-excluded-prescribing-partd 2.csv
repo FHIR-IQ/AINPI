@@ -1,9 +1,0 @@
-npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1982099297,"MATTHEWS, STEPHEN",CO,CO,223953.68,961,192,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1982099297
-1336496330,"PONDER, S",CO,CO,119806.51,875,69,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1336496330
-1790706745,"JOSEPH, FRANCIS",CO,CO,4144.77,102,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1790706745
-1295952729,"KIM, GEOFFREY",CO,CO,3698.56,41,16,13,80.8,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1295952729
-1336228022,"GERBER, GREGORY",CO,OH,798.51,20,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1336228022
-1649204975,"CARIS, JENNIFER",CO,CA,265.92,21,17,,,oig_excluded|nppes_deactivated,2025,no,2.3,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1649204975
-1154643658,"LUCERO, TONI",CO,CO,71.11,22,13,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1154643658
-1942301502,"CRAIG, JAMES",CO,CO,49.64,14,,,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942301502

@@ -1,8 +1,0 @@
-npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1609985852,"MALAVE, ERNESTO",MD,TX,2837924.07,11956,624,252,1401.31,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1609985852
-1699149492,"DEGRAFENREID II, R",MD,MD,72391.6,406,24,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1699149492
-1780081323,"TAURINO, ELISABETH",MD,MD,57263.87,355,79,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1780081323
-1225110075,"HOLCOMB, HENRY",MD,MD,9623.42,215,14,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1225110075
-1447418918,"MAROOF, ANISSA",MD,MD,935.33,20,,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1447418918
-1457413734,"FRIED, ANDREW",MD,MD,772.14,123,60,,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1457413734
-1386682169,"RAMIREZ, JULIO",MD,MD,491.07,16,,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1386682169

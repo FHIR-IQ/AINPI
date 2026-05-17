@@ -1,5 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1336496330,"PONDER, S",CO,Covered Recipient Non-Physician Practitioner,leie,20260420,,2026,no,159.72,2,6=$160,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1336496330
-1164458006,"THOMAS, MICHAEL",CO,Covered Recipient Physician,leie+sam,20170820,2017-08-20,2017,yes,72.01,3,6=$72,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1164458006
-1790706745,"JOSEPH, FRANCIS",CO,Covered Recipient Physician,leie,20240520,,2024,no,28.99,1,6=$29,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1790706745
-1982099297,"MATTHEWS, STEPHEN",CO,Covered Recipient Physician,leie,20250720,,2025,no,27.57,1,6=$28,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1982099297

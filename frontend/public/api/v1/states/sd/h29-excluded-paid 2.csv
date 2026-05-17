@@ -1,2 +1,0 @@
-npi,name,paid_amount_post_exclusion,claim_lines_post_exclusion,paid_amount_full_window,claim_lines_full_window,patients_total,top_hcpcs_codes,exclusion_source,exclusion_effective_date,score,first_paid_month,last_paid_month,billing_or_servicing,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1740376102,"PERRY, JON",0.0,0,148457.8,2325,1462,"99232=$56,170; 99213=$43,521; 99214=$18,487",oig_excluded,2022-11-20,1.5,,,"billing, servicing",https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1740376102
