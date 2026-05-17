@@ -18,7 +18,6 @@ export default function StateSidePanel({ state, onClose }: StateSidePanelProps) 
   const lower = state.code.toLowerCase();
   return (
     <aside
-      role="dialog"
       aria-label={`${state.name} findings`}
       className="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-white shadow-2xl border-l border-slate-200 z-50 overflow-y-auto"
     >
