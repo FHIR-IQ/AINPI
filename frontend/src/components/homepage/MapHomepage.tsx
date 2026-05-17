@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ThemeSwitcher, {
   initialTheme,
   persistTheme,
@@ -38,6 +38,15 @@ export default function MapHomepage({ data }: MapHomepageProps) {
   const [metric, setMetric] = useState<MapMetricSlug>('cohortSize');
   const [selected, setSelected] = useState<SidePanelState | null>(null);
 
+  const totals = {
+    cohort: data.states.reduce((s, x) => s + x.metrics.cohortSize, 0),
+    deactivated: data.states.reduce((s, x) => s + x.metrics.deactivatedStillBilling, 0),
+    industry: data.states.reduce(
+      (s, x) => s + x.metrics.industryPaymentsPostExclusion,
+      0,
+    ),
+  };
+
   // Resolve theme on mount (avoids SSR/CSR mismatch).
   useEffect(() => {
     setTheme(initialTheme());
@@ -48,10 +57,14 @@ export default function MapHomepage({ data }: MapHomepageProps) {
     persistTheme(next);
   };
 
-  const stateValues = data.states.map((s) => ({
-    state: s.code,
-    value: s.metrics[metric],
-  }));
+  const stateValues = useMemo(
+    () =>
+      data.states.map((s) => ({
+        state: s.code,
+        value: s.metrics[metric],
+      })),
+    [data.states, metric],
+  );
 
   const onStateClick = (code: string) => {
     const entry = data.states.find((s) => s.code === code);
@@ -62,11 +75,6 @@ export default function MapHomepage({ data }: MapHomepageProps) {
       cohortSize: entry.metrics.cohortSize,
     });
   };
-
-  const topStat = data.states.reduce(
-    (sum, s) => sum + s.metrics.cohortSize,
-    0,
-  );
 
   return (
     <main className={`min-h-screen ${THEME_CLASS[theme]} transition-colors`}>
@@ -80,7 +88,7 @@ export default function MapHomepage({ data }: MapHomepageProps) {
             {theme === 'dark' ? (
               <h1 className="text-4xl sm:text-5xl font-bold leading-tight max-w-3xl">
                 <span className="tabular-nums text-blue-400">
-                  {topStat.toLocaleString()}
+                  {totals.cohort.toLocaleString()}
                 </span>{' '}
                 federally-excluded NPIs are still listed in the federal provider
                 directory today.
@@ -99,25 +107,18 @@ export default function MapHomepage({ data }: MapHomepageProps) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
             <KpiCard
               label="Cohort"
-              value={topStat.toLocaleString()}
+              value={totals.cohort.toLocaleString()}
               caption="federally-excluded NPIs"
             />
             <KpiCard
               label="Still billing"
-              value={data.states
-                .reduce((s, x) => s + x.metrics.deactivatedStillBilling, 0)
-                .toLocaleString()}
+              value={totals.deactivated.toLocaleString()}
               caption="deactivated NPIs"
               tone="loss"
             />
             <KpiCard
               label="Industry $"
-              value={data.states
-                .reduce(
-                  (s, x) => s + x.metrics.industryPaymentsPostExclusion,
-                  0,
-                )
-                .toLocaleString()}
+              value={totals.industry.toLocaleString()}
               caption="strict post-exclusion matches"
               tone="loss"
             />
@@ -145,24 +146,30 @@ export default function MapHomepage({ data }: MapHomepageProps) {
           />
         </div>
 
+        {/* Accessible state directory — keyboard-and-screen-reader navigable mirror
+            of the choropleth's click affordance. Also indexed by search engines so
+            every state name appears in the page body. */}
+        <ul className="sr-only" aria-label="State directory">
+          {data.states.map((s) => (
+            <li key={s.code}>
+              <button type="button" onClick={() => onStateClick(s.code)}>
+                {s.name}: {s.metrics[metric].toLocaleString()} {data.availableMetrics.find((m) => m.slug === metric)?.label.toLowerCase() ?? metric}
+              </button>
+            </li>
+          ))}
+        </ul>
+
         {/* Minimal layout: stats below map */}
         {theme === 'minimal' && (
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 text-center">
-            <MiniStat label="cohort" value={topStat.toLocaleString()} />
+            <MiniStat label="cohort" value={totals.cohort.toLocaleString()} />
             <MiniStat
               label="deactivated billing"
-              value={data.states
-                .reduce((s, x) => s + x.metrics.deactivatedStillBilling, 0)
-                .toLocaleString()}
+              value={totals.deactivated.toLocaleString()}
             />
             <MiniStat
               label="industry $"
-              value={data.states
-                .reduce(
-                  (s, x) => s + x.metrics.industryPaymentsPostExclusion,
-                  0,
-                )
-                .toLocaleString()}
+              value={totals.industry.toLocaleString()}
             />
             <MiniStat label="NDH complete" value="99.99984%" />
           </div>
