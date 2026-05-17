@@ -23,7 +23,7 @@ import {
   allStateCodes,
   findStateByCode,
 } from '@/data/states';
-import { loadStateCohort } from '@/lib/load-api-v1';
+import { loadStateCohort, loadStateFindings } from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -64,6 +64,21 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
   const samples = cohort.slice(0, 3);
 
   const cohortCsvUrl = `/api/v1/states/${code.toLowerCase()}-cohort-critical.csv`;
+
+  // Per-state directory-hygiene findings, surfaced in plain English for the
+  // CMO audience. Pulled from the same state JSON that drives /states/<code>.
+  const stateFindings = loadStateFindings(code);
+  const orgDupeRow = stateFindings?.findings.find(
+    (f) => f.slug === 'duplicate-detection',
+  );
+  const taxonomyRow = stateFindings?.findings.find(
+    (f) => f.slug === 'npi-taxonomy-correctness',
+  );
+
+  // VA is the pilot state; its claims-side cross-audit has been computed
+  // already and is hard-anchored below. Other states get the national
+  // pattern + a clear "we can compute this for your state" hook.
+  const hasVaCrossAudit = code === 'VA';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -399,6 +414,315 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             and no AINPI-internal account creation. Your team downloads
             the file and runs their existing verification workflow.
           </p>
+        </div>
+      </section>
+
+      {/* Band 4b — Cross-audit findings beyond the directory.
+          Designed as citation-ready ammunition for Element 4 ("other
+          comprehensive measures") of the SMD response. */}
+      <section className="bg-white border-b border-gray-200">
+        <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
+          <div className="text-xs font-bold tracking-wider uppercase text-emerald-700 mb-3">
+            Cross-audit · ammunition for Element 4 of your SMD response
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            What the claims-side audit shows{' '}
+            {hasVaCrossAudit ? `for ${state.name}` : 'nationally'}
+          </h2>
+          <p className="text-gray-700 mb-8 leading-relaxed">
+            AINPI also cross-references the federally-excluded cohort
+            against five public federal claims and payment datasets:
+            Medicaid spending, Medicare Part B billing, Medicare Part D
+            prescribing (with opioid metrics), Open Payments industry
+            transfers, and the DMEPOS supplier directory. Each finding
+            below is citation-ready for the &ldquo;other comprehensive
+            measures&rdquo; element of your CMS State Medicaid Director
+            response.
+          </p>
+
+          <div className="space-y-6">
+            {/* Finding 1: payment gate is mostly working */}
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-2">
+                Working as designed
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                The federal payment gate is doing its job for the active
+                cohort
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                {hasVaCrossAudit ? (
+                  <>
+                    <strong>0 of the 125 federally-excluded Virginia
+                    providers</strong> received Medicaid, Medicare
+                    Part&nbsp;B, or Medicare Part&nbsp;D payment in a
+                    calendar period strictly after their exclusion took
+                    effect (Medicaid Provider Spending 2018&ndash;2024;
+                    Medicare CY 2023). Pre-exclusion billing was
+                    legitimate; once exclusion is processed, the federal
+                    program-payment side holds. This is the strongest
+                    single signal that CMS&apos;s exclusion-revocation
+                    pipeline is working for {state.name}&apos;s active
+                    cohort.
+                  </>
+                ) : (
+                  <>
+                    <strong>0 of the 125 federally-excluded Virginia
+                    providers</strong> (the pilot cohort) received
+                    Medicaid, Medicare Part&nbsp;B, or Medicare
+                    Part&nbsp;D payment strictly post-exclusion. The
+                    same audit is available for {state.name}&apos;s
+                    cohort on request &mdash; ask and we&apos;ll generate
+                    the file for your PI team.
+                  </>
+                )}
+              </p>
+            </div>
+
+            {/* Finding 2: directory hygiene is the persistent problem */}
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-2">
+                Persistent problem
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                The federal directory is highly complete &mdash; but
+                staleness is real
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                <strong>99.99984% of Medicare Part&nbsp;B billers with
+                material payment in CY 2023 are present in the federal
+                directory</strong> (only 2 of 1.26M individual NPIs
+                absent). Coverage is excellent. What fails is
+                <em> currency</em> &mdash; keeping deactivated and
+                excluded providers off the list.
+                {orgDupeRow && orgDupeRow.state_pct !== null && (
+                  <>
+                    {' '}
+                    For {state.name} specifically: the organization-NPI
+                    duplicate rate is{' '}
+                    <strong className="tabular-nums">
+                      {orgDupeRow.state_pct.toFixed(1)}%
+                    </strong>{' '}
+                    ({orgDupeRow.state_numerator?.toLocaleString()} of{' '}
+                    {orgDupeRow.state_denominator?.toLocaleString()}{' '}
+                    organization rows). If you count organizations the
+                    naive way, the federal directory will overcount.
+                  </>
+                )}
+                {taxonomyRow && taxonomyRow.state_pct !== null && (
+                  <>
+                    {' '}
+                    NPI taxonomy correctness for {state.name} is{' '}
+                    <strong className="tabular-nums">
+                      {taxonomyRow.state_pct.toFixed(2)}%
+                    </strong>{' '}
+                    against the CMS Medicare crosswalk.
+                  </>
+                )}
+              </p>
+            </div>
+
+            {/* Finding 3: deactivated still billing (VA) */}
+            {hasVaCrossAudit && (
+              <div className="bg-rose-50 border border-rose-200 rounded-lg p-5">
+                <div className="text-xs font-bold uppercase tracking-wider text-rose-800 mb-2">
+                  MMIS reconciliation queue
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  3 of 1,495 {state.name}-state NPPES-deactivated NPIs
+                  still show billing activity
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  These are closed federal identifiers that continued to
+                  appear in Medicaid Provider Spending, Medicare
+                  Part&nbsp;B, or Medicare Part&nbsp;D after their NPPES
+                  deactivation date. Three is a small number nationally;
+                  for an MMIS reconciliation queue, each one is a
+                  discrete case to verify. Detail file (with NPI,
+                  deactivation date, billing month, federal source):{' '}
+                  <a
+                    href="/api/v1/states/va/h31-deactivated-paid.csv"
+                    className="text-blue-600 hover:underline"
+                  >
+                    h31-deactivated-paid.csv
+                  </a>
+                  .
+                </p>
+              </div>
+            )}
+
+            {/* Finding 4: ownership flags (VA) */}
+            {hasVaCrossAudit && (
+              <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
+                <div className="text-xs font-bold uppercase tracking-wider text-purple-800 mb-2">
+                  Ownership transparency · candidate flags
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  17 candidate-demographic matches between
+                  {' '}{state.name}-state facility owners and the OIG
+                  exclusion list
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  SNF, hospice, home-health, and hospital owners with
+                  name + facility-state matches against the OIG LEIE
+                  exclusion list. These are <strong>candidates that
+                  need human verification</strong> at the LEIE portal,
+                  not confirmed determinations &mdash; common-name
+                  collisions are real and the source file does not carry
+                  owner-NPI. The CMS Disclosure of Ownership Interim
+                  Final Rule (2023) expanded ownership transparency
+                  precisely to enable this kind of cross-check. Detail
+                  file:{' '}
+                  <a
+                    href="/api/v1/states/va/h35-nh-ownership-flags.csv"
+                    className="text-blue-600 hover:underline"
+                  >
+                    h35-nh-ownership-flags.csv
+                  </a>
+                  .
+                </p>
+              </div>
+            )}
+
+            {/* Finding 5: Sunshine Act leak (universal) */}
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-orange-800 mb-2">
+                Sunshine Act surface · still leaking
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                198 of 8,619 federally-excluded providers nationally
+                received industry payments strictly post-exclusion
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                In Program Year 2024, $167K in industry payments
+                (pharmaceutical and device transfers) reached providers
+                whose exclusion had already taken effect. The Sunshine
+                Act surface is leaking even when the Medicare/Medicaid
+                payment gates are holding. This is regulator territory
+                for HHS-OIG, FDA, and DEA &mdash; but a state PI office
+                citing this in a comprehensive-strategy submission is
+                naming a real federal gap.
+                {hasVaCrossAudit && (
+                  <>
+                    {' '}
+                    2 of those 198 are {state.name}-resident. Detail
+                    file:{' '}
+                    <a
+                      href="/api/v1/states/va/h32-excluded-industry-payments-va.csv"
+                      className="text-blue-600 hover:underline"
+                    >
+                      h32-excluded-industry-payments-va.csv
+                    </a>
+                    .
+                  </>
+                )}
+              </p>
+            </div>
+
+            {/* Finding 6: opioid prescribers (VA only) */}
+            {hasVaCrossAudit && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-5">
+                <div className="text-xs font-bold uppercase tracking-wider text-red-800 mb-2">
+                  Opioid prescriber subset · DEA-coordination signal
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  6 of 10 {state.name}-cohort Medicare Part&nbsp;D
+                  prescribers wrote opioid prescriptions
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  10 of the 125 federally-excluded {state.name}{' '}
+                  providers prescribed Medicare Part&nbsp;D in CY 2023
+                  (full-window, including pre-exclusion). 6 of them were
+                  opioid prescribers. The 21st Century Cures Act and
+                  2018 SUPPORT Act extended controlled-substance
+                  enforcement to specifically cover Medicaid/Medicare
+                  prescribers; this subset feeds directly into the DEA
+                  Opioid Coordination queue and the federal
+                  controlled-substance referral path. Detail file:{' '}
+                  <a
+                    href="/api/v1/states/va/h30b-excluded-prescribing-partd.csv"
+                    className="text-blue-600 hover:underline"
+                  >
+                    h30b-excluded-prescribing-partd.csv
+                  </a>
+                  .
+                </p>
+              </div>
+            )}
+
+            {/* Universal: compounding-signal pattern */}
+            <div className="bg-slate-100 border border-slate-300 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+                Triage pattern · for your PI team
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Single-source flags are noise; multi-source flags
+                converge on real cases
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                A few names in the {hasVaCrossAudit ? state.name + ' ' : ''}
+                cohort appear in five independent public-data joins at
+                once (exclusion list + Medicaid spending + Medicare
+                Part&nbsp;B + Part&nbsp;D + payer-directory presence).
+                Each individual signal is a low-priority flag; the
+                cross-product is the high-priority triage target. AINPI
+                produces the file so your PI team can read the
+                multi-source matches first, single-source matches
+                second. The CSV columns make the multi-source pattern
+                obvious at a glance.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA for non-VA states */}
+          {!hasVaCrossAudit && (
+            <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-lg">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Want the state-specific claims-side cross-audit for{' '}
+                {state.name}?
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed mb-3">
+                Each of the five federal claims/payment datasets above
+                can be cross-walked against {state.name}&apos;s cohort
+                of {cohortCount} federally-excluded providers. The
+                output is per-NPI rows, primary-source verification
+                URLs, and exclusion-date-aware filtering (strict
+                post-exclusion vs full-window). Same file shape as the
+                VA pilot. Email{' '}
+                <a
+                  href="mailto:gene@fhiriq.com?subject=AINPI%20cross-audit%20for%20{state.name}"
+                  className="text-blue-700 hover:underline font-medium"
+                >
+                  gene@fhiriq.com
+                </a>
+                {' '}with the dataset(s) you want and the file is back
+                in your inbox within a week. No cost for state Medicaid
+                agencies.
+              </p>
+            </div>
+          )}
+
+          {/* Source / reproducibility note */}
+          <div className="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-500">
+            All findings are reproducible from public federal sources.
+            Methodology notes, source-release pinning, and the scripts
+            that generate each file are in the AINPI{' '}
+            <Link
+              href="/findings"
+              className="text-blue-600 hover:underline"
+            >
+              findings catalog
+            </Link>
+            . Citation language ready to paste for each element of the
+            SMD response is at{' '}
+            <Link
+              href="/smd-revalidation"
+              className="text-blue-600 hover:underline"
+            >
+              ainpi.dev/smd-revalidation
+            </Link>
+            .
+          </div>
         </div>
       </section>
 
