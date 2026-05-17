@@ -44,7 +44,7 @@ interface ThemeSwitcherProps {
 export default function ThemeSwitcher({ value, onChange }: ThemeSwitcherProps) {
   return (
     <div
-      role="radiogroup"
+      role="group"
       aria-label="Page style"
       className="inline-flex bg-white/90 backdrop-blur border border-slate-200 rounded-full p-1 gap-1 text-xs font-medium"
     >

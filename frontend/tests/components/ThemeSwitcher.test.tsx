@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import ThemeSwitcher, { type Theme } from '@/components/homepage/ThemeSwitcher';
+import ThemeSwitcher, { initialTheme, type Theme } from '@/components/homepage/ThemeSwitcher';
 
 function setMatchMedia(prefersDark: boolean) {
   Object.defineProperty(window, 'matchMedia', {
@@ -55,24 +55,21 @@ describe('ThemeSwitcher', () => {
 });
 
 describe('initialTheme helper', () => {
-  it('returns localStorage value when set', async () => {
+  it('returns localStorage value when set', () => {
     localStorage.setItem('ainpi-theme', 'minimal');
     setMatchMedia(true);
-    const { initialTheme } = await import('@/components/homepage/ThemeSwitcher');
     expect(initialTheme()).toBe('minimal');
   });
 
-  it('returns dark when prefers-color-scheme: dark and no localStorage', async () => {
+  it('returns dark when prefers-color-scheme: dark and no localStorage', () => {
     localStorage.clear();
     setMatchMedia(true);
-    const { initialTheme } = await import('@/components/homepage/ThemeSwitcher');
     expect(initialTheme()).toBe('dark');
   });
 
-  it('returns light when prefers-color-scheme: light and no localStorage', async () => {
+  it('returns light when prefers-color-scheme: light and no localStorage', () => {
     localStorage.clear();
     setMatchMedia(false);
-    const { initialTheme } = await import('@/components/homepage/ThemeSwitcher');
     expect(initialTheme()).toBe('light');
   });
 });
