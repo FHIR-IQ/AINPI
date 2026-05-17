@@ -1,0 +1,20 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1023169257,"EVERETT, SPAULDING",ND,3.0,critical,oig_excluded|sam_excluded,2017-07-20,2017-07-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1023169257
+1043299159,"SPENGLER, CARL",ND,3.0,critical,oig_excluded|sam_excluded,2020-08-20,2020-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1043299159
+1427014752,"BIALIK, DAVID",ND,3.0,critical,oig_excluded|sam_excluded,2021-10-20,2021-10-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427014752
+1619995420,"WASEMILLER, JAMES",ND,3.0,critical,oig_excluded|sam_excluded,2013-01-20,2013-01-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1619995420
+1760675623,"OPARE-ADDO, BARIFI",ND,3.0,critical,oig_excluded|sam_excluded,2016-01-20,2016-01-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1760675623
+1861480006,"LORENZ, KEVIN",ND,3.0,critical,oig_excluded|sam_excluded,2013-08-20,2013-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1861480006
+1205150174,"ANAGHO, RITA",ND,1.5,critical,oig_excluded,2025-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1205150174
+1235650250,"TWO EAGLE, TIFFANEY",ND,1.5,critical,oig_excluded,2023-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1235650250
+1356661474,"DESJARDINS, DESIREE",ND,1.5,critical,oig_excluded,2022-11-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1356661474
+1366919268,"DOERR, ASHLEY",ND,1.5,critical,oig_excluded,2023-10-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366919268
+1407918956,"ARRINGTON, DAVID",ND,1.5,critical,oig_excluded,2022-05-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1407918956
+1457762627,"LAKSONEN, RICHARD",ND,1.5,critical,oig_excluded,2023-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1457762627
+1467721829,"JACKSON, CLISSIE",ND,1.5,critical,oig_excluded,2025-06-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1467721829
+1548808447,"WEAH, GRACIOUS",ND,1.5,critical,oig_excluded,2023-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1548808447
+1568879203,"TANDE, LEVI",ND,1.5,critical,oig_excluded,2026-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1568879203
+1649524109,"CHRISTOPHERSON, MITCHELL",ND,1.5,critical,oig_excluded,2024-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1649524109
+1679520183,"LORAAS, DAWN",ND,1.5,critical,oig_excluded,2023-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1679520183
+1881250884,"SEBASTIAN-WILSON, ANNA",ND,1.5,critical,oig_excluded,2024-09-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1881250884
+1881781656,"PAYER, ALYSSA",ND,1.5,critical,oig_excluded,2023-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1881781656

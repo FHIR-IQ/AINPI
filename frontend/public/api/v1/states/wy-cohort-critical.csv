@@ -1,0 +1,17 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1336207190,"CROOK, JOHN",WY,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2010-04-20,2010-04-20,2013-02-14,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1336207190
+1740290253,"BROWN, CRAIG",WY,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2015-07-20,2015-07-20,2025-05-01,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1740290253
+1306963863,"SCHREINER, ROBERT",WY,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1306963863
+1497756118,"PRACTICE PC, CESKO",WY,3.0,critical,oig_excluded|sam_excluded,2021-08-19,2021-08-19,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1497756118
+1528284502,"JIMENEZ, BRIAN",WY,3.0,critical,oig_excluded|sam_excluded,2015-06-18,2015-06-18,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1528284502
+1861843039,"HARPER, JANAE",WY,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1861843039
+1912347469,"ROBINSON, WILLIAM",WY,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1912347469
+1952403925,"LEA, MARK",WY,3.0,critical,oig_excluded|sam_excluded,2017-03-20,2017-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1952403925
+1962441618,"MOSER, CHRIS",WY,3.0,critical,oig_excluded|sam_excluded,2012-08-20,2012-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1962441618
+1962516443,"HAND, MARY",WY,3.0,critical,oig_excluded|sam_excluded,2010-01-20,2010-01-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1962516443
+1003066838,"LOVELL, JASON",WY,1.5,critical,oig_excluded,2021-03-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1003066838
+1144399056,"SINK, JOHN",WY,1.5,critical,oig_excluded,2019-06-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144399056
+1154609519,"POPKIN, JOSHUA",WY,1.5,critical,oig_excluded,2019-04-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1154609519
+1427427178,"BOLLING, KRISTEN",WY,1.5,critical,oig_excluded,2025-10-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427427178
+1568484475,"PHISTER, SCOTT",WY,1.5,critical,oig_excluded,2023-11-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1568484475
+1609427327,"COX, SHARON",WY,1.5,critical,oig_excluded,2025-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1609427327

@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "generated_at": "2026-05-14T23:49:23+00:00",
+  "generated_at": "2026-05-17T14:52:05+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -128,18 +128,6 @@
   },
   "findings": [
     {
-      "slug": "deactivated-still-billing",
-      "title": "NPPES-deactivated VA-state NPIs still billing public claims data",
-      "hypotheses": [
-        "H31"
-      ],
-      "status": "published",
-      "release_date": "2026-05-14",
-      "url": "https://ainpi.dev/api/v1/findings/deactivated-still-billing 2.json",
-      "html_url": "https://ainpi.dev/findings/deactivated-still-billing",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
-    },
-    {
       "slug": "deactivated-still-billing-detail",
       "title": null,
       "hypotheses": [],
@@ -233,33 +221,8 @@
       ],
       "status": "published",
       "release_date": "CY 2023 (RY2025 P05)",
-      "url": "https://ainpi.dev/api/v1/findings/excluded-billing-medicare-partb 2.json",
-      "html_url": "https://ainpi.dev/findings/excluded-billing-medicare-partb",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
-    },
-    {
-      "slug": "excluded-billing-medicare-partb",
-      "title": "Federally excluded VA-resident NPIs billing Medicare Part B (CY 2023)",
-      "hypotheses": [
-        "H30",
-        "H30a"
-      ],
-      "status": "published",
-      "release_date": "CY 2023 (RY2025 P05)",
       "url": "https://ainpi.dev/api/v1/findings/excluded-billing-medicare-partb.json",
       "html_url": "https://ainpi.dev/findings/excluded-billing-medicare-partb",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
-    },
-    {
-      "slug": "excluded-paid-by-medicaid",
-      "title": "Federally excluded providers paid by Medicaid (HHS spending dataset)",
-      "hypotheses": [
-        "H29"
-      ],
-      "status": "published",
-      "release_date": "2026-02-09",
-      "url": "https://ainpi.dev/api/v1/findings/excluded-paid-by-medicaid 2.json",
-      "html_url": "https://ainpi.dev/findings/excluded-paid-by-medicaid",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
@@ -295,18 +258,6 @@
       "release_date": "CY 2023 (RY2025 P04)",
       "url": "https://ainpi.dev/api/v1/findings/excluded-prescribing-medicare-partd.json",
       "html_url": "https://ainpi.dev/findings/excluded-prescribing-medicare-partd",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
-    },
-    {
-      "slug": "excluded-receiving-industry-payments",
-      "title": "Federally excluded NPIs receiving industry payments (Open Payments)",
-      "hypotheses": [
-        "H32"
-      ],
-      "status": "published",
-      "release_date": "PGYR2024 P01232026 (released 2026-01-10)",
-      "url": "https://ainpi.dev/api/v1/findings/excluded-receiving-industry-payments 2.json",
-      "html_url": "https://ainpi.dev/findings/excluded-receiving-industry-payments",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
@@ -366,18 +317,6 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
-      "slug": "ndh-completeness-gap",
-      "title": "High-volume Medicare billers absent from NDH (directory completeness)",
-      "hypotheses": [
-        "H36"
-      ],
-      "status": "published",
-      "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-05-08",
-      "url": "https://ainpi.dev/api/v1/findings/ndh-completeness-gap 2.json",
-      "html_url": "https://ainpi.dev/findings/ndh-completeness-gap",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
-    },
-    {
       "slug": "ndh-completeness-gap-detail",
       "title": null,
       "hypotheses": [],
@@ -409,16 +348,6 @@
       "release_date": "2026-04-09",
       "url": "https://ainpi.dev/api/v1/findings/network-adequacy-gauge.json",
       "html_url": "https://ainpi.dev/findings/network-adequacy-gauge",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
-    },
-    {
-      "slug": "nh-hospice-hh-ownership-flags-detail 2",
-      "title": null,
-      "hypotheses": [],
-      "status": null,
-      "release_date": null,
-      "url": "https://ainpi.dev/api/v1/findings/nh-hospice-hh-ownership-flags-detail 2.json",
-      "html_url": "https://ainpi.dev/findings/nh-hospice-hh-ownership-flags-detail 2",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
@@ -557,24 +486,11 @@
       "state": "AK",
       "state_name": "Alaska",
       "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ak 2.json",
-      "html_url": "https://ainpi.dev/states/ak 2",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "AK",
-      "state_name": "Alaska",
-      "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ak.json",
       "html_url": "https://ainpi.dev/states/ak",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "AL",
-      "state_name": "Alabama",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/al 2.json",
-      "html_url": "https://ainpi.dev/states/al 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ak",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ak-cohort-critical.csv",
+      "cohort_critical_count": 23,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -583,6 +499,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/al.json",
       "html_url": "https://ainpi.dev/states/al",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/al",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/al-cohort-critical.csv",
+      "cohort_critical_count": 79,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -591,14 +510,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ar.json",
       "html_url": "https://ainpi.dev/states/ar",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "AZ",
-      "state_name": "Arizona",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/az 2.json",
-      "html_url": "https://ainpi.dev/states/az 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ar",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ar-cohort-critical.csv",
+      "cohort_critical_count": 52,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -607,14 +521,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/az.json",
       "html_url": "https://ainpi.dev/states/az",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "CA",
-      "state_name": "California",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ca 2.json",
-      "html_url": "https://ainpi.dev/states/ca 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/az",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/az-cohort-critical.csv",
+      "cohort_critical_count": 125,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -623,14 +532,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ca.json",
       "html_url": "https://ainpi.dev/states/ca",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "CO",
-      "state_name": "Colorado",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/co 2.json",
-      "html_url": "https://ainpi.dev/states/co 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ca",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ca-cohort-critical.csv",
+      "cohort_critical_count": 932,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -639,6 +543,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/co.json",
       "html_url": "https://ainpi.dev/states/co",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/co",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/co-cohort-critical.csv",
+      "cohort_critical_count": 114,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -647,14 +554,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ct.json",
       "html_url": "https://ainpi.dev/states/ct",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "DC",
-      "state_name": "District of Columbia",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/dc 2.json",
-      "html_url": "https://ainpi.dev/states/dc 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ct",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ct-cohort-critical.csv",
+      "cohort_critical_count": 66,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -663,6 +565,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/dc.json",
       "html_url": "https://ainpi.dev/states/dc",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/dc",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/dc-cohort-critical.csv",
+      "cohort_critical_count": 47,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -671,14 +576,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/de.json",
       "html_url": "https://ainpi.dev/states/de",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "FL",
-      "state_name": "Florida",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/fl 2.json",
-      "html_url": "https://ainpi.dev/states/fl 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/de",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/de-cohort-critical.csv",
+      "cohort_critical_count": 16,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -687,14 +587,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/fl.json",
       "html_url": "https://ainpi.dev/states/fl",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "GA",
-      "state_name": "Georgia",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ga 2.json",
-      "html_url": "https://ainpi.dev/states/ga 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/fl",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/fl-cohort-critical.csv",
+      "cohort_critical_count": 614,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -703,6 +598,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ga.json",
       "html_url": "https://ainpi.dev/states/ga",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ga",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ga-cohort-critical.csv",
+      "cohort_critical_count": 136,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -711,14 +609,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/hi.json",
       "html_url": "https://ainpi.dev/states/hi",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "IA",
-      "state_name": "Iowa",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ia 2.json",
-      "html_url": "https://ainpi.dev/states/ia 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/hi",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/hi-cohort-critical.csv",
+      "cohort_critical_count": 17,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -727,14 +620,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ia.json",
       "html_url": "https://ainpi.dev/states/ia",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "ID",
-      "state_name": "Idaho",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/id 2.json",
-      "html_url": "https://ainpi.dev/states/id 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ia",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ia-cohort-critical.csv",
+      "cohort_critical_count": 66,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -743,6 +631,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/id.json",
       "html_url": "https://ainpi.dev/states/id",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/id",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/id-cohort-critical.csv",
+      "cohort_critical_count": 31,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -751,14 +642,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/il.json",
       "html_url": "https://ainpi.dev/states/il",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "IN",
-      "state_name": "Indiana",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/in 2.json",
-      "html_url": "https://ainpi.dev/states/in 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/il",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/il-cohort-critical.csv",
+      "cohort_critical_count": 217,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -767,14 +653,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/in.json",
       "html_url": "https://ainpi.dev/states/in",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "KS",
-      "state_name": "Kansas",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ks 2.json",
-      "html_url": "https://ainpi.dev/states/ks 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/in",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/in-cohort-critical.csv",
+      "cohort_critical_count": 76,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -783,14 +664,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ks.json",
       "html_url": "https://ainpi.dev/states/ks",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "KY",
-      "state_name": "Kentucky",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ky 2.json",
-      "html_url": "https://ainpi.dev/states/ky 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ks",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ks-cohort-critical.csv",
+      "cohort_critical_count": 49,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -799,14 +675,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ky.json",
       "html_url": "https://ainpi.dev/states/ky",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "LA",
-      "state_name": "Louisiana",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/la 2.json",
-      "html_url": "https://ainpi.dev/states/la 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ky",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ky-cohort-critical.csv",
+      "cohort_critical_count": 126,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -815,6 +686,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/la.json",
       "html_url": "https://ainpi.dev/states/la",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/la",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/la-cohort-critical.csv",
+      "cohort_critical_count": 109,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -823,14 +697,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ma.json",
       "html_url": "https://ainpi.dev/states/ma",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "MD",
-      "state_name": "Maryland",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/md 2.json",
-      "html_url": "https://ainpi.dev/states/md 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ma",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ma-cohort-critical.csv",
+      "cohort_critical_count": 100,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -839,14 +708,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/md.json",
       "html_url": "https://ainpi.dev/states/md",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "ME",
-      "state_name": "Maine",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/me 2.json",
-      "html_url": "https://ainpi.dev/states/me 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/md",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/md-cohort-critical.csv",
+      "cohort_critical_count": 116,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -855,14 +719,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/me.json",
       "html_url": "https://ainpi.dev/states/me",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "MI",
-      "state_name": "Michigan",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/mi 2.json",
-      "html_url": "https://ainpi.dev/states/mi 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/me",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/me-cohort-critical.csv",
+      "cohort_critical_count": 58,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -871,6 +730,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/mi.json",
       "html_url": "https://ainpi.dev/states/mi",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mi",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/mi-cohort-critical.csv",
+      "cohort_critical_count": 328,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -879,14 +741,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/mn.json",
       "html_url": "https://ainpi.dev/states/mn",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "MO",
-      "state_name": "Missouri",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/mo 2.json",
-      "html_url": "https://ainpi.dev/states/mo 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mn",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/mn-cohort-critical.csv",
+      "cohort_critical_count": 66,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -895,14 +752,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/mo.json",
       "html_url": "https://ainpi.dev/states/mo",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "MS",
-      "state_name": "Mississippi",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ms 2.json",
-      "html_url": "https://ainpi.dev/states/ms 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mo",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/mo-cohort-critical.csv",
+      "cohort_critical_count": 117,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -911,14 +763,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ms.json",
       "html_url": "https://ainpi.dev/states/ms",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "MT",
-      "state_name": "Montana",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/mt 2.json",
-      "html_url": "https://ainpi.dev/states/mt 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ms",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ms-cohort-critical.csv",
+      "cohort_critical_count": 50,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -927,14 +774,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/mt.json",
       "html_url": "https://ainpi.dev/states/mt",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NC",
-      "state_name": "North Carolina",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/nc 2.json",
-      "html_url": "https://ainpi.dev/states/nc 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mt",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/mt-cohort-critical.csv",
+      "cohort_critical_count": 26,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -943,14 +785,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/nc.json",
       "html_url": "https://ainpi.dev/states/nc",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "ND",
-      "state_name": "North Dakota",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/nd 2.json",
-      "html_url": "https://ainpi.dev/states/nd 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nc",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/nc-cohort-critical.csv",
+      "cohort_critical_count": 94,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -959,14 +796,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/nd.json",
       "html_url": "https://ainpi.dev/states/nd",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NE",
-      "state_name": "Nebraska",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ne 2.json",
-      "html_url": "https://ainpi.dev/states/ne 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nd",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/nd-cohort-critical.csv",
+      "cohort_critical_count": 19,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -975,14 +807,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ne.json",
       "html_url": "https://ainpi.dev/states/ne",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NH",
-      "state_name": "New Hampshire",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/nh 2.json",
-      "html_url": "https://ainpi.dev/states/nh 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ne",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ne-cohort-critical.csv",
+      "cohort_critical_count": 29,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -991,14 +818,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/nh.json",
       "html_url": "https://ainpi.dev/states/nh",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NJ",
-      "state_name": "New Jersey",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/nj 2.json",
-      "html_url": "https://ainpi.dev/states/nj 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nh",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/nh-cohort-critical.csv",
+      "cohort_critical_count": 24,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1007,14 +829,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/nj.json",
       "html_url": "https://ainpi.dev/states/nj",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NM",
-      "state_name": "New Mexico",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/nm 2.json",
-      "html_url": "https://ainpi.dev/states/nm 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nj",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/nj-cohort-critical.csv",
+      "cohort_critical_count": 141,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1023,14 +840,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/nm.json",
       "html_url": "https://ainpi.dev/states/nm",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NV",
-      "state_name": "Nevada",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/nv 2.json",
-      "html_url": "https://ainpi.dev/states/nv 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nm",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/nm-cohort-critical.csv",
+      "cohort_critical_count": 43,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1039,14 +851,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/nv.json",
       "html_url": "https://ainpi.dev/states/nv",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "NY",
-      "state_name": "New York",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ny 2.json",
-      "html_url": "https://ainpi.dev/states/ny 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nv",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/nv-cohort-critical.csv",
+      "cohort_critical_count": 106,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1055,6 +862,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ny.json",
       "html_url": "https://ainpi.dev/states/ny",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ny",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ny-cohort-critical.csv",
+      "cohort_critical_count": 573,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1063,14 +873,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/oh.json",
       "html_url": "https://ainpi.dev/states/oh",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "OK",
-      "state_name": "Oklahoma",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ok 2.json",
-      "html_url": "https://ainpi.dev/states/ok 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/oh",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/oh-cohort-critical.csv",
+      "cohort_critical_count": 296,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1079,14 +884,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ok.json",
       "html_url": "https://ainpi.dev/states/ok",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "OR",
-      "state_name": "Oregon",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/or 2.json",
-      "html_url": "https://ainpi.dev/states/or 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ok",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ok-cohort-critical.csv",
+      "cohort_critical_count": 112,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1095,6 +895,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/or.json",
       "html_url": "https://ainpi.dev/states/or",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/or",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/or-cohort-critical.csv",
+      "cohort_critical_count": 67,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1103,14 +906,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/pa.json",
       "html_url": "https://ainpi.dev/states/pa",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "RI",
-      "state_name": "Rhode Island",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ri 2.json",
-      "html_url": "https://ainpi.dev/states/ri 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/pa",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/pa-cohort-critical.csv",
+      "cohort_critical_count": 332,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1119,14 +917,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ri.json",
       "html_url": "https://ainpi.dev/states/ri",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "SC",
-      "state_name": "South Carolina",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/sc 2.json",
-      "html_url": "https://ainpi.dev/states/sc 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ri",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ri-cohort-critical.csv",
+      "cohort_critical_count": 11,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1135,14 +928,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/sc.json",
       "html_url": "https://ainpi.dev/states/sc",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "SD",
-      "state_name": "South Dakota",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/sd 2.json",
-      "html_url": "https://ainpi.dev/states/sd 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/sc",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/sc-cohort-critical.csv",
+      "cohort_critical_count": 33,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1151,14 +939,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/sd.json",
       "html_url": "https://ainpi.dev/states/sd",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "TN",
-      "state_name": "Tennessee",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/tn 2.json",
-      "html_url": "https://ainpi.dev/states/tn 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/sd",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/sd-cohort-critical.csv",
+      "cohort_critical_count": 14,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1167,14 +950,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/tn.json",
       "html_url": "https://ainpi.dev/states/tn",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "TX",
-      "state_name": "Texas",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/tx 2.json",
-      "html_url": "https://ainpi.dev/states/tx 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/tn",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/tn-cohort-critical.csv",
+      "cohort_critical_count": 172,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1183,14 +961,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/tx.json",
       "html_url": "https://ainpi.dev/states/tx",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "UT",
-      "state_name": "Utah",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/ut 2.json",
-      "html_url": "https://ainpi.dev/states/ut 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/tx",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/tx-cohort-critical.csv",
+      "cohort_critical_count": 404,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1199,14 +972,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/ut.json",
       "html_url": "https://ainpi.dev/states/ut",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "VA",
-      "state_name": "Virginia",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/va-briefing-summary.json",
-      "html_url": "https://ainpi.dev/states/va-briefing-summary",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ut",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/ut-cohort-critical.csv",
+      "cohort_critical_count": 84,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1215,14 +983,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/va.json",
       "html_url": "https://ainpi.dev/states/va",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "VT",
-      "state_name": "Vermont",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/vt 2.json",
-      "html_url": "https://ainpi.dev/states/vt 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/va",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/va-cohort-critical.csv",
+      "cohort_critical_count": 125,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1231,14 +994,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/vt.json",
       "html_url": "https://ainpi.dev/states/vt",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "WA",
-      "state_name": "Washington",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/wa 2.json",
-      "html_url": "https://ainpi.dev/states/wa 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/vt",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/vt-cohort-critical.csv",
+      "cohort_critical_count": 18,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1247,14 +1005,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/wa.json",
       "html_url": "https://ainpi.dev/states/wa",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "WI",
-      "state_name": "Wisconsin",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/wi 2.json",
-      "html_url": "https://ainpi.dev/states/wi 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wa",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/wa-cohort-critical.csv",
+      "cohort_critical_count": 123,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1263,14 +1016,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/wi.json",
       "html_url": "https://ainpi.dev/states/wi",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "WV",
-      "state_name": "West Virginia",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/wv 2.json",
-      "html_url": "https://ainpi.dev/states/wv 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wi",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/wi-cohort-critical.csv",
+      "cohort_critical_count": 93,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1279,14 +1027,9 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/wv.json",
       "html_url": "https://ainpi.dev/states/wv",
-      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
-    },
-    {
-      "state": "WY",
-      "state_name": "Wyoming",
-      "release_date": "2026-05-08",
-      "url": "https://ainpi.dev/api/v1/states/wy 2.json",
-      "html_url": "https://ainpi.dev/states/wy 2",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wv",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/wv-cohort-critical.csv",
+      "cohort_critical_count": 77,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1295,13 +1038,271 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/states/wy.json",
       "html_url": "https://ainpi.dev/states/wy",
+      "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wy",
+      "cohort_csv_url": "https://ainpi.dev/api/v1/states/wy-cohort-critical.csv",
+      "cohort_critical_count": 16,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     }
   ],
   "downloads_csv": [
     {
+      "name": "ak-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ak-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "al-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/al-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ar-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ar-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "az-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/az-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ca-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ca-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "co-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/co-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ct-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ct-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "dc-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/dc-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "de-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/de-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "fl-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/fl-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ga-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ga-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "hi-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/hi-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ia-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ia-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "id-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/id-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "il-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/il-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "in-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/in-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ks-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ks-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ky-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ky-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "la-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/la-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ma-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ma-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "md-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/md-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "me-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/me-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "mi-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/mi-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "mn-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/mn-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "mo-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/mo-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ms-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ms-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "mt-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/mt-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "nc-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/nc-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "nd-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/nd-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ne-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ne-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "nh-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/nh-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "nj-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/nj-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "nm-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/nm-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "nv-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/nv-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ny-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ny-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "oh-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/oh-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ok-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ok-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "or-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/or-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "pa-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/pa-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "pr-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/pr-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ri-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ri-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "sc-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/sc-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "sd-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/sd-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "tn-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/tn-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "tx-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/tx-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "ut-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/ut-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
       "name": "va-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/va-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "vt-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/vt-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "wa-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/wa-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "wi-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/wi-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "wv-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/wv-cohort-critical.csv",
+      "format": "csv"
+    },
+    {
+      "name": "wy-cohort-critical",
+      "url": "https://ainpi.dev/api/v1/states/wy-cohort-critical.csv",
       "format": "csv"
     }
   ]

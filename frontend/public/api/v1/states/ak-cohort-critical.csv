@@ -1,0 +1,24 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1033263439,"ROBERTSON, MICHAEL",AK,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2021-06-17,2021-06-17,2022-05-16,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033263439
+1154734341,"LOOKHART, SETH",AK,3.0,critical,oig_excluded|sam_excluded,2018-02-20,2018-02-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1154734341
+1164630042,"SMALL, AUDREY",AK,3.0,critical,oig_excluded|sam_excluded,2013-04-18,2013-04-18,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1164630042
+1225168396,"SASSEEN, LAURA",AK,3.0,critical,oig_excluded|sam_excluded,2015-09-20,2015-09-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1225168396
+1366427676,"FULTZ, JEFFREY",AK,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366427676
+1386602019,"SPAYD, JESSICA",AK,3.0,critical,oig_excluded|sam_excluded,2022-04-20,2022-04-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1386602019
+1972789899,"SOBIER, CECELIA",AK,3.0,critical,oig_excluded|sam_excluded,2016-10-20,2016-10-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1972789899
+1982947248,"NILSSON, KRISTEN",AK,3.0,critical,oig_excluded|sam_excluded,2017-08-20,2017-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1982947248
+1114077468,"CARLSON, RAY",AK,1.5,critical,oig_excluded,2025-06-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114077468
+1154334381,"DAVIDHIZAR, LAVERN",AK,1.5,critical,oig_excluded,2021-09-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1154334381
+1174730170,"MEADOWS, ROBERT",AK,1.5,critical,oig_excluded,2024-07-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1174730170
+1306067996,"GHOSH, S",AK,1.5,critical,oig_excluded,2015-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1306067996
+1356369573,"KOVALESKI, THOMAS",AK,1.5,critical,oig_excluded,2025-06-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1356369573
+1376205492,"KELLY, KIMBERLY",AK,1.5,critical,oig_excluded,2024-10-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376205492
+1386473866,"BURTON, JUSTICE",AK,1.5,critical,oig_excluded,2026-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1386473866
+1417981366,"CROSSETT, CLAY",AK,1.5,critical,oig_excluded,2025-06-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1417981366
+1427156868,"CHISHOLM, DAVID",AK,1.5,critical,oig_excluded,2022-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427156868
+1427528629,"SCROGGINS, ASHLEY",AK,1.5,critical,oig_excluded,2023-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427528629
+1578787214,"MCGUIRE, DAYNA",AK,1.5,critical,oig_excluded,2024-08-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1578787214
+1649384066,"GOTTLIEB, KEVIN",AK,1.5,critical,oig_excluded,2025-06-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1649384066
+1740523307,"KILE, KRIS",AK,1.5,critical,oig_excluded,2020-03-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1740523307
+1851038483,"WALKER, EBONY",AK,1.5,critical,oig_excluded,2025-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1851038483
+1992188478,"DOBBS, MELISSA",AK,1.5,critical,oig_excluded,2026-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1992188478

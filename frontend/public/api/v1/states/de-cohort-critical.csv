@@ -1,0 +1,17 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1265561161,"SELTZER, ALAN",DE,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2016-10-20,2016-10-20,2023-06-21,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1265561161
+1639166572,"HANNAN, PAUL",DE,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2020-12-20,2020-12-20,2021-11-30,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1639166572
+1073510319,"FERNANDEZ, ROSA",DE,3.0,critical,oig_excluded|sam_excluded,2016-06-20,2016-06-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1073510319
+1245404334,"JONES, GERALD",DE,3.0,critical,oig_excluded|sam_excluded,2015-09-20,2015-09-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245404334
+1306249826,"KARNIK, SACHIN",DE,3.0,critical,oig_excluded|sam_excluded,2019-03-20,2019-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1306249826
+1376528182,"GROB, RENEE",DE,3.0,critical,oig_excluded|sam_excluded,2017-12-20,2017-12-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376528182
+1386695591,"BRATHWAITE, LINDSAY",DE,3.0,critical,oig_excluded|sam_excluded,2016-05-19,2016-05-19,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1386695591
+1669414553,"BRADLEY, EARL",DE,3.0,critical,oig_excluded|sam_excluded,2012-10-18,2012-10-18,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1669414553
+1851379960,"BALTAZAR, RODNEY",DE,3.0,critical,oig_excluded|sam_excluded,2009-02-06,2009-02-06,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1851379960
+1962421198,"CEMERLIC, SENAD",DE,3.0,critical,oig_excluded|sam_excluded,2017-02-20,2017-02-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1962421198
+1346012317,"HARDING, ARKEISHA",DE,1.5,critical,oig_excluded,2024-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1346012317
+1417077637,"TURLEY, MATTHEW",DE,1.5,critical,oig_excluded,2025-08-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1417077637
+1437198033,"TITUS, PATRICK",DE,1.5,critical,oig_excluded,2023-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1437198033
+1598119018,"BRUWER, LISA",DE,1.5,critical,oig_excluded,2025-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1598119018
+1760461826,"ABAD-SANTOS, CRISELDA",DE,1.5,critical,oig_excluded,2025-01-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1760461826
+1992799704,"LAGATTUTA, FRANCIS",DE,1.5,critical,oig_excluded,2023-07-07,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1992799704

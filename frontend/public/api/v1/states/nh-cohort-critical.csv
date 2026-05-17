@@ -1,0 +1,25 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1427112325,"ROBINSON, MARK",NH,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2016-10-20,2016-10-20,2017-08-31,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427112325
+1861428922,"MCCULLOM, DOUGLAS",NH,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2013-11-20,2013-11-20,2021-04-09,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1861428922
+1033127931,"GLAUBER, JEFFERY",NH,3.0,critical,oig_excluded|sam_excluded,2018-01-18,2018-01-18,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033127931
+1033454848,"STYLES, FRANK",NH,3.0,critical,oig_excluded|sam_excluded,2020-05-20,2020-05-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033454848
+1215224449,"TAYTAWAT, PONGPEERA",NH,3.0,critical,oig_excluded|sam_excluded,2016-04-20,2016-04-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1215224449
+1528087970,"CLOUGH, C",NH,3.0,critical,oig_excluded|sam_excluded,2017-06-20,2017-06-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1528087970
+1689727901,"JACOBS, AYMAN",NH,3.0,critical,oig_excluded|sam_excluded,2020-02-20,2020-02-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1689727901
+1740296961,"WEINREB, MARK",NH,3.0,critical,oig_excluded|sam_excluded,2013-08-20,2013-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1740296961
+1881613362,"FRYDENBORG, CHRISTINE",NH,3.0,critical,oig_excluded|sam_excluded,2010-04-20,2010-04-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1881613362
+1881678548,"HENNING, CARL",NH,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1881678548
+1902876659,"DUYMAZLAR, HASAN",NH,3.0,critical,oig_excluded|sam_excluded,2014-11-20,2014-11-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1902876659
+1912985458,"MENDES, ANITA",NH,3.0,critical,oig_excluded|sam_excluded,2011-02-20,2011-02-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1912985458
+1134364672,"CALLAHAN, DENIS",NH,1.5,critical,oig_excluded,2025-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1134364672
+1164027074,"GAUTHIER, LISA",NH,1.5,critical,oig_excluded,2025-08-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1164027074
+1164613691,"HO, DENNIS",NH,1.5,critical,oig_excluded,2022-06-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1164613691
+1194155531,"PRAGER, AMY",NH,1.5,critical,oig_excluded,2022-08-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194155531
+1245363761,"KHAN, ADNAN",NH,1.5,critical,oig_excluded,2026-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245363761
+1598701633,"REMO, JUDITH",NH,1.5,critical,oig_excluded,2018-07-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1598701633
+1609857747,"SOUCY, ROBERT",NH,1.5,critical,oig_excluded,2026-04-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1609857747
+1770672230,"SUTTON, M",NH,1.5,critical,oig_excluded,2024-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1770672230
+1831747534,"DELAFONTAINE, KAYLA",NH,1.5,critical,oig_excluded,2025-08-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1831747534
+1922138452,"MCCARTHY, DAVID",NH,1.5,critical,oig_excluded,2020-03-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1922138452
+1932244753,"KHANNA, KRISTEN",NH,1.5,critical,oig_excluded,2018-10-01,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1932244753
+1932253358,"VIDAVER, ROBERT",NH,1.5,critical,oig_excluded,2022-05-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1932253358

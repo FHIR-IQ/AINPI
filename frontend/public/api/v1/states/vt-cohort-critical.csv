@@ -1,0 +1,19 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1437132362,"MALONE RISING, DOROTHY",VT,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2015-07-20,2015-07-20,2024-06-26,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1437132362
+1780907980,"PINSONNEAULT, MICHAEL",VT,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2012-01-19,2012-01-19,2022-11-07,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1780907980
+1831112077,"HERSCHER, JOHN",VT,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2015-07-20,2015-07-20,2022-09-29,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1831112077
+1245270776,"FRANK, LOUIS",VT,3.0,critical,oig_excluded|sam_excluded,2012-05-20,2012-05-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245270776
+1265518088,"SPICER, MARY",VT,3.0,critical,oig_excluded|sam_excluded,2018-04-19,2018-04-19,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1265518088
+1528044179,"HANDELMAN, BOB",VT,3.0,critical,oig_excluded|sam_excluded,2018-06-20,2018-06-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1528044179
+1578647038,"GRAY, PETER",VT,3.0,critical,oig_excluded|sam_excluded,2013-07-18,2013-07-18,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1578647038
+1720150691,"GOULD, TYLER",VT,3.0,critical,oig_excluded|sam_excluded,2013-08-20,2013-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1720150691
+1972543247,"LOWY, JED",VT,3.0,critical,oig_excluded|sam_excluded,2018-08-20,2018-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1972543247
+1780089961,"SKEKEL, DONALD",VT,2.3,critical,oig_excluded|nppes_deactivated,2022-08-18,,2025-01-02,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1780089961
+1144232117,"MCMAHON, SCOTT",VT,1.5,critical,oig_excluded,2022-02-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144232117
+1215227467,"BLOHM, EIKE",VT,1.5,critical,oig_excluded,2022-11-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1215227467
+1245741982,"CONNOLLY, KRISTEN",VT,1.5,critical,oig_excluded,2026-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245741982
+1255417473,"MILLER, RANDALL",VT,1.5,critical,oig_excluded,2022-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1255417473
+1497085401,"LASANTE, LAUREN",VT,1.5,critical,oig_excluded,2025-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1497085401
+1659448207,"LEWIS, GRETCHEN",VT,1.5,critical,oig_excluded,2025-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1659448207
+1669425336,"COATES III, JOHN",VT,1.5,critical,oig_excluded,2022-11-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1669425336
+1942671417,"VAUGHAN, YOANNA",VT,1.5,critical,oig_excluded,2025-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942671417
