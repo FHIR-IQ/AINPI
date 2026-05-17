@@ -1,0 +1,11 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1942208715,"MALIK, AZFAR",MO,MO,2310786.78,10496,806,,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942208715
+1033161120,"BRUGGEMAN, JERRY",MO,MO,1617897.42,25890,911,1251,27394.39,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033161120
+1205800257,"CHAND, SUNIL",MO,MO,123692.32,758,115,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1205800257
+1700813607,"ALI, IFTIKHAR",MO,MO,57363.49,490,127,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1700813607
+1346342920,"LIBRACH, STANLEY",MO,MO,43528.55,290,16,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1346342920
+1033422357,"IZQUIERDO MALON, R",MO,MO,33004.25,325,145,19,71.65,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033422357
+1245232693,"HALLEY, RANDALL",MO,MO,8584.19,135,,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245232693
+1437198074,"DEAN, RONALD",MO,MT,2868.21,121,91,23,78.71,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1437198074
+1578596235,"SAGGAR, SONNY",MO,MO,1454.88,94,64,19,100.55,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1578596235
+1255308417,"STELLING, HEATHER",MO,MO,801.56,20,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1255308417

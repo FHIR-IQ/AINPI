@@ -1,0 +1,10 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1396843132,"JREISAT, KHALED",NC,NC,921228.69,980,194,18,2681.45,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1396843132
+1295053510,"RICHARDS, TNESHIA",NC,NC,914136.32,7131,444,311,7655.26,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1295053510
+1255979613,"COODY, MICHAEL",NC,NC,98948.6,920,91,14,93.39,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1255979613
+1124109830,"ASADI, KATHERINE",NC,NC,36340.14,323,89,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1124109830
+1053454009,"HEROMAN, JAMES",NC,NC,17130.64,210,69,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1053454009
+1811934318,"CIPRIANI, WENDY",NC,NC,16116.05,145,78,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1811934318
+1013376128,"JOYNER, COLBY",NC,NC,8809.14,72,13,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1013376128
+1184983066,"DRISKILL, DANIEL",NC,NC,2056.76,420,143,11,39.79,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1184983066
+1427012301,"BROWN, CAROL",NC,NC,424.7,12,,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427012301

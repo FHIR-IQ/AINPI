@@ -1,0 +1,5 @@
+npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1689625436,"MORASKI, LUANN",WI,Covered Recipient Physician,leie,20260120,,2026,no,614.6,39,6=$615,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1689625436
+1922165083,"MARCHIGIANI, JAMES",WI,Covered Recipient Physician,leie+sam,20141020,2014-10-20,2014,yes,133.69,1,6=$134,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1922165083
+1659431724,"KANIA, C",WI,Covered Recipient Physician,leie,20220220,,2022,yes,18.65,1,6=$19,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1659431724
+1801901814,"GALVANI, THEODORE",WI,Covered Recipient Physician,leie+sam,20140520,2014-05-20,2014,yes,17.75,1,6=$18,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1801901814

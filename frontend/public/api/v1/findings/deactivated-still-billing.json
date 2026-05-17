@@ -1,36 +1,412 @@
 {
   "slug": "deactivated-still-billing",
-  "title": "NPPES-deactivated VA-state NPIs still billing public claims data",
+  "title": "NPPES-deactivated NPIs still billing public claims data (all states)",
   "hypotheses": [
     "H31"
   ],
   "status": "published",
-  "release_date": "2026-05-14",
-  "generated_at": "2026-05-14T21:59:49+00:00",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "7d8304a",
-  "headline": "3 of 1495 NPPES-deactivated VA-state NPIs (per NDH practice-state retention; NPPES nulls practice state on deactivation) billed at least one public claims source STRICTLY AFTER their NPPES deactivation date. Post-deactivation totals: Medicaid $74,556, Medicare Part B $177,703 (CY 2023), Medicare Part D $32,116 drug cost (CY 2023). 1 of 3 matched NPIs appear in MULTIPLE post-deactivation billing sources, which is a stronger signal than any single source. Match rule: claim month/year > NPPES deactivation month/year. Each match is either a data-quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier \u2014 both are state PI triage flags.",
-  "numerator": 3,
-  "denominator": 1495,
-  "denominator_note": "Cohort = 1495 NPIs that are NPPES-deactivated (npi_deactivation_date IS NOT NULL, npi_reactivation_date IS NULL) AND appear in NDH practitioner with _state='VA'. NPPES nulls practice address fields on deactivation, so VA-state attribution comes from the NDH side (the H10 \"NPPES-deactivated but still listed in NDH\" signal extended to its claims-side consequence).",
+  "release_date": "2026-05-17",
+  "generated_at": "2026-05-17T15:37:01+00:00",
+  "methodology_version": "0.6.1-draft",
+  "commit_sha": "334099e",
+  "headline": "195 of 78,995 NPPES-deactivated NPIs (across all states, per NDH practice-state retention; NPPES nulls practice state on deactivation) billed at least one public claims source STRICTLY AFTER their NPPES deactivation date. Post-deactivation totals: Medicaid $13,709,307, Medicare Part B $2,841,502 (CY 2023), Medicare Part D $9,044,086 drug cost (CY 2023). 62 of 195 matched NPIs appear in MULTIPLE post-deactivation billing sources, which is a stronger signal than any single source. Match rule: claim month/year > NPPES deactivation month/year. Each match is either a data-quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier \u2014 both are state PI triage flags.",
+  "numerator": 195,
+  "denominator": 78995,
+  "denominator_note": "Cohort = 78,995 NPIs that are NPPES-deactivated (npi_deactivation_date IS NOT NULL, npi_reactivation_date IS NULL) AND appear in NDH practitioner with a populated _state. NPPES nulls practice address fields on deactivation, so state attribution comes from the NDH side (the H10 \"NPPES-deactivated but still listed in NDH\" signal extended to its claims-side consequence). Per-state CSVs at /api/v1/states/<state>/h31-deactivated-paid.csv.",
   "data_source_release": "HHS 2026-02-09 + Medicare CY 2023 + NPPES (BigQuery public dataset)",
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
-        "label": "Cohort NPIs billing post-deactivation",
-        "value": 3
+        "label": "NPPES-deactivated NPIs still billing",
+        "value": 195
       },
       {
-        "label": "Cohort NPIs in \u22652 sources",
-        "value": 1
-      },
-      {
-        "label": "Cohort with no billing match",
-        "value": 1492
+        "label": "Multi-source post-deactivation matches",
+        "value": 62
       }
     ]
   },
-  "notes": "Per-state CSV at /api/v1/states/va/h31-deactivated-paid.csv. Match rule for Medicaid: CLAIM_FROM_MONTH > deactivation month/year (month-level precision). For Medicare Part B / Part D: deactivation_year < 2023 (year-level precision since the source files are CY 2023 aggregates). Multi-source matches are the strongest signal \u2014 same NPI billing across Medicaid + Medicare after NPPES deactivation is direct evidence of work being done under a closed identifier. State PI triage priority order: (1) multi-source matches, (2) Part D opioid prescribers, (3) high-dollar single-source matches."
+  "per_state": [
+    {
+      "state": "CA",
+      "matches": 25,
+      "multi_source": 7,
+      "medicaid_paid_post_deactivation": 1684868.46,
+      "partb_paid_cy2023": 172396.58,
+      "partd_drug_cost_cy2023": 208037.32,
+      "cohort_size": 10626
+    },
+    {
+      "state": "NY",
+      "matches": 21,
+      "multi_source": 8,
+      "medicaid_paid_post_deactivation": 907980.33,
+      "partb_paid_cy2023": 352440.42,
+      "partd_drug_cost_cy2023": 1694769.59,
+      "cohort_size": 6103
+    },
+    {
+      "state": "OH",
+      "matches": 18,
+      "multi_source": 6,
+      "medicaid_paid_post_deactivation": 1306525.7,
+      "partb_paid_cy2023": 142229.57,
+      "partd_drug_cost_cy2023": 609495.25,
+      "cohort_size": 2669
+    },
+    {
+      "state": "FL",
+      "matches": 15,
+      "multi_source": 5,
+      "medicaid_paid_post_deactivation": 615271.0,
+      "partb_paid_cy2023": 444976.52,
+      "partd_drug_cost_cy2023": 1337001.07,
+      "cohort_size": 4875
+    },
+    {
+      "state": "TX",
+      "matches": 11,
+      "multi_source": 5,
+      "medicaid_paid_post_deactivation": 107986.74,
+      "partb_paid_cy2023": 89077.24,
+      "partd_drug_cost_cy2023": 1522088.85,
+      "cohort_size": 4873
+    },
+    {
+      "state": "NJ",
+      "matches": 7,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 91630.7,
+      "partb_paid_cy2023": 39604.3,
+      "partd_drug_cost_cy2023": 547936.52,
+      "cohort_size": 2054
+    },
+    {
+      "state": "MA",
+      "matches": 7,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 421309.53,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 4562.04,
+      "cohort_size": 2191
+    },
+    {
+      "state": "IL",
+      "matches": 6,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 479713.65,
+      "partb_paid_cy2023": 115263.31,
+      "partd_drug_cost_cy2023": 385655.03,
+      "cohort_size": 2722
+    },
+    {
+      "state": "GA",
+      "matches": 6,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 816309.09,
+      "partb_paid_cy2023": 132195.89,
+      "partd_drug_cost_cy2023": 26206.79,
+      "cohort_size": 1923
+    },
+    {
+      "state": "LA",
+      "matches": 6,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 393089.83,
+      "partb_paid_cy2023": 98306.8,
+      "partd_drug_cost_cy2023": 126475.23,
+      "cohort_size": 1160
+    },
+    {
+      "state": "MI",
+      "matches": 6,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 70278.84,
+      "partb_paid_cy2023": 26339.75,
+      "partd_drug_cost_cy2023": 1586.54,
+      "cohort_size": 2836
+    },
+    {
+      "state": "NC",
+      "matches": 5,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 1614941.07,
+      "partb_paid_cy2023": 115686.85,
+      "partd_drug_cost_cy2023": 42962.44,
+      "cohort_size": 1907
+    },
+    {
+      "state": "WA",
+      "matches": 5,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 318886.41,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 409.82,
+      "cohort_size": 1796
+    },
+    {
+      "state": "CT",
+      "matches": 5,
+      "multi_source": 3,
+      "medicaid_paid_post_deactivation": 66699.38,
+      "partb_paid_cy2023": 44053.84,
+      "partd_drug_cost_cy2023": 181399.9,
+      "cohort_size": 968
+    },
+    {
+      "state": "PA",
+      "matches": 4,
+      "multi_source": 3,
+      "medicaid_paid_post_deactivation": 1570548.98,
+      "partb_paid_cy2023": 81745.79,
+      "partd_drug_cost_cy2023": 533153.73,
+      "cohort_size": 3416
+    },
+    {
+      "state": "OR",
+      "matches": 3,
+      "multi_source": 3,
+      "medicaid_paid_post_deactivation": 530046.15,
+      "partb_paid_cy2023": 11652.54,
+      "partd_drug_cost_cy2023": 242637.94,
+      "cohort_size": 1195
+    },
+    {
+      "state": "OK",
+      "matches": 3,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 456120.5,
+      "partb_paid_cy2023": 8287.01,
+      "partd_drug_cost_cy2023": 27555.0,
+      "cohort_size": 1327
+    },
+    {
+      "state": "VA",
+      "matches": 3,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 74555.65,
+      "partb_paid_cy2023": 177702.94,
+      "partd_drug_cost_cy2023": 32116.42,
+      "cohort_size": 1495
+    },
+    {
+      "state": "MN",
+      "matches": 3,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 194048.09,
+      "partb_paid_cy2023": 18037.47,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1107
+    },
+    {
+      "state": "MO",
+      "matches": 3,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 182506.32,
+      "partb_paid_cy2023": 1422.85,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1472
+    },
+    {
+      "state": "MD",
+      "matches": 3,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 63405.5,
+      "partb_paid_cy2023": 136336.34,
+      "partd_drug_cost_cy2023": 14139.51,
+      "cohort_size": 1487
+    },
+    {
+      "state": "NV",
+      "matches": 3,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 250092.69,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 602
+    },
+    {
+      "state": "NM",
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 490720.78,
+      "partb_paid_cy2023": 465868.65,
+      "partd_drug_cost_cy2023": 1241192.81,
+      "cohort_size": 800
+    },
+    {
+      "state": "KY",
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 135983.96,
+      "partb_paid_cy2023": 74356.76,
+      "partd_drug_cost_cy2023": 28049.08,
+      "cohort_size": 1125
+    },
+    {
+      "state": "IN",
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 98799.85,
+      "partb_paid_cy2023": 1433.84,
+      "partd_drug_cost_cy2023": 7138.01,
+      "cohort_size": 1365
+    },
+    {
+      "state": "HI",
+      "matches": 2,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 39258.96,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 4490.02,
+      "cohort_size": 316
+    },
+    {
+      "state": "AZ",
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 13867.37,
+      "partb_paid_cy2023": 1861.73,
+      "partd_drug_cost_cy2023": 31992.24,
+      "cohort_size": 1568
+    },
+    {
+      "state": "CO",
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 1269.48,
+      "partb_paid_cy2023": 15861.35,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1306
+    },
+    {
+      "state": "VT",
+      "matches": 1,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 412749.4,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 120229.01,
+      "cohort_size": 169
+    },
+    {
+      "state": "PR",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 104396.08,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 980
+    },
+    {
+      "state": "AR",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 97739.65,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 886
+    },
+    {
+      "state": "NE",
+      "matches": 1,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 17874.13,
+      "partb_paid_cy2023": 43909.7,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 417
+    },
+    {
+      "state": "SC",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 0,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 56189.19,
+      "cohort_size": 984
+    },
+    {
+      "state": "RI",
+      "matches": 1,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 38304.14,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 16415.61,
+      "cohort_size": 318
+    },
+    {
+      "state": "ME",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 20381.89,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 432
+    },
+    {
+      "state": "AL",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 0,
+      "partb_paid_cy2023": 18019.36,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 897
+    },
+    {
+      "state": "WI",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 0,
+      "partb_paid_cy2023": 9379.68,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1300
+    },
+    {
+      "state": "WY",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 8608.0,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 158
+    },
+    {
+      "state": "AK",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 7686.81,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 315
+    },
+    {
+      "state": "WV",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 3033.02,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 499
+    },
+    {
+      "state": "KS",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 1452.0,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 695
+    },
+    {
+      "state": "DC",
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 367.05,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 452
+    }
+  ],
+  "notes": "Per-state CSV at /api/v1/states/<state>/h31-deactivated-paid.csv. Match rule for Medicaid: CLAIM_FROM_MONTH > deactivation month/year (month-level precision). For Medicare Part B / Part D: deactivation_year < 2023 (year-level precision since the source files are CY 2023 aggregates). Multi-source matches are the strongest signal \u2014 same NPI billing across Medicaid + Medicare after NPPES deactivation is direct evidence of work being done under a closed identifier. State PI triage priority order: (1) multi-source matches, (2) Part D opioid prescribers, (3) high-dollar single-source matches."
 }

@@ -1,0 +1,2 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1932200185,"GREENWOOD, ANTHONY",KS,2018-06-05,false,medicaid,1452.0,76,2018-01,2018-08,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1932200185

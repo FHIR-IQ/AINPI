@@ -1,0 +1,6 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1194871277,"MUNIZ MOLINERO, C",PR,PR,5341926.01,114910,2426,836,12403.6,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194871277
+1972685758,"CUBANO, CESAR",PR,PR,420429.84,26164,1548,,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1972685758
+1356404909,"MELENDEZ ORTIZ, F",PR,PR,408996.78,6582,571,,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1356404909
+1194721431,"DE JESUS SANTOS, J",PR,PR,323419.38,25474,967,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194721431
+1437277142,"TORRES, ROSAIDA",PR,PR,87.11,23,19,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1437277142

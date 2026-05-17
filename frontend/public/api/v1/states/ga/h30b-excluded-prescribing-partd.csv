@@ -1,0 +1,11 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1619170701,"GRAY, DURIEL",GA,GA,450520.19,8076,437,180,10835.47,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1619170701
+1992883201,"LESLIE, HARVEY",GA,GA,413256.4,13287,806,6000,274278.01,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1992883201
+1265518567,"YASIN, NURA",GA,GA,294808.08,3672,425,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1265518567
+1528164092,"CHEEKS JR, CURTIS",GA,GA,267757.38,3975,209,409,6181.74,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1528164092
+1720031503,"BERINHOUT, RANDALL",GA,GA,226189.16,4120,612,2871,175357.17,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1720031503
+1083673180,"ROSENBLUM, FREDERICK",GA,KY,207777.43,825,248,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1083673180
+1023210473,"BARROGA, DESI",GA,TX,5341.13,134,17,94,4353.13,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1023210473
+1235237546,"BENDER, JAY",GA,GA,4305.51,18,11,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1235237546
+1851655625,"ROSENFIELD, JONATHAN",GA,OH,1819.33,22,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1851655625
+1902819352,"PATEL, KETAN",GA,GA,122.3,20,16,,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1902819352

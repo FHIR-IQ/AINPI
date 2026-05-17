@@ -1,0 +1,4 @@
+npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1568479715,"JACKSON, MICHELLE",AL,Covered Recipient Physician,leie,20230119,,2023,yes,96.56,5,6=$97,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1568479715
+1962693275,"JENKINS, DAVID",AL,Covered Recipient Physician,leie+sam,20090618,2009-06-18,2009,yes,21.38,1,6=$21,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1962693275
+1366433187,"HERNANDEZ RAMIREZ, A",AL,Covered Recipient Physician,leie,20251120,,2025,no,15.19,1,6=$15,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366433187

@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "generated_at": "2026-05-17T14:52:05+00:00",
+  "generated_at": "2026-05-17T15:37:26+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -139,12 +139,12 @@
     },
     {
       "slug": "deactivated-still-billing",
-      "title": "NPPES-deactivated VA-state NPIs still billing public claims data",
+      "title": "NPPES-deactivated NPIs still billing public claims data (all states)",
       "hypotheses": [
         "H31"
       ],
       "status": "published",
-      "release_date": "2026-05-14",
+      "release_date": "2026-05-17",
       "url": "https://ainpi.dev/api/v1/findings/deactivated-still-billing.json",
       "html_url": "https://ainpi.dev/findings/deactivated-still-billing",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -214,7 +214,7 @@
     },
     {
       "slug": "excluded-billing-medicare-partb",
-      "title": "Federally excluded VA-resident NPIs billing Medicare Part B (CY 2023)",
+      "title": "Federally excluded NPIs billing Medicare Part B (CY 2023, all states)",
       "hypotheses": [
         "H30",
         "H30a"
@@ -249,7 +249,7 @@
     },
     {
       "slug": "excluded-prescribing-medicare-partd",
-      "title": "Federally excluded VA-resident NPIs prescribing Medicare Part D (CY 2023)",
+      "title": "Federally excluded NPIs prescribing Medicare Part D (CY 2023, all states)",
       "hypotheses": [
         "H30",
         "H30b"

@@ -1,0 +1,4 @@
+npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1629098496,"OCH, MOHAMAD",MA,Covered Recipient Physician,leie,20260120,,2026,no,583.69,14,6=$584,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1629098496
+1053669473,"BETHI, LAKSHMI",MA,Covered Recipient Physician,leie,20250619,,2025,no,199.64,4,8=$150; 6=$50,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1053669473
+1275785958,"BARTELS, ANNEMARIE",MA,Covered Recipient Non-Physician Practitioner,leie+sam,20171019,2017-10-19,2017,yes,23.11,1,6=$23,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1275785958

@@ -69,7 +69,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 import pyarrow.compute as pc
 
-METHODOLOGY_VERSION = "0.6.0-draft"
+METHODOLOGY_VERSION = "0.6.1-draft"
 DATA_SOURCE_RELEASE = "2026-02-09"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
@@ -297,7 +297,7 @@ def write_state_csv(state: str, rows: list[dict]) -> pathlib.Path:
     return out
 
 
-def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
+def write_finding_json(rows: list[dict], states_total: int, total_cohort: int, per_state_stats: dict) -> None:
     total_paid_post = sum(r["paid_amount_post_exclusion"] for r in rows if r["exclusion_effective_date"])
     total_paid_window = sum(r["paid_amount_full_window"] for r in rows)
     total_claims_window = sum(r["claim_lines_full_window"] for r in rows)
@@ -308,23 +308,24 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
     top_rows = rows[:5]
 
     headline = (
-        f"Of {total_cohort} currently-active federally-excluded {state.upper()}-resident NPIs "
-        f"(per NPPES practice state), {len(rows)} received Medicaid payments somewhere "
-        f"in T-MSIS 2018–2024 totalling ${total_paid_window:,.0f} across "
-        f"{total_claims_window:,} claim lines — but only {len(post_exclusion_rows)} of those "
-        f"{len(rows)} matches received payment STRICTLY AFTER the earliest of their LEIE / SAM "
+        f"Of {total_cohort:,} currently-active federally-excluded NPIs across "
+        f"{states_total} state cohorts (per NPPES practice state), {len(rows)} "
+        f"received Medicaid payments somewhere in T-MSIS 2018–2024 totalling "
+        f"${total_paid_window:,.0f} across {total_claims_window:,} claim lines — "
+        f"but only {len(post_exclusion_rows)} of those {len(rows)} matches "
+        f"received payment STRICTLY AFTER the earliest of their LEIE / SAM "
         f"exclusion-effective dates, totalling ${total_paid_post:,.0f} in strict "
-        f"post-exclusion payments. The strict-filter result is the regulatorily significant "
-        f"signal — pre-exclusion billing reflects work the provider was legitimately "
-        f"authorized to do at the time, while post-exclusion billing is a direct 42 CFR § 455.436 "
-        f"audit-referral candidate. Source: HHS Medicaid Provider Spending dataset "
-        f"({DATA_SOURCE_RELEASE} release). Per-NPI exclusion-effective dates carried in the "
-        f"H23 cohort export as of methodology v0.6.0-draft. Two source-data limits: "
-        f"(1) the HHS file has no state-of-payment column, so paid amounts aggregate "
-        f"across every state Medicaid program that paid the NPI — the VA-resident cohort "
-        f"is per NPPES practice state, not per state of payment; (2) NPPES deactivation "
-        f"is NOT used as an exclusion-effective date because it can be triggered by "
-        f"retirement / death / voluntary closure of practice."
+        f"post-exclusion payments. The strict-filter result is the regulatorily "
+        f"significant signal — pre-exclusion billing reflects work the provider "
+        f"was legitimately authorized to do at the time, while post-exclusion "
+        f"billing is a direct 42 CFR § 455.436 audit-referral candidate. Source: "
+        f"HHS Medicaid Provider Spending dataset ({DATA_SOURCE_RELEASE} release). "
+        f"Two source-data limits: (1) the HHS file has no state-of-payment "
+        f"column, so paid amounts aggregate across every state Medicaid program "
+        f"that paid the NPI — state attribution is per NPPES practice state, "
+        f"not per state of payment; (2) NPPES deactivation is NOT used as an "
+        f"exclusion-effective date because it can be triggered by retirement / "
+        f"death / voluntary closure of practice."
     )
 
     payload = {
@@ -346,17 +347,14 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
             f"2018-2024, regardless of pre/post exclusion) = {len(rows)}."
         ),
         "denominator_note": (
-            f"Phase 1 pilot scope = the {total_cohort}-NPI Virginia federally-"
-            f"excluded cohort (active LEIE or SAM, score >= 1.5; VA-resident per "
-            f"NPPES practice state). All-50-states roll-up follows once VA "
-            f"methodology clears DMAS review. Two source-data limits readers "
-            f"must keep in mind: the HHS source file does NOT carry a state-of-"
-            f"payment column (so paid amounts aggregate across every state "
-            f"Medicaid program that paid the NPI), and the cohort export does "
-            f"not currently pin per-NPI exclusion-effective dates (so a row's "
-            f"paid amount may include claim months that pre-date the exclusion; "
-            f"MMIS triage should reconcile each NPI's paid period against the "
-            f"LEIE / SAM effective date)."
+            f"All-states scope = {total_cohort:,} unique federally-excluded NPIs "
+            f"across {states_total} state cohorts (active LEIE or SAM, score >= "
+            f"1.5; state per NPPES practice state). Per-state CSVs at "
+            f"/api/v1/states/<state>/h29-excluded-paid.csv. Source-data limit: "
+            f"the HHS file does NOT carry a state-of-payment column, so per-NPI "
+            f"paid amounts aggregate across every state Medicaid program that "
+            f"paid the NPI. State attribution comes from NPPES practice state, "
+            f"not state of payment."
         ),
         "data_source_release": DATA_SOURCE_RELEASE,
         "data_source_url": "https://opendata.hhs.gov/datasets/medicaid-provider-spending/",
@@ -364,13 +362,17 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
             "type": "bar",
             "unit": "count",
             "data": [
-                {"label": "VA cohort NPIs paid by Medicaid", "value": len(rows)},
-                {"label": "VA cohort NPIs not paid (in this dataset)", "value": max(0, total_cohort - len(rows))},
+                {"label": "Cohort NPIs paid by Medicaid (full-window)", "value": len(rows)},
+                {"label": "Strict post-exclusion subset", "value": len(post_exclusion_rows)},
             ],
         },
+        "per_state": sorted(
+            ({"state": s, **stats} for s, stats in per_state_stats.items()),
+            key=lambda d: -d["matches_full_window"],
+        ),
         "notes": (
-            "Pilot state: Virginia. Per-state CSV at "
-            f"/api/v1/states/{state}/h29-excluded-paid.csv carries one row per "
+            "All-states refresh. Per-state CSVs at "
+            f"/api/v1/states/<state>/h29-excluded-paid.csv carry one row per "
             "matched NPI with the directory-side context columns (top_hcpcs_codes, "
             "exclusion_source, billing-or-servicing axis, first/last paid month) "
             "needed to interpret the paid-amount headline. Source-file schema: "
@@ -393,8 +395,8 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
 
     detail = {
         "queried_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "pilot_state": state.upper(),
         "denominator_cohort_size": total_cohort,
+        "states_covered": states_total,
         "matches": len(rows),
         "total_paid_post_exclusion": total_paid_post,
         "total_paid_full_window": total_paid_window,
@@ -402,19 +404,20 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
         "matches_with_post_exclusion_payment": len(post_exclusion_rows),
         "source_file_schema_note": (
             "HHS Medicaid Provider Spending has no state-of-payment column. "
-            "State attribution (VA in this slice) is via NPPES practice state, "
-            "not the source file. Per-NPI paid amounts aggregate across all "
-            "state Medicaid programs."
+            "State attribution is via NPPES practice state from each state's "
+            "cohort CSV, not the source file. Per-NPI paid amounts aggregate "
+            "across all state Medicaid programs that paid the NPI."
         ),
+        "per_state_stats": per_state_stats,
         "top_paid_npis": [
             {k: r.get(k) for k in (
-                "npi", "name", "paid_amount_post_exclusion", "claim_lines_total",
+                "npi", "name", "paid_amount_post_exclusion", "paid_amount_full_window",
                 "patients_total", "exclusion_source", "top_hcpcs_codes",
                 "first_paid_month", "last_paid_month", "billing_or_servicing",
             )}
             for r in top_rows
         ],
-        "csv_url": f"/api/v1/states/{state.lower()}/h29-excluded-paid.csv",
+        "csv_url_pattern": "/api/v1/states/<state>/h29-excluded-paid.csv",
     }
     detail_out = FINDINGS_DIR / "excluded-paid-by-medicaid-detail.json"
     detail_out.write_text(json.dumps(detail, indent=2) + "\n")
@@ -422,29 +425,67 @@ def write_finding_json(rows: list[dict], state: str, total_cohort: int) -> None:
 
 
 def main() -> None:
-    p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--state", default="va", help="State pilot to materialize (default: va)")
-    args = p.parse_args()
+    from analysis.claims_sources._cohorts import (
+        load_all_state_cohorts,
+        npi_to_state_map,
+    )
 
-    state = args.state.lower()
-    va_cohort_csv = STATES_DIR / "va-cohort-critical.csv"
-    if not va_cohort_csv.exists():
-        raise SystemExit(f"VA cohort CSV not found at {va_cohort_csv}")
+    cohorts = load_all_state_cohorts()
+    if not cohorts:
+        raise SystemExit("No per-state cohort CSVs found. Run analysis/build_state_cohort.py --all first.")
 
-    cohort = load_cohort(va_cohort_csv)
-    npis = {r["npi"].strip() for r in cohort if r.get("npi")}
-    print(f"VA cohort: {len(npis)} NPIs")
+    npi_to_state = npi_to_state_map(cohorts)
+    total_npis = len(npi_to_state)
+    print(f"Loaded {len(cohorts)} state cohorts, {total_npis:,} unique NPIs total")
 
-    cutoff_by_npi = {
-        r["npi"]: cutoff_for_cohort_row(r) for r in cohort if r.get("npi")
-    }
+    # Flatten cohorts to one big list (for compose_rows) and build cutoff index
+    flat_cohort: list[dict] = []
+    cutoff_by_npi: dict[str, str] = {}
+    for state, state_cohort in cohorts.items():
+        for npi, row in state_cohort.items():
+            flat_cohort.append(row)
+            cutoff_by_npi[npi] = cutoff_for_cohort_row(row)
     with_cutoff = sum(1 for v in cutoff_by_npi.values() if v)
-    print(f"  with exclusion-effective date: {with_cutoff} ({100*with_cutoff/len(npis):.1f}%)")
+    print(f"  with exclusion-effective date: {with_cutoff} ({100*with_cutoff/total_npis:.1f}%)")
 
-    hits = filter_parquet_for_npis(npis, cutoff_by_npi=cutoff_by_npi)
-    rows = compose_rows(cohort, hits)
-    write_state_csv(state, rows)
-    write_finding_json(rows, state, total_cohort=len(npis))
+    # Single pass over the 2.9 GB parquet
+    hits = filter_parquet_for_npis(set(npi_to_state.keys()), cutoff_by_npi=cutoff_by_npi)
+    rows = compose_rows(flat_cohort, hits)
+
+    # Partition by state
+    per_state_rows: dict[str, list[dict]] = defaultdict(list)
+    for r in rows:
+        st = npi_to_state.get(r["npi"], "")
+        if st:
+            per_state_rows[st].append(r)
+
+    per_state_stats: dict[str, dict] = {}
+    for st, st_rows in per_state_rows.items():
+        write_state_csv(st, st_rows)
+        full_window = sum(r["paid_amount_full_window"] for r in st_rows)
+        strict = sum(r["paid_amount_post_exclusion"] for r in st_rows if r["exclusion_effective_date"])
+        per_state_stats[st] = {
+            "matches_full_window": len(st_rows),
+            "matches_strict_post": sum(
+                1 for r in st_rows
+                if r["exclusion_effective_date"] and r["paid_amount_post_exclusion"] > 0
+            ),
+            "paid_full_window": round(full_window, 2),
+            "paid_strict_post": round(strict, 2),
+        }
+
+    write_finding_json(
+        rows,
+        states_total=len(cohorts),
+        total_cohort=total_npis,
+        per_state_stats=per_state_stats,
+    )
+
+    print("\nTop 5 states by match count:")
+    top5 = sorted(per_state_stats.items(), key=lambda kv: -kv[1]["matches_full_window"])[:5]
+    for s, st in top5:
+        print(f"  {s:2s}  matches={st['matches_full_window']:>4}  strict={st['matches_strict_post']:>3}  "
+              f"paid=${st['paid_full_window']:>14,.0f}  strict_paid=${st['paid_strict_post']:>12,.0f}")
 
 
 if __name__ == "__main__":

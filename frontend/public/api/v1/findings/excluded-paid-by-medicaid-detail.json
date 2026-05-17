@@ -1,74 +1,388 @@
 {
-  "queried_at": "2026-05-14T22:33:25+00:00",
-  "pilot_state": "VA",
-  "denominator_cohort_size": 125,
-  "matches": 28,
-  "total_paid_post_exclusion": 0.0,
-  "total_paid_full_window": 8487743.65,
-  "total_claim_lines_full_window": 217655,
-  "matches_with_post_exclusion_payment": 0,
-  "source_file_schema_note": "HHS Medicaid Provider Spending has no state-of-payment column. State attribution (VA in this slice) is via NPPES practice state, not the source file. Per-NPI paid amounts aggregate across all state Medicaid programs.",
+  "queried_at": "2026-05-17T15:34:34+00:00",
+  "denominator_cohort_size": 6840,
+  "states_covered": 52,
+  "matches": 1180,
+  "total_paid_post_exclusion": 3249456.57,
+  "total_paid_full_window": 481682269.85,
+  "total_claim_lines_full_window": 12539039,
+  "matches_with_post_exclusion_payment": 12,
+  "source_file_schema_note": "HHS Medicaid Provider Spending has no state-of-payment column. State attribution is via NPPES practice state from each state's cohort CSV, not the source file. Per-NPI paid amounts aggregate across all state Medicaid programs that paid the NPI.",
+  "per_state_stats": {
+    "NM": {
+      "matches_full_window": 9,
+      "matches_strict_post": 1,
+      "paid_full_window": 2966939.24,
+      "paid_strict_post": 1575535.0
+    },
+    "RI": {
+      "matches_full_window": 2,
+      "matches_strict_post": 1,
+      "paid_full_window": 830323.6,
+      "paid_strict_post": 817196.18
+    },
+    "GA": {
+      "matches_full_window": 29,
+      "matches_strict_post": 1,
+      "paid_full_window": 6965348.46,
+      "paid_strict_post": 304090.2
+    },
+    "TX": {
+      "matches_full_window": 56,
+      "matches_strict_post": 1,
+      "paid_full_window": 5733379.16,
+      "paid_strict_post": 234995.83
+    },
+    "MA": {
+      "matches_full_window": 21,
+      "matches_strict_post": 2,
+      "paid_full_window": 11864466.41,
+      "paid_strict_post": 225984.28
+    },
+    "OH": {
+      "matches_full_window": 114,
+      "matches_strict_post": 1,
+      "paid_full_window": 65740489.57,
+      "paid_strict_post": 52524.64
+    },
+    "CA": {
+      "matches_full_window": 116,
+      "matches_strict_post": 1,
+      "paid_full_window": 64337137.94,
+      "paid_strict_post": 20668.51
+    },
+    "KY": {
+      "matches_full_window": 33,
+      "matches_strict_post": 1,
+      "paid_full_window": 16394217.17,
+      "paid_strict_post": 15595.65
+    },
+    "NV": {
+      "matches_full_window": 21,
+      "matches_strict_post": 1,
+      "paid_full_window": 22619667.28,
+      "paid_strict_post": 2266.0
+    },
+    "PR": {
+      "matches_full_window": 10,
+      "matches_strict_post": 1,
+      "paid_full_window": 3732965.04,
+      "paid_strict_post": 406.28
+    },
+    "NY": {
+      "matches_full_window": 73,
+      "matches_strict_post": 1,
+      "paid_full_window": 45360017.58,
+      "paid_strict_post": 194.0
+    },
+    "FL": {
+      "matches_full_window": 53,
+      "matches_strict_post": 0,
+      "paid_full_window": 30916784.9,
+      "paid_strict_post": 0.0
+    },
+    "DE": {
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 15819445.49,
+      "paid_strict_post": 0.0
+    },
+    "CT": {
+      "matches_full_window": 25,
+      "matches_strict_post": 0,
+      "paid_full_window": 21993177.92,
+      "paid_strict_post": 0.0
+    },
+    "MO": {
+      "matches_full_window": 30,
+      "matches_strict_post": 0,
+      "paid_full_window": 15072197.09,
+      "paid_strict_post": 0.0
+    },
+    "MD": {
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 10023078.92,
+      "paid_strict_post": 0.0
+    },
+    "TN": {
+      "matches_full_window": 51,
+      "matches_strict_post": 0,
+      "paid_full_window": 13170785.77,
+      "paid_strict_post": 0.0
+    },
+    "AL": {
+      "matches_full_window": 23,
+      "matches_strict_post": 0,
+      "paid_full_window": 3749641.21,
+      "paid_strict_post": 0.0
+    },
+    "ME": {
+      "matches_full_window": 14,
+      "matches_strict_post": 0,
+      "paid_full_window": 2026676.73,
+      "paid_strict_post": 0.0
+    },
+    "NC": {
+      "matches_full_window": 23,
+      "matches_strict_post": 0,
+      "paid_full_window": 9248714.04,
+      "paid_strict_post": 0.0
+    },
+    "AZ": {
+      "matches_full_window": 18,
+      "matches_strict_post": 0,
+      "paid_full_window": 5701730.42,
+      "paid_strict_post": 0.0
+    },
+    "WI": {
+      "matches_full_window": 22,
+      "matches_strict_post": 0,
+      "paid_full_window": 6097211.07,
+      "paid_strict_post": 0.0
+    },
+    "IN": {
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 8352693.75,
+      "paid_strict_post": 0.0
+    },
+    "IA": {
+      "matches_full_window": 20,
+      "matches_strict_post": 0,
+      "paid_full_window": 6609655.6,
+      "paid_strict_post": 0.0
+    },
+    "DC": {
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 1343706.19,
+      "paid_strict_post": 0.0
+    },
+    "LA": {
+      "matches_full_window": 32,
+      "matches_strict_post": 0,
+      "paid_full_window": 10033852.76,
+      "paid_strict_post": 0.0
+    },
+    "OK": {
+      "matches_full_window": 22,
+      "matches_strict_post": 0,
+      "paid_full_window": 6099058.09,
+      "paid_strict_post": 0.0
+    },
+    "VA": {
+      "matches_full_window": 28,
+      "matches_strict_post": 0,
+      "paid_full_window": 8487743.65,
+      "paid_strict_post": 0.0
+    },
+    "SC": {
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "paid_full_window": 1265435.09,
+      "paid_strict_post": 0.0
+    },
+    "CO": {
+      "matches_full_window": 19,
+      "matches_strict_post": 0,
+      "paid_full_window": 3752401.6,
+      "paid_strict_post": 0.0
+    },
+    "NJ": {
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 9421456.46,
+      "paid_strict_post": 0.0
+    },
+    "PA": {
+      "matches_full_window": 41,
+      "matches_strict_post": 0,
+      "paid_full_window": 2727208.33,
+      "paid_strict_post": 0.0
+    },
+    "OR": {
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 6321506.29,
+      "paid_strict_post": 0.0
+    },
+    "ND": {
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 474356.04,
+      "paid_strict_post": 0.0
+    },
+    "AK": {
+      "matches_full_window": 10,
+      "matches_strict_post": 0,
+      "paid_full_window": 1839546.28,
+      "paid_strict_post": 0.0
+    },
+    "MS": {
+      "matches_full_window": 20,
+      "matches_strict_post": 0,
+      "paid_full_window": 4773718.13,
+      "paid_strict_post": 0.0
+    },
+    "WA": {
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 4175212.47,
+      "paid_strict_post": 0.0
+    },
+    "MI": {
+      "matches_full_window": 19,
+      "matches_strict_post": 0,
+      "paid_full_window": 4544282.09,
+      "paid_strict_post": 0.0
+    },
+    "IL": {
+      "matches_full_window": 29,
+      "matches_strict_post": 0,
+      "paid_full_window": 7387546.58,
+      "paid_strict_post": 0.0
+    },
+    "MN": {
+      "matches_full_window": 14,
+      "matches_strict_post": 0,
+      "paid_full_window": 1177882.11,
+      "paid_strict_post": 0.0
+    },
+    "HI": {
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "paid_full_window": 1081145.01,
+      "paid_strict_post": 0.0
+    },
+    "ID": {
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 820637.93,
+      "paid_strict_post": 0.0
+    },
+    "MT": {
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "paid_full_window": 2853309.63,
+      "paid_strict_post": 0.0
+    },
+    "VT": {
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 2793259.64,
+      "paid_strict_post": 0.0
+    },
+    "WV": {
+      "matches_full_window": 15,
+      "matches_strict_post": 0,
+      "paid_full_window": 2029244.48,
+      "paid_strict_post": 0.0
+    },
+    "NE": {
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 1050545.06,
+      "paid_strict_post": 0.0
+    },
+    "SD": {
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 148457.8,
+      "paid_strict_post": 0.0
+    },
+    "AR": {
+      "matches_full_window": 15,
+      "matches_strict_post": 0,
+      "paid_full_window": 1241929.34,
+      "paid_strict_post": 0.0
+    },
+    "KS": {
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 340851.67,
+      "paid_strict_post": 0.0
+    },
+    "WY": {
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "paid_full_window": 125325.93,
+      "paid_strict_post": 0.0
+    },
+    "NH": {
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 34412.42,
+      "paid_strict_post": 0.0
+    },
+    "UT": {
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 11494.42,
+      "paid_strict_post": 0.0
+    }
+  },
   "top_paid_npis": [
     {
-      "npi": "1902856065",
-      "name": "RANDALL, W",
-      "paid_amount_post_exclusion": 0.0,
-      "claim_lines_total": null,
-      "patients_total": 46519,
-      "exclusion_source": "oig_excluded",
-      "top_hcpcs_codes": "G0483=$2,042,673; 99214=$1,272,587; 80307=$459,587",
-      "first_paid_month": "",
-      "last_paid_month": "",
-      "billing_or_servicing": "billing, servicing"
-    },
-    {
-      "npi": "1114918752",
-      "name": "DIXON, DUANE",
-      "paid_amount_post_exclusion": 0.0,
-      "claim_lines_total": null,
-      "patients_total": 20970,
-      "exclusion_source": "oig_excluded",
-      "top_hcpcs_codes": "G0483=$962,089; 99214=$353,803; 80307=$265,840",
-      "first_paid_month": "",
-      "last_paid_month": "",
-      "billing_or_servicing": "billing, servicing"
-    },
-    {
-      "npi": "1518967207",
-      "name": "RALEY, THOMAS",
-      "paid_amount_post_exclusion": 0.0,
-      "claim_lines_total": null,
-      "patients_total": 15317,
-      "exclusion_source": "oig_excluded",
-      "top_hcpcs_codes": "99214=$450,464; 80307=$170,580; 99213=$37,227",
-      "first_paid_month": "",
-      "last_paid_month": "",
-      "billing_or_servicing": "billing, servicing"
-    },
-    {
-      "npi": "1609825553",
-      "name": "BUGARIN, LOPITO",
-      "paid_amount_post_exclusion": 0.0,
-      "claim_lines_total": null,
-      "patients_total": 6496,
+      "npi": "1871571406",
+      "name": "ASWAD, MOHAMED",
+      "paid_amount_post_exclusion": 1575535.0,
+      "paid_amount_full_window": 1575535.0,
+      "patients_total": 20713,
       "exclusion_source": "oig_excluded|sam_excluded",
-      "top_hcpcs_codes": "99214=$462,706; 99205=$17,527; 99394=$2,602",
-      "first_paid_month": "",
-      "last_paid_month": "",
+      "top_hcpcs_codes": "99214=$1,334,149; 96365=$66,930; 96401=$47,526",
+      "first_paid_month": "2018-01",
+      "last_paid_month": "2022-07",
       "billing_or_servicing": "billing, servicing"
     },
     {
-      "npi": "1336149830",
-      "name": "SHAFFER, DEBRA",
-      "paid_amount_post_exclusion": 0.0,
-      "claim_lines_total": null,
-      "patients_total": 1036,
-      "exclusion_source": "oig_excluded",
-      "top_hcpcs_codes": "99214=$32,616; G0483=$18,060; 99213=$9,231",
-      "first_paid_month": "",
-      "last_paid_month": "",
+      "npi": "1982713020",
+      "name": "CULLEN, EDWARD",
+      "paid_amount_post_exclusion": 817196.18,
+      "paid_amount_full_window": 817196.18,
+      "patients_total": 11874,
+      "exclusion_source": "sam_excluded",
+      "top_hcpcs_codes": "99214=$344,485; 80307=$201,056; G0483=$147,409",
+      "first_paid_month": "2018-01",
+      "last_paid_month": "2024-12",
+      "billing_or_servicing": "billing, servicing"
+    },
+    {
+      "npi": "1093904914",
+      "name": "SMITH, G",
+      "paid_amount_post_exclusion": 304090.2,
+      "paid_amount_full_window": 827085.21,
+      "patients_total": 28653,
+      "exclusion_source": "oig_excluded|nppes_deactivated",
+      "top_hcpcs_codes": "99214=$485,876; 99213=$322,330; 99212=$8,361",
+      "first_paid_month": "2021-06",
+      "last_paid_month": "2024-12",
+      "billing_or_servicing": "billing, servicing"
+    },
+    {
+      "npi": "1285673012",
+      "name": "MIRANDA, EDUARDO",
+      "paid_amount_post_exclusion": 234995.83,
+      "paid_amount_full_window": 234995.83,
+      "patients_total": 10950,
+      "exclusion_source": "oig_excluded|sam_excluded",
+      "top_hcpcs_codes": "99214=$61,952; 99213=$57,719; 96413=$39,326",
+      "first_paid_month": "2018-01",
+      "last_paid_month": "2024-11",
       "billing_or_servicing": "servicing"
+    },
+    {
+      "npi": "1346352531",
+      "name": "EHRLICH, MELVIN",
+      "paid_amount_post_exclusion": 181145.64,
+      "paid_amount_full_window": 181145.64,
+      "patients_total": 2204,
+      "exclusion_source": "oig_excluded|sam_excluded",
+      "top_hcpcs_codes": "D1120=$39,248; D1206=$38,842; D0120=$23,224",
+      "first_paid_month": "2018-09",
+      "last_paid_month": "2018-10",
+      "billing_or_servicing": "billing, servicing"
     }
   ],
-  "csv_url": "/api/v1/states/va/h29-excluded-paid.csv"
+  "csv_url_pattern": "/api/v1/states/<state>/h29-excluded-paid.csv"
 }

@@ -1,0 +1,19 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1952836199,"ALLEN, B",OH,2019-04-03,true,medicaid|medicare_partd,346080.96,29918,2019-08,2024-11,0,0,408215.26,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1952836199
+1780081224,"GONSALES, SHELBY",OH,2015-04-20,true,medicaid|medicare_partb|medicare_partd,365255.54,9422,2023-03,2024-12,12479.44,260,4844.97,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1780081224
+1457864258,"ROSS, KATHY",OH,2017-11-20,true,medicaid,183701.55,2355,2019-10,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1457864258
+1548551971,"STRAINER, AMITY",OH,2018-07-14,true,medicaid|medicare_partb|medicare_partd,13908.07,980,2022-02,2024-11,26202.6,392,123618.13,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1548551971
+1447747803,"KHAN, KAMRAN",OH,2018-11-28,true,medicaid|medicare_partb|medicare_partd,24871.31,1148,2022-08,2024-10,38339.81,468,48868.0,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1447747803
+1982082095,"JOYCE, TIFFANY",OH,2017-01-18,true,medicaid,111778.93,2524,2022-02,2024-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1982082095
+1891223962,"DAROMAR, OBAYDAH",OH,2018-04-12,true,medicaid|medicare_partb|medicare_partd,6094.64,347,2022-10,2024-04,65207.72,889,18020.33,16,52.76,https://npiregistry.cms.hhs.gov/provider-view/1891223962
+1699296947,"LAUVRAY, JENNIFER",OH,2018-03-19,true,medicaid,84910.23,1465,2022-10,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1699296947
+1245765874,"MUSSALOW, PHOENIX",OH,2017-08-09,true,medicaid,72128.55,768,2020-11,2022-05,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1245765874
+1871659037,"JONES, EDWARD",OH,2018-03-02,false,medicaid,66373.76,737,2019-08,2020-02,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1871659037
+1184041352,"TEMPLE, MELISSA",OH,2019-04-08,true,medicaid,24440.76,406,2022-05,2022-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1184041352
+1811394109,"BOERIU, IOAN",OH,2015-10-16,true,medicare_partd,0,0,,,0,0,4325.16,18,82.23,https://npiregistry.cms.hhs.gov/provider-view/1811394109
+1336181486,"ESSIG, GARTH",OH,2016-05-05,false,medicaid,2129.82,28,2018-01,2018-05,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1336181486
+1871052100,"O'HEHIR, LIAM",OH,2019-04-04,true,medicaid|medicare_partd,351.75,45,2024-07,2024-07,0,0,1603.4,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1871052100
+1538405980,"EDWARDS, FELICIA",OH,2015-05-27,true,medicaid,1943.49,65,2024-10,2024-11,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1538405980
+1932555109,"KACZMAREK, JENNIFER",OH,2017-01-05,true,medicaid,1583.41,51,2023-03,2024-01,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1932555109
+1962947051,"NIESE, CARLA",OH,2018-06-14,true,medicaid,750.96,14,2021-04,2021-04,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1962947051
+1174501464,"NORMAN, ROBERT",OH,2013-04-15,false,medicaid,221.97,29,2018-09,2018-09,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1174501464

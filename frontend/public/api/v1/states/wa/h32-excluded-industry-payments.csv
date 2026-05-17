@@ -1,0 +1,5 @@
+npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1104849900,"DERAKSHANI, KAM",WA,Covered Recipient Physician,leie+sam,20151020,2015-10-20,2015,yes,224.25,4,6=$224,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1104849900
+1750370466,"RICHARDS, JULIA",WA,Covered Recipient Physician,leie,20241219,,2024,no,51.71,3,6=$52,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1750370466
+1649249483,"KOHCHET CHUA, CLARIBEL",WA,Covered Recipient Physician,sam,,2024-09-16,2024,no,42.23,2,6=$42,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1649249483
+1104912278,"SHELBY, JAMES",WA,Covered Recipient Physician,leie+sam,20191219,2019-12-19,2019,yes,42.12,1,6=$42,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1104912278

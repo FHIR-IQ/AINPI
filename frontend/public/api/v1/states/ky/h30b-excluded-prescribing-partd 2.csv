@@ -1,0 +1,10 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1194796169,"GAINEY, MICHAEL",KY,KY,2940180.44,29481,895,2155,56622.59,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194796169
+1417927229,"PETERS, LAWRENCE",KY,KY,2080099.89,23514,1251,12342,1491120.97,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1417927229
+1922246594,"LEWIS, MATTHEW",KY,KY,1807227.41,16102,926,221,2512.97,oig_excluded|nppes_deactivated,2026,no,2.3,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1922246594
+1780635250,"STAMPER, JASON",KY,KY,23378.78,332,84,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1780635250
+1114911773,"BARNES, CHERYL",KY,KY,23095.07,298,24,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114911773
+1548798309,"MCALPINE, LINDSEY",KY,KY,21581.18,73,,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1548798309
+1609291079,"PARMAN, SARA",KY,KY,12376.15,730,22,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1609291079
+1467740696,"LUCENO, GILBERT",KY,CA,6591.31,49,24,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1467740696
+1053505479,"COMPTON-PINSON, C",KY,KY,4146.41,33,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1053505479

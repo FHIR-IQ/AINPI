@@ -1,0 +1,4 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1528451804,"BRAY, ANNA",MO,2015-12-21,true,medicaid,155662.58,2102,2020-08,2024-02,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1528451804
+1629259379,"KLING, ANGELA",MO,2019-01-29,false,medicaid,26368.0,264,2018-01,2019-04,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1629259379
+1245471150,"MAHRT, CHRISTY",MO,2009-04-01,true,medicaid|medicare_partb,475.74,34,2022-06,2022-06,1422.85,80,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1245471150

@@ -1,0 +1,22 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1578940813,"JURANGAL, AJAY",NY,2015-12-14,true,medicaid|medicare_partb|medicare_partd,43821.94,853,2021-05,2024-11,141305.63,1169,1022788.44,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1578940813
+1336492529,"OFFNER, CECILY",NY,2015-04-01,true,medicaid|medicare_partb|medicare_partd,272566.41,3913,2019-11,2024-10,166414.11,2153,287607.18,11,651.4,https://npiregistry.cms.hhs.gov/provider-view/1336492529
+1992936975,"DEUTOU, DUREMELLE",NY,2014-05-13,true,medicaid|medicare_partb|medicare_partd,6859.27,156,2023-03,2024-09,2362.53,35,285961.38,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1992936975
+1386188670,"ORTEGA, FRIEDRICH",NY,2018-07-03,true,medicaid,284789.87,13009,2022-02,2024-11,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1386188670
+1538641311,"DAVIS, AVRIELLE",NY,2019-04-05,true,medicaid|medicare_partd,191713.01,2247,2021-05,2024-11,0,0,9129.81,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1538641311
+1245622661,"BENNETT, CHENEL",NY,2015-07-24,true,medicaid|medicare_partd,3853.68,716,2022-11,2023-08,0,0,64982.12,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1245622661
+1053765677,"FRANCISCO, JUDELYS",NY,2018-06-24,true,medicaid,63322.56,2592,2022-01,2024-05,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1053765677
+1609368182,"TREGUBOV, BORIS",NY,2019-02-13,true,medicaid|medicare_partb|medicare_partd,2322.6,80,2022-12,2024-07,20271.83,188,756.02,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1609368182
+1700374659,"RAJEVAC, HANA",NY,2018-11-29,true,medicare_partd,0,0,,,0,0,16300.53,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1700374659
+1437448396,"BELLEUS, GUSLENE",NY,2012-10-01,true,medicaid|medicare_partd,9187.51,164,2021-11,2024-11,0,0,6586.17,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1437448396
+1396079752,"CHOE, ESTELLE",NY,2010-08-09,true,medicare_partb,0,0,,,12500.36,506,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1396079752
+1427158013,"SMILOWITZ, DANIEL",NY,2018-12-12,false,medicaid,9695.7,672,2019-03,2019-11,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1427158013
+1861548687,"NOVIE, HOWARD",NY,2019-01-14,false,medicaid,7852.64,426,2018-01,2019-08,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1861548687
+1619323367,"AL DALAHMAH, OSAMA",NY,2017-01-05,true,medicare_partb,0,0,,,7001.43,215,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1619323367
+1851843163,"CHOE, SUNMI",NY,2018-01-17,true,medicaid,3877.03,54,2024-07,2024-09,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1851843163
+1679587976,"ALLOUCHERIE, YVES",NY,2018-01-03,false,medicaid,2724.0,491,2018-05,2019-08,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1679587976
+1255677480,"CORRADO, DOMENICA",NY,2016-06-07,true,medicare_partb|medicare_partd,0,0,,,2584.53,27,95.32,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1255677480
+1699963744,"JARVIS, MARCIA",NY,2012-07-16,true,medicaid,2345.0,38,2022-02,2022-03,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1699963744
+1801992011,"UNGER, LEONARD",NY,2016-04-19,false,medicaid,1889.76,320,2018-01,2018-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1801992011
+1588693907,"GIAMBRONE, JAMES",NY,2013-11-06,false,medicaid,1159.35,28,2018-07,2018-08,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1588693907
+1831681865,"NEMAKALLU, SHARANYA REDDY",NY,2019-01-25,true,medicare_partd,0,0,,,0,0,562.62,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1831681865

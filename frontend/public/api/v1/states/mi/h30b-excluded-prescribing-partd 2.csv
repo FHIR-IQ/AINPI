@@ -1,0 +1,15 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1942375837,"BAUL, TERRY",MI,MI,1239939.99,15386,383,532,10560.43,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942375837
+1144603721,"DELVA, MARISLENE",MI,MI,1182823.75,16990,374,1827,50626.1,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144603721
+1780674218,"ZAKI, GAMAL",MI,MI,659362.71,7081,533,77,412.98,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1780674218
+1811989650,"HAGEN, JOSEPH",MI,MI,83910.02,2954,67,198,3840.28,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1811989650
+1528185303,"PETERSON, MAXINE",MI,MI,49094.13,258,64,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1528185303
+1760424972,"CALL, RICHARD",MI,MI,26015.84,114,29,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1760424972
+1104210582,"EFFIONG, UTIBE",MI,MI,19261.67,325,168,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1104210582
+1255537056,"NAEEM, NAVEED",MI,MI,10931.52,26,,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1255537056
+1508112491,"JUDD, DAVID",MI,MI,9475.87,267,37,0,,oig_excluded|nppes_deactivated,2026,no,2.3,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1508112491
+1427091123,"MCCLURE, J",MI,MI,5943.78,22,,0,,oig_excluded|nppes_deactivated,2024,no,2.3,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427091123
+1215929906,"ABELLANA, EDUARDO",MI,MI,3458.44,44,,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1215929906
+1366592768,"STURLA, CESAR",MI,MI,2604.36,155,28,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366592768
+1093707101,"PILATO, FRANK",MI,MI,2583.39,23,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1093707101
+1942247689,"GULOW, MARK",MI,MI,1623.55,51,13,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942247689

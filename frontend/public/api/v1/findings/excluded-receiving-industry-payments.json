@@ -6,9 +6,9 @@
   ],
   "status": "published",
   "release_date": "PGYR2024 P01232026 (released 2026-01-10)",
-  "generated_at": "2026-05-14T22:38:11+00:00",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "bcf9b81",
+  "generated_at": "2026-05-17T15:36:21+00:00",
+  "methodology_version": "0.6.1-draft",
+  "commit_sha": "334099e",
   "headline": "350 of 8,619 currently-active LEIE / SAM-excluded NPIs received industry payments from drug and device manufacturers in program year 2024 per CMS Open Payments. Combined paid amount: $3,826,596. Of those 350 matches, **198 were paid STRICTLY POST-EXCLUSION** (earliest LEIE/SAM exclusion year before 2024), with $166,984 in strict post-exclusion industry payments. 9 of the 350 matches are VA-resident per NDH; 2 of those VA-resident matches are also strict post-exclusion. The strict-post-exclusion subset is the regulatorily significant signal \u2014 pre-exclusion industry payments reflect work the provider was authorized to do at the time.",
   "numerator": 198,
   "denominator": 8619,
@@ -30,5 +30,315 @@
       }
     ]
   },
-  "notes": "Aggregate file (PBLCTN_SMRY_BY_CR_BY_NTR_OF_PYMT) used rather than the line-detail file (~10M rows) \u2014 the aggregate gives per-NPI \u00d7 per-nature-code totals which is the right granularity for the exclusion join. Open Payments is itself public \u2014 drug and device manufacturers are required to report by the Sunshine Act / Physician Payments Sunshine Act (42 USC \u00a7 1320a-7h). AINPI's contribution is the systematic cross-join with the LEIE \u222a SAM active exclusion set, which has not been published. VA-state slice at /api/v1/states/va/h32-excluded-industry-payments-va.csv. Full national list at /api/v1/findings/excluded-receiving-industry-payments-detail.csv."
+  "per_state": [
+    {
+      "state": "CA",
+      "matches_full_window": 65,
+      "matches_strict_post": 33,
+      "total_paid_full_window": 33507.54,
+      "total_paid_strict_post": 21251.59
+    },
+    {
+      "state": "NY",
+      "matches_full_window": 31,
+      "matches_strict_post": 23,
+      "total_paid_full_window": 46321.22,
+      "total_paid_strict_post": 6632.59
+    },
+    {
+      "state": "TX",
+      "matches_full_window": 22,
+      "matches_strict_post": 11,
+      "total_paid_full_window": 128489.21,
+      "total_paid_strict_post": 121189.16
+    },
+    {
+      "state": "FL",
+      "matches_full_window": 19,
+      "matches_strict_post": 13,
+      "total_paid_full_window": 305592.99,
+      "total_paid_strict_post": 1658.08
+    },
+    {
+      "state": "PA",
+      "matches_full_window": 18,
+      "matches_strict_post": 10,
+      "total_paid_full_window": 21160.59,
+      "total_paid_strict_post": 823.44
+    },
+    {
+      "state": "TN",
+      "matches_full_window": 18,
+      "matches_strict_post": 8,
+      "total_paid_full_window": 3654.42,
+      "total_paid_strict_post": 926.77
+    },
+    {
+      "state": "NJ",
+      "matches_full_window": 14,
+      "matches_strict_post": 9,
+      "total_paid_full_window": 1368.74,
+      "total_paid_strict_post": 856.78
+    },
+    {
+      "state": "IL",
+      "matches_full_window": 13,
+      "matches_strict_post": 11,
+      "total_paid_full_window": 855.76,
+      "total_paid_strict_post": 588.75
+    },
+    {
+      "state": "OH",
+      "matches_full_window": 11,
+      "matches_strict_post": 6,
+      "total_paid_full_window": 7285.78,
+      "total_paid_strict_post": 4941.13
+    },
+    {
+      "state": "GA",
+      "matches_full_window": 10,
+      "matches_strict_post": 5,
+      "total_paid_full_window": 818.01,
+      "total_paid_strict_post": 330.8
+    },
+    {
+      "state": "MI",
+      "matches_full_window": 9,
+      "matches_strict_post": 4,
+      "total_paid_full_window": 2750.28,
+      "total_paid_strict_post": 335.92
+    },
+    {
+      "state": "VA",
+      "matches_full_window": 9,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 1547.01,
+      "total_paid_strict_post": 400.62
+    },
+    {
+      "state": "PR",
+      "matches_full_window": 9,
+      "matches_strict_post": 7,
+      "total_paid_full_window": 483.56,
+      "total_paid_strict_post": 339.1
+    },
+    {
+      "state": "LA",
+      "matches_full_window": 8,
+      "matches_strict_post": 4,
+      "total_paid_full_window": 3017.7,
+      "total_paid_strict_post": 597.06
+    },
+    {
+      "state": "MO",
+      "matches_full_window": 7,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 36589.13,
+      "total_paid_strict_post": 149.98
+    },
+    {
+      "state": "KY",
+      "matches_full_window": 7,
+      "matches_strict_post": 3,
+      "total_paid_full_window": 5144.94,
+      "total_paid_strict_post": 206.6
+    },
+    {
+      "state": "IA",
+      "matches_full_window": 7,
+      "matches_strict_post": 5,
+      "total_paid_full_window": 1000.51,
+      "total_paid_strict_post": 360.02
+    },
+    {
+      "state": "NC",
+      "matches_full_window": 6,
+      "matches_strict_post": 4,
+      "total_paid_full_window": 1984.18,
+      "total_paid_strict_post": 127.32
+    },
+    {
+      "state": "IN",
+      "matches_full_window": 5,
+      "matches_strict_post": 3,
+      "total_paid_full_window": 87676.68,
+      "total_paid_strict_post": 1517.54
+    },
+    {
+      "state": "NV",
+      "matches_full_window": 5,
+      "matches_strict_post": 3,
+      "total_paid_full_window": 1091.45,
+      "total_paid_strict_post": 477.44
+    },
+    {
+      "state": "MS",
+      "matches_full_window": 4,
+      "matches_strict_post": 3,
+      "total_paid_full_window": 45729.19,
+      "total_paid_strict_post": 609.19
+    },
+    {
+      "state": "WI",
+      "matches_full_window": 4,
+      "matches_strict_post": 3,
+      "total_paid_full_window": 784.69,
+      "total_paid_strict_post": 170.09
+    },
+    {
+      "state": "AZ",
+      "matches_full_window": 4,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 534.26,
+      "total_paid_strict_post": 74.22
+    },
+    {
+      "state": "WA",
+      "matches_full_window": 4,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 360.31,
+      "total_paid_strict_post": 266.37
+    },
+    {
+      "state": "CO",
+      "matches_full_window": 4,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 288.29,
+      "total_paid_strict_post": 72.01
+    },
+    {
+      "state": "OK",
+      "matches_full_window": 3,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 3082791.01,
+      "total_paid_strict_post": 19.29
+    },
+    {
+      "state": "MN",
+      "matches_full_window": 3,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 1318.86,
+      "total_paid_strict_post": 242.7
+    },
+    {
+      "state": "MA",
+      "matches_full_window": 3,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 806.44,
+      "total_paid_strict_post": 23.11
+    },
+    {
+      "state": "SC",
+      "matches_full_window": 3,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 948.64,
+      "total_paid_strict_post": 458.75
+    },
+    {
+      "state": "OR",
+      "matches_full_window": 3,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 364.35,
+      "total_paid_strict_post": 288.46
+    },
+    {
+      "state": "AL",
+      "matches_full_window": 3,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 133.13,
+      "total_paid_strict_post": 117.94
+    },
+    {
+      "state": "MD",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "total_paid_full_window": 1046.39,
+      "total_paid_strict_post": 0
+    },
+    {
+      "state": "NM",
+      "matches_full_window": 2,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 559.92,
+      "total_paid_strict_post": 559.92
+    },
+    {
+      "state": "AR",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "total_paid_full_window": 174.89,
+      "total_paid_strict_post": 0
+    },
+    {
+      "state": "CT",
+      "matches_full_window": 2,
+      "matches_strict_post": 2,
+      "total_paid_full_window": 115.66,
+      "total_paid_strict_post": 115.66
+    },
+    {
+      "state": "AK",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 59.34,
+      "total_paid_strict_post": 59.34
+    },
+    {
+      "state": "MT",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 40.73,
+      "total_paid_strict_post": 40.73
+    },
+    {
+      "state": "KS",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 30.01,
+      "total_paid_strict_post": 30.01
+    },
+    {
+      "state": "RI",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 29.87,
+      "total_paid_strict_post": 29.87
+    },
+    {
+      "state": "ME",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "total_paid_full_window": 26.51,
+      "total_paid_strict_post": 0
+    },
+    {
+      "state": "NE",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 23.72,
+      "total_paid_strict_post": 23.72
+    },
+    {
+      "state": "DC",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 17.62,
+      "total_paid_strict_post": 17.62
+    },
+    {
+      "state": "UT",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "total_paid_full_window": 17.54,
+      "total_paid_strict_post": 17.54
+    },
+    {
+      "state": "HI",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "total_paid_full_window": 17.51,
+      "total_paid_strict_post": 0
+    }
+  ],
+  "notes": "Aggregate file (PBLCTN_SMRY_BY_CR_BY_NTR_OF_PYMT) used rather than the line-detail file (~10M rows) \u2014 the aggregate gives per-NPI \u00d7 per-nature-code totals which is the right granularity for the exclusion join. Open Payments is itself public \u2014 drug and device manufacturers are required to report by the Sunshine Act / Physician Payments Sunshine Act (42 USC \u00a7 1320a-7h). AINPI's contribution is the systematic cross-join with the LEIE \u222a SAM active exclusion set, which has not been published. Per-state slices at /api/v1/states/<state>/h32-excluded-industry-payments.csv. Full national list at /api/v1/findings/excluded-receiving-industry-payments-detail.csv. Source CSV streamed once and partitioned across NDH practice states in memory."
 }

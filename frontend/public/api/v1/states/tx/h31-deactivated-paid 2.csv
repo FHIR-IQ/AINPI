@@ -1,0 +1,12 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1376070300,"VAILATI NEGRAO, M",TX,2017-12-28,true,medicare_partb|medicare_partd,0,0,,,59787.01,624,1270858.94,20,441.44,https://npiregistry.cms.hhs.gov/provider-view/1376070300
+1447755749,"ERNST, CAGDAS",TX,2018-11-07,true,medicaid|medicare_partb|medicare_partd,33336.9,859,2023-08,2024-12,2089.94,43,124250.74,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1447755749
+1568874220,"MAPLES, EGUONO",TX,2015-04-28,true,medicare_partb|medicare_partd,0,0,,,6297.47,128,89284.49,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1568874220
+1649268541,"YOUNG, GEORGE",TX,2015-01-20,false,medicaid,45198.4,804,2020-11,2022-01,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1649268541
+1730676115,"NATHANI, PIYUSH",TX,2018-11-28,true,medicare_partd,0,0,,,0,0,34609.9,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1730676115
+1962552455,"CREIGHTON, JAMES",TX,2012-02-29,true,medicaid|medicare_partb,8453.12,207,2023-11,2024-08,14938.21,202,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1962552455
+1841224573,"SHY, GREGORY",TX,2017-05-02,false,medicaid,20238.2,609,2019-01,2019-01,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1841224573
+1801385810,"JOHNSON, ABIMBOLA",TX,2018-11-29,true,medicare_partb|medicare_partd,0,0,,,5964.61,116,1555.67,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1801385810
+1164917654,"VASQUEZ ENCINAS, NESTOR",TX,2019-02-13,true,medicare_partd,0,0,,,0,0,1210.52,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1164917654
+1730264979,"COCHRAN, JAMES",TX,2018-12-07,false,medicaid,760.12,18,2023-09,2023-09,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1730264979
+1053847368,"NGUYEN, HANAH",TX,2017-06-06,true,medicare_partd,0,0,,,0,0,318.59,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1053847368

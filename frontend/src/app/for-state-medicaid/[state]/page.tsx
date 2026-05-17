@@ -23,7 +23,11 @@ import {
   allStateCodes,
   findStateByCode,
 } from '@/data/states';
-import { loadStateCohort, loadStateFindings } from '@/lib/load-api-v1';
+import {
+  loadStateClaimsAudit,
+  loadStateCohort,
+  loadStateFindings,
+} from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -75,10 +79,23 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
     (f) => f.slug === 'npi-taxonomy-correctness',
   );
 
-  // VA is the pilot state; its claims-side cross-audit has been computed
-  // already and is hard-anchored below. Other states get the national
-  // pattern + a clear "we can compute this for your state" hook.
-  const hasVaCrossAudit = code === 'VA';
+  // Per-state claims-side cross-audit. Every state has its own findings
+  // now — H29 / H30a / H30b / H31 / H32 each ran against this state's
+  // critical cohort and dropped per-state CSVs we read at build time.
+  const claims = loadStateClaimsAudit(code);
+  // Any state with ≥1 claims-side match anywhere shows the rich band.
+  const hasClaimsData =
+    claims.medicaid.full_window_matches > 0 ||
+    claims.partb.full_window_matches > 0 ||
+    claims.partd.full_window_matches > 0 ||
+    claims.deactivated_billing.matches > 0 ||
+    claims.industry_payments.full_window_matches > 0;
+  const fmtUsd = (n: number) =>
+    n >= 1_000_000
+      ? `$${(n / 1_000_000).toFixed(1)}M`
+      : n >= 1_000
+        ? `$${(n / 1_000).toFixed(0)}K`
+        : `$${n.toFixed(0)}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -426,75 +443,209 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             Cross-audit · ammunition for Element 4 of your SMD response
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            What the claims-side audit shows{' '}
-            {hasVaCrossAudit ? `for ${state.name}` : 'nationally'}
+            What the claims-side audit shows for {state.name}
           </h2>
           <p className="text-gray-700 mb-8 leading-relaxed">
-            AINPI also cross-references the federally-excluded cohort
-            against five public federal claims and payment datasets:
-            Medicaid spending, Medicare Part B billing, Medicare Part D
-            prescribing (with opioid metrics), Open Payments industry
-            transfers, and the DMEPOS supplier directory. Each finding
-            below is citation-ready for the &ldquo;other comprehensive
-            measures&rdquo; element of your CMS State Medicaid Director
-            response.
+            AINPI also cross-references {state.name}&apos;s{' '}
+            {cohortCount} federally-excluded providers against five
+            public federal claims and payment datasets: Medicaid
+            spending (2018&ndash;2024), Medicare Part&nbsp;B billing
+            (CY 2023), Medicare Part&nbsp;D prescribing with opioid
+            metrics (CY 2023), Open Payments industry transfers (PY 2024),
+            and NPPES deactivation status. Each finding below is
+            citation-ready for the &ldquo;other comprehensive measures&rdquo;
+            element of your CMS State Medicaid Director response.
+            {!hasClaimsData && (
+              <>
+                {' '}
+                {state.name} has zero matches across all five sources for
+                its current critical-cohort &mdash; that&apos;s the
+                strongest possible signal that the federal exclusion-
+                revocation pipeline is working for your active cohort.
+              </>
+            )}
           </p>
 
           <div className="space-y-6">
-            {/* Finding 1: payment gate is mostly working */}
-            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-5">
-              <div className="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-2">
-                Working as designed
+            {/* Finding 1 — Medicaid spending */}
+            <div className={`${claims.medicaid.strict_post_exclusion_matches === 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'} border rounded-lg p-5`}>
+              <div className={`text-xs font-bold uppercase tracking-wider ${claims.medicaid.strict_post_exclusion_matches === 0 ? 'text-emerald-800' : 'text-rose-800'} mb-2`}>
+                {claims.medicaid.strict_post_exclusion_matches === 0 ? 'Working as designed' : 'Strict post-exclusion Medicaid payments'}
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                The federal payment gate is doing its job for the active
-                cohort
+                Medicaid spending vs the federal exclusion list
               </h3>
               <p className="text-gray-700 text-sm leading-relaxed">
-                {hasVaCrossAudit ? (
-                  <>
-                    <strong>0 of the 125 federally-excluded Virginia
-                    providers</strong> received Medicaid, Medicare
-                    Part&nbsp;B, or Medicare Part&nbsp;D payment in a
-                    calendar period strictly after their exclusion took
-                    effect (Medicaid Provider Spending 2018&ndash;2024;
-                    Medicare CY 2023). Pre-exclusion billing was
-                    legitimate; once exclusion is processed, the federal
-                    program-payment side holds. This is the strongest
-                    single signal that CMS&apos;s exclusion-revocation
-                    pipeline is working for {state.name}&apos;s active
-                    cohort.
-                  </>
-                ) : (
-                  <>
-                    <strong>0 of the 125 federally-excluded Virginia
-                    providers</strong> (the pilot cohort) received
-                    Medicaid, Medicare Part&nbsp;B, or Medicare
-                    Part&nbsp;D payment strictly post-exclusion. The
-                    same audit is available for {state.name}&apos;s
-                    cohort on request &mdash; ask and we&apos;ll generate
-                    the file for your PI team.
-                  </>
-                )}
+                <strong>
+                  {claims.medicaid.strict_post_exclusion_matches} of{' '}
+                  {claims.medicaid.full_window_matches}{' '}
+                  matched {state.name} providers
+                </strong>
+                {' '}received Medicaid payment <em>strictly after</em>{' '}
+                their LEIE or SAM exclusion took effect (
+                {fmtUsd(claims.medicaid.strict_post_paid)} strict-post-
+                exclusion, {fmtUsd(claims.medicaid.full_window_paid)}{' '}
+                full-window 2018&ndash;2024 across all state Medicaid
+                programs that paid the NPI). The HHS spending file has
+                no state-of-payment column, so the full-window dollar
+                figure aggregates payment from every state that paid
+                the NPI; state attribution is by NPPES practice state.
+                Detail file:{' '}
+                <a
+                  href={`/api/v1/states/${code.toLowerCase()}/h29-excluded-paid.csv`}
+                  className="text-blue-600 hover:underline"
+                >
+                  h29-excluded-paid.csv
+                </a>
+                .
               </p>
             </div>
 
-            {/* Finding 2: directory hygiene is the persistent problem */}
+            {/* Finding 2 — Medicare Part B + Part D */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
               <div className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-2">
-                Persistent problem
+                Medicare Part B + Part D · CY 2023
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                The federal directory is highly complete &mdash; but
-                staleness is real
+                Federal Medicare billing by {state.name}&apos;s excluded cohort
               </h3>
               <p className="text-gray-700 text-sm leading-relaxed">
-                <strong>99.99984% of Medicare Part&nbsp;B billers with
-                material payment in CY 2023 are present in the federal
+                <strong>
+                  {claims.partb.full_window_matches} Part&nbsp;B billers
+                </strong>{' '}
+                ({fmtUsd(claims.partb.full_window_paid)} full-window;{' '}
+                {claims.partb.strict_post_exclusion_matches} strictly
+                post-exclusion at {fmtUsd(claims.partb.strict_post_paid)})
+                and{' '}
+                <strong>
+                  {claims.partd.full_window_matches} Part&nbsp;D prescribers
+                </strong>{' '}
+                ({fmtUsd(claims.partd.full_window_drug_cost)} drug cost;{' '}
+                {claims.partd.opioid_prescribers} opioid prescribers).
+                Pre-exclusion billing reflects work the provider was
+                authorized to do at the time; the strict-post-exclusion
+                subset is the direct § 455.436 violation signal.
+                {claims.partd.opioid_prescribers > 0 && (
+                  <>
+                    {' '}
+                    Opioid-prescriber subset feeds directly into the DEA
+                    Opioid Coordination queue under the 21st Century
+                    Cures Act and 2018 SUPPORT Act.
+                  </>
+                )}
+                {' '}Detail files:{' '}
+                <a
+                  href={`/api/v1/states/${code.toLowerCase()}/h30a-excluded-billing-partb.csv`}
+                  className="text-blue-600 hover:underline"
+                >
+                  h30a Part&nbsp;B
+                </a>
+                {' '}·{' '}
+                <a
+                  href={`/api/v1/states/${code.toLowerCase()}/h30b-excluded-prescribing-partd.csv`}
+                  className="text-blue-600 hover:underline"
+                >
+                  h30b Part&nbsp;D
+                </a>
+                .
+              </p>
+            </div>
+
+            {/* Finding 3 — NPPES-deactivated × billing */}
+            <div className="bg-rose-50 border border-rose-200 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-rose-800 mb-2">
+                MMIS reconciliation queue · closed identifiers
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                NPPES-deactivated NPIs in {state.name} still showing
+                billing activity
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                <strong>
+                  {claims.deactivated_billing.matches} NPPES-deactivated{' '}
+                  {state.name}-state NPIs
+                </strong>{' '}
+                billed at least one public claims source strictly after
+                their NPPES deactivation date.{' '}
+                {claims.deactivated_billing.multi_source_matches > 0 && (
+                  <>
+                    <strong>
+                      {claims.deactivated_billing.multi_source_matches}{' '}
+                      of them appear in multiple sources
+                    </strong>
+                    {' '}(Medicaid + Medicare = stronger signal).{' '}
+                  </>
+                )}
+                Post-deactivation totals: Medicaid{' '}
+                {fmtUsd(claims.deactivated_billing.medicaid_post_deactivation_paid)},
+                Medicare Part&nbsp;B{' '}
+                {fmtUsd(claims.deactivated_billing.partb_post_deactivation_paid)},
+                Medicare Part&nbsp;D{' '}
+                {fmtUsd(claims.deactivated_billing.partd_post_deactivation_drug_cost)}{' '}
+                drug cost. Each match is either a data-quality problem
+                (NPI reused or misattributed) or evidence of work being
+                done under a closed identifier &mdash; both are state PI
+                triage flags. Detail file:{' '}
+                <a
+                  href={`/api/v1/states/${code.toLowerCase()}/h31-deactivated-paid.csv`}
+                  className="text-blue-600 hover:underline"
+                >
+                  h31-deactivated-paid.csv
+                </a>
+                .
+              </p>
+            </div>
+
+            {/* Finding 4 — Open Payments (Sunshine Act) */}
+            <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-orange-800 mb-2">
+                Sunshine Act surface · industry payments to excluded providers
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Federally excluded {state.name} providers receiving
+                industry payments
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                <strong>
+                  {claims.industry_payments.full_window_matches} federally-
+                  excluded {state.name}-resident providers
+                </strong>{' '}
+                received pharmaceutical or device-manufacturer payments
+                in Program Year 2024 (
+                {fmtUsd(claims.industry_payments.full_window_paid)}{' '}
+                full-window;{' '}
+                {claims.industry_payments.strict_post_exclusion_matches}{' '}
+                strictly post-exclusion at{' '}
+                {fmtUsd(claims.industry_payments.strict_post_paid)}).
+                The Sunshine Act surface is regulator territory for
+                HHS-OIG, FDA, and DEA &mdash; but a state PI office
+                citing this in a comprehensive-strategy submission is
+                naming a real federal gap. Detail file:{' '}
+                <a
+                  href={`/api/v1/states/${code.toLowerCase()}/h32-excluded-industry-payments.csv`}
+                  className="text-blue-600 hover:underline"
+                >
+                  h32-excluded-industry-payments.csv
+                </a>
+                .
+              </p>
+            </div>
+
+            {/* Finding 5 — Federal directory hygiene context (per-state) */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
+              <div className="text-xs font-bold uppercase tracking-wider text-blue-800 mb-2">
+                Directory hygiene context · for Element 3
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                The federal directory&apos;s coverage is excellent;
+                currency is where the failures live
+              </h3>
+              <p className="text-gray-700 text-sm leading-relaxed">
+                <strong>99.99984% of material Medicare Part&nbsp;B
+                billers nationally are present in the federal
                 directory</strong> (only 2 of 1.26M individual NPIs
-                absent). Coverage is excellent. What fails is
-                <em> currency</em> &mdash; keeping deactivated and
-                excluded providers off the list.
+                absent). What fails is <em>currency</em> &mdash; keeping
+                deactivated and excluded providers <em>off</em> the list.
                 {orgDupeRow && orgDupeRow.state_pct !== null && (
                   <>
                     {' '}
@@ -502,155 +653,27 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
                     duplicate rate is{' '}
                     <strong className="tabular-nums">
                       {orgDupeRow.state_pct.toFixed(1)}%
-                    </strong>{' '}
-                    ({orgDupeRow.state_numerator?.toLocaleString()} of{' '}
+                    </strong>
+                    {' '}({orgDupeRow.state_numerator?.toLocaleString()}{' '}
+                    of{' '}
                     {orgDupeRow.state_denominator?.toLocaleString()}{' '}
-                    organization rows). If you count organizations the
-                    naive way, the federal directory will overcount.
+                    organization rows in {state.name}).
                   </>
                 )}
                 {taxonomyRow && taxonomyRow.state_pct !== null && (
                   <>
                     {' '}
-                    NPI taxonomy correctness for {state.name} is{' '}
+                    NPI taxonomy correctness is{' '}
                     <strong className="tabular-nums">
                       {taxonomyRow.state_pct.toFixed(2)}%
-                    </strong>{' '}
-                    against the CMS Medicare crosswalk.
+                    </strong>
+                    {' '}against the CMS Medicare crosswalk.
                   </>
                 )}
               </p>
             </div>
 
-            {/* Finding 3: deactivated still billing (VA) */}
-            {hasVaCrossAudit && (
-              <div className="bg-rose-50 border border-rose-200 rounded-lg p-5">
-                <div className="text-xs font-bold uppercase tracking-wider text-rose-800 mb-2">
-                  MMIS reconciliation queue
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  3 of 1,495 {state.name}-state NPPES-deactivated NPIs
-                  still show billing activity
-                </h3>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  These are closed federal identifiers that continued to
-                  appear in Medicaid Provider Spending, Medicare
-                  Part&nbsp;B, or Medicare Part&nbsp;D after their NPPES
-                  deactivation date. Three is a small number nationally;
-                  for an MMIS reconciliation queue, each one is a
-                  discrete case to verify. Detail file (with NPI,
-                  deactivation date, billing month, federal source):{' '}
-                  <a
-                    href="/api/v1/states/va/h31-deactivated-paid.csv"
-                    className="text-blue-600 hover:underline"
-                  >
-                    h31-deactivated-paid.csv
-                  </a>
-                  .
-                </p>
-              </div>
-            )}
-
-            {/* Finding 4: ownership flags (VA) */}
-            {hasVaCrossAudit && (
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-5">
-                <div className="text-xs font-bold uppercase tracking-wider text-purple-800 mb-2">
-                  Ownership transparency · candidate flags
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  17 candidate-demographic matches between
-                  {' '}{state.name}-state facility owners and the OIG
-                  exclusion list
-                </h3>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  SNF, hospice, home-health, and hospital owners with
-                  name + facility-state matches against the OIG LEIE
-                  exclusion list. These are <strong>candidates that
-                  need human verification</strong> at the LEIE portal,
-                  not confirmed determinations &mdash; common-name
-                  collisions are real and the source file does not carry
-                  owner-NPI. The CMS Disclosure of Ownership Interim
-                  Final Rule (2023) expanded ownership transparency
-                  precisely to enable this kind of cross-check. Detail
-                  file:{' '}
-                  <a
-                    href="/api/v1/states/va/h35-nh-ownership-flags.csv"
-                    className="text-blue-600 hover:underline"
-                  >
-                    h35-nh-ownership-flags.csv
-                  </a>
-                  .
-                </p>
-              </div>
-            )}
-
-            {/* Finding 5: Sunshine Act leak (universal) */}
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
-              <div className="text-xs font-bold uppercase tracking-wider text-orange-800 mb-2">
-                Sunshine Act surface · still leaking
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                198 of 8,619 federally-excluded providers nationally
-                received industry payments strictly post-exclusion
-              </h3>
-              <p className="text-gray-700 text-sm leading-relaxed">
-                In Program Year 2024, $167K in industry payments
-                (pharmaceutical and device transfers) reached providers
-                whose exclusion had already taken effect. The Sunshine
-                Act surface is leaking even when the Medicare/Medicaid
-                payment gates are holding. This is regulator territory
-                for HHS-OIG, FDA, and DEA &mdash; but a state PI office
-                citing this in a comprehensive-strategy submission is
-                naming a real federal gap.
-                {hasVaCrossAudit && (
-                  <>
-                    {' '}
-                    2 of those 198 are {state.name}-resident. Detail
-                    file:{' '}
-                    <a
-                      href="/api/v1/states/va/h32-excluded-industry-payments-va.csv"
-                      className="text-blue-600 hover:underline"
-                    >
-                      h32-excluded-industry-payments-va.csv
-                    </a>
-                    .
-                  </>
-                )}
-              </p>
-            </div>
-
-            {/* Finding 6: opioid prescribers (VA only) */}
-            {hasVaCrossAudit && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-5">
-                <div className="text-xs font-bold uppercase tracking-wider text-red-800 mb-2">
-                  Opioid prescriber subset · DEA-coordination signal
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  6 of 10 {state.name}-cohort Medicare Part&nbsp;D
-                  prescribers wrote opioid prescriptions
-                </h3>
-                <p className="text-gray-700 text-sm leading-relaxed">
-                  10 of the 125 federally-excluded {state.name}{' '}
-                  providers prescribed Medicare Part&nbsp;D in CY 2023
-                  (full-window, including pre-exclusion). 6 of them were
-                  opioid prescribers. The 21st Century Cures Act and
-                  2018 SUPPORT Act extended controlled-substance
-                  enforcement to specifically cover Medicaid/Medicare
-                  prescribers; this subset feeds directly into the DEA
-                  Opioid Coordination queue and the federal
-                  controlled-substance referral path. Detail file:{' '}
-                  <a
-                    href="/api/v1/states/va/h30b-excluded-prescribing-partd.csv"
-                    className="text-blue-600 hover:underline"
-                  >
-                    h30b-excluded-prescribing-partd.csv
-                  </a>
-                  .
-                </p>
-              </div>
-            )}
-
-            {/* Universal: compounding-signal pattern */}
+            {/* Triage pattern (universal) */}
             <div className="bg-slate-100 border border-slate-300 rounded-lg p-5">
               <div className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
                 Triage pattern · for your PI team
@@ -660,47 +683,18 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
                 converge on real cases
               </h3>
               <p className="text-gray-700 text-sm leading-relaxed">
-                A few names in the {hasVaCrossAudit ? state.name + ' ' : ''}
-                cohort appear in five independent public-data joins at
-                once (exclusion list + Medicaid spending + Medicare
-                Part&nbsp;B + Part&nbsp;D + payer-directory presence).
-                Each individual signal is a low-priority flag; the
-                cross-product is the high-priority triage target. AINPI
-                produces the file so your PI team can read the
-                multi-source matches first, single-source matches
-                second. The CSV columns make the multi-source pattern
-                obvious at a glance.
+                The strongest signals in {state.name}&apos;s cohort are
+                the NPIs that appear in multiple files at once
+                (exclusion list + Medicaid spending + Medicare
+                Part&nbsp;B/D billing). AINPI produces the files; your
+                PI team reads the multi-source matches first,
+                single-source matches second. Pre-exclusion billing
+                reflects work the provider was authorized to do at the
+                time &mdash; the regulatorily significant subset is the
+                strict-post-exclusion column in each file.
               </p>
             </div>
           </div>
-
-          {/* CTA for non-VA states */}
-          {!hasVaCrossAudit && (
-            <div className="mt-8 p-5 bg-blue-50 border border-blue-200 rounded-lg">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Want the state-specific claims-side cross-audit for{' '}
-                {state.name}?
-              </h3>
-              <p className="text-gray-700 text-sm leading-relaxed mb-3">
-                Each of the five federal claims/payment datasets above
-                can be cross-walked against {state.name}&apos;s cohort
-                of {cohortCount} federally-excluded providers. The
-                output is per-NPI rows, primary-source verification
-                URLs, and exclusion-date-aware filtering (strict
-                post-exclusion vs full-window). Same file shape as the
-                VA pilot. Email{' '}
-                <a
-                  href="mailto:gene@fhiriq.com?subject=AINPI%20cross-audit%20for%20{state.name}"
-                  className="text-blue-700 hover:underline font-medium"
-                >
-                  gene@fhiriq.com
-                </a>
-                {' '}with the dataset(s) you want and the file is back
-                in your inbox within a week. No cost for state Medicaid
-                agencies.
-              </p>
-            </div>
-          )}
 
           {/* Source / reproducibility note */}
           <div className="mt-8 pt-6 border-t border-gray-200 text-xs text-gray-500">

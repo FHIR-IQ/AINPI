@@ -1,21 +1,21 @@
 {
   "slug": "excluded-billing-medicare-partb",
-  "title": "Federally excluded VA-resident NPIs billing Medicare Part B (CY 2023)",
+  "title": "Federally excluded NPIs billing Medicare Part B (CY 2023, all states)",
   "hypotheses": [
     "H30",
     "H30a"
   ],
   "status": "published",
   "release_date": "CY 2023 (RY2025 P05)",
-  "generated_at": "2026-05-14T22:35:02+00:00",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "bcf9b81",
-  "headline": "8 of 125 currently-active federally-excluded VA-resident NPIs billed Medicare Part B in CY 2023 (full-window total paid $337,191 on 10,586 services). Of those 8 matches, **0 were billing STRICTLY POST-EXCLUSION** (LEIE or SAM exclusion-effective year before 2023), with $0 paid on 0 services. The strict-post-exclusion subset is the regulatorily significant signal under 42 USC \u00a7 1320a-7 (LEIE binding across all federal programs) \u2014 pre-exclusion billing reflects work the provider was authorized to do at the time.",
-  "numerator": 0,
-  "denominator": 125,
-  "numerator_full_window": 8,
-  "numerator_note": "Numerator = NPIs billing Part B in CY 2023 with LEIE/SAM exclusion-effective year < 2023 (strict post-exclusion). Full-window numerator (any 2023 billing, regardless of when exclusion took effect) = 8.",
-  "denominator_note": "VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state). The Part B file is itself national; VA-cohort matches reflect billing anywhere in the US, not VA-specific billing.",
+  "generated_at": "2026-05-17T15:33:59+00:00",
+  "methodology_version": "0.6.1-draft",
+  "commit_sha": "334099e",
+  "headline": "206 of 6,840 currently-active federally-excluded NPIs (across 52 state cohorts) billed Medicare Part B in CY 2023 (full-window total paid $30,770,165 on 635,144 services). Of those, **5 were billing STRICTLY POST-EXCLUSION** (LEIE or SAM exclusion-effective year before 2023), with $2,022,667 paid on 116,552 services. The strict-post-exclusion subset is the regulatorily significant signal under 42 USC \u00a7 1320a-7 \u2014 pre-exclusion billing reflects work the provider was authorized to do at the time.",
+  "numerator": 5,
+  "denominator": 6840,
+  "numerator_full_window": 206,
+  "numerator_note": "Numerator = NPIs billing Part B in CY 2023 with LEIE/SAM exclusion-effective year < 2023 (strict post-exclusion). Full-window numerator (any 2023 billing) = 206.",
+  "denominator_note": "Federally-excluded cohort across all 52 state slices (6,840 unique NPIs; active LEIE or SAM; H23 score >= 1.5; state per NPPES practice state in the NDH practitioner table). Per-state CSVs at /api/v1/states/<state>/h30a-excluded-billing-partb.csv.",
   "data_source_release": "CY 2023 (RY2025 P05)",
   "data_source_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners",
   "chart": {
@@ -23,14 +23,317 @@
     "unit": "count",
     "data": [
       {
-        "label": "VA cohort NPIs billing Part B",
-        "value": 8
+        "label": "All federally-excluded NPIs billing Part B (full-window)",
+        "value": 206
       },
       {
-        "label": "VA cohort NPIs not billing Part B",
-        "value": 117
+        "label": "Strictly post-exclusion subset",
+        "value": 5
       }
     ]
   },
-  "notes": "Per-state CSV at /api/v1/states/va/h30a-excluded-billing-partb.csv carries one row per matched NPI with paid + allowed + services + beneficiaries + provider type + exclusion source. Same VA-pilot operational courtesy as H29: DMAS gets 5-business-day review before each refresh \u2014 operational, not a publication gate."
+  "per_state": [
+    {
+      "state": "CA",
+      "matches_full_window": 30,
+      "matches_strict_post": 0,
+      "paid_full_window": 3939979.2,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "NY",
+      "matches_full_window": 17,
+      "matches_strict_post": 0,
+      "paid_full_window": 6142397.68,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "FL",
+      "matches_full_window": 12,
+      "matches_strict_post": 0,
+      "paid_full_window": 905258.66,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "TX",
+      "matches_full_window": 12,
+      "matches_strict_post": 1,
+      "paid_full_window": 4694281.77,
+      "paid_strict_post": 1862190.5
+    },
+    {
+      "state": "PA",
+      "matches_full_window": 11,
+      "matches_strict_post": 1,
+      "paid_full_window": 1067545.26,
+      "paid_strict_post": 14699.59
+    },
+    {
+      "state": "MO",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "paid_full_window": 2866584.07,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "NJ",
+      "matches_full_window": 8,
+      "matches_strict_post": 1,
+      "paid_full_window": 389927.79,
+      "paid_strict_post": 122698.62
+    },
+    {
+      "state": "VA",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "paid_full_window": 337190.78,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "IL",
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "paid_full_window": 390689.13,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "TN",
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "paid_full_window": 99396.16,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "OH",
+      "matches_full_window": 6,
+      "matches_strict_post": 1,
+      "paid_full_window": 58490.23,
+      "paid_strict_post": 4928.59
+    },
+    {
+      "state": "GA",
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 480753.63,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "MS",
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 36583.21,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "NC",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 637630.4,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "MI",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 278622.82,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "LA",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "paid_full_window": 65879.22,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "OK",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "paid_full_window": 4922833.27,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "KY",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "paid_full_window": 352672.48,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "AZ",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 574061.21,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "OR",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 69673.72,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "IA",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 143506.98,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "AL",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 15022.94,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "WI",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 67486.16,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "CT",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 51057.84,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "KS",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 10888.89,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "ME",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 30630.38,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "PR",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 4843.49,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "CO",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 59565.32,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "WA",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 9722.23,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "MD",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 121738.23,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "MA",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 30871.36,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "AR",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 125383.8,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "NV",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 701128.54,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "SC",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 33953.36,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "UT",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 5156.28,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "ID",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 4630.55,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "NE",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 1379.06,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "MN",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 2735.47,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "WV",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 21000.37,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "DE",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 802864.88,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "IN",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 195249.83,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "NM",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 2748.72,
+      "paid_strict_post": 0
+    },
+    {
+      "state": "RI",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "paid_full_window": 18149.32,
+      "paid_strict_post": 18149.32
+    }
+  ],
+  "notes": "Per-state CSV at /api/v1/states/<state>/h30a-excluded-billing-partb.csv carries one row per matched NPI with paid + allowed + services + beneficiaries + provider type + exclusion source + post-exclusion flag. Source CSV streamed once and partitioned across all state cohorts in memory \u2014 same I/O cost as the original VA-only run."
 }
