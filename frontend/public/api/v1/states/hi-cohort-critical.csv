@@ -1,0 +1,18 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1457332983,"KOSMIDES, GEORGE",HI,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2013-05-20,2013-05-20,2018-03-13,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1457332983
+1043470370,"YANG, SUNG",HI,3.0,critical,oig_excluded|sam_excluded,2021-08-19,2021-08-19,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1043470370
+1073645545,"OKUBO, GARRETT",HI,3.0,critical,oig_excluded|sam_excluded,2020-02-20,2019-04-02,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1073645545
+1508955055,"ARRINGTON, CLIF",HI,3.0,critical,oig_excluded|sam_excluded,2019-08-20,2019-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1508955055
+1588691554,"PERRINO, JOSEPH",HI,3.0,critical,oig_excluded|sam_excluded,2014-02-20,2014-02-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1588691554
+1801000518,"SPEAR, HAROLD",HI,3.0,critical,oig_excluded|sam_excluded,2011-04-20,2011-04-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1801000518
+1396799201,"WOLF, ROBERT",HI,2.3,critical,oig_excluded|nppes_deactivated,2018-11-20,,2024-07-26,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1396799201
+1497874705,"BOULANGE, CHRIS",HI,2.3,critical,oig_excluded|nppes_deactivated,2025-04-20,,2025-06-19,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1497874705
+1306919956,"LIPETZ, MARK",HI,1.5,critical,oig_excluded,2020-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1306919956
+1326272246,"PARAMESWARA, VINAY",HI,1.5,critical,oig_excluded,2024-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1326272246
+1407909401,"ALLEN, TERRY",HI,1.5,critical,oig_excluded,2020-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1407909401
+1457590796,"MCDERMOTT, JOANN",HI,1.5,critical,oig_excluded,2024-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1457590796
+1497836498,"PUANA, RUDOLPH",HI,1.5,critical,oig_excluded,2022-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1497836498
+1518102250,"KAHALE, DESRAE",HI,1.5,critical,oig_excluded,2019-04-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1518102250
+1568499960,"HARRIS, SHEILA",HI,1.5,critical,oig_excluded,2020-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1568499960
+1730123365,"KAIWI JR, PAUL",HI,1.5,critical,oig_excluded,2023-06-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1730123365
+1760620652,"ODA, AARIES",HI,1.5,critical,oig_excluded,2025-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1760620652

@@ -45,16 +45,35 @@ def main() -> None:
 
     states = []
     for p in sorted(states_dir.glob("*.json")):
+        # Skip non-state JSON in the states/ directory (e.g.
+        # va-briefing-summary.json). A 2-letter stem is the only thing
+        # that maps to /states/<code> and /for-state-medicaid/<code>.
+        if len(p.stem) != 2:
+            continue
         try:
             data = json.loads(p.read_text())
         except Exception:
             continue
+        code_lower = p.stem
+        # Per-state cohort CSV — only populated for states with ≥1 critical NPI
+        cohort_csv = states_dir / f"{code_lower}-cohort-critical.csv"
+        cohort_count = 0
+        if cohort_csv.exists():
+            # Lightweight count: total lines minus header
+            try:
+                cohort_count = sum(1 for _ in cohort_csv.open("r")) - 1
+                cohort_count = max(0, cohort_count)
+            except Exception:
+                cohort_count = 0
         states.append({
-            "state": data.get("state") or p.stem.upper(),
+            "state": data.get("state") or code_lower.upper(),
             "state_name": data.get("state_name"),
             "release_date": data.get("release_date"),
             "url": f"{SITE}/api/v1/states/{p.name}",
-            "html_url": f"{SITE}/states/{p.stem}",
+            "html_url": f"{SITE}/states/{code_lower}",
+            "cmo_html_url": f"{SITE}/for-state-medicaid/{code_lower}",
+            "cohort_csv_url": f"{SITE}/api/v1/states/{code_lower}-cohort-critical.csv" if cohort_csv.exists() else None,
+            "cohort_critical_count": cohort_count,
             "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State",
         })
 

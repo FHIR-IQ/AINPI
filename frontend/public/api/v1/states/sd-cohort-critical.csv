@@ -1,0 +1,15 @@
+npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactivation_date,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1366518458,"ROTH, THOMAS",SD,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2017-09-20,2017-09-20,2018-03-07,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366518458
+1508174830,"LARSON, DORRANCE",SD,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2016-02-18,2016-02-18,2022-11-17,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1508174830
+1891900619,"MARTELL, CHRISTOPHER",SD,3.8,critical,oig_excluded|sam_excluded|nppes_deactivated,2010-06-17,2010-06-17,2018-07-25,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1891900619
+1073735759,"FELDMAN, CARY",SD,3.0,critical,oig_excluded|sam_excluded,2013-08-20,2013-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1073735759
+1194706754,"ASFORA, WILSON",SD,3.0,critical,oig_excluded|sam_excluded,2021-04-30,2021-04-30,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194706754
+1245425974,"ANDRE, KENT",SD,3.0,critical,oig_excluded|sam_excluded,2017-10-19,2017-10-19,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245425974
+1376638684,"HITTLE, REED",SD,3.0,critical,oig_excluded|sam_excluded,2011-03-20,2011-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376638684
+1528134715,"NOLAND, TIFFINEY",SD,3.0,critical,oig_excluded|sam_excluded,2012-02-20,2012-02-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1528134715
+1720159916,"SABIDO, BENJAMIN",SD,3.0,critical,oig_excluded|sam_excluded,2015-01-20,2015-01-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1720159916
+1770593030,"NILLS, SHAWN",SD,3.0,critical,oig_excluded|sam_excluded,2015-10-20,2015-11-30,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1770593030
+1972720829,"MCCONKEY, JAMES",SD,3.0,critical,oig_excluded|sam_excluded,2011-12-20,2011-12-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1972720829
+1487621579,"WEBER, STANLEY",SD,1.5,critical,oig_excluded,2019-05-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1487621579
+1508969569,"CARSTENSEN, CODY",SD,1.5,critical,oig_excluded,2024-03-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1508969569
+1740376102,"PERRY, JON",SD,1.5,critical,oig_excluded,2022-11-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1740376102
