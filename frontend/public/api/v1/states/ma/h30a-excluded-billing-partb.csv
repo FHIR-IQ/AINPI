@@ -1,0 +1,3 @@
+npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1942523451,"DIMEDIA, RACHELLE",MA,MA,17385.13,21822.35,165,162,Certified Registered Nurse Anesthetist (CRNA),oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942523451
+1710190590,"SAWICKI, SORAYA",MA,CT,13486.23,17676.44,154,12,Licensed Clinical Social Worker,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1710190590

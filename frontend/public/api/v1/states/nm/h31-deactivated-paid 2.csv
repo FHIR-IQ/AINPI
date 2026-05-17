@@ -1,0 +1,3 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1679060099,"EL ALAYLI, AHMAD",NM,2018-11-28,true,medicaid|medicare_partb|medicare_partd,454144.27,11990,2021-08,2024-12,465868.65,21485,1241192.81,208,4931.55,https://npiregistry.cms.hhs.gov/provider-view/1679060099
+1063846863,"MARQUEZ, APRIL",NM,2018-01-10,true,medicaid,36576.51,1891,2022-08,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1063846863

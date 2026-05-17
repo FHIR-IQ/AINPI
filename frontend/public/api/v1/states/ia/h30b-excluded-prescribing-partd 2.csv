@@ -1,0 +1,9 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1194712976,"PIPER, SCOTT",IA,IA,228248.56,1385,66,32,908.46,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194712976
+1083654669,"SAMUELS, GARFIELD",IA,VA,194656.54,1347,137,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1083654669
+1023642162,"VANDER LINDEN, BRYAN",IA,IA,87405.63,340,257,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1023642162
+1568690014,"SHAKNOVSKY, THOMAS",IA,FL,11371.59,452,182,143,662.5,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1568690014
+1477525038,"LINDAMAN, LYNN",IA,IA,5081.96,27,12,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1477525038
+1477732659,"JAYASWAL, GAUTAM",IA,MO,1752.89,93,59,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1477732659
+1841341567,"WEBER, CALVIN",IA,IA,159.55,29,15,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1841341567
+1144393034,"THOMAS, PHELAN",IA,IA,156.72,29,13,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144393034

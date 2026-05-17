@@ -1,4 +1,4 @@
-"""H32 — Federally excluded NPIs receiving industry payments (Open Payments).
+"""H32 — Federally excluded NPIs receiving industry payments (Open Payments, all states).
 
 Pharmaceutical and device manufacturers report payments to physicians
 and teaching hospitals under the Sunshine Act. If a manufacturer is
@@ -15,14 +15,15 @@ Source file:
     Aggregated 2024 General Payments grouped by Covered Recipient and
     Nature of Payment Type (~98 MB CSV, ~one row per recipient × payment type).
 
-Cohort: full 8,619-NPI active LEIE ∪ SAM exclusion set (queried from
-BigQuery, same as H33). National finding; VA-resident subset surfaced
-as the per-state slice.
+Cohort: full active LEIE ∪ SAM exclusion set (queried from BigQuery, single
+scan whether one state or all). Per-NPI matches are partitioned by NDH
+practice state and written to per-state CSVs in one pass.
 
 Writes:
     frontend/public/api/v1/findings/excluded-receiving-industry-payments.json
     frontend/public/api/v1/findings/excluded-receiving-industry-payments-detail.json
-    frontend/public/api/v1/states/va/h32-excluded-industry-payments-va.csv
+    frontend/public/api/v1/findings/excluded-receiving-industry-payments-detail.csv
+    frontend/public/api/v1/states/<state>/h32-excluded-industry-payments.csv  (per-state, all states)
 """
 from __future__ import annotations
 import csv
@@ -34,7 +35,7 @@ from datetime import datetime, timezone
 
 from google.cloud import bigquery
 
-METHODOLOGY_VERSION = "0.6.0-draft"
+METHODOLOGY_VERSION = "0.6.1-draft"
 DATA_SOURCE_RELEASE = "PGYR2024 P01232026 (released 2026-01-10)"
 PROGRAM_YEAR = 2024
 PROJECT = "thematic-fort-453901-t7"
@@ -182,20 +183,24 @@ def main() -> None:
 
     rows.sort(key=lambda r: r["industry_payments_2024_total"], reverse=True)
     print(f"\nTotal matched: {len(rows)}")
-    va_rows = [r for r in rows if r["ndh_state"] == "VA"]
     strict_post = [r for r in rows if r["post_exclusion_pgyr2024"] == "yes"]
-    strict_va = [r for r in va_rows if r["post_exclusion_pgyr2024"] == "yes"]
     print(f"  of which strictly POST-EXCLUSION (excl year < {PROGRAM_YEAR}): {len(strict_post)}")
-    print(f"  of which VA-state per NDH: {len(va_rows)}")
-    print(f"  of which VA + strict post-exclusion: {len(strict_va)}")
     total_paid = sum(r["industry_payments_2024_total"] for r in rows)
     total_paid_strict = sum(r["industry_payments_2024_total"] for r in strict_post)
-    total_va_paid = sum(r["industry_payments_2024_total"] for r in va_rows)
     print(f"Total {PROGRAM_YEAR} industry payments to LEIE/SAM-excluded NPIs: ${total_paid:,.0f}")
     print(f"  strict post-exclusion subset: ${total_paid_strict:,.0f}")
-    print(f"  to VA-resident: ${total_va_paid:,.0f}")
 
-    # CSV writes
+    # Partition matches across all states with NDH practice-state
+    # attribution. NPPES (via NDH) allows international addresses, so the
+    # length-2 string is not sufficient — must be a valid US jurisdiction.
+    from analysis.claims_sources._cohorts import is_valid_us_state
+    from collections import defaultdict as _dd
+    per_state: dict[str, list[dict]] = _dd(list)
+    for r in rows:
+        st = (r.get("ndh_state") or "").strip().upper()
+        if is_valid_us_state(st):
+            per_state[st].append(r)
+
     fields = [
         "npi", "name", "ndh_state", "recipient_type", "exclusion_source",
         "leie_excldate", "sam_active_date", "earliest_exclusion_year",
@@ -203,15 +208,29 @@ def main() -> None:
         "industry_payments_2024_total", "industry_payments_2024_transactions",
         "top_nature_codes", "leie_lookup_url", "sam_lookup_url", "nppes_lookup_url",
     ]
-    out_dir = STATES_DIR / "va"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    va_csv = out_dir / "h32-excluded-industry-payments-va.csv"
-    with open(va_csv, "w", newline="") as fh:
+
+    # Per-state CSVs (all states, one pass over the result set)
+    for st, st_rows in per_state.items():
+        st_dir = STATES_DIR / st.lower()
+        st_dir.mkdir(parents=True, exist_ok=True)
+        out_path = st_dir / "h32-excluded-industry-payments.csv"
+        with open(out_path, "w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=fields)
+            w.writeheader()
+            for r in st_rows:
+                w.writerow({k: r.get(k, "") for k in fields})
+
+    # Back-compat: also keep the legacy va-named slice for any external
+    # consumer that bookmarked it before the all-states refactor.
+    va_rows = per_state.get("VA", [])
+    legacy_va_path = STATES_DIR / "va" / "h32-excluded-industry-payments-va.csv"
+    legacy_va_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(legacy_va_path, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=fields)
         w.writeheader()
         for r in va_rows:
             w.writerow({k: r.get(k, "") for k in fields})
-    print(f"Wrote VA: {va_csv} ({len(va_rows)} rows)")
+    print(f"Wrote {len(per_state)} per-state CSVs + legacy VA-named file ({len(va_rows)} VA rows)")
 
     national_csv = FINDINGS_DIR / "excluded-receiving-industry-payments-detail.csv"
     with open(national_csv, "w", newline="") as fh:
@@ -220,6 +239,9 @@ def main() -> None:
         for r in rows:
             w.writerow({k: r.get(k, "") for k in fields})
     print(f"Wrote national: {national_csv} ({len(rows)} rows)")
+
+    strict_va = [r for r in va_rows if r["post_exclusion_pgyr2024"] == "yes"]
+    total_va_paid = sum(r["industry_payments_2024_total"] for r in va_rows)
 
     headline = (
         f"{len(rows)} of {len(excl):,} currently-active LEIE / SAM-excluded NPIs "
@@ -265,6 +287,14 @@ def main() -> None:
                 {"label": "of which VA-resident", "value": len(va_rows)},
             ],
         },
+        "per_state": sorted(
+            ({"state": s, "matches_full_window": len(rs),
+              "matches_strict_post": sum(1 for r in rs if r["post_exclusion_pgyr2024"] == "yes"),
+              "total_paid_full_window": round(sum(r["industry_payments_2024_total"] for r in rs), 2),
+              "total_paid_strict_post": round(sum(r["industry_payments_2024_total"] for r in rs if r["post_exclusion_pgyr2024"] == "yes"), 2)}
+             for s, rs in per_state.items()),
+            key=lambda d: -d["matches_full_window"],
+        ),
         "notes": (
             "Aggregate file (PBLCTN_SMRY_BY_CR_BY_NTR_OF_PYMT) used rather than "
             "the line-detail file (~10M rows) — the aggregate gives per-NPI × "
@@ -273,10 +303,11 @@ def main() -> None:
             "manufacturers are required to report by the Sunshine Act / "
             "Physician Payments Sunshine Act (42 USC § 1320a-7h). AINPI's "
             "contribution is the systematic cross-join with the LEIE ∪ SAM "
-            "active exclusion set, which has not been published. VA-state "
-            "slice at /api/v1/states/va/h32-excluded-industry-payments-va.csv. "
+            "active exclusion set, which has not been published. Per-state "
+            "slices at /api/v1/states/<state>/h32-excluded-industry-payments.csv. "
             "Full national list at /api/v1/findings/excluded-receiving-"
-            "industry-payments-detail.csv."
+            "industry-payments-detail.csv. Source CSV streamed once and "
+            "partitioned across NDH practice states in memory."
         ),
     }
 

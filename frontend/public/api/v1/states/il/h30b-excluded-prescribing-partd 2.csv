@@ -1,0 +1,14 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1740238757,"MAHESHWARI, HIRALAL",IL,IL,2888025.34,4589,557,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1740238757
+1669429908,"BEE, LEE",IL,MO,502393.0,5307,476,52,1311.8,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1669429908
+1184648248,"NAVAKAS, EDWARD",IL,IL,20164.04,426,140,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1184648248
+1346248481,"GREENE, PHILLIP",IL,IL,11115.18,203,18,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1346248481
+1144242090,"ANUKWU, LINUS",IL,IL,10376.39,155,24,,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144242090
+1750313177,"TOH, BEN",IL,IL,9056.86,127,67,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1750313177
+1427164722,"GREAGER, JOHN",IL,IL,6550.9,133,25,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1427164722
+1821047218,"ALI, ASIM",IL,MO,3239.59,31,19,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1821047218
+1851518617,"MCMILLER, WILLIAM",IL,IL,2196.31,51,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1851518617
+1205920659,"CALISOFF, RANDY",IL,IL,1187.16,38,14,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1205920659
+1366676090,"WEINSTEIN, BRIAN",IL,IL,561.83,26,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1366676090
+1760597140,"BRASCH, JOEL",IL,IL,202.41,13,,0,,sam_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1760597140
+1821134495,"AHMED, MAKIN",IL,IL,133.87,18,,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1821134495

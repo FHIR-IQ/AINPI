@@ -1,21 +1,21 @@
 {
   "slug": "excluded-prescribing-medicare-partd",
-  "title": "Federally excluded VA-resident NPIs prescribing Medicare Part D (CY 2023)",
+  "title": "Federally excluded NPIs prescribing Medicare Part D (CY 2023, all states)",
   "hypotheses": [
     "H30",
     "H30b"
   ],
   "status": "published",
   "release_date": "CY 2023 (RY2025 P04)",
-  "generated_at": "2026-05-14T22:36:26+00:00",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "bcf9b81",
-  "headline": "10 of 125 currently-active federally-excluded VA-resident NPIs prescribed Medicare Part D in CY 2023 (full-window drug cost $1,363,000; 7 of 10 were opioid prescribers with 3,271 opioid claims). Of those 10 matches, **0 were prescribing STRICTLY POST-EXCLUSION** (LEIE or SAM exclusion-effective year before 2023), with $0 drug cost and 0 opioid prescribers writing 0 opioid claims. The strict-post-exclusion subset is the regulatorily significant signal \u2014 pre-exclusion prescribing was authorized at the time.",
-  "numerator": 0,
-  "denominator": 125,
-  "numerator_full_window": 10,
-  "numerator_note": "Numerator = NPIs prescribing Part D in CY 2023 with LEIE/SAM exclusion-effective year < 2023 (strict post-exclusion). Full-window numerator = 10.",
-  "denominator_note": "VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state). The Part D file is itself national; cohort matches reflect prescribing anywhere in the US.",
+  "generated_at": "2026-05-17T15:34:08+00:00",
+  "methodology_version": "0.6.1-draft",
+  "commit_sha": "334099e",
+  "headline": "416 of 6,840 currently-active federally-excluded NPIs (across 52 state cohorts) prescribed Medicare Part D in CY 2023 (full-window drug cost $119,792,842; 138 of 416 were opioid prescribers with 65,309 opioid claims). Of those, **6 were prescribing STRICTLY POST-EXCLUSION** (LEIE or SAM exclusion-effective year before 2023), with $8,662,186 drug cost and 2 opioid prescribers writing 137 opioid claims. The strict-post-exclusion subset is the regulatorily significant signal \u2014 pre-exclusion prescribing was authorized at the time.",
+  "numerator": 6,
+  "denominator": 6840,
+  "numerator_full_window": 416,
+  "numerator_note": "Numerator = NPIs prescribing Part D in CY 2023 with LEIE/SAM exclusion-effective year < 2023 (strict post-exclusion). Full-window numerator = 416.",
+  "denominator_note": "Federally-excluded cohort across all 52 state slices (6,840 unique NPIs; active LEIE or SAM; score >= 1.5).",
   "data_source_release": "CY 2023 (RY2025 P04)",
   "data_source_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-part-d-prescribers",
   "chart": {
@@ -23,14 +23,349 @@
     "unit": "count",
     "data": [
       {
-        "label": "VA cohort prescribing Part D",
-        "value": 10
+        "label": "All cohorts prescribing Part D (full-window)",
+        "value": 416
       },
       {
-        "label": "of which prescribed opioids",
-        "value": 7
+        "label": "Strict post-exclusion",
+        "value": 6
+      },
+      {
+        "label": "Opioid prescribers (full-window)",
+        "value": 138
       }
     ]
   },
-  "notes": "Per-state CSV at /api/v1/states/va/h30b-excluded-prescribing-partd.csv with drug cost + claims + beneficiaries + opioid metrics + exclusion source. Opioid prescribing by federally-excluded NPIs is a particularly elevated signal because the 21st Century Cures Act and 2018 SUPPORT Act extended controlled-substance enforcement to specifically cover Medicaid/Medicare prescribers; this should feed directly into state PI + DEA referral queues."
+  "per_state": [
+    {
+      "state": "CA",
+      "matches_full_window": 74,
+      "matches_strict_post": 1,
+      "drug_cost_full_window": 19241829.17,
+      "opioid_prescribers_full_window": 25
+    },
+    {
+      "state": "TX",
+      "matches_full_window": 32,
+      "matches_strict_post": 1,
+      "drug_cost_full_window": 21900926.31,
+      "opioid_prescribers_full_window": 15
+    },
+    {
+      "state": "FL",
+      "matches_full_window": 28,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 2038823.18,
+      "opioid_prescribers_full_window": 9
+    },
+    {
+      "state": "PA",
+      "matches_full_window": 22,
+      "matches_strict_post": 1,
+      "drug_cost_full_window": 5675400.43,
+      "opioid_prescribers_full_window": 6
+    },
+    {
+      "state": "NY",
+      "matches_full_window": 20,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 13310069.83,
+      "opioid_prescribers_full_window": 5
+    },
+    {
+      "state": "OH",
+      "matches_full_window": 16,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 1190681.66,
+      "opioid_prescribers_full_window": 3
+    },
+    {
+      "state": "TN",
+      "matches_full_window": 16,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 4384692.25,
+      "opioid_prescribers_full_window": 5
+    },
+    {
+      "state": "MI",
+      "matches_full_window": 14,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 3297029.02,
+      "opioid_prescribers_full_window": 4
+    },
+    {
+      "state": "IL",
+      "matches_full_window": 13,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 3455202.88,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "NJ",
+      "matches_full_window": 12,
+      "matches_strict_post": 2,
+      "drug_cost_full_window": 1280851.3,
+      "opioid_prescribers_full_window": 6
+    },
+    {
+      "state": "GA",
+      "matches_full_window": 10,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 1871896.91,
+      "opioid_prescribers_full_window": 5
+    },
+    {
+      "state": "MO",
+      "matches_full_window": 10,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 4199981.65,
+      "opioid_prescribers_full_window": 4
+    },
+    {
+      "state": "VA",
+      "matches_full_window": 10,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 1363000.37,
+      "opioid_prescribers_full_window": 7
+    },
+    {
+      "state": "NC",
+      "matches_full_window": 9,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 2015191.04,
+      "opioid_prescribers_full_window": 4
+    },
+    {
+      "state": "KY",
+      "matches_full_window": 9,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 6918676.64,
+      "opioid_prescribers_full_window": 3
+    },
+    {
+      "state": "LA",
+      "matches_full_window": 9,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 3024210.19,
+      "opioid_prescribers_full_window": 4
+    },
+    {
+      "state": "IA",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 528833.44,
+      "opioid_prescribers_full_window": 2
+    },
+    {
+      "state": "CO",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 352788.7,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "AL",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 267680.75,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "MS",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 259900.21,
+      "opioid_prescribers_full_window": 2
+    },
+    {
+      "state": "WA",
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 421617.33,
+      "opioid_prescribers_full_window": 2
+    },
+    {
+      "state": "MD",
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 2979401.5,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "CT",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 333391.72,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "OR",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 762447.49,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "NV",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 800843.2,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "PR",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 6494859.12,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "AZ",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 151061.34,
+      "opioid_prescribers_full_window": 2
+    },
+    {
+      "state": "ME",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 133240.13,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "IN",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 768771.71,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "AR",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 360739.56,
+      "opioid_prescribers_full_window": 2
+    },
+    {
+      "state": "MN",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 51732.88,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "OK",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 7665834.56,
+      "opioid_prescribers_full_window": 2
+    },
+    {
+      "state": "WV",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 724474.18,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "WI",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 161062.8,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "MA",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 662.55,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "NH",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 77918.66,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "NE",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 1435.04,
+      "opioid_prescribers_full_window": 0
+    },
+    {
+      "state": "NM",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 219196.22,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "SC",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 865992.39,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "AK",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 5585.89,
+      "opioid_prescribers_full_window": 0
+    },
+    {
+      "state": "DC",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 5430.0,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "ID",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 38968.57,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "WY",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 76.69,
+      "opioid_prescribers_full_window": 0
+    },
+    {
+      "state": "HI",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 3980.67,
+      "opioid_prescribers_full_window": 1
+    },
+    {
+      "state": "MT",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 987.44,
+      "opioid_prescribers_full_window": 0
+    },
+    {
+      "state": "DE",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "drug_cost_full_window": 77651.54,
+      "opioid_prescribers_full_window": 0
+    },
+    {
+      "state": "RI",
+      "matches_full_window": 1,
+      "matches_strict_post": 1,
+      "drug_cost_full_window": 107813.17,
+      "opioid_prescribers_full_window": 1
+    }
+  ],
+  "notes": "Per-state CSV at /api/v1/states/<state>/h30b-excluded-prescribing-partd.csv carries drug cost + claims + beneficiaries + opioid metrics + exclusion source. Opioid prescribing by federally-excluded NPIs is a particularly elevated signal because the 21st Century Cures Act and 2018 SUPPORT Act extended controlled-substance enforcement to specifically cover Medicaid/Medicare prescribers; this should feed directly into state PI + DEA referral queues."
 }

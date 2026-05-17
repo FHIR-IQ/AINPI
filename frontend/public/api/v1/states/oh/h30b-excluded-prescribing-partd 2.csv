@@ -1,0 +1,17 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1619069739,"PAOLONE, VINCE",OH,OH,767341.77,6852,374,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1619069739
+1376723684,"FLOREA, ROBERT",OH,OH,185605.14,2479,152,72,1187.69,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376723684
+1356530380,"ARNOLD, STEVEN",OH,OH,124608.91,1862,36,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1356530380
+1487753695,"PANUTO, JOHN",OH,OH,38986.16,236,98,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1487753695
+1033111000,"JENKINS, OLIVER",OH,GA,20354.32,729,205,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033111000
+1518595073,"SAUNDERS, RUDEL",OH,OH,15169.71,206,26,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1518595073
+1144411471,"MARTIN, ANTHONY",OH,OH,10416.25,105,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144411471
+1477511939,"SUTTON, JEFFREY",OH,OH,9612.5,258,13,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1477511939
+1851353866,"WAHIB, SAMIR",OH,IN,5716.52,56,21,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1851353866
+1285829101,"ASHBY, ARLAN",OH,OH,4887.02,26,17,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1285829101
+1780768861,"WASHINGTON, WILLIAM",OH,WA,4087.12,128,15,100,2157.87,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1780768861
+1033472386,"AHMAD, MOHAMMED",OH,OH,2229.8,84,59,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033472386
+1184653214,"MUKHDOMI, GULAM",OH,OH,698.4,13,,,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1184653214
+1033177571,"GETACHEW, ESKENDER",OH,OH,483.96,13,,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033177571
+1992932941,"GROSS, IRINA",OH,OH,320.32,15,,0,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1992932941
+1295902484,"EMARA-JALLAQ, GEHAN",OH,OH,163.76,55,23,11,23.19,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1295902484

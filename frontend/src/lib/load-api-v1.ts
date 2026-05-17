@@ -128,3 +128,159 @@ function parseCsvLine(line: string): string[] {
   out.push(cur);
   return out;
 }
+
+/**
+ * Per-state claims-side cross-audit findings — read at build time from the
+ * per-state CSVs the analysis pipeline produces. Returns a summary object
+ * with counts and totals for each finding, plain-English ready for the
+ * CMO-facing page band.
+ */
+export interface StateClaimsAudit {
+  /** Medicaid spending (H29) — matches and dollar totals. */
+  medicaid: {
+    full_window_matches: number;
+    strict_post_exclusion_matches: number;
+    full_window_paid: number;
+    strict_post_paid: number;
+  };
+  /** Medicare Part B billing (H30a). */
+  partb: {
+    full_window_matches: number;
+    strict_post_exclusion_matches: number;
+    full_window_paid: number;
+    strict_post_paid: number;
+  };
+  /** Medicare Part D prescribing (H30b) + opioid subset. */
+  partd: {
+    full_window_matches: number;
+    strict_post_exclusion_matches: number;
+    full_window_drug_cost: number;
+    opioid_prescribers: number;
+  };
+  /** NPPES-deactivated × billing (H31). */
+  deactivated_billing: {
+    matches: number;
+    multi_source_matches: number;
+    medicaid_post_deactivation_paid: number;
+    partb_post_deactivation_paid: number;
+    partd_post_deactivation_drug_cost: number;
+  };
+  /** Open Payments × exclusion (H32) — Sunshine Act surface. */
+  industry_payments: {
+    full_window_matches: number;
+    strict_post_exclusion_matches: number;
+    full_window_paid: number;
+    strict_post_paid: number;
+  };
+}
+
+function readStateCsv(state: string, slug: string): Record<string, string>[] {
+  const stateLower = state.toLowerCase();
+  const candidates = [
+    path.join(PUBLIC_API_ROOT, 'states', stateLower, slug),
+    // Back-compat for the legacy va-named H32 file pattern.
+    path.join(PUBLIC_API_ROOT, 'states', stateLower, slug.replace('.csv', `-${stateLower}.csv`)),
+  ];
+  for (const p of candidates) {
+    try {
+      const raw = fs.readFileSync(p, 'utf8');
+      const lines = raw.split('\n').filter((l) => l.length > 0);
+      if (lines.length < 2) return [];
+      const header = parseCsvLine(lines[0]);
+      return lines.slice(1).map((line) => {
+        const cols = parseCsvLine(line);
+        const obj: Record<string, string> = {};
+        header.forEach((k, i) => {
+          obj[k] = cols[i] ?? '';
+        });
+        return obj;
+      });
+    } catch {
+      // try next candidate
+    }
+  }
+  return [];
+}
+
+function toNum(s: string | undefined): number {
+  if (!s) return 0;
+  const n = Number(s);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/**
+ * Load all five claims-side per-state findings for a single state. Returns
+ * a unified shape regardless of whether the underlying CSVs are present —
+ * missing files just yield zero values.
+ */
+export function loadStateClaimsAudit(state: string): StateClaimsAudit {
+  const medicaidRows = readStateCsv(state, 'h29-excluded-paid.csv');
+  const partbRows = readStateCsv(state, 'h30a-excluded-billing-partb.csv');
+  const partdRows = readStateCsv(state, 'h30b-excluded-prescribing-partd.csv');
+  const deactRows = readStateCsv(state, 'h31-deactivated-paid.csv');
+  const industryRows = readStateCsv(state, 'h32-excluded-industry-payments.csv');
+
+  const medicaidStrict = medicaidRows.filter(
+    (r) => toNum(r['paid_amount_post_exclusion']) > 0 && r['exclusion_effective_date'],
+  );
+  const partbStrict = partbRows.filter((r) => r['post_exclusion_2023_billing'] === 'yes');
+  const partdStrict = partdRows.filter((r) => r['post_exclusion_2023_prescribing'] === 'yes');
+  const industryStrict = industryRows.filter((r) => r['post_exclusion_pgyr2024'] === 'yes');
+
+  return {
+    medicaid: {
+      full_window_matches: medicaidRows.length,
+      strict_post_exclusion_matches: medicaidStrict.length,
+      full_window_paid: medicaidRows.reduce(
+        (a, r) => a + toNum(r['paid_amount_full_window']),
+        0,
+      ),
+      strict_post_paid: medicaidStrict.reduce(
+        (a, r) => a + toNum(r['paid_amount_post_exclusion']),
+        0,
+      ),
+    },
+    partb: {
+      full_window_matches: partbRows.length,
+      strict_post_exclusion_matches: partbStrict.length,
+      full_window_paid: partbRows.reduce((a, r) => a + toNum(r['medicare_paid_2023']), 0),
+      strict_post_paid: partbStrict.reduce((a, r) => a + toNum(r['medicare_paid_2023']), 0),
+    },
+    partd: {
+      full_window_matches: partdRows.length,
+      strict_post_exclusion_matches: partdStrict.length,
+      full_window_drug_cost: partdRows.reduce((a, r) => a + toNum(r['drug_cost_2023']), 0),
+      opioid_prescribers: partdRows.filter((r) => toNum(r['opioid_claims_2023']) > 0).length,
+    },
+    deactivated_billing: {
+      matches: deactRows.length,
+      multi_source_matches: deactRows.filter((r) =>
+        (r['billing_sources_post_deactivation'] || '').includes('|'),
+      ).length,
+      medicaid_post_deactivation_paid: deactRows.reduce(
+        (a, r) => a + toNum(r['medicaid_post_deactivation_paid']),
+        0,
+      ),
+      partb_post_deactivation_paid: deactRows.reduce(
+        (a, r) => a + toNum(r['partb_2023_paid']),
+        0,
+      ),
+      partd_post_deactivation_drug_cost: deactRows.reduce(
+        (a, r) => a + toNum(r['partd_2023_drug_cost']),
+        0,
+      ),
+    },
+    industry_payments: {
+      full_window_matches: industryRows.length,
+      strict_post_exclusion_matches: industryStrict.length,
+      full_window_paid: industryRows.reduce(
+        (a, r) => a + toNum(r['industry_payments_2024_total']),
+        0,
+      ),
+      strict_post_paid: industryStrict.reduce(
+        (a, r) => a + toNum(r['industry_payments_2024_total']),
+        0,
+      ),
+    },
+  };
+}

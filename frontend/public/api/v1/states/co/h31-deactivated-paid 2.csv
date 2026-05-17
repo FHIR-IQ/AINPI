@@ -1,0 +1,3 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1609020106,"GLOBERMAN, ARI",CO,2016-03-08,true,medicaid|medicare_partb,1269.48,60,2022-11,2022-11,14454.93,653,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1609020106
+1053855577,"HARBELL, JULIA",CO,2017-08-15,true,medicare_partb,0,0,,,1406.42,34,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1053855577

@@ -1,0 +1,6 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1750362554,"LARGE, LANCE",OR,OR,546524.66,5505,484,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1750362554
+1013090877,"KLEIN, JOEL",OR,OR,168355.56,3344,297,53,530.08,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1013090877
+1144218454,"LAWRENCE, SHARON",OR,OR,19257.0,226,70,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1144218454
+1114992104,"WEEKS, JAMES",OR,OR,15509.9,120,37,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114992104
+1326114943,"APAU, RICHARD",OR,OR,12800.37,96,41,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1326114943

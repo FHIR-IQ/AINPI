@@ -1,0 +1,8 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1447710645,"REVURI, NIKIL",NJ,2019-03-24,true,medicare_partd,0,0,,,0,0,464274.09,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1447710645
+1831115914,"O KANE, THOMAS",NJ,2017-11-13,false,medicaid,91630.7,5816,2018-01,2019-09,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1831115914
+1396257531,"DOPPALAPUDI, SAI",NJ,2018-06-05,true,medicare_partd,0,0,,,0,0,82591.66,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1396257531
+1245753482,"KHAN, DANIAL",NJ,2017-12-05,true,medicare_partb,0,0,,,34397.78,1672,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1245753482
+1922530880,"OGUNTOYE, AYO",NJ,2018-06-04,true,medicare_partb,0,0,,,5206.52,87,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1922530880
+1023487022,"GABAY, YENDI",NJ,2015-12-09,true,medicare_partd,0,0,,,0,0,916.76,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1023487022
+1558717041,"OBEID, LAMA",NJ,2017-01-20,true,medicare_partd,0,0,,,0,0,154.01,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1558717041

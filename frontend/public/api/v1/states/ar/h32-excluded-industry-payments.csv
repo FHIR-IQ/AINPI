@@ -1,0 +1,3 @@
+npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1871708180,"LANKFORD, LADARYL",AR,Covered Recipient Physician,leie,20260520,,2026,no,149.22,3,6=$149,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1871708180
+1710381082,"FAULKNER, BRANDON",AR,Covered Recipient Non-Physician Practitioner,leie,20250420,,2025,no,25.67,1,6=$26,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1710381082

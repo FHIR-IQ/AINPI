@@ -1,0 +1,4 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1588193775,"OMAR, AHMED",MD,2018-01-11,true,medicaid|medicare_partb|medicare_partd,30110.08,282,2020-11,2024-03,94239.71,1200,9195.55,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1588193775
+1619443884,"WILSON, JONATHAN",MD,2019-04-07,true,medicaid|medicare_partb|medicare_partd,33295.42,356,2021-06,2024-06,42096.63,1227,2613.35,27,146.68,https://npiregistry.cms.hhs.gov/provider-view/1619443884
+1457844342,"ASIRI, FERAS",MD,2019-01-25,true,medicare_partd,0,0,,,0,0,2330.61,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1457844342

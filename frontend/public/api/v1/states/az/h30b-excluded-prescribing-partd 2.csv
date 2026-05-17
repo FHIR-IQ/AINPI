@@ -1,0 +1,5 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1376538496,"RUBIN, MARK",AZ,AZ,70353.75,1077,217,787,63022.18,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376538496
+1134691173,"ALLEN-BRADY, RYAN",AZ,AZ,39225.51,908,285,290,12607.04,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1134691173
+1003242314,"EARLE, C",AZ,AZ,37538.9,609,32,,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1003242314
+1114914843,"MARTINEZ-AVILES, GEORGE",AZ,AZ,3943.18,106,33,0,,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114914843

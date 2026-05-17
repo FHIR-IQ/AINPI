@@ -6,15 +6,15 @@
   ],
   "status": "published",
   "release_date": "2026-02-09",
-  "generated_at": "2026-05-14T22:33:25+00:00",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "bcf9b81",
-  "headline": "Of 125 currently-active federally-excluded VA-resident NPIs (per NPPES practice state), 28 received Medicaid payments somewhere in T-MSIS 2018\u20132024 totalling $8,487,744 across 217,655 claim lines \u2014 but only 0 of those 28 matches received payment STRICTLY AFTER the earliest of their LEIE / SAM exclusion-effective dates, totalling $0 in strict post-exclusion payments. The strict-filter result is the regulatorily significant signal \u2014 pre-exclusion billing reflects work the provider was legitimately authorized to do at the time, while post-exclusion billing is a direct 42 CFR \u00a7 455.436 audit-referral candidate. Source: HHS Medicaid Provider Spending dataset (2026-02-09 release). Per-NPI exclusion-effective dates carried in the H23 cohort export as of methodology v0.6.0-draft. Two source-data limits: (1) the HHS file has no state-of-payment column, so paid amounts aggregate across every state Medicaid program that paid the NPI \u2014 the VA-resident cohort is per NPPES practice state, not per state of payment; (2) NPPES deactivation is NOT used as an exclusion-effective date because it can be triggered by retirement / death / voluntary closure of practice.",
-  "numerator": 0,
-  "denominator": 125,
-  "numerator_full_window": 28,
-  "numerator_note": "Numerator = NPIs with payments STRICTLY AFTER their LEIE/SAM exclusion-effective date. Full-window numerator (any payment 2018-2024, regardless of pre/post exclusion) = 28.",
-  "denominator_note": "Phase 1 pilot scope = the 125-NPI Virginia federally-excluded cohort (active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state). All-50-states roll-up follows once VA methodology clears DMAS review. Two source-data limits readers must keep in mind: the HHS source file does NOT carry a state-of-payment column (so paid amounts aggregate across every state Medicaid program that paid the NPI), and the cohort export does not currently pin per-NPI exclusion-effective dates (so a row's paid amount may include claim months that pre-date the exclusion; MMIS triage should reconcile each NPI's paid period against the LEIE / SAM effective date).",
+  "generated_at": "2026-05-17T15:34:34+00:00",
+  "methodology_version": "0.6.1-draft",
+  "commit_sha": "334099e",
+  "headline": "Of 6,840 currently-active federally-excluded NPIs across 52 state cohorts (per NPPES practice state), 1180 received Medicaid payments somewhere in T-MSIS 2018\u20132024 totalling $481,682,270 across 12,539,039 claim lines \u2014 but only 12 of those 1180 matches received payment STRICTLY AFTER the earliest of their LEIE / SAM exclusion-effective dates, totalling $3,249,457 in strict post-exclusion payments. The strict-filter result is the regulatorily significant signal \u2014 pre-exclusion billing reflects work the provider was legitimately authorized to do at the time, while post-exclusion billing is a direct 42 CFR \u00a7 455.436 audit-referral candidate. Source: HHS Medicaid Provider Spending dataset (2026-02-09 release). Two source-data limits: (1) the HHS file has no state-of-payment column, so paid amounts aggregate across every state Medicaid program that paid the NPI \u2014 state attribution is per NPPES practice state, not per state of payment; (2) NPPES deactivation is NOT used as an exclusion-effective date because it can be triggered by retirement / death / voluntary closure of practice.",
+  "numerator": 12,
+  "denominator": 6840,
+  "numerator_full_window": 1180,
+  "numerator_note": "Numerator = NPIs with payments STRICTLY AFTER their LEIE/SAM exclusion-effective date. Full-window numerator (any payment 2018-2024, regardless of pre/post exclusion) = 1180.",
+  "denominator_note": "All-states scope = 6,840 unique federally-excluded NPIs across 52 state cohorts (active LEIE or SAM, score >= 1.5; state per NPPES practice state). Per-state CSVs at /api/v1/states/<state>/h29-excluded-paid.csv. Source-data limit: the HHS file does NOT carry a state-of-payment column, so per-NPI paid amounts aggregate across every state Medicaid program that paid the NPI. State attribution comes from NPPES practice state, not state of payment.",
   "data_source_release": "2026-02-09",
   "data_source_url": "https://opendata.hhs.gov/datasets/medicaid-provider-spending/",
   "chart": {
@@ -22,14 +22,380 @@
     "unit": "count",
     "data": [
       {
-        "label": "VA cohort NPIs paid by Medicaid",
-        "value": 28
+        "label": "Cohort NPIs paid by Medicaid (full-window)",
+        "value": 1180
       },
       {
-        "label": "VA cohort NPIs not paid (in this dataset)",
-        "value": 97
+        "label": "Strict post-exclusion subset",
+        "value": 12
       }
     ]
   },
-  "notes": "Pilot state: Virginia. Per-state CSV at /api/v1/states/va/h29-excluded-paid.csv carries one row per matched NPI with the directory-side context columns (top_hcpcs_codes, exclusion_source, billing-or-servicing axis, first/last paid month) needed to interpret the paid-amount headline. Source-file schema: 7 columns (billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount), 238M rows, no state-of-payment column. State attribution comes from NPPES practice state, not the spending file. The HHS source aggregates fee-for-service, managed care, and CHIP; matches catch MCO-side exposures that AINPI's H26 4-payer sweep currently misses behind authentication walls. Disclosure timing: publish when available and high confidence (locked-in 2026-05-14 per roadmap \u00a710). DMAS receives 5-business-day review courtesy on VA-attributed rows before each refresh \u2014 operational courtesy, not a publication gate."
+  "per_state": [
+    {
+      "state": "CA",
+      "matches_full_window": 116,
+      "matches_strict_post": 1,
+      "paid_full_window": 64337137.94,
+      "paid_strict_post": 20668.51
+    },
+    {
+      "state": "OH",
+      "matches_full_window": 114,
+      "matches_strict_post": 1,
+      "paid_full_window": 65740489.57,
+      "paid_strict_post": 52524.64
+    },
+    {
+      "state": "NY",
+      "matches_full_window": 73,
+      "matches_strict_post": 1,
+      "paid_full_window": 45360017.58,
+      "paid_strict_post": 194.0
+    },
+    {
+      "state": "TX",
+      "matches_full_window": 56,
+      "matches_strict_post": 1,
+      "paid_full_window": 5733379.16,
+      "paid_strict_post": 234995.83
+    },
+    {
+      "state": "FL",
+      "matches_full_window": 53,
+      "matches_strict_post": 0,
+      "paid_full_window": 30916784.9,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "TN",
+      "matches_full_window": 51,
+      "matches_strict_post": 0,
+      "paid_full_window": 13170785.77,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "PA",
+      "matches_full_window": 41,
+      "matches_strict_post": 0,
+      "paid_full_window": 2727208.33,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "KY",
+      "matches_full_window": 33,
+      "matches_strict_post": 1,
+      "paid_full_window": 16394217.17,
+      "paid_strict_post": 15595.65
+    },
+    {
+      "state": "LA",
+      "matches_full_window": 32,
+      "matches_strict_post": 0,
+      "paid_full_window": 10033852.76,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "MO",
+      "matches_full_window": 30,
+      "matches_strict_post": 0,
+      "paid_full_window": 15072197.09,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "GA",
+      "matches_full_window": 29,
+      "matches_strict_post": 1,
+      "paid_full_window": 6965348.46,
+      "paid_strict_post": 304090.2
+    },
+    {
+      "state": "IL",
+      "matches_full_window": 29,
+      "matches_strict_post": 0,
+      "paid_full_window": 7387546.58,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "VA",
+      "matches_full_window": 28,
+      "matches_strict_post": 0,
+      "paid_full_window": 8487743.65,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "CT",
+      "matches_full_window": 25,
+      "matches_strict_post": 0,
+      "paid_full_window": 21993177.92,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "AL",
+      "matches_full_window": 23,
+      "matches_strict_post": 0,
+      "paid_full_window": 3749641.21,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "NC",
+      "matches_full_window": 23,
+      "matches_strict_post": 0,
+      "paid_full_window": 9248714.04,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "WI",
+      "matches_full_window": 22,
+      "matches_strict_post": 0,
+      "paid_full_window": 6097211.07,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "OK",
+      "matches_full_window": 22,
+      "matches_strict_post": 0,
+      "paid_full_window": 6099058.09,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "MA",
+      "matches_full_window": 21,
+      "matches_strict_post": 2,
+      "paid_full_window": 11864466.41,
+      "paid_strict_post": 225984.28
+    },
+    {
+      "state": "NV",
+      "matches_full_window": 21,
+      "matches_strict_post": 1,
+      "paid_full_window": 22619667.28,
+      "paid_strict_post": 2266.0
+    },
+    {
+      "state": "MD",
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 10023078.92,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "NJ",
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 9421456.46,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "OR",
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 6321506.29,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "WA",
+      "matches_full_window": 21,
+      "matches_strict_post": 0,
+      "paid_full_window": 4175212.47,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "IA",
+      "matches_full_window": 20,
+      "matches_strict_post": 0,
+      "paid_full_window": 6609655.6,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "MS",
+      "matches_full_window": 20,
+      "matches_strict_post": 0,
+      "paid_full_window": 4773718.13,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "CO",
+      "matches_full_window": 19,
+      "matches_strict_post": 0,
+      "paid_full_window": 3752401.6,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "MI",
+      "matches_full_window": 19,
+      "matches_strict_post": 0,
+      "paid_full_window": 4544282.09,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "AZ",
+      "matches_full_window": 18,
+      "matches_strict_post": 0,
+      "paid_full_window": 5701730.42,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "WV",
+      "matches_full_window": 15,
+      "matches_strict_post": 0,
+      "paid_full_window": 2029244.48,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "AR",
+      "matches_full_window": 15,
+      "matches_strict_post": 0,
+      "paid_full_window": 1241929.34,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "ME",
+      "matches_full_window": 14,
+      "matches_strict_post": 0,
+      "paid_full_window": 2026676.73,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "MN",
+      "matches_full_window": 14,
+      "matches_strict_post": 0,
+      "paid_full_window": 1177882.11,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "PR",
+      "matches_full_window": 10,
+      "matches_strict_post": 1,
+      "paid_full_window": 3732965.04,
+      "paid_strict_post": 406.28
+    },
+    {
+      "state": "AK",
+      "matches_full_window": 10,
+      "matches_strict_post": 0,
+      "paid_full_window": 1839546.28,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "NM",
+      "matches_full_window": 9,
+      "matches_strict_post": 1,
+      "paid_full_window": 2966939.24,
+      "paid_strict_post": 1575535.0
+    },
+    {
+      "state": "SC",
+      "matches_full_window": 8,
+      "matches_strict_post": 0,
+      "paid_full_window": 1265435.09,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "HI",
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "paid_full_window": 1081145.01,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "MT",
+      "matches_full_window": 7,
+      "matches_strict_post": 0,
+      "paid_full_window": 2853309.63,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "IN",
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 8352693.75,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "VT",
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 2793259.64,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "NE",
+      "matches_full_window": 6,
+      "matches_strict_post": 0,
+      "paid_full_window": 1050545.06,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "ND",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 474356.04,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "ID",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 820637.93,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "KS",
+      "matches_full_window": 5,
+      "matches_strict_post": 0,
+      "paid_full_window": 340851.67,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "WY",
+      "matches_full_window": 4,
+      "matches_strict_post": 0,
+      "paid_full_window": 125325.93,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "DE",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 15819445.49,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "DC",
+      "matches_full_window": 3,
+      "matches_strict_post": 0,
+      "paid_full_window": 1343706.19,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "RI",
+      "matches_full_window": 2,
+      "matches_strict_post": 1,
+      "paid_full_window": 830323.6,
+      "paid_strict_post": 817196.18
+    },
+    {
+      "state": "UT",
+      "matches_full_window": 2,
+      "matches_strict_post": 0,
+      "paid_full_window": 11494.42,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "SD",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 148457.8,
+      "paid_strict_post": 0.0
+    },
+    {
+      "state": "NH",
+      "matches_full_window": 1,
+      "matches_strict_post": 0,
+      "paid_full_window": 34412.42,
+      "paid_strict_post": 0.0
+    }
+  ],
+  "notes": "All-states refresh. Per-state CSVs at /api/v1/states/<state>/h29-excluded-paid.csv carry one row per matched NPI with the directory-side context columns (top_hcpcs_codes, exclusion_source, billing-or-servicing axis, first/last paid month) needed to interpret the paid-amount headline. Source-file schema: 7 columns (billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount), 238M rows, no state-of-payment column. State attribution comes from NPPES practice state, not the spending file. The HHS source aggregates fee-for-service, managed care, and CHIP; matches catch MCO-side exposures that AINPI's H26 4-payer sweep currently misses behind authentication walls. Disclosure timing: publish when available and high confidence (locked-in 2026-05-14 per roadmap \u00a710). DMAS receives 5-business-day review courtesy on VA-attributed rows before each refresh \u2014 operational courtesy, not a publication gate."
 }

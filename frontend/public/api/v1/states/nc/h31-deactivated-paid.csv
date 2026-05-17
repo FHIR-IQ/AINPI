@@ -1,0 +1,6 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1497948160,"HESTER, BETTIE",NC,2012-11-09,false,medicaid,1459298.12,34972,2018-01,2024-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1497948160
+1841763968,"JOHNSON, HALEY",NC,2019-01-11,true,medicaid|medicare_partd,110360.69,1356,2022-02,2023-08,0,0,42962.44,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1841763968
+1437274776,"BRADLEY, STACY",NC,2012-05-03,true,medicaid|medicare_partb,34758.18,3114,2020-08,2024-10,55489.92,688,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1437274776
+1649703950,"LAWRENCE MITCHELL, A",NC,2018-07-30,true,medicare_partb,0,0,,,60196.93,3041,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1649703950
+1720518244,"WILSON, NATIELA",NC,2019-03-18,true,medicaid,10524.08,131,2023-08,2024-05,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1720518244

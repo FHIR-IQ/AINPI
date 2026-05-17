@@ -1,0 +1,4 @@
+npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1568690014,"SHAKNOVSKY, THOMAS",IA,FL,122756.85,158109.22,693,299,General Surgery,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1568690014
+1194712976,"PIPER, SCOTT",IA,IA,17488.53,21278.85,317,44,Family Practice,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1194712976
+1477732659,"JAYASWAL, GAUTAM",IA,MO,3261.6,4468.7,39,29,Emergency Medicine,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1477732659

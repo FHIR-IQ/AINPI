@@ -1,0 +1,2 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1588029136,"GARZA, MEGAN",WY,2018-05-17,true,medicaid,8608.0,207,2022-02,2022-09,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1588029136

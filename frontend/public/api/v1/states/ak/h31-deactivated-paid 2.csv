@@ -1,0 +1,2 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1962598441,"RIX, BARB",AK,2012-10-05,true,medicaid,7686.81,112,2024-02,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1962598441

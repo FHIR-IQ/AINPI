@@ -1,0 +1,4 @@
+npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1376538496,"RUBIN, MARK",AZ,AZ,546250.39,630288.65,5761,443,Interventional Pain Management,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376538496
+1003242314,"EARLE, C",AZ,AZ,21694.29,28428.24,384,18,Nurse Practitioner,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1003242314
+1134691173,"ALLEN-BRADY, RYAN",AZ,AZ,6116.53,10782.08,103,90,Nurse Practitioner,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1134691173

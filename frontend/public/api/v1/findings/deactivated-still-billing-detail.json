@@ -1,53 +1,493 @@
 {
-  "queried_at": "2026-05-14T21:59:49+00:00",
-  "denominator_cohort_size": 1495,
-  "matches_post_deactivation_billing": 3,
-  "multi_source_matches": 1,
+  "queried_at": "2026-05-17T15:37:01+00:00",
+  "denominator_cohort_size": 78995,
+  "matches_post_deactivation_billing": 195,
+  "multi_source_matches": 62,
   "totals": {
-    "medicaid_paid_post_deactivation": 74555.65,
-    "partb_paid_cy2023_post_deactivation": 177702.94,
-    "partd_drug_cost_cy2023_post_deactivation": 32116.420000000002
+    "medicaid_paid_post_deactivation": 13709307.18,
+    "partb_paid_cy2023_post_deactivation": 2841502.12,
+    "partd_drug_cost_cy2023_post_deactivation": 9044085.69
+  },
+  "per_state_stats": {
+    "NM": {
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 490720.78,
+      "partb_paid_cy2023": 465868.65,
+      "partd_drug_cost_cy2023": 1241192.81,
+      "cohort_size": 800
+    },
+    "PA": {
+      "matches": 4,
+      "multi_source": 3,
+      "medicaid_paid_post_deactivation": 1570548.98,
+      "partb_paid_cy2023": 81745.79,
+      "partd_drug_cost_cy2023": 533153.73,
+      "cohort_size": 3416
+    },
+    "NC": {
+      "matches": 5,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 1614941.07,
+      "partb_paid_cy2023": 115686.85,
+      "partd_drug_cost_cy2023": 42962.44,
+      "cohort_size": 1907
+    },
+    "TX": {
+      "matches": 11,
+      "multi_source": 5,
+      "medicaid_paid_post_deactivation": 107986.74,
+      "partb_paid_cy2023": 89077.24,
+      "partd_drug_cost_cy2023": 1522088.85,
+      "cohort_size": 4873
+    },
+    "NY": {
+      "matches": 21,
+      "multi_source": 8,
+      "medicaid_paid_post_deactivation": 907980.33,
+      "partb_paid_cy2023": 352440.42,
+      "partd_drug_cost_cy2023": 1694769.59,
+      "cohort_size": 6103
+    },
+    "IL": {
+      "matches": 6,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 479713.65,
+      "partb_paid_cy2023": 115263.31,
+      "partd_drug_cost_cy2023": 385655.03,
+      "cohort_size": 2722
+    },
+    "OH": {
+      "matches": 18,
+      "multi_source": 6,
+      "medicaid_paid_post_deactivation": 1306525.7,
+      "partb_paid_cy2023": 142229.57,
+      "partd_drug_cost_cy2023": 609495.25,
+      "cohort_size": 2669
+    },
+    "FL": {
+      "matches": 15,
+      "multi_source": 5,
+      "medicaid_paid_post_deactivation": 615271.0,
+      "partb_paid_cy2023": 444976.52,
+      "partd_drug_cost_cy2023": 1337001.07,
+      "cohort_size": 4875
+    },
+    "GA": {
+      "matches": 6,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 816309.09,
+      "partb_paid_cy2023": 132195.89,
+      "partd_drug_cost_cy2023": 26206.79,
+      "cohort_size": 1923
+    },
+    "CA": {
+      "matches": 25,
+      "multi_source": 7,
+      "medicaid_paid_post_deactivation": 1684868.46,
+      "partb_paid_cy2023": 172396.58,
+      "partd_drug_cost_cy2023": 208037.32,
+      "cohort_size": 10626
+    },
+    "OR": {
+      "matches": 3,
+      "multi_source": 3,
+      "medicaid_paid_post_deactivation": 530046.15,
+      "partb_paid_cy2023": 11652.54,
+      "partd_drug_cost_cy2023": 242637.94,
+      "cohort_size": 1195
+    },
+    "VT": {
+      "matches": 1,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 412749.4,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 120229.01,
+      "cohort_size": 169
+    },
+    "NJ": {
+      "matches": 7,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 91630.7,
+      "partb_paid_cy2023": 39604.3,
+      "partd_drug_cost_cy2023": 547936.52,
+      "cohort_size": 2054
+    },
+    "OK": {
+      "matches": 3,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 456120.5,
+      "partb_paid_cy2023": 8287.01,
+      "partd_drug_cost_cy2023": 27555.0,
+      "cohort_size": 1327
+    },
+    "LA": {
+      "matches": 6,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 393089.83,
+      "partb_paid_cy2023": 98306.8,
+      "partd_drug_cost_cy2023": 126475.23,
+      "cohort_size": 1160
+    },
+    "WA": {
+      "matches": 5,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 318886.41,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 409.82,
+      "cohort_size": 1796
+    },
+    "MA": {
+      "matches": 7,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 421309.53,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 4562.04,
+      "cohort_size": 2191
+    },
+    "VA": {
+      "matches": 3,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 74555.65,
+      "partb_paid_cy2023": 177702.94,
+      "partd_drug_cost_cy2023": 32116.42,
+      "cohort_size": 1495
+    },
+    "KY": {
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 135983.96,
+      "partb_paid_cy2023": 74356.76,
+      "partd_drug_cost_cy2023": 28049.08,
+      "cohort_size": 1125
+    },
+    "CT": {
+      "matches": 5,
+      "multi_source": 3,
+      "medicaid_paid_post_deactivation": 66699.38,
+      "partb_paid_cy2023": 44053.84,
+      "partd_drug_cost_cy2023": 181399.9,
+      "cohort_size": 968
+    },
+    "MN": {
+      "matches": 3,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 194048.09,
+      "partb_paid_cy2023": 18037.47,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1107
+    },
+    "MO": {
+      "matches": 3,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 182506.32,
+      "partb_paid_cy2023": 1422.85,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1472
+    },
+    "MD": {
+      "matches": 3,
+      "multi_source": 2,
+      "medicaid_paid_post_deactivation": 63405.5,
+      "partb_paid_cy2023": 136336.34,
+      "partd_drug_cost_cy2023": 14139.51,
+      "cohort_size": 1487
+    },
+    "NV": {
+      "matches": 3,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 250092.69,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 602
+    },
+    "PR": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 104396.08,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 980
+    },
+    "IN": {
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 98799.85,
+      "partb_paid_cy2023": 1433.84,
+      "partd_drug_cost_cy2023": 7138.01,
+      "cohort_size": 1365
+    },
+    "AR": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 97739.65,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 886
+    },
+    "NE": {
+      "matches": 1,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 17874.13,
+      "partb_paid_cy2023": 43909.7,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 417
+    },
+    "SC": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 0,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 56189.19,
+      "cohort_size": 984
+    },
+    "RI": {
+      "matches": 1,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 38304.14,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 16415.61,
+      "cohort_size": 318
+    },
+    "HI": {
+      "matches": 2,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 39258.96,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 4490.02,
+      "cohort_size": 316
+    },
+    "MI": {
+      "matches": 6,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 70278.84,
+      "partb_paid_cy2023": 26339.75,
+      "partd_drug_cost_cy2023": 1586.54,
+      "cohort_size": 2836
+    },
+    "AZ": {
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 13867.37,
+      "partb_paid_cy2023": 1861.73,
+      "partd_drug_cost_cy2023": 31992.24,
+      "cohort_size": 1568
+    },
+    "ME": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 20381.89,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 432
+    },
+    "AL": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 0,
+      "partb_paid_cy2023": 18019.36,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 897
+    },
+    "CO": {
+      "matches": 2,
+      "multi_source": 1,
+      "medicaid_paid_post_deactivation": 1269.48,
+      "partb_paid_cy2023": 15861.35,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1306
+    },
+    "WI": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 0,
+      "partb_paid_cy2023": 9379.68,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 1300
+    },
+    "WY": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 8608.0,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 158
+    },
+    "AK": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 7686.81,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 315
+    },
+    "WV": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 3033.02,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 499
+    },
+    "KS": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 1452.0,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 695
+    },
+    "DC": {
+      "matches": 1,
+      "multi_source": 0,
+      "medicaid_paid_post_deactivation": 367.05,
+      "partb_paid_cy2023": 0,
+      "partd_drug_cost_cy2023": 0,
+      "cohort_size": 452
+    }
   },
   "top_10_by_combined_amount": [
     {
-      "npi": "1700273794",
-      "name": "SHAHID, MUHAMMAD",
-      "deactivation_date": "2015-11-16",
+      "npi": "1679060099",
+      "name": "EL ALAYLI, AHMAD",
+      "state": "NM",
+      "deactivation_date": "2018-11-28",
       "ndh_active_flag": "true",
       "billing_sources_post_deactivation": "medicaid|medicare_partb|medicare_partd",
-      "medicaid_post_deactivation_paid": 56681.68,
-      "medicaid_post_deactivation_claims": 1633,
-      "partb_2023_paid": 177702.94,
-      "partb_2023_services": 2031,
-      "partd_2023_drug_cost": 31877.15,
-      "partd_2023_opioid_claims": 30
+      "medicaid_post_deactivation_paid": 454144.27,
+      "medicaid_post_deactivation_claims": 11990,
+      "partb_2023_paid": 465868.65,
+      "partb_2023_services": 21485,
+      "partd_2023_drug_cost": 1241192.81,
+      "partd_2023_opioid_claims": 208
     },
     {
-      "npi": "1043396328",
-      "name": "THURMAN, CECILIA",
-      "deactivation_date": "2019-03-27",
+      "npi": "1699054916",
+      "name": "NUNEZ, K",
+      "state": "PA",
+      "deactivation_date": "2016-08-10",
       "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partd",
+      "medicaid_post_deactivation_paid": 1483652.4,
+      "medicaid_post_deactivation_claims": 14859,
+      "partb_2023_paid": 0,
+      "partb_2023_services": 0,
+      "partd_2023_drug_cost": 508982.85,
+      "partd_2023_opioid_claims": 28
+    },
+    {
+      "npi": "1497948160",
+      "name": "HESTER, BETTIE",
+      "state": "NC",
+      "deactivation_date": "2012-11-09",
+      "ndh_active_flag": "false",
       "billing_sources_post_deactivation": "medicaid",
-      "medicaid_post_deactivation_paid": 17873.97,
-      "medicaid_post_deactivation_claims": 251,
+      "medicaid_post_deactivation_paid": 1459298.12,
+      "medicaid_post_deactivation_claims": 34972,
       "partb_2023_paid": 0,
       "partb_2023_services": 0,
       "partd_2023_drug_cost": 0,
       "partd_2023_opioid_claims": 0
     },
     {
-      "npi": "1164874087",
-      "name": "BAHRAMIAN, NAGHMEH",
-      "deactivation_date": "2018-07-18",
+      "npi": "1376070300",
+      "name": "VAILATI NEGRAO, M",
+      "state": "TX",
+      "deactivation_date": "2017-12-28",
       "ndh_active_flag": "true",
-      "billing_sources_post_deactivation": "medicare_partd",
-      "medicaid_post_deactivation_paid": 0.0,
+      "billing_sources_post_deactivation": "medicare_partb|medicare_partd",
+      "medicaid_post_deactivation_paid": 0,
       "medicaid_post_deactivation_claims": 0,
+      "partb_2023_paid": 59787.01,
+      "partb_2023_services": 624,
+      "partd_2023_drug_cost": 1270858.94,
+      "partd_2023_opioid_claims": 20
+    },
+    {
+      "npi": "1578940813",
+      "name": "JURANGAL, AJAY",
+      "state": "NY",
+      "deactivation_date": "2015-12-14",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partb|medicare_partd",
+      "medicaid_post_deactivation_paid": 43821.94,
+      "medicaid_post_deactivation_claims": 853,
+      "partb_2023_paid": 141305.63,
+      "partb_2023_services": 1169,
+      "partd_2023_drug_cost": 1022788.44,
+      "partd_2023_opioid_claims": 0
+    },
+    {
+      "npi": "1689889180",
+      "name": "CUTLER, ANDREA",
+      "state": "IL",
+      "deactivation_date": "2019-03-18",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partb|medicare_partd",
+      "medicaid_post_deactivation_paid": 404356.61,
+      "medicaid_post_deactivation_claims": 5787,
+      "partb_2023_paid": 3496.2,
+      "partb_2023_services": 62,
+      "partd_2023_drug_cost": 385655.03,
+      "partd_2023_opioid_claims": 0
+    },
+    {
+      "npi": "1952836199",
+      "name": "ALLEN, B",
+      "state": "OH",
+      "deactivation_date": "2019-04-03",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partd",
+      "medicaid_post_deactivation_paid": 346080.96,
+      "medicaid_post_deactivation_claims": 29918,
       "partb_2023_paid": 0,
       "partb_2023_services": 0,
-      "partd_2023_drug_cost": 239.27,
-      "partd_2023_opioid_claims": 18
+      "partd_2023_drug_cost": 408215.26,
+      "partd_2023_opioid_claims": 0
+    },
+    {
+      "npi": "1356645972",
+      "name": "TESAR, LEIGH",
+      "state": "FL",
+      "deactivation_date": "2019-03-21",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partb|medicare_partd",
+      "medicaid_post_deactivation_paid": 297283.53,
+      "medicaid_post_deactivation_claims": 32710,
+      "partb_2023_paid": 336799.24,
+      "partb_2023_services": 5908,
+      "partd_2023_drug_cost": 105596.54,
+      "partd_2023_opioid_claims": 1857
+    },
+    {
+      "npi": "1336492529",
+      "name": "OFFNER, CECILY",
+      "state": "NY",
+      "deactivation_date": "2015-04-01",
+      "ndh_active_flag": "true",
+      "billing_sources_post_deactivation": "medicaid|medicare_partb|medicare_partd",
+      "medicaid_post_deactivation_paid": 272566.41,
+      "medicaid_post_deactivation_claims": 3913,
+      "partb_2023_paid": 166414.11,
+      "partb_2023_services": 2153,
+      "partd_2023_drug_cost": 287607.18,
+      "partd_2023_opioid_claims": 11
+    },
+    {
+      "npi": "1295023661",
+      "name": "RHINEHART, ASHLEY",
+      "state": "GA",
+      "deactivation_date": "2016-11-21",
+      "ndh_active_flag": "false",
+      "billing_sources_post_deactivation": "medicaid",
+      "medicaid_post_deactivation_paid": 625904.24,
+      "medicaid_post_deactivation_claims": 3482,
+      "partb_2023_paid": 0,
+      "partb_2023_services": 0,
+      "partd_2023_drug_cost": 0,
+      "partd_2023_opioid_claims": 0
     }
   ],
-  "csv_url": "/api/v1/states/va/h31-deactivated-paid.csv"
+  "csv_url_pattern": "/api/v1/states/<state>/h31-deactivated-paid.csv",
+  "national_csv_url": "/api/v1/findings/deactivated-still-billing-detail.csv"
 }

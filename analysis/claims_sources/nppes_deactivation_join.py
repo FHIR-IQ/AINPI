@@ -1,4 +1,4 @@
-"""H31 — NPPES-deactivated VA-state NPIs still billing public claims data.
+"""H31 — NPPES-deactivated NPIs still billing public claims data (all states).
 
 NPPES deactivation = the provider is no longer in practice per the
 federal provider registry. Billing after deactivation is either a
@@ -42,7 +42,7 @@ import pyarrow.parquet as pq
 import pyarrow.compute as pc
 from google.cloud import bigquery
 
-METHODOLOGY_VERSION = "0.6.0-draft"
+METHODOLOGY_VERSION = "0.6.1-draft"
 PROJECT = "thematic-fort-453901-t7"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
@@ -70,14 +70,21 @@ def get_commit_sha() -> str:
 
 
 def load_cohort_from_bq() -> dict[str, dict]:
-    """Build the VA-deactivated cohort: NDH practitioners with state=VA
-    whose NPI appears as NPPES-deactivated."""
+    """All-states cohort: every NPPES-deactivated NPI that's also listed in
+    the NDH practitioner table, carrying the NDH practice state for output
+    partitioning. Single BQ scan; downstream Python code partitions by state.
+
+    NPPES nulls practice address fields on deactivation. The NDH side retains
+    practice state — this is exactly the H10 "deactivated-still-listed" signal
+    extended to claims-side consequence.
+    """
     client = bigquery.Client(project=PROJECT)
     sql = """
     SELECT
       p._npi AS npi,
       COALESCE(p._family_name, '') AS family_name,
       COALESCE(p._given_name, '') AS given_name,
+      p._state AS ndh_state,
       n.npi_deactivation_date AS deactivation_date,
       EXTRACT(YEAR FROM n.npi_deactivation_date) AS deactivation_year,
       EXTRACT(MONTH FROM n.npi_deactivation_date) AS deactivation_month,
@@ -85,21 +92,23 @@ def load_cohort_from_bq() -> dict[str, dict]:
     FROM `thematic-fort-453901-t7.cms_npd.practitioner` p
     JOIN `bigquery-public-data.nppes.npi_optimized` n
       ON p._npi = n.npi
-    WHERE p._state = 'VA'
-      AND n.npi_deactivation_date IS NOT NULL
+    WHERE n.npi_deactivation_date IS NOT NULL
       AND n.npi_reactivation_date IS NULL
+      AND p._state IS NOT NULL
+      AND LENGTH(p._state) = 2
     """
     cohort = {}
     for row in client.query(sql).result():
         cohort[row.npi] = {
             "npi": row.npi,
             "name": f"{row.family_name}, {row.given_name}".strip(", "),
+            "ndh_state": row.ndh_state or "",
             "deactivation_date": str(row.deactivation_date) if row.deactivation_date else "",
             "deactivation_year": row.deactivation_year,
             "deactivation_month": row.deactivation_month,
             "ndh_active": bool(row.ndh_active),
         }
-    print(f"VA cohort (NPPES-deactivated × NDH practice state = VA): {len(cohort)} NPIs")
+    print(f"All-states cohort (NPPES-deactivated × NDH-listed): {len(cohort):,} NPIs")
     return cohort
 
 
@@ -252,6 +261,7 @@ def main() -> None:
         rows.append({
             "npi": npi,
             "name": cohort_row["name"],
+            "state": cohort_row["ndh_state"],
             "deactivation_date": cohort_row["deactivation_date"],
             "ndh_active_flag": "true" if cohort_row["ndh_active"] else "false",
             "billing_sources_post_deactivation": "|".join(sources),
@@ -267,18 +277,13 @@ def main() -> None:
             "nppes_lookup_url": f"https://npiregistry.cms.hhs.gov/provider-view/{npi}",
         })
 
-    # Sort by total post-deactivation $$
     rows.sort(
         key=lambda r: r["medicaid_post_deactivation_paid"] + r["partb_2023_paid"] + r["partd_2023_drug_cost"],
         reverse=True,
     )
 
-    # Write CSV
-    out_dir = STATES_DIR / "va"
-    out_dir.mkdir(parents=True, exist_ok=True)
-    csv_out = out_dir / "h31-deactivated-paid.csv"
     fields = [
-        "npi", "name", "deactivation_date", "ndh_active_flag",
+        "npi", "name", "state", "deactivation_date", "ndh_active_flag",
         "billing_sources_post_deactivation",
         "medicaid_post_deactivation_paid", "medicaid_post_deactivation_claims",
         "medicaid_first_claim_month", "medicaid_last_claim_month",
@@ -286,12 +291,46 @@ def main() -> None:
         "partd_2023_drug_cost", "partd_2023_opioid_claims", "partd_2023_opioid_cost",
         "nppes_lookup_url",
     ]
-    with open(csv_out, "w", newline="") as fh:
+
+    # Per-state CSVs. NPPES allows international addresses, so filter to
+    # US states / DC / territories only — anything else (Canadian provinces,
+    # Mexican states) would create unroutable URLs in the static site.
+    from analysis.claims_sources._cohorts import is_valid_us_state
+    per_state: dict[str, list[dict]] = defaultdict(list)
+    for r in rows:
+        st = (r.get("state") or "").strip().upper()
+        if is_valid_us_state(st):
+            per_state[st].append(r)
+    for st, st_rows in per_state.items():
+        st_dir = STATES_DIR / st.lower()
+        st_dir.mkdir(parents=True, exist_ok=True)
+        with open(st_dir / "h31-deactivated-paid.csv", "w", newline="") as fh:
+            w = csv.DictWriter(fh, fieldnames=fields)
+            w.writeheader()
+            for r in st_rows:
+                w.writerow({k: r.get(k, "") for k in fields})
+
+    # National rollup
+    national_csv = FINDINGS_DIR / "deactivated-still-billing-detail.csv"
+    with open(national_csv, "w", newline="") as fh:
         w = csv.DictWriter(fh, fieldnames=fields)
         w.writeheader()
         for r in rows:
             w.writerow({k: r.get(k, "") for k in fields})
-    print(f"Wrote {csv_out} ({len(rows)} rows)")
+    print(f"Wrote {len(per_state)} per-state CSVs · national rollup at {national_csv} ({len(rows)} rows)")
+
+    # Per-state stats for the finding JSON
+    per_state_stats = {
+        s: {
+            "matches": len(rs),
+            "multi_source": sum(1 for r in rs if "|" in r["billing_sources_post_deactivation"]),
+            "medicaid_paid_post_deactivation": round(sum(r["medicaid_post_deactivation_paid"] for r in rs), 2),
+            "partb_paid_cy2023": round(sum(r["partb_2023_paid"] for r in rs), 2),
+            "partd_drug_cost_cy2023": round(sum(r["partd_2023_drug_cost"] for r in rs), 2),
+            "cohort_size": sum(1 for c in cohort.values() if c["ndh_state"] == s),
+        }
+        for s, rs in per_state.items()
+    }
 
     total_medicaid = sum(r["medicaid_post_deactivation_paid"] for r in rows)
     total_partb = sum(r["partb_2023_paid"] for r in rows)
@@ -299,9 +338,9 @@ def main() -> None:
     multi_source = sum(1 for r in rows if "|" in r["billing_sources_post_deactivation"])
 
     headline = (
-        f"{len(rows)} of {len(cohort)} NPPES-deactivated VA-state NPIs "
-        f"(per NDH practice-state retention; NPPES nulls practice state on "
-        f"deactivation) billed at least one public claims source STRICTLY "
+        f"{len(rows)} of {len(cohort):,} NPPES-deactivated NPIs (across all "
+        f"states, per NDH practice-state retention; NPPES nulls practice state "
+        f"on deactivation) billed at least one public claims source STRICTLY "
         f"AFTER their NPPES deactivation date. Post-deactivation totals: "
         f"Medicaid ${total_medicaid:,.0f}, Medicare Part B ${total_partb:,.0f} "
         f"(CY 2023), Medicare Part D ${total_partd:,.0f} drug cost (CY 2023). "
@@ -315,10 +354,10 @@ def main() -> None:
 
     payload = {
         "slug": "deactivated-still-billing",
-        "title": "NPPES-deactivated VA-state NPIs still billing public claims data",
+        "title": "NPPES-deactivated NPIs still billing public claims data (all states)",
         "hypotheses": ["H31"],
         "status": "published",
-        "release_date": "2026-05-14",
+        "release_date": "2026-05-17",
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
@@ -326,26 +365,30 @@ def main() -> None:
         "numerator": len(rows),
         "denominator": len(cohort),
         "denominator_note": (
-            f"Cohort = {len(cohort)} NPIs that are NPPES-deactivated "
+            f"Cohort = {len(cohort):,} NPIs that are NPPES-deactivated "
             f"(npi_deactivation_date IS NOT NULL, npi_reactivation_date "
-            f"IS NULL) AND appear in NDH practitioner with _state='VA'. "
-            f"NPPES nulls practice address fields on deactivation, so "
-            f"VA-state attribution comes from the NDH side (the H10 "
+            f"IS NULL) AND appear in NDH practitioner with a populated "
+            f"_state. NPPES nulls practice address fields on deactivation, "
+            f"so state attribution comes from the NDH side (the H10 "
             f"\"NPPES-deactivated but still listed in NDH\" signal "
-            f"extended to its claims-side consequence)."
+            f"extended to its claims-side consequence). Per-state CSVs "
+            f"at /api/v1/states/<state>/h31-deactivated-paid.csv."
         ),
         "data_source_release": "HHS 2026-02-09 + Medicare CY 2023 + NPPES (BigQuery public dataset)",
         "chart": {
             "type": "bar",
             "unit": "count",
             "data": [
-                {"label": "Cohort NPIs billing post-deactivation", "value": len(rows)},
-                {"label": "Cohort NPIs in ≥2 sources", "value": multi_source},
-                {"label": "Cohort with no billing match", "value": len(cohort) - len(rows)},
+                {"label": "NPPES-deactivated NPIs still billing", "value": len(rows)},
+                {"label": "Multi-source post-deactivation matches", "value": multi_source},
             ],
         },
+        "per_state": sorted(
+            ({"state": s, **stats} for s, stats in per_state_stats.items()),
+            key=lambda d: -d["matches"],
+        ),
         "notes": (
-            "Per-state CSV at /api/v1/states/va/h31-deactivated-paid.csv. "
+            "Per-state CSV at /api/v1/states/<state>/h31-deactivated-paid.csv. "
             "Match rule for Medicaid: CLAIM_FROM_MONTH > deactivation month/year "
             "(month-level precision). For Medicare Part B / Part D: "
             "deactivation_year < 2023 (year-level precision since the source "
@@ -362,7 +405,6 @@ def main() -> None:
     out.write_text(json.dumps(payload, indent=2) + "\n")
     print(f"Wrote {out}")
 
-    # Sidecar with top examples
     top_rows = rows[:10]
     detail = {
         "queried_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -374,9 +416,10 @@ def main() -> None:
             "partb_paid_cy2023_post_deactivation": total_partb,
             "partd_drug_cost_cy2023_post_deactivation": total_partd,
         },
+        "per_state_stats": per_state_stats,
         "top_10_by_combined_amount": [
             {k: r.get(k) for k in (
-                "npi", "name", "deactivation_date", "ndh_active_flag",
+                "npi", "name", "state", "deactivation_date", "ndh_active_flag",
                 "billing_sources_post_deactivation",
                 "medicaid_post_deactivation_paid", "medicaid_post_deactivation_claims",
                 "partb_2023_paid", "partb_2023_services",
@@ -384,7 +427,8 @@ def main() -> None:
             )}
             for r in top_rows
         ],
-        "csv_url": "/api/v1/states/va/h31-deactivated-paid.csv",
+        "csv_url_pattern": "/api/v1/states/<state>/h31-deactivated-paid.csv",
+        "national_csv_url": "/api/v1/findings/deactivated-still-billing-detail.csv",
     }
     (FINDINGS_DIR / "deactivated-still-billing-detail.json").write_text(json.dumps(detail, indent=2) + "\n")
     print(f"Wrote {FINDINGS_DIR / 'deactivated-still-billing-detail.json'}")

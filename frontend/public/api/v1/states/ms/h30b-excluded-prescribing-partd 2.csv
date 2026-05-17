@@ -1,0 +1,9 @@
+npi,name,state,prescribing_state,drug_cost_2023,claims_2023,beneficiaries_2023,opioid_claims_2023,opioid_cost_2023,exclusion_source,exclusion_effective_year,post_exclusion_2023_prescribing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1336220276,"NELSON, SCOTT",MS,MS,117759.21,943,114,,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1336220276
+1902196777,"STEADE, SALENA",MS,VT,63334.49,656,194,20,232.4,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1902196777
+1306865746,"MAASSEN, MARTIN",MS,IN,50855.07,370,27,140,41896.77,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1306865746
+1497147318,"PENDLETON, MONIQUE",MS,MS,15357.86,136,21,0,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1497147318
+1407817240,"RIGSBY, REGINALD",MS,MS,8499.69,190,58,0,,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1407817240
+1396085015,"LUND, M",MS,MS,2766.19,124,62,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1396085015
+1942641485,"SPICER, JARED",MS,AZ,711.81,53,33,,,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1942641485
+1376905901,"JUAKALI, EBONY",MS,LA,615.89,71,51,,,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1376905901

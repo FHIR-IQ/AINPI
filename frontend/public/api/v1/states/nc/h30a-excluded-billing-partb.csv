@@ -1,0 +1,6 @@
+npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1053454009,"HEROMAN, JAMES",NC,NC,576791.86,760371.5,5967,684,Ophthalmology,oig_excluded,2023,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1053454009
+1295053510,"RICHARDS, TNESHIA",NC,NC,38877.28,52716.98,716,171,Nurse Practitioner,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1295053510
+1396843132,"JREISAT, KHALED",NC,NC,12173.86,21234.04,153,101,Neurology,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1396843132
+1255979613,"COODY, MICHAEL",NC,NC,9623.12,12078.05,118,110,Internal Medicine,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1255979613
+1952364374,"KARDON, EVAN",NC,NC,164.28,380.87,11,11,Internal Medicine,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1952364374

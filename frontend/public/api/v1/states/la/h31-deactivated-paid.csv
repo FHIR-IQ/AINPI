@@ -1,0 +1,7 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1215462213,"JANDE, SURAJ",LA,2017-11-29,true,medicaid|medicare_partb|medicare_partd,363716.03,5092,2020-11,2024-12,21024.39,265,1003.49,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1215462213
+1417446782,"DAHAL, BONAS",LA,2018-12-13,true,medicaid|medicare_partb|medicare_partd,28473.0,1513,2021-12,2024-09,77282.41,1088,43552.19,22,104.17,https://npiregistry.cms.hhs.gov/provider-view/1417446782
+1275038218,"CUEVAS VELAZQUEZ, ADAN",LA,2018-11-16,true,medicare_partd,0,0,,,0,0,81919.55,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1275038218
+1013085059,"WARD, SWAN",LA,2015-02-16,false,medicaid,764.45,24,2018-08,2018-08,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1013085059
+1588626063,"THOMPSON, W DAVID",LA,2018-03-02,false,medicaid,84.0,33,2018-01,2018-08,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1588626063
+1245443878,"INOA CHAPLAIN, JOEANNA",LA,2017-07-19,false,medicaid,52.35,611,2018-01,2018-03,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1245443878

@@ -1,0 +1,3 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1245764596,"STRICKLIN, ANDREW",KY,2019-04-04,true,medicaid|medicare_partb|medicare_partd,135983.96,1952,2022-08,2024-11,74356.76,638,8037.22,35,96.93,https://npiregistry.cms.hhs.gov/provider-view/1245764596
+1265969885,"THIRUNAVUKKARASU, G",KY,2017-12-18,true,medicare_partd,0,0,,,0,0,20011.86,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1265969885

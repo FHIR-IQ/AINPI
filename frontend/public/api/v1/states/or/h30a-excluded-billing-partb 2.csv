@@ -1,0 +1,4 @@
+npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
+1013090877,"KLEIN, JOEL",OR,OR,58351.62,72361.67,2966,444,Family Practice,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1013090877
+1750362554,"LARGE, LANCE",OR,OR,9319.13,19380.18,288,132,Family Practice,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1750362554
+1770562977,"HOFFMAN, PAUL",OR,OR,2002.97,3239.48,59,15,General Surgery,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1770562977

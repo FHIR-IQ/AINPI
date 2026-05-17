@@ -1,0 +1,8 @@
+npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
+1861471948,"SANTANIELLO, GIUSEPPE",MA,2015-05-04,false,medicaid,269237.88,1388,2018-01,2018-12,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1861471948
+1033643606,"DE SOUZA, BRADLEY",MA,2017-11-27,true,medicaid,124742.04,333,2022-03,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1033643606
+1649769449,"CURRIE, ROY",MA,2018-09-05,true,medicaid,18047.18,150,2022-10,2022-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1649769449
+1760562136,"ROTH, CATHERINE",MA,2018-03-09,false,medicaid,5636.33,250,2018-07,2018-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1760562136
+1760924161,"JOGLEKAR, VAISHALI",MA,2018-02-01,true,medicare_partd,0,0,,,0,0,4562.04,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1760924161
+1780176453,"SALAH, FATIMA",MA,2019-01-22,true,medicaid,3472.05,212,2024-05,2024-11,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1780176453
+1053838623,"COUPAL, TYLER",MA,2018-03-29,true,medicaid,174.05,17,2020-01,2020-01,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1053838623
