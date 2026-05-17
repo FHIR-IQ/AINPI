@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import SubscriberCount from './SubscriberCount';
 
 export default function Footer() {
   return (
@@ -14,6 +15,8 @@ export default function Footer() {
             <li><Link href="/smd-revalidation" className="hover:text-white">SMD-response citation language</Link></li>
             <li><a href="https://github.com/FHIR-IQ/AINPI" target="_blank" rel="noopener noreferrer" className="hover:text-white">GitHub</a></li>
             <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
+            <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
+            <li><Link href="/security" className="hover:text-white">Security</Link></li>
           </ul>
         </div>
         <div>
@@ -33,15 +36,51 @@ export default function Footer() {
             Stay current
           </h3>
           <ul className="space-y-2">
-            <li><Link href="/subscribe" className="hover:text-white">Subscribe to updates</Link></li>
+            <li>
+              <Link href="/subscribe" className="hover:text-white">
+                Subscribe to updates
+              </Link>
+              <span className="block text-xs text-slate-500 mt-0.5">
+                <SubscriberCount />
+              </span>
+            </li>
             <li><Link href="/reports/2026-05-14-update" className="hover:text-white">Latest release update</Link></li>
             <li><Link href="/insights" className="hover:text-white">Provenance + variance analysis</Link></li>
             <li><Link href="/api/v1/manifest.json" className="hover:text-white">API manifest (JSON)</Link></li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-slate-800 px-4 sm:px-6 lg:px-8 py-5 text-center text-xs text-slate-500">
-        Audit of the CMS National Directory of Healthcare · Methodology v0.6.1-draft · Apache-2.0 · Produced by FHIR IQ
+      <div className="border-t border-slate-800 px-4 sm:px-6 lg:px-8 py-5 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div>
+          © 2026{' '}
+          <a
+            href="https://fhiriq.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-slate-300"
+          >
+            FHIR IQ
+          </a>
+          {' · '}
+          <a
+            href="https://github.com/FHIR-IQ/AINPI/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-slate-300"
+          >
+            Apache-2.0
+          </a>
+          {' · Methodology v0.6.1-draft · '}
+          <a
+            href="mailto:gene@fhiriq.com"
+            className="hover:text-slate-300"
+          >
+            gene@fhiriq.com
+          </a>
+        </div>
+        <div className="text-slate-500">
+          Audit of the CMS National Directory of Healthcare
+        </div>
       </div>
     </footer>
   );
