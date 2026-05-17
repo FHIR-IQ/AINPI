@@ -1,4 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1952399222,"RODRIGUEZ, DAVID",SC,Covered Recipient Physician,leie,20251120,,2025,no,471.39,19,6=$296; 8=$175,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1952399222
-1750551818,"CHAN, SOTHEARY",SC,Covered Recipient Non-Physician Practitioner,leie+sam,20111220,2011-12-20,2011,yes,458.75,6,6=$459,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1750551818
-1891854873,"WILLIAMS, JAMES",SC,Covered Recipient Physician,leie,20240320,,2024,no,18.5,1,6=$18,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1891854873

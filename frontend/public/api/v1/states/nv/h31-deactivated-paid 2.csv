@@ -1,4 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1841747979,"DE LA RIVA LONGORIA, LESLEY",NV,2018-12-19,true,medicaid,126765.97,2452,2020-10,2024-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1841747979
-1215470778,"KAYANO, LILIAN",NV,2017-12-31,true,medicaid,121668.75,1180,2022-03,2024-04,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1215470778
-1720151350,"ONG, TENG",NV,2019-01-07,false,medicaid,1657.97,442,2018-01,2019-03,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1720151350

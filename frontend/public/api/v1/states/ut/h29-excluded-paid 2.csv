@@ -1,3 +1,0 @@
-npi,name,paid_amount_post_exclusion,claim_lines_post_exclusion,paid_amount_full_window,claim_lines_full_window,patients_total,top_hcpcs_codes,exclusion_source,exclusion_effective_date,score,first_paid_month,last_paid_month,billing_or_servicing,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1790745768,"BEALL, LARRY",0.0,0,7123.53,48,25,"90837=$7,124",oig_excluded,2024-05-20,1.5,,,servicing,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1790745768
-1407129588,"SULLIVAN, C",0.0,0,4370.89,31,13,"90837=$4,371",oig_excluded,2024-11-20,1.5,,,servicing,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1407129588

@@ -1,4 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1083984850,"ASHBACHER, ASHLEY",MN,2016-09-19,true,medicaid,182199.98,1396,2021-04,2024-12,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1083984850
-1154749273,"BITEW, MAHEDER",MN,2016-03-02,true,medicare_partb,0,0,,,18037.47,126,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1154749273
-1598134207,"ROMANO, SONJA",MN,2017-11-28,true,medicaid,11848.11,135,2021-10,2024-02,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1598134207

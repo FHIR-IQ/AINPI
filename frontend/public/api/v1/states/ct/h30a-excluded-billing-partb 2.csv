@@ -1,3 +1,0 @@
-npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1235186255,"PASACRETA, JEANNE",CT,CT,42701.78,54498.08,417,23,Certified Clinical Nurse Specialist,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1235186255
-1003312018,"IDREES, J",CT,CT,8356.06,11237.96,93,36,Preventive Medicine,oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1003312018

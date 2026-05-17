@@ -1,3 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1790788289,"LEE, FRANCES",HI,2006-03-17,false,medicaid,39258.96,1418,2018-01,2018-07,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1790788289
-1669855953,"BLOOM, ASHLIE",HI,2016-04-04,true,medicare_partd,0,0,,,0,0,4490.02,19,140.29,https://npiregistry.cms.hhs.gov/provider-view/1669855953

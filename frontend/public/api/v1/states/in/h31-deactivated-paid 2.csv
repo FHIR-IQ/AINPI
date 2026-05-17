@@ -1,3 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1952847584,"MEYERS, ALLISON",IN,2019-01-15,true,medicaid|medicare_partb|medicare_partd,90272.82,1090,2021-01,2024-10,1433.84,40,7138.01,110,694.99,https://npiregistry.cms.hhs.gov/provider-view/1952847584
-1417015785,"HUTCHINSON, ROBEERT",IN,2014-08-26,false,medicaid,8527.03,562,2018-01,2019-02,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1417015785

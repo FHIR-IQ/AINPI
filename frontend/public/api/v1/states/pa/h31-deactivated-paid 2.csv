@@ -1,5 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1699054916,"NUNEZ, K",PA,2016-08-10,true,medicaid|medicare_partd,1483652.4,14859,2020-03,2024-12,0,0,508982.85,28,188.53,https://npiregistry.cms.hhs.gov/provider-view/1699054916
-1124515838,"ADDO, BASILIO",PA,2018-11-28,true,medicaid|medicare_partb|medicare_partd,36612.84,856,2021-10,2024-09,78549.68,1041,24170.88,23,109.02,https://npiregistry.cms.hhs.gov/provider-view/1124515838
-1992724306,"DIMARCO, CARLO",PA,2014-09-11,false,medicaid,30464.92,891,2024-07,2024-12,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1992724306
-1124291323,"BOYCE, CONSTANCE",PA,2013-11-05,true,medicaid|medicare_partb,19818.82,290,2023-08,2024-06,3196.11,48,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1124291323

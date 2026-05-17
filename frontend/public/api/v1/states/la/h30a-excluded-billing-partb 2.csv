@@ -1,5 +1,0 @@
-npi,name,state,billing_state,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,provider_type,exclusion_source,exclusion_effective_year,post_exclusion_2023_billing,score,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1003952185,"BOATMAN, TERRY",LA,TX,36625.23,47635.97,225,215,Certified Registered Nurse Anesthetist (CRNA),oig_excluded,2025,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1003952185
-1891185948,"WATSON, M",LA,LA,16968.88,25036.66,938,68,Nurse Practitioner,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1891185948
-1538100078,"HICKEY, KEITH",LA,LA,6318.82,9994.02,79,66,Cardiology,oig_excluded,2026,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1538100078
-1245329325,"BARRETT, BRYAN",LA,LA,5966.29,7778.49,420,49,General Practice,oig_excluded,2024,no,1.5,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1245329325

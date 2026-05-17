@@ -1,5 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1396085015,"LUND, M",MS,Covered Recipient Physician,leie,20240320,,2024,no,45120.0,18,"17=$45,120",https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1396085015
-1265696769,"NICHOLS, BRANTLEY",MS,Covered Recipient Physician,leie,20220519,,2022,yes,400.75,10,6=$309; 2=$92,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1265696769
-1255343570,"PARKER, GREGORY",MS,Covered Recipient Non-Physician Practitioner,leie,20220519,,2022,yes,127.25,7,6=$127,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1255343570
-1629042304,"SANFORD, BEN",MS,Covered Recipient Physician,leie,20220818,,2022,yes,81.19,1,6=$81,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1629042304

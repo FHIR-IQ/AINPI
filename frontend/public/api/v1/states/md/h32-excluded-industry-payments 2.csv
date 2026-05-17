@@ -1,3 +1,0 @@
-npi,name,ndh_state,recipient_type,exclusion_source,leie_excldate,sam_active_date,earliest_exclusion_year,post_exclusion_pgyr2024,industry_payments_2024_total,industry_payments_2024_transactions,top_nature_codes,leie_lookup_url,sam_lookup_url,nppes_lookup_url
-1609985852,"MALAVE, ERNESTO",MD,Covered Recipient Physician,leie,20250820,,2025,no,875.12,56,6=$750; 8=$125,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1609985852
-1457413734,"FRIED, ANDREW",MD,Covered Recipient Physician,leie,20260420,,2026,no,171.27,2,17=$119; 6=$52,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1457413734

@@ -1,7 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1689889180,"CUTLER, ANDREA",IL,2019-03-18,true,medicaid|medicare_partb|medicare_partd,404356.61,5787,2019-07,2024-12,3496.2,62,385655.03,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1689889180
-1588803969,"STEINKAMP, JULIA",IL,2010-05-17,true,medicaid|medicare_partb,2855.72,434,2023-12,2024-03,97078.72,5242,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1588803969
-1518980226,"TANAKA, BLAIR",IL,2015-06-23,false,medicaid,60209.2,1380,2019-04,2020-02,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1518980226
-1033650007,"SHARPSTENE, DANIELLE",IL,2018-07-04,true,medicare_partb,0,0,,,14688.39,674,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1033650007
-1184715062,"KHALID, MUHIYUDDI",IL,2019-02-11,false,medicaid,10524.38,232,2018-01,2019-03,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1184715062
-1366657470,"TONEY, PATRIS",IL,2013-06-19,false,medicaid,1767.74,58,2018-08,2020-12,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1366657470

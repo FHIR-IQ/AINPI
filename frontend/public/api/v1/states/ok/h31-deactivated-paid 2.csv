@@ -1,4 +1,0 @@
-npi,name,state,deactivation_date,ndh_active_flag,billing_sources_post_deactivation,medicaid_post_deactivation_paid,medicaid_post_deactivation_claims,medicaid_first_claim_month,medicaid_last_claim_month,partb_2023_paid,partb_2023_services,partd_2023_drug_cost,partd_2023_opioid_claims,partd_2023_opioid_cost,nppes_lookup_url
-1679741276,"DILLINGHAM, TANYA",OK,2019-01-07,true,medicaid,455601.21,6601,2018-01,2024-10,0,0,0,0,0,https://npiregistry.cms.hhs.gov/provider-view/1679741276
-1245758150,"DAS, SWETA",OK,2018-03-22,true,medicaid|medicare_partb|medicare_partd,519.29,38,2023-02,2023-09,8287.01,142,12891.44,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1245758150
-1437121860,"GORNICHEC, RUSSELL",OK,2019-02-19,true,medicare_partd,0.0,0,2018-01,2018-07,0,0,14663.56,0,0.0,https://npiregistry.cms.hhs.gov/provider-view/1437121860
