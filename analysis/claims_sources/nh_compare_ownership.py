@@ -33,8 +33,8 @@ METHODOLOGY — TWO-TIER MATCH (Stage B, 2026-05-14):
 
     Tier 1 is the regulatorily significant signal — published as the
     headline numerator. Tier 2 is a candidate-verification surface
-    that DMAS / state survey agencies must verify against the LEIE
-    portal before action.
+    that state survey agencies / state PI offices must verify against
+    the LEIE portal before action.
 
 REACH CONTEXT (why these numbers will be small):
     Exclusion under 42 USC § 1320a-7 forces CMS to revoke the provider's

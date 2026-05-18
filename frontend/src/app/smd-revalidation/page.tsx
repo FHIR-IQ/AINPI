@@ -317,17 +317,16 @@ export default function SmdRevalidationPage() {
             Worked example: Virginia
           </h2>
           <p className="text-gray-800 mb-3">
-            Virginia&apos;s Department of Medical Assistance Services (DMAS)
-            administers Cardinal Care, with approximately 1.8 million
-            enrollees and six contracted managed care organizations. The
-            state-scoped AINPI page at{' '}
+            Virginia is one of the per-state worked examples in the
+            AINPI catalog. The state-scoped page at{' '}
             <a href="/states/va" className="underline font-medium">
               /states/va
             </a>{' '}
             re-runs the cleanly state-filterable subset of the AINPI hypothesis
             catalog against Virginia-resident NDH resources, with side-by-side
-            national context and a verify-yourself sample of NPIs the
-            DMAS Program Integrity team can hand to investigators.
+            national context and a verify-yourself sample of NPIs any state
+            Program Integrity team can independently verify against the public
+            federal sources.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">
             {SEED_STATES.map((s) => (

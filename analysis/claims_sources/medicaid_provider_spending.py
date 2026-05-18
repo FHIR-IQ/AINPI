@@ -383,9 +383,9 @@ def write_finding_json(rows: list[dict], states_total: int, total_cohort: int, p
             "CHIP; matches catch MCO-side exposures that AINPI's H26 4-payer sweep "
             "currently misses behind authentication walls. Disclosure timing: "
             "publish when available and high confidence (locked-in 2026-05-14 per "
-            "roadmap §10). DMAS receives 5-business-day review courtesy on "
-            "VA-attributed rows before each refresh — operational courtesy, not "
-            "a publication gate."
+            "roadmap §10). All per-state CSVs ship concurrently with each "
+            "refresh; no state agency receives prior notice or has gating "
+            "rights over publication."
         ),
     }
 

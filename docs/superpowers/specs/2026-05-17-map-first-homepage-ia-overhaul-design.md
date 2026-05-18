@@ -9,7 +9,7 @@ AINPI has grown from a single-purpose audit page into a sprawling site: 11+ item
 
 Two related problems:
 
-1. **No discovery surface.** First-time visitors land in NPD search, which assumes they have a specific NPI in mind. Greg Barabell's feedback (state Medicaid CMO listserve, 2026-05-15) called out the inverse pattern as the hook: "here are N providers you can take action on." That hook is per-state, geographic, and obvious — exactly what a choropleth map is for.
+1. **No discovery surface.** First-time visitors land in NPD search, which assumes they have a specific NPI in mind. The inverse pattern is the hook for state Medicaid CMO audiences: "here are N providers you can take action on." That hook is per-state, geographic, and obvious — exactly what a choropleth map is for.
 2. **Information architecture overload.** The Navbar currently has NPD Search · Data Quality · Findings · States · VA Briefing · Methodology · Insights · HCS Survey · Developer · Payer Search · Magic Scanner · Sign In. Best-practice IA for audit / public-good / data-portal sites runs 5-7 top-level items (see [healthdata.gov](https://www.healthdata.gov), [data.who.int](https://data.who.int/dashboards/global-progress)). The current breadth makes everything compete with everything.
 
 This design proposes a map-first homepage with a 3-style theme switcher and a 5-item primary nav.
@@ -84,7 +84,7 @@ The 11-item Navbar collapses to:
 
 `Sign In` becomes a small right-aligned icon (user silhouette) that opens the login modal when clicked. The current "NEW" badges on individual items go away — the homepage's "last updated" line carries the freshness signal instead.
 
-**`/for-state-medicaid` index (new page)**: a lightweight choropleth-or-list view of all 51 jurisdictions, each linking to its per-state CMO page. Same dataset as the homepage map, but the framing is "pick your state for the forwardable explainer" rather than "explore the audit." Functions as the primary entry-point Greg's listserve forwards will surface for CMOs who land cold.
+**`/for-state-medicaid` index (new page)**: a lightweight choropleth-or-list view of all 51 jurisdictions, each linking to its per-state CMO page. Same dataset as the homepage map, but the framing is "pick your state for the forwardable explainer" rather than "explore the audit." Functions as the primary cold-arrival entry point for state Medicaid CMOs.
 
 **`/npd` and `/payer-search` are preserved as deep-link URLs** — Explore's hero has compact search forms that route to these, so external bookmarks and our own existing links don't break.
 
@@ -192,4 +192,4 @@ E2E (Playwright):
 - amCharts US choropleth demo — https://www.amcharts.com/demos/trumps-reciprocal-tariffs-map/
 - healthdata.gov — https://www.healthdata.gov
 - WHO Global Progress Dashboard — https://data.who.int/dashboards/global-progress
-- Greg Barabell DMAS feedback (2026-05-15) — captured in [[feedback-cmo-audience-framing]] memory.
+- CMO audience-framing rule — captured in [[feedback-cmo-audience-framing]] memory.

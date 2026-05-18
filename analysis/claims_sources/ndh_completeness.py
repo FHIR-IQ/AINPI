@@ -211,7 +211,7 @@ def main() -> None:
             "entity_type=2 NPIs that ARE in NDH-organization. The union "
             "join produces the honest completeness gap. Per-state CSV at "
             "/api/v1/states/va/h36-billers-absent-from-ndh.csv carries "
-            "the VA subset for DMAS triage; national rollup at "
+            "the Virginia subset for state PI triage; national rollup at "
             "/api/v1/findings/ndh-completeness-gap-detail.csv. Verify "
             "individual NPIs at the NPPES Registry to distinguish "
             "true directory-completeness gaps from out-of-scope billers."

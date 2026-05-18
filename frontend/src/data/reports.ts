@@ -76,9 +76,9 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'va-briefing',
     version: 'va-briefing-2026-05-08',
-    title: 'Virginia State Medicaid briefing',
+    title: 'Virginia case study (worked example)',
     description:
-      'Citation-grade briefing prepared for Virginia DMAS. 42 CFR § 455.436 framework + state-specific data quality (130K practitioners, 99.50% NPPES match, 4,090 deactivated-still-listed, 40.8% organization NPI duplicate rate) + the 131-NPI federally-excluded cohort + H26 4-payer cross-reference + Stage B roadmap.',
+      'Worked example using public federal data. 42 CFR § 455.436 framework + Virginia-specific data quality (130K practitioners, 99.50% NPPES match, 4,090 deactivated-still-listed, 40.8% organization NPI duplicate rate) + the 131-NPI Virginia federally-excluded cohort + H26 4-payer cross-reference + Stage B roadmap.',
     format: 'web',
     url: '/briefings/va',
     length: '~10 min read',
@@ -88,7 +88,7 @@ export const REPORTS: ReportOption[] = [
     version: 'va-cohort-critical-2026-05-08',
     title: 'Virginia federally-excluded cohort (CSV)',
     description:
-      'The 131 VA-resident NPIs in the H23 critical bucket (LEIE or SAM excluded, score ≥ 1.5) with per-NPI verification URLs (LEIE / SAM / NPPES). DMAS-shareable; MMIS-ready.',
+      'The 131 VA-resident NPIs in the H23 critical bucket (LEIE or SAM excluded, score ≥ 1.5) with per-NPI verification URLs (LEIE / SAM / NPPES). Public file derived from public federal sources.',
     format: 'csv',
     url: '/api/v1/states/va-cohort-critical.csv',
     badge: 'UPDATED',
