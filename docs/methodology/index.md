@@ -1,13 +1,39 @@
 ---
 title: AINPI methodology
-version: 0.6.0-draft
+version: 0.7.0-draft
 status: findings-landed
-last_updated: 2026-04-21
+last_updated: 2026-05-18
 ---
 
 # AINPI methodology
 
-> **Status: `0.6.0-draft`.** All ten pre-registered findings (H1–H27 bundled into 10 slugs) have landed real numbers against both the 2026-04-09 and 2026-05-08 NDH releases. Three of the four federal database checks under 42 CFR § 455.436 are covered: NPPES (H10–H13), OIG LEIE (H24), and SAM.gov (H25); the SSA Death Master File leg remains out-of-scope due to access restrictions. H26 (VA payer-directory exposure) reaches 4 publicly-queryable payer FHIR endpoints (Humana, Cigna, UHC via Optum FLEX, Molina via Azure APIM); 2 of 6 VA Medicaid MCOs are wired directly. **H27 (PII exposure in NDH bulk export)** independently verifies the 2026-04-30 Washington Post finding that the federal NDH bulk file contains provider Social Security Numbers — 46 confirmed exposures across 17 states in the April 2026-04-09 release; 41 across 15 states in the May 2026-05-08 release (CMS partially scrubbed but did not eliminate). Analyses are reproducible from the scripts in `analysis/`. The methodology prose below is still a working document — expect formalization before `1.0.0`. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
+> **Status: `0.7.0-draft`.** Methodology bumped from 0.6.x to 0.7 after the claims-side cross-audit (H29–H36) shipped for all 50 states + DC + PR, and the homepage was rebuilt as a map-first dashboard. The original ten directory-side findings (H1–H28) still land against both the 2026-04-09 and 2026-05-08 NDH releases, with three of the four federal database checks under 42 CFR § 455.436 closed: NPPES (H10–H13), OIG LEIE (H24), SAM.gov (H25). H26 reaches 4 public payer FHIR endpoints; H27 independently verified the 2026-04-30 Washington Post SSN exposure (46 → 41 across releases; CMS partially scrubbed but did not eliminate). H29–H36 add claims-side cross-checks — Medicaid spending, Medicare Part B + Part D billing, NPPES-deactivated × billing, Open Payments × exclusion, DMEPOS supplier directory, nursing-home / hospice / HHA / hospital ownership disclosures, NDH completeness against material Medicare billers. H37–H39 pre-register the PECOS-as-authoritative-source workstream triggered by CMS's 2026 verification rules. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
+
+## What's new since 0.6.0-draft
+
+- **Methodology improvement #1 — strict post-exclusion attribution.** Earlier framings of "$8.5M Medicaid paid to excluded NPIs 2018–2024" captured pre-exclusion legitimate billing. The H23 cohort exporter now carries per-NPI `leie_excldate`, `sam_active_date`, `nppes_deactivation_date`, and downstream claims-side findings (H29 / H30a / H30b / H32) filter strictly post-exclusion as the regulatory headline. The full-window number stays as a sidecar field. Pattern: when federal exclusion takes effect, federal-program payment stops in the data — the directory still lists them.
+- **Methodology improvement #2 — H35 Stage B via the CMS PPEF cross-walk.** First H35 release reported "0 demographic matches" — a structural null caused by joining on owner STATE, which is 100% empty for individual owners in CMS's All Owners files. Stage B introduces the CMS Medicare Fee-For-Service Public Provider Enrollment File (2.47M individual NPIs) as the cross-walk: PECOS_ASCT_CNTL_ID → NPI for Tier 1 confirmed matches; ENRLMT_ID → STATE_CD for Tier 2 demographic matches with a real geographic filter.
+- **All-states claims-side cross-audit.** H29 / H30a / H30b / H31 / H32 refactored to stream each big source file ONCE and partition output across every state cohort. Same I/O cost as the original VA-only runs; 50× the coverage. Per-state CSVs at `/api/v1/states/<state>/h{29..32}-*.csv`.
+- **Map-first homepage.** `/` is now an interactive US choropleth with a 3-style theme switcher and a 5-metric switcher. Click a state for an at-a-glance side panel with the cross-audit findings. Replaces the previous redirect to `/npd`.
+- **CMO-facing per-state surface.** New `/for-state-medicaid/<state>` pages for the state Medicaid CMO listserve audience — count-and-action lede, no H-numbers, citation-ready for SMD-letter Elements 2 + 4. Index at `/for-state-medicaid`.
+
+## PECOS as authoritative source (CMS 2026 verification rules)
+
+CMS designated PECOS as the authoritative source for Medicare enrollment data. State Medicaid systems must demonstrate alignment with PECOS under the 2026 verification rules. The window between "discrepancy found" and "enrollment affected" tightens.
+
+Three classes of misalignment matter:
+
+1. **Taxonomy code disagreement** (PECOS PROVIDER_TYPE_CD vs NPPES NUCC taxonomy vs actual billing pattern). Behavioral-health wrong-taxonomy generates denials, not warnings. Recoupment risk for the entire window the wrong code was in place.
+2. **Practice location currency.** Stale PECOS addresses survive partnership moves, retirements, and group-practice splits. Multi-enrollment NPIs (the same NPI enrolled in multiple states with conflicting addresses) are the most concrete signal.
+3. **Ownership disclosure currency.** The 2023 CMS Disclosure of Ownership IFR requires disclosures be kept current. AINPI's H35 Stage B already cross-walks owner ASSOCIATE_IDs through PPEF; the PECOS-currency lens extends that to "ownership disclosure was last updated when."
+
+AINPI pre-registers three findings on this workstream:
+
+- **H37 — PECOS PROVIDER_TYPE vs NPPES taxonomy disagreement.** Per-NPI mismatch surfaced against the CMS Medicare ↔ NUCC taxonomy crosswalk. Per-state aggregate for SMD-response Element 3 (revalidation use).
+- **H38 — Behavioral-health taxonomy misalignment.** Subset of H37 narrowed to behavioral-health NUCC codes (counselors, psychologists, LCSWs, MFTs). These are the highest-recoupment-risk providers under the 2026 rules; surfacing the misalignment cohort gives state PI offices and provider organizations the list to triage.
+- **H39 — Multi-enrollment NPIs with conflicting state addresses.** Same NPI enrolled in multiple PECOS records with different `STATE_CD`. Indicates stale records, partnership-move staleness, or active multi-state practice — each requires distinct triage. Per-state CSVs published.
+
+All three findings reuse the PPEF file already on disk for H35 Stage B; no new ingestion. The CMS Medicare ↔ NUCC taxonomy crosswalk used in H10–H13 is the same crosswalk H37 / H38 require.
 
 AINPI audits the CMS National Provider Directory (NPD) bulk public-use release against its own structural requirements, its referential integrity, its endpoint liveness, and its temporal freshness. Every check is reproducible from a clean checkout; every finding is emitted as a FHIR `VerificationResult`.
 
