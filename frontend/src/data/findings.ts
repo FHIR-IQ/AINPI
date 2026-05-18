@@ -16,12 +16,18 @@ export type ImplicationAudience =
   | 'Payer data teams'
   | 'Payer ops teams'
   | 'Provider data teams'
+  | 'Provider organizations'
   | 'Regulators'
   | 'Researchers'
   | 'FHIR implementers'
   | 'Everyone using NDH'
   | 'Startups + integrators'
-  | 'CMS publishing the data';
+  | 'CMS publishing the data'
+  | 'State Medicaid CMOs'
+  | 'State Medicaid PI offices'
+  | 'Individual providers'
+  | 'Behavioral-health providers'
+  | 'Behavioral-health group practices';
 
 export interface Implication {
   audience: ImplicationAudience;
@@ -537,6 +543,97 @@ export const FINDINGS: Finding[] = [
       { audience: 'Regulators', takeaway: 'Empirical FHIR endpoint reachability (90.3% L7) clears the 85% MA network-adequacy implied ceiling on BASIC reachability, but SMART discovery (81.6%) sits below it. If policy adds SMART conformance to the adequacy frame, the floor moves.' },
       { audience: 'Payer data teams', takeaway: 'Technical reachability ≠ regulatory adequacy. The 85% ceiling concerns active-provider share, not endpoint liveness. Don\u2019t substitute one for the other; use both as independent signals.' },
       { audience: 'Researchers', takeaway: 'This gauge maps technical reachability ONTO a regulatory proxy. The mapping is defensible but imperfect. Treat the comparison as illustrative, not regulatory-equivalent.' },
+    ],
+  },
+  {
+    slug: 'pecos-taxonomy-disagreement',
+    hypotheses: ['H37'],
+    title: 'PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy disagreement',
+    summary:
+      'CMS designated PECOS as the authoritative source for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment with PECOS, and the window between "discrepancy found" and "enrollment affected" tightens. This finding cross-references each NPI\'s PECOS PROVIDER_TYPE_CD (from the CMS Public Provider Enrollment Extract) against its NPPES NUCC primary taxonomy via the CMS Medicare ↔ NUCC crosswalk. Mismatches are the regulatorily significant signal: the provider is enrolled to bill one type of service but registered in NPPES for another.',
+    nullHypothesis:
+      'Every Medicare-enrolled NPI in PPEF has a PROVIDER_TYPE that maps cleanly through the CMS Medicare ↔ NUCC taxonomy crosswalk to the NPI\'s NPPES primary taxonomy. No mismatches at scale.',
+    denominator:
+      '2,470,908 individual NPIs in the PPEF (2026-04-01 release) with non-null PECOS_ASCT_CNTL_ID + NPI. Each row\'s PROVIDER_TYPE_CD is mapped through the CMS Medicare ↔ NUCC crosswalk (same crosswalk H10–H13 use); the resolved NUCC code is compared to all 15 NPPES taxonomy slots with switch-aware logic (primary only, then any slot).',
+    dataSource:
+      'PPEF (`frontend/data/cms-claims/PPEF_Enrollment_Extract_2026.04.01.csv`) × NPPES `cms_npd.practitioner` (BigQuery) × CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, fetched fresh per run). Streams the PPEF once, joins via NPI, applies the crosswalk in Python. See `analysis/h37_pecos_taxonomy.py` (pre-registered, not yet shipped).',
+    status: 'pre-registered',
+    ogTagline: 'When CMS makes PECOS authoritative, the mismatches you have always had become enforcement signals.',
+    implications: [
+      {
+        audience: 'State Medicaid CMOs',
+        takeaway:
+          'Under the 2026 verification rules your MMIS must align with PECOS. A non-matching taxonomy on a behavioral-health provider does not generate a warning — it generates a denial, then recoupment over the entire window the wrong code was in place. AINPI\'s per-state CSV gives your PI team the cohort to pre-emptively verify.',
+      },
+      {
+        audience: 'Individual providers',
+        takeaway:
+          'PECOS records do not update themselves. If you changed credentialing, switched specialties, or moved from W2 to private practice and did not refile a CMS-855B/I, your PECOS taxonomy is probably wrong. The fix is your responsibility; the cost of a wrong code now is a recoupment letter.',
+      },
+      {
+        audience: 'Provider organizations',
+        takeaway:
+          'Run AINPI\'s per-state list against your roster. Anyone with a PECOS-NPPES taxonomy mismatch is at active denial risk. The 2026 timelines compress the window between flag and enforcement — preemptive cleanup wins.',
+      },
+    ],
+  },
+  {
+    slug: 'pecos-behavioral-health-taxonomy',
+    hypotheses: ['H38'],
+    title: 'Behavioral-health PECOS taxonomy misalignment (highest-recoupment cohort)',
+    summary:
+      'Subset of H37 narrowed to behavioral-health NUCC codes — counselors, psychologists, LCSWs, marriage/family therapists, addiction counselors, mental health counselors. Behavioral-health wrong-taxonomy is the highest-recoupment-risk category under the 2026 verification rules: payer rejection is automatic (not a warning), and the rejection covers the entire period the wrong code was in place. This finding surfaces the at-risk cohort per state so PI offices, provider organizations, and individual clinicians can verify before CMS does.',
+    nullHypothesis:
+      'Zero NPIs with a behavioral-health NPPES taxonomy slot have a PECOS PROVIDER_TYPE that does not resolve to a behavioral-health NUCC family via the CMS Medicare ↔ NUCC crosswalk.',
+    denominator:
+      'Subset of H37 where any NPPES taxonomy slot matches the NUCC behavioral-health family (codes 101Y* counselor, 103T* psychologist, 1041C* clinical social worker, 106H* marriage and family therapist, 106E* mental health counselor, 106S* addiction counselor, plus related specializations).',
+    dataSource:
+      'H37 output filtered by the NUCC behavioral-health subtree. Per-state CSV at `/api/v1/states/<state>/h38-behavioral-health-pecos-mismatch.csv`. See `analysis/h38_behavioral_health_pecos.py` (pre-registered, not yet shipped).',
+    status: 'pre-registered',
+    ogTagline: 'Behavioral-health wrong-taxonomy = denial + recoupment, not warning. The 2026 timeline does not forgive stale PECOS records.',
+    implications: [
+      {
+        audience: 'Behavioral-health providers',
+        takeaway:
+          'Your taxonomy code drives every payer\'s service-coverage logic. A wrong code that has been in your PECOS record for years can trigger recoupment over that same multi-year window once a payer audit catches it. Run AINPI\'s lookup, check yours.',
+      },
+      {
+        audience: 'Behavioral-health group practices',
+        takeaway:
+          'Roster-wide PECOS audit before the 2026 enforcement window opens. The cost of fixing a CMS-855I refile is trivial; the cost of recoupment on a year of misclassified claims is not.',
+      },
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'The behavioral-health subset is the highest-priority slice within H37 for SMD-letter Element 4 (other comprehensive measures). The cohort is small enough per state to triage manually.',
+      },
+    ],
+  },
+  {
+    slug: 'pecos-multi-enrollment-state-mismatch',
+    hypotheses: ['H39'],
+    title: 'Multi-enrollment NPIs with conflicting state addresses',
+    summary:
+      'PPEF has ~2.98M rows but only ~2.47M individual NPIs — so ~500K NPIs have multiple enrollments. Many are legitimate (multi-state practice, hospital + private practice, etc.) but a subset have CONFLICTING state addresses that signal stale records: partnership move never refiled, retirement never updated, group-practice split where one half kept the legacy enrollment. Under the 2026 verification rules, stale PECOS practice addresses are a flag. This finding surfaces the conflicting-state cohort per state.',
+    nullHypothesis:
+      'Every NPI with multiple PPEF enrollment records has consistent state metadata across those records. Multi-state listings only occur with consistent metadata (e.g., explicit telehealth practice).',
+    denominator:
+      'NPIs in PPEF with ≥2 ENRLMT_ID records and ≥2 distinct STATE_CD values across those records. Per-state attribution: each state where the NPI has any enrollment record.',
+    dataSource:
+      'PPEF (`frontend/data/cms-claims/PPEF_Enrollment_Extract_2026.04.01.csv`). Single pass, GROUP BY NPI, COUNT(DISTINCT STATE_CD) > 1. Per-state CSV at `/api/v1/states/<state>/h39-pecos-multi-state.csv`. See `analysis/h39_pecos_multi_enrollment.py` (pre-registered, not yet shipped).',
+    status: 'pre-registered',
+    ogTagline: 'Same NPI, multiple PECOS records, conflicting state addresses. The 2026 rules read that as a stale record, not a multi-state practice.',
+    implications: [
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'The conflicting-state cohort is a triage layer: any NPI in your state with a competing out-of-state PECOS record is either telehealth (verify), stale (clean up), or fraudulent (refer). Per-state CSV gives your team the working list.',
+      },
+      {
+        audience: 'Individual providers',
+        takeaway:
+          'If you moved practice states and did not close the old enrollment, your PECOS has two competing records. The new authoritative-source rule means the wrong one might win during a verification check. File a CMS-855I to close the old enrollment.',
+      },
     ],
   },
 ];

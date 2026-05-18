@@ -8,23 +8,35 @@ Experimental explorer for the CMS National Provider Directory (NPD) public use f
 
 ## What it does
 
-CMS released the National Provider Directory as FHIR R4 NDJSON public use files from [directory.cms.gov](https://directory.cms.gov/) — 27.2M records across 6 resource types (Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint). AINPI:
+CMS released the National Provider Directory as FHIR R4 NDJSON public use files from [directory.cms.gov](https://directory.cms.gov/) — 21.7M records across 6 resource types (Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, Endpoint) in the May 2026-05-08 release. AINPI:
 
-1. **Ingests** the full 40.7 GB dataset into Google BigQuery (2.8 GB compressed zstd on disk, 27,200,569 rows loaded, 99.985% completeness vs CMS manifest)
-2. **Serves** interactive exploration through a Next.js 14 app on Vercel, backed by Supabase Postgres for pre-aggregated metrics
-3. **Analyzes** data provenance — which fields come from NPPES vs PECOS vs CEHRT vendor submissions, and where the self-attestation gaps are (CAQH is not in the NPD pipeline)
+1. **Ingests** the full dataset into Google BigQuery, then runs ~30 pre-registered findings (H1–H39) against both the directory itself and federal claims/payment data (Medicaid, Medicare Part B + Part D, NPPES-deactivated × billing, Open Payments, DMEPOS, nursing-home ownership disclosures)
+2. **Serves** an interactive US choropleth at `/` with a 3-style theme switcher, plus per-state CMO-facing pages built for the state Medicaid Director-letter response window
+3. **Cross-audits** federal exclusion lists (OIG LEIE + SAM.gov) against the directory, against MMIS-flagged providers, and against federal claims data — closing 3 of the 4 federal database checks the 2026-04-23 CMS State Medicaid Director letter requires (NPPES + LEIE + SAM; SSA-DMF stays restricted)
+
+## What's new
+
+- **2026-05-18 · PECOS-as-authoritative workstream (H37–H39).** CMS designated PECOS as authoritative for Medicare enrollment. State Medicaid systems must demonstrate alignment under the 2026 verification rules. AINPI pre-registered three findings: PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy disagreement (H37), the behavioral-health subset (H38, highest recoupment risk), and multi-state-enrollment NPIs with conflicting addresses (H39). See [`/pecos`](https://ainpi.dev/pecos).
+- **2026-05-17 · Map-first homepage.** `/` is now an interactive US choropleth with 3 selectable styles (Light cards / Dark dashboard / Minimal map). Click a state for an inline side panel with the 5 claims-side findings, CSV download, and primary-source NPI verification.
+- **2026-05-15 · For state Medicaid CMOs.** New `/for-state-medicaid/<state>` per-state pages built for the state Medicaid CMO listserve audience (after pushback from VA DMAS CMO Greg Barabell). Count-and-action lede, no H-numbers, citation-ready for SMD-letter Elements 2 + 4.
+- **2026-05-14 · Claims-side cross-audit shipped for all 50 states + DC + PR.** H29–H36 — Medicaid spending, Medicare Part B / Part D, NPPES-deactivated × billing, Open Payments, DMEPOS, nursing-home ownership (Stage B via the CMS PPEF cross-walk), NDH completeness. 99.99984% NDH completeness against material Medicare Part B billers.
+- **2026-05-08 · NDH May release ingested.** First release-to-release deltas published. Endpoint −73%, Location −61%, OrgAffiliation +147% vs April. Two source-side schema breaks AINPI caught and patched.
 
 ## Pages
 
 | Path | What it is |
 |---|---|
-| [`/methodology`](https://ainpi.vercel.app/methodology) | Versioned audit methodology — DAMA DMBOK mapping, L0–L7 scoring, reproducibility commands |
-| [`/findings`](https://ainpi.vercel.app/findings) | Pre-registered findings (H1–H27). Each states null hypothesis + denominator *before* numbers drop |
-| [`/npd`](https://ainpi.vercel.app/npd) | Public search by NPI, name, organization, state, city |
-| [`/data-quality`](https://ainpi.vercel.app/data-quality) | D3 dashboard: choropleth, sankey, knowledge graph, drill-down, validation |
-| [`/insights`](https://ainpi.vercel.app/insights) | Provenance + variance analysis (NPD vs published org numbers) |
-| [`/provider-search`](https://ainpi.vercel.app/provider-search) | Real-time search against live payer FHIR directories |
-| [`/magic-scanner`](https://ainpi.vercel.app/magic-scanner) | AI-augmented provider discovery |
+| [`/`](https://ainpi.dev/) | Map-first homepage. Click any state for inline findings. 3-style theme switcher. |
+| [`/for-state-medicaid`](https://ainpi.dev/for-state-medicaid) | Index of per-state CMO-facing pages. Forwardable for the SMD-letter response window. |
+| [`/findings`](https://ainpi.dev/findings) | Pre-registered findings (H1–H39). Each states null hypothesis + denominator *before* numbers drop |
+| [`/methodology`](https://ainpi.dev/methodology) | Versioned audit methodology — DAMA DMBOK mapping, L0–L7 scoring, reproducibility commands |
+| [`/pecos`](https://ainpi.dev/pecos) | PECOS-as-authoritative-source brief — implications of the 2026 verification rules |
+| [`/smd-revalidation`](https://ainpi.dev/smd-revalidation) | Citation-ready language for the 2026-05-23 SMD-letter response (Elements 1–5) |
+| [`/data-quality`](https://ainpi.dev/data-quality) | D3 dashboard: choropleth, sankey, knowledge graph, drill-down, validation |
+| [`/insights`](https://ainpi.dev/insights) | Provenance + variance analysis (NPD vs published org numbers) |
+| [`/provider-search`](https://ainpi.dev/provider-search) | Real-time search against live payer FHIR directories |
+| [`/magic-scanner`](https://ainpi.dev/magic-scanner) | AI-augmented provider discovery |
+| [`/npd`](https://ainpi.dev/npd) | Public search by NPI, name, organization, state, city |
 
 ## Public URL contract
 
