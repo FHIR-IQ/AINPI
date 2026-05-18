@@ -1,0 +1,135 @@
+{
+  "slug": "pecos-taxonomy-disagreement",
+  "title": "PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy disagreement",
+  "hypotheses": [
+    "H37"
+  ],
+  "status": "published",
+  "release_date": "PPEF 2026-04-01 + NPPES + CMS Medicare\u2194NUCC crosswalk (2025-10)",
+  "generated_at": "2026-05-18T13:05:12+00:00",
+  "methodology_version": "0.7.0-draft",
+  "commit_sha": "f94199d",
+  "headline": "508,064 of 1,860,307 comparable PPEF-NPPES pairs (27.31%) show a PECOS PROVIDER_TYPE that doesn't resolve to any NUCC code on the NPI's NPPES record, via the CMS Medicare-NUCC crosswalk. Under CMS's 2026 verification rules (PECOS designated as authoritative for Medicare enrollment), this is the regulatorily significant signal: the provider is Medicare-enrolled to bill services their NPPES record does not register them for. Per-state CSVs at /api/v1/states/<state>/h37-pecos-taxonomy-mismatch.csv. The mismatch CSV lists PECOS code(s), resolved-NUCC set, and NPPES-registered NUCC set for every flagged NPI \u2014 provider verification + CMS-855 refile is the fix.",
+  "numerator": 508064,
+  "denominator": 1860307,
+  "denominator_note": "Denominator = 1,860,307 NPIs that are (a) in PPEF with at least one PROVIDER_TYPE_CD that maps through the CMS Medicare\u2194NUCC crosswalk, AND (b) have at least one NUCC taxonomy code on their NPPES record. Numerator = NPIs where the PECOS-resolved NUCC set has empty intersection with the NPPES-registered NUCC set. Filter exclusions: 2,722 PPEF NPIs have only org-level / non-NUCC PROVIDER_TYPE codes (e.g., Part B SUPPLIER - CLINIC/GROUP PRACTICE); 693,627 have no NPPES record; 0 have NPPES but no taxonomy codes \u2014 none of these can be compared and are excluded from both numerator and denominator.",
+  "data_source_release": "PPEF 2026-04-01 + NPPES + CMS Medicare\u2194NUCC crosswalk (2025-10)",
+  "data_source_url": "https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment/medicare-fee-for-service-public-provider-enrollment",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "PECOS-NPPES mismatch",
+        "value": 508064
+      },
+      {
+        "label": "PECOS-NPPES match",
+        "value": 1352243
+      }
+    ]
+  },
+  "per_state": [
+    {
+      "state": "CA",
+      "matches": 64180
+    },
+    {
+      "state": "NY",
+      "matches": 43590
+    },
+    {
+      "state": "TX",
+      "matches": 39574
+    },
+    {
+      "state": "FL",
+      "matches": 36190
+    },
+    {
+      "state": "PA",
+      "matches": 23577
+    },
+    {
+      "state": "OH",
+      "matches": 21776
+    },
+    {
+      "state": "IL",
+      "matches": 20137
+    },
+    {
+      "state": "MI",
+      "matches": 18654
+    },
+    {
+      "state": "NJ",
+      "matches": 18291
+    },
+    {
+      "state": "NC",
+      "matches": 16380
+    },
+    {
+      "state": "MA",
+      "matches": 16193
+    },
+    {
+      "state": "GA",
+      "matches": 16122
+    },
+    {
+      "state": "WA",
+      "matches": 13026
+    },
+    {
+      "state": "VA",
+      "matches": 12923
+    },
+    {
+      "state": "TN",
+      "matches": 10821
+    },
+    {
+      "state": "AZ",
+      "matches": 10733
+    },
+    {
+      "state": "WI",
+      "matches": 10731
+    },
+    {
+      "state": "CO",
+      "matches": 10638
+    },
+    {
+      "state": "MD",
+      "matches": 10597
+    },
+    {
+      "state": "IN",
+      "matches": 10131
+    },
+    {
+      "state": "MO",
+      "matches": 10056
+    },
+    {
+      "state": "MN",
+      "matches": 10054
+    },
+    {
+      "state": "DC",
+      "matches": 9354
+    },
+    {
+      "state": "AL",
+      "matches": 8488
+    },
+    {
+      "state": "LA",
+      "matches": 8273
+    }
+  ],
+  "notes": "The crosswalk is many-to-many: a CMS specialty code can map to multiple NUCC codes (e.g., Internal Medicine spans all IM sub-specialties), and a NUCC code can map to multiple CMS codes. The mismatch test is 'does the PECOS-resolved NUCC set intersect the NPPES set?' \u2014 empty intersection is the signal. This is intentionally permissive: a NPI enrolled for Internal Medicine in PECOS but registered as Family Practice in NPPES will register as a match if the crosswalks share any sub-specialty. The mismatch headline is the conservative count. Per-row detail (pecos_resolved_nucc + nppes_nucc columns) shows exactly which code sets are in disagreement for each flagged NPI; CMS-855B/I refile is the fix. Under the 2026 verification rules, every mismatch is a denial-risk flag \u2014 behavioral-health especially (see H38 for the subset)."
+}

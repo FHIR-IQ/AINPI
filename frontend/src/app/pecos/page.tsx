@@ -25,20 +25,57 @@ export default function PecosPage() {
         {/* Hero */}
         <div className="mb-10">
           <div className="text-xs font-bold uppercase tracking-wider text-blue-700 mb-3">
-            AINPI · PECOS workstream · pre-registered
+            AINPI · PECOS workstream · 2026-05-18 release
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 leading-tight">
             CMS designated PECOS as authoritative for Medicare enrollment.
             Most providers have never actually looked at what is in their
             record.
           </h1>
-          <p className="text-lg text-slate-700 leading-relaxed">
+          <p className="text-lg text-slate-700 leading-relaxed mb-6">
             That matters now in a way it didn&apos;t before. Under the 2026
             verification rules, state Medicaid systems must demonstrate
             alignment with PECOS records. The window between &ldquo;we
             found a discrepancy&rdquo; and &ldquo;your enrollment is
             affected&rdquo; is a lot shorter than it used to be.
           </p>
+
+          {/* Headline numbers from H37/H38/H39 */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="bg-rose-50 border border-rose-200 rounded-md p-4">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-rose-800">
+                PECOS-NPPES taxonomy mismatch (H37)
+              </div>
+              <div className="text-3xl font-bold tabular-nums text-rose-700">
+                508,064
+              </div>
+              <div className="text-xs text-slate-600 mt-0.5">
+                27.31% of 1.86M comparable Medicare-enrolled NPIs
+              </div>
+            </div>
+            <div className="bg-orange-50 border border-orange-200 rounded-md p-4">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-orange-800">
+                Behavioral-health subset (H38)
+              </div>
+              <div className="text-3xl font-bold tabular-nums text-orange-700">
+                44,875
+              </div>
+              <div className="text-xs text-slate-600 mt-0.5">
+                30.38% of 147K BH providers · highest recoupment risk
+              </div>
+            </div>
+            <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-amber-800">
+                Multi-state PECOS records (H39)
+              </div>
+              <div className="text-3xl font-bold tabular-nums text-amber-700">
+                255,700
+              </div>
+              <div className="text-xs text-slate-600 mt-0.5">
+                NPIs enrolled in ≥2 US states · 10.0% of 2.56M NPIs
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Three misalignment classes */}

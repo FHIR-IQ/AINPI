@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "generated_at": "2026-05-17T15:37:26+00:00",
+  "generated_at": "2026-05-18T13:18:13+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -408,6 +408,72 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/findings/oig-leie-exclusions.json",
       "html_url": "https://ainpi.dev/findings/oig-leie-exclusions",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pecos-behavioral-health-taxonomy-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/pecos-behavioral-health-taxonomy-detail.json",
+      "html_url": "https://ainpi.dev/findings/pecos-behavioral-health-taxonomy-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pecos-behavioral-health-taxonomy",
+      "title": "Behavioral-health PECOS taxonomy misalignment (highest-recoupment cohort)",
+      "hypotheses": [
+        "H38"
+      ],
+      "status": "published",
+      "release_date": "PPEF 2026-04-01 + NPPES + CMS Medicare\u2194NUCC crosswalk (2025-10)",
+      "url": "https://ainpi.dev/api/v1/findings/pecos-behavioral-health-taxonomy.json",
+      "html_url": "https://ainpi.dev/findings/pecos-behavioral-health-taxonomy",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pecos-multi-enrollment-state-mismatch-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/pecos-multi-enrollment-state-mismatch-detail.json",
+      "html_url": "https://ainpi.dev/findings/pecos-multi-enrollment-state-mismatch-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pecos-multi-enrollment-state-mismatch",
+      "title": "Multi-enrollment NPIs with conflicting state addresses (PECOS)",
+      "hypotheses": [
+        "H39"
+      ],
+      "status": "published",
+      "release_date": "PPEF 2026-04-01",
+      "url": "https://ainpi.dev/api/v1/findings/pecos-multi-enrollment-state-mismatch.json",
+      "html_url": "https://ainpi.dev/findings/pecos-multi-enrollment-state-mismatch",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pecos-taxonomy-disagreement-detail",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": null,
+      "url": "https://ainpi.dev/api/v1/findings/pecos-taxonomy-disagreement-detail.json",
+      "html_url": "https://ainpi.dev/findings/pecos-taxonomy-disagreement-detail",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "pecos-taxonomy-disagreement",
+      "title": "PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy disagreement",
+      "hypotheses": [
+        "H37"
+      ],
+      "status": "published",
+      "release_date": "PPEF 2026-04-01 + NPPES + CMS Medicare\u2194NUCC crosswalk (2025-10)",
+      "url": "https://ainpi.dev/api/v1/findings/pecos-taxonomy-disagreement.json",
+      "html_url": "https://ainpi.dev/findings/pecos-taxonomy-disagreement",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {

@@ -1,0 +1,359 @@
+{
+  "queried_at": "2026-05-18T13:16:20+00:00",
+  "nppes_bh_npis": 898109,
+  "bh_with_pecos_in_crosswalk": 147693,
+  "bh_with_pecos_outside_crosswalk": 13,
+  "matches": 102818,
+  "mismatches": 44875,
+  "mismatch_rate_pct": 30.38,
+  "top_states": [
+    {
+      "state": "CA",
+      "matches": 5524
+    },
+    {
+      "state": "NY",
+      "matches": 2884
+    },
+    {
+      "state": "FL",
+      "matches": 2403
+    },
+    {
+      "state": "TX",
+      "matches": 2220
+    },
+    {
+      "state": "MI",
+      "matches": 2146
+    },
+    {
+      "state": "MA",
+      "matches": 2109
+    },
+    {
+      "state": "OH",
+      "matches": 2072
+    },
+    {
+      "state": "PA",
+      "matches": 1828
+    },
+    {
+      "state": "IL",
+      "matches": 1651
+    },
+    {
+      "state": "MN",
+      "matches": 1411
+    },
+    {
+      "state": "NJ",
+      "matches": 1399
+    },
+    {
+      "state": "CO",
+      "matches": 1295
+    },
+    {
+      "state": "NC",
+      "matches": 1280
+    },
+    {
+      "state": "WA",
+      "matches": 1274
+    },
+    {
+      "state": "OR",
+      "matches": 1185
+    },
+    {
+      "state": "WI",
+      "matches": 1122
+    },
+    {
+      "state": "CT",
+      "matches": 967
+    },
+    {
+      "state": "GA",
+      "matches": 888
+    },
+    {
+      "state": "OK",
+      "matches": 837
+    },
+    {
+      "state": "IN",
+      "matches": 783
+    },
+    {
+      "state": "VA",
+      "matches": 760
+    },
+    {
+      "state": "MD",
+      "matches": 735
+    },
+    {
+      "state": "MO",
+      "matches": 663
+    },
+    {
+      "state": "KY",
+      "matches": 625
+    },
+    {
+      "state": "AZ",
+      "matches": 620
+    }
+  ],
+  "sample_mismatches": [
+    {
+      "npi": "1629132279",
+      "name": "GALLO, FRED",
+      "states": [
+        "PA"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "103T00000X",
+      "bh_codes_on_nppes": "103T00000X"
+    },
+    {
+      "npi": "1770938359",
+      "name": "CHAMPAIGN COUNSELING LLC",
+      "states": [
+        "IL"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "1041C0700X",
+      "bh_codes_on_nppes": "1041C0700X"
+    },
+    {
+      "npi": "1326080003",
+      "name": "THE SAMARITAN COUNSELING CENTER, INC.",
+      "states": [
+        "AL"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "101YP2500X,103T00000X,106H00000X",
+      "bh_codes_on_nppes": "101YP2500X,103T00000X,106H00000X"
+    },
+    {
+      "npi": "1558667758",
+      "name": "BRADOW, ALLYSON",
+      "states": [
+        "KY"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "103T00000X",
+      "bh_codes_on_nppes": "103T00000X"
+    },
+    {
+      "npi": "1366472706",
+      "name": "THE GETTYSBURG HOSPITAL",
+      "states": [
+        "PA"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "101Y00000X,102L00000X,207P00000X,207R00000X,207RC0000X+10",
+      "bh_codes_on_nppes": "101Y00000X"
+    },
+    {
+      "npi": "1013991405",
+      "name": "PAMELA MILLER PHD PC",
+      "states": [
+        "OR"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "103TC0700X",
+      "bh_codes_on_nppes": "103TC0700X"
+    },
+    {
+      "npi": "1285910075",
+      "name": "GLASPER-SATTWHITE, JACQUELINE",
+      "states": [
+        "NV"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL SOCIAL WORKER",
+      "pecos_codes": "14-80",
+      "pecos_resolved_nucc": "1041C0700X",
+      "nppes_nucc": "101Y00000X",
+      "bh_codes_on_nppes": "101Y00000X"
+    },
+    {
+      "npi": "1063781441",
+      "name": "KENDRICK, JENNIFER",
+      "states": [
+        "IN",
+        "KY",
+        "MN",
+        "OH",
+        "WV"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL SOCIAL WORKER",
+      "pecos_codes": "14-80",
+      "pecos_resolved_nucc": "1041C0700X",
+      "nppes_nucc": "106H00000X",
+      "bh_codes_on_nppes": "106H00000X"
+    },
+    {
+      "npi": "1477736866",
+      "name": "CAROLE M ROWLAND PHD PLLC",
+      "states": [
+        "MI"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "103T00000X",
+      "bh_codes_on_nppes": "103T00000X"
+    },
+    {
+      "npi": "1669621033",
+      "name": "REYNOLDS, ABIGAIL",
+      "states": [
+        "CA"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "101YM0800X,103T00000X,225C00000X",
+      "bh_codes_on_nppes": "101YM0800X,103T00000X"
+    },
+    {
+      "npi": "1992243794",
+      "name": "PADILLA, CHRISTINA",
+      "states": [
+        "CA"
+      ],
+      "pecos_types": "PRACTITIONER - MARRIAGE AND FAMILY THERAPIST",
+      "pecos_codes": "14-E1",
+      "pecos_resolved_nucc": "106H00000X",
+      "nppes_nucc": "101YM0800X",
+      "bh_codes_on_nppes": "101YM0800X"
+    },
+    {
+      "npi": "1962650242",
+      "name": "DE LOS SANTOS, SARAH",
+      "states": [
+        "CA"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "101YM0800X",
+      "bh_codes_on_nppes": "101YM0800X"
+    },
+    {
+      "npi": "1154715274",
+      "name": "OGLAND-HAND CONSULTING LLC",
+      "states": [
+        "MI"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "103TC0700X",
+      "bh_codes_on_nppes": "103TC0700X"
+    },
+    {
+      "npi": "1467740407",
+      "name": "CONSTANTINO, MICHELLE",
+      "states": [
+        "VA"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "101YM0800X,103T00000X",
+      "bh_codes_on_nppes": "101YM0800X,103T00000X"
+    },
+    {
+      "npi": "1598917692",
+      "name": "FIEBELKORN KENNEDY, BETHANY",
+      "states": [
+        "MN"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "103T00000X",
+      "bh_codes_on_nppes": "103T00000X"
+    },
+    {
+      "npi": "1538544952",
+      "name": "PASSARO, ARIANNA",
+      "states": [
+        "CA"
+      ],
+      "pecos_types": "ORDER AND REFERRING ONLY - MARRIAGE AND FAMILY THERAPIST",
+      "pecos_codes": "33-E1",
+      "pecos_resolved_nucc": "106H00000X",
+      "nppes_nucc": "101YM0800X",
+      "bh_codes_on_nppes": "101YM0800X"
+    },
+    {
+      "npi": "1952424715",
+      "name": "BELANGER, MARY",
+      "states": [
+        "MI"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL PSYCHOLOGIST",
+      "pecos_codes": "14-68",
+      "pecos_resolved_nucc": "103TC0700X",
+      "nppes_nucc": "103T00000X",
+      "bh_codes_on_nppes": "103T00000X"
+    },
+    {
+      "npi": "1497184949",
+      "name": "ED PATTON LLC.",
+      "states": [
+        "MN"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "106H00000X",
+      "bh_codes_on_nppes": "106H00000X"
+    },
+    {
+      "npi": "1710447859",
+      "name": "GRAY, SAMUEL",
+      "states": [
+        "MA"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL SOCIAL WORKER",
+      "pecos_codes": "14-80",
+      "pecos_resolved_nucc": "1041C0700X",
+      "nppes_nucc": "101Y00000X",
+      "bh_codes_on_nppes": "101Y00000X"
+    },
+    {
+      "npi": "1215249693",
+      "name": "BARNHART, TIFFANY",
+      "states": [
+        "OH"
+      ],
+      "pecos_types": "PRACTITIONER - MENTAL HEALTH COUNSELOR",
+      "pecos_codes": "14-E2",
+      "pecos_resolved_nucc": "101YM0800X,101YP2500X",
+      "nppes_nucc": "101Y00000X",
+      "bh_codes_on_nppes": "101Y00000X"
+    }
+  ],
+  "csv_url_national": "/api/v1/findings/pecos-behavioral-health-taxonomy-detail.csv",
+  "csv_url_pattern": "/api/v1/states/<state>/h38-behavioral-health-pecos-mismatch.csv"
+}

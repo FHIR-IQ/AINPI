@@ -1,0 +1,338 @@
+{
+  "queried_at": "2026-05-18T13:05:12+00:00",
+  "total_ppef_rows": 2981799,
+  "distinct_npis_in_ppef": 2556656,
+  "no_pecos_specialty_in_crosswalk": 2722,
+  "npi_not_in_nppes": 693627,
+  "nppes_no_taxonomy": 0,
+  "comparable_pairs": 1860307,
+  "matches": 1352243,
+  "mismatches": 508064,
+  "mismatch_rate_pct": 27.31,
+  "top_states": [
+    {
+      "state": "CA",
+      "matches": 64180
+    },
+    {
+      "state": "NY",
+      "matches": 43590
+    },
+    {
+      "state": "TX",
+      "matches": 39574
+    },
+    {
+      "state": "FL",
+      "matches": 36190
+    },
+    {
+      "state": "PA",
+      "matches": 23577
+    },
+    {
+      "state": "OH",
+      "matches": 21776
+    },
+    {
+      "state": "IL",
+      "matches": 20137
+    },
+    {
+      "state": "MI",
+      "matches": 18654
+    },
+    {
+      "state": "NJ",
+      "matches": 18291
+    },
+    {
+      "state": "NC",
+      "matches": 16380
+    },
+    {
+      "state": "MA",
+      "matches": 16193
+    },
+    {
+      "state": "GA",
+      "matches": 16122
+    },
+    {
+      "state": "WA",
+      "matches": 13026
+    },
+    {
+      "state": "VA",
+      "matches": 12923
+    },
+    {
+      "state": "TN",
+      "matches": 10821
+    },
+    {
+      "state": "AZ",
+      "matches": 10733
+    },
+    {
+      "state": "WI",
+      "matches": 10731
+    },
+    {
+      "state": "CO",
+      "matches": 10638
+    },
+    {
+      "state": "MD",
+      "matches": 10597
+    },
+    {
+      "state": "IN",
+      "matches": 10131
+    },
+    {
+      "state": "MO",
+      "matches": 10056
+    },
+    {
+      "state": "MN",
+      "matches": 10054
+    },
+    {
+      "state": "DC",
+      "matches": 9354
+    },
+    {
+      "state": "AL",
+      "matches": 8488
+    },
+    {
+      "state": "LA",
+      "matches": 8273
+    }
+  ],
+  "sample_mismatches": [
+    {
+      "npi": "1003000209",
+      "name": "KOPELMAN FAMILY CHIROPRACTIC INC",
+      "states": [
+        "MA"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "111N00000X"
+    },
+    {
+      "npi": "1003000217",
+      "name": "TRI-STATE EYE CARE CENTER, LTD.",
+      "states": [
+        "WV"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "152W00000X"
+    },
+    {
+      "npi": "1003000225",
+      "name": "MORGAN, ANNA",
+      "states": [
+        "CA"
+      ],
+      "pecos_types": "PRACTITIONER - PEDIATRIC MEDICINE",
+      "pecos_codes": "14-37",
+      "pecos_resolved_nucc": "208000000X,2080A0000X,2080B0002X,2080C0008X,2080H0002X+19",
+      "nppes_nucc": "174400000X"
+    },
+    {
+      "npi": "1003000274",
+      "name": "WAEL ALABDULKARIM, MD APMC",
+      "states": [
+        "LA"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "2084N0400X"
+    },
+    {
+      "npi": "1003000308",
+      "name": "KEITH M DOCKERY, MD PC",
+      "states": [
+        "GA"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "231H00000X"
+    },
+    {
+      "npi": "1003000399",
+      "name": "RECONSTRUCTIVE HAND TO SHOULDER OF INDIANA LLC",
+      "states": [
+        "IN"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "207XS0106X"
+    },
+    {
+      "npi": "1003000423",
+      "name": "VELOTTA, JENNIFER",
+      "states": [
+        "OH"
+      ],
+      "pecos_types": "PRACTITIONER - OBSTETRICS/GYNECOLOGY",
+      "pecos_codes": "14-16",
+      "pecos_resolved_nucc": "207V00000X,207VB0002X,207VC0200X,207VC0300X,207VE0102X+6",
+      "nppes_nucc": "390200000X"
+    },
+    {
+      "npi": "1003000514",
+      "name": "SENIOR MANAGEMENT INC",
+      "states": [
+        "WI"
+      ],
+      "pecos_types": "PART A PROVIDER - SKILLED NURSING FACILITY",
+      "pecos_codes": "00-18",
+      "pecos_resolved_nucc": "207W00000X,207WX0009X,207WX0107X,207WX0109X,207WX0110X+2",
+      "nppes_nucc": "314000000X"
+    },
+    {
+      "npi": "1003000639",
+      "name": "BENHARASH, PEYMAN",
+      "states": [
+        "CA"
+      ],
+      "pecos_types": "PRACTITIONER - CARDIAC SURGERY",
+      "pecos_codes": "14-78",
+      "pecos_resolved_nucc": "208G00000X",
+      "nppes_nucc": "208600000X"
+    },
+    {
+      "npi": "1003000670",
+      "name": "DR JEFF SNYDER LLC",
+      "states": [
+        "PA"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "111N00000X"
+    },
+    {
+      "npi": "1003001066",
+      "name": "WOMENS HEALTH SERVICES CHATTANOOGA PC",
+      "states": [
+        "GA"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "174400000X"
+    },
+    {
+      "npi": "1003001322",
+      "name": "NODAWAY COUNTY HEALTH CENTER",
+      "states": [
+        "MO"
+      ],
+      "pecos_types": "PART B SUPPLIER - MASS IMMUNIZATION (ROSTER BILLER ONLY)",
+      "pecos_codes": "12-73",
+      "pecos_resolved_nucc": "",
+      "nppes_nucc": "251K00000X"
+    },
+    {
+      "npi": "1003001538",
+      "name": "MIDWEST INTERNAL MEDICINE ASSOCIATES LLC",
+      "states": [
+        "OH"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "207R00000X"
+    },
+    {
+      "npi": "1003001579",
+      "name": "KEVIN LANE DO PA",
+      "states": [
+        "TX"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "207Q00000X"
+    },
+    {
+      "npi": "1003001629",
+      "name": "HARMONY CHIROPRACTIC PC",
+      "states": [
+        "OK"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "111N00000X"
+    },
+    {
+      "npi": "1003001702",
+      "name": "CENTRAL MAINE FAMILY COUNSELING PA",
+      "states": [
+        "ME"
+      ],
+      "pecos_types": "PART B SUPPLIER - CLINIC/GROUP PRACTICE",
+      "pecos_codes": "12-70",
+      "pecos_resolved_nucc": "193200000X,193400000X,261Q00000X,261QM1300X,261QP2000X",
+      "nppes_nucc": "251S00000X"
+    },
+    {
+      "npi": "1003001819",
+      "name": "TAVORA, SARA",
+      "states": [
+        "MI"
+      ],
+      "pecos_types": "PRACTITIONER - CLINICAL SOCIAL WORKER",
+      "pecos_codes": "14-80",
+      "pecos_resolved_nucc": "1041C0700X",
+      "nppes_nucc": "101YM0800X"
+    },
+    {
+      "npi": "1003001975",
+      "name": "CHRISTIANSON, SHANNON",
+      "states": [
+        "ID"
+      ],
+      "pecos_types": "PRACTITIONER - PHYSICAL THERAPIST IN PRIVATE PRACTICE",
+      "pecos_codes": "14-65",
+      "pecos_resolved_nucc": "225100000X,2251C2600X,2251E1200X,2251E1300X,2251G0304X+6",
+      "nppes_nucc": "261QP2000X"
+    },
+    {
+      "npi": "1003002106",
+      "name": "CASTRO CORDOBA, JUAN LUIS",
+      "states": [
+        "FL"
+      ],
+      "pecos_types": "PRACTITIONER - PSYCHIATRY",
+      "pecos_codes": "14-26",
+      "pecos_resolved_nucc": "2084P0301X,2084P0800X",
+      "nppes_nucc": "2084P0804X"
+    },
+    {
+      "npi": "1003002148",
+      "name": "OWENS, JUSTIN",
+      "states": [
+        "LA"
+      ],
+      "pecos_types": "PRACTITIONER - DIAGNOSTIC RADIOLOGY",
+      "pecos_codes": "14-30",
+      "pecos_resolved_nucc": "2085D0003X,2085P0229X,2085R0202X,2085R0205X,2085U0001X",
+      "nppes_nucc": "2083A0100X"
+    }
+  ],
+  "csv_url_national": "/api/v1/findings/pecos-taxonomy-disagreement-detail.csv",
+  "csv_url_pattern": "/api/v1/states/<state>/h37-pecos-taxonomy-mismatch.csv"
+}

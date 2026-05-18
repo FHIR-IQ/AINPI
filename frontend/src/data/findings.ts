@@ -550,15 +550,15 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H37'],
     title: 'PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy disagreement',
     summary:
-      'CMS designated PECOS as the authoritative source for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment with PECOS, and the window between "discrepancy found" and "enrollment affected" tightens. This finding cross-references each NPI\'s PECOS PROVIDER_TYPE_CD (from the CMS Public Provider Enrollment Extract) against its NPPES NUCC primary taxonomy via the CMS Medicare ↔ NUCC crosswalk. Mismatches are the regulatorily significant signal: the provider is enrolled to bill one type of service but registered in NPPES for another.',
+      'CMS designated PECOS as the authoritative source for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment with PECOS, and the window between "discrepancy found" and "enrollment affected" tightens. This finding cross-references each NPI\'s PECOS PROVIDER_TYPE_CD against its NPPES NUCC taxonomy via the CMS Medicare ↔ NUCC crosswalk. **Result: 508,064 of 1,860,307 comparable pairs (27.31%) show empty intersection between the PECOS-resolved NUCC set and the NPPES-registered NUCC set.** CA leads with 64,180, NY 43,590, TX 39,574, FL 36,190. Every mismatch is a denial-risk flag under the 2026 verification rules — the provider is Medicare-enrolled to bill services their NPPES record does not register them for.',
     nullHypothesis:
-      'Every Medicare-enrolled NPI in PPEF has a PROVIDER_TYPE that maps cleanly through the CMS Medicare ↔ NUCC taxonomy crosswalk to the NPI\'s NPPES primary taxonomy. No mismatches at scale.',
+      'Every Medicare-enrolled NPI in PPEF has a PROVIDER_TYPE that maps cleanly through the CMS Medicare ↔ NUCC taxonomy crosswalk to the NPI\'s NPPES NUCC taxonomy set. No mismatches at scale.',
     denominator:
-      '2,470,908 individual NPIs in the PPEF (2026-04-01 release) with non-null PECOS_ASCT_CNTL_ID + NPI. Each row\'s PROVIDER_TYPE_CD is mapped through the CMS Medicare ↔ NUCC crosswalk (same crosswalk H10–H13 use); the resolved NUCC code is compared to all 15 NPPES taxonomy slots with switch-aware logic (primary only, then any slot).',
+      '1,860,307 NPIs that are (a) Medicare-enrolled in PPEF (2026-04-01) with a PROVIDER_TYPE_CD that maps through the CMS Medicare ↔ NUCC crosswalk (Oct 2025), AND (b) carry at least one NUCC taxonomy code on their NPPES record. Excludes 2,722 PPEF NPIs with only org-level / non-NUCC PROVIDER_TYPE codes (Part B SUPPLIER - CLINIC/GROUP PRACTICE etc.) and 693,627 PPEF NPIs not found in the NPPES public dataset.',
     dataSource:
-      'PPEF (`frontend/data/cms-claims/PPEF_Enrollment_Extract_2026.04.01.csv`) × NPPES `cms_npd.practitioner` (BigQuery) × CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, fetched fresh per run). Streams the PPEF once, joins via NPI, applies the crosswalk in Python. See `analysis/h37_pecos_taxonomy.py` (pre-registered, not yet shipped).',
-    status: 'pre-registered',
-    ogTagline: 'When CMS makes PECOS authoritative, the mismatches you have always had become enforcement signals.',
+      'PPEF × NPPES (`bigquery-public-data.nppes.npi_optimized`) × CMS Medicare Provider and Supplier Taxonomy Crosswalk (loaded to `cms_npd.medicare_taxonomy_crosswalk`, same crosswalk H10–H13 use). Streams PPEF once, joins via NPI, applies the crosswalk in Python; intersection test on the resolved-NUCC sets. See `analysis/h37_pecos_taxonomy.py`.',
+    status: 'published',
+    ogTagline: '508,064 PECOS-NPPES taxonomy mismatches nationally (27.31%). Under the 2026 verification rules, every one is a denial-risk flag.',
     implications: [
       {
         audience: 'State Medicaid CMOs',
@@ -582,15 +582,15 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H38'],
     title: 'Behavioral-health PECOS taxonomy misalignment (highest-recoupment cohort)',
     summary:
-      'Subset of H37 narrowed to behavioral-health NUCC codes — counselors, psychologists, LCSWs, marriage/family therapists, addiction counselors, mental health counselors. Behavioral-health wrong-taxonomy is the highest-recoupment-risk category under the 2026 verification rules: payer rejection is automatic (not a warning), and the rejection covers the entire period the wrong code was in place. This finding surfaces the at-risk cohort per state so PI offices, provider organizations, and individual clinicians can verify before CMS does.',
+      'Subset of H37 narrowed to NPIs with at least one behavioral-health NUCC code on their NPPES record. **Result: 44,875 of 147,693 comparable behavioral-health pairs (30.38%) show PECOS-NPPES mismatch — higher than the all-comers rate of 27.31% (H37).** Behavioral-health wrong-taxonomy is the highest-recoupment-risk category under the 2026 verification rules: payer rejection is automatic (not a warning), and the rejection covers the entire period the wrong code was in place. CA 5,524, NY 2,884, FL 2,403, TX 2,220 lead.',
     nullHypothesis:
-      'Zero NPIs with a behavioral-health NPPES taxonomy slot have a PECOS PROVIDER_TYPE that does not resolve to a behavioral-health NUCC family via the CMS Medicare ↔ NUCC crosswalk.',
+      'Behavioral-health NPIs do not exhibit a higher PECOS-NPPES taxonomy mismatch rate than the all-comers H37 baseline. The subset matches at the same ~27% rate.',
     denominator:
-      'Subset of H37 where any NPPES taxonomy slot matches the NUCC behavioral-health family (codes 101Y* counselor, 103T* psychologist, 1041C* clinical social worker, 106H* marriage and family therapist, 106E* mental health counselor, 106S* addiction counselor, plus related specializations).',
+      '147,693 NPIs that are (a) Medicare-enrolled in PPEF, (b) have a PECOS PROVIDER_TYPE that maps through the CMS Medicare ↔ NUCC crosswalk, AND (c) carry at least one behavioral-health NUCC code on their NPPES record. Behavioral-health prefixes: 101Y (counselor), 103T (psychologist), 103G (clinical neuropsychologist), 103K (behavior analyst), 1041C / 1041S (clinical/school social worker), 106E (assistant behavior analyst), 106H (marriage & family therapist).',
     dataSource:
-      'H37 output filtered by the NUCC behavioral-health subtree. Per-state CSV at `/api/v1/states/<state>/h38-behavioral-health-pecos-mismatch.csv`. See `analysis/h38_behavioral_health_pecos.py` (pre-registered, not yet shipped).',
-    status: 'pre-registered',
-    ogTagline: 'Behavioral-health wrong-taxonomy = denial + recoupment, not warning. The 2026 timeline does not forgive stale PECOS records.',
+      'H37 input dataset filtered to NPPES behavioral-health NPIs. See `analysis/h38_behavioral_health_pecos.py`. Per-state CSV at `/api/v1/states/<state>/h38-behavioral-health-pecos-mismatch.csv`.',
+    status: 'published',
+    ogTagline: '30.38% behavioral-health PECOS-NPPES mismatch rate. 44,875 providers at automatic-denial risk under the 2026 verification rules.',
     implications: [
       {
         audience: 'Behavioral-health providers',
@@ -614,15 +614,15 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H39'],
     title: 'Multi-enrollment NPIs with conflicting state addresses',
     summary:
-      'PPEF has ~2.98M rows but only ~2.47M individual NPIs — so ~500K NPIs have multiple enrollments. Many are legitimate (multi-state practice, hospital + private practice, etc.) but a subset have CONFLICTING state addresses that signal stale records: partnership move never refiled, retirement never updated, group-practice split where one half kept the legacy enrollment. Under the 2026 verification rules, stale PECOS practice addresses are a flag. This finding surfaces the conflicting-state cohort per state.',
+      'PPEF has ~2.98M rows but ~2.56M distinct NPIs — so ~400K NPIs have multiple enrollments. Many are legitimate telehealth or multi-state practice. **Result: 255,700 of 2,556,656 distinct NPIs (10.0%) have enrollment records in 2 or more distinct US states.** Top NPIs include telehealth companies enrolled in all 51 jurisdictions (VIRTA MEDICAL PC, ACCESS TELECARE PLLC). TX 36,364, FL 31,680, NY 30,320, DC 30,247 lead — DC is high because of national-scope organizations enrolling in DC for federal contracting. Under the 2026 verification rules, every multi-state enrollment is a flag requiring triage: telehealth (document) · stale (file CMS-855I to close) · fraudulent (refer).',
     nullHypothesis:
-      'Every NPI with multiple PPEF enrollment records has consistent state metadata across those records. Multi-state listings only occur with consistent metadata (e.g., explicit telehealth practice).',
+      'Every NPI with multiple PPEF enrollment records has consistent state metadata across those records. Multi-state listings only occur with consistent metadata.',
     denominator:
-      'NPIs in PPEF with ≥2 ENRLMT_ID records and ≥2 distinct STATE_CD values across those records. Per-state attribution: each state where the NPI has any enrollment record.',
+      '2,556,656 distinct NPIs in PPEF (2026-04-01) across 2,981,800 enrollment records. Numerator = NPIs with ≥2 distinct US-jurisdiction STATE_CD values across their enrollment records. Per-state attribution: each state where the NPI has any enrollment record (so an NPI enrolled in VA + MD appears in both states\' CSVs).',
     dataSource:
-      'PPEF (`frontend/data/cms-claims/PPEF_Enrollment_Extract_2026.04.01.csv`). Single pass, GROUP BY NPI, COUNT(DISTINCT STATE_CD) > 1. Per-state CSV at `/api/v1/states/<state>/h39-pecos-multi-state.csv`. See `analysis/h39_pecos_multi_enrollment.py` (pre-registered, not yet shipped).',
-    status: 'pre-registered',
-    ogTagline: 'Same NPI, multiple PECOS records, conflicting state addresses. The 2026 rules read that as a stale record, not a multi-state practice.',
+      'PPEF (`frontend/data/cms-claims/PPEF_Enrollment_Extract_2026.04.01.csv`). Single pass, GROUP BY NPI, COUNT(DISTINCT STATE_CD) > 1. Per-state CSV at `/api/v1/states/<state>/h39-pecos-multi-state.csv`. See `analysis/h39_pecos_multi_enrollment.py`.',
+    status: 'published',
+    ogTagline: '255,700 NPIs enrolled in ≥2 US states. Some are telehealth; some are stale. Under 2026 rules, every one needs triage.',
     implications: [
       {
         audience: 'State Medicaid PI offices',
