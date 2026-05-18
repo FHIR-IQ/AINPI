@@ -80,7 +80,7 @@ const STATIC_API: Endpoint[] = [
   {
     method: 'GET',
     path: '/api/v1/states/va-cohort-critical.csv',
-    summary: 'Federally-excluded VA NPIs (LEIE or SAM, score ≥ 1.5) with per-NPI verification URLs. DMAS-shareable.',
+    summary: 'Federally-excluded VA-resident NPIs (LEIE or SAM, score ≥ 1.5) with per-NPI verification URLs (LEIE / SAM / NPPES).',
     tier: 'static',
     exampleCurl: 'curl -s https://ainpi.dev/api/v1/states/va-cohort-critical.csv',
   },

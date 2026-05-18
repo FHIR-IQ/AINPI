@@ -214,10 +214,11 @@ def main() -> None:
             f"This is a national finding — DMEPOS supplier directory is itself "
             f"the population, joined against the active LEIE ∪ SAM NPI set "
             f"({len(excl)} NPIs). Per-state breakdown chart shows the top 10 "
-            f"states by matched supplier count. VA-state slice at "
+            f"states by matched supplier count. Virginia-state slice at "
             f"/api/v1/states/va/h33-dmepos-excluded-va.csv ({len(va_matches)} "
-            f"rows) for DMAS triage. Full national CSV with all {len(matches)} "
-            f"matched suppliers at /api/v1/findings/dmepos-excluded-detail.csv."
+            f"rows) for state PI triage. Full national CSV with all "
+            f"{len(matches)} matched suppliers at "
+            f"/api/v1/findings/dmepos-excluded-detail.csv."
         ),
     }
 

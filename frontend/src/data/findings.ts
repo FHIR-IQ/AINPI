@@ -56,7 +56,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H29'],
     title: 'Federally excluded providers paid by Medicaid (HHS spending dataset)',
     summary:
-      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred — and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls. Virginia is the Phase 1 pilot state.',
+      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred — and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls. Virginia is shipped as the most-developed worked example; per-state CSVs published for all 51 jurisdictions.',
     nullHypothesis:
       'Zero NPIs currently active on OIG LEIE or SAM.gov appear as Billing NPI or Servicing NPI in the HHS Medicaid Provider Spending dataset (2018–2024).',
     denominator:

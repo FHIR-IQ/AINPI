@@ -771,16 +771,16 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             differs.
           </p>
           <p className="text-gray-700 text-sm">
-            Virginia has been the pilot state for this work; the
-            Department of Medical Assistance Services (DMAS) shaped much
-            of the format you see here.{' '}
+            The Virginia worked example is the most-developed of the per-state
+            case studies and includes a deeper narrative breakdown.{' '}
             <Link
               href="/briefings/va"
               className="text-blue-600 hover:underline"
             >
-              Read the Virginia briefing
+              Read the Virginia case study
             </Link>{' '}
-            for the full deeper-dive version of what AINPI gives a state.
+            for the longer-form version of what the per-state cross-audit
+            looks like.
           </p>
         </div>
       </section>
@@ -879,9 +879,10 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
       <section className="bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-10 text-sm text-gray-600">
           <p className="mb-2">
-            AINPI is produced by FHIR IQ. Built for state Medicaid
-            agencies, shaped by direct work with the Virginia Department
-            of Medical Assistance Services. Free, public, citable.
+            AINPI is produced by FHIR IQ as independent public-good
+            research. Free, public, citable. Every finding is reproducible
+            from the public federal data sources documented in the
+            methodology.
           </p>
           <p>
             Questions: reply to{' '}

@@ -160,7 +160,7 @@ Deliverables: pre-registration PRs in the AINPI repo for each hypothesis, ingest
 
 - **H34** (POS × NPPES-deactivated) — internal CMS contradiction finding.
 - **H36** (NDH completeness gap) — most computationally expensive (full join across NDH + Medicare Part B universes).
-- State-partner co-authored publication. South Carolina or Pennsylvania as a candidate pilot if Greg's referral lands.
+- Additional per-state worked examples surfaced as research deepens.
 
 ---
 
@@ -228,29 +228,29 @@ The roadmap was reviewed and three decisions locked in. The other two stay open 
 
 1. **Per-NPI publication policy for spending outliers — DECIDED: amount with context.** Aggregate paid amount per excluded NPI is published, and every row carries the AINPI directory-side priors the reader needs to interpret the number — exclusion source (LEIE / SAM / both), exclusion effective date, NPPES deactivation status, NDH active flag, entity type. The existing H1–H28 findings act as the context layer: an H29 row is presented next to what AINPI already knows about that NPI's directory record, so the spending headline is never read in isolation. This matters because the source file mixes individual practitioners, state and county health agencies, and high-volume entity-NPIs that bill across wide procedure ranges — without the directory-side context, a paid-amount ranking would over-index on the entity-NPIs that aren't comparable to individual practitioners in the first place.
 
-2. **State partner co-authorship — DECIDED: Virginia as the pilot.** Pilot state for the cross-audit work is Virginia (via the warm DMAS relationship behind the existing 131-NPI federally-excluded cohort and the 2026-05-04 briefing). South Carolina remains a Phase 2 candidate if the SC referral lands. Virginia gets the first state-scoped CSV at `/api/v1/states/va/h29-excluded-paid.csv` and Virginia DMAS gets review-before-publish courtesy on the VA-attributed rows (operational courtesy, not a publication gate — see decision 4).
+2. **First worked example — DECIDED: Virginia.** Virginia is the most-developed of the per-state worked examples for the cross-audit. The first state-scoped CSV ships at `/api/v1/states/va/h29-excluded-paid.csv`; subsequent refreshes ship per-state CSVs for all 51 jurisdictions concurrently. No state is co-author or recipient of the work — every output is independent public-good research derived from public federal data.
 
 3. **Methodology pre-registration template extension — still open.** Claims-side findings need additional fields on top of the directory-side template: source dataset version, attribution rules for billing vs servicing NPI, date-range scope, entity-type filter applied. To be addressed when the first ingestion module ships in June.
 
-4. **Disclosure timing — DECIDED: publish when available and high confidence; no pre-publication notice gate.** Findings ship the moment the ingestion module finishes a clean run against a pinned source release and the result has been internally cross-checked against the directory-side priors. This matches the transparency posture of the existing AINPI findings (H1–H28). Virginia DMAS gets review-before-publish courtesy on VA-attributed rows because of the pilot relationship; that's a one-state operational courtesy, not a precedent for delayed publication elsewhere.
+4. **Disclosure timing — DECIDED: publish when available and high confidence; no pre-publication notice gate.** Findings ship the moment the ingestion module finishes a clean run against a pinned source release and the result has been internally cross-checked against the directory-side priors. This matches the transparency posture of the existing AINPI findings (H1–H28). No state agency receives prior notice or has gating rights over publication.
 
 5. **Funding pathway — still open.** Phase 1 is feasible inside current FHIR-IQ time. Phase 2 and Phase 3 likely benefit from state contract revenue (state PI engagements citing AINPI findings) or foundation funding (RWJF, Arnold Ventures have funded comparable transparency work).
 
 ---
 
-## 10b. Virginia pilot scope (decided 2026-05-14)
+## 10b. Virginia worked-example scope (decided 2026-05-14)
 
-Virginia is the Phase 1 co-author state. The existing infrastructure makes this the lowest-friction path:
+Virginia is the most-developed of the per-state worked examples. The existing infrastructure makes this the lowest-friction first publish:
 
 - **131-NPI cohort already enumerated.** `/api/v1/states/va-cohort-critical.csv` contains every VA-resident NPI currently active on LEIE or SAM. H29 joins this exact set against the HHS Medicaid Provider Spending dataset filtered to VA — no separate cohort construction needed.
-- **DMAS relationship is warm.** The 2026-05-04 briefing established the working pattern (cite AINPI as one input to the state's broader program-integrity strategy under 42 CFR § 455.436). The cross-audit Phase 1 output extends that pattern from directory-side flags to claims-side spending exposure on the same NPIs.
-- **MMIS reconciliation workflow already exists.** The VA-cohort CSV format and verification-URL convention from H23 (LEIE / SAM / NPPES portal links) carries forward to H29. State PI staff don't learn a new file shape.
+- **Same H23 verification-URL convention.** The VA-cohort CSV format and verification-URL pattern from H23 (LEIE / SAM / NPPES portal links) carries forward to H29. Any state PI team that already worked with the H23 file format reads the H29 file without learning a new shape.
+- **All 51 jurisdictions ship concurrently.** The Virginia version is the first published example, not a private deliverable. Subsequent refresh cycles ship per-state CSVs for every US state + DC + 5 territories on the same release cadence.
 
-### What VA gets in Phase 1
+### What Virginia includes in the first cross-audit publish
 
 | Deliverable | URL | When |
 | --- | --- | --- |
-| `/api/v1/states/va/h29-excluded-paid.csv` | DMAS-shareable, MMIS-ready | June 2026, with DMAS review-before-publish courtesy |
+| `/api/v1/states/va/h29-excluded-paid.csv` | Public + MMIS-ready format | June 2026, shipped concurrently with the all-states refresh |
 | Updated `/briefings/va` | Cross-audit story added | June 2026 |
 | Updated `/states/va` | Element 2 cross-audit panel | June 2026 |
 | Citation language update on `/smd-revalidation` | Element 2 references the live VA cross-audit CSV | June 2026 |
@@ -277,9 +277,9 @@ Anchoring the spending headline in AINPI's directory-side priors per decision 1 
 
 The `paid_amount_post_exclusion` column is the H29 headline. Every other column is the context the reader needs to decide whether the headline is load-bearing or whether the row is a non-individual entity that mixes a wide procedure range into one NPI.
 
-### Pilot governance
+### Governance
 
-DMAS gets a 5-business-day review window on the VA-attributed rows before each refresh publishes. Their feedback updates the row-level context columns (e.g., entity-type misclassification, MMIS reconciliation already-resolved cases) but does not gate publication of the aggregate number. This is the one-state pilot courtesy from decision 4; it does not extend to other states.
+Every state's per-row CSV publishes concurrently with the all-states refresh. No state agency receives prior notice and no state agency has gating rights over publication. The verification-URL convention (LEIE / SAM / NPPES portal links on every row) means any reader can independently verify any single row against the primary federal sources in 30 seconds.
 
 ---
 

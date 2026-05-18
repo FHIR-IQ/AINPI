@@ -19,5 +19,5 @@
     "unit": "count",
     "data": []
   },
-  "notes": "This is a national finding \u2014 DMEPOS supplier directory is itself the population, joined against the active LEIE \u222a SAM NPI set (8619 NPIs). Per-state breakdown chart shows the top 10 states by matched supplier count. VA-state slice at /api/v1/states/va/h33-dmepos-excluded-va.csv (0 rows) for DMAS triage. Full national CSV with all 0 matched suppliers at /api/v1/findings/dmepos-excluded-detail.csv."
+  "notes": "This is a national finding \u2014 DMEPOS supplier directory is itself the population, joined against the active LEIE \u222a SAM NPI set (8619 NPIs). Per-state breakdown chart shows the top 10 states by matched supplier count. VA-state slice at /api/v1/states/va/h33-dmepos-excluded-va.csv (0 rows) for state PI triage. Full national CSV with all 0 matched suppliers at /api/v1/findings/dmepos-excluded-detail.csv."
 }

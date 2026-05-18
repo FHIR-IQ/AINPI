@@ -180,8 +180,8 @@ function buildBody(): { text: string; html: string } {
     '     - Molina Complete Care         0 of 125',
     '   2 of 6 VA Medicaid MCOs are now wired directly.',
     '',
-    'Virginia State Medicaid briefing',
-    '   Prepared for the 2026-05-04 DMAS review meeting.',
+    'Virginia case study',
+    '   The most-developed of the per-state worked examples.',
     '   141,660 VA practitioners; 99.39% NPPES match rate;',
     '   4,657 NPPES-deactivated still listed; 42.5% organization',
     '   duplicate rate.',
@@ -277,9 +277,9 @@ function buildBody(): { text: string; html: string } {
   <!-- VA briefing -->
   <div style="padding: 24px 28px; border-top: 1px solid #e5e7eb;">
     <div style="display: inline-block; padding: 3px 10px; background: #dcfce7; color: #166534; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; margin-bottom: 10px;">
-      Virginia briefing
+      Virginia case study
     </div>
-    <h2 style="font-size: 18px; margin: 4px 0 12px 0; color: #111827;">Prepared for the 2026-05-04 DMAS review meeting</h2>
+    <h2 style="font-size: 18px; margin: 4px 0 12px 0; color: #111827;">The most-developed of the per-state worked examples</h2>
 
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-collapse: collapse; margin-bottom: 14px;">
       <tr>

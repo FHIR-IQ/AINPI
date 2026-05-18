@@ -68,5 +68,5 @@ State agencies writing their SMD response between now and 2026-05-23 can cite th
 ## Decisions locked in 2026-05-14 (see roadmap §10)
 
 - **Per-NPI publication policy (H29):** paid amount with context, anchored in AINPI's directory-side priors. Every row carries `entity_type`, `nppes_active`, `ndh_active`, `exclusion_source`, `exclusion_effective_date`, `top_hcpcs_codes`. No state-comparative ranking; per-state slices only.
-- **Disclosure timing:** publish when available and high confidence. No pre-publication notice gate. Virginia gets a 5-business-day review courtesy on VA-attributed rows as the pilot relationship; that's one-state, not a precedent.
-- **Pilot state:** Virginia. The first state-scoped CSV is `/api/v1/states/va/h29-excluded-paid.csv`. The 131-NPI cohort already at `/api/v1/states/va-cohort-critical.csv` is the input set.
+- **Disclosure timing:** publish when available and high confidence. No pre-publication notice gate. All per-state CSVs ship concurrently; no state agency receives prior notice or has gating rights over publication.
+- **First worked example:** Virginia. The first state-scoped CSV is `/api/v1/states/va/h29-excluded-paid.csv`. The 131-NPI cohort already at `/api/v1/states/va-cohort-critical.csv` is the input set. Subsequent refresh cycles ship per-state CSVs for every US jurisdiction on the same release.

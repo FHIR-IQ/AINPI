@@ -1273,7 +1273,7 @@ Scanner, HCS Survey, Data quality dashboard, Insights, FAQ)."
 
 ## Task 8: New `/for-state-medicaid` index page
 
-A lightweight directory of all 51 CMO-facing per-state pages. This is what Greg's listserve forwards land on when a state CMO who isn't VA clicks through cold.
+A lightweight directory of all 51 CMO-facing per-state pages. Cold-arrival entry point for state Medicaid CMOs who land without prior context.
 
 **Files:**
 - Create: `frontend/src/app/for-state-medicaid/page.tsx`
