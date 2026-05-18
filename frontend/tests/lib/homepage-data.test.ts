@@ -23,9 +23,28 @@ describe('loadHomepageMapData', () => {
   it('cohort size matches the published cohort CSV row count', () => {
     const data = loadHomepageMapData();
     const va = data.states.find((s) => s.code === 'VA');
-    // The VA cohort file has 125 critical NPIs as of the 2026-05-08 release.
     expect(va!.metrics.cohortSize).toBeGreaterThan(100);
     expect(va!.metrics.cohortSize).toBeLessThan(200);
+  });
+
+  it('each state entry carries an audit summary', () => {
+    const data = loadHomepageMapData();
+    const va = data.states.find((s) => s.code === 'VA');
+    expect(va!.audit).toBeDefined();
+    expect(typeof va!.audit.medicaid.fullWindowMatches).toBe('number');
+    expect(typeof va!.audit.medicaid.strictPaid).toBe('number');
+    expect(typeof va!.audit.partbPartd.partbMatches).toBe('number');
+    expect(typeof va!.audit.partbPartd.opioidPrescribers).toBe('number');
+    expect(typeof va!.audit.deactivatedBilling.matches).toBe('number');
+    expect(typeof va!.audit.industryPayments.strictMatches).toBe('number');
+    // VA has a cohort, so sampleNpi must be a 10-digit NPI.
+    expect(va!.audit.sampleNpi).toMatch(/^\d{10}$/);
+  });
+
+  it('release metadata is populated from stats.json', () => {
+    const data = loadHomepageMapData();
+    expect(data.releaseDate).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(data.methodologyVersion).toMatch(/^\d+\.\d+\.\d+/);
   });
 
   it('compositeRiskScore is between 0 and 100 inclusive', () => {

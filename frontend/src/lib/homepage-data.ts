@@ -5,8 +5,13 @@
  * single typed structure with one entry per US jurisdiction. The MapHomepage
  * client component binds the choropleth to this structure. No HTTP fetch on
  * the client.
+ *
+ * Each state entry carries enough data to populate the side panel inline —
+ * the five claims-side summary rows (Medicaid, Part B+D with opioid count,
+ * NPPES-deactivated, Open Payments, directory hygiene) plus the first
+ * cohort NPI for the "Verify a sample NPI" CTA.
  */
-import { loadStateCohort, loadStateClaimsAudit } from './load-api-v1';
+import { loadStateCohort, loadStateClaimsAudit, loadStats } from './load-api-v1';
 
 export type MapMetricSlug =
   | 'cohortSize'
@@ -24,14 +29,43 @@ export interface MapMetric {
   unit: 'count' | 'usd' | 'score';
 }
 
+export interface StateAuditSummary {
+  medicaid: {
+    strictMatches: number;
+    fullWindowMatches: number;
+    strictPaid: number;
+    fullWindowPaid: number;
+  };
+  partbPartd: {
+    partbMatches: number;
+    partdMatches: number;
+    opioidPrescribers: number;
+  };
+  deactivatedBilling: {
+    matches: number;
+    multiSource: number;
+  };
+  industryPayments: {
+    strictMatches: number;
+    fullWindowMatches: number;
+    strictPaid: number;
+  };
+  /** First cohort NPI for the "Verify a sample NPI" CTA. Empty if cohort is empty. */
+  sampleNpi: string;
+}
+
 export interface StateMapEntry {
   code: string;
   name: string;
   metrics: Record<MapMetricSlug, number>;
+  audit: StateAuditSummary;
 }
 
 export interface HomepageMapData {
   generatedAt: string;
+  /** The pinned NDH release date (e.g. "2026-05-08"). From stats.json. */
+  releaseDate: string;
+  methodologyVersion: string;
   states: StateMapEntry[];
   availableMetrics: MapMetric[];
 }
@@ -86,15 +120,20 @@ const AVAILABLE_METRICS: MapMetric[] = [
   },
 ];
 
-function rawMetrics(state: string): {
+interface StateRawData {
+  code: string;
   cohortSize: number;
   strictPostExclusion: number;
   deactivatedStillBilling: number;
   industryPaymentsPostExclusion: number;
-} {
+  audit: StateAuditSummary;
+}
+
+function loadStateRawData(state: string): StateRawData {
   const cohort = loadStateCohort(state);
   const audit = loadStateClaimsAudit(state);
   return {
+    code: state,
     cohortSize: cohort.length,
     strictPostExclusion:
       audit.medicaid.strict_post_exclusion_matches +
@@ -102,6 +141,29 @@ function rawMetrics(state: string): {
       audit.partd.strict_post_exclusion_matches,
     deactivatedStillBilling: audit.deactivated_billing.matches,
     industryPaymentsPostExclusion: audit.industry_payments.strict_post_exclusion_matches,
+    audit: {
+      medicaid: {
+        strictMatches: audit.medicaid.strict_post_exclusion_matches,
+        fullWindowMatches: audit.medicaid.full_window_matches,
+        strictPaid: audit.medicaid.strict_post_paid,
+        fullWindowPaid: audit.medicaid.full_window_paid,
+      },
+      partbPartd: {
+        partbMatches: audit.partb.full_window_matches,
+        partdMatches: audit.partd.full_window_matches,
+        opioidPrescribers: audit.partd.opioid_prescribers,
+      },
+      deactivatedBilling: {
+        matches: audit.deactivated_billing.matches,
+        multiSource: audit.deactivated_billing.multi_source_matches,
+      },
+      industryPayments: {
+        strictMatches: audit.industry_payments.strict_post_exclusion_matches,
+        fullWindowMatches: audit.industry_payments.full_window_matches,
+        strictPaid: audit.industry_payments.strict_post_paid,
+      },
+      sampleNpi: cohort[0]?.npi ?? '',
+    },
   };
 }
 
@@ -112,7 +174,7 @@ function normalize(value: number, max: number): number {
 
 export function loadHomepageMapData(): HomepageMapData {
   const codes = Object.keys(STATE_NAMES);
-  const raw = codes.map((code) => ({ code, ...rawMetrics(code) }));
+  const raw = codes.map(loadStateRawData);
 
   const maxCohort = Math.max(...raw.map((r) => r.cohortSize), 1);
   const maxStrict = Math.max(...raw.map((r) => r.strictPostExclusion), 1);
@@ -135,11 +197,16 @@ export function loadHomepageMapData(): HomepageMapData {
         industryPaymentsPostExclusion: r.industryPaymentsPostExclusion,
         compositeRiskScore: composite,
       },
+      audit: r.audit,
     };
   });
 
+  const stats = loadStats();
+
   return {
     generatedAt: new Date().toISOString(),
+    releaseDate: stats?.release_date ?? '',
+    methodologyVersion: stats?.methodology_version ?? '',
     states,
     availableMetrics: AVAILABLE_METRICS,
   };

@@ -73,6 +73,7 @@ export default function MapHomepage({ data }: MapHomepageProps) {
       code: entry.code,
       name: entry.name,
       cohortSize: entry.metrics.cohortSize,
+      audit: entry.audit,
     });
   };
 
@@ -127,7 +128,15 @@ export default function MapHomepage({ data }: MapHomepageProps) {
 
         {/* Metric switcher */}
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-sm opacity-80">Click any state to see its findings.</p>
+          <div className="text-sm opacity-80">
+            <p>Click any state to see its findings.</p>
+            {data.releaseDate && (
+              <p className="text-xs opacity-70 mt-0.5">
+                Last NDH refresh: <span className="tabular-nums">{data.releaseDate}</span>
+                {data.methodologyVersion && ` · methodology v${data.methodologyVersion}`}
+              </p>
+            )}
+          </div>
           <MetricSwitcher
             metrics={data.availableMetrics}
             value={metric}
