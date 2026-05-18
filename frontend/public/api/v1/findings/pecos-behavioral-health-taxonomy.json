@@ -1,0 +1,134 @@
+{
+  "slug": "pecos-behavioral-health-taxonomy",
+  "title": "Behavioral-health PECOS taxonomy misalignment (highest-recoupment cohort)",
+  "hypotheses": [
+    "H38"
+  ],
+  "status": "published",
+  "release_date": "PPEF 2026-04-01 + NPPES + CMS Medicare\u2194NUCC crosswalk (2025-10)",
+  "generated_at": "2026-05-18T13:16:20+00:00",
+  "methodology_version": "0.7.0-draft",
+  "commit_sha": "f94199d",
+  "headline": "44,875 of 147,693 comparable behavioral-health NPIs (30.38%) show a PECOS PROVIDER_TYPE that does not resolve to any NUCC code on the NPI's NPPES record via the CMS Medicare\u2194NUCC crosswalk. Behavioral-health wrong-taxonomy is the highest-recoupment-risk category under the 2026 verification rules \u2014 payer rejection is automatic, not flag-and-investigate, and recoupment covers the entire window the wrong code was in place. This subset is the priority cohort for state PI offices and behavioral-health group practices to triage. Per-state CSVs at /api/v1/states/<state>/h38-behavioral-health-pecos-mismatch.csv.",
+  "numerator": 44875,
+  "denominator": 147693,
+  "denominator_note": "Denominator = 147,693 NPIs that are (a) Medicare-enrolled with a PROVIDER_TYPE_CD in the crosswalk, AND (b) carry at least one NUCC behavioral-health code on their NPPES record. Behavioral-health codes recognized: prefixes 101Y, 103T, 103G, 103K, 1041C, 1041S, 106E, 106H (counselor, psychologist, clinical neuropsychologist, behavior analyst, clinical/school social worker, MFT). Numerator = subset where the PECOS-resolved NUCC set has empty intersection with the NPPES set.",
+  "data_source_release": "PPEF 2026-04-01 + NPPES + CMS Medicare\u2194NUCC crosswalk (2025-10)",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Behavioral-health mismatch",
+        "value": 44875
+      },
+      {
+        "label": "Behavioral-health match",
+        "value": 102818
+      }
+    ]
+  },
+  "per_state": [
+    {
+      "state": "CA",
+      "matches": 5524
+    },
+    {
+      "state": "NY",
+      "matches": 2884
+    },
+    {
+      "state": "FL",
+      "matches": 2403
+    },
+    {
+      "state": "TX",
+      "matches": 2220
+    },
+    {
+      "state": "MI",
+      "matches": 2146
+    },
+    {
+      "state": "MA",
+      "matches": 2109
+    },
+    {
+      "state": "OH",
+      "matches": 2072
+    },
+    {
+      "state": "PA",
+      "matches": 1828
+    },
+    {
+      "state": "IL",
+      "matches": 1651
+    },
+    {
+      "state": "MN",
+      "matches": 1411
+    },
+    {
+      "state": "NJ",
+      "matches": 1399
+    },
+    {
+      "state": "CO",
+      "matches": 1295
+    },
+    {
+      "state": "NC",
+      "matches": 1280
+    },
+    {
+      "state": "WA",
+      "matches": 1274
+    },
+    {
+      "state": "OR",
+      "matches": 1185
+    },
+    {
+      "state": "WI",
+      "matches": 1122
+    },
+    {
+      "state": "CT",
+      "matches": 967
+    },
+    {
+      "state": "GA",
+      "matches": 888
+    },
+    {
+      "state": "OK",
+      "matches": 837
+    },
+    {
+      "state": "IN",
+      "matches": 783
+    },
+    {
+      "state": "VA",
+      "matches": 760
+    },
+    {
+      "state": "MD",
+      "matches": 735
+    },
+    {
+      "state": "MO",
+      "matches": 663
+    },
+    {
+      "state": "KY",
+      "matches": 625
+    },
+    {
+      "state": "AZ",
+      "matches": 620
+    }
+  ],
+  "notes": "Behavioral health gets carved out from H37 because the regulatory consequences are harder. A mental-health counselor billing E/M codes their NPPES taxonomy doesn't cover, or a marriage-and-family therapist whose PECOS record was filed as a general counselor, will trigger automatic claim rejection. Then recoupment over the multi-year window the wrong code was in place. The cohort surfaced here is the highest-priority triage list for behavioral-health group practices doing pre-emptive PECOS-cleanup audits. State PI offices should treat this subset as priority within H37 for the SMD-letter Element 4 (other comprehensive measures) submission."
+}

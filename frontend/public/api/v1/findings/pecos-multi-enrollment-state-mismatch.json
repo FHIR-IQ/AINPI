@@ -1,0 +1,259 @@
+{
+  "slug": "pecos-multi-enrollment-state-mismatch",
+  "title": "Multi-enrollment NPIs with conflicting state addresses (PECOS)",
+  "hypotheses": [
+    "H39"
+  ],
+  "status": "published",
+  "release_date": "PPEF 2026-04-01",
+  "generated_at": "2026-05-18T12:51:46+00:00",
+  "methodology_version": "0.7.0-draft",
+  "commit_sha": "f94199d",
+  "headline": "255,700 of 2,556,656 individual NPIs in the CMS Public Provider Enrollment Extract (PPEF, PPEF 2026-04-01) have enrollment records in 2 or more distinct US states. Many are legitimate multi-state practitioners (telehealth, hospital + private, split-state practices); a subset are stale records from partnership moves or retirements that never refiled. Under CMS's 2026 verification rules (PECOS designated as authoritative for Medicare enrollment), every multi-state enrollment is a flag requiring state-Medicaid triage: telehealth (verify and document) \u00b7 stale (file CMS-855I to close legacy enrollment) \u00b7 fraudulent (refer to PI). Per-state CSVs at /api/v1/states/<state>/h39-pecos-multi-state.csv list each NPI in the state's cohort with the other states they're also enrolled in.",
+  "numerator": 255700,
+  "denominator": 2556656,
+  "denominator_note": "Denominator = 2,556,656 distinct individual NPIs in PPEF PPEF 2026-04-01. Numerator = NPIs with \u22652 distinct US-jurisdiction STATE_CD values across their enrollment records. Non-US addresses (PPEF allows them) are filtered out so per-state output only contains routable US state codes.",
+  "data_source_release": "PPEF 2026-04-01",
+  "data_source_url": "https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment/medicare-fee-for-service-public-provider-enrollment",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Multi-state NPIs",
+        "value": 255700
+      },
+      {
+        "label": "Single-state NPIs",
+        "value": 2300956
+      }
+    ]
+  },
+  "per_state": [
+    {
+      "state": "TX",
+      "matches": 36364
+    },
+    {
+      "state": "FL",
+      "matches": 31680
+    },
+    {
+      "state": "NY",
+      "matches": 30320
+    },
+    {
+      "state": "DC",
+      "matches": 30247
+    },
+    {
+      "state": "PA",
+      "matches": 26251
+    },
+    {
+      "state": "VA",
+      "matches": 25727
+    },
+    {
+      "state": "CA",
+      "matches": 25253
+    },
+    {
+      "state": "MD",
+      "matches": 22844
+    },
+    {
+      "state": "IL",
+      "matches": 21246
+    },
+    {
+      "state": "NC",
+      "matches": 19906
+    },
+    {
+      "state": "NJ",
+      "matches": 19554
+    },
+    {
+      "state": "GA",
+      "matches": 19032
+    },
+    {
+      "state": "OH",
+      "matches": 18444
+    },
+    {
+      "state": "WA",
+      "matches": 17489
+    },
+    {
+      "state": "TN",
+      "matches": 16766
+    },
+    {
+      "state": "MO",
+      "matches": 15184
+    },
+    {
+      "state": "WI",
+      "matches": 15019
+    },
+    {
+      "state": "IN",
+      "matches": 14984
+    },
+    {
+      "state": "MA",
+      "matches": 14283
+    },
+    {
+      "state": "SC",
+      "matches": 13727
+    },
+    {
+      "state": "AZ",
+      "matches": 13666
+    },
+    {
+      "state": "KY",
+      "matches": 13179
+    },
+    {
+      "state": "MI",
+      "matches": 12370
+    },
+    {
+      "state": "OR",
+      "matches": 12151
+    },
+    {
+      "state": "CO",
+      "matches": 12127
+    },
+    {
+      "state": "MN",
+      "matches": 11800
+    },
+    {
+      "state": "AL",
+      "matches": 9097
+    },
+    {
+      "state": "CT",
+      "matches": 8910
+    },
+    {
+      "state": "KS",
+      "matches": 8659
+    },
+    {
+      "state": "IA",
+      "matches": 8412
+    },
+    {
+      "state": "WV",
+      "matches": 7349
+    },
+    {
+      "state": "MS",
+      "matches": 6632
+    },
+    {
+      "state": "NM",
+      "matches": 6513
+    },
+    {
+      "state": "OK",
+      "matches": 6466
+    },
+    {
+      "state": "NH",
+      "matches": 6446
+    },
+    {
+      "state": "LA",
+      "matches": 6408
+    },
+    {
+      "state": "NV",
+      "matches": 5903
+    },
+    {
+      "state": "AR",
+      "matches": 5357
+    },
+    {
+      "state": "UT",
+      "matches": 5237
+    },
+    {
+      "state": "DE",
+      "matches": 5070
+    },
+    {
+      "state": "NE",
+      "matches": 4800
+    },
+    {
+      "state": "ID",
+      "matches": 4681
+    },
+    {
+      "state": "ME",
+      "matches": 4423
+    },
+    {
+      "state": "MT",
+      "matches": 4391
+    },
+    {
+      "state": "ND",
+      "matches": 3973
+    },
+    {
+      "state": "HI",
+      "matches": 3849
+    },
+    {
+      "state": "RI",
+      "matches": 3835
+    },
+    {
+      "state": "SD",
+      "matches": 3244
+    },
+    {
+      "state": "WY",
+      "matches": 3003
+    },
+    {
+      "state": "VT",
+      "matches": 2879
+    },
+    {
+      "state": "AK",
+      "matches": 2472
+    },
+    {
+      "state": "PR",
+      "matches": 903
+    },
+    {
+      "state": "VI",
+      "matches": 654
+    },
+    {
+      "state": "GU",
+      "matches": 599
+    },
+    {
+      "state": "MP",
+      "matches": 172
+    },
+    {
+      "state": "AS",
+      "matches": 3
+    }
+  ],
+  "notes": "Multi-state enrollment is not inherently a problem. The signal is ambiguous between legitimate multi-state practice (telehealth, hospital + private practice split) and stale records (partnership move, retirement, group-practice split where the legacy enrollment was never closed). Under the CMS 2026 verification rules, every multi-state enrollment is a flag \u2014 your PI team's job is to categorize: telehealth (document the practice arrangement) \u00b7 stale (file CMS-855I to close the legacy record) \u00b7 fraudulent (refer). The detail file at /api/v1/findings/pecos-multi-enrollment-state-mismatch-detail.csv lists all matches nationally; per-state CSVs at /api/v1/states/<state>/h39-pecos-multi-state.csv carry the rows your state owns triage on."
+}
