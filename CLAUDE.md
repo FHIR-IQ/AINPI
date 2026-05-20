@@ -300,6 +300,7 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 - `.vercelignore` excludes `frontend/data/` (the downloaded NDJSON files, 2.8 GB compressed) and legacy `backend/` / `web-app/`
 - All Vercel env vars mirror the local `.env.local`, with `GCP_SERVICE_ACCOUNT_KEY` being critical for production BigQuery access
 - Dynamic routes: `npd/*` API routes export `dynamic = 'force-dynamic'` so stale edge-cached data doesn't poison live-data endpoints
+- **Vercel 250 MB lambda size limit** (`frontend/next.config.js` → `experimental.outputFileTracingExcludes`). `public/api/v1/` is ~345 MB (per-state H37/H38/H39 CSVs + the 508K/256K-row PECOS detail files). Next.js's output-file tracer was over-including the entire tree in every serverless function bundle. The fix excludes `public/api/v1/findings/**` and `public/api/v1/states/**` from all lambdas — safe because the loaders only read these at build time for static page generation, and at runtime Vercel's CDN static handler serves the JSON/CSV directly without ever touching the lambda. **If you add a new route that imports `load-api-v1.ts` or `homepage-data.ts`, verify it's still `force-static` and that its `.nft.json` doesn't reference the big trees** (`grep -c 'public/api/v1/states' .next/server/app/<route>.js.nft.json` should be 0). If you ever need to serve these dynamically from a lambda, you'll need to refactor — not just remove the exclusion.
 
 ## CI / CD workflows
 

@@ -100,3 +100,6 @@ supabase/.temp/
 supabase/migrations/*.local.sql
 frontend/test-results/
 persona-walkthrough-*.png
+
+# Local Claude Code skill workspace (brainstorm sessions, etc.)
+.superpowers/
