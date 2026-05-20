@@ -13,12 +13,39 @@ updates:
     labels:
       - dependencies
     groups:
+      # Bundle dev-dep minor/patch updates together; majors get their own PR
+      # so each breaking change (Prisma 7, Tailwind 4, TypeScript 6, etc.) can
+      # be evaluated and migrated independently.
       dev-dependencies:
         dependency-type: development
+        update-types:
+          - minor
+          - patch
       minor-and-patch:
         update-types:
           - minor
           - patch
+    ignore:
+      # Major bumps that need migration work — keep on the current major until
+      # we have time to do the migration in a dedicated PR.
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
