@@ -43,6 +43,17 @@ export const REPORTS: ReportOption[] = [
     length: '~30 pages',
   },
   {
+    id: 'may-2026-05-22-update',
+    version: '2026-05-22-update',
+    title: '2026-05-22 update — H40 published, one confirmed case, three SAM-NPI false positives',
+    description:
+      'Sharpened H30a to per-(NPI, HCPCS, place-of-service) detail. Cross-audit surfaced 4 strict-post-exclusion candidates nationally; primary-source verification confirms 1 (Eduardo Miranda MD, LEIE-excluded 2015, $880K Medicare Part B in CY 2023) and reveals 3 SAM-NPI-join false positives. H42 null result honestly framed.',
+    format: 'web',
+    url: '/reports/2026-05-22-update',
+    badge: 'NEW',
+    length: '~7 min read',
+  },
+  {
     id: 'may-2026-05-14-update',
     version: '2026-05-14-update',
     title: '2026-05-14 update — claims-side cross-audit shipped',
@@ -50,7 +61,6 @@ export const REPORTS: ReportOption[] = [
       '8 new findings (H29-H36) link AINPI\'s directory cohort to Medicaid spending, Medicare Part B / Part D, Open Payments, DMEPOS, nursing-home ownership, and NDH completeness. Strict-post-exclusion attribution and the H35 Stage B PPEF cross-walk fix shipped this week.',
     format: 'web',
     url: '/reports/2026-05-14-update',
-    badge: 'NEW',
     length: '~6 min read',
   },
   {

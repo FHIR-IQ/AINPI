@@ -1,0 +1,60 @@
+{
+  "slug": "excluded-telehealth-dominant-post-exclusion",
+  "title": "Federally excluded NPIs whose post-exclusion Medicare Part B billing is telehealth-dominant",
+  "hypotheses": [
+    "H42"
+  ],
+  "status": "published",
+  "release_date": "CY 2023 (RY2025)",
+  "generated_at": "2026-05-22T15:19:20+00:00",
+  "methodology_version": "0.7.0-draft",
+  "commit_sha": "50a0d37",
+  "headline": "**Null hypothesis supported.** Zero federally-excluded NPIs in CY 2023 show \u226580% of post-exclusion Medicare Part B services billed under telehealth-specific HCPCS codes. Sensitivity sidecar (60\u201379%): 0 NPIs; high-confidence (\u226595%): 0 NPIs. Two readings are consistent with this result: (a) federal exclusion screening is in fact catching telehealth-specific Part B billing pre-payment, or (b) the post-exclusion cohort billing Part B is too small for the dominant-share threshold to register at all. Use H40 (per-claim recoupment unit) for the headline cohort instead; H42 is intended as a sharpened sub-test.",
+  "numerator": 0,
+  "denominator_note": "Federally-excluded cohort with strict-post-exclusion Part B billing in CY 2023 (the H40 cohort). Numerator is the share of those NPIs with >=80% of post-exclusion services under telehealth-specific HCPCS codes. See `analysis/claims_sources/h42_excluded_telehealth_dominant.py` for the HCPCS code list and the share computation.",
+  "data_source_release": "CY 2023 (RY2025)",
+  "data_source_url": "https://www.cms.gov/medicare/coverage/telehealth/list-services",
+  "thresholds": {
+    "publishable": 0.8,
+    "sensitivity_low": 0.6,
+    "sensitivity_high": 0.95
+  },
+  "telehealth_hcpcs_codes": [
+    "99421",
+    "99422",
+    "99423",
+    "99441",
+    "99442",
+    "99443",
+    "G0425",
+    "G0426",
+    "G0427",
+    "G2010",
+    "G2012",
+    "G2061",
+    "G2062",
+    "G2063",
+    "G3002",
+    "G3003"
+  ],
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": ">=95% telehealth (high-confidence)",
+        "value": 0
+      },
+      {
+        "label": ">=80% telehealth (publishable)",
+        "value": 0
+      },
+      {
+        "label": "60-79% (sensitivity sidecar)",
+        "value": 0
+      }
+    ]
+  },
+  "per_state": [],
+  "notes": "H42 is a pure filter on H40's per-state CSV output \u2014 no separate source file read. Telehealth-HCPCS list is from the CMS Telehealth Services List (cms.gov/medicare/coverage/telehealth/list-services). Excludes general E/M codes (99202-99215) that are telehealth-enabled but used predominantly in-person \u2014 the published file does not carry the 95/GT modifier needed to distinguish in-person from telehealth for those codes. Sensitivity bands at 60% and 95% published as sidecar so readers can pick their own falsification threshold."
+}

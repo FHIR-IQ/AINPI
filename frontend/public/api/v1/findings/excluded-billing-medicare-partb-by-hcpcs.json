@@ -1,0 +1,618 @@
+{
+  "slug": "excluded-billing-medicare-partb-by-hcpcs",
+  "title": "Federally excluded NPIs billing Medicare Part B by HCPCS code (CY 2023, all states)",
+  "hypotheses": [
+    "H40"
+  ],
+  "status": "published",
+  "release_date": "CY 2023 (RY2025)",
+  "generated_at": "2026-05-22T15:16:48+00:00",
+  "methodology_version": "0.7.0-draft",
+  "commit_sha": "50a0d37",
+  "headline": "194 of 6,840 currently-active federally-excluded NPIs billed Medicare Part B in CY 2023 across 1,686 (NPI, HCPCS, place-of-service) row combinations (est. $27,384,846 paid on 551,657 services). Of those, **4 NPIs were billing STRICTLY POST-EXCLUSION** across 57 (NPI, HCPCS, POS) rows (est. $1,045,336 paid on 66,445 services). Per-row detail is the unit-of-work State Medicaid PI offices write recoupment letters against \u2014 per-claim, not per-provider.",
+  "numerator": 4,
+  "denominator": 6840,
+  "numerator_full_window": 194,
+  "numerator_note": "Numerator = distinct NPIs with LEIE/SAM exclusion-effective year < 2023 AND >= 1 row in the by-Provider-AND-Service file for CY 2023 (strict post-exclusion). Full-window numerator (any 2023 billing) = 194 NPIs across 1,686 (NPI, HCPCS, POS) rows.",
+  "denominator_note": "Federally-excluded cohort across all 52 state slices (6,840 unique NPIs; active LEIE or SAM; H23 score >= 1.5; state per NPPES practice state in the NDH practitioner table). Per-state CSVs at /api/v1/states/<state>/h40-excluded-partb-by-hcpcs.csv.",
+  "data_source_release": "CY 2023 (RY2025)",
+  "data_source_url": "https://data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Distinct NPIs billing Part B (full-window)",
+        "value": 194
+      },
+      {
+        "label": "Distinct NPIs strict-post-exclusion",
+        "value": 4
+      },
+      {
+        "label": "Total (NPI, HCPCS, POS) match rows (full-window)",
+        "value": 1686
+      },
+      {
+        "label": "Match rows strict-post-exclusion",
+        "value": 57
+      }
+    ]
+  },
+  "per_state": [
+    {
+      "state": "CA",
+      "distinct_npis": 29,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 349,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 3707967.95,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "NY",
+      "distinct_npis": 16,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 130,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 5835690.09,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "TX",
+      "distinct_npis": 12,
+      "distinct_npis_strict_post": 1,
+      "match_rows_full_window": 185,
+      "match_rows_strict_post": 26,
+      "estimated_paid_full_window": 3366933.6,
+      "estimated_paid_strict_post": 896671.64
+    },
+    {
+      "state": "PA",
+      "distinct_npis": 11,
+      "distinct_npis_strict_post": 1,
+      "match_rows_full_window": 101,
+      "match_rows_strict_post": 4,
+      "estimated_paid_full_window": 843221.54,
+      "estimated_paid_strict_post": 12859.58
+    },
+    {
+      "state": "FL",
+      "distinct_npis": 10,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 66,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 837092.92,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "MO",
+      "distinct_npis": 8,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 132,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 2821929.99,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "NJ",
+      "distinct_npis": 8,
+      "distinct_npis_strict_post": 1,
+      "match_rows_full_window": 59,
+      "match_rows_strict_post": 16,
+      "estimated_paid_full_window": 369850.75,
+      "estimated_paid_strict_post": 121679.89
+    },
+    {
+      "state": "IL",
+      "distinct_npis": 7,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 36,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 374147.01,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "TN",
+      "distinct_npis": 7,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 22,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 90376.57,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "VA",
+      "distinct_npis": 6,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 29,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 292259.47,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "MS",
+      "distinct_npis": 6,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 15,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 17993.33,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "OH",
+      "distinct_npis": 5,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 13,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 34414.75,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "NC",
+      "distinct_npis": 5,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 26,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 595110.6,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "GA",
+      "distinct_npis": 5,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 60,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 463766.41,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "MI",
+      "distinct_npis": 5,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 45,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 248988.41,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "LA",
+      "distinct_npis": 4,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 14,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 42090.24,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "KY",
+      "distinct_npis": 4,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 56,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 316018.16,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "AZ",
+      "distinct_npis": 3,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 22,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 559114.01,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "OR",
+      "distinct_npis": 3,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 25,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 65830.64,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "OK",
+      "distinct_npis": 3,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 75,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 4710879.24,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "IA",
+      "distinct_npis": 3,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 21,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 65223.25,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "AL",
+      "distinct_npis": 3,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 6,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 13080.63,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "CT",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 2,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 44453.55,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "KS",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 2,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 10322.29,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "ME",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 6,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 23373.21,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "PR",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 3,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 4752.07,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "CO",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 23,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 53298.5,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "WA",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 3,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 9479.48,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "MD",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 12,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 117836.25,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "MA",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 4,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 19956.66,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "AR",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 7,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 123143.12,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "NV",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 24,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 205266.61,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "WI",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 7,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 46363.88,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "SC",
+      "distinct_npis": 2,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 13,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 27118.35,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "UT",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 3,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 4621.52,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "ID",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 1,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 673.92,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "MN",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 2,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 2735.47,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "WV",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 5,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 12991.93,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "DE",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 4,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 802124.96,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "IN",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 0,
+      "match_rows_full_window": 67,
+      "match_rows_strict_post": 0,
+      "estimated_paid_full_window": 190229.89,
+      "estimated_paid_strict_post": 0
+    },
+    {
+      "state": "RI",
+      "distinct_npis": 1,
+      "distinct_npis_strict_post": 1,
+      "match_rows_full_window": 11,
+      "match_rows_strict_post": 11,
+      "estimated_paid_full_window": 14124.67,
+      "estimated_paid_strict_post": 14124.67
+    }
+  ],
+  "top_hcpcs_full_window": [
+    {
+      "hcpcs": "99214",
+      "description": "Established patient office or other outpatient visit, 30-39 minutes",
+      "match_rows": 100
+    },
+    {
+      "hcpcs": "99213",
+      "description": "Established patient office or other outpatient visit, 20-29 minutes",
+      "match_rows": 92
+    },
+    {
+      "hcpcs": "99204",
+      "description": "New patient office or other outpatient visit, 45-59 minutes",
+      "match_rows": 31
+    },
+    {
+      "hcpcs": "G0439",
+      "description": "Annual wellness visit, includes a personalized prevention plan of service (pps), subsequent visit",
+      "match_rows": 28
+    },
+    {
+      "hcpcs": "99215",
+      "description": "Established patient office or other outpatient visit, 40-54 minutes",
+      "match_rows": 25
+    },
+    {
+      "hcpcs": "93000",
+      "description": "Routine electrocardiogram (ecg) using at least 12 leads with interpretation and report",
+      "match_rows": 23
+    },
+    {
+      "hcpcs": "96372",
+      "description": "Injection of drug or substance under skin or into muscle",
+      "match_rows": 22
+    },
+    {
+      "hcpcs": "99203",
+      "description": "New patient office or other outpatient visit, 30-44 minutes",
+      "match_rows": 21
+    },
+    {
+      "hcpcs": "36415",
+      "description": "Insertion of needle into vein for collection of blood sample",
+      "match_rows": 19
+    },
+    {
+      "hcpcs": "99212",
+      "description": "Established patient office or other outpatient visit, 10-19 minutes",
+      "match_rows": 18
+    },
+    {
+      "hcpcs": "G0008",
+      "description": "Administration of influenza virus vaccine",
+      "match_rows": 16
+    },
+    {
+      "hcpcs": "99442",
+      "description": "Telephone medical discussion with physician, 11-20 minutes",
+      "match_rows": 13
+    },
+    {
+      "hcpcs": "99309",
+      "description": "Subsequent nursing facility care with moderate level of medical decision making, per day, if using time, at least 30 minutes",
+      "match_rows": 12
+    },
+    {
+      "hcpcs": "G0444",
+      "description": "Annual depression screening, 5 to 15 minutes",
+      "match_rows": 12
+    },
+    {
+      "hcpcs": "81002",
+      "description": "Urinalysis, manual test",
+      "match_rows": 12
+    },
+    {
+      "hcpcs": "20610",
+      "description": "Aspiration and/or injection of fluid from large joint",
+      "match_rows": 12
+    },
+    {
+      "hcpcs": "71046",
+      "description": "X-ray of chest, 2 views",
+      "match_rows": 12
+    },
+    {
+      "hcpcs": "99497",
+      "description": "Advance care planning, first 30 minutes",
+      "match_rows": 11
+    },
+    {
+      "hcpcs": "81003",
+      "description": "Automated urinalysis test",
+      "match_rows": 11
+    },
+    {
+      "hcpcs": "99348",
+      "description": "Residence visit for established patient with low level of medical decision making, per day, if using time, at least 30 minutes",
+      "match_rows": 10
+    }
+  ],
+  "top_hcpcs_strict_post": [
+    {
+      "hcpcs": "99213",
+      "description": "Established patient office or other outpatient visit, 20-29 minutes",
+      "match_rows": 4
+    },
+    {
+      "hcpcs": "99214",
+      "description": "Established patient office or other outpatient visit, 30-39 minutes",
+      "match_rows": 4
+    },
+    {
+      "hcpcs": "96374",
+      "description": "Injection of drug or substance into vein",
+      "match_rows": 2
+    },
+    {
+      "hcpcs": "93000",
+      "description": "Routine electrocardiogram (ecg) using at least 12 leads with interpretation and report",
+      "match_rows": 2
+    },
+    {
+      "hcpcs": "96365",
+      "description": "Infusion into a vein for therapy, prevention, or diagnosis, 1 hour or less",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96366",
+      "description": "Infusion into a vein for therapy, prevention, or diagnosis, each additional hour",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96367",
+      "description": "Infusion into a vein for therapy, prevention, or diagnosis, additional sequential infusion, 1 hour or less",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96372",
+      "description": "Injection of drug or substance under skin or into muscle",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96375",
+      "description": "Injection of additional new drug or substance into vein",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96402",
+      "description": "Administration of hormonal anti-neoplastic chemotherapy under skin or into muscle",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96413",
+      "description": "Administration of chemotherapy into vein, 1 hour or less",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96415",
+      "description": "Administration of chemotherapy into vein, each additional hour",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "96417",
+      "description": "Administration of additional new drug or substance into vein, 1 hour or less",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "99204",
+      "description": "New patient office or other outpatient visit, 45-59 minutes",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "99223",
+      "description": "Initial hospital care with moderate level of medical decision making, if using time, at least 75 minutes",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "99233",
+      "description": "Subsequent hospital care with moderate levelof medical decision making, if using time, at least 50 minutes",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "J0897",
+      "description": "Injection, denosumab, 1 mg",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "J1100",
+      "description": "Injection, dexamethasone sodium phosphate, 1 mg",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "J1200",
+      "description": "Injection, diphenhydramine hcl, up to 50 mg",
+      "match_rows": 1
+    },
+    {
+      "hcpcs": "J1644",
+      "description": "Injection, heparin sodium, per 1000 units",
+      "match_rows": 1
+    }
+  ],
+  "notes": "Per-state CSV at /api/v1/states/<state>/h40-excluded-partb-by-hcpcs.csv carries one row per (NPI, HCPCS, place_of_service) combination. estimated_paid_total = Tot_Srvcs \u00d7 Avg_Mdcr_Pymt_Amt (CMS publishes averages, not totals, in this file). Place_Of_Srvc is aggregated to 'F' (Facility) or 'O' (Office/non-facility) at file build time \u2014 claim-level POS codes (02 telehealth, etc.) are not directly recoverable. Source CSV streamed once and partitioned across all state cohorts in memory \u2014 same I/O pattern as H30a."
+}

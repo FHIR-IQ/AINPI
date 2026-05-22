@@ -265,10 +265,25 @@ def main() -> None:
             "then re-run H42. H42 is a pure filter on H40's output and produces "
             "no findings until H40 has been computed."
         )
+    elif len(publishable) == 0:
+        headline = (
+            f"**Null hypothesis supported.** Zero federally-excluded NPIs in CY "
+            f"{SERVICE_YEAR} show ≥{int(TELEHEALTH_DOMINANT_THRESHOLD*100)}% of "
+            f"post-exclusion Medicare Part B services billed under telehealth-"
+            f"specific HCPCS codes. Sensitivity sidecar (60–79%): "
+            f"{len(sensitivity)} NPIs; high-confidence (≥95%): "
+            f"{len(high_confidence)} NPIs. Two readings are consistent with "
+            f"this result: (a) federal exclusion screening is in fact catching "
+            f"telehealth-specific Part B billing pre-payment, or (b) the post-"
+            f"exclusion cohort billing Part B is too small for the dominant-"
+            f"share threshold to register at all. Use H40 (per-claim recoupment "
+            f"unit) for the headline cohort instead; H42 is intended as a "
+            f"sharpened sub-test."
+        )
     else:
         headline = (
             f"**{len(publishable)} federally-excluded NPIs** billed Medicare "
-            f"Part B in CY {SERVICE_YEAR} with >={int(TELEHEALTH_DOMINANT_THRESHOLD*100)}% "
+            f"Part B in CY {SERVICE_YEAR} with ≥{int(TELEHEALTH_DOMINANT_THRESHOLD*100)}% "
             f"of post-exclusion services billed under telehealth-specific "
             f"HCPCS codes (est. ${total_paid_publishable:,.0f} paid). "
             f"Sensitivity sidecar (60–79%): {len(sensitivity)} NPIs. "
