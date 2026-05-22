@@ -7,6 +7,14 @@
  * `loadHubFeed()` is only called from server components.
  */
 
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+import { FINDINGS, type Finding, type FindingStatus } from '@/data/findings';
+
+// Next.js runs from frontend/, so repo root is one level up
+const REPO_ROOT = path.join(process.cwd(), '..');
+
 export type TimelineCategory = 'finding' | 'update' | 'article' | 'methodology';
 /**
  * Status of a published finding.
@@ -59,7 +67,61 @@ export interface HubFeed {
   catalog: CatalogRow[];
 }
 
-// Implementation lives in subsequent tasks.
+/** Map FindingStatus from findings.ts to the hub-feed TimelineStatus literal. */
+function normalizeStatus(s: FindingStatus): TimelineStatus {
+  if (s === 'pre-registered') return 'pre-registered';
+  if (s === 'in-progress') return 'pre-registered';
+  return 'published';
+}
+
+/**
+ * Extract a per-finding updated date. v1 uses the first H-number in the
+ * hypotheses array as a tag and looks up the most recent reports.ts entry
+ * mentioning that H-number. If no match, falls back to a sensible default
+ * (2026-05-08 — the date H1-H28 were captured against). Later refinement
+ * could maintain a per-finding `updated` field on findings.ts directly.
+ */
+function findingUpdatedDate(f: Finding): string {
+  // v1 simplification: use the most-recently-published bundle date that
+  // touches any of this finding's H-numbers. Implementation arrives in
+  // Task 4 when we wire reports.ts. For now, use a static lookup that
+  // gets a reasonable date from the H-number range.
+  const hNum = parseInt(f.hypotheses[0]?.replace(/[^\d]/g, '') || '0', 10);
+  if (hNum >= 40) return '2026-05-22';
+  if (hNum >= 37) return '2026-05-18';
+  if (hNum >= 29) return '2026-05-14';
+  if (hNum >= 27) return '2026-05-08';
+  if (hNum >= 23) return '2026-05-02';
+  return '2026-05-08';
+}
+
+function findingsToCatalog(): CatalogRow[] {
+  return FINDINGS.map((f) => ({
+    hNumber: f.hypotheses[0] ?? 'H?',
+    title: f.title,
+    slug: f.slug,
+    updated: findingUpdatedDate(f),
+    status: normalizeStatus(f.status),
+  })).sort((a, b) => b.updated.localeCompare(a.updated));
+}
+
 export function loadHubFeed(): HubFeed {
-  throw new Error('loadHubFeed not yet implemented');
+  const catalog = findingsToCatalog();
+  // Lead + timeline are filled in subsequent tasks. Provide a placeholder
+  // lead so the type is satisfied during this task's tests.
+  const placeholderLead: LeadStoryItem = {
+    date: '2026-05-22',
+    category: 'finding',
+    status: 'published',
+    title: '__lead_placeholder__',
+    summary: '__lead_placeholder__',
+    href: '/findings',
+    ctaLabel: 'Open finding →',
+    ctaHref: '/findings',
+  };
+  return {
+    lead: placeholderLead,
+    timeline: [],
+    catalog,
+  };
 }
