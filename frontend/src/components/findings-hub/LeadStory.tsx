@@ -6,7 +6,11 @@ interface Props {
 }
 
 function formatDate(iso: string): string {
-  return iso;
+  const d = new Date(iso + 'T00:00:00Z');
+  const month = d.toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+  const day = d.getUTCDate();
+  const year = d.getUTCFullYear();
+  return `${month} ${day}, ${year}`;
 }
 
 export function LeadStory({ item }: Props) {

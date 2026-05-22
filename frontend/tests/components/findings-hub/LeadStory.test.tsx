@@ -60,4 +60,9 @@ describe('LeadStory', () => {
     render(<LeadStory item={minimal} />);
     expect(screen.queryByText('Confirmed cases')).not.toBeInTheDocument();
   });
+
+  it('renders the lead date in human-readable format', () => {
+    render(<LeadStory item={lead} />);
+    expect(screen.getByText(/May 22, 2026/)).toBeInTheDocument();
+  });
 });
