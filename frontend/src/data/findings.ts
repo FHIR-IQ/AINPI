@@ -636,6 +636,39 @@ export const FINDINGS: Finding[] = [
       },
     ],
   },
+  {
+    slug: 'excluded-billing-medicare-partb-by-hcpcs',
+    hypotheses: ['H40'],
+    title: 'Federally excluded NPIs billing Medicare Part B by HCPCS code post-exclusion',
+    summary:
+      'H30a established that federally-excluded NPIs continue to bill Medicare Part B post-exclusion. H40 sharpens the signal from "billed Part B for $30K" to "billed HCPCS J0897 47 times from POS 02 (telehealth) in [year], strictly after the LEIE exclusion effective date" — the unit of work State Medicaid PI offices write recoupment letters against. Joins the federally-excluded cohort (active LEIE or SAM, score ≥ 1.5) against the CMS Medicare Physician & Other Practitioners by Provider AND Service file (one row per NPI × HCPCS × place-of-service × year). Strict-post-exclusion attribution uses the per-NPI leie_excldate / sam_active_date already carried by the cohort exporter (shipped 2026-05-14 with the H29/H30a/H30b/H32 retrofit). Per-state CSVs at `/api/v1/states/<state>/h40-excluded-partb-by-hcpcs.csv`.',
+    nullHypothesis:
+      'Zero currently-LEIE/SAM-excluded NPIs appear as billing providers for any HCPCS code in any place of service in the CMS Medicare Physician & Other Practitioners by Provider AND Service file for any year strictly after their exclusion effective date.',
+    denominator:
+      'Federally-excluded cohort (active LEIE or SAM, score ≥ 1.5; ~8,619 NPIs nationally per the latest `high-risk-cohort-export.csv`) joined against every (Rndrng_NPI, HCPCS_Cd, Place_Of_Srvc, year) row in the by-Provider-AND-Service file (latest available release; ~10M rows / ~3 GB per service year). State attribution via NPPES practice state, same partitioning the H29/H30a/H30b/H32 streams use.',
+    dataSource:
+      'CMS Medicare Physician & Other Practitioners by Provider AND Service (data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service). One row per (Rndrng_NPI, HCPCS_Cd, Place_Of_Srvc, year) with services, beneficiaries, charges, and Medicare-allowed/paid amounts. Strict-post-exclusion filter at the (NPI, year) grain since CMS publishes year-level totals (same caveat as H30a). Streaming-once partition pattern at `analysis/claims_sources/medicare_partb_by_hcpcs.py` (to be added) mirrors `medicare_partb.py`. Public domain (CC0-equivalent), 2-year publication lag.',
+    status: 'pre-registered',
+    ogTagline:
+      'Sharpens H30a from "billed Part B" to per-HCPCS, per-place-of-service post-exclusion billing — the per-claim recoupment unit.',
+    implications: [
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'Recoupment is per-claim, not per-provider. H40 is the per-(NPI, HCPCS, POS, year) working list your team builds the recoupment letter from. Pairs with H29 (Medicaid spending) so the same NPI shows up in both the state-side and federal-side audit trail with the procedure mix attached.',
+      },
+      {
+        audience: 'Regulators',
+        takeaway:
+          'High-risk procedure patterns surface that the aggregate file masks: POS 02 (telehealth) E/M codes by an excluded NPI, controlled-substance J-codes, expensive injectables. Each pattern has a defined fraud-recoupment posture and a distinct prosecutorial weight.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'Strict-post-exclusion filter applied at the (NPI, year) grain because CMS publishes year-level service totals — same temporal precision as H30a, with per-HCPCS, per-POS specificity added. Full-window sidecar available for sensitivity analysis.',
+      },
+    ],
+  },
 ];
 
 export function findBySlug(slug: string): Finding | undefined {
