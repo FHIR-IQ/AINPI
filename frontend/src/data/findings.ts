@@ -669,6 +669,72 @@ export const FINDINGS: Finding[] = [
       },
     ],
   },
+  {
+    slug: 'specialty-billing-drift',
+    hypotheses: ['H41'],
+    title: 'NPPES taxonomy vs Medicare-billed-specialty divergence (behavioral specialty drift)',
+    summary:
+      'H37 tests whether PECOS PROVIDER_TYPE matches the NPPES NUCC taxonomy — a record-vs-record test. H41 is the billing-behavior counterpart: for each NPI active in Medicare Part B, does the actual procedure mix match what the NPPES-registered taxonomy would predict? An NPPES "Family Medicine" (207Q) provider whose Part B billing is 80% pain-management J-codes and trigger-point injections is *behaviorally* practicing a different specialty than the directory says. State Medicaid systems trust NPPES taxonomy for prior-authorization rules, network-adequacy counts, and credentialing — drift on the billing side means those downstream rules are operating on stale signal. Pairs with H37 (registration drift) and H38 (behavioral-health subset) as the three-leg PECOS-NPPES-billing audit triangle.',
+    nullHypothesis:
+      'Every NPI with both a NPPES NUCC taxonomy and Medicare Part B billing activity bills a procedure mix consistent with that taxonomy. No NPIs show ≥80% of billed services attributable to HCPCS codes whose modal NUCC (across the full population) differs from the NPI\'s registered NUCC.',
+    denominator:
+      'NPIs that are (a) present in the CMS Medicare Physician & Other Practitioners by Provider AND Service file with ≥1 service row AND (b) carry ≥1 NUCC code on NPPES (~1.86M expected, same denominator as H37). Drift threshold operationalized as ≥80% of billed services attributable to HCPCS codes whose modal NUCC across the full population differs from the NPI\'s NPPES taxonomy. The 80% threshold is a publishable falsification line — sensitivity analysis at 60% / 90% as sidecar.',
+    dataSource:
+      'NPPES (`bigquery-public-data.nppes.npi_optimized`) × CMS Medicare Physician & Other Practitioners by Provider AND Service (same file as H40). HCPCS↔NUCC affinity table built empirically from the full dataset: for each HCPCS code, the modal NPPES NUCC across all NPIs billing it. Then per-NPI billing-share against that affinity table. Streaming-once partition at `analysis/h41_specialty_drift.py` (to be added). See methodology doc §10d for the affinity-table construction and the falsification window.',
+    status: 'pre-registered',
+    ogTagline:
+      'NPPES says Family Medicine. Medicare billing says pain management. H41 catches the drift the directory can\'t.',
+    implications: [
+      {
+        audience: 'Payer ops teams',
+        takeaway:
+          'Prior-authorization rules and network-adequacy counts trust NPPES taxonomy. H41 surfaces providers whose actual practice profile diverges sharply — the same population your specialty-of-record-based PA decisions are running against. Treat as a credentialing-team flag, not a denial trigger.',
+      },
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'Specialty drift is the behavioral analog of H37 registration drift. A provider with PECOS-NPPES taxonomy alignment but billing-pattern drift is operating outside the lane the directory advertises. Per-state CSV gives your team the cohort; combine with H37 / H38 results for the same NPI to triage by signal strength.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'The HCPCS↔NUCC affinity table is data-derived, not normative — it reflects what providers in each taxonomy *actually* bill, not what they should bill. Useful as an empirical anchor, not as a coding-correctness ground truth. Sensitivity windows (60% / 90%) published as sidecar so readers can pick their own falsification threshold.',
+      },
+    ],
+  },
+  {
+    slug: 'excluded-telehealth-only-post-exclusion',
+    hypotheses: ['H42'],
+    title: 'Federally excluded NPIs billing telehealth-only post-exclusion (POS 02 / POS 10)',
+    summary:
+      'Subset of H40 with place-of-service filtered to POS 02 (telehealth distant site) and POS 10 (telehealth from patient home). Federally-excluded providers whose entire post-exclusion Medicare Part B billing is virtual is a known fraud pattern — virtual practice lets the excluded provider continue without a physical office that would attract local oversight, and most telehealth platforms maintain their own LEIE/SAM screening that should have caught the exclusion. Cohort is small but each row carries unusually high prosecutorial weight because the "I didn\'t know I was excluded" defense is weaker for a provider actively credentialed through a telehealth platform. Per-state CSVs at `/api/v1/states/<state>/h42-excluded-telehealth-only.csv`.',
+    nullHypothesis:
+      'Zero LEIE/SAM-excluded NPIs have any post-exclusion Medicare Part B billing where the place-of-service is exclusively POS 02 or POS 10 across all post-exclusion service years.',
+    denominator:
+      'Federally-excluded cohort (~8,619 NPIs nationally, active LEIE or SAM, score ≥ 1.5), joined against the by-Provider-AND-Service file, filtered to NPIs whose post-exclusion service rows are 100% POS 02 or POS 10 (no physical-location billing at all post-exclusion). Strict-post-exclusion temporal filter same as H40 (per-NPI leie_excldate / sam_active_date at (NPI, year) grain).',
+    dataSource:
+      'CMS Medicare Physician & Other Practitioners by Provider AND Service (same as H40). POS code filter applied after H40\'s join; ratio test gates inclusion. Implementation: `analysis/h42_excluded_telehealth_only.py` (to be added), depends on H40\'s compute stage.',
+    status: 'pre-registered',
+    ogTagline:
+      'Federally excluded. Practicing entirely through telehealth. Whichever platform credentialed them did not run the check.',
+    implications: [
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'High-prosecutorial-weight cohort — the recoupment math is per-claim and the credentialing-failure trail makes the platform itself a secondary inquiry target. Pair with H40\'s per-HCPCS detail for the recoupment letter\'s evidence section.',
+      },
+      {
+        audience: 'Regulators',
+        takeaway:
+          'Telehealth-only post-exclusion is a defined pattern — § 455.436 screening was meant to catch exactly this. Where the pattern recurs across platforms, the screening-control failure is systemic, not provider-specific.',
+      },
+      {
+        audience: 'Provider organizations',
+        takeaway:
+          'If you operate a telehealth network, the LEIE/SAM screening cadence and the date your credentialing system last refreshed it are the two numbers H42 inverts. Use the cohort to backtest your screening pipeline against AINPI\'s exclusion register.',
+      },
+    ],
+  },
 ];
 
 export function findBySlug(slug: string): Finding | undefined {
