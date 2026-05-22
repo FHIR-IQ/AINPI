@@ -16,6 +16,7 @@ import { REPORTS, type ReportOption } from '@/data/reports';
 // Next.js runs from frontend/, so repo root is one level up
 const REPO_ROOT = path.join(process.cwd(), '..');
 const ARTICLES_DIR = path.join(REPO_ROOT, 'docs', 'articles');
+const VERSION_LOG_PATH = path.join(REPO_ROOT, 'docs', 'methodology', 'version-log.md');
 
 export type TimelineCategory = 'finding' | 'update' | 'article' | 'methodology';
 /**
@@ -159,6 +160,40 @@ function articlesToTimelineEntries(): TimelineEntry[] {
   return out;
 }
 
+export interface VersionLogEntry {
+  version: string;
+  date: string;
+  summary: string;
+}
+
+function methodologyToTimelineEntries(): TimelineEntry[] {
+  if (!fs.existsSync(VERSION_LOG_PATH)) return [];
+  const raw = fs.readFileSync(VERSION_LOG_PATH, 'utf-8');
+  const { data } = matter(raw);
+  const versions = ((data.versions as VersionLogEntry[]) ?? []).filter(
+    (v) => v && v.version && v.date && v.summary,
+  );
+  return versions.map((v) => ({
+    date: v.date,
+    category: 'methodology' as const,
+    title: `Methodology v${v.version}`,
+    summary: v.summary,
+    href: '/methodology',
+  }));
+}
+
+function publishedFindingsToTimelineEntries(): TimelineEntry[] {
+  return FINDINGS.filter((f) => f.status === 'published').map((f) => ({
+    date: findingUpdatedDate(f),
+    category: 'finding' as const,
+    status: 'published' as const,
+    title: f.title,
+    summary: f.ogTagline ?? f.summary.slice(0, 220),
+    href: `/findings/${f.slug}`,
+    hNumbers: f.hypotheses,
+  }));
+}
+
 function findingsToCatalog(): CatalogRow[] {
   return FINDINGS.map((f) => ({
     hNumber: f.hypotheses[0] ?? 'H?',
@@ -172,8 +207,10 @@ function findingsToCatalog(): CatalogRow[] {
 export function loadHubFeed(): HubFeed {
   const catalog = findingsToCatalog();
   const timeline = [
+    ...publishedFindingsToTimelineEntries(),
     ...reportsToTimelineEntries(),
     ...articlesToTimelineEntries(),
+    ...methodologyToTimelineEntries(),
   ].sort((a, b) => b.date.localeCompare(a.date));
   const placeholderLead: LeadStoryItem = {
     date: '2026-05-22',
