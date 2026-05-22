@@ -19,8 +19,8 @@ AINPI/
 │   │   ├── app/              Routes (pages + API, including /api/v1/*)
 │   │   ├── components/       Shared UI (Navbar, WipBanner, Footer, charts/)
 │   │   ├── contexts/         FilterContext for cross-chart filtering
-│   │   ├── data/findings.ts  Pre-registration catalog (H1-H27 → slugs)
-│   │   ├── lib/              bigquery.ts, prisma.ts, auth.ts, api-v1-types.ts, load-api-v1.ts
+│   │   ├── data/findings.ts  Pre-registration catalog (H1–H42 → 27 slugs; some bundle multiple H#s)
+│   │   ├── lib/              bigquery.ts, prisma.ts, auth.ts, api-v1-types.ts, load-api-v1.ts, hub-feed.ts, homepage-data.ts
 │   │   └── utils/supabase/   SSR-safe Supabase clients
 │   ├── public/api/v1/        Static JSON contract (stats.json, findings/<slug>.json)
 │   ├── scripts/              BigQuery setup, ingestion, sync scripts
@@ -31,8 +31,10 @@ AINPI/
 │   └── tests/                pytest unit tests (currently h26 only)
 ├── pipeline/                 DuckDB-over-Parquet scaffold (shard, edges, Luhn, lastUpdated)
 ├── crawler/                  Local mirror of FHIR-IQ/ainpi-probe endpoint liveness crawler
-├── docs/methodology/         Versioned methodology doc, rendered at /methodology
+├── docs/methodology/         Versioned methodology doc (index.md rendered at /methodology) + version-log.md (YAML frontmatter of past versions; surfaced by hub-feed timeline) + runs/ (per-run provenance docs)
 ├── docs/briefings/           State-meeting briefing markdown (rendered at /briefings/<state>)
+├── docs/articles/            Long-form articles (filename `YYYY-MM-DD-<slug>.md`; rendered at /articles/<slug> via dynamic route)
+├── docs/reports/             Release-update markdown (one .md per dated update; rendered at /reports/<slug> via hand-written page.tsx per release)
 ├── docs/superpowers/         Spec-driven-dev workspace: specs/<date>-<topic>-design.md + plans/<date>-<topic>.md
 ├── .github/                  Workflows (CI, CodeQL, gitleaks, weekly-refresh, release), gitleaks-baseline.json
 ├── models/ + modules/        Legacy TypeScript FHIR core library (not actively maintained)
@@ -49,7 +51,7 @@ AINPI/
 - **ORM**: Prisma (against Supabase only; BigQuery is accessed via `@google-cloud/bigquery` SDK)
 - **Visualizations**: D3.js (+ topojson-client for US choropleth), dynamic `next/dynamic` imports so D3 stays out of SSR
 - **Testing**: Vitest (frontend) + Playwright E2E (frontend) + pytest (`analysis/tests/`, pure-function unit tests for h26)
-- **Methodology version**: `0.6.0-draft` (see `docs/methodology/index.md`)
+- **Methodology version**: `0.7.0-draft` (see `docs/methodology/index.md`; historical versions in `docs/methodology/version-log.md`)
 - **Hosting**: Vercel
 - **Auth for BigQuery in production**: service account key JSON loaded from `GCP_SERVICE_ACCOUNT_KEY` env var
 
@@ -83,14 +85,15 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 
 ## Pages
 
-- `/` → redirects to `/npd`
-- `/npd` — Public NPD search (NPI, name, org, state, city; no login)
+- `/` — Map-first homepage. Interactive US choropleth (3-style theme switcher: Light cards / Dark dashboard / Minimal map) with click-to-side-panel state detail. Below the map: slim `<HomepageLatestStrip lead={...} />` line teasing the latest finding + linking to `/findings`. Server component composes `MapHomepage` + `HomepageLatestStrip` from `loadHomepageMapData()` + `loadHubFeed()` at build time.
+- `/findings` — **Findings hub** (NOT a flat index). Three vertically-stacked sections: (1) `LeadStory` hero block — currently H40 with hero stats, LEIE/SAM/NPPES verify chips, CTA; data sourced from the finding marked `featured: true` in `findings.ts`. (2) `Timeline` — 10 most-recent items across 4 categories (Finding/Update/Article/Methodology) with color-coded category chips + status pills. (3) `FindingsCatalogTable` — sortable table of all findings (mobile card-stack below 640px) with `aria-sort` semantics. All three sourced from `loadHubFeed()` in `frontend/src/lib/hub-feed.ts`, which aggregates findings + reports + articles + methodology version-log into typed `HubFeed`. Components live under `frontend/src/components/findings-hub/`. Spec at `docs/superpowers/specs/2026-05-22-findings-hub-redesign-design.md`.
+- `/findings/[slug]` — One finding per page. `force-static` + `generateStaticParams` over `allSlugs()`. Live headline/chart/notes from `loadFinding(slug)` reading `frontend/public/api/v1/findings/<slug>.json`. **Tier-1 follow-up:** apply the hub's hero + verify-chip pattern here too (currently chart-first; see roadmap in design spec).
+- `/articles/[slug]` — Long-form articles rendered from `docs/articles/*.md` via dynamic route at `frontend/src/app/articles/[slug]/page.tsx`. Slug strips the `YYYY-MM-DD-` date prefix from the filename (`2026-05-22-eight-years-post-exclusion.md` → `/articles/eight-years-post-exclusion`). Currently one article (the Miranda confirmed-case Substack/LinkedIn piece).
+- `/npd` — Public NPD search (NPI, name, org, state, city; no login). Reachable via Explore nav + hub timeline links.
 - `/data-quality` — Interactive dashboard: KPIs, completeness heatmap, US choropleth, per-resource gauges, state bar chart, specialty treemap, endpoint sunburst, relationship stats, Sankey graph, force-directed knowledge graph, state→city drill-down via `StateDetailPanel`, data validation panel. All charts share a `FilterContext` for cross-filtering.
 - `/insights` — Provenance & variance analysis. Interactive org comparison tool + narrative sections on NPPES-vs-PECOS-vs-CAQH sources, active-flag signal limitations, CAQH ingestion path. Pre-filled with UPMC.
 - `/methodology` — Versioned audit methodology (DAMA DMBOK mapping, L0–L7 scoring, reproducibility). Sourced from `docs/methodology/index.md`.
 - `/data-sources` — Citation-grade reference: every public dataset AINPI ingests, considers, or rejects (NPPES, PECOS, LEIE, SAM, NUCC, NDH IG, etc.) with primary-source URLs, license terms, refresh cadence, and the hypothesis each maps to. `force-static`.
-- `/findings` — Index of pre-registered findings. Data in `frontend/src/data/findings.ts` (the **pre-registration record** — slug, hypotheses, null, denominator, audience implications). Live numbers hydrate from `/api/v1/findings/<slug>.json`.
-- `/findings/[slug]` — One finding per page. `force-static` + `generateStaticParams` over `allSlugs()`; live headline/chart/notes come from `loadFinding(slug)`, which reads `frontend/public/api/v1/findings/<slug>.json` at build time.
 - `/states` — Index of state-scoped audit slices. **All 50 states + DC now have a published JSON slice**; only VA / PA / OH currently carry the richer Medicaid-program narrative (program brand, agency, MCO list) in `frontend/src/data/states.ts` (`SEED_STATES`). The rest render the data-quality block + a "brief pending — open an issue" callout, driven by `ALL_STATE_NAMES` in the same file.
 - `/states/[state]` — One state per page. `force-static` over `allStateCodes()` (51 codes). Renders denominators, state-vs-national findings table, "verify a sample yourself" block of NPIs (linked to NPPES Registry), citation language for the state's CMS response, and explicit limitations. Live data from `loadStateFindings(state)` which reads `frontend/public/api/v1/states/<state>.json`. Generated by `analysis/state_findings.py <state…>`. `/states/va` also renders an `McoExposurePanel` (H26 4-payer cross-reference).
 - `/briefings/va` — Markdown-rendered Virginia case study (most-developed of the per-state worked examples). Sourced from `docs/briefings/2026-05-04-virginia-state-medicaid.md` via `loadMarkdown` + `MarkdownPage` (same pattern as `/faq`). Pulls together the § 455.436 framework, VA-specific data quality numbers, the 125-NPI federally-excluded cohort, the H26 4-payer cross-reference, and Stage B roadmap. **Public-good research framing — never represented as produced for, prepared for, or guided by any state agency.**
@@ -100,8 +103,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 - `/download`, `/report` — Report picker (4 reports today) with email gate → `/api/v1/download-report` streams a Playwright-generated PDF of `/report` (or redirects to a web report). Fires a realtime admin alert on every download.
 - `/provider-search` — Real-time cross-source merged search: NDH (BigQuery) + NPPES NPI Registry + 4 payer FHIR directories (Humana, Cigna, UHC via Optum FLEX, Molina via Sapphire360). Returns per-source results so disagreements are visible side-by-side.
 - `/magic-scanner` — AI-powered (Anthropic / OpenAI / Perplexity) provider discovery + NPPES staleness check
-- `/reports/2026-05-08-update` — May 8 release-update report. Dark `<ReleaseTeaser />` hero above the markdown body, linking to the animated viral video at `/video/2026-05-08-update/`.
-- `/reports/2026-05-update` — May 2 subscriber update (the SMD-revalidation push).
+- `/reports/<slug>` — Subscriber release updates. Currently: `/reports/2026-05-22-update` (H40 confirmed-case + SAM-NPI false-positive QA finding), `/reports/2026-05-14-update` (claims-side cross-audit H29–H36), `/reports/2026-05-08-update` (NDH May release ingested; dark `<ReleaseTeaser />` + viral video link), `/reports/2026-05-update` (SMD-revalidation push). Each release is a hand-written `page.tsx` at `frontend/src/app/reports/<slug>/page.tsx` rendering `docs/reports/<slug>.md` via `loadMarkdown` + `<ReactMarkdown>`. New reports must register in `frontend/src/data/reports.ts` AND get their own `page.tsx` AND the markdown source.
 - `/developer` — API docs for external consumers: stable `/api/v1` contract, live `/api/npd/*` + `/api/provider-search`, code samples (Python / TypeScript / Anthropic Claude tool definitions), license + AI-use-rights guidance.
 - `/video/2026-05-08-update/` — Static asset: 48-sec viral data video (7 scenes) from the Claude Design handoff. Vendored HTML + JSX + Babel-in-browser bundle; OG/Twitter tags wired so X/LinkedIn share previews render rich.
 
@@ -150,11 +152,20 @@ Static files under `frontend/public/api/v1/` are the **stable public contract** 
 
 Server Components read these via `loadStats()` / `loadFinding(slug)` in `frontend/src/lib/load-api-v1.ts` (filesystem reads at build time; no round-trip). External consumers hit the same files over HTTP.
 
+**Findings-hub data layer** (`frontend/src/lib/hub-feed.ts`): `loadHubFeed()` aggregates 4 timeline sources — published findings (from `FINDINGS`), web-format reports under `/reports/*` (from `REPORTS`), articles (filesystem scan of `docs/articles/*.md`), and methodology version bumps (YAML frontmatter in `docs/methodology/version-log.md`) — into one typed `HubFeed` `{ lead, timeline, catalog }`. Lead selection: `FINDINGS.find(f => f.featured)` first, fall back to latest published. Timeline trimmed to 10 with the lead excluded. Catalog = every finding sorted by updated date desc. Both the `/findings` hub page and the homepage Latest strip consume the same `HubFeed`.
+
 The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js route handlers — the static JSON files sit in `public/` and take precedence over same-named routes, so never name a route handler `stats/route.ts`.
 
-## Pre-registration workflow (H1–H28)
+## Pre-registration workflow (H1–H42)
 
-Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H28**, with H23 (high-risk cohort), H24 (OIG LEIE), H25 (SAM.gov), H26 (VA payer-directory exposure), H27 (PII exposure replicating the 2026-04-30 WaPo finding), and H28 (endpoint URL validity — only 8.4% of NDH endpoints are FHIR REST URLs; the rest are Direct Trust HISP messaging addresses) added since the SMD-revalidation push.
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H42**.
+
+- H1–H28 — original directory-side audit (NDH-side checks).
+- H29–H36 — claims-side cross-audit (Medicaid spending, Medicare Part B/D, Open Payments, DMEPOS, nursing-home ownership, NDH completeness).
+- H37–H39 — PECOS-as-authoritative-source workstream (taxonomy mismatch, behavioral-health subset, multi-state enrollments).
+- H40 — published 2026-05-22. Per-(NPI, HCPCS, place-of-service) cross-audit of federally-excluded NPIs billing Medicare Part B. Source: CMS Medicare Physician & Other Practitioners by Provider AND Service file (~3 GB, CY 2023). **Result: 194 NPIs full-window, 4 strict-post-exclusion candidates → 1 confirmed (Eduardo Miranda, MD, ~$880K CY 2023 billing 8 years post-LEIE-exclusion), 3 SAM-NPI-join false positives caught by primary-source verification.** Compute script: `analysis/claims_sources/medicare_partb_by_hcpcs.py`. Provenance doc: `docs/methodology/runs/2026-05-22-h40-h41-h42-baseline.md`.
+- H42 — published 2026-05-22. Telehealth-dominant filter on H40. **Result: null hypothesis supported** (zero NPIs at ≥80% telehealth-HCPCS threshold). Honest headline names two competing readings (screening working vs cohort too small).
+- H41 — pre-registered, deferred. Two-pass over the H40 source file + BQ NPPES taxonomy query stalled at the iterator mid-run on first attempt. Switch to `bq query --format=csv > /tmp/nppes.csv` upfront before retrying. Compute script ships in `analysis/h41_specialty_drift.py` but is unpublished.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
 2. **Compute** via `analysis/<hN>_*.py` (BigQuery-driven) or `crawler/` (endpoint probes for H1–H5, H22). Each script emits a `frontend/public/api/v1/findings/<slug>.json` conforming to `ApiV1Finding`.
@@ -168,7 +179,7 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `referential-integrity` → H6–H8 (BQ: `analysis/h6_h8_integrity.py`)
 - `duplicate-detection` → H14–H15 (BQ: `analysis/h14_h15_duplicates.py`)
 - `network-adequacy-gauge` → H22 (joins crawler results to Endpoint table)
-- `high-risk-cohort` → H23 (BQ: `analysis/high_risk_cohort.py`) — composite per-NPI score combining 5 signals at v0.4.0: oig_excluded (1.5), sam_excluded (1.5), not_in_nppes (1.0), nppes_deactivated (0.8), luhn_fail (1.0). Closes 3 of 4 federal database checks per 42 CFR § 455.436; SSA-DMF remains restricted-access. Critical bucket = score ≥ 1.5 (LEIE or SAM excluded). Outputs `high-risk-cohort.json` + `high-risk-cohort-export.csv`.
+- `high-risk-cohort` → H23 (BQ: `analysis/high_risk_cohort.py`) — composite per-NPI score combining 5 signals at v0.4.0: oig_excluded (1.5), sam_excluded (1.5), not_in_nppes (1.0), nppes_deactivated (0.8), luhn_fail (1.0). Closes 3 of 4 federal database checks per 42 CFR § 455.436; SSA-DMF remains restricted-access. Critical bucket = score ≥ 1.5 (LEIE or SAM excluded). Outputs `high-risk-cohort.json` + `high-risk-cohort-export.csv`. **Known data-quality caveat (surfaced by H40 QA, 2026-05-22): the cohort builder's SAM-NPI join treats any non-empty SAM `npi` field as a cohort-qualifying signal without cross-validating the SAM-row name against NPPES.** The SAM.gov Public Extract sometimes carries an NPI field that doesn't belong to the named excluded party (clerical errors at SAM, NPIs reused across records). Observed false-positive rate among H40's strict-post candidates: 3 of 4. Fix path (tracked as follow-up PR): add NPPES-name-match validation to the SAM join; downgrade non-matching rows to `bucket=needs-review` rather than `critical`. Until that fix lands, any audit-referral based on this cohort needs primary-source verification per row (the per-NPI LEIE/SAM/NPPES verify URLs on every cohort row are the mechanism — see the H40 provenance doc for the worked example).
 - `oig-leie-exclusions` → H24 (ingest: `analysis/ingest_oig_leie.py`, BQ: `analysis/h24_oig_exclusions.py`) — joins OIG LEIE monthly file to NDH practitioner NPIs
 - State-scoped slices → `analysis/state_findings.py <state>` writes `frontend/public/api/v1/states/<state>.json`
 - `sam-exclusions` → H25 (ingest: `analysis/ingest_sam_exclusions.py`, BQ: `analysis/h25_sam_exclusions.py`) — joins SAM.gov Public Extract V2 to NDH practitioner NPIs. Independent from LEIE: HHS slice overlaps, OPM slice is net-new. Ingest defaults to `sample-data/SAM_Exclusions_Public_Extract_V2_*.CSV`; API path requires `SAM_GOV_API_KEY` from `analysis/.env.example`.
@@ -300,7 +311,8 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 - `.vercelignore` excludes `frontend/data/` (the downloaded NDJSON files, 2.8 GB compressed) and legacy `backend/` / `web-app/`
 - All Vercel env vars mirror the local `.env.local`, with `GCP_SERVICE_ACCOUNT_KEY` being critical for production BigQuery access
 - Dynamic routes: `npd/*` API routes export `dynamic = 'force-dynamic'` so stale edge-cached data doesn't poison live-data endpoints
-- **Vercel 250 MB lambda size limit** (`frontend/next.config.js` → `experimental.outputFileTracingExcludes`). `public/api/v1/` is ~345 MB (per-state H37/H38/H39 CSVs + the 508K/256K-row PECOS detail files). Next.js's output-file tracer was over-including the entire tree in every serverless function bundle. The fix excludes `public/api/v1/findings/**` and `public/api/v1/states/**` from all lambdas — safe because the loaders only read these at build time for static page generation, and at runtime Vercel's CDN static handler serves the JSON/CSV directly without ever touching the lambda. **If you add a new route that imports `load-api-v1.ts` or `homepage-data.ts`, verify it's still `force-static` and that its `.nft.json` doesn't reference the big trees** (`grep -c 'public/api/v1/states' .next/server/app/<route>.js.nft.json` should be 0). If you ever need to serve these dynamically from a lambda, you'll need to refactor — not just remove the exclusion.
+- **Vercel 250 MB lambda size limit** (`frontend/next.config.js` → `experimental.outputFileTracingExcludes`). `public/api/v1/` is ~345 MB (per-state H37/H38/H39 CSVs + the 508K/256K-row PECOS detail files). Next.js's output-file tracer was over-including the entire tree in every serverless function bundle. The fix excludes `public/api/v1/findings/**` and `public/api/v1/states/**` from all lambdas — safe because the loaders only read these at build time for static page generation, and at runtime Vercel's CDN static handler serves the JSON/CSV directly without ever touching the lambda. **If you add a new route that imports `load-api-v1.ts`, `homepage-data.ts`, or `hub-feed.ts`, verify it's still `force-static` and that its `.nft.json` doesn't reference the big trees** (`grep -c 'public/api/v1/states' .next/server/app/<route>.js.nft.json` should be 0). If you ever need to serve these dynamically from a lambda, you'll need to refactor — not just remove the exclusion.
+- **CodeQL stored-XSS pattern (recurring)**: CodeQL flags any dynamic value flowing from filesystem/static data into an anchor `href` — even when the source is a `findings.ts` slug or a `docs/articles/` filename (both authored-by-us, never user input) and the consumer is `next/link` (which sanitizes). Fix pattern: **constant-prefix + allowlist validator**. See `safeCtaHref` in `frontend/src/components/findings-hub/LeadStory.tsx` and `ARTICLES_GITHUB_URL` constant in `frontend/src/app/articles/[slug]/page.tsx`. Both fixes carry inline JSDoc explaining the false-positive context so future maintainers don't undo them.
 
 ## CI / CD workflows
 
