@@ -204,27 +204,75 @@ function findingsToCatalog(): CatalogRow[] {
   })).sort((a, b) => b.updated.localeCompare(a.updated));
 }
 
+/**
+ * Detect findings that cross-audit against federal exclusion lists.
+ * Returns LEIE/SAM/NPPES verify chips when the finding's text references those
+ * lists explicitly. The earlier broader heuristic (matching on "cohort") falsely
+ * triggered on H23 (high-risk-cohort) and H38 (PECOS subset, mentions "cohort").
+ */
+function findingVerifyChips(f: Finding): LeadStoryItem['verifyChips'] {
+  // Combine title + summary for the keyword check.
+  const text = `${f.title} ${f.summary}`;
+  // "federally excluded" / "LEIE" / "SAM.gov" / "OIG LEIE" are explicit
+  // exclusion-list references. We don't include "NPPES" alone here because
+  // many findings mention NPPES without being exclusion cross-audits.
+  const referencesExclusionLists =
+    /federally[ -]excluded|OIG LEIE|\bLEIE\b|SAM\.gov|\bSAM\b/i.test(text);
+  if (!referencesExclusionLists) return undefined;
+  return [
+    { label: 'LEIE' as const, url: 'https://exclusions.oig.hhs.gov/' },
+    { label: 'SAM' as const, url: 'https://sam.gov/search/?index=ex' },
+    { label: 'NPPES' as const, url: 'https://npiregistry.cms.hhs.gov/' },
+  ];
+}
+
+function buildLead(allEntries: TimelineEntry[]): LeadStoryItem {
+  // Prefer the editor's featured finding if any.
+  const featured = FINDINGS.find((f) => f.featured);
+  if (featured) {
+    return {
+      date: findingUpdatedDate(featured),
+      category: 'finding',
+      status: 'published',
+      title: featured.title,
+      summary: featured.ogTagline ?? featured.summary.slice(0, 280),
+      href: `/findings/${featured.slug}`,
+      hNumbers: featured.hypotheses,
+      heroStats: featured.heroStats,
+      verifyChips: findingVerifyChips(featured),
+      ctaLabel: 'Open finding →',
+      ctaHref: `/findings/${featured.slug}`,
+    };
+  }
+  // Fallback: latest published finding from the timeline.
+  const latest = allEntries.find(
+    (e) => e.category === 'finding' && e.status === 'published',
+  );
+  if (!latest) {
+    throw new Error(
+      'loadHubFeed: no featured finding and no published finding in timeline; cannot build lead.',
+    );
+  }
+  // We have a TimelineEntry but need the Finding for verifyChips / heroStats.
+  const f = FINDINGS.find((x) => `/findings/${x.slug}` === latest.href);
+  return {
+    ...latest,
+    heroStats: f?.heroStats,
+    verifyChips: f ? findingVerifyChips(f) : undefined,
+    ctaLabel: 'Open finding →',
+    ctaHref: latest.href,
+  };
+}
+
 export function loadHubFeed(): HubFeed {
   const catalog = findingsToCatalog();
-  const timeline = [
+  const allEntries = [
     ...publishedFindingsToTimelineEntries(),
     ...reportsToTimelineEntries(),
     ...articlesToTimelineEntries(),
     ...methodologyToTimelineEntries(),
   ].sort((a, b) => b.date.localeCompare(a.date));
-  const placeholderLead: LeadStoryItem = {
-    date: '2026-05-22',
-    category: 'finding',
-    status: 'published',
-    title: '__lead_placeholder__',
-    summary: '__lead_placeholder__',
-    href: '/findings',
-    ctaLabel: 'Open finding →',
-    ctaHref: '/findings',
-  };
-  return {
-    lead: placeholderLead,
-    timeline,
-    catalog,
-  };
+  const lead = buildLead(allEntries);
+  const timeline = allEntries.filter((e) => e.href !== lead.href).slice(0, 10);
+  return { lead, timeline, catalog };
 }
