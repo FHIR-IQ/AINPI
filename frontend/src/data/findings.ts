@@ -44,6 +44,10 @@ export interface Finding {
   dataSource: string;
   status: FindingStatus;
   ogTagline?: string;
+  /** Marks this finding as the hub's lead story. At most one finding may be featured. */
+  featured?: boolean;
+  /** Stat row pairs shown in the hub hero block. Omit to render headline-only. */
+  heroStats?: { label: string; value: string }[];
   /** Audience-specific "so what" — what to do with this number */
   implications?: Implication[];
 }
@@ -648,9 +652,15 @@ export const FINDINGS: Finding[] = [
       'Federally-excluded cohort (active LEIE or SAM, score ≥ 1.5; ~8,619 NPIs nationally per the latest `high-risk-cohort-export.csv`) joined against every (Rndrng_NPI, HCPCS_Cd, Place_Of_Srvc, year) row in the by-Provider-AND-Service file (latest available release; ~10M rows / ~3 GB per service year). State attribution via NPPES practice state, same partitioning the H29/H30a/H30b/H32 streams use.',
     dataSource:
       'CMS Medicare Physician & Other Practitioners by Provider AND Service (data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service). One row per (Rndrng_NPI, HCPCS_Cd, Place_Of_Srvc, year) with services, beneficiaries, charges, and Medicare-allowed/paid amounts. Strict-post-exclusion filter at the (NPI, year) grain since CMS publishes year-level totals (same caveat as H30a). Streaming-once partition pattern at `analysis/claims_sources/medicare_partb_by_hcpcs.py` (to be added) mirrors `medicare_partb.py`. Public domain (CC0-equivalent), 2-year publication lag.',
-    status: 'pre-registered',
+    status: 'published',
     ogTagline:
       'Sharpens H30a from "billed Part B" to per-HCPCS, per-place-of-service post-exclusion billing — the per-claim recoupment unit.',
+    featured: true,
+    heroStats: [
+      { label: 'Confirmed cases', value: '1' },
+      { label: 'CY 2023 paid', value: '$880K' },
+      { label: 'Years post-exclusion', value: '8' },
+    ],
     implications: [
       {
         audience: 'State Medicaid PI offices',

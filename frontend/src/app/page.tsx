@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import MapHomepage from '@/components/homepage/MapHomepage';
 import { loadHomepageMapData } from '@/lib/homepage-data';
+import { HomepageLatestStrip } from '@/components/findings-hub/HomepageLatestStrip';
+import { loadHubFeed } from '@/lib/hub-feed';
 
 export const dynamic = 'force-static';
 
@@ -13,10 +15,12 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const data = loadHomepageMapData();
+  const { lead } = loadHubFeed();
   return (
     <>
       <Navbar />
       <MapHomepage data={data} />
+      <HomepageLatestStrip lead={lead} />
     </>
   );
 }
