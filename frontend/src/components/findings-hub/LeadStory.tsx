@@ -69,11 +69,24 @@ export function LeadStory({ item }: Props) {
       ) : null}
 
       <Link
-        href={item.ctaHref}
+        href={safeCtaHref(item.ctaHref)}
         className="inline-flex items-center bg-red-700 text-white px-4 py-2 rounded-sm text-sm font-semibold hover:bg-red-800"
       >
         {item.ctaLabel}
       </Link>
     </article>
   );
+}
+
+// Validate the lead's CTA destination is a known internal path. CodeQL's
+// stored-XSS analysis flags free-string href props even when the source
+// (FINDINGS.slug) is statically authored and the consumer is Next.js's Link
+// (which performs its own validation). The lead is always a finding, so the
+// expected shape is `/findings/<slug>`; anything else falls back to the
+// canonical hub URL. Constant-prefix + word-character allowlist eliminates
+// the taint flow as far as the analyzer is concerned and gives us an
+// auditable invariant if the upstream data layer ever drifts.
+function safeCtaHref(href: string): string {
+  if (/^\/findings\/[a-z0-9-]+$/i.test(href)) return href;
+  return '/findings';
 }
