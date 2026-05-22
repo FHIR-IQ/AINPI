@@ -44,6 +44,10 @@ export interface Finding {
   dataSource: string;
   status: FindingStatus;
   ogTagline?: string;
+  /** Marks this finding as the hub's lead story. At most one finding may be featured. */
+  featured?: boolean;
+  /** Stat row pairs shown in the hub hero block. Omit to render headline-only. */
+  heroStats?: { label: string; value: string }[];
   /** Audience-specific "so what" — what to do with this number */
   implications?: Implication[];
 }
@@ -651,6 +655,12 @@ export const FINDINGS: Finding[] = [
     status: 'pre-registered',
     ogTagline:
       'Sharpens H30a from "billed Part B" to per-HCPCS, per-place-of-service post-exclusion billing — the per-claim recoupment unit.',
+    featured: true,
+    heroStats: [
+      { label: 'Confirmed cases', value: '1' },
+      { label: 'CY 2023 paid', value: '$880K' },
+      { label: 'Years post-exclusion', value: '8' },
+    ],
     implications: [
       {
         audience: 'State Medicaid PI offices',
