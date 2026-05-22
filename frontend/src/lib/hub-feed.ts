@@ -15,6 +15,7 @@ import { REPORTS, type ReportOption } from '@/data/reports';
 
 // Next.js runs from frontend/, so repo root is one level up
 const REPO_ROOT = path.join(process.cwd(), '..');
+const ARTICLES_DIR = path.join(REPO_ROOT, 'docs', 'articles');
 
 export type TimelineCategory = 'finding' | 'update' | 'article' | 'methodology';
 /**
@@ -127,6 +128,37 @@ function reportsToTimelineEntries(): TimelineEntry[] {
   return out;
 }
 
+function articlesToTimelineEntries(): TimelineEntry[] {
+  if (!fs.existsSync(ARTICLES_DIR)) return [];
+  const out: TimelineEntry[] = [];
+  for (const name of fs.readdirSync(ARTICLES_DIR)) {
+    if (!name.endsWith('.md')) continue;
+    const dateMatch = name.match(/^(\d{4}-\d{2}-\d{2})-(.+)\.md$/);
+    if (!dateMatch) continue;
+    const [, date, slug] = dateMatch;
+    const filepath = path.join(ARTICLES_DIR, name);
+    const raw = fs.readFileSync(filepath, 'utf-8');
+    const { content } = matter(raw);
+    const h1 = content.match(/^#\s+(.+)$/m);
+    const title = h1 ? h1[1].trim() : slug.replace(/-/g, ' ');
+    // First substantive paragraph after the H1 becomes the summary.
+    const afterH1 = content.split(/^#\s+.+$/m)[1] ?? '';
+    const firstPara = afterH1
+      .split(/\n\n/)
+      .map((p) => p.trim())
+      .find((p) => p && !p.startsWith('*') && !p.startsWith('#'));
+    const summary = firstPara ? firstPara.slice(0, 220) : '';
+    out.push({
+      date,
+      category: 'article',
+      title,
+      summary,
+      href: `/articles/${slug}`,
+    });
+  }
+  return out;
+}
+
 function findingsToCatalog(): CatalogRow[] {
   return FINDINGS.map((f) => ({
     hNumber: f.hypotheses[0] ?? 'H?',
@@ -139,9 +171,10 @@ function findingsToCatalog(): CatalogRow[] {
 
 export function loadHubFeed(): HubFeed {
   const catalog = findingsToCatalog();
-  const timeline = reportsToTimelineEntries().sort((a, b) =>
-    b.date.localeCompare(a.date),
-  );
+  const timeline = [
+    ...reportsToTimelineEntries(),
+    ...articlesToTimelineEntries(),
+  ].sort((a, b) => b.date.localeCompare(a.date));
   const placeholderLead: LeadStoryItem = {
     date: '2026-05-22',
     category: 'finding',
