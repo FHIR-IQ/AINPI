@@ -33,7 +33,7 @@ import { Resend } from 'resend';
 const SUBJECT =
   'AINPI 2026-05-22 update — H40 published, 1 confirmed case, 3 SAM-NPI false positives caught';
 const REPORT_URL = 'https://ainpi.dev/reports/2026-05-22-update';
-const ARTICLE_URL = 'https://ainpi.dev/articles/2026-05-22-eight-years-post-exclusion';
+const ARTICLE_URL = 'https://ainpi.dev/articles/eight-years-post-exclusion';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
 const FROM_ADDRESS =
@@ -275,9 +275,7 @@ async function main() {
     if (args.email) {
       recipients = [{ email: args.email }];
     } else {
-      const where = { unsubscribedAt: null };
       const subs = await prisma.subscriber.findMany({
-        where,
         select: { email: true },
         orderBy: { createdAt: 'asc' },
         ...(args.limit ? { take: args.limit } : {}),
