@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import { FINDINGS, type Finding, type FindingStatus } from '@/data/findings';
+import { REPORTS, type ReportOption } from '@/data/reports';
 
 // Next.js runs from frontend/, so repo root is one level up
 const REPO_ROOT = path.join(process.cwd(), '..');
@@ -95,6 +96,37 @@ function findingUpdatedDate(f: Finding): string {
   return '2026-05-08';
 }
 
+/**
+ * The reports.ts version field is the canonical date prefix for web reports.
+ * Format: '2026-05-22-update' → '2026-05-22'. Returns null for reports whose
+ * version doesn't carry an ISO date prefix.
+ */
+function reportDate(r: ReportOption): string | null {
+  const m = r.version.match(/(\d{4}-\d{2}-\d{2})/);
+  return m ? m[1] : null;
+}
+
+function reportsToTimelineEntries(): TimelineEntry[] {
+  const out: TimelineEntry[] = [];
+  for (const r of REPORTS) {
+    if (r.format !== 'web') continue; // Skip PDF + CSV reports
+    // va-briefing is format:'web' but lives at /briefings/va — without this
+    // filter, briefings and any future web-format docs would bleed into the
+    // release-updates feed.
+    if (!r.url.startsWith('/reports/')) continue;
+    const date = reportDate(r);
+    if (!date) continue;
+    out.push({
+      date,
+      category: 'update',
+      title: r.title,
+      summary: r.description,
+      href: r.url,
+    });
+  }
+  return out;
+}
+
 function findingsToCatalog(): CatalogRow[] {
   return FINDINGS.map((f) => ({
     hNumber: f.hypotheses[0] ?? 'H?',
@@ -107,8 +139,9 @@ function findingsToCatalog(): CatalogRow[] {
 
 export function loadHubFeed(): HubFeed {
   const catalog = findingsToCatalog();
-  // Lead + timeline are filled in subsequent tasks. Provide a placeholder
-  // lead so the type is satisfied during this task's tests.
+  const timeline = reportsToTimelineEntries().sort((a, b) =>
+    b.date.localeCompare(a.date),
+  );
   const placeholderLead: LeadStoryItem = {
     date: '2026-05-22',
     category: 'finding',
@@ -121,7 +154,7 @@ export function loadHubFeed(): HubFeed {
   };
   return {
     lead: placeholderLead,
-    timeline: [],
+    timeline,
     catalog,
   };
 }
