@@ -703,17 +703,17 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
-    slug: 'excluded-telehealth-only-post-exclusion',
+    slug: 'excluded-telehealth-dominant-post-exclusion',
     hypotheses: ['H42'],
-    title: 'Federally excluded NPIs billing telehealth-only post-exclusion (POS 02 / POS 10)',
+    title: 'Federally excluded NPIs whose post-exclusion Medicare Part B billing is telehealth-dominant',
     summary:
-      'Subset of H40 with place-of-service filtered to POS 02 (telehealth distant site) and POS 10 (telehealth from patient home). Federally-excluded providers whose entire post-exclusion Medicare Part B billing is virtual is a known fraud pattern — virtual practice lets the excluded provider continue without a physical office that would attract local oversight, and most telehealth platforms maintain their own LEIE/SAM screening that should have caught the exclusion. Cohort is small but each row carries unusually high prosecutorial weight because the "I didn\'t know I was excluded" defense is weaker for a provider actively credentialed through a telehealth platform. Per-state CSVs at `/api/v1/states/<state>/h42-excluded-telehealth-only.csv`.',
+      'Subset of H40 with the post-exclusion HCPCS mix filtered to telehealth-specific procedure codes. Federally-excluded providers whose post-exclusion billing concentrates in telehealth-delivery codes is a known fraud pattern — virtual practice lets the excluded provider continue without a physical office that would attract local oversight, and most telehealth platforms maintain their own LEIE/SAM screening that should have caught the exclusion. Cohort is small but each row carries unusually high prosecutorial weight because the "I didn\'t know I was excluded" defense is weaker for a provider actively credentialed through a telehealth platform. Per-state CSVs at `/api/v1/states/<state>/h42-excluded-telehealth-dominant.csv`. **Methodology note**: the published Medicare Physician & Other Practitioners by Provider AND Service file aggregates `Place_Of_Srvc` to F (Facility) / O (Office) at file build, so claim-level POS 02 / POS 10 codes are not directly recoverable. H42 therefore operationalizes "telehealth" via the HCPCS code list (G2010, G2012, G2061-G2063, 99421-99423, 99441-99443, G0425-G0427, G3002-G3003), which exist primarily or exclusively as telehealth-delivery procedures.',
     nullHypothesis:
-      'Zero LEIE/SAM-excluded NPIs have any post-exclusion Medicare Part B billing where the place-of-service is exclusively POS 02 or POS 10 across all post-exclusion service years.',
+      'Zero LEIE/SAM-excluded NPIs have post-exclusion Medicare Part B billing where ≥80% of services bill under the published telehealth-specific HCPCS code list (see methodology note in summary).',
     denominator:
-      'Federally-excluded cohort (~8,619 NPIs nationally, active LEIE or SAM, score ≥ 1.5), joined against the by-Provider-AND-Service file, filtered to NPIs whose post-exclusion service rows are 100% POS 02 or POS 10 (no physical-location billing at all post-exclusion). Strict-post-exclusion temporal filter same as H40 (per-NPI leie_excldate / sam_active_date at (NPI, year) grain).',
+      'Federally-excluded cohort (~8,619 NPIs nationally, active LEIE or SAM, score ≥ 1.5), joined against the by-Provider-AND-Service file (H40\'s match table), filtered to NPIs whose post-exclusion HCPCS distribution puts ≥80% of services under telehealth-specific codes. Strict-post-exclusion temporal filter same as H40 (per-NPI leie_excldate / sam_active_date at (NPI, year) grain). The 80% threshold is publishable; sensitivity at 60% / 95% as sidecar.',
     dataSource:
-      'CMS Medicare Physician & Other Practitioners by Provider AND Service (same as H40). POS code filter applied after H40\'s join; ratio test gates inclusion. Implementation: `analysis/h42_excluded_telehealth_only.py` (to be added), depends on H40\'s compute stage.',
+      'CMS Medicare Physician & Other Practitioners by Provider AND Service (same as H40). Telehealth-HCPCS list applied after H40\'s join; service-share threshold gates inclusion. Implementation: `analysis/h42_excluded_telehealth_dominant.py` (to be added), depends on H40\'s compute stage. Reference for the telehealth-HCPCS list: CMS Telehealth Services List (`cms.gov/medicare/coverage/telehealth/list-services`).',
     status: 'pre-registered',
     ogTagline:
       'Federally excluded. Practicing entirely through telehealth. Whichever platform credentialed them did not run the check.',
