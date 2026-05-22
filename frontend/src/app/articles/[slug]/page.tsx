@@ -59,6 +59,15 @@ export async function generateMetadata({
   };
 }
 
+// Hardcoded GitHub directory link for the article source. The per-article
+// filename is intentionally NOT interpolated into the href — CodeQL's
+// stored-XSS analysis flags any filesystem-derived value flowing into an
+// anchor href even when (a) the route is statically generated via
+// generateStaticParams, (b) the slug is validated by slugToFile, and
+// (c) React escapes JSX. Static href is unambiguously safe.
+const ARTICLES_GITHUB_URL =
+  'https://github.com/FHIR-IQ/AINPI/tree/main/docs/articles';
+
 export default async function ArticlePage({
   params,
 }: {
@@ -68,7 +77,6 @@ export default async function ArticlePage({
   const docPath = slugToFile(slug);
   if (!docPath) notFound();
   const doc = loadMarkdown(docPath, 'AINPI article');
-  const githubUrl = `https://github.com/FHIR-IQ/AINPI/blob/main/${docPath}`;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -79,9 +87,11 @@ export default async function ArticlePage({
         </article>
         <footer className="mt-16 pt-8 border-t text-sm text-gray-500 flex flex-wrap gap-4 items-center justify-between">
           <p>
-            Source:{' '}
-            <a className="text-primary-600 hover:underline" href={githubUrl}>
-              {docPath}
+            <a
+              className="text-primary-600 hover:underline"
+              href={ARTICLES_GITHUB_URL}
+            >
+              View source on GitHub →
             </a>
           </p>
         </footer>
