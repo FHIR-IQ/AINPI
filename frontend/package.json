@@ -38,7 +38,7 @@
     "axios": "^1.16.1",
     "bcryptjs": "^3.0.3",
     "d3": "^7.9.0",
-    "date-fns": "^3.0.0",
+    "date-fns": "^4.3.0",
     "gray-matter": "^4.0.3",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^1.16.0",
