@@ -43,17 +43,31 @@ Already-done parts:
 **Run-yourself parts** (require billing-account-level IAM the agent can't grant):
 
 ```bash
-# 1. Grant the kill-switch SA billing.projectManager on the billing account
-#    (this is the only way to disable billing for a project)
-gcloud billing accounts add-iam-policy-binding 01B58B-9C267D-ECC805 \
+# Disabling billing for a project requires TWO IAM grants on TWO different
+# resources, because the operation needs:
+#   - resourcemanager.projects.deleteBillingAssignment (project-level, in
+#     roles/billing.projectManager)
+#   - billing.resourceAssociations.delete (billing-account-level, in
+#     roles/billing.user)
+# Either alone produces PERMISSION_DENIED. This pair is least-privilege:
+# the SA can only disable billing for THIS project, not others on the
+# billing account.
+
+# 1. Grant billing.projectManager on the PROJECT (not the billing account)
+gcloud projects add-iam-policy-binding thematic-fort-453901-t7 \
   --member="serviceAccount:kill-billing-sa@thematic-fort-453901-t7.iam.gserviceaccount.com" \
   --role="roles/billing.projectManager"
 
-# 2. Update the budget to publish to the Pub/Sub topic
-gcloud billing budgets update 6d1efd94-3b35-4aeb-af19-bb38f3bbb03f \
-  --billing-account=01B58B-9C267D-ECC805 \
-  --pubsub-topic=projects/thematic-fort-453901-t7/topics/billing-alerts
+# 2. Grant billing.user on the BILLING ACCOUNT
+gcloud billing accounts add-iam-policy-binding 01B58B-9C267D-ECC805 \
+  --member="serviceAccount:kill-billing-sa@thematic-fort-453901-t7.iam.gserviceaccount.com" \
+  --role="roles/billing.user"
 ```
+
+The budget→Pub/Sub link is already wired server-side via
+`gcloud billing budgets update 6d1efd94-3b35-4aeb-af19-bb38f3bbb03f \
+  --billing-account=01B58B-9C267D-ECC805 \
+  --notifications-rule-pubsub-topic=projects/thematic-fort-453901-t7/topics/billing-alerts`.
 
 ## Deploy
 
