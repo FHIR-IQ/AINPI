@@ -19,6 +19,31 @@ from typing import Iterable
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent.parent
 STATES_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "states"
 
+# Per-query maximum bytes billed cap. 100 GB ≈ $0.50 per query at on-demand
+# pricing ($5 per TB). Any query that would scan more than this errors out
+# instead of running — protects against runaway costs from accidental
+# full-table scans on the 21.7M-record NDH dataset or its joins. Current
+# production queries scan well under 25 GB; this cap has 4× headroom.
+#
+# Apply to every BigQuery job in analysis scripts via:
+#     from google.cloud import bigquery
+#     from analysis.claims_sources._cohorts import bq_job_config
+#     client.query(sql, job_config=bq_job_config())
+DEFAULT_MAX_BYTES_BILLED = 100_000_000_000  # 100 GB
+
+
+def bq_job_config(maximum_bytes_billed: int | None = None):
+    """Return a BigQuery QueryJobConfig with the project-wide per-query cap.
+
+    Import lazily so analysis scripts that don't touch BQ don't pay the
+    google-cloud-bigquery import cost.
+    """
+    from google.cloud import bigquery
+
+    return bigquery.QueryJobConfig(
+        maximum_bytes_billed=maximum_bytes_billed or DEFAULT_MAX_BYTES_BILLED,
+    )
+
 # 50 states + DC + the 5 US territories NPPES uses. NPPES allows
 # international addresses (CA-province codes like AB / BC, MX-state codes,
 # etc.) so claims-side scripts must whitelist before writing per-state

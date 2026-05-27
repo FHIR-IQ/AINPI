@@ -54,6 +54,7 @@ AINPI/
 - **Methodology version**: `0.7.0-draft` (see `docs/methodology/index.md`; historical versions in `docs/methodology/version-log.md`)
 - **Hosting**: Vercel
 - **Auth for BigQuery in production**: service account key JSON loaded from `GCP_SERVICE_ACCOUNT_KEY` env var
+- **GCP cost controls** (added 2026-05-27 after a $200 unrelated-project leak): (1) a $10/mo budget alert (`6d1efd94-3b35-4aeb-af19-bb38f3bbb03f`) emails at 50/90/100%, (2) the budget publishes to `projects/thematic-fort-453901-t7/topics/billing-alerts`, (3) `infrastructure/kill-billing-function/` contains a Cloud Function that disables billing on the project when cost ≥ budget — see its README for the deploy + IAM commands, (4) every BigQuery query is per-query-capped at 100 GB billed (~$0.50). Use `DEFAULT_MAX_BYTES_BILLED` from `frontend/src/lib/bigquery.ts` (TS) or `bq_job_config()` from `analysis/claims_sources/_cohorts.py` (Python) on any new BQ work. **All Maps/Places APIs are disabled at the project level**; do not enable any without explicit need (those were the $200 leak).
 
 ## Common Commands
 
