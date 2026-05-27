@@ -194,6 +194,17 @@ H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2
 
 Each of the 6 resource tables stores the full FHIR resource as a `resource:JSON` column plus extracted flat `_*` fields for efficient querying. This avoids schema-drift failures when NDH extensions vary across records.
 
+**Clustering** (added 2026-05-27 after a recurring full-scan query on `practitioner` accounted for ~$190 of the May 2026 bill — 6,249 unbounded `WHERE _npi = @npi` lookups from `/api/provider-search` at 11.58 GB billed each). Every table is now clustered on its most-queried `_*` column. **Any production query that filters by these keys scans <100 MB instead of the full table; filtering by any other column still scans everything.** Don't add a hot-path route that filters by an unclustered column without first reclustering or adding a per-query `maximum_bytes_billed` cap.
+
+| Table | Cluster key |
+|---|---|
+| `practitioner` | `_npi` |
+| `organization` | `_npi` |
+| `location` | `_managing_org_id` |
+| `endpoint` | `_managing_org_id` |
+| `practitioner_role` | `_practitioner_id` |
+| `organization_affiliation` | `_org_id` |
+
 | Table | Key extracted columns |
 |---|---|
 | `practitioner` | `_id, _npi, _family_name, _given_name, _state, _city, _postal_code, _gender, _active` |
