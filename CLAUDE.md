@@ -340,6 +340,7 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 | `.github/workflows/ci.yml` | push/PR to main | `npm ci` → `prisma generate` → `npm run lint` → `npm run test` (from `frontend/`) |
 | `.github/workflows/codeql.yml` | push/PR + weekly | JS/TS + Python static analysis |
 | `.github/workflows/gitleaks.yml` | push/PR | Secret scan using upstream gitleaks **binary** (v8.21.2) — NOT `gitleaks/gitleaks-action@v2` (that requires a paid org license). Baselines historical leaks via `.github/gitleaks-baseline.json`; any NEW finding fails the job. |
+| `.github/workflows/anti-patterns.yml` | push/PR | AINPI-specific guardrails complementing gitleaks + CodeQL. Runs `.github/scripts/scan-anti-patterns.sh` on the PR diff. Catches: hardcoded `AIza…` Google API keys, embedded service-account JSON, Python BQ queries missing `bq_job_config()` cap, direct `new BigQuery(` outside the bounded helper, re-enabling deliberately-disabled Maps/Places APIs, and state-agency attribution language. Rules + remediation pointers in the script header. Add new rules there when a new policy is added to CLAUDE.md. |
 | `.github/workflows/weekly-refresh.yml` | Mon 09:00 UTC + manual | Runs all `analysis/h*.py` scripts, regenerates `frontend/public/api/v1/*.json`, commits directly to `main`. Requires `GCP_SERVICE_ACCOUNT_KEY` secret (BQ jobUser + dataViewer on `cms_npd` and `bigquery-public-data.nppes`). |
 | `.github/workflows/release.yml` | tag `v*` | Cuts GitHub release |
 

@@ -1,0 +1,38 @@
+name: anti-patterns
+
+# Runs the AINPI-specific anti-pattern scanner on every PR + push to main.
+# Complements the existing gitleaks + CodeQL workflows by catching:
+#   - Hardcoded Google API keys / service-account credentials
+#   - BQ queries without per-query maximum_bytes_billed caps
+#   - Direct BigQuery client instantiation outside the bounded helper
+#   - Re-enabling deliberately-disabled paid APIs (Maps/Places)
+#   - State-agency attribution language (per CLAUDE.md Public Framing)
+#
+# Rules + remediation pointers live in .github/scripts/scan-anti-patterns.sh.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  scan:
+    name: scan changed files
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # need full history so diff against base branch works
+
+      - name: Make scanner executable
+        run: chmod +x .github/scripts/scan-anti-patterns.sh
+
+      - name: Run anti-pattern scan
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: bash .github/scripts/scan-anti-patterns.sh
