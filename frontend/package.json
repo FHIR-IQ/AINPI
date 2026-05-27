@@ -24,11 +24,11 @@
     "report:pdf": "tsx scripts/generate-report-pdf.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.97.1",
+    "@anthropic-ai/sdk": "^0.98.0",
     "@google-cloud/bigquery": "^8.3.1",
     "@prisma/client": "^6.19.3",
     "@supabase/ssr": "^0.10.3",
-    "@supabase/supabase-js": "^2.105.1",
+    "@supabase/supabase-js": "^2.106.2",
     "@types/bcryptjs": "^3.0.0",
     "@types/d3": "^7.4.3",
     "@types/jsonwebtoken": "^9.0.10",
@@ -43,12 +43,12 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^1.16.0",
     "next": "14.2.35",
-    "openai": "^6.38.0",
+    "openai": "^6.39.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^9.1.0",
     "remark-gfm": "^4.0.1",
-    "resend": "^6.12.3",
+    "resend": "^6.12.4",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
