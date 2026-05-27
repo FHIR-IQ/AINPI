@@ -54,7 +54,14 @@ AINPI/
 - **Methodology version**: `0.7.0-draft` (see `docs/methodology/index.md`; historical versions in `docs/methodology/version-log.md`)
 - **Hosting**: Vercel
 - **Auth for BigQuery in production**: service account key JSON loaded from `GCP_SERVICE_ACCOUNT_KEY` env var
-- **GCP cost controls** (added 2026-05-27 after a $200 unrelated-project leak): (1) a $10/mo budget alert (`6d1efd94-3b35-4aeb-af19-bb38f3bbb03f`) emails at 50/90/100%, (2) the budget publishes to `projects/thematic-fort-453901-t7/topics/billing-alerts`, (3) `infrastructure/kill-billing-function/` contains a Cloud Function that disables billing on the project when cost ≥ budget — see its README for the deploy + IAM commands, (4) every BigQuery query is per-query-capped at 100 GB billed (~$0.50). Use `DEFAULT_MAX_BYTES_BILLED` from `frontend/src/lib/bigquery.ts` (TS) or `bq_job_config()` from `analysis/claims_sources/_cohorts.py` (Python) on any new BQ work. **All Maps/Places APIs are disabled at the project level**; do not enable any without explicit need (those were the $200 leak).
+- **GCP cost controls (load-bearing — always follow before adding paid-service usage)**: This project enforces a hard-cap architecture for any paid API. Existing controls: (1) a `$10/mo` budget alert (`6d1efd94-3b35-4aeb-af19-bb38f3bbb03f`) emails at 50/90/100%, (2) the budget publishes to `projects/thematic-fort-453901-t7/topics/billing-alerts`, (3) `infrastructure/kill-billing-function/` deploys a Cloud Function that auto-disables billing when cost ≥ budget (see its README), (4) every BigQuery query defaults to `maximum_bytes_billed=100 GB` (~$0.50). Use `DEFAULT_MAX_BYTES_BILLED` from `frontend/src/lib/bigquery.ts` (TS) or `bq_job_config()` from `analysis/claims_sources/_cohorts.py` (Python) on any new BQ work. **All Maps/Places APIs are disabled at the project level** — do not re-enable without a deliberate, documented need.
+
+  **Architecture review checklist — run before adding any production route that hits a paid service:**
+  1. **Per-call cost at projected traffic.** Calculate cost-per-1,000-requests for the worst-case query path. If >$1, hard-cap or cache before launch.
+  2. **Storage-layer fit for the query pattern.** BigQuery tables MUST be clustered on the column you filter by (see Clustering section under BigQuery Schema). An unclustered table full-scans on every query — a single hot-path route with no clustering + no cap can produce hundreds of dollars of charges in days.
+  3. **Caching layer.** Vercel `force-static` or `revalidate` for data that updates ≤ daily. Response caching for repeated lookups of the same key.
+  4. **Hard cap on traffic spikes.** Either a per-query `maximum_bytes_billed`, a per-day quota, or a rate limit on the route.
+  5. **Disable unused paid APIs at the project level** so accidental enablement (e.g., via a tutorial, a tool, or AI assistant) can't trigger spend.
 
 ## Common Commands
 
@@ -194,7 +201,7 @@ H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2
 
 Each of the 6 resource tables stores the full FHIR resource as a `resource:JSON` column plus extracted flat `_*` fields for efficient querying. This avoids schema-drift failures when NDH extensions vary across records.
 
-**Clustering** (added 2026-05-27 after a recurring full-scan query on `practitioner` accounted for ~$190 of the May 2026 bill — 6,249 unbounded `WHERE _npi = @npi` lookups from `/api/provider-search` at 11.58 GB billed each). Every table is now clustered on its most-queried `_*` column. **Any production query that filters by these keys scans <100 MB instead of the full table; filtering by any other column still scans everything.** Don't add a hot-path route that filters by an unclustered column without first reclustering or adding a per-query `maximum_bytes_billed` cap.
+**Clustering**: every table is clustered on its most-queried `_*` column. Production queries that filter on these cluster keys scan <100 MB; filtering on any other column scans the full table (10 GB+ for `practitioner`, smaller for the others). **Any new hot-path route filtering by a non-cluster-key column must either recluster the table on that column OR set a per-query `maximum_bytes_billed` cap** — see the GCP cost-control checklist in the Stack section.
 
 | Table | Cluster key |
 |---|---|
