@@ -43,6 +43,17 @@ export const REPORTS: ReportOption[] = [
     length: '~30 pages',
   },
   {
+    id: 'jun-2026-06-02-update',
+    version: '2026-06-02-update',
+    title: '2026-06-02 update — landscape becomes the front door, REAL Health audit framework published',
+    description:
+      'Two coordinated releases: the homepage swaps to a Karpathy-style hierarchical treemap (548 cells, 6 audit dimensions, one per state × specialty) and a new policy brief maps every § 6220 obligation of the REAL Health Providers Act to the AINPI signal that measures it. The choropleth moves to /map.',
+    format: 'web',
+    url: '/reports/2026-06-02-update',
+    badge: 'NEW',
+    length: '~6 min read',
+  },
+  {
     id: 'may-2026-05-22-update',
     version: '2026-05-22-update',
     title: '2026-05-22 update — H40 published, one confirmed case, three SAM-NPI false positives',
@@ -50,7 +61,6 @@ export const REPORTS: ReportOption[] = [
       'Sharpened H30a to per-(NPI, HCPCS, place-of-service) detail. Cross-audit surfaced 4 strict-post-exclusion candidates nationally; primary-source verification confirms 1 (Eduardo Miranda MD, LEIE-excluded 2015, $880K Medicare Part B in CY 2023) and reveals 3 SAM-NPI-join false positives. H42 null result honestly framed.',
     format: 'web',
     url: '/reports/2026-05-22-update',
-    badge: 'NEW',
     length: '~7 min read',
   },
   {
