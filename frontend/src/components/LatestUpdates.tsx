@@ -21,47 +21,52 @@ interface Update {
 
 const UPDATES: Update[] = [
   {
+    label:
+      '2026-06-02 update — landscape becomes the homepage, REAL Health audit framework published',
+    href: '/reports/2026-06-02-update',
+    isNew: true,
+    date: '2026-06-02',
+  },
+  {
+    label:
+      'Provider data landscape — Karpathy-style treemap, 548 cells, 6 audit dimensions, fullscreen mode',
+    href: '/',
+    isNew: true,
+    date: '2026-06-02',
+  },
+  {
+    label:
+      'REAL Health Providers Act — § 6220 audit framework with copy-paste citation language for the 2028 CMS scoring RFC',
+    href: '/real-health-providers',
+    isNew: true,
+    date: '2026-06-02',
+  },
+  {
+    label: '2026-05-22 update — H40 published, 1 confirmed $880K post-exclusion case, 3 SAM-NPI false positives caught',
+    href: '/reports/2026-05-22-update',
+    date: '2026-05-22',
+  },
+  {
     label: '2026-05-08 update — Endpoint −73%, Location −61%, SSN exposures 46 → 41',
     href: '/reports/2026-05-08-update',
-    isNew: true,
     date: '2026-05-08',
   },
   {
     label: 'H27 — SSN exposure dropped 46 → 41 (CMS partially scrubbed in May release)',
     href: '/findings/pii-exposure-ndh',
     hypothesis: 'H27',
-    isNew: true,
     date: '2026-05-08',
   },
   {
     label: 'H26 — VA payer-directory exposure: 2 of 131 in Cigna (4-MCO sweep)',
     href: '/findings/mco-exposure-va',
     hypothesis: 'H26',
-    isNew: true,
     date: '2026-05-08',
   },
   {
     label: 'Virginia State Medicaid briefing — refreshed for May NDH release',
     href: '/briefings/va',
     date: '2026-05-08',
-  },
-  {
-    label: 'H25 — SAM.gov exclusions (OPM debarment is net-new beyond LEIE)',
-    href: '/findings/sam-exclusions',
-    hypothesis: 'H25',
-    date: '2026-04-30',
-  },
-  {
-    label: 'H24 — OIG LEIE matched against NDH practitioners',
-    href: '/findings/oig-leie-exclusions',
-    hypothesis: 'H24',
-    date: '2026-04-29',
-  },
-  {
-    label: 'H23 — high-risk-cohort v0.4 (5 signals, closes 3 of 4 § 455.436 checks)',
-    href: '/findings/high-risk-cohort',
-    hypothesis: 'H23',
-    date: '2026-04-29',
   },
 ];
 
