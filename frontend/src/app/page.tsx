@@ -2,9 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import WipBanner from '@/components/WipBanner';
-import { HomepageLatestStrip } from '@/components/findings-hub/HomepageLatestStrip';
 import { loadLandscape } from '@/lib/load-api-v1';
-import { loadHubFeed } from '@/lib/hub-feed';
 import LandscapeExplorer from './landscape/landscape-explorer';
 
 export const dynamic = 'force-static';
@@ -24,13 +22,11 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const payload = loadLandscape();
-  const { lead } = loadHubFeed();
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <WipBanner />
-      <HomepageLatestStrip lead={lead} />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-3xl mb-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-1">
