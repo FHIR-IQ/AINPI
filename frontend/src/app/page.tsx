@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import WipBanner from '@/components/WipBanner';
 import { loadLandscape } from '@/lib/load-api-v1';
 import LandscapeExplorer from './landscape/landscape-explorer';
 
@@ -26,7 +25,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <WipBanner />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-3xl mb-6">
           <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-1">
