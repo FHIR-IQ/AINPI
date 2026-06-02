@@ -4,6 +4,14 @@ const nextConfig = {
     // Empty string for serverless (Next.js API routes) - no external backend needed
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || '',
   },
+  async redirects() {
+    return [
+      // /landscape was the original deep URL for the treemap. As of 2026-06-02
+      // the homepage renders the same content directly; keep external bookmarks
+      // and the social-share-card URL working.
+      { source: '/landscape', destination: '/', permanent: true },
+    ];
+  },
   experimental: {
     // public/api/v1/** is served as static CDN assets by Vercel, never read from
     // inside a lambda at runtime — the loaders only touch them during `next build`
