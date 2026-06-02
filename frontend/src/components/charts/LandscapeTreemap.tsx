@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo, useState } from 'react';
 import * as d3 from 'd3';
+import { Maximize2, Minimize2 } from 'lucide-react';
 import type { LandscapeCell, LandscapeMetricKey, LandscapeMetricDef } from '@/lib/landscape-types';
 
 export type LandscapeGroupBy = 'specialty' | 'state';
@@ -70,6 +71,41 @@ export default function LandscapeTreemap({
 }: LandscapeTreemapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  // Live viewport size, only used when fullscreen — re-runs the D3 layout so
+  // cells and labels actually get bigger (not just CSS-scaled).
+  const [viewport, setViewport] = useState({ w: 1600, h: 900 });
+
+  const effectiveWidth = isFullscreen ? viewport.w : width;
+  const effectiveHeight = isFullscreen ? viewport.h : height;
+
+  // Sync viewport size on enter/resize while in fullscreen mode.
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const sync = () =>
+      setViewport({
+        w: Math.max(400, window.innerWidth - 24),
+        h: Math.max(300, window.innerHeight - 72),
+      });
+    sync();
+    window.addEventListener('resize', sync);
+    return () => window.removeEventListener('resize', sync);
+  }, [isFullscreen]);
+
+  // ESC key + body scroll lock while fullscreen.
+  useEffect(() => {
+    if (!isFullscreen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsFullscreen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [isFullscreen]);
 
   const colorScale = useMemo(
     () => d3.scaleLinear<string>()
@@ -95,7 +131,7 @@ export default function LandscapeTreemap({
       .sort((a, b) => (b.value || 0) - (a.value || 0));
 
     d3.treemap<AnyNode>()
-      .size([width, height])
+      .size([effectiveWidth, effectiveHeight])
       // Outer = space between parent groups; inner = space between child cells;
       // top = breathing room for the parent label band.
       .paddingOuter(4)
@@ -251,17 +287,36 @@ export default function LandscapeTreemap({
           .text(metric.format(cell.metrics[metric.key]));
       }
     });
-  }, [cells, metric, groupBy, colorScale, width, height, onCellClick, selectedCell]);
+  }, [cells, metric, groupBy, colorScale, effectiveWidth, effectiveHeight, onCellClick, selectedCell]);
+
+  // Fullscreen container is fixed-positioned full-viewport with high z-index;
+  // normal container is just a relative wrapper. The svg sits inside either.
+  const containerClass = isFullscreen
+    ? 'fixed inset-0 z-50 bg-white p-3 flex flex-col'
+    : 'relative';
+  const svgWrapClass = isFullscreen
+    ? 'relative overflow-hidden rounded-lg bg-white border border-gray-200 flex-1'
+    : 'relative overflow-hidden rounded-lg bg-white border border-gray-200';
 
   return (
-    <div className="relative">
-      <div className="relative overflow-hidden rounded-lg bg-white border border-gray-200">
+    <div className={containerClass}>
+      <div className={svgWrapClass}>
+        <button
+          type="button"
+          onClick={() => setIsFullscreen((v) => !v)}
+          aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+          title={isFullscreen ? 'Exit fullscreen (Esc)' : 'Enter fullscreen'}
+          className="absolute top-2 right-2 z-20 bg-white/95 hover:bg-white text-gray-700 hover:text-gray-900 border border-gray-200 rounded-md p-1.5 shadow-sm transition-colors"
+        >
+          {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+        </button>
         <svg
           ref={svgRef}
-          width={width}
-          height={height}
-          viewBox={`0 0 ${width} ${height}`}
-          className="w-full h-auto"
+          width={effectiveWidth}
+          height={effectiveHeight}
+          viewBox={`0 0 ${effectiveWidth} ${effectiveHeight}`}
+          className={isFullscreen ? 'w-full h-full' : 'w-full h-auto'}
+          preserveAspectRatio="xMidYMid meet"
         />
         <div
           ref={tooltipRef}
@@ -269,10 +324,13 @@ export default function LandscapeTreemap({
           style={{ display: 'none' }}
         />
       </div>
-      <div className="mt-2 flex items-center gap-3 text-xs text-gray-600">
+      <div className={isFullscreen ? 'mt-2 flex items-center gap-3 text-xs text-gray-600 px-1' : 'mt-2 flex items-center gap-3 text-xs text-gray-600'}>
         <span className="font-medium">Worse</span>
         <div className="flex-1 h-2 rounded" style={{ background: 'linear-gradient(to right, #b91c1c, #f59e0b, #15803d)' }} />
         <span className="font-medium">Better</span>
+        {isFullscreen && (
+          <span className="text-gray-400 ml-2">Esc to exit fullscreen</span>
+        )}
       </div>
     </div>
   );
