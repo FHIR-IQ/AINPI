@@ -350,14 +350,9 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 
 ## Branch protection on `main`
 
-The `main` ruleset enforces (see `gh api repos/FHIR-IQ/AINPI/rules/branches/main`): `deletion`, `non_fast_forward`, `required_linear_history`, `required_deployments`, `required_signatures`, `merge_queue`, `code_scanning`, `code_quality`, `copilot_code_review`.
+Baseline protection only: `allow_force_pushes: false`, `allow_deletions: false`. No required reviews, signatures, linear history, or merge queue — this is a single-maintainer project and that level of process is friction without payoff. Direct push to `main` is still allowed.
 
-Practical consequences:
-
-- Direct push to `main` is rejected even on fast-forward. Work in a branch and open a PR.
-- Unsigned commits are rejected. Set up GPG or SSH signing (`git config commit.gpgsign true` + configured key).
-- The merge-queue rule means "Merge pull request" in the UI is the only merge path; `gh pr merge --merge` without `--auto` will not bypass it.
-- Copilot code review is a required signal — assign Copilot as reviewer from the PR sidebar if the queue stalls on `mergeStateStatus: BLOCKED`.
+If the stricter rules return in the future (merge queue, required signatures, copilot review), document them here so they aren't a surprise.
 
 ## Secrets management
 
