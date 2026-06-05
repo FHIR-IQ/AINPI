@@ -93,6 +93,20 @@ skills-lock.json
 
 # Playwright MCP output (screenshots + console logs from local QA runs)
 .playwright-mcp/
+playwright-report/
+frontend/playwright-report/
+
+# Probe crawler local artifacts
+# crawler/ holds only the README forwarding marker now (the live probe
+# code lives in github.com/FHIR-IQ/ainpi-probe). Any local venv or test
+# scratch from older runs is dev-only.
+crawler/.venv/
+crawler/tests/
+crawler/out/
+
+# Analysis crawl outputs — written locally by analysis/h1_h5_h22_full.py
+# from the probe parquet, regenerated on demand; not for commit.
+analysis/.crawl/
 
 # Supabase CLI local project metadata
 supabase/.branches/

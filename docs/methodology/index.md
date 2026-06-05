@@ -1,13 +1,13 @@
 ---
 title: AINPI methodology
-version: 0.7.0-draft
+version: 0.7.1-draft
 status: findings-landed
-last_updated: 2026-05-18
+last_updated: 2026-06-05
 ---
 
 # AINPI methodology
 
-> **Status: `0.7.0-draft`.** Methodology bumped from 0.6.x to 0.7 after the claims-side cross-audit (H29–H36) shipped for all 50 states + DC + PR, and the homepage was rebuilt as a map-first dashboard. The original ten directory-side findings (H1–H28) still land against both the 2026-04-09 and 2026-05-08 NDH releases, with three of the four federal database checks under 42 CFR § 455.436 closed: NPPES (H10–H13), OIG LEIE (H24), SAM.gov (H25). H26 reaches 4 public payer FHIR endpoints; H27 independently verified the 2026-04-30 Washington Post SSN exposure (46 → 41 across releases; CMS partially scrubbed but did not eliminate). H29–H36 add claims-side cross-checks — Medicaid spending, Medicare Part B + Part D billing, NPPES-deactivated × billing, Open Payments × exclusion, DMEPOS supplier directory, nursing-home / hospice / HHA / hospital ownership disclosures, NDH completeness against material Medicare billers. H37–H39 pre-register the PECOS-as-authoritative-source workstream triggered by CMS's 2026 verification rules. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
+> **Status: `0.7.1-draft`.** Methodology bumped from 0.6.x to 0.7 after the claims-side cross-audit (H29–H36) shipped for all 50 states + DC + PR. 0.7.1 adds the **provider data landscape** (`/`) — a Karpathy-style hierarchical treemap of every (state × specialty) cell scored across six audit dimensions — and the **REAL Health Providers Act audit framework** (`/real-health-providers`), which maps each HR 7148 § 6220 obligation to the AINPI signal that measures it. The choropleth that was the homepage moved to `/map`. The original ten directory-side findings (H1–H28) still land against both the 2026-04-09 and 2026-05-08 NDH releases, with three of the four federal database checks under 42 CFR § 455.436 closed: NPPES (H10–H13), OIG LEIE (H24), SAM.gov (H25). H26 reaches 4 public payer FHIR endpoints; H27 independently verified the 2026-04-30 Washington Post SSN exposure (46 → 41 across releases; CMS partially scrubbed but did not eliminate). H29–H36 add claims-side cross-checks — Medicaid spending, Medicare Part B + Part D billing, NPPES-deactivated × billing, Open Payments × exclusion, DMEPOS supplier directory, nursing-home / hospice / HHA / hospital ownership disclosures, NDH completeness against material Medicare billers. H37–H39 pre-register the PECOS-as-authoritative-source workstream triggered by CMS's 2026 verification rules. Until `1.0.0`, treat any single headline as provisional and read it alongside the notes on the corresponding `/findings/<slug>` page.
 
 ## What's new since 0.6.0-draft
 

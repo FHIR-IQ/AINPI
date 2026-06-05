@@ -324,7 +324,7 @@ export default function PecosPage() {
             </Link>{' '}
             ·{' '}
             <Link href="/methodology" className="text-blue-700 hover:underline">
-              methodology v0.7.0-draft
+              methodology v0.7.1-draft
             </Link>
           </p>
         </section>

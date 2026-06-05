@@ -1,5 +1,8 @@
 ---
 versions:
+  - version: '0.7.1-draft'
+    date: '2026-06-05'
+    summary: 'Provider data landscape (Karpathy-style treemap, 548 cells, 6 audit dimensions) becomes the homepage at /; choropleth moves to /map. REAL Health Providers Act audit framework published at /real-health-providers. Endpoint-liveness denominator clarification (host-level not practitioner-level).'
   - version: '0.7.0-draft'
     date: '2026-05-18'
     summary: 'PECOS-as-authoritative workstream (H37-H39) shipped; all-states claims-side cross-audit (H29-H36) covers 50 states + DC + PR; map-first homepage and CMO-facing per-state surface.'

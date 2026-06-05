@@ -43,7 +43,7 @@ export default function ReleaseTeaser({
   videoHref,
   reportSlug,
   releaseDate,
-  methodologyVersion = '0.6.0-draft',
+  methodologyVersion = '0.7.1-draft',
 }: ReleaseTeaserProps) {
   return (
     <section

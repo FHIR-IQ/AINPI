@@ -177,7 +177,7 @@ export default function RealHealthProvidersPage() {
                   AINPI ingests every public NDH release (2026-04-09 and
                   2026-05-08 archived to date) and computes per-NPI delta. The
                   in-development{' '}
-                  <a href="/landscape" className="underline">
+                  <a href="/" className="underline">
                     landscape view
                   </a>{' '}
                   shows median{' '}
@@ -474,7 +474,7 @@ export default function RealHealthProvidersPage() {
               AINPI methodology
             </a>
             {' · '}
-            <a href="/landscape" className="underline">
+            <a href="/" className="underline">
               Provider data landscape
             </a>
             {' · '}
