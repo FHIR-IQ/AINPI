@@ -27,7 +27,8 @@ export type ImplicationAudience =
   | 'State Medicaid PI offices'
   | 'Individual providers'
   | 'Behavioral-health providers'
-  | 'Behavioral-health group practices';
+  | 'Behavioral-health group practices'
+  | 'Methodology readers';
 
 export interface Implication {
   audience: ImplicationAudience;
