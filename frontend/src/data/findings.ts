@@ -252,12 +252,13 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'FHIR-REST endpoints are reachable and conformant at or above the implied 85% network-adequacy ceiling.',
     denominator:
-      'All `Endpoint` resources with `connectionType` in the FHIR-REST family.',
+      'Distinct FHIR-REST hosts after deduping `Endpoint` resources by hostname (2,974 in the 2026-04-09 release). NOT the count of `Endpoint` records, NOT practitioners — many endpoint records share a base URL.',
     dataSource:
       'CMS NPD bulk export + live HTTP probes run by the `ainpi-probe` crawler against declared `Endpoint.address` URLs.',
     status: 'pre-registered',
     ogTagline: 'How many NDH endpoints are actually alive?',
     implications: [
+      { audience: 'Methodology readers', takeaway: 'The reachability rates (93.3% HTTP, 85.4% CapabilityStatement, 81.6% SMART, 90.3% Practitioner search) describe distinct FHIR-REST HOSTS, not practitioners. Practitioner-level reachability is dramatically lower because 98.7% of organizations in the federal directory carry zero `Endpoint` references at all; even when a host is alive, only a small share of practitioners hang off it via the practitioner → role → managing_org → endpoint chain. Read host-level rates as upper-bound technical reachability, not a patient-access proxy.' },
       { audience: 'Payer data teams', takeaway: 'If you build integrations against declared NDH FHIR endpoints, expect 14.6% to fail at /metadata and 18.4% to lack a valid SMART well-known — budget for partial availability rather than treating endpoint presence as functional.' },
       { audience: 'Provider data teams', takeaway: 'An endpoint URL in NDH does not prove your endpoint works. Audit yours against ainpi-probe L0–L7: DNS, TLS cert expiry, CapabilityStatement conformance, SMART discovery, unauthenticated Practitioner search.' },
       { audience: 'Regulators', takeaway: 'Technical reachability (90.4% L7) vs SMART discovery compliance (81.6%) is a 9-point gap. If rules start citing SMART conformance, current NDH is below the implied bar.' },
@@ -538,12 +539,13 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'Measured endpoint liveness matches or exceeds the 85% regulatory ceiling.',
     denominator:
-      'All FHIR-REST endpoints declared in the NPD bulk export at the pinned release.',
+      'Distinct FHIR-REST hosts after deduping `Endpoint` resources by hostname (2,974 in the 2026-04-09 release). Host-level, not endpoint-record-level and not practitioner-level — see /findings/endpoint-liveness for the chain.',
     dataSource:
       '`ainpi-probe` crawler results joined to the `Endpoint` resource table.',
     status: 'pre-registered',
     ogTagline: 'Empirical liveness vs the 85% regulatory line.',
     implications: [
+      { audience: 'Methodology readers', takeaway: 'The 90.3% L7 number is HOST-level reachability across 2,974 distinct FHIR-REST hosts, not patient-level network access. The 85% MA network-adequacy ceiling concerns active-provider share within a service area — a different denominator entirely. The comparison is illustrative of the technical reachability floor; it is NOT a regulatory-equivalent adequacy score.' },
       { audience: 'Regulators', takeaway: 'Empirical FHIR endpoint reachability (90.3% L7) clears the 85% MA network-adequacy implied ceiling on BASIC reachability, but SMART discovery (81.6%) sits below it. If policy adds SMART conformance to the adequacy frame, the floor moves.' },
       { audience: 'Payer data teams', takeaway: 'Technical reachability ≠ regulatory adequacy. The 85% ceiling concerns active-provider share, not endpoint liveness. Don\u2019t substitute one for the other; use both as independent signals.' },
       { audience: 'Researchers', takeaway: 'This gauge maps technical reachability ONTO a regulatory proxy. The mapping is defensible but imperfect. Treat the comparison as illustrative, not regulatory-equivalent.' },
