@@ -30,11 +30,24 @@ import sys
 import time
 from typing import Callable
 
+# Manifest-driven URL resolution per the 2026-06-05 CMS NDH Slack
+# discussion (Fred Trotter): manifest.json is the stable indirection;
+# downstream consumers should resolve dated filenames through it rather
+# than guessing or scraping. See analysis/ndh_manifest.py for details.
+from ndh_manifest import (  # type: ignore[import-not-found]
+    fetch_manifest,
+    resolve_file_url,
+    parse_release_date,
+    expected_compressed_size,
+)
+
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 DOWNLOADS_BASE = "https://directory.cms.gov/downloads"
-DEFAULT_DATA_DIR = pathlib.Path("frontend/data/cms-npd-2026-05-08")
 LOAD_DIR = pathlib.Path("/tmp/ndh-load")
+# DEFAULT_DATA_DIR is no longer hardcoded — the release date is read
+# from the manifest at runtime and the data dir is derived as
+# `frontend/data/cms-npd-<release-date>`. Pass --data-dir to override.
 
 
 def extract_npi(identifiers):
@@ -156,19 +169,44 @@ RESOURCES = [
 ]
 
 
-def download_if_missing(file_name: str, data_dir: pathlib.Path) -> pathlib.Path:
+def download_if_missing(
+    url: str,
+    basename: str,
+    data_dir: pathlib.Path,
+    expected_bytes: int | None = None,
+) -> pathlib.Path:
+    """Download an NDH resource by manifest-resolved URL, with caching + size check.
+
+    `url` and `basename` come from analysis/ndh_manifest.resolve_file_url —
+    no string-concatenation against a hardcoded base. `expected_bytes` is
+    the manifest's declared compressed_bytes; when set, we verify the
+    downloaded file matches (catches half-published files + truncated
+    downloads).
+    """
     data_dir.mkdir(parents=True, exist_ok=True)
-    path = data_dir / file_name
+    path = data_dir / basename
     if path.exists() and path.stat().st_size > 0:
-        print(f"  {file_name}: cached ({path.stat().st_size:,} bytes)")
-        return path
-    url = f"{DOWNLOADS_BASE}/{file_name}"
+        if expected_bytes is not None and path.stat().st_size != expected_bytes:
+            print(
+                f"  {basename}: cached but size mismatch "
+                f"({path.stat().st_size:,} vs manifest {expected_bytes:,}); re-downloading"
+            )
+            path.unlink()
+        else:
+            print(f"  {basename}: cached ({path.stat().st_size:,} bytes)")
+            return path
     print(f"  Downloading {url}...")
     subprocess.run(
         ["curl", "-sSL", "-o", str(path), url],
         check=True,
     )
-    print(f"  Downloaded ({path.stat().st_size:,} bytes)")
+    actual = path.stat().st_size
+    if expected_bytes is not None and actual != expected_bytes:
+        raise RuntimeError(
+            f"{basename}: downloaded {actual:,} bytes but manifest declared "
+            f"{expected_bytes:,} — file may be partial or manifest stale"
+        )
+    print(f"  Downloaded ({actual:,} bytes)")
     return path
 
 
@@ -237,8 +275,11 @@ def main():
     parser.add_argument(
         "--data-dir",
         type=pathlib.Path,
-        default=DEFAULT_DATA_DIR,
-        help=f"directory holding *.ndjson.zst files (default: {DEFAULT_DATA_DIR})",
+        default=None,
+        help=(
+            "directory holding *.ndjson.zst files. Default: "
+            "frontend/data/cms-npd-<release-date> derived from manifest.json"
+        ),
     )
     parser.add_argument(
         "--resource",
@@ -249,20 +290,50 @@ def main():
         action="store_true",
         help="don't delete /tmp/ndh-load/*.ndjson after bq load (debug)",
     )
+    parser.add_argument(
+        "--print-manifest-only",
+        action="store_true",
+        help=(
+            "Resolve URLs from manifest.json and print them; do not download, "
+            "transform, or bq load. Useful for verifying manifest changes."
+        ),
+    )
     args = parser.parse_args()
+
+    print("Fetching NDH manifest...")
+    manifest = fetch_manifest()
+    files = manifest.get("files", {})
+    print(f"  manifest carries {len(files)} files")
 
     targets = [r for r in RESOURCES if not args.resource or r[0].lower() == args.resource.lower()]
     if not targets:
         print(f"unknown resource: {args.resource}", file=sys.stderr)
         sys.exit(2)
 
+    # Derive release date + data dir from the manifest unless explicitly overridden.
+    _, first_basename = resolve_file_url(manifest, targets[0][0])
+    release_date = parse_release_date(first_basename) or "unknown"
+    data_dir = args.data_dir or pathlib.Path(f"frontend/data/cms-npd-{release_date}")
+    print(f"  release: {release_date}")
+    print(f"  data dir: {data_dir}")
+
+    if args.print_manifest_only:
+        print()
+        for name, table, _ in targets:
+            url, basename = resolve_file_url(manifest, name)
+            sz = expected_compressed_size(manifest, name)
+            sz_str = f"{sz / 1e6:8.1f} MB" if sz else "       ? MB"
+            print(f"  {name:25s} -> {table:30s}  {sz_str}  {url}")
+        return
+
     LOAD_DIR.mkdir(parents=True, exist_ok=True)
 
     overall_t0 = time.time()
     for name, table, extractor in targets:
         print(f"\n=== {name} -> {table} ===")
-        zst_file = name + ".ndjson.zst"
-        zst_path = download_if_missing(zst_file, args.data_dir)
+        url, basename = resolve_file_url(manifest, name)
+        exp_bytes = expected_compressed_size(manifest, name)
+        zst_path = download_if_missing(url, basename, data_dir, expected_bytes=exp_bytes)
         load_path = LOAD_DIR / f"{table}.ndjson"
         try:
             transform_to_loadable(zst_path, load_path, extractor, name)

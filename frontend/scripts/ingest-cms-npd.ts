@@ -2,6 +2,21 @@
 /**
  * CMS National Provider Directory Ingestion Pipeline
  *
+ * **DEPRECATED — use analysis/fast_ingest_ndh.py instead.**
+ *
+ * The Python script is ~5-10x faster (bq load jobs vs streaming inserts)
+ * and as of 2026-06-06 is the only ingestor wired to the NDH
+ * manifest.json contract (per the CMS NDH Slack discussion on
+ * release-detection). This TS implementation still works but:
+ *  - hardcodes undated filenames (`Practitioner.ndjson.zst`) which only
+ *    happen to resolve because CMS currently serves the latest file at
+ *    that path — there is no guarantee this stays true
+ *  - uses streaming inserts at ~1.3K rows/s (3-4 hours total vs ~30 min)
+ *  - does not integrity-check downloaded files against manifest size
+ *
+ * Kept for historical reference and as a smaller-footprint sampler
+ * (`--sample N`). For production / weekly-refresh, use the Python.
+ *
  * Stores full FHIR resource as JSON + extracted flat fields for querying.
  * Parses FHIR references (e.g. "Practitioner/Practitioner-1234567890") to extract IDs.
  *

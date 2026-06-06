@@ -113,6 +113,15 @@ echo "→ Rule 4: direct BigQuery client outside frontend/src/lib/bigquery.ts"
 for f in $(filter_files '\.(ts|tsx|js|mjs|cjs)$'); do
   case "$f" in
     frontend/src/lib/bigquery.ts) continue ;;  # the helper itself
+    # Bulk-load + DDL scripts use `bigquery.dataset().table().load()` /
+    # CREATE TABLE / VIEW operations rather than SELECT queries. The
+    # DEFAULT_MAX_BYTES_BILLED cap that queryBigQuery() applies is only
+    # meaningful on bytes-scanned operations (SELECT), so these scripts
+    # are not in scope of Rule 4 by design. ingest-cms-npd.ts is also
+    # formally deprecated in favor of analysis/fast_ingest_ndh.py.
+    frontend/scripts/ingest-cms-npd.ts) continue ;;
+    frontend/scripts/setup-bigquery.ts) continue ;;
+    frontend/scripts/recreate-views.ts) continue ;;
   esac
   if grep -qE 'new BigQuery\(' "$f"; then
     record "$f: direct \`new BigQuery(\` instantiation  [Rule 4: use queryBigQuery() from @/lib/bigquery so DEFAULT_MAX_BYTES_BILLED applies]"

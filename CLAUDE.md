@@ -226,6 +226,12 @@ JOIN organization o ON pr._org_id = CONCAT('Organization/', o._id)
 
 **Views** (see `scripts/recreate-views.ts`): `v_provider_by_state`, `v_provider_by_specialty`, `v_endpoint_by_type`, `v_org_by_state`, `v_data_quality_summary`.
 
+### Ingestion contract — manifest-driven
+
+The NDH bulk export at `https://directory.cms.gov/downloads/` publishes a stable `manifest.json` that is the canonical indirection. Per Fred Trotter (CMS NDH team, 2026-06-05 Slack thread): the manifest is intended as the only URL downstream consumers need to poll — when its contents change, the new file URLs are in there. The goal is to never have to download a 5GB file just to find out that the 5GB needs re-downloading.
+
+`analysis/ndh_manifest.py` fetches the manifest, resolves each NDH resource to its current dated download URL, and exposes the manifest-declared `compressed_bytes` so downstream consumers can integrity-check partial downloads. `analysis/fast_ingest_ndh.py` uses it; pass `--print-manifest-only` to dump the resolved URLs without running the full ingest. The legacy `frontend/scripts/ingest-cms-npd.ts` still works but is deprecated (hardcodes undated filenames, ~5-10x slower via streaming inserts).
+
 ### Known data quality baseline
 
 Measured on the 2026-05-08 release after ingestion via `analysis/fast_ingest_ndh.py` (bq load):
