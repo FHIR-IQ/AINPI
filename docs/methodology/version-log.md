@@ -1,5 +1,8 @@
 ---
 versions:
+  - version: '0.7.2-draft'
+    date: '2026-06-09'
+    summary: 'H43 (practitioner phone-number reachability) pre-registered — resolves practitioner → phone across three FHIR paths (Practitioner.telecom, PractitionerRole.telecom, referenced Location.telecom) and reports the any-path union vs the on-record share. Compute script ships; live fill-rates land on the next weekly-refresh.'
   - version: '0.7.1-draft'
     date: '2026-06-05'
     summary: 'Provider data landscape (Karpathy-style treemap, 548 cells, 6 audit dimensions) becomes the homepage at /; choropleth moves to /map. REAL Health Providers Act audit framework published at /real-health-providers. Endpoint-liveness denominator clarification (host-level not practitioner-level).'

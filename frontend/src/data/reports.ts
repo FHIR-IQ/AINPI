@@ -43,6 +43,17 @@ export const REPORTS: ReportOption[] = [
     length: '~30 pages',
   },
   {
+    id: 'jun-2026-06-09-update',
+    version: '2026-06-09-update',
+    title: '2026-06-09 update — can you associate a practitioner with a phone number? (H43)',
+    description:
+      'Pre-registers H43 — practitioner phone-number reachability. A phone can live on Practitioner.telecom, PractitionerRole.telecom, or the referenced Location.telecom; H43 resolves all three and reports the any-path union vs the on-record share. NPPES keeps practice phone on the location, so reading Practitioner.telecom alone undercounts reachability badly. Compute script ships; live fill-rates land on the next weekly-refresh.',
+    format: 'web',
+    url: '/reports/2026-06-09-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'jun-2026-06-02-update',
     version: '2026-06-02-update',
     title: '2026-06-02 update — landscape becomes the front door, REAL Health audit framework published',
@@ -50,7 +61,6 @@ export const REPORTS: ReportOption[] = [
       'Two coordinated releases: the homepage swaps to a Karpathy-style hierarchical treemap (548 cells, 6 audit dimensions, one per state × specialty) and a new policy brief maps every § 6220 obligation of the REAL Health Providers Act to the AINPI signal that measures it. The choropleth moves to /map.',
     format: 'web',
     url: '/reports/2026-06-02-update',
-    badge: 'NEW',
     length: '~6 min read',
   },
   {

@@ -126,6 +126,13 @@ jobs:
         # Source: WaPo 2026-04-30 reporting.
         run: python analysis/h27_pii_exposure.py
 
+      - name: Re-run H43 practitioner phone reachability
+        # Resolves practitioner -> phone across three FHIR paths
+        # (Practitioner.telecom, PractitionerRole.telecom, and the referenced
+        # Location.telecom) and reports the union vs the on-record share.
+        # One capped scan each of practitioner, practitioner_role, location.
+        run: python analysis/h43_practitioner_phone.py
+
       - name: Stamp stats.json with run metadata
         run: |
           python - <<'PY'
