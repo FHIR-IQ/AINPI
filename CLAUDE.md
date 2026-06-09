@@ -19,7 +19,7 @@ AINPI/
 │   │   ├── app/              Routes (pages + API, including /api/v1/*)
 │   │   ├── components/       Shared UI (Navbar, WipBanner, Footer, charts/)
 │   │   ├── contexts/         FilterContext for cross-chart filtering
-│   │   ├── data/findings.ts  Pre-registration catalog (H1–H42 → 27 slugs; some bundle multiple H#s)
+│   │   ├── data/findings.ts  Pre-registration catalog (H1–H43 → 28 slugs; some bundle multiple H#s)
 │   │   ├── lib/              bigquery.ts, prisma.ts, auth.ts, api-v1-types.ts, load-api-v1.ts, hub-feed.ts, homepage-data.ts
 │   │   └── utils/supabase/   SSR-safe Supabase clients
 │   ├── public/api/v1/        Static JSON contract (stats.json, findings/<slug>.json)
@@ -161,9 +161,9 @@ Server Components read these via `loadStats()` / `loadFinding(slug)` in `fronten
 
 The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js route handlers — the static JSON files sit in `public/` and take precedence over same-named routes, so never name a route handler `stats/route.ts`.
 
-## Pre-registration workflow (H1–H42)
+## Pre-registration workflow (H1–H43)
 
-Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H42**.
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H43**.
 
 - H1–H28 — original directory-side audit (NDH-side checks).
 - H29–H36 — claims-side cross-audit (Medicaid spending, Medicare Part B/D, Open Payments, DMEPOS, nursing-home ownership, NDH completeness).
@@ -171,6 +171,7 @@ Each hypothesis in the check catalog is registered **before** numbers drop. Curr
 - H40 — published 2026-05-22. Per-(NPI, HCPCS, place-of-service) cross-audit of federally-excluded NPIs billing Medicare Part B. Source: CMS Medicare Physician & Other Practitioners by Provider AND Service file (~3 GB, CY 2023). **Result: 194 NPIs full-window, 4 strict-post-exclusion candidates → 1 confirmed (Eduardo Miranda, MD, ~$880K CY 2023 billing 8 years post-LEIE-exclusion), 3 SAM-NPI-join false positives caught by primary-source verification.** Compute script: `analysis/claims_sources/medicare_partb_by_hcpcs.py`. Provenance doc: `docs/methodology/runs/2026-05-22-h40-h41-h42-baseline.md`.
 - H42 — published 2026-05-22. Telehealth-dominant filter on H40. **Result: null hypothesis supported** (zero NPIs at ≥80% telehealth-HCPCS threshold). Honest headline names two competing readings (screening working vs cohort too small).
 - H41 — pre-registered, deferred. Two-pass over the H40 source file + BQ NPPES taxonomy query stalled at the iterator mid-run on first attempt. Switch to `bq query --format=csv > /tmp/nppes.csv` upfront before retrying. Compute script ships in `analysis/h41_specialty_drift.py` but is unpublished.
+- H43 — pre-registered 2026-06-09. Practitioner phone-number reachability: resolves practitioner → phone across three FHIR paths (`Practitioner.telecom`, `PractitionerRole.telecom`, and the referenced `Location.telecom` via `PractitionerRole.location`), reporting the any-path union vs the on-record share. NPPES keeps practice phone on the location, so `Practitioner.telecom` is structurally sparse — the metric exists so "call this provider" features read the right resource. Compute script: `analysis/h43_practitioner_phone.py` (wired into weekly-refresh). Provenance: `docs/methodology/runs/2026-06-09-h43-practitioner-phone.md`. Live fill-rates land on the next weekly-refresh; finding renders pre-registration view until then.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
 2. **Compute** via `analysis/<hN>_*.py` (BigQuery-driven) or `crawler/` (endpoint probes for H1–H5, H22). Each script emits a `frontend/public/api/v1/findings/<slug>.json` conforming to `ApiV1Finding`.
@@ -191,6 +192,7 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `pii-exposure-ndh` → H27 (BQ: `analysis/h27_pii_exposure.py`) — independently verifies the 2026-04-30 Washington Post finding that the NDH bulk export contains provider SSNs. Scans `cms_npd.practitioner` + `cms_npd.organization` for `\d{3}-\d{2}-\d{4}` in `TO_JSON_STRING(resource)`, classifies hits by JSON location (`qualification[].identifier[].value` vs `name[].given[]`), filters intl-phone false positives. Privacy posture: publishes counts/locations/NPIs/state breakdown only; SSN values themselves are NOT republished in finding output despite being in the public NDH bulk file. April 2026-04-09: 46 confirmed exposures across 17 states. May 2026-05-08: 41 confirmed (CMS partially scrubbed but did not eliminate); IL still leads with 13. Undashed 9-digit SSNs are out of scope (collide with EINs / account IDs / claim IDs).
 - `mco-exposure-va` → H26 (live FHIR: `analysis/h26_mco_exposure_va.py`) — joins the VA federally-excluded cohort (131 NPIs in May; 125 in April) to 4 publicly-queryable payer FHIR endpoints: Humana (`?identifier=`), Cigna (`?family=&given=` + post-filter Bundle by NPI in `identifier[]` since Cigna rejects identifier search), UnitedHealthcare via Optum FLEX `https://flex.optum.com/fhirpublic/R4` (covers UHC commercial + UHC Community Plan + OptumRx), and Molina via Azure APIM gateway `https://api.interop.molinahealthcare.com/providerdirectory` (Sapphire360 backend, no auth despite registration-gated dev portal). May result: 2 of 131 matched (both Cigna), down from 4 of 125 in April. 2 of 6 VA Medicaid MCOs (UHC Community Plan + Molina) are wired directly. Stage B fast-follow: Anthem HealthKeepers Plus (public `cms_mandate/mcd/` endpoint exists but returns 500s; Anthem only supports family/given/name search), Aetna BH of VA (OAuth at developerportal.aetna.com), Sentara, Virginia Premier. The script shells out to `curl` instead of `urllib` because Akamai-fronted endpoints (Humana) WAF-block Python's TLS fingerprint.
 - `endpoint-url-validity` → H28 (BQ: `analysis/h28_endpoint_url_validity.py`) — partitions the 1.36M Endpoint resources by connectionType.code. 114K (8.4%) are hl7-fhir-rest URLs an integrator can GET; 1.25M (91.6%) are Direct Trust HISP messaging addresses. The right denominator for any "find FHIR endpoint by NPI" feature is the FHIR REST subset, not the resource count.
+- `practitioner-phone-reachability` → H43 (BQ: `analysis/h43_practitioner_phone.py`) — resolves practitioner → phone across `Practitioner.telecom`, `PractitionerRole.telecom`, and the referenced `Location.telecom` (`PractitionerRole.location → Location`), unioned and intersected back to the active Practitioner set. Reports the any-path reachability vs the on-record share, plus the on-record telecom-system breakdown (phone/fax/email/url). Denominator is active Practitioner resources (~7.44M). Single capped scan of each of the three tables via `bq_job_config()`.
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).
 

@@ -245,6 +245,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'practitioner-phone-reachability',
+    hypotheses: ['H43'],
+    title: 'Practitioner phone-number reachability',
+    summary:
+      'Can you associate a practitioner in the NDH bulk export with a phone number? It depends which FHIR resource you read. A phone can live on the Practitioner record (`Practitioner.telecom`), on the role (`PractitionerRole.telecom`), or on the place the role points at (`Location.telecom`, via `PractitionerRole.location`). H43 resolves all three and reports both the union (reachable by any path) and the on-record share. NPPES — the upstream of ~90% of these fields — keeps practice phone on the location, not the individual, so we expect `Practitioner.telecom` to be sparse and most reachability to come from the PractitionerRole → Location traversal. The metric quantifies that gap so anyone building "call this provider" reads the right resource.',
+    nullHypothesis:
+      'No active Practitioner resource in the NDH release can be associated with a phone number through any of the three FHIR paths (Practitioner.telecom, PractitionerRole.telecom, or a referenced Location.telecom).',
+    denominator:
+      'All active Practitioner resources in the pinned NDH bulk export (~7.44M at 2026-05-08, `_active = TRUE`). The numerator is the count of those reachable by a `system=\'phone\'` telecom entry on the Practitioner record, on any active PractitionerRole whose `practitioner` reference resolves to that NPI, or on any Location referenced by such a role — unioned and intersected back to the active Practitioner set so dangling references and inactive practitioners drop out.',
+    dataSource:
+      'BigQuery scan of `cms_npd.practitioner`, `cms_npd.practitioner_role`, and `cms_npd.location` — JSON-extracting the `telecom[]` array on each resource and joining roles to locations via the pipe-joined `_location_ids` reference list. Compute script: `analysis/h43_practitioner_phone.py` (capped at the project default `maximum_bytes_billed` via `bq_job_config()`).',
+    status: 'pre-registered',
+    ogTagline: 'Where does a provider’s phone number actually live in the federal directory?',
+    implications: [
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'A "call this provider" feature cannot read `Practitioner.telecom` alone — it is structurally sparse. Resolve phone through PractitionerRole → Location, and fall back to NPPES practice-location phone for the practitioners NDH leaves unreachable.',
+      },
+      {
+        audience: 'FHIR implementers',
+        takeaway:
+          'Phone reachability is a traversal, not a field read. Budget for the PractitionerRole → Location hop and for the share of practitioners with no phone on any of the three resources.',
+      },
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'If contactability is a directory goal, the gap between on-record phone and any-path phone is the number to watch. The May Location dedup (-61%) mechanically reduced path-3 reachability — a contactability metric should be reported alongside the resource census so the dedup does not read as a contact-data loss.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'Sparse `Practitioner.telecom` is expected, not a defect — NPPES keeps practice phone on the location. Read the on-record share as "phone published directly on the individual," and the any-path share as "phone discoverable for this individual at all."',
+      },
+    ],
+  },
+  {
     slug: 'endpoint-liveness',
     hypotheses: ['H1', 'H2', 'H3', 'H4', 'H5'],
     title: 'Endpoint liveness',
