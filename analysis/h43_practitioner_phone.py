@@ -11,10 +11,11 @@ union (any path) and the on-record share (Practitioner.telecom alone):
   3. Location.telecom                — on the place the role points at
                                        (PractitionerRole.location -> Location)
 
-Upstream (NPPES) keeps practice phone on the practice location, so we expect
-Practitioner.telecom to be sparse and most reachability to come from the
-PractitionerRole -> Location traversal. The metric quantifies that gap so a
-consumer building "call this provider" knows which resource to actually read.
+The pre-registered prior was that Practitioner.telecom would be sparse (NPPES
+keeps practice phone on the location). The first measured run (2026-05-08
+release) rejected it: 99.98% of active practitioners carry a phone directly on
+the Practitioner record, and the traversal adds nothing. The headline below
+adapts to whichever case the data shows.
 
 Run:    python analysis/h43_practitioner_phone.py
 Writes:
@@ -186,7 +187,13 @@ def get_commit_sha() -> str:
 
 
 def pct(n: int, d: int) -> float:
-    return round(100 * n / d, 1) if d else 0.0
+    if not d:
+        return 0.0
+    p = 100 * n / d
+    # Keep small/large shares honest: 1,115 / 7.2M is 0.015%, not "0.0%".
+    if 0 < p < 0.1 or 99.9 < p < 100:
+        return round(p, 3)
+    return round(p, 1)
 
 
 def main() -> None:
