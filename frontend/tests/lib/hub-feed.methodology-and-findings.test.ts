@@ -18,7 +18,7 @@ describe('loadHubFeed - methodology + finding entries', () => {
     const latestMeth = timeline
       .filter((e) => e.category === 'methodology')
       .sort((a, b) => b.date.localeCompare(a.date))[0];
-    expect(latestMeth.title).toBe('Methodology v0.7.1-draft');
+    expect(latestMeth.title).toBe('Methodology v0.7.2-draft');
   });
 
   it('emits a TimelineEntry for each PUBLISHED finding (not pre-registered)', () => {
