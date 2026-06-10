@@ -234,6 +234,15 @@ The NDH bulk export at `https://directory.cms.gov/downloads/` publishes a stable
 
 `analysis/ndh_manifest.py` fetches the manifest, resolves each NDH resource to its current dated download URL, and exposes the manifest-declared `compressed_bytes` so downstream consumers can integrity-check partial downloads. `analysis/fast_ingest_ndh.py` uses it; pass `--print-manifest-only` to dump the resolved URLs without running the full ingest. The legacy `frontend/scripts/ingest-cms-npd.ts` still works but is deprecated (hardcodes undated filenames, ~5-10x slower via streaming inserts).
 
+### Materialized helper tables (substrate pattern)
+
+When the same dimension of the raw FHIR resources is interrogated by multiple findings, pre-extract it once into a small clustered helper table partitioned by release, then run each finding as a cheap join against the helper instead of re-doing the heavy resource scan. Pays for itself the second time the question is asked; the storage cost is negligible compared to repeated re-extraction.
+
+**Phones helper — `cms_npd.phones_per_practitioner`** (built by `analysis/build_phones_per_practitioner.py`).
+Per-release row per practitioner with normalized phone arrays for each of the three resolution paths (`phones_p`, `phones_r`, `phones_l`) plus the union (`phones`) and an `invalid_dropped` count for telecom values that failed normalization. Partitioned by `release_date`, clustered by `practitioner_id`. ~15 GB scan per release build (~$0.08), idempotent within a release (DELETE + INSERT against the matching partition). Rebuilt once per NDH release via the dispatch-only `phones-helper-refresh.yml` workflow. Downstream consumers (H43 path-combo Venn, H44 phone-value agreement, future H45 phone-churn diff-since-last-release) query the helper instead of the raw resource tables.
+
+Phone normalization rules (encoded in the SQL): strip every non-digit character, drop a leading `1` if the result is 11 digits, require exactly 10 digits after. Anything else collapses to NULL and contributes to `invalid_dropped` instead of `phones`. Garbage-in-garbage-out is explicit, not hidden.
+
 ### Known data quality baseline
 
 Measured on the 2026-05-08 release after ingestion via `analysis/fast_ingest_ndh.py` (bq load):

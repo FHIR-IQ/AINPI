@@ -1,0 +1,59 @@
+name: Phones helper refresh
+
+# Standalone, dispatch-only refresh for the cms_npd.phones_per_practitioner
+# helper table — the materialized substrate H43 / H44 / future phone-related
+# findings query against (~$0.08 per release, vs ~$0.10+ per finding when
+# each one re-extracts from the raw resource tables).
+#
+# Deliberately isolated from weekly-refresh.yml. The helper is built ONCE per
+# NDH release; running it on the weekly cadence wastes scan budget without
+# changing the output (phone data is fixed within a release).
+#
+# Required secrets:
+#   GCP_SERVICE_ACCOUNT_KEY  — JSON service account with BigQuery jobUser,
+#                              dataEditor on cms_npd (to write the helper
+#                              table), and dataViewer on the source tables.
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'NDH release date to (re)build the partition for (YYYY-MM-DD).'
+        required: false
+        default: '2026-05-08'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: phones-helper-refresh
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Rebuild phones_per_practitioner partition
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-cloud-bigquery
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3.0.0
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Build phones_per_practitioner
+        # Idempotent: DELETEs and re-INSERTs the matching release_date partition.
+        # Scan cap is the project default (100 GB) via bq_job_config(); rendered
+        # scan against the 2026-05-08 release is ~15 GB.
+        run: python analysis/build_phones_per_practitioner.py --release "${{ github.event.inputs.release }}"
