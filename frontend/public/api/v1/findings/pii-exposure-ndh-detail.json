@@ -1,5 +1,5 @@
 {
-  "queried_at": "2026-05-08T21:14:37+00:00",
+  "queried_at": "2026-06-10T18:43:58+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
     "flagged_pattern_match": 50,
@@ -74,39 +74,39 @@
   ],
   "samples": [
     {
-      "npi": "1851328371",
-      "name": "SHIM, KYUNGRAN",
+      "npi": "1740436500",
+      "name": "TODOROVA ANGELOVA, R",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1851328371"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1740436500"
     },
     {
-      "npi": "1306963327",
-      "name": "HUDSON, PATRICIA",
-      "state": "",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306963327"
-    },
-    {
-      "npi": "1841702693",
-      "name": "RUMMELHART, PATRICIA",
+      "npi": "1083124960",
+      "name": "NEVILLE, EVANEE",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841702693"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083124960"
     },
     {
-      "npi": "1942589551",
-      "name": "KING, JAMIE",
+      "npi": "1861030215",
+      "name": "BOUTON SANCHEZ, A",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942589551"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861030215"
     },
     {
-      "npi": "1821002098",
-      "name": "MCDUNN, SUSAN",
+      "npi": "1689705204",
+      "name": "JOHNSON, KATHLEEN",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1821002098"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1689705204"
+    },
+    {
+      "npi": "1265972624",
+      "name": "COOLEY, CAROL",
+      "state": "NC",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1265972624"
     }
   ],
   "limitations": [

@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-05-08T20:59:18+00:00",
+  "generated_at": "2026-06-10T18:21:08+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "4bee6b1",
+  "commit_sha": "903d67a",
   "denominators": {
     "practitioner": 235956,
     "organization": 104896,
@@ -26,7 +26,7 @@
       "state_numerator": 235040,
       "state_denominator": 235956,
       "state_pct": 99.6118,
-      "national_pct": null,
+      "national_pct": 9.0995,
       "state_headline": "235,040 of 235,956 PA practitioner NPIs (99.6118%) match NPPES; 8,726 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1346197480",
-      "display_name": "PEREZ BAEZ, KEVIN",
+      "npi": "1063365773",
+      "display_name": "COOK, VIENNA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346197480"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1063365773"
     },
     {
-      "npi": "1649121393",
-      "display_name": "WOLFF, HARRISON",
+      "npi": "1235082769",
+      "display_name": "QUINTANILLA, SELENA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649121393"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1235082769"
     },
     {
-      "npi": "1841142296",
-      "display_name": "CHRIST, EMILY",
+      "npi": "1518810860",
+      "display_name": "WOYTACH, JONATHAN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841142296"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1518810860"
     },
     {
-      "npi": "1922950112",
-      "display_name": "MCKINNEY, MARY",
+      "npi": "1275486391",
+      "display_name": "MOORE, MADELYN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1922950112"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275486391"
     },
     {
-      "npi": "1962356931",
-      "display_name": "SUTHERLAND, MARK",
+      "npi": "1275489460",
+      "display_name": "PETERS, MELISSA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1962356931"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275489460"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five PA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

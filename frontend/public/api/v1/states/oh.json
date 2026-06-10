@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-05-08T20:59:18+00:00",
+  "generated_at": "2026-06-10T18:21:14+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "4bee6b1",
+  "commit_sha": "903d67a",
   "denominators": {
     "practitioner": 268111,
     "organization": 94023,
@@ -26,7 +26,7 @@
       "state_numerator": 266332,
       "state_denominator": 268111,
       "state_pct": 99.3365,
-      "national_pct": null,
+      "national_pct": 9.0995,
       "state_headline": "266,332 of 268,111 OH practitioner NPIs (99.3365%) match NPPES; 7,754 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1033066626",
-      "display_name": "SCHIFF, RONI",
+      "npi": "1942158225",
+      "display_name": "RAMOS, KARI",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033066626"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942158225"
     },
     {
-      "npi": "1780531442",
-      "display_name": "NASH, MICHELLE",
+      "npi": "1720932031",
+      "display_name": "BRYANT, TRACI",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780531442"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1720932031"
     },
     {
-      "npi": "1407708910",
-      "display_name": "BLUMENSAADT, CALEIGH",
+      "npi": "1720934292",
+      "display_name": "MEHTA, POOJA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1407708910"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1720934292"
     },
     {
-      "npi": "1558217893",
-      "display_name": "WILTSHIRE, HAILEY",
+      "npi": "1730036963",
+      "display_name": "WRIGHT, JENNIFER",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558217893"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1730036963"
     },
     {
-      "npi": "1609729326",
-      "display_name": "STRANGER HORSE, EUGENE",
+      "npi": "1245187236",
+      "display_name": "CHANN, WILLIAM",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1609729326"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245187236"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
