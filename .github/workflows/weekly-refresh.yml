@@ -29,7 +29,7 @@ jobs:
   refresh:
     name: Re-run BQ analyses + PR findings
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v6
 
@@ -116,6 +116,14 @@ jobs:
         # Requires curl in PATH (sidesteps Akamai TLS fingerprinting that
         # blocks Python urllib). curl is on ubuntu-latest by default.
         # No new secrets — endpoints are public per CMS-9115-F.
+        #
+        # continue-on-error + a step timeout: this is a pilot/demo that hits
+        # flaky external payer endpoints over the whole cohort and can run
+        # 10+ min. It must never cancel the run or block the commit step that
+        # publishes the other findings (it did exactly that on 2026-06-10,
+        # blowing the job timeout mid-curl and skipping H27/H43/commit).
+        continue-on-error: true
+        timeout-minutes: 15
         run: python analysis/h26_mco_exposure_va.py
 
       - name: Re-run H27 PII exposure scan (replicates 2026-04-30 WaPo finding)
