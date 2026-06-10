@@ -11,10 +11,11 @@ union (any path) and the on-record share (Practitioner.telecom alone):
   3. Location.telecom                — on the place the role points at
                                        (PractitionerRole.location -> Location)
 
-Upstream (NPPES) keeps practice phone on the practice location, so we expect
-Practitioner.telecom to be sparse and most reachability to come from the
-PractitionerRole -> Location traversal. The metric quantifies that gap so a
-consumer building "call this provider" knows which resource to actually read.
+The pre-registered prior was that Practitioner.telecom would be sparse (NPPES
+keeps practice phone on the location). The first measured run (2026-05-08
+release) rejected it: 99.98% of active practitioners carry a phone directly on
+the Practitioner record, and the traversal adds nothing. The headline below
+adapts to whichever case the data shows.
 
 Run:    python analysis/h43_practitioner_phone.py
 Writes: frontend/public/api/v1/findings/practitioner-phone-reachability.json
@@ -147,7 +148,13 @@ def get_commit_sha() -> str:
 
 
 def pct(n: int, d: int) -> float:
-    return round(100 * n / d, 1) if d else 0.0
+    if not d:
+        return 0.0
+    p = 100 * n / d
+    # Keep small/large shares honest: 1,115 / 7.2M is 0.015%, not "0.0%".
+    if 0 < p < 0.1 or 99.9 < p < 100:
+        return round(p, 3)
+    return round(p, 1)
 
 
 def main() -> None:
@@ -168,14 +175,28 @@ def main() -> None:
     via_only = max(any_path - direct, 0)          # reachable, but not on-record
     unreachable = max(total - any_path, 0)         # no phone on any path
 
-    headline = (
-        f"Of {total:,} active Practitioner resources in the {RELEASE_DATE} NDH release, "
-        f"{any_path:,} ({pct(any_path, total)}%) can be associated with at least one phone "
-        f"number through FHIR — but only {direct:,} ({pct(direct, total)}%) carry a phone on "
-        f"the Practitioner record itself. The other {via_only:,} are reachable only by "
-        f"traversing PractitionerRole -> Location. {unreachable:,} "
-        f"({pct(unreachable, total)}%) have no phone on any of the three resources."
-    )
+    # The headline adapts to where the phone actually lives. If on-record
+    # coverage already accounts for essentially the whole reachable set, the
+    # role/location traversal is moot and saying "but only N on-record" would
+    # be misleading; lead with the on-record share instead.
+    if via_only <= total * 0.005:  # traversal adds < 0.5 pt of reach
+        headline = (
+            f"Of {total:,} active Practitioner resources in the {RELEASE_DATE} NDH release, "
+            f"{direct:,} ({pct(direct, total)}%) carry a phone number directly on the "
+            f"Practitioner record. Resolving PractitionerRole and the referenced Location "
+            f"adds essentially no further reach ({via_only:,} practitioners); "
+            f"{unreachable:,} ({pct(unreachable, total)}%) have no phone on any of the three "
+            f"resources."
+        )
+    else:
+        headline = (
+            f"Of {total:,} active Practitioner resources in the {RELEASE_DATE} NDH release, "
+            f"{any_path:,} ({pct(any_path, total)}%) can be associated with at least one phone "
+            f"number through FHIR — but only {direct:,} ({pct(direct, total)}%) carry a phone on "
+            f"the Practitioner record itself. The other {via_only:,} are reachable only by "
+            f"traversing PractitionerRole -> Location. {unreachable:,} "
+            f"({pct(unreachable, total)}%) have no phone on any of the three resources."
+        )
 
     chart = {
         "type": "bar",
@@ -201,13 +222,13 @@ def main() -> None:
         "carry any telecom entry at all on the Practitioner resource. "
         f"Before de-duplication against the active set, {role_raw:,} practitioner references "
         f"are reachable via a role-level phone and {loc_raw:,} via a location-level phone. "
-        "Caveat — the May 2026-05-08 release deduped Location resources sharply (-61% vs "
-        "April), which mechanically lowers path-3 reachability relative to the April release; "
-        "compare across releases with that in mind. Upstream context: NPPES (the source of "
-        "~90% of these fields) keeps practice phone on the practice location, not the "
-        "individual, so a sparse Practitioner.telecom is expected and is not itself a data "
-        "quality defect — the operational takeaway is that a 'call this provider' feature must "
-        "read PractitionerRole/Location, not Practitioner.telecom alone."
+        "The pre-registered prior (sparse Practitioner.telecom, NPPES-style) did not hold: "
+        f"the phone is on the Practitioner record for {pct(direct, total)}% of active "
+        "practitioners, so a 'call this provider' feature can read Practitioner.telecom "
+        "directly. Release-sensitive caveats: the May 2026-05-08 release deduped Location "
+        f"resources (-61% vs April), and on-record email ({direct_email:,}), url "
+        f"({direct_url:,}), and location-phone ({loc_raw:,}) all came back empty — verify "
+        "before relying on those channels."
     )
 
     payload = {
