@@ -1,0 +1,34 @@
+{
+  "slug": "practitioner-phone-reachability",
+  "title": "Practitioner phone-number reachability",
+  "hypotheses": [
+    "H43"
+  ],
+  "status": "published",
+  "release_date": "2026-05-08",
+  "generated_at": "2026-06-10T01:29:59+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "3f439e9",
+  "headline": "Of 7,196,385 active Practitioner resources in the 2026-05-08 NDH release, 7,195,270 (100.0%) can be associated with at least one phone number through FHIR \u2014 but only 7,195,270 (100.0%) carry a phone on the Practitioner record itself. The other 0 are reachable only by traversing PractitionerRole -> Location. 1,115 (0.0%) have no phone on any of the three resources.",
+  "numerator": 7195270,
+  "denominator": 7196385,
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Phone on Practitioner record",
+        "value": 7195270
+      },
+      {
+        "label": "Phone only via role / location",
+        "value": 0
+      },
+      {
+        "label": "No phone on any path",
+        "value": 1115
+      }
+    ]
+  },
+  "notes": "Three resolution paths, evaluated independently then unioned: (1) Practitioner.telecom (system='phone'); (2) PractitionerRole.telecom on any active role whose practitioner reference resolves to this NPI; (3) Location.telecom on any Location referenced by such a role (PractitionerRole.location -> Location). The union is intersected with the active Practitioner set, so the numerator never exceeds the denominator and dangling references drop out. On-record contact points break down as: phone 7,195,270, fax 2,871,690, email 0, url 0; 7,195,397 active practitioners carry any telecom entry at all on the Practitioner resource. Before de-duplication against the active set, 1,790,830 practitioner references are reachable via a role-level phone and 0 via a location-level phone. Caveat \u2014 the May 2026-05-08 release deduped Location resources sharply (-61% vs April), which mechanically lowers path-3 reachability relative to the April release; compare across releases with that in mind. Upstream context: NPPES (the source of ~90% of these fields) keeps practice phone on the practice location, not the individual, so a sparse Practitioner.telecom is expected and is not itself a data quality defect \u2014 the operational takeaway is that a 'call this provider' feature must read PractitionerRole/Location, not Practitioner.telecom alone."
+}
