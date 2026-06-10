@@ -12,14 +12,14 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-06-09 update — can you associate a practitioner with a phone number? (H43)',
+    'AINPI 2026-06-09 update — 99.98% of practitioners carry a phone on the record (H43)',
   description:
-    'H43 pre-registered: practitioner phone-number reachability. A phone can live on Practitioner.telecom, PractitionerRole.telecom, or the referenced Location.telecom — H43 resolves all three and reports the any-path union vs the on-record share.',
+    'H43 published: practitioner phone-number reachability. We expected NDH to hide phone on the location; the 2026-05-08 data overturned it — 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone directly on the Practitioner record, and the role/location traversal adds nothing.',
   openGraph: {
     title:
-      'AINPI 2026-06-09 — where does a provider’s phone number actually live in the federal directory?',
+      'AINPI 2026-06-09 — the practitioner phone is right on the record, not the location',
     description:
-      'Read Practitioner.telecom alone and NDH looks like it has almost no phone numbers. It does not — the phone is one or two hops away, on the role and the location. H43 measures the gap.',
+      'We pre-registered H43 expecting NDH phone to live on the location. The data said the opposite: 99.98% of active practitioners carry a phone directly on Practitioner.telecom. Pre-registration working as intended.',
     url: 'https://ainpi.dev/reports/2026-06-09-update',
     type: 'article',
   },
@@ -33,13 +33,13 @@ export default function June2026Update0609Page() {
       <Navbar />
       <ReleaseTeaser
         eyebrow="Release update · 2026-06-09"
-        headlineA="Three resources."
-        headlineB="One phone number."
-        caption="H43 pre-registered: practitioner phone-number reachability. A phone can live on the Practitioner record, the role, or the referenced location — H43 resolves all three and reports the any-path union vs the on-record share."
+        headlineA="The phone is on the record."
+        headlineB="Not the location."
+        caption="H43 published: practitioner phone-number reachability. We pre-registered expecting NDH to hide phone on the location — the data overturned it. 99.98% of active practitioners carry a phone directly on the Practitioner record."
         stats={[
-          { label: 'Resolution paths', delta: '3', tone: 'gain' },
-          { label: 'New finding', delta: 'H43', tone: 'gain' },
-          { label: 'Methodology', delta: '0.7.2', tone: 'gain' },
+          { label: 'Phone on record', delta: '99.98%', tone: 'gain' },
+          { label: 'Active practitioners', delta: '7.2M', tone: 'gain' },
+          { label: 'No phone anywhere', delta: '1,115', tone: 'gain' },
         ]}
         reportSlug="2026-06-09-update"
         releaseDate="2026-06-09"

@@ -45,9 +45,9 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'jun-2026-06-09-update',
     version: '2026-06-09-update',
-    title: '2026-06-09 update — can you associate a practitioner with a phone number? (H43)',
+    title: '2026-06-09 update — 99.98% of practitioners carry a phone on the record (H43)',
     description:
-      'Pre-registers H43 — practitioner phone-number reachability. A phone can live on Practitioner.telecom, PractitionerRole.telecom, or the referenced Location.telecom; H43 resolves all three and reports the any-path union vs the on-record share. NPPES keeps practice phone on the location, so reading Practitioner.telecom alone undercounts reachability badly. Compute script ships; live fill-rates land on the next weekly-refresh.',
+      'H43 — practitioner phone-number reachability — published. We pre-registered expecting NDH to keep phone on the location (the NPPES pattern); the 2026-05-08 data overturned it. 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone directly on the Practitioner record, the role/location traversal adds nothing, and only 1,115 have no phone on any resource. Pre-registration working as intended.',
     format: 'web',
     url: '/reports/2026-06-09-update',
     badge: 'NEW',
