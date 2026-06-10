@@ -51,12 +51,14 @@ jobs:
       - name: Commit + push the H43 finding JSON
         run: |
           FILE=frontend/public/api/v1/findings/practitioner-phone-reachability.json
-          if git diff --quiet "$FILE"; then
+          git config user.name "ainpi-weekly-refresh"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Stage first — git diff --quiet ignores untracked files, so a
+          # brand-new JSON would otherwise look like "no change".
+          git add "$FILE"
+          if git diff --cached --quiet; then
             echo "No change in $FILE — nothing to commit."
           else
-            git config user.name "ainpi-weekly-refresh"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add "$FILE"
             git commit -m "H43 refresh: regenerate practitioner-phone-reachability.json from BQ"
             git push origin main
           fi
