@@ -35,6 +35,11 @@ import subprocess
 from datetime import datetime, timezone
 from google.cloud import bigquery
 
+# analysis/ is on sys.path[0] when run as `python analysis/h24_oig_exclusions.py`,
+# so claims_sources (a subpackage of analysis/) is importable. Same pattern as
+# analysis/landscape.py and analysis/h43_practitioner_phone.py.
+from claims_sources._cohorts import bq_job_config
+
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 LEIE_TABLE = f"{PROJECT}.{DATASET}.oig_leie"
@@ -70,7 +75,7 @@ def run() -> None:
                   AND (REINDATE = '00000000' OR REINDATE IS NULL OR REINDATE = ''))
             AS still_excluded_with_npi
         FROM `{LEIE_TABLE}`
-    """).result()))
+    """, job_config=bq_job_config()).result()))
     leie_total = int(leie_stats.total)
     leie_with_npi = int(leie_stats.with_real_npi)
     leie_active_with_npi = int(leie_stats.still_excluded_with_npi)
@@ -98,7 +103,7 @@ def run() -> None:
     FROM active_leie l
     INNER JOIN `{PROJECT}.{DATASET}.practitioner` p ON p._npi = l.NPI
     """
-    pract_matches = list(client.query(pract_match_sql).result())
+    pract_matches = list(client.query(pract_match_sql, job_config=bq_job_config()).result())
     print(f"\nActive LEIE NPIs matching NDH Practitioner: {len(pract_matches):,}")
 
     # 3. Match against NDH organizations.
@@ -117,7 +122,7 @@ def run() -> None:
     FROM active_leie l
     INNER JOIN `{PROJECT}.{DATASET}.organization` o ON o._npi = l.NPI
     """
-    org_matches = list(client.query(org_match_sql).result())
+    org_matches = list(client.query(org_match_sql, job_config=bq_job_config()).result())
     print(f"Active LEIE NPIs matching NDH Organization: {len(org_matches):,}")
 
     # 4. Per-state breakdown of matched practitioners.
@@ -149,7 +154,7 @@ def run() -> None:
     # may appear as both a Practitioner and an Organization resource — count
     # the union, not the sum, so the percentage stays in [0, 100]).
     distinct_leie_npis_in_ndh = len(
-        {r["npi"] for r in pract_matches} | {r["npi"] for r in org_matches}
+        {r["NPI"] for r in pract_matches} | {r["NPI"] for r in org_matches}
     )
     appearance_rate = 100 * distinct_leie_npis_in_ndh / leie_active_with_npi if leie_active_with_npi else 0
     headline = (
