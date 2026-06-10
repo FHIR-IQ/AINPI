@@ -14,12 +14,12 @@ export const metadata: Metadata = {
   title:
     'AINPI 2026-06-09 update — 99.98% of practitioners carry a phone on the record (H43)',
   description:
-    'H43 published: practitioner phone-number reachability. We expected NDH to hide phone on the location; the 2026-05-08 data overturned it — 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone directly on the Practitioner record, and the role/location traversal adds nothing.',
+    'H43 published: practitioner phone-number reachability. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 NDH release carry a phone directly on the Practitioner record; the role/location traversal adds nothing.',
   openGraph: {
     title:
-      'AINPI 2026-06-09 — the practitioner phone is right on the record, not the location',
+      'AINPI 2026-06-09 — practitioner phone numbers are on the record, not the location',
     description:
-      'We pre-registered H43 expecting NDH phone to live on the location. The data said the opposite: 99.98% of active practitioners carry a phone directly on Practitioner.telecom. Pre-registration working as intended.',
+      '99.98% of active practitioners carry a phone directly on Practitioner.telecom in the 2026-05-08 NDH release. The pre-registered prior (phone on the location) was rejected by the data.',
     url: 'https://ainpi.dev/reports/2026-06-09-update',
     type: 'article',
   },
@@ -35,7 +35,7 @@ export default function June2026Update0609Page() {
         eyebrow="Release update · 2026-06-09"
         headlineA="The phone is on the record."
         headlineB="Not the location."
-        caption="H43 published: practitioner phone-number reachability. We pre-registered expecting NDH to hide phone on the location — the data overturned it. 99.98% of active practitioners carry a phone directly on the Practitioner record."
+        caption="H43 published: practitioner phone-number reachability. 99.98% of active practitioners carry a phone directly on the Practitioner record; the role/location traversal adds nothing."
         stats={[
           { label: 'Phone on record', delta: '99.98%', tone: 'gain' },
           { label: 'Active practitioners', delta: '7.2M', tone: 'gain' },

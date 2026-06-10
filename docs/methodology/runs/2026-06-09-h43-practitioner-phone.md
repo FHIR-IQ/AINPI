@@ -13,7 +13,7 @@ both the union (reachable by any path) and the on-record share.
 **Status:** published — measured against the 2026-05-08 release.
 **Reproducibility:** see "Commands" at the end.
 
-## Result (2026-06-09 run) — the hypothesis was overturned
+## Result (2026-06-09 run) — prior rejected
 
 | Metric | Value |
 |---|---|
@@ -28,10 +28,9 @@ both the union (reachable by any path) and the on-record share.
 
 The pre-registered expectation (below) was that `Practitioner.telecom` would be
 sparse and reachability would come from the PractitionerRole → Location
-traversal. **The data says the opposite:** NDH populates a phone directly on the
+traversal. The data rejected it: NDH carries a phone directly on the
 Practitioner record for essentially every active practitioner, and the
-traversal adds nothing. This is a clean worked example of pre-registration
-catching a wrong prior.
+traversal adds nothing.
 
 Two zeros to keep an eye on (they do not affect the headline, which stands on
 on-record phone alone): on-record `email`/`url` and the location-phone path all

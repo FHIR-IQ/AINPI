@@ -249,11 +249,11 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H43'],
     title: 'Practitioner phone-number reachability',
     summary:
-      'Can you associate a practitioner in the NDH bulk export with a phone number? H43 resolves all three FHIR paths a phone can live on — the Practitioner record (`Practitioner.telecom`), the role (`PractitionerRole.telecom`), and the place the role points at (`Location.telecom`, via `PractitionerRole.location`) — and reports the any-path union vs the on-record share. The pre-registration expected `Practitioner.telecom` to be sparse (NPPES keeps practice phone on the location). **The measured 2026-05-08 release overturned that:** 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone number directly on the Practitioner record. The role/location traversal adds essentially nothing, and only 1,115 active practitioners (0.015%) have no phone on any of the three resources. NDH evidently enriches `Practitioner.telecom` directly rather than leaving phone on the location — so a "call this provider" feature can read it straight off the Practitioner.',
+      'Can you associate a practitioner in the NDH bulk export with a phone number? A phone can live on the Practitioner record (`Practitioner.telecom`), the role (`PractitionerRole.telecom`), or the referenced location (`Location.telecom`). H43 resolves all three. Result on the 2026-05-08 release: 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 (0.015%) have no phone on any path. A "call this provider" feature can read `Practitioner.telecom` directly.',
     nullHypothesis:
-      'No active Practitioner resource in the NDH release can be associated with a phone number through any of the three FHIR paths (Practitioner.telecom, PractitionerRole.telecom, or a referenced Location.telecom). Rejected: 99.98% are reachable, almost entirely on-record.',
+      '`Practitioner.telecom` is sparse — fewer than half of active practitioners carry an on-record phone, and reachability requires the PractitionerRole → Location traversal (the NPPES pattern, where practice phone lives on the location). Rejected: 99.98% carry an on-record phone and the traversal adds nothing.',
     denominator:
-      'All active Practitioner resources in the pinned NDH bulk export (7,196,385 at 2026-05-08, `_active = TRUE`). The numerator (7,195,270) is the count of those reachable by a `system=\'phone\'` telecom entry on the Practitioner record, on any active PractitionerRole whose `practitioner` reference resolves to that NPI, or on any Location referenced by such a role — unioned and intersected back to the active Practitioner set so dangling references and inactive practitioners drop out.',
+      'All active Practitioner resources in the pinned NDH bulk export (7,196,385 at 2026-05-08, `_active = TRUE`). The numerator (7,195,270) counts those with a `system=\'phone\'` telecom entry on the Practitioner record, on any active PractitionerRole resolving to that practitioner, or on any Location referenced by such a role — unioned, then intersected back to the active set so dangling references drop out.',
     dataSource:
       'BigQuery scan of `cms_npd.practitioner`, `cms_npd.practitioner_role`, and `cms_npd.location` — JSON-extracting the `telecom[]` array on each resource and joining roles to locations via the pipe-joined `_location_ids` reference list. Compute script: `analysis/h43_practitioner_phone.py` (capped at the project default `maximum_bytes_billed` via `bq_job_config()`).',
     status: 'published',
@@ -262,22 +262,22 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'Contrary to the usual NPPES-derived expectation, you can read `Practitioner.telecom` directly — 99.98% of active practitioners carry a phone there in the 2026-05-08 release. The PractitionerRole → Location traversal is not needed for phone reachability in this release; keep it only as a fallback for the ~1,115 with nothing on record.',
+          'Read `Practitioner.telecom` directly — 99.98% of active practitioners carry a phone there. Keep the role → location traversal only as a fallback for the ~1,115 records with nothing on file.',
       },
       {
         audience: 'FHIR implementers',
         takeaway:
-          'Phone is a field read on Practitioner.telecom, not a traversal, in this release. Note the on-record telecom is phone + fax only — email and url came back empty, so do not assume those channels exist without checking the source.',
+          'On-record telecom is phone + fax only in this release — email and url came back empty. Don\'t assume those channels exist without checking the source.',
       },
       {
         audience: 'CMS publishing the data',
         takeaway:
-          'NDH is doing well on practitioner contactability: a phone is present on essentially every active Practitioner record. The release-to-release watch item is the Location layer (May deduped -61%), and the empty email/url telecom channels if those are intended to be populated.',
+          'Practitioner phone coverage is effectively complete. Release-to-release watch items: the Location layer (May deduped −61%) and the empty email/url channels if those are intended to be populated.',
       },
       {
         audience: 'Methodology readers',
         takeaway:
-          'This finding is a worked example of pre-registration paying off: the hypothesis (sparse Practitioner.telecom) was wrong and the measured data overturned it. Read the on-record share as "phone published directly on the individual," and the any-path share as "phone discoverable for this individual at all" — here they coincide.',
+          'The pre-registered prior (sparse `Practitioner.telecom`, NPPES-style) was wrong; the measurement corrected it. On-record share and any-path share coincide in this release.',
       },
     ],
   },

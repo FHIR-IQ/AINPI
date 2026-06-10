@@ -11,10 +11,11 @@ union (any path) and the on-record share (Practitioner.telecom alone):
   3. Location.telecom                — on the place the role points at
                                        (PractitionerRole.location -> Location)
 
-Upstream (NPPES) keeps practice phone on the practice location, so we expect
-Practitioner.telecom to be sparse and most reachability to come from the
-PractitionerRole -> Location traversal. The metric quantifies that gap so a
-consumer building "call this provider" knows which resource to actually read.
+The pre-registered prior was that Practitioner.telecom would be sparse (NPPES
+keeps practice phone on the location). The first measured run (2026-05-08
+release) rejected it: 99.98% of active practitioners carry a phone directly on
+the Practitioner record, and the traversal adds nothing. The headline below
+adapts to whichever case the data shows.
 
 Run:    python analysis/h43_practitioner_phone.py
 Writes: frontend/public/api/v1/findings/practitioner-phone-reachability.json
@@ -182,9 +183,8 @@ def main() -> None:
         headline = (
             f"Of {total:,} active Practitioner resources in the {RELEASE_DATE} NDH release, "
             f"{direct:,} ({pct(direct, total)}%) carry a phone number directly on the "
-            f"Practitioner record — overturning the common assumption that NDH phone lives "
-            f"only on the location. Resolving PractitionerRole and the referenced Location "
-            f"adds essentially no further reach ({via_only:,} practitioners). Just "
+            f"Practitioner record. Resolving PractitionerRole and the referenced Location "
+            f"adds essentially no further reach ({via_only:,} practitioners); "
             f"{unreachable:,} ({pct(unreachable, total)}%) have no phone on any of the three "
             f"resources."
         )
@@ -222,16 +222,12 @@ def main() -> None:
         "carry any telecom entry at all on the Practitioner resource. "
         f"Before de-duplication against the active set, {role_raw:,} practitioner references "
         f"are reachable via a role-level phone and {loc_raw:,} via a location-level phone. "
-        "Result note — this pre-registration expected Practitioner.telecom to be sparse "
-        "(NPPES keeps practice phone on the location). In the measured release the opposite "
-        "holds: NDH populates a phone directly on the Practitioner record for "
-        f"{pct(direct, total)}% of active practitioners, so the role/location traversal adds "
-        f"essentially nothing ({via_only:,} extra). The operational takeaway flips — a 'call "
-        "this provider' feature can read Practitioner.telecom directly. Watch two things "
-        "across releases: (a) the May 2026-05-08 release deduped Location resources sharply "
-        "(-61% vs April), so path-3 reachability is release-sensitive; and (b) in this "
-        f"release email ({direct_email:,}) and url ({direct_url:,}) on-record telecom and the "
-        f"location-phone path ({loc_raw:,}) all came back empty — confirm against the source "
+        "The pre-registered prior (sparse Practitioner.telecom, NPPES-style) did not hold: "
+        f"the phone is on the Practitioner record for {pct(direct, total)}% of active "
+        "practitioners, so a 'call this provider' feature can read Practitioner.telecom "
+        "directly. Release-sensitive caveats: the May 2026-05-08 release deduped Location "
+        f"resources (-61% vs April), and on-record email ({direct_email:,}), url "
+        f"({direct_url:,}), and location-phone ({loc_raw:,}) all came back empty — verify "
         "before relying on those channels."
     )
 

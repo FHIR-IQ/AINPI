@@ -47,7 +47,7 @@ export const REPORTS: ReportOption[] = [
     version: '2026-06-09-update',
     title: '2026-06-09 update — 99.98% of practitioners carry a phone on the record (H43)',
     description:
-      'H43 — practitioner phone-number reachability — published. We pre-registered expecting NDH to keep phone on the location (the NPPES pattern); the 2026-05-08 data overturned it. 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone directly on the Practitioner record, the role/location traversal adds nothing, and only 1,115 have no phone on any resource. Pre-registration working as intended.',
+      'H43 — practitioner phone-number reachability — published. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 release carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 have no phone on any resource. The pre-registered prior (phone on the location, NPPES-style) was rejected by the data.',
     format: 'web',
     url: '/reports/2026-06-09-update',
     badge: 'NEW',
