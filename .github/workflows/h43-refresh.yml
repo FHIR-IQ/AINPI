@@ -1,0 +1,62 @@
+name: H43 refresh
+
+# Standalone, dispatch-only refresh for H43 (practitioner phone-number
+# reachability). Deliberately isolated from weekly-refresh.yml so the H43
+# number does not depend on the health of the other ~20 analyses in that
+# pipeline (a single failing step there — e.g. H24 — fail-fasts the whole
+# chain and skips everything after it, including H43 and the commit step).
+#
+# Runs the one capped BigQuery analysis and commits only its JSON.
+#
+# Required secrets:
+#   GCP_SERVICE_ACCOUNT_KEY  — JSON service account with BigQuery jobUser +
+#                              dataViewer on cms_npd.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: h43-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Re-run H43 + commit finding JSON
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-cloud-bigquery
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3.0.0
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Re-run H43 practitioner phone reachability
+        run: python analysis/h43_practitioner_phone.py
+
+      - name: Commit + push the H43 finding JSON
+        run: |
+          FILE=frontend/public/api/v1/findings/practitioner-phone-reachability.json
+          if git diff --quiet "$FILE"; then
+            echo "No change in $FILE — nothing to commit."
+          else
+            git config user.name "ainpi-weekly-refresh"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$FILE"
+            git commit -m "H43 refresh: regenerate practitioner-phone-reachability.json from BQ"
+            git push origin main
+          fi
