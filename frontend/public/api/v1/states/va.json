@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-05-08T20:58:48+00:00",
+  "generated_at": "2026-06-10T18:21:01+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "4bee6b1",
+  "commit_sha": "903d67a",
   "denominators": {
     "practitioner": 130127,
     "organization": 67291,
@@ -26,7 +26,7 @@
       "state_numerator": 129470,
       "state_denominator": 130127,
       "state_pct": 99.4951,
-      "national_pct": null,
+      "national_pct": 9.0995,
       "state_headline": "129,470 of 130,127 VA practitioner NPIs (99.4951%) match NPPES; 4,090 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1992651053",
-      "display_name": "COLLIVER, SAMANTHA",
+      "npi": "1245187210",
+      "display_name": "ASARE, SHEILLA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992651053"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245187210"
     },
     {
-      "npi": "1497601843",
-      "display_name": "MAHONEY, KATHRYN",
+      "npi": "1245187574",
+      "display_name": "GONZALEZ DIAZ, STEPHANIE",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1497601843"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245187574"
     },
     {
-      "npi": "1255289013",
-      "display_name": "LIBICKI, ARIELLA",
+      "npi": "1245183649",
+      "display_name": "BELL, BETHANY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1255289013"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245183649"
     },
     {
-      "npi": "1841147360",
-      "display_name": "WOODY, KATIE",
+      "npi": "1245182633",
+      "display_name": "PETERKIN, NNEKA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841147360"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245182633"
     },
     {
-      "npi": "1851244834",
-      "display_name": "ADDAIR, ROSLY",
+      "npi": "1245187939",
+      "display_name": "NESBITT-GAINES, AFRICA LYNN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1851244834"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245187939"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

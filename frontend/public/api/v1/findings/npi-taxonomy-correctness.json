@@ -8,35 +8,79 @@
     "H12",
     "H13"
   ],
-  "status": "in-progress",
+  "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-05-08T20:52:35+00:00",
-  "methodology_version": "0.1.0-draft",
+  "generated_at": "2026-06-10T18:20:45+00:00",
+  "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
-  "headline": "100.0000% of 10.9M NDH NPIs pass structural + Luhn validation (2 failing records: 0 structural, 2 Luhn checksum). 2,131 Practitioner/Organization resources carry no us-npi identifier.",
-  "numerator": 2,
-  "denominator": 10853455,
+  "headline": "95.71% of 10.9M NDH NPIs clear NPPES (0.79% ghost, 3.49% deactivated). Practitioner name agreement: 93.8% exact \u2192 94.1% normalized \u2192 96.7% Jaro-Winkler \u22650.85. Organization name: 59.2% exact \u2192 92.4% normalized \u2192 99.6% Jaro-Winkler \u22650.85 (closes the 44-point exact-match gap to 0pp). NDH carries NUCC on Practitioner.qualification (99.83% valid) AND Medicare Specialty codes on PractitionerRole.specialty (13.10% valid against the CMS-published crosswalk). Internal cross-system consistency: 9.1% of 2.3M Practitioner\u2194Role pairs agree via the crosswalk. External NUCC agreement NDH\u2194NPPES: 91.8% match NPPES's switch='Y' TRUE primary, 99.0% match any of the 15 slots, 7.3% match only a secondary. Slot_1 is NOT always the true primary (14.93% of rows).",
+  "numerator": 206603,
+  "denominator": 2270482,
   "chart": {
     "type": "bar",
-    "unit": "count",
+    "unit": "percent",
     "data": [
       {
-        "label": "OK",
-        "value": 10853453
+        "label": "H10 NPPES match OK",
+        "value": 95.71
       },
       {
-        "label": "INVALID_STRUCTURE",
-        "value": 0
+        "label": "H10 not in NPPES",
+        "value": 0.79
       },
       {
-        "label": "LUHN_FAIL",
-        "value": 2
+        "label": "H10 deactivated in NPPES",
+        "value": 3.5
       },
       {
-        "label": "MISSING",
-        "value": 2131
+        "label": "H11 Prac exact",
+        "value": 93.8
+      },
+      {
+        "label": "H11 Prac normalized",
+        "value": 94.1
+      },
+      {
+        "label": "H11 Prac JW \u22650.85",
+        "value": 96.7
+      },
+      {
+        "label": "H11 Org exact",
+        "value": 59.2
+      },
+      {
+        "label": "H11 Org normalized",
+        "value": 92.4
+      },
+      {
+        "label": "H11 Org JW \u22650.85",
+        "value": 99.6
+      },
+      {
+        "label": "H12 NUCC valid",
+        "value": 99.86
+      },
+      {
+        "label": "H12 CMS code valid",
+        "value": 13.1
+      },
+      {
+        "label": "H13 internal crosswalk",
+        "value": 9.1
+      },
+      {
+        "label": "H13 NDH\u2194NPPES slot 1",
+        "value": 93.9
+      },
+      {
+        "label": "H13 NDH\u2194NPPES true primary",
+        "value": 91.8
+      },
+      {
+        "label": "H13 NDH\u2194NPPES any of 15",
+        "value": 99.0
       }
     ]
   },
-  "notes": "H9 only \u2014 Practitioner: 7,441,209 OK / 0 invalid structure / 2 Luhn fail / 0 missing. Organization: 3,412,244 OK / 0 invalid / 0 Luhn fail / 2,131 missing. H10 (NPPES existence), H11 (name agreement), H12 (NUCC taxonomy), H13 (specialty agreement) pending the NPPES monthly file + NUCC code set joins."
+  "notes": "Source: bigquery-public-data.nppes.npi_raw (updated 2026-02-09, 9.37M NPIs) + .healthcare_provider_taxonomy_code_set_170 + CMS Medicare Provider and Supplier Taxonomy Crosswalk (2025-10, 565 rows, 1-to-many). H11 v2 methodology \u2014 three tiers: (1) exact match on UPPER(TRIM), (2) normalized match that strips business suffixes (LLC/INC/CORP/PC/PA/PLLC/LLP/LTD/CO/COMPANY/THE for Orgs; JR/SR/II\u2013V/MD/DO/PHD/RN/NP/PA-C/FNP-BC/DMD/DDS/DVM/PHARMD for persons), drops non-alphanumeric, collapses whitespace, (3) Jaro-Winkler \u22650.85 via a BQ JS UDF. Practitioner name: 6,907,334/7,139,252 family exact, 6,718,876 normalized full match, 6,904,517 at JW\u22650.85, 6,748,894 at JW\u22650.95. Organization name: 1,935,660/3,267,281 exact, 3,020,262 normalized, 3,253,066 at JW\u22650.85, 3,210,187 at JW\u22650.95. H12: NUCC codes on Practitioner.qualification (7,114,222/7,123,912 valid in NUCC v17.0); Medicare codes on PractitionerRole.specialty (298,166/2,276,748 valid in the crosswalk). NDH PractitionerRole._specialty_code carries a leading 'NN-' prefix (e.g. '14-50'); stripping recovers the canonical Medicare code. H13 internal: 2,270,482 Practitioner\u2194Role pairs, 206,603 agree via crosswalk. H13 confusion matrix \u2014 top 10 inconsistent (Medicare \u2192 qualification-NUCC) pairs: 207R00000X (INTERNAL MEDICINE) \u2194 207R00000X (Internal Medicine /): 208,760; 207Q00000X (FAMILY MEDICINE) \u2194 207Q00000X (Family Medicine /): 138,926; 207P00000X (EMERGENCY MEDICINE) \u2194 207P00000X (Emergency Medicine /): 133,684; 225100000X (PHYSICAL THERAPIST) \u2194 225100000X (Physical Therapist /): 111,838; 2085R0202X (DIAGNOSTIC RADIOLOGY) \u2194 2085R0202X (Radiology / Diagnostic Radiology): 86,970; 207L00000X (ANESTHESIOLOGY) \u2194 207L00000X (Anesthesiology /): 85,949; 152W00000X (OPTOMETRIST) \u2194 152W00000X (Optometrist /): 75,278; 367500000X (NURSE ANESTHETIST, CERTIFIED REGISTERED) \u2194 367500000X (Nurse Anesthetist, Certified Registered /): 72,140; 193400000X (SINGLE SPECIALTY) \u2194 193400000X (Single Specialty /): 57,371; 363A00000X (PHYSICIAN ASSISTANT) \u2194 363A00000X (Physician Assistant /): 56,545. H13 external (v3 \u2014 switch-aware): NPPES stores 15 (taxonomy_code, primary_switch) pairs per NPI; exactly one should have switch='Y' (the TRUE primary). Four buckets:\n  \u2022 Match NPPES true primary (switch='Y' slot): 6,538,617 (91.78%)\n  \u2022 Match any slot:           7,055,325 (99.04%)\n  \u2022 Match slot_1 specifically:6,688,650 (93.89%)\n  \u2022 Match only a secondary (switch='N'): 516,708 (7.25%)\n  \u2022 Disagree entirely (not in any slot): 68,587 (0.96%)\nSlot-ordering observation: 1,063,860 rows (14.93%) have the NPPES TRUE primary in a slot other than slot_1 \u2014 so the prior 'slot_1' proxy for 'primary' was slightly wrong. 0 rows (0.00%) have no switch='Y' at all (NPPES data-quality edge). Known caveats: NPPES vintage 2026-02-09 vs NDH 2026-05-08 \u2014 8-week gap means taxonomy changes in that window show as disagreement; Jaro-Winkler \u22650.85 is a permissive threshold that recovers common variations (whitespace, DBA suffixes, casing) but also accepts some false positives (e.g. 'Smith Medical' vs 'Smith Medicare'); the 0.95 column is the strict signal. v2 upgrade candidates: pinned quarterly NUCC; NPPES secondary-taxonomy match; phonetic fallback (Soundex / Metaphone) for names where JW misses transpositions."
 }
