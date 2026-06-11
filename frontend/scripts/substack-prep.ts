@@ -38,8 +38,9 @@
  *   SUBSTACK_COOKIE       Full Cookie header from a logged-in browser
  *                         session. Extract from DevTools -> Application ->
  *                         Cookies -> substack.com. Treat as a password.
- *   SUBSTACK_PUBLICATION  The publication subdomain (e.g. "fhiriqplaybook"
- *                         for https://fhiriqplaybook.substack.com).
+ *   SUBSTACK_PUBLICATION  The publication subdomain (e.g. "evestel" for
+ *                         https://evestel.substack.com — the FHIR IQ
+ *                         Playbook publication's actual URL).
  *
  * NOTE: this script never reads or modifies the AINPI subscriber list. It
  * touches the Substack channel only.
@@ -86,11 +87,26 @@ function parseArgs(argv: string[]): CliArgs {
  *  - Wraps the doc in title + subtitle if provided.
  */
 function prepareForSubstack(markdown: string, title: string | null, subtitle: string | null): string {
+  // Em-dash and en-dash handling. Crude period substitution would land
+  // orphan periods mid-sentence ("would be wrong . and H43"). Comma is a
+  // safer mechanical default for the connecting-clauses case.
+  //
+  // Special-case the leading-signature line: a line that starts with
+  // "— Name" is the standard email sign-off; promote to "-- Name" so the
+  // signature doesn't end up as a period in column 1.
+  //
+  // Known limitation: a SOURCE em-dash that line-wraps to column 1 mid-
+  // document (e.g. "script —\n[link](...)\n— is committed") trips the
+  // signature heuristic and produces a stray "-- " mid-prose. Eyeball the
+  // output before publishing; the editor is the last line of defense.
   const cleaned = markdown
-    // Em-dash and en-dash to period. The copy-reviewer agent should already
-    // have caught these, but we strip again as a safety net.
-    .replace(/—/g, '.')
-    .replace(/–/g, '.')
+    .replace(/^—\s/gm, '-- ')
+    .replace(/\s—\s/g, ', ')
+    .replace(/—/g, '')
+    .replace(/\s–\s/g, ', ')
+    .replace(/–/g, '')
+    // Collapse any double-commas the substitution created.
+    .replace(/,\s*,/g, ',')
     // Smart quotes to straight.
     .replace(/[“”]/g, '"')
     .replace(/[‘’]/g, "'")
@@ -204,7 +220,7 @@ async function main() {
     console.log('Copy the block above by hand.');
   }
 
-  const publication = process.env.SUBSTACK_PUBLICATION || 'fhiriqplaybook';
+  const publication = process.env.SUBSTACK_PUBLICATION || 'evestel';
   console.log(`Open the new-post editor: https://${publication}.substack.com/publish/post`);
   console.log('Paste, set the title/subtitle if not already, and Publish.');
 }

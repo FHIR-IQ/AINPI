@@ -6,7 +6,7 @@ last_updated: 2026-04-21
 
 # Privacy policy
 
-AINPI is a research project. This privacy policy covers the public website at [ainpi.vercel.app](https://ainpi.vercel.app) and the published API at `/api/v1/*`.
+AINPI is a research project. This privacy policy covers the public website at [ainpi.dev](https://ainpi.dev) and the published API at `/api/v1/*`.
 
 ## TL;DR
 

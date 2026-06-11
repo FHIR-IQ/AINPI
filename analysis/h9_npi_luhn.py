@@ -1,7 +1,7 @@
 """H9 — NPI Luhn + structural validity across all NPD Practitioner + Organization resources.
 
 Query every NPI (system = us-npi) from BigQuery, validate with the same
-Luhn implementation used by pipeline/2_npi_luhn.py, emit the finding JSON.
+Luhn implementation per Mod-10. Emit the finding JSON.
 
 Expected outcomes:
     NPI_OK                 — passes structure + Luhn (predicted >99.9%)
@@ -18,6 +18,11 @@ import re
 from collections import Counter
 from datetime import datetime, timezone
 from google.cloud import bigquery
+
+# Apply the project's 100 GB per-query cap. Same helper used by every
+# other analysis/ script that runs a BigQuery client.query() — see
+# CLAUDE.md → "GCP cost controls".
+from claims_sources._cohorts import bq_job_config
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
@@ -63,7 +68,7 @@ def run() -> None:
         FROM `{PROJECT}.{DATASET}.{tbl}`
         """
         print(f"Querying {tbl} ...")
-        result = client.query(sql).result()
+        result = client.query(sql, job_config=bq_job_config()).result()
         t_counter: Counter[str] = Counter()
         for row in result:
             code = validate(row.npi)

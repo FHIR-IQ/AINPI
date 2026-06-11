@@ -23,7 +23,7 @@ Credit is given in release notes unless the reporter requests anonymity.
 
 In scope:
 
-- The AINPI web app (`ainpi.vercel.app`) and its API routes under `/api/`
+- The AINPI web app (`ainpi.dev`) and its API routes under `/api/`
 - The `FHIR-IQ/AINPI` repository code and build/CI configuration
 - Sibling repositories: `FHIR-IQ/ainpi-examples`, `FHIR-IQ/ainpi-probe`
 - The endpoint crawler (`ainpi-probe`) and its rate-limiting / robots behavior

@@ -35,7 +35,7 @@ export default function ReportPage() {
               .page-break { page-break-before: always; }
               main { max-width: none !important; padding: 0 !important; }
               a[href]:after { content: " (" attr(href) ")"; font-size: 0.8em; color: #666; }
-              a[href^="/"]:after { content: " (ainpi.vercel.app" attr(href) ")"; }
+              a[href^="/"]:after { content: " (ainpi.dev" attr(href) ")"; }
               a[href^="#"]:after,
               a[href^="mailto:"]:after { content: ""; }
             }
@@ -95,7 +95,7 @@ export default function ReportPage() {
             </div>
           </dl>
           <p className="mt-6 text-xs text-gray-500">
-            Author: Eugene Vestel, FHIR IQ · <a href="mailto:gene@fhiriq.com">gene@fhiriq.com</a> · <a href="https://ainpi.vercel.app">ainpi.vercel.app</a>
+            Author: Eugene Vestel, FHIR IQ · <a href="mailto:gene@fhiriq.com">gene@fhiriq.com</a> · <a href="https://ainpi.dev">ainpi.dev</a>
             <br />
             Generated at: {stats?.generated_at || 'unknown'}
           </p>
@@ -130,7 +130,7 @@ export default function ReportPage() {
             Every number in this report is reproducible from the scripts in
             the <a href="https://github.com/FHIR-IQ/AINPI/tree/main/analysis">analysis/</a>
             {' '}directory of the repository. Methodology at{' '}
-            <a href="https://ainpi.vercel.app/methodology">/methodology</a>.
+            <a href="https://ainpi.dev/methodology">/methodology</a>.
           </p>
         </section>
 
@@ -203,13 +203,13 @@ export default function ReportPage() {
             <li>Main repo: <a href="https://github.com/FHIR-IQ/AINPI">github.com/FHIR-IQ/AINPI</a></li>
             <li>Crawler: <a href="https://github.com/FHIR-IQ/ainpi-probe">github.com/FHIR-IQ/ainpi-probe</a></li>
             <li>Usage examples: <a href="https://github.com/FHIR-IQ/ainpi-examples">github.com/FHIR-IQ/ainpi-examples</a></li>
-            <li>Live site: <a href="https://ainpi.vercel.app">ainpi.vercel.app</a></li>
-            <li>Public URL contract: <a href="https://ainpi.vercel.app/api/v1/stats.json">ainpi.vercel.app/api/v1/stats.json</a></li>
+            <li>Live site: <a href="https://ainpi.dev">ainpi.dev</a></li>
+            <li>Public URL contract: <a href="https://ainpi.dev/api/v1/stats.json">ainpi.dev/api/v1/stats.json</a></li>
           </ul>
           <p className="mb-3">
             To cite: see <a href="https://github.com/FHIR-IQ/AINPI/blob/main/CITATION.cff">CITATION.cff</a>.
             To contribute: see <a href="https://github.com/FHIR-IQ/AINPI/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>.
-            To subscribe: <a href="https://ainpi.vercel.app/subscribe">ainpi.vercel.app/subscribe</a>.
+            To subscribe: <a href="https://ainpi.dev/subscribe">ainpi.dev/subscribe</a>.
           </p>
           <p className="mt-6 text-xs text-gray-500">
             © 2026 FHIR IQ · Apache-2.0 · Report version v1.0.0

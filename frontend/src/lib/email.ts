@@ -49,9 +49,9 @@ export async function sendSubscribeWelcome(email: string): Promise<boolean> {
         `  • No marketing. No filler. You can reply to any email to`,
         `    unsubscribe or ask a question.`,
         ``,
-        `Current findings: https://ainpi.vercel.app/findings`,
-        `Methodology:    https://ainpi.vercel.app/methodology`,
-        `Full report:    https://ainpi.vercel.app/download`,
+        `Current findings: https://ainpi.dev/findings`,
+        `Methodology:    https://ainpi.dev/methodology`,
+        `Full report:    https://ainpi.dev/download`,
         ``,
         `— Eugene Vestel, FHIR IQ`,
       ].join('\n'),
@@ -65,9 +65,9 @@ export async function sendSubscribeWelcome(email: string): Promise<boolean> {
             <li>No marketing, no filler. Reply to any email to unsubscribe or ask a question.</li>
           </ul>
           <p>
-            <a href="https://ainpi.vercel.app/findings" style="color: #2557eb;">Current findings</a> ·
-            <a href="https://ainpi.vercel.app/methodology" style="color: #2557eb;">Methodology</a> ·
-            <a href="https://ainpi.vercel.app/download" style="color: #2557eb;">Download the full report</a>
+            <a href="https://ainpi.dev/findings" style="color: #2557eb;">Current findings</a> ·
+            <a href="https://ainpi.dev/methodology" style="color: #2557eb;">Methodology</a> ·
+            <a href="https://ainpi.dev/download" style="color: #2557eb;">Download the full report</a>
           </p>
           <p style="color: #6b7280; font-size: 14px;">— Eugene Vestel, FHIR IQ</p>
         </div>
@@ -103,7 +103,7 @@ export async function sendDownloadThanks(
         `  ${pdfUrl}`,
         ``,
         `You can also view the web version at:`,
-        `  https://ainpi.vercel.app/report`,
+        `  https://ainpi.dev/report`,
         ``,
         `If you have a question about methodology or a finding disagrees`,
         `with what you're seeing in the source, just reply to this email.`,
@@ -117,7 +117,7 @@ export async function sendDownloadThanks(
           <p><strong>Download:</strong><br/>
             <a href="${pdfUrl}" style="color: #2557eb;">${pdfUrl}</a>
           </p>
-          <p>You can also view the web version at <a href="https://ainpi.vercel.app/report" style="color: #2557eb;">ainpi.vercel.app/report</a>.</p>
+          <p>You can also view the web version at <a href="https://ainpi.dev/report" style="color: #2557eb;">ainpi.dev/report</a>.</p>
           <p>If you have a question about methodology or a finding disagrees with what you're seeing in the source, just reply to this email.</p>
           <p style="color: #6b7280; font-size: 14px;">— Eugene Vestel, FHIR IQ</p>
         </div>

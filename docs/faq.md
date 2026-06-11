@@ -39,7 +39,7 @@ Each finding's JSON at `/api/v1/findings/<slug>.json` carries its `generated_at`
 
 Yes. Use the `CITATION.cff` file in the repository root for Zotero / reference managers, or follow this pattern:
 
-> Vestel, E. *AINPI — open-source audit of the CMS National Provider Directory.* FHIR IQ. <https://ainpi.vercel.app>
+> Vestel, E. *AINPI — open-source audit of the CMS National Provider Directory.* FHIR IQ. <https://ainpi.dev>
 
 Pin to a specific release (`v1.0.0`, `v0.9.0-preview`, etc.) for reproducibility.
 
