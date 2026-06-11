@@ -85,10 +85,15 @@ logs/
 .env.*
 !.env.example
 
-# Local agent / skill tooling (not part of application code)
+# Local agent / skill tooling (not part of application code).
+# Workspace state stays gitignored; only the curated .md subagent definitions
+# under .claude/agents/ are tracked.
 .agents/
 .kiro/
-.claude/
+.claude/*
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/*.md
 skills-lock.json
 
 # Playwright MCP output (screenshots + console logs from local QA runs)
