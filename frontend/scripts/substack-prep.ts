@@ -38,8 +38,9 @@
  *   SUBSTACK_COOKIE       Full Cookie header from a logged-in browser
  *                         session. Extract from DevTools -> Application ->
  *                         Cookies -> substack.com. Treat as a password.
- *   SUBSTACK_PUBLICATION  The publication subdomain (e.g. "fhiriqplaybook"
- *                         for https://fhiriqplaybook.substack.com).
+ *   SUBSTACK_PUBLICATION  The publication subdomain (e.g. "evestel" for
+ *                         https://evestel.substack.com — the FHIR IQ
+ *                         Playbook publication's actual URL).
  *
  * NOTE: this script never reads or modifies the AINPI subscriber list. It
  * touches the Substack channel only.
@@ -219,7 +220,7 @@ async function main() {
     console.log('Copy the block above by hand.');
   }
 
-  const publication = process.env.SUBSTACK_PUBLICATION || 'fhiriqplaybook';
+  const publication = process.env.SUBSTACK_PUBLICATION || 'evestel';
   console.log(`Open the new-post editor: https://${publication}.substack.com/publish/post`);
   console.log('Paste, set the title/subtitle if not already, and Publish.');
 }
