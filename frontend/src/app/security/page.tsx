@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Security policy — AINPI',
     description: 'Report vulnerabilities to gene@fhiriq.com; see the disclosure SLA.',
-    url: 'https://ainpi.vercel.app/security',
+    url: 'https://ainpi.dev/security',
     type: 'article',
   },
 };

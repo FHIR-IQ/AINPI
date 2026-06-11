@@ -16,7 +16,7 @@ const TWITTER_INTENT = 'https://twitter.com/intent/tweet';
 const LINKEDIN_INTENT = 'https://www.linkedin.com/sharing/share-offsite/';
 
 export default function ShareButtons({
-  url = 'https://ainpi.vercel.app',
+  url = 'https://ainpi.dev',
   title = 'AINPI — open-source audit of the CMS National Provider Directory',
   compact = false,
   variant = 'light',

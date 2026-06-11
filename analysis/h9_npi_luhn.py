@@ -1,7 +1,7 @@
 """H9 — NPI Luhn + structural validity across all NPD Practitioner + Organization resources.
 
 Query every NPI (system = us-npi) from BigQuery, validate with the same
-Luhn implementation used by pipeline/2_npi_luhn.py, emit the finding JSON.
+Luhn implementation per Mod-10. Emit the finding JSON.
 
 Expected outcomes:
     NPI_OK                 — passes structure + Luhn (predicted >99.9%)

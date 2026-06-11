@@ -21,7 +21,7 @@ export async function generateMetadata({
 
   const title = `${finding.title} — AINPI`;
   const description = finding.ogTagline || finding.summary;
-  const url = `https://ainpi.vercel.app/findings/${finding.slug}`;
+  const url = `https://ainpi.dev/findings/${finding.slug}`;
 
   return {
     title,

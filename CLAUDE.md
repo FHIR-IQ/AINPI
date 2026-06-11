@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 AINPI is an experimental exploration of the CMS National Provider Directory (NPD) public use files (2026-05-08 release; April 2026-04-09 also archived). It ingests the 21.7M-record FHIR R4 dataset from directory.cms.gov into Google BigQuery, serves interactive exploration via a Next.js 14 app on Vercel, and backs the app with Supabase Postgres for session-scoped state.
 
-Live: <https://ainpi.vercel.app>
+Live: <https://ainpi.dev>
 
 **Scope note**: This is a research/educational project. Every page shows a WIP banner; every number should be verified against primary sources before any decision.
 
@@ -28,8 +28,7 @@ AINPI/
 │   ├── tests/                Vitest unit tests
 │   └── e2e/                  Playwright tests
 ├── analysis/                 Python scripts per hypothesis (h9, h10_h13, h18, etc.) — outputs to frontend/public/api/v1/
-│   └── tests/                pytest unit tests (currently h26 only)
-├── pipeline/                 DuckDB-over-Parquet scaffold (shard, edges, Luhn, lastUpdated)
+│   └── tests/                pytest unit tests (currently h26 + ndh_manifest)
 ├── crawler/                  Local mirror of FHIR-IQ/ainpi-probe endpoint liveness crawler
 ├── docs/methodology/         Versioned methodology doc (index.md rendered at /methodology) + version-log.md (YAML frontmatter of past versions; surfaced by hub-feed timeline) + runs/ (per-run provenance docs)
 ├── docs/briefings/           State-meeting briefing markdown (rendered at /briefings/<state>)
@@ -275,7 +274,7 @@ Two-layer admin-visibility stack, all keyed off `ADMIN_EMAIL` (default `gene@fhi
 
 **Important: Vercel has no public Web Analytics REST API.** Confirmed against `openapi.vercel.sh` (zero analytics endpoints across 234 documented routes) and direct probing — every guess at `/v1/web-analytics/*`, `/v1/insights/*`, `/v1/analytics/*` returns 404. The dashboard fetches from internal `vercel.com/api/web/insights/*` routes with cookie auth, which are not stable or token-accessible. **Don't reinvent the broken fetch.** The cron renders dashboard deep-links instead; pageview/visitor numbers have to be read in-browser. If Vercel ships a public analytics API later, that's a new function in `vercel-analytics.ts` — not a fix to the old broken paths.
 
-When changing the cron cadence, edit `vercel.json#crons[0].schedule`. The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.vercel.app/api/v1/admin/weekly-report`.
+When changing the cron cadence, edit `vercel.json#crons[0].schedule`. The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.dev/api/v1/admin/weekly-report`.
 
 ## Required Environment Variables (`frontend/.env.local`)
 
@@ -325,7 +324,7 @@ NPD_RELEASE_DATE             Defaults to 2026-05-08 in scripts/sync-bq-to-supaba
 
 - **Vitest**: 62 tests covering FHIR reference extraction, API parameter parsing, data-quality API contract, validation API, filter context hierarchy, NPI/URL regex, BigQuery schema validation
 - **Playwright (dev)**: `frontend/e2e/data-quality.spec.ts` + `npd-search.spec.ts` — structural assertions, run via `npm run test:e2e` (boots local dev server)
-- **Playwright (prod)**: `frontend/e2e/accuracy-2026-05-08.spec.ts` (24 assertions) — production smoke that pins every published number to the May release. Run with `PLAYWRIGHT_BASE_URL="https://ainpi.vercel.app" npx playwright test --config=playwright.prod.config.ts accuracy-2026-05-08.spec.ts` (the prod config skips webServer boot so it doesn't fight other dev servers on port 3000)
+- **Playwright (prod)**: `frontend/e2e/accuracy-2026-05-08.spec.ts` (24 assertions) — production smoke that pins every published number to the May release. Run with `PLAYWRIGHT_BASE_URL="https://ainpi.dev" npx playwright test --config=playwright.prod.config.ts accuracy-2026-05-08.spec.ts` (the prod config skips webServer boot so it doesn't fight other dev servers on port 3000)
 
 Run dev tests in CI: `npm run test && npm run test:e2e`.
 

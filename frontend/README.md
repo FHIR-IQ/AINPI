@@ -545,7 +545,7 @@ MIT
 
 ## 🔗 Links
 
-- **Live App**: https://ainpi.vercel.app
+- **Live App**: https://ainpi.dev
 - **GitHub**: https://github.com/FHIR-IQ/AINPI
 - **FHIR R4**: https://hl7.org/fhir/R4/
 - **NUCC**: https://www.nucc.org/

@@ -145,7 +145,7 @@ In local dev `GCP_SERVICE_ACCOUNT_KEY` is unset and the BigQuery client falls ba
 After everything is loaded, hit the validation endpoint:
 
 ```bash
-curl https://ainpi.vercel.app/api/npd/validation | jq '.resource_counts'
+curl https://ainpi.dev/api/npd/validation | jq '.resource_counts'
 ```
 
 Expected completeness vs the CMS source manifest (2026-04-09 release):

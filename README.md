@@ -2,9 +2,9 @@
 
 Experimental explorer for the CMS National Provider Directory (NPD) public use files.
 
-**Live:** <https://ainpi.vercel.app>
+**Live:** <https://ainpi.dev>
 
-> **Work in progress.** AINPI is research/educational. Data may be incomplete, stale, or incorrect. Every number should be verified against primary sources before any business or clinical decision. See the [`/insights`](https://ainpi.vercel.app/insights) page for a full provenance analysis.
+> **Work in progress.** AINPI is research/educational. Data may be incomplete, stale, or incorrect. Every number should be verified against primary sources before any business or clinical decision. See the [`/insights`](https://ainpi.dev/insights) page for a full provenance analysis.
 
 ## What it does
 
@@ -42,7 +42,7 @@ CMS released the National Provider Directory as FHIR R4 NDJSON public use files 
 
 Static JSON, CDN-cached, safe to depend on across releases:
 
-- [`/api/v1/stats.json`](https://ainpi.vercel.app/api/v1/stats.json) — site-wide counters, methodology version, commit SHA
+- [`/api/v1/stats.json`](https://ainpi.dev/api/v1/stats.json) — site-wide counters, methodology version, commit SHA
 - `/api/v1/findings/<slug>.json` — one per finding ([types](./frontend/src/lib/api-v1-types.ts))
 
 Breaking changes bump the path (`/api/v2/`), not the shape in place.
@@ -70,7 +70,6 @@ Contributions welcome on any issue. File a new one using the [issue templates](h
 
 ```text
 frontend/          Next.js 14 app — routes, API, charts, tests
-pipeline/          DuckDB-over-Parquet validation pipeline (shard, edges, NPI Luhn, temporal)
 docs/methodology/  Versioned methodology doc, rendered at /methodology
 .github/           CI, CodeQL, dependabot, issue + PR templates, release workflow
 ```

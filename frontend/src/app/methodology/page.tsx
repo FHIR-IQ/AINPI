@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: `${title} — AINPI`,
     description,
-    openGraph: { title, description, type: 'article', url: 'https://ainpi.vercel.app/methodology' },
+    openGraph: { title, description, type: 'article', url: 'https://ainpi.dev/methodology' },
     twitter: { card: 'summary_large_image', title, description },
   };
 }

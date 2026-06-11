@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Production smoke-test config. Used when PLAYWRIGHT_BASE_URL is set
- * to ainpi.vercel.app (or a preview URL); skips the local webServer
+ * to ainpi.dev (or a preview URL); skips the local webServer
  * boot. Run with `npx playwright test --config=playwright.prod.config.ts`.
  */
 export default defineConfig({
@@ -14,7 +14,7 @@ export default defineConfig({
   reporter: 'list',
   timeout: 60_000,
   use: {
-    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://ainpi.vercel.app',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://ainpi.dev',
     trace: 'retain-on-failure',
   },
   projects: [

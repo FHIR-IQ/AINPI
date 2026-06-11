@@ -23,7 +23,7 @@ Link to the authoritative source that contradicts the AINPI number.
 
 ## Reproducibility
 
-- [ ] I can reproduce this in production (https://ainpi.vercel.app)
+- [ ] I can reproduce this in production (https://ainpi.dev)
 - [ ] I can reproduce this locally from `main`
 - [ ] I have a failing test or query
 

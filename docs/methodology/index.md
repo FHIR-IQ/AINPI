@@ -99,7 +99,6 @@ Each check maps to one of the six DAMA DMBOK data-quality dimensions and to a FH
   findings/ (VerificationResult NDJSON + Parquet)
 ```
 
-*(Each stage will link to its source file in `pipeline/` once the scaffold lands.)*
 
 ---
 
@@ -200,7 +199,7 @@ Scored L0 through L7 against every FHIR-REST `Endpoint.address` URL:
 
 - 2–4 concurrent connections per host
 - 1 request per second default
-- User-Agent: `AINPI-DirectoryQualityBot/1.0 (+https://ainpi.vercel.app/crawler; gene@fhiriq.com)`
+- User-Agent: `AINPI-DirectoryQualityBot/1.0 (+https://ainpi.dev/crawler; gene@fhiriq.com)`
 - Exponential backoff with jitter on 429 / 503
 - 10-second connect timeout, 30-second read timeout
 - Documented stable source IP so operators can whitelist
@@ -251,7 +250,7 @@ Every check output is emitted as:
 
 ## 12. Reproducibility
 
-All pipeline code lives in the `pipeline/` directory. A clean-checkout reproduction will be:
+All analysis code lives in `analysis/`. A clean-checkout reproduction:
 
 ```bash
 # (commands finalize when pipeline scaffold lands)

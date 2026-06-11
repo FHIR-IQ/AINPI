@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Privacy policy — AINPI',
     description: 'How AINPI handles your data: none, unless you ask us to.',
-    url: 'https://ainpi.vercel.app/privacy',
+    url: 'https://ainpi.dev/privacy',
     type: 'article',
   },
 };

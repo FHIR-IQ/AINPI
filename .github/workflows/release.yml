@@ -50,10 +50,10 @@ jobs:
             echo
             echo "### Methodology + findings"
             echo
-            echo "- Site: https://ainpi.vercel.app"
-            echo "- Methodology (versioned): https://ainpi.vercel.app/methodology"
-            echo "- Findings: https://ainpi.vercel.app/findings"
-            echo "- Static JSON contract: https://ainpi.vercel.app/api/v1/stats.json"
+            echo "- Site: https://ainpi.dev"
+            echo "- Methodology (versioned): https://ainpi.dev/methodology"
+            echo "- Findings: https://ainpi.dev/findings"
+            echo "- Static JSON contract: https://ainpi.dev/api/v1/stats.json"
             echo
             echo "### Sibling repos"
             echo

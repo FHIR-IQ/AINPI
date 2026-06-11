@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'FAQ — AINPI',
     description: 'Frequently asked questions about AINPI, the open-source CMS NPD audit.',
-    url: 'https://ainpi.vercel.app/faq',
+    url: 'https://ainpi.dev/faq',
     type: 'article',
   },
 };
