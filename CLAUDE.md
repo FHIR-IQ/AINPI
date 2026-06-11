@@ -29,10 +29,6 @@ AINPI/
 │   └── e2e/                  Playwright tests
 ├── analysis/                 Python scripts per hypothesis (h9, h10_h13, h18, etc.) — outputs to frontend/public/api/v1/
 │   └── tests/                pytest unit tests (currently h26 + ndh_manifest)
-<<<<<<< HEAD
-=======
-├── pipeline/                 DuckDB-over-Parquet scaffold (shard, edges, Luhn, lastUpdated)
->>>>>>> origin/main
 ├── crawler/                  Local mirror of FHIR-IQ/ainpi-probe endpoint liveness crawler
 ├── docs/methodology/         Versioned methodology doc (index.md rendered at /methodology) + version-log.md (YAML frontmatter of past versions; surfaced by hub-feed timeline) + runs/ (per-run provenance docs)
 ├── docs/briefings/           State-meeting briefing markdown (rendered at /briefings/<state>)
