@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-06-10T18:21:14+00:00",
+  "generated_at": "2026-06-15T15:24:01+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "903d67a",
+  "commit_sha": "2941341",
   "denominators": {
     "practitioner": 268111,
     "organization": 94023,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1942158225",
-      "display_name": "RAMOS, KARI",
+      "npi": "1396690145",
+      "display_name": "ZMOOD, DANIEL",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942158225"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396690145"
     },
     {
-      "npi": "1720932031",
-      "display_name": "BRYANT, TRACI",
+      "npi": "1982550901",
+      "display_name": "DUNCAN, BRANDIE",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1720932031"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982550901"
     },
     {
-      "npi": "1720934292",
-      "display_name": "MEHTA, POOJA",
+      "npi": "1982557344",
+      "display_name": "EARHART, JENNIFER",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1720934292"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982557344"
     },
     {
-      "npi": "1730036963",
-      "display_name": "WRIGHT, JENNIFER",
+      "npi": "1982557351",
+      "display_name": "ORIGLIO, ELIZABETH",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1730036963"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982557351"
     },
     {
-      "npi": "1245187236",
-      "display_name": "CHANN, WILLIAM",
+      "npi": "1265388383",
+      "display_name": "MITCHELL, CASSANDRA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245187236"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1265388383"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
