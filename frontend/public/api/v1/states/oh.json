@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-06-15T15:24:01+00:00",
+  "generated_at": "2026-06-22T14:49:07+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "2941341",
+  "commit_sha": "6e8c27b",
   "denominators": {
     "practitioner": 268111,
     "organization": 94023,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1396690145",
-      "display_name": "ZMOOD, DANIEL",
+      "npi": "1790633816",
+      "display_name": "GEARY, ADAM",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396690145"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1790633816"
     },
     {
-      "npi": "1982550901",
-      "display_name": "DUNCAN, BRANDIE",
+      "npi": "1790630382",
+      "display_name": "MCGRAW, DAVID",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982550901"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1790630382"
     },
     {
-      "npi": "1982557344",
-      "display_name": "EARHART, JENNIFER",
+      "npi": "1174471825",
+      "display_name": "BUI, KIM VAN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982557344"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1174471825"
     },
     {
-      "npi": "1982557351",
-      "display_name": "ORIGLIO, ELIZABETH",
+      "npi": "1548117070",
+      "display_name": "CAIN, CORTNEY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982557351"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1548117070"
     },
     {
-      "npi": "1265388383",
-      "display_name": "MITCHELL, CASSANDRA",
+      "npi": "1548114861",
+      "display_name": "ATER, SARAH",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1265388383"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1548114861"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

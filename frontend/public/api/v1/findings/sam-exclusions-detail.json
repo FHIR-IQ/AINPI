@@ -89,26 +89,26 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326274648"
     },
     {
-      "npi": "1336584366",
-      "display_name": "POOLE, SHANIQUE",
-      "ndh_state": "NV",
-      "sam_state": "NV",
+      "npi": "1093922460",
+      "display_name": "MALKOFF, LORI",
+      "ndh_state": "",
+      "sam_state": "CA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2019-03-20",
+      "active_date": "2010-01-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1336584366"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093922460"
     },
     {
-      "npi": "1336682921",
-      "display_name": "GONZALEZ, RAFAEL",
-      "ndh_state": "NY",
-      "sam_state": "NY",
+      "npi": "1104044478",
+      "display_name": "GUILLMENO, DEBORA",
+      "ndh_state": "",
+      "sam_state": "CA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2018-08-20",
+      "active_date": "2018-04-19",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1336682921"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104044478"
     }
   ],
   "agency_breakdown": [

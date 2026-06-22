@@ -10,7 +10,7 @@
   ],
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-06-15T15:23:02+00:00",
+  "generated_at": "2026-06-22T14:48:12+00:00",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
   "headline": "95.71% of 10.9M NDH NPIs clear NPPES (0.79% ghost, 3.49% deactivated). Practitioner name agreement: 93.8% exact \u2192 94.1% normalized \u2192 96.7% Jaro-Winkler \u22650.85. Organization name: 59.2% exact \u2192 92.4% normalized \u2192 99.6% Jaro-Winkler \u22650.85 (closes the 44-point exact-match gap to 0pp). NDH carries NUCC on Practitioner.qualification (99.83% valid) AND Medicare Specialty codes on PractitionerRole.specialty (13.10% valid against the CMS-published crosswalk). Internal cross-system consistency: 9.1% of 2.3M Practitioner\u2194Role pairs agree via the crosswalk. External NUCC agreement NDH\u2194NPPES: 91.8% match NPPES's switch='Y' TRUE primary, 99.0% match any of the 15 slots, 7.3% match only a secondary. Slot_1 is NOT always the true primary (14.93% of rows).",
