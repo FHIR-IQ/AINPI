@@ -24,10 +24,10 @@
     "report:pdf": "tsx scripts/generate-report-pdf.ts"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.98.0",
+    "@anthropic-ai/sdk": "^0.105.0",
     "@google-cloud/bigquery": "^8.3.1",
     "@prisma/client": "^6.19.3",
-    "@supabase/ssr": "^0.10.3",
+    "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.106.2",
     "@types/bcryptjs": "^3.0.0",
     "@types/d3": "^7.4.3",
@@ -35,25 +35,25 @@
     "@types/topojson-client": "^3.1.5",
     "@vercel/analytics": "^2.0.1",
     "@vercel/postgres": "^0.10.0",
-    "axios": "^1.16.1",
+    "axios": "^1.18.0",
     "bcryptjs": "^3.0.3",
     "d3": "^7.9.0",
-    "date-fns": "^4.3.0",
+    "date-fns": "^4.4.0",
     "gray-matter": "^4.0.3",
     "jsonwebtoken": "^9.0.2",
-    "lucide-react": "^1.16.0",
+    "lucide-react": "^1.21.0",
     "next": "14.2.35",
-    "openai": "^6.39.0",
+    "openai": "^6.44.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "resend": "^6.12.4",
+    "resend": "^6.14.0",
     "topojson-client": "^3.1.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.60.0",
-    "@tailwindcss/typography": "^0.5.19",
+    "@playwright/test": "^1.61.0",
+    "@tailwindcss/typography": "^0.5.20",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/bcrypt": "^6.0.0",
@@ -69,8 +69,8 @@
     "postcss": "^8.5.15",
     "prisma": "^6.18.0",
     "tailwindcss": "^3.4.0",
-    "tsx": "^4.22.3",
+    "tsx": "^4.22.4",
     "typescript": "^5.3.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.9"
   }
 }
