@@ -1,0 +1,107 @@
+{
+  "slug": "endpoint-metadata-coverage",
+  "title": "Endpoint metadata coverage vs the HTE submission spec",
+  "hypotheses": [
+    "H44"
+  ],
+  "status": "published",
+  "release_date": "2026-05-08",
+  "generated_at": "2026-06-25T11:39:42+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "ca78bfe",
+  "headline": "The HTE submission spec collects 9 endpoint-metadata fields. Mapped against the NDH FHIR Endpoint profile (STU1 v1.0.0): 2 have a structured home, 2 map partially, and 5 have no representation in STU1 at all (developer documentation, developer signup, swagger, OpenAPI, and per-instance sandbox URLs). Adopting the spec for those five needs STU2 extensions or out-of-band storage, not data entry. Across 114,071 FHIR-REST Endpoint records in the 2026-05-08 NDH release, the fields that DO have a home are sparsely populated: endpoint use-case 0.0%, SMART/UDAP dynamic-registration 0.0%, environment-type 0.0%.",
+  "numerator": 4,
+  "denominator": 9,
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Mapped to STU1",
+        "value": 2
+      },
+      {
+        "label": "Partial home",
+        "value": 2
+      },
+      {
+        "label": "No home in STU1",
+        "value": 5
+      }
+    ]
+  },
+  "notes": "Two layers. STRUCTURAL: each of the nine submission-spec fields is mapped to its home in the published NDH STU1 Endpoint profile (hl7.org/fhir/us/ndh/STU1). 'mapped' = a core element or extension carries the exact value; 'partial' = a related element exists but does not capture what the spec asks for (e.g. environment-type is a code, not a sandbox URL; dynamicRegistration declares SMART/UDAP support, not the .well-known URL); 'none' = no element or extension in STU1. EMPIRICAL: presence of each mappable NDH extension is detected by scanning the serialized Endpoint resource for the extension's canonical URL, which is an UPPER BOUND on real usage (it catches the extension wherever it nests) \u2014 reported as a presence scan, not a strict cardinality count. Denominator is FHIR-REST endpoints (connectionType.code = 'hl7-fhir-rest'); Direct Trust HISP addresses (91.6% of the Endpoint table per H28) are excluded because they are not queryable FHIR APIs. Cross-reference: H1-H5 found that 81.6% of distinct FHIR-REST hosts already publish a valid SMART .well-known by crawl, so the SMART capability is largely auto-discoverable even though the NDH record rarely declares it \u2014 the submission-spec field is most valuable for the minority of hosts that are not crawl-discoverable. Supporting context (not spec fields): FHIR version declared on 0.0%, payloadType present on 100.0%.",
+  "spec_field_coverage": [
+    {
+      "spec_field": "fhir_endpoint_url",
+      "stu1_home": "mapped",
+      "stu1_path": "Endpoint.address (core element)",
+      "present_in_ndh": 114071,
+      "present_pct": 100.0
+    },
+    {
+      "spec_field": "fhir_endpoint_type",
+      "stu1_home": "mapped",
+      "stu1_path": "Endpoint.connectionType + base-ext-endpoint-usecase",
+      "present_in_ndh": 0,
+      "present_pct": 0.0
+    },
+    {
+      "spec_field": "fhir_endpoint_smart_capabilities_url",
+      "stu1_home": "partial",
+      "stu1_path": "base-ext-dynamicRegistration (declares SMART/UDAP dynamic registration, not the .well-known URL itself)",
+      "present_in_ndh": 0,
+      "present_pct": 0.0
+    },
+    {
+      "spec_field": "fhir_endpoint_developer_documentation_url",
+      "stu1_home": "none",
+      "stu1_path": "(no element or extension in STU1)",
+      "present_in_ndh": null,
+      "present_pct": null
+    },
+    {
+      "spec_field": "fhir_endpoint_developer_signup_url",
+      "stu1_home": "none",
+      "stu1_path": "(no element or extension in STU1)",
+      "present_in_ndh": null,
+      "present_pct": null
+    },
+    {
+      "spec_field": "fhir_endpoint_swagger_url",
+      "stu1_home": "none",
+      "stu1_path": "(no element or extension in STU1)",
+      "present_in_ndh": null,
+      "present_pct": null
+    },
+    {
+      "spec_field": "fhir_endpoint_openapi_url",
+      "stu1_home": "none",
+      "stu1_path": "(no element or extension in STU1)",
+      "present_in_ndh": null,
+      "present_pct": null
+    },
+    {
+      "spec_field": "fhir_general_sandbox_url",
+      "stu1_home": "partial",
+      "stu1_path": "base-ext-endpoint-environment-type (a code: production/test/etc., not a sandbox URL)",
+      "present_in_ndh": 0,
+      "present_pct": 0.0
+    },
+    {
+      "spec_field": "fhir_specific_sandbox_endpoint_url",
+      "stu1_home": "none",
+      "stu1_path": "(environment-type is a code, not a per-instance URL)",
+      "present_in_ndh": null,
+      "present_pct": null
+    }
+  ],
+  "context_extensions": {
+    "fhir_version_declared": 0,
+    "payload_type_present": 114071,
+    "secure_exchange_artifacts": 0,
+    "trust_framework": 0,
+    "usage_restriction": 0
+  },
+  "total_fhir_rest_endpoints": 114071
+}
