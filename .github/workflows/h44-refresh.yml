@@ -1,0 +1,64 @@
+name: H44 refresh
+
+# Standalone, dispatch-only refresh for H44 (endpoint metadata
+# coverage). Deliberately isolated from weekly-refresh.yml so the H44
+# number does not depend on the health of the other ~20 analyses in that
+# pipeline (a single failing step there — e.g. H24 — fail-fasts the whole
+# chain and skips everything after it, including H44 and the commit step).
+#
+# Runs the one capped BigQuery analysis and commits only its JSON.
+#
+# Required secrets:
+#   GCP_SERVICE_ACCOUNT_KEY  — JSON service account with BigQuery jobUser +
+#                              dataViewer on cms_npd.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: h44-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Re-run H44 + commit finding JSON
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install google-cloud-bigquery
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3.0.0
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Re-run H44 endpoint metadata coverage
+        run: python analysis/h44_endpoint_metadata.py
+
+      - name: Commit + push the H44 finding JSON
+        run: |
+          FILE=frontend/public/api/v1/findings/endpoint-metadata-coverage.json
+          git config user.name "ainpi-weekly-refresh"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Stage first — git diff --quiet ignores untracked files, so a
+          # brand-new JSON would otherwise look like "no change".
+          git add "$FILE"
+          if git diff --cached --quiet; then
+            echo "No change in $FILE — nothing to commit."
+          else
+            git commit -m "H44 refresh: regenerate endpoint-metadata-coverage.json from BQ"
+            git push origin main
+          fi
