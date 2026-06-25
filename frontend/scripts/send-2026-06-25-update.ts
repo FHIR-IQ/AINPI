@@ -226,6 +226,24 @@ async function main() {
       recipients = subs;
     }
 
+    // Hard guard against duplicate sends: collapse case/whitespace variants
+    // so the same mailbox can never receive two copies in one blast, even if
+    // the subscriber table somehow holds `Gene@x` and `gene@x`. Keeps the
+    // first occurrence (preserves createdAt ordering).
+    const seenNorm = new Set<string>();
+    const before = recipients.length;
+    recipients = recipients.filter((r) => {
+      const key = r.email.trim().toLowerCase();
+      if (seenNorm.has(key)) return false;
+      seenNorm.add(key);
+      return true;
+    });
+    if (recipients.length < before) {
+      console.log(
+        `Deduped ${before - recipients.length} duplicate recipient(s) (case/whitespace variants).`,
+      );
+    }
+
     console.log(`Sending to ${recipients.length} recipient(s)...`);
 
     let ok = 0;

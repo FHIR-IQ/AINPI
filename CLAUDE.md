@@ -289,6 +289,15 @@ Two-layer admin-visibility stack, all keyed off `ADMIN_EMAIL` (default `gene@fhi
 
 When changing the cron cadence, edit `vercel.json#crons[0].schedule`. The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.dev/api/v1/admin/weekly-report`.
 
+### Subscriber newsletters (`frontend/scripts/send-YYYY-MM-DD-update.ts`)
+
+One hand-written send script per release. Each new one copies the previous (same CLI shape) and rewrites `buildBody()`. **Run the draft through the `copy-reviewer` subagent before sending** (em-dash + AI-cruft + factual-claim check against the finding JSON). Hard conventions that prevent duplicate / accidental sends:
+
+- **Dry-run by default; `--confirm` required to send.** `--email <addr>` targets one address (no DB hit); `--limit N` targets the first N subscribers. 250ms throttle between sends.
+- **In-blast dedup is mandatory.** The recipient list is collapsed case/whitespace-insensitively before sending so the same mailbox can never get two copies in one run (`email` is `@unique` in Postgres but that is case-sensitive). Carry the `seenNorm` Set filter forward into every new send script.
+- **One `--confirm` per campaign.** There is no sent-log table; re-running `--confirm` re-sends to everyone. Send once, verify the `sent=N failed=0` line, do not re-run.
+- **Publish + deploy the report/finding pages BEFORE the full blast** so subscriber clicks don't 404 (poll the linked URLs for `200` on production first — see the 2026-06-02 timing lesson).
+
 ## Required Environment Variables (`frontend/.env.local`)
 
 ```text
