@@ -282,6 +282,43 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'endpoint-metadata-coverage',
+    hypotheses: ['H44'],
+    title: 'Endpoint metadata coverage vs the HTE submission spec',
+    summary:
+      'The HTE data-release spec (ftrotter-gov/HTE_data_release_specifications) asks submitters for nine endpoint-metadata fields. H44 maps each against the NDH FHIR Endpoint profile (STU1 v1.0.0): two have a structured home (`fhir_endpoint_url` → `Endpoint.address`; `fhir_endpoint_type` → `connectionType` + the use-case extension), two map partially (SMART capabilities → the dynamic-registration extension; general sandbox → the environment-type code), and five have no representation in STU1 at all — developer-documentation, developer-signup, swagger, OpenAPI, and per-instance sandbox URLs. Adopting the spec for those five needs STU2 extensions or out-of-band storage, not data entry. The fill rate of the fields that do have a home is measured against the FHIR-REST Endpoint records.',
+    nullHypothesis:
+      'Every field the HTE submission spec collects already has a home in the NDH STU1 Endpoint profile, and the FHIR-REST Endpoint records populate those fields at a high rate.',
+    denominator:
+      'FHIR-REST Endpoint records in the pinned NDH bulk export (`connectionType.code = \'hl7-fhir-rest\'`, 114,071 at 2026-05-08 per H28). Direct Trust HISP addresses (the other 91.6% of the Endpoint table) are excluded — they are clinical-messaging addresses, not queryable FHIR APIs.',
+    dataSource:
+      'Structural layer: the published NDH STU1 Endpoint profile (hl7.org/fhir/us/ndh/STU1). Empirical layer: one capped BigQuery scan of `cms_npd.endpoint`, presence-scanning the serialized resource for each NDH extension\'s canonical URL. Compute script: `analysis/h44_endpoint_metadata.py` (capped via `bq_job_config()`). Cross-references H1–H5 (SMART `.well-known` discoverability) and H28 (FHIR-REST vs HISP split).',
+    status: 'pre-registered',
+    ogTagline: 'Five of nine HTE endpoint fields have no home in the NDH FHIR profile yet.',
+    implications: [
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'Five submission-spec fields (developer docs, signup, swagger, OpenAPI, per-instance sandbox URL) have no element or extension in the STU1 Endpoint profile. Collecting them via the CSV spec creates data with nowhere to land in the FHIR representation until STU2 — worth deciding deliberately, not by default.',
+      },
+      {
+        audience: 'FHIR implementers',
+        takeaway:
+          'Endpoint metadata is sparse in the current NDH. Do not assume the use-case, dynamic-registration, or environment-type extensions are present; check per record. SMART capability is largely auto-discoverable by crawl (81.6% of distinct hosts per H1–H5), so the declared field matters most for the crawl-invisible minority.',
+      },
+      {
+        audience: 'Payer data teams',
+        takeaway:
+          'If you build against the new submission-spec fields, the developer-docs / swagger / sandbox URLs will arrive out-of-band (not in the FHIR Endpoint resource) until the IG adds extensions. Plan a side-channel rather than expecting them in the bulk export.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'Extension presence is a JSON-wide canonical-URL scan — an upper bound on real usage, reported as a presence scan, not a strict cardinality count.',
+      },
+    ],
+  },
+  {
     slug: 'endpoint-liveness',
     hypotheses: ['H1', 'H2', 'H3', 'H4', 'H5'],
     title: 'Endpoint liveness',
