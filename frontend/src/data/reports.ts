@@ -43,6 +43,17 @@ export const REPORTS: ReportOption[] = [
     length: '~30 pages',
   },
   {
+    id: 'jun-2026-06-25-update',
+    version: '2026-06-25-update',
+    title: '2026-06-25 update — what is actually in an NDH endpoint record? (H44)',
+    description:
+      'H44 — endpoint metadata coverage vs the HTE submission spec — published. Of the 9 endpoint fields the spec collects, 5 have no home in the NDH FHIR Endpoint profile (STU1); the extensions that could carry the others are 0% populated across all 114,071 FHIR-REST endpoints. Today the NDH knows an endpoint address and payload type (both 100%), and that is the whole record.',
+    format: 'web',
+    url: '/reports/2026-06-25-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'jun-2026-06-09-update',
     version: '2026-06-09-update',
     title: '2026-06-09 update — 99.98% of practitioners carry a phone on the record (H43)',
@@ -50,7 +61,6 @@ export const REPORTS: ReportOption[] = [
       'H43 — practitioner phone-number reachability — published. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 release carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 have no phone on any resource. The pre-registered prior (phone on the location, NPPES-style) was rejected by the data.',
     format: 'web',
     url: '/reports/2026-06-09-update',
-    badge: 'NEW',
     length: '~4 min read',
   },
   {
