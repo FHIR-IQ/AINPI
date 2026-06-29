@@ -1,114 +1,114 @@
 {
   "samples": [
     {
-      "npi": "1326395625",
-      "display_name": "HITES, TIFFANY",
-      "ndh_state": "",
-      "sam_state": "OH",
+      "npi": "1649399635",
+      "display_name": "BRITT, SUSAN",
+      "ndh_state": "CT",
+      "sam_state": "CT",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2018-06-20",
+      "active_date": "2020-12-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326395625"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649399635"
     },
     {
-      "npi": "1326372723",
-      "display_name": "ORCHARD, PATRICIA",
-      "ndh_state": "ME",
-      "sam_state": "ME",
+      "npi": "1649401548",
+      "display_name": "MILLER, NAEISHA",
+      "ndh_state": "GA",
+      "sam_state": "GA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2021-12-20",
+      "active_date": "2017-03-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326372723"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649401548"
     },
     {
-      "npi": "1326329392",
-      "display_name": "BUSSEY, KIMBERLY",
-      "ndh_state": "NY",
-      "sam_state": "NY",
+      "npi": "1649372236",
+      "display_name": "MERCADO-SANCHEZ, ONEIDA",
+      "ndh_state": "FL",
+      "sam_state": "FL",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2014-05-20",
+      "active_date": "2016-12-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326329392"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649372236"
     },
     {
-      "npi": "1326159914",
-      "display_name": "PHILLIPS, AMI",
-      "ndh_state": "TN",
-      "sam_state": "OR",
+      "npi": "1649285495",
+      "display_name": "STRAUGHAN, CAROL",
+      "ndh_state": "MN",
+      "sam_state": "MN",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2017-04-20",
+      "active_date": "2010-04-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326159914"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649285495"
     },
     {
-      "npi": "1326209354",
-      "display_name": "IGUH, B",
-      "ndh_state": "TX",
-      "sam_state": "TX",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2021-06-17",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326209354"
-    },
-    {
-      "npi": "1326155094",
-      "display_name": "HOLLANDER, CORINA",
+      "npi": "1649353780",
+      "display_name": "ROSDAHL, DANA",
       "ndh_state": "AZ",
       "sam_state": "AZ",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2012-10-18",
+      "active_date": "2016-07-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326155094"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649353780"
     },
     {
-      "npi": "1326350935",
-      "display_name": "HUNTER, MARYSA",
+      "npi": "1649217548",
+      "display_name": "SUNDSVOLD, JOYCE",
+      "ndh_state": "AZ",
+      "sam_state": "AZ",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2018-01-18",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649217548"
+    },
+    {
+      "npi": "1649401753",
+      "display_name": "OSHER, LORA",
       "ndh_state": "CA",
-      "sam_state": "OR",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2012-09-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326350935"
-    },
-    {
-      "npi": "1326274648",
-      "display_name": "KEMP, WILLIAM",
-      "ndh_state": "",
-      "sam_state": "GA",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2011-01-19",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326274648"
-    },
-    {
-      "npi": "1093922460",
-      "display_name": "MALKOFF, LORI",
-      "ndh_state": "",
       "sam_state": "CA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2010-01-20",
+      "active_date": "2020-09-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093922460"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649401753"
     },
     {
-      "npi": "1104044478",
-      "display_name": "GUILLMENO, DEBORA",
+      "npi": "1649249483",
+      "display_name": "KOHCHET CHUA, CLARIBEL",
+      "ndh_state": "WA",
+      "sam_state": "AK",
+      "excluding_agency": "OPM",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2024-09-16",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649249483"
+    },
+    {
+      "npi": "1649393869",
+      "display_name": "KLEIN, STUART",
       "ndh_state": "",
-      "sam_state": "CA",
+      "sam_state": "MA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2018-04-19",
+      "active_date": "2015-10-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104044478"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649393869"
+    },
+    {
+      "npi": "1649215633",
+      "display_name": "DICKEY, DAVID",
+      "ndh_state": "",
+      "sam_state": "MI",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2020-02-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649215633"
     }
   ],
   "agency_breakdown": [
@@ -130,11 +130,11 @@
   ],
   "state_breakdown": [
     {
-      "state": "UNKNOWN",
+      "state": "CA",
       "n": 602
     },
     {
-      "state": "CA",
+      "state": "UNKNOWN",
       "n": 602
     },
     {

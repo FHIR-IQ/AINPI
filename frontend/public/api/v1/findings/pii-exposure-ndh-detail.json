@@ -1,5 +1,5 @@
 {
-  "queried_at": "2026-06-22T15:12:17+00:00",
+  "queried_at": "2026-06-29T13:43:20+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
     "flagged_pattern_match": 50,
@@ -81,32 +81,32 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1265972624"
     },
     {
-      "npi": "1619009883",
-      "name": "KENT, DENNIS",
-      "state": "IL",
+      "npi": "1699808675",
+      "name": "EARNEY, ROBERT",
+      "state": "OH",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619009883"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1699808675"
     },
     {
-      "npi": "1306963327",
-      "name": "HUDSON, PATRICIA",
-      "state": "",
+      "npi": "1184941775",
+      "name": "KIJAK, ADRIENNE",
+      "state": "CA",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306963327"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1184941775"
     },
     {
-      "npi": "1457679961",
-      "name": "MOSS, L",
-      "state": "IL",
+      "npi": "1417109950",
+      "name": "TURNER, GEOFFREY",
+      "state": "OR",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1457679961"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417109950"
     },
     {
-      "npi": "1851679179",
-      "name": "REGEN, LEWIS",
-      "state": "",
+      "npi": "1407857279",
+      "name": "WALKER, MARK",
+      "state": "WA",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1851679179"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1407857279"
     }
   ],
   "limitations": [
