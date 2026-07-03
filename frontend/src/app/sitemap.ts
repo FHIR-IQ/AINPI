@@ -4,6 +4,7 @@ import type { MetadataRoute } from 'next';
 import { allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
 import { REPORTS } from '@/data/reports';
+import { allCohortNpis } from '@/lib/load-npi-cohort';
 
 const BASE = 'https://ainpi.dev';
 
@@ -44,6 +45,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/data-sources', priority: 0.6 },
     { path: '/data-quality', priority: 0.6 },
     { path: '/npd', priority: 0.6 },
+    { path: '/npi', priority: 0.7 },
     { path: '/provider-search', priority: 0.6 },
     { path: '/insights', priority: 0.5 },
     { path: '/developer', priority: 0.5 },
@@ -95,6 +97,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.6,
       });
     }
+  }
+
+  for (const npi of allCohortNpis()) {
+    entries.push({
+      url: `${BASE}/npi/${npi}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    });
   }
 
   for (const slug of articleSlugs()) {
