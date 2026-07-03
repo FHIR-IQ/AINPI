@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import SubscriberCount from './SubscriberCount';
+import { REPORTS } from '@/data/reports';
+import { METHODOLOGY_VERSION } from '@/data/site-meta';
 
 export default function Footer() {
   return (
@@ -44,7 +46,7 @@ export default function Footer() {
                 <SubscriberCount />
               </span>
             </li>
-            <li><Link href="/reports/2026-05-14-update" className="hover:text-white">Latest release update</Link></li>
+            <li><Link href={REPORTS[0].url} className="hover:text-white">Latest release update</Link></li>
             <li><Link href="/insights" className="hover:text-white">Provenance + variance analysis</Link></li>
             <li><Link href="/api/v1/manifest.json" className="hover:text-white">API manifest (JSON)</Link></li>
           </ul>
@@ -70,7 +72,7 @@ export default function Footer() {
           >
             Apache-2.0
           </a>
-          {' · Methodology v0.6.1-draft · '}
+          {` · Methodology v${METHODOLOGY_VERSION} · `}
           <a
             href="mailto:gene@fhiriq.com"
             className="hover:text-slate-300"
