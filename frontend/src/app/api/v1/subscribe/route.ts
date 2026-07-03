@@ -11,6 +11,12 @@ const VALID_SOURCES = new Set([
   'hero',
   'footer',
   'download_gate',
+  // Inline-capture surfaces (InlineSubscribe component) — one tag per
+  // placement so per-surface conversion shows up in the admin report.
+  'finding_page',
+  'landscape_panel',
+  'npi_page',
+  'npi_index',
   'unspecified',
 ]);
 

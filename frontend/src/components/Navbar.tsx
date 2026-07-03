@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Map, FileText, MapPin, BookOpen, Code2, LayoutGrid } from 'lucide-react';
+import { LogOut, User, Map, FileText, MapPin, BookOpen, Code2, LayoutGrid, IdCard } from 'lucide-react';
 
 const NAV_ITEMS: { href: string; label: string; icon: React.ReactNode }[] = [
   { href: '/', label: 'Landscape', icon: <LayoutGrid className="w-4 h-4 mr-1.5" /> },
   { href: '/map', label: 'Map', icon: <Map className="w-4 h-4 mr-1.5" /> },
   { href: '/findings', label: 'Findings', icon: <FileText className="w-4 h-4 mr-1.5" /> },
+  { href: '/npi', label: 'NPI check', icon: <IdCard className="w-4 h-4 mr-1.5" /> },
   { href: '/for-state-medicaid', label: 'For States', icon: <MapPin className="w-4 h-4 mr-1.5" /> },
   { href: '/methodology', label: 'Methodology', icon: <BookOpen className="w-4 h-4 mr-1.5" /> },
   { href: '/developer', label: 'Developer', icon: <Code2 className="w-4 h-4 mr-1.5" /> },

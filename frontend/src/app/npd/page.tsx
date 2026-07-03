@@ -226,9 +226,16 @@ export default function NpdSearchPage() {
           <h1 className="text-3xl sm:text-5xl font-bold tracking-tight mb-4">
             Check any NPI against the NPD.
           </h1>
-          <p className="text-gray-300 mb-8 max-w-xl mx-auto">
+          <p className="text-gray-300 mb-4 max-w-xl mx-auto">
             21.7M FHIR R4 records from the 2026-05-08 bulk public-use release.
             Six pre-registered findings, reproducible from open source.
+          </p>
+          <p className="text-sm text-gray-400 mb-8 max-w-xl mx-auto">
+            Checking exclusion and registry signals for a specific record?{' '}
+            <a href="/npi" className="underline text-primary-300 hover:text-primary-200">
+              Per-NPI report cards
+            </a>{' '}
+            cover the 10,000-record high-risk cohort with primary-source verify links.
           </p>
           <form onSubmit={handleNpiHero} className="flex flex-col sm:flex-row gap-3 max-w-xl mx-auto">
             <input
