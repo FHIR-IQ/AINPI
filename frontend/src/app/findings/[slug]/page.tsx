@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import FindingChart from '@/components/FindingChart';
 import { findBySlug, allSlugs } from '@/data/findings';
 import { loadFinding } from '@/lib/load-api-v1';
+import InlineSubscribe from '@/components/InlineSubscribe';
 
 export const dynamic = 'force-static';
 
@@ -186,6 +187,10 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
             </p>
           </div>
         )}
+
+        <div className="mt-10">
+          <InlineSubscribe source="finding_page" />
+        </div>
 
         <footer className="mt-12 pt-8 border-t text-sm text-gray-500 space-y-1">
           <p>

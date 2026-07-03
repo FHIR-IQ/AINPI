@@ -6,6 +6,7 @@ import { ExternalLink, X } from 'lucide-react';
 import type { LandscapePayload, LandscapeCell, LandscapeMetricDef } from '@/lib/landscape-types';
 import { LANDSCAPE_METRICS } from '@/lib/landscape-types';
 import type { LandscapeGroupBy } from '@/components/charts/LandscapeTreemap';
+import InlineSubscribe from '@/components/InlineSubscribe';
 
 const LandscapeTreemap = dynamic(() => import('@/components/charts/LandscapeTreemap'), {
   ssr: false,
@@ -195,6 +196,12 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
                 <p>
                   Spatial layout doesn&apos;t change when you flip layers — only color animates.
                 </p>
+              </div>
+              <div className="mt-4">
+                <InlineSubscribe
+                  source="landscape_panel"
+                  prompt="New audit layers land monthly. Get them in your inbox."
+                />
               </div>
             </div>
           ) : (
