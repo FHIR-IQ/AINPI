@@ -375,6 +375,23 @@ export default function DeveloperPage() {
             for &quot;is this provider real / active / federally excluded?&quot; queries inside an
             LLM tool surface.
           </p>
+          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4">
+            <p className="text-sm font-semibold text-gray-900 mb-1">
+              Live MCP server (streamable HTTP)
+            </p>
+            <pre className="text-xs bg-gray-900 text-gray-100 rounded p-3 overflow-x-auto mb-2">
+              <code>claude mcp add --transport http ainpi https://ainpi.dev/api/mcp</code>
+            </pre>
+            <p className="text-xs text-gray-600">
+              Five tools: <code className="font-mono">list_findings</code>,{' '}
+              <code className="font-mono">get_finding</code>,{' '}
+              <code className="font-mono">get_state_audit</code>,{' '}
+              <code className="font-mono">check_npi_cohort</code>,{' '}
+              <code className="font-mono">lookup_npi</code>. No key, no auth. Every
+              response carries provenance (release date, methodology version) and the
+              signals-not-findings disclaimer where flags are involved.
+            </p>
+          </div>
           <ul className="text-sm text-gray-700 space-y-2 mb-4">
             <li>
               <strong>Discovery:</strong>{' '}
