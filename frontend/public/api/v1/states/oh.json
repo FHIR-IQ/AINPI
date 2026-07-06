@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-06-29T13:17:57+00:00",
+  "generated_at": "2026-07-06T12:58:05+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "9fb406d",
+  "commit_sha": "45b0620",
   "denominators": {
     "practitioner": 268111,
     "organization": 94023,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1386598852",
-      "display_name": "WILLIS, JAMIE",
+      "npi": "1346191905",
+      "display_name": "EZEDANI, ANASTESIA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1386598852"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346191905"
     },
     {
-      "npi": "1386592939",
-      "display_name": "PETERSEN, JOSHUA",
+      "npi": "1346198470",
+      "display_name": "ARNOLD, TIARA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1386592939"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346198470"
     },
     {
-      "npi": "1386599587",
-      "display_name": "KIRKLAND, JAMES",
+      "npi": "1346192341",
+      "display_name": "ALLEN, SHERITA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1386599587"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346192341"
     },
     {
-      "npi": "1669324877",
-      "display_name": "HAINES, ALLYSON",
+      "npi": "1346193901",
+      "display_name": "CLEARY, RACHEL",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669324877"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346193901"
     },
     {
-      "npi": "1669329660",
-      "display_name": "DAVIS, SHAKEEMA",
+      "npi": "1346193802",
+      "display_name": "WATSON, JAMACIA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669329660"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346193802"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
