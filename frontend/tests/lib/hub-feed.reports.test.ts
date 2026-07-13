@@ -8,12 +8,16 @@ describe('loadHubFeed - reports', () => {
     expect(updates.length).toBeGreaterThan(0);
   });
 
-  it('emits an entry for the 2026-05-22 update', () => {
+  // The timeline trims to the 10 most-recent entries, so this asserts on the
+  // newest report (stable by construction: REPORTS[0] is the latest web
+  // report) rather than pinning a dated one that ages out of the window.
+  it('emits an entry for the newest web report with its date derived from the version slug', () => {
     const { timeline } = loadHubFeed();
-    const may22 = timeline.find((e) => e.href === '/reports/2026-05-22-update');
-    expect(may22).toBeDefined();
-    expect(may22?.category).toBe('update');
-    expect(may22?.date).toBe('2026-05-22');
+    const updates = timeline.filter((e) => e.category === 'update');
+    expect(updates.length).toBeGreaterThan(0);
+    const newest = updates[0];
+    expect(newest.href).toMatch(/^\/reports\/\d{4}-\d{2}-\d{2}-/);
+    expect(newest.href).toContain(newest.date);
   });
 
   it('skips non-web report entries (PDF + CSV)', () => {

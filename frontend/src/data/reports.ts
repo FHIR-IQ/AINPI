@@ -33,6 +33,17 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'jul-2026-07-13-update',
+    version: '2026-07-13-update',
+    title: '2026-07-13 update — no June release, and the missing endpoints are already public',
+    description:
+      'The NDH manifest still serves the May release after 66 days. The CMS directory team published a scrape of 31,255 certified-EHR FHIR endpoints (HTI-1 bundles) with NPIs and states attached; 98.7% of NDH orgs carried zero endpoints in the April release. H45 pre-registered: the per-state coverage gap, computed from public data on both sides.',
+    format: 'web',
+    url: '/reports/2026-07-13-update',
+    badge: 'NEW',
+    length: '~5 min read',
+  },
+  {
     id: 'state-of-ndh-v1',
     version: 'state-of-ndh-v1.0.0',
     title: 'State of the National Provider Directory (v1.0)',
@@ -50,7 +61,6 @@ export const REPORTS: ReportOption[] = [
       'H44 — endpoint metadata coverage vs the HTE submission spec — published. Of the 9 endpoint fields the spec collects, 5 have no home in the NDH FHIR Endpoint profile (STU1); the extensions that could carry the others are 0% populated across all 114,071 FHIR-REST endpoints. Today the NDH knows an endpoint address and payload type (both 100%), and that is the whole record.',
     format: 'web',
     url: '/reports/2026-06-25-update',
-    badge: 'NEW',
     length: '~4 min read',
   },
   {
