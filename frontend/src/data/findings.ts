@@ -319,6 +319,44 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'cehrt-endpoint-coverage-gap',
+    hypotheses: ['H45'],
+    title: 'CEHRT-published FHIR endpoints missing from the NDH, by state',
+    summary:
+      'Certified EHR vendors must publish service-base-URL bundles under the HTI-1 rule: org name, address, often an NPI, and the FHIR endpoint URL. ONC\'s Lantern aggregates them, and the CMS directory team\'s public scrape (DSACMS/npd_ehr_fhir_npi_slurp, cached at ftrotter-gov/npd_slurp_cehrt_clientfhir_cache) flattens them into joinable records: 7,999 Organization entries and 31,255 Endpoint entries across 17 vendor hosts at the 2026-07-10 snapshot. H45 joins that scrape against the NDH to measure, per state, how many provider organizations with a publicly-published EHR FHIR endpoint either have no matching NDH Organization or match one that carries zero Endpoint references. The baseline from H5: 98.7% of NDH organizations carried no endpoint at all in the 2026-04-09 release.',
+    nullHypothesis:
+      'The NDH already carries a FHIR endpoint for at least 90% of organizations that publish one through their certified EHR vendor\'s HTI-1 service-base-URL bundle, and the residual gap shows no meaningful state-level concentration.',
+    denominator:
+      'Organization entries in the CEHRT client-FHIR scrape that carry a US state and match an NDH organization by NPI (primary) or normalized name + state (fallback). The scrape snapshot is pinned per run (7,999 Organization entries at 2026-07-10); the matchable subset is reported alongside the match rate so the join quality is itself visible.',
+    dataSource:
+      'Public GitHub cache of the Lantern-derived CEHRT endpoint scrape (ftrotter-gov/npd_slurp_cehrt_clientfhir_cache), joined to `cms_npd.organization` and `cms_npd.endpoint` in BigQuery, one capped scan via `bq_job_config()`. Cross-references H5 (orgs without endpoints) and H28 (FHIR-REST vs HISP split). Per-state gap counts feed the /states/[state] slices.',
+    status: 'pre-registered',
+    ogTagline:
+      'EHR vendors already publish org-to-endpoint mappings the NDH lacks. H45 measures the gap, state by state.',
+    implications: [
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'The directory team\'s own Lantern scrape is the ingestion candidate; H45 quantifies what it would close, per state, against the 98.7% zero-endpoint baseline (April release). That is the before-number to cite when the ingest lands.',
+      },
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'If the NDH shows no endpoint for an organization, a publicly-published CEHRT endpoint may still exist. Until the gap closes, check the HTI-1 service-base-URL bundles (or Lantern) as a second source before concluding an org is unreachable by FHIR.',
+      },
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'The per-state gap count is a concrete, verifiable measure of how much of your state\'s provider-endpoint infrastructure is invisible in the federal directory today, with public data on both sides of the join.',
+      },
+      {
+        audience: 'FHIR implementers',
+        takeaway:
+          'Vendor-published Organization entries carry NPIs and addresses of varying quality; the match rate itself (NPI-join vs name+state fallback) is reported so you can judge how far self-published HTI-1 bundles can be trusted as a directory source.',
+      },
+    ],
+  },
+  {
     slug: 'endpoint-liveness',
     hypotheses: ['H1', 'H2', 'H3', 'H4', 'H5'],
     title: 'Endpoint liveness',
