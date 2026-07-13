@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-07-06T12:57:42+00:00",
+  "generated_at": "2026-07-13T12:16:09+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "45b0620",
+  "commit_sha": "8b26186",
   "denominators": {
     "practitioner": 130127,
     "organization": 67291,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1346192317",
-      "display_name": "FOUNTAIN, CYRE",
+      "npi": "1164374583",
+      "display_name": "FRANCIS, LINDSEY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346192317"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1164374583"
     },
     {
-      "npi": "1346198553",
-      "display_name": "WAKEFIELD, ALYN",
+      "npi": "1376490540",
+      "display_name": "HATCHER, LAUREN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346198553"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1376490540"
     },
     {
-      "npi": "1346195427",
-      "display_name": "TESTERMAN, VICTORIA",
+      "npi": "1972451771",
+      "display_name": "GOFORTH, JEREL",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346195427"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972451771"
     },
     {
-      "npi": "1073460051",
-      "display_name": "LIU-NG, YING",
+      "npi": "1780532606",
+      "display_name": "SWIETNICKI, LINDSEY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1073460051"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780532606"
     },
     {
-      "npi": "1073464665",
-      "display_name": "MOORE, JEHNIECE",
+      "npi": "1114872314",
+      "display_name": "WAGNER, WHITLEY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1073464665"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114872314"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

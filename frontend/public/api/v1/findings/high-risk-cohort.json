@@ -6,11 +6,11 @@
   ],
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-07-06T13:10:35+00:00",
+  "generated_at": "2026-07-13T12:28:49+00:00",
   "methodology_version": "0.4.0",
-  "commit_sha": "45b0620",
-  "headline": "64,234 of 7,441,211 (0.86%) NDH practitioner NPIs score at or above the 1.0 composite threshold, including 8,080 at the critical 1.5 threshold (LEIE- or SAM-excluded). Anchored in 42 CFR \u00a7 455.436 federal database checks. Reason codes: oig_excluded (7,960), sam_excluded (4,517), not_in_nppes (56,156), nppes_deactivated (260,534), luhn_fail (2).",
-  "numerator": 64234,
+  "commit_sha": "8b26186",
+  "headline": "64,291 of 7,441,211 (0.86%) NDH practitioner NPIs score at or above the 1.0 composite threshold, including 8,137 at the critical 1.5 threshold (LEIE- or SAM-excluded). Anchored in 42 CFR \u00a7 455.436 federal database checks. Reason codes: oig_excluded (8,015), sam_excluded (4,517), not_in_nppes (56,156), nppes_deactivated (260,534), luhn_fail (2).",
+  "numerator": 64291,
   "denominator": 7441211,
   "chart": {
     "type": "bar",
@@ -18,7 +18,7 @@
     "data": [
       {
         "label": "critical",
-        "value": 8080
+        "value": 8137
       },
       {
         "label": "high",
@@ -26,11 +26,11 @@
       },
       {
         "label": "medium",
-        "value": 259606
+        "value": 259605
       },
       {
         "label": "clean",
-        "value": 7117371
+        "value": 7117315
       }
     ]
   },
