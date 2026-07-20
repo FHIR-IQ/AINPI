@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-07-13T12:16:23+00:00",
+  "generated_at": "2026-07-20T11:52:07+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8b26186",
+  "commit_sha": "74d262a",
   "denominators": {
     "practitioner": 235956,
     "organization": 104896,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1649124280",
-      "display_name": "VANCE, SIERRA",
+      "npi": "1891640942",
+      "display_name": "ROBINSON, RACHEL",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649124280"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1891640942"
     },
     {
-      "npi": "1205782398",
-      "display_name": "MCMAHAN, DELACE",
+      "npi": "1316891039",
+      "display_name": "HARRIS, MEGHAN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1205782398"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316891039"
     },
     {
-      "npi": "1316892474",
-      "display_name": "FERNANDEZ, KAITLYN",
+      "npi": "1649124082",
+      "display_name": "KOZMINSKI, SAMANTHA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316892474"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649124082"
     },
     {
-      "npi": "1972451052",
-      "display_name": "SHDID, RITA",
+      "npi": "1447108345",
+      "display_name": "HANNA, KELARA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972451052"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1447108345"
     },
     {
-      "npi": "1972457265",
-      "display_name": "DIEFENDERFER, JAMIE",
+      "npi": "1447103239",
+      "display_name": "WYSMULLER, ADAM",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972457265"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1447103239"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five PA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

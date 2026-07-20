@@ -1,5 +1,5 @@
 {
-  "queried_at": "2026-07-13T12:41:48+00:00",
+  "queried_at": "2026-07-20T12:14:29+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
     "flagged_pattern_match": 50,
@@ -81,18 +81,11 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1235403742"
     },
     {
-      "npi": "1083124960",
-      "name": "NEVILLE, EVANEE",
+      "npi": "1861030215",
+      "name": "BOUTON SANCHEZ, A",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083124960"
-    },
-    {
-      "npi": "1619955713",
-      "name": "KNAPP, MEREDITH",
-      "state": "",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619955713"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861030215"
     },
     {
       "npi": "1336193671",
@@ -102,11 +95,18 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1336193671"
     },
     {
-      "npi": "1265972624",
-      "name": "COOLEY, CAROL",
-      "state": "NC",
+      "npi": "1396918496",
+      "name": "MAKIM, SHITAL",
+      "state": "MA",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1265972624"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396918496"
+    },
+    {
+      "npi": "1396751012",
+      "name": "SUTTON, BARBARA",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396751012"
     }
   ],
   "limitations": [
