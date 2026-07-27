@@ -1,5 +1,5 @@
 {
-  "queried_at": "2026-07-20T12:14:29+00:00",
+  "queried_at": "2026-07-27T12:57:02+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
     "flagged_pattern_match": 50,
@@ -74,39 +74,39 @@
   ],
   "samples": [
     {
-      "npi": "1235403742",
-      "name": "RUCKER, WILDER",
-      "state": "NY",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1235403742"
-    },
-    {
-      "npi": "1861030215",
-      "name": "BOUTON SANCHEZ, A",
+      "npi": "1457679961",
+      "name": "MOSS, L",
       "state": "IL",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861030215"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1457679961"
     },
     {
-      "npi": "1336193671",
-      "name": "BROWN, REBECCA",
+      "npi": "1568628477",
+      "name": "GATSINOS, PEGGY",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568628477"
+    },
+    {
+      "npi": "1306963327",
+      "name": "HUDSON, PATRICIA",
       "state": "",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1336193671"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306963327"
     },
     {
-      "npi": "1396918496",
-      "name": "MAKIM, SHITAL",
-      "state": "MA",
+      "npi": "1699808675",
+      "name": "EARNEY, ROBERT",
+      "state": "OH",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396918496"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1699808675"
     },
     {
-      "npi": "1396751012",
-      "name": "SUTTON, BARBARA",
-      "state": "IL",
+      "npi": "1033205281",
+      "name": "RIDENOUR, KAREN",
+      "state": "AZ",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396751012"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033205281"
     }
   ],
   "limitations": [

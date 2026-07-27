@@ -1,114 +1,114 @@
 {
   "samples": [
     {
-      "npi": "1326094889",
-      "display_name": "CHAMPAGNE, MICHELINE",
-      "ndh_state": "MA",
-      "sam_state": "WV",
+      "npi": "1114102373",
+      "display_name": "WARE, TONIA",
+      "ndh_state": "",
+      "sam_state": "OH",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2011-09-20",
+      "active_date": "2011-06-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326094889"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114102373"
     },
     {
-      "npi": "1316979453",
-      "display_name": "GABINSKAYA, TATYANA",
-      "ndh_state": "NY",
-      "sam_state": "CT",
+      "npi": "1104860253",
+      "display_name": "POWERS, DONYA",
+      "ndh_state": "RI",
+      "sam_state": "RI",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2015-08-20",
+      "active_date": "2017-05-18",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316979453"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104860253"
     },
     {
-      "npi": "1326058157",
-      "display_name": "REIMERS, ELIZABETH",
-      "ndh_state": "TN",
-      "sam_state": "WV",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2011-09-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326058157"
-    },
-    {
-      "npi": "1316923824",
-      "display_name": "ROYAL, STACEY",
-      "ndh_state": "OH",
-      "sam_state": "PA",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2012-08-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316923824"
-    },
-    {
-      "npi": "1326091646",
-      "display_name": "BRANDT, SUSAN",
-      "ndh_state": "LA",
-      "sam_state": "NC",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2012-03-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326091646"
-    },
-    {
-      "npi": "1316962806",
-      "display_name": "TURTLE, SANDRA",
-      "ndh_state": "ID",
-      "sam_state": "ID",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2013-08-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316962806"
-    },
-    {
-      "npi": "1326024688",
-      "display_name": "GERKAN, BETH",
-      "ndh_state": "CA",
-      "sam_state": "CA",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2016-01-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326024688"
-    },
-    {
-      "npi": "1326071564",
-      "display_name": "MRDJEN, JASNA",
-      "ndh_state": "CA",
-      "sam_state": "CA",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2018-10-18",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326071564"
-    },
-    {
-      "npi": "1316977408",
-      "display_name": "WEINSTEIN, PAUL",
-      "ndh_state": "MA",
+      "npi": "1114068236",
+      "display_name": "MONTE, LYDA",
+      "ndh_state": "NJ",
       "sam_state": "NJ",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2014-05-20",
+      "active_date": "2019-09-19",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316977408"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114068236"
     },
     {
-      "npi": "1316906456",
-      "display_name": "BELLOFIORE, PAUL",
-      "ndh_state": "CT",
-      "sam_state": "CT",
+      "npi": "1114074747",
+      "display_name": "ROZENTSVIT, INNA",
+      "ndh_state": "NY",
+      "sam_state": "NY",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2017-07-20",
+      "active_date": "2009-05-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316906456"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114074747"
+    },
+    {
+      "npi": "1114075827",
+      "display_name": "INVERSO, CINDY",
+      "ndh_state": "PA",
+      "sam_state": "PA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2011-02-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114075827"
+    },
+    {
+      "npi": "1104870302",
+      "display_name": "GARNES, CHARLOTTE",
+      "ndh_state": "VA",
+      "sam_state": "FL",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2014-02-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104870302"
+    },
+    {
+      "npi": "1104891852",
+      "display_name": "TINDELL, SONIA",
+      "ndh_state": "TN",
+      "sam_state": "TN",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2011-06-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104891852"
+    },
+    {
+      "npi": "1104974906",
+      "display_name": "DAVID, ERIN",
+      "ndh_state": "CA",
+      "sam_state": "CA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2013-05-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104974906"
+    },
+    {
+      "npi": "1114009172",
+      "display_name": "ONG, JANIS",
+      "ndh_state": "CA",
+      "sam_state": "CA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2015-07-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114009172"
+    },
+    {
+      "npi": "1114076734",
+      "display_name": "ENSMINGER, ALETHA",
+      "ndh_state": "CA",
+      "sam_state": "CA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2010-08-19",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114076734"
     }
   ],
   "agency_breakdown": [
@@ -130,11 +130,11 @@
   ],
   "state_breakdown": [
     {
-      "state": "CA",
+      "state": "UNKNOWN",
       "n": 602
     },
     {
-      "state": "UNKNOWN",
+      "state": "CA",
       "n": 602
     },
     {

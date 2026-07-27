@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-07-20T11:51:54+00:00",
+  "generated_at": "2026-07-27T12:32:11+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "74d262a",
+  "commit_sha": "e5474d5",
   "denominators": {
     "practitioner": 130127,
     "organization": 67291,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1568316495",
-      "display_name": "SALAZAR, KARLA",
+      "npi": "1568316602",
+      "display_name": "HOWERY, CASSANDRA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568316495"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568316602"
     },
     {
-      "npi": "1568318483",
-      "display_name": "ANDREWS, CHRISTOPHER",
+      "npi": "1568310316",
+      "display_name": "CARTER, TIMOTHY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568318483"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568310316"
     },
     {
-      "npi": "1457207763",
-      "display_name": "ABDALLAH, SUHAD",
+      "npi": "1750233417",
+      "display_name": "MORAN, IARA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1457207763"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1750233417"
     },
     {
-      "npi": "1205783750",
-      "display_name": "ASIEDU, LUCY",
+      "npi": "1871441972",
+      "display_name": "PIERSON, KAITLYN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1205783750"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1871441972"
     },
     {
-      "npi": "1780531632",
-      "display_name": "KELLY, MATTHEW",
+      "npi": "1902759483",
+      "display_name": "RAMIREZ, CINDY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780531632"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1902759483"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
