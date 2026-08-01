@@ -44,6 +44,13 @@ export interface Finding {
   denominator: string;
   dataSource: string;
   status: FindingStatus;
+  /**
+   * ISO date this finding's numbers last changed. Drives hub-feed timeline
+   * ordering. Set it on every newly-published or re-computed finding: without
+   * it the feed falls back to an H-number range lookup that caps at
+   * 2026-05-22, which silently buries anything published after that date.
+   */
+  updated?: string;
   ogTagline?: string;
   /** Marks this finding as the hub's lead story. At most one finding may be featured. */
   featured?: boolean;
@@ -257,6 +264,7 @@ export const FINDINGS: Finding[] = [
     dataSource:
       'BigQuery scan of `cms_npd.practitioner`, `cms_npd.practitioner_role`, and `cms_npd.location` — JSON-extracting the `telecom[]` array on each resource and joining roles to locations via the pipe-joined `_location_ids` reference list. Compute script: `analysis/h43_practitioner_phone.py` (capped at the project default `maximum_bytes_billed` via `bq_job_config()`).',
     status: 'published',
+    updated: '2026-06-09',
     ogTagline: '99.98% of active practitioners carry a phone right on the Practitioner record.',
     implications: [
       {
@@ -294,6 +302,7 @@ export const FINDINGS: Finding[] = [
     dataSource:
       'Structural layer: the published NDH STU1 Endpoint profile (hl7.org/fhir/us/ndh/STU1). Empirical layer: one capped BigQuery scan of `cms_npd.endpoint`, presence-scanning the serialized resource for each NDH extension\'s canonical URL. Compute script: `analysis/h44_endpoint_metadata.py` (capped via `bq_job_config()`). Cross-references H1–H5 (SMART `.well-known` discoverability) and H28 (FHIR-REST vs HISP split).',
     status: 'pre-registered',
+    updated: '2026-06-25',
     ogTagline: 'Five of nine HTE endpoint fields have no home in the NDH FHIR profile yet.',
     implications: [
       {
@@ -319,6 +328,45 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'state-medicaid-directory-coverage',
+    hypotheses: ['H46'],
+    title: 'State Medicaid provider-directory coverage and liveness',
+    summary:
+      'CMS publishes a directory-of-directories for state Medicaid provider directories (Enterprise-CMCS/SMA-Endpoint-Directory). H46 measures two layers the catalog itself does not report: how many jurisdictions carry a URL, and whether those URLs answer. Result: 32 of the 51 jurisdictions (50 states plus DC) have a listed directory, and 0 of 5 territories do. Of the 32 listed URLs, 27 answered an unauthenticated GET; 5 did not (Arizona times out, Delaware and Kansas redirect-loop, Maine returns 404, Ohio returns 500). So 27 of 51, 52.9%, have a federally-catalogued Medicaid provider directory that a member of the public can actually open. The companion Interoperability and Patient Access endpoint directory in the same repository is still an empty data-gathering workbook with zero states populated.',
+    nullHypothesis:
+      'Every state has a listed Medicaid provider-directory URL in the CMS catalog, and every listed URL resolves. Rejected on both layers: 19 states carry no URL (DC does), and 5 of the 32 listed URLs fail to resolve.',
+    denominator:
+      'The 56 jurisdiction rows in `state-medicaid-provider-directories.md` (50 states plus DC, plus 5 territories), pinned at commit 8efa0c2d. Two header rows are excluded; the territory sub-table header in particular reads as a listed directory if not filtered. The liveness denominator is the 32 rows carrying a markdown link.',
+    dataSource:
+      '`state-medicaid-provider-directories.md` in Enterprise-CMCS/SMA-Endpoint-Directory, pinned at commit 8efa0c2d for reproducibility, plus one HTTP GET per listed URL via curl (identified User-Agent, 25s timeout, redirects followed, no retries in the script; the 5 failures were additionally re-probed by hand before publication). The companion SMAEndpointDirectory.csv was inspected by hand at the same commit and is not parsed by the script. Compute script: `analysis/h46_sma_directory_coverage.py`. Zero BigQuery, zero paid-API cost.',
+    status: 'published',
+    updated: '2026-08-01',
+    ogTagline:
+      '27 of 51 jurisdictions have a federally-catalogued Medicaid provider directory that actually opens.',
+    implications: [
+      {
+        audience: 'State Medicaid CMOs',
+        takeaway:
+          'Check whether your state is one of the 19 with no URL in the CMS catalog, or one of the 5 whose listed link fails. Both are fixable by sending CMS a working URL, and both are visible to anyone who reads the public repository.',
+      },
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'The Interoperability and Patient Access endpoint directory in the same repository is still a blank questionnaire. Submitting your Patient Access and Provider Directory API details now puts your state in the first cohort of a federal endpoint catalog rather than the backfill.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'A listed URL is not a working URL. Any study that counts state directory availability from the CMS catalog alone overstates it by 5 of 32; the liveness probe is the cheap correction and the per-jurisdiction CSV ships alongside the finding.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'The first probe implementation reported 8 failures; three were our own TLS stack failing where curl succeeded. Publishing that number would have named three states as broken incorrectly. The 5 remaining failures were re-probed by hand before publication. 403, 406 and 429 are classified as "refused a crawler" rather than "down"; no listed URL fell into that class in this run.',
+      },
+    ],
+  },
+  {
     slug: 'cehrt-endpoint-coverage-gap',
     hypotheses: ['H45'],
     title: 'CEHRT-published FHIR endpoints missing from the NDH, by state',
@@ -331,6 +379,7 @@ export const FINDINGS: Finding[] = [
     dataSource:
       'Public GitHub cache of the Lantern-derived CEHRT endpoint scrape (ftrotter-gov/npd_slurp_cehrt_clientfhir_cache), joined to `cms_npd.organization` and `cms_npd.endpoint` in BigQuery, one capped scan via `bq_job_config()`. Cross-references H5 (orgs without endpoints) and H28 (FHIR-REST vs HISP split). Per-state gap counts feed the /states/[state] slices.',
     status: 'pre-registered',
+    updated: '2026-07-13',
     ogTagline:
       'EHR vendors already publish org-to-endpoint mappings the NDH lacks. H45 measures the gap, state by state.',
     implications: [

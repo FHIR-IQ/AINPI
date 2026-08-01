@@ -1,0 +1,488 @@
+{
+  "slug": "state-medicaid-directory-coverage",
+  "title": "State Medicaid provider-directory coverage and liveness",
+  "hypotheses": [
+    "H46"
+  ],
+  "status": "published",
+  "release_date": "2026-06-23",
+  "generated_at": "2026-08-01T14:19:27+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "8efa0c2d9f632317f549ce29e3887d9eb28b5a03",
+  "numerator": 27,
+  "denominator": 32,
+  "headline": "CMS's own list of state Medicaid provider directories carries a URL for 32 of 51 jurisdictions (50 states plus DC), and for 0 of 5 territories. Of the 32 listed URLs, 27 answered an unauthenticated request, 0 refused an identified crawler, and 5 did not resolve. The companion Interoperability and Patient Access endpoint directory in the same repository is still an empty data-gathering workbook, with zero states populated.",
+  "notes": "Source: state-medicaid-provider-directories.md in Enterprise-CMCS/SMA-Endpoint-Directory, pinned at commit 8efa0c2d9f63 (last pushed 2026-06-23). Layer 1 counts rows whose cell contains a markdown link versus the literal 'Not available'. Layer 2 issues at most one GET per listed URL with User-Agent AINPI-DirectoryQualityBot/1.0 (+https://ainpi.dev/methodology), 25s timeout, no retries. Outcome classes: ok=27, blocked=0 (403/406/429 \u2014 a WAF refusing an identified bot, which is not evidence the directory is broken for a human), unreachable/http_error/redirect_loop=5. The script probes each URL once; the failures were additionally re-probed by hand before publication. States without a listed URL: Arkansas, California, Florida, Hawaii, Illinois, Indiana, Kentucky, Minnesota, Mississippi, Montana, Nebraska, Nevada, New Mexico, North Dakota, Oregon, South Carolina, South Dakota, Tennessee, Virginia. Territories without a listed URL: American Samoa (AS), Guam (GU), Northern Mariana Islands (MP), Puerto Rico (PR), Virgin Islands (VI). IMPORTANT LIMIT: 'not listed' measures CMS's catalog, not the state. A state may publish a directory that this list has not captured; the finding is a completeness measure of the federal directory-of-directories, not a compliance judgement about any state. Section 5006 of the 21st Century Cures Act, codified at 42 U.S.C. 1396a(a)(83), requires each state providing medical assistance on a fee-for-service basis or through a primary care case-management system to publish a directory of physicians on the state agency's public website, which is why the gap is worth counting, but confirming any individual state's status requires checking that state directly.",
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Listed + answered",
+        "value": 27
+      },
+      {
+        "label": "Listed + refused crawler",
+        "value": 0
+      },
+      {
+        "label": "Listed + did not resolve",
+        "value": 5
+      },
+      {
+        "label": "No URL listed",
+        "value": 24
+      }
+    ]
+  },
+  "jurisdictions": [
+    {
+      "jurisdiction": "Alabama",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.medicaid.alabamaservices.org/providerDirectory/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Alaska",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://health.alaska.gov/en/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Arizona",
+      "is_territory": false,
+      "listed": true,
+      "url": "http://ahcccsproviderdirectory.az-apep.gov/",
+      "probe_outcome": "unreachable",
+      "probe_status": 0
+    },
+    {
+      "jurisdiction": "Arkansas",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "California",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Colorado",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.healthfirstcolorado.com/find-doctors/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Connecticut",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.huskyhealthct.org/members/provider_lookup.html",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Delaware",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://medicaid.dhss.delaware.gov/member/Resources/SearchProviders/tabid/97/Default.aspx?AspxAutoDetectCookieSupport=1",
+      "probe_outcome": "redirect_loop",
+      "probe_status": 302
+    },
+    {
+      "jurisdiction": "District of Columbia",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://dhcfproviders.caremesh.app/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Florida",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Georgia",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.mmis.georgia.gov/portal/PubAccess.Member%20Information/Find%20a%20Provider/tabId/13/Default.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Hawaii",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Idaho",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.idmedicaid.com/mhpviewer.aspx?FID=PDIR",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Illinois",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Indiana",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Iowa",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://secureapp.dhs.state.ia.us/providersearche/(S(w4pm4l45jrw2hg4555cdsqrr))/Default.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Kansas",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://portal.kmap-state-ks.us/PublicPage/ProviderPricing/ProviderDirectorySearch",
+      "probe_outcome": "redirect_loop",
+      "probe_status": 302
+    },
+    {
+      "jurisdiction": "Kentucky",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Louisiana",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.lamedicaid.com/apps/provider_demographics/provider_map.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Maine",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://mainecare.maine.gov/mhpviewer.aspx?FID=PDIR",
+      "probe_outcome": "http_error",
+      "probe_status": 404
+    },
+    {
+      "jurisdiction": "Maryland",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://health.maryland.gov/mmcp/Pages/provider-finder.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Massachusetts",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://masshealth.ehs.state.ma.us/ProviderDirectory",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Michigan",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://myhbcld.state.mi.us/myHBPublic/landing.action?request_locale=en#load_page",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Minnesota",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Mississippi",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Missouri",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://apps.dss.mo.gov/fmsMedicaidProviderSearch/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Montana",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Nebraska",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Nevada",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "New Hampshire",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://nhmmis.nh.gov/portals/wps/portal/FindaHealthCareProvider",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "New Jersey",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://guavahealth.com/provider-directory/new-jersey-medicaid-familycare",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "New Mexico",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "New York",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://health.data.ny.gov/stories/s/Medicaid-Enrolled-Provider-Lookup/ru78-uxr9/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "North Carolina",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://ncmedicaidplans.gov/en",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "North Dakota",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Ohio",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.ohiomh.com/home/findaprovider",
+      "probe_outcome": "http_error",
+      "probe_status": 500
+    },
+    {
+      "jurisdiction": "Oklahoma",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://apps.okhca.org:456/OHCAProviderDirectory/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Oregon",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Pennsylvania",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://provider.directory.dhs.pa.gov/ProviderSearch.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Rhode Island",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://providersearch.riproviderportal.org/ProviderSearchEOHHS/ProviderSearch.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "South Carolina",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "South Dakota",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Tennessee",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Texas",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://opl.tmhp.com/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Utah",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://fp.medicaid.utah.gov/find-provider/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Vermont",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.vtmedicaid.com/#/providerLookup",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Virginia",
+      "is_territory": false,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Washington",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://fortress.wa.gov/hca/p1findaprovider/",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "West Virginia",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.wvmmis.com/MhpViewer.aspx?auth=0&Url=https%3A%2F%2Fwww.wvmmis.com%2FMyHealthPAS%2FProvider%2FPages%2FProviderDirectory.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Wisconsin",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.forwardhealth.wi.gov/WIPortal/Subsystem/Public/DirectorySearch.aspx",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "Wyoming",
+      "is_territory": false,
+      "listed": true,
+      "url": "https://www.wyomingmedicaid.com/portal/ProviderLocator",
+      "probe_outcome": "ok",
+      "probe_status": 200
+    },
+    {
+      "jurisdiction": "American Samoa (AS)",
+      "is_territory": true,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Guam (GU)",
+      "is_territory": true,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Northern Mariana Islands (MP)",
+      "is_territory": true,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Puerto Rico (PR)",
+      "is_territory": true,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    },
+    {
+      "jurisdiction": "Virgin Islands (VI)",
+      "is_territory": true,
+      "listed": false,
+      "url": "",
+      "probe_outcome": "not_listed",
+      "probe_status": ""
+    }
+  ]
+}

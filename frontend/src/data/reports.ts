@@ -33,6 +33,17 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'aug-2026-08-01-update',
+    version: '2026-08-01-update',
+    title: '2026-08-01 update — half the states have a Medicaid directory you can actually open',
+    description:
+      'H46 published, computed entirely from public data at zero cost: CMS lists a Medicaid provider directory for 32 of 51 states and DC, and 5 of those listed URLs do not resolve, so 27 of 51 (52.9%) have a catalogued directory the public can open. Plus a baseline of the federated payer registry: 2,557 Medicare Advantage plans enumerated, zero payer-published files, zero endpoints.',
+    format: 'web',
+    url: '/reports/2026-08-01-update',
+    badge: 'NEW',
+    length: '~5 min read',
+  },
+  {
     id: 'jul-2026-07-13-update',
     version: '2026-07-13-update',
     title: '2026-07-13 update — no June release, and the missing endpoints are already public',
@@ -40,7 +51,6 @@ export const REPORTS: ReportOption[] = [
       'The NDH manifest still serves the May release after 66 days. The CMS directory team published a scrape of 31,255 certified-EHR FHIR endpoints (HTI-1 bundles) with NPIs and states attached; 98.7% of NDH orgs carried zero endpoints in the April release. H45 pre-registered: the per-state coverage gap, computed from public data on both sides.',
     format: 'web',
     url: '/reports/2026-07-13-update',
-    badge: 'NEW',
     length: '~5 min read',
   },
   {
