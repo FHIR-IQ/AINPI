@@ -1,0 +1,57 @@
+jurisdiction,is_territory,listed_by_cms,url,probe_outcome,probe_status
+Alabama,False,True,https://www.medicaid.alabamaservices.org/providerDirectory/,ok,200
+Alaska,False,True,https://health.alaska.gov/en/,ok,200
+Arizona,False,True,http://ahcccsproviderdirectory.az-apep.gov/,unreachable,0
+Arkansas,False,False,,not_listed,
+California,False,False,,not_listed,
+Colorado,False,True,https://www.healthfirstcolorado.com/find-doctors/,ok,200
+Connecticut,False,True,https://www.huskyhealthct.org/members/provider_lookup.html,ok,200
+Delaware,False,True,https://medicaid.dhss.delaware.gov/member/Resources/SearchProviders/tabid/97/Default.aspx?AspxAutoDetectCookieSupport=1,redirect_loop,302
+District of Columbia,False,True,https://dhcfproviders.caremesh.app/,ok,200
+Florida,False,False,,not_listed,
+Georgia,False,True,https://www.mmis.georgia.gov/portal/PubAccess.Member%20Information/Find%20a%20Provider/tabId/13/Default.aspx,ok,200
+Hawaii,False,False,,not_listed,
+Idaho,False,True,https://www.idmedicaid.com/mhpviewer.aspx?FID=PDIR,ok,200
+Illinois,False,False,,not_listed,
+Indiana,False,False,,not_listed,
+Iowa,False,True,https://secureapp.dhs.state.ia.us/providersearche/(S(w4pm4l45jrw2hg4555cdsqrr))/Default.aspx,ok,200
+Kansas,False,True,https://portal.kmap-state-ks.us/PublicPage/ProviderPricing/ProviderDirectorySearch,redirect_loop,302
+Kentucky,False,False,,not_listed,
+Louisiana,False,True,https://www.lamedicaid.com/apps/provider_demographics/provider_map.aspx,ok,200
+Maine,False,True,https://mainecare.maine.gov/mhpviewer.aspx?FID=PDIR,http_error,404
+Maryland,False,True,https://health.maryland.gov/mmcp/Pages/provider-finder.aspx,ok,200
+Massachusetts,False,True,https://masshealth.ehs.state.ma.us/ProviderDirectory,ok,200
+Michigan,False,True,https://myhbcld.state.mi.us/myHBPublic/landing.action?request_locale=en#load_page,ok,200
+Minnesota,False,False,,not_listed,
+Mississippi,False,False,,not_listed,
+Missouri,False,True,https://apps.dss.mo.gov/fmsMedicaidProviderSearch/,ok,200
+Montana,False,False,,not_listed,
+Nebraska,False,False,,not_listed,
+Nevada,False,False,,not_listed,
+New Hampshire,False,True,https://nhmmis.nh.gov/portals/wps/portal/FindaHealthCareProvider,ok,200
+New Jersey,False,True,https://guavahealth.com/provider-directory/new-jersey-medicaid-familycare,ok,200
+New Mexico,False,False,,not_listed,
+New York,False,True,https://health.data.ny.gov/stories/s/Medicaid-Enrolled-Provider-Lookup/ru78-uxr9/,ok,200
+North Carolina,False,True,https://ncmedicaidplans.gov/en,ok,200
+North Dakota,False,False,,not_listed,
+Ohio,False,True,https://www.ohiomh.com/home/findaprovider,http_error,500
+Oklahoma,False,True,https://apps.okhca.org:456/OHCAProviderDirectory/,ok,200
+Oregon,False,False,,not_listed,
+Pennsylvania,False,True,https://provider.directory.dhs.pa.gov/ProviderSearch.aspx,ok,200
+Rhode Island,False,True,https://providersearch.riproviderportal.org/ProviderSearchEOHHS/ProviderSearch.aspx,ok,200
+South Carolina,False,False,,not_listed,
+South Dakota,False,False,,not_listed,
+Tennessee,False,False,,not_listed,
+Texas,False,True,https://opl.tmhp.com/,ok,200
+Utah,False,True,https://fp.medicaid.utah.gov/find-provider/,ok,200
+Vermont,False,True,https://www.vtmedicaid.com/#/providerLookup,ok,200
+Virginia,False,False,,not_listed,
+Washington,False,True,https://fortress.wa.gov/hca/p1findaprovider/,ok,200
+West Virginia,False,True,https://www.wvmmis.com/MhpViewer.aspx?auth=0&Url=https%3A%2F%2Fwww.wvmmis.com%2FMyHealthPAS%2FProvider%2FPages%2FProviderDirectory.aspx,ok,200
+Wisconsin,False,True,https://www.forwardhealth.wi.gov/WIPortal/Subsystem/Public/DirectorySearch.aspx,ok,200
+Wyoming,False,True,https://www.wyomingmedicaid.com/portal/ProviderLocator,ok,200
+American Samoa (AS),True,False,,not_listed,
+Guam (GU),True,False,,not_listed,
+Northern Mariana Islands (MP),True,False,,not_listed,
+Puerto Rico (PR),True,False,,not_listed,
+Virgin Islands (VI),True,False,,not_listed,

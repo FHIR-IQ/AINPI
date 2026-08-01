@@ -85,10 +85,11 @@ function normalizeStatus(s: FindingStatus): TimelineStatus {
  * could maintain a per-finding `updated` field on findings.ts directly.
  */
 function findingUpdatedDate(f: Finding): string {
-  // v1 simplification: use the most-recently-published bundle date that
-  // touches any of this finding's H-numbers. Implementation arrives in
-  // Task 4 when we wire reports.ts. For now, use a static lookup that
-  // gets a reasonable date from the H-number range.
+  // Explicit per-finding date wins. The H-number ranges below are a legacy
+  // fallback for H1-H42 and top out at 2026-05-22, so any finding published
+  // after that date MUST set `updated` in findings.ts or it sorts to the
+  // bottom of the timeline and drops out of the 10-item window.
+  if (f.updated) return f.updated;
   const hNum = parseInt(f.hypotheses[0]?.replace(/[^\d]/g, '') || '0', 10);
   if (hNum >= 40) return '2026-05-22';
   if (hNum >= 37) return '2026-05-18';
