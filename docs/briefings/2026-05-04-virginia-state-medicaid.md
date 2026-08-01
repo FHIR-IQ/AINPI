@@ -237,7 +237,7 @@ The earlier "28 of 125 paid \$8.5M" (H29 full-window) framing was technically tr
 
 - **For H29 / H30a / H30b**: 0 VA-cohort NPIs received Medicaid, Part B, or Part D payment in a calendar period strictly after their LEIE/SAM exclusion took effect. The system actually worked: once excluded, federal-program billing stopped in the data.
 - **For H32**: 198 of 350 industry-payment matches were strictly post-exclusion (\$167K, much smaller than the full-window \$3.8M because the \$3M FRANK, ALEXANDER payment was pre-exclusion). 2 of the 9 VA matches were strict post-exclusion.
-- **For H31**: was strict-filtered from the start (3 of 1,495 billed strictly after their NPPES deactivation date).
+- **For H31**: strict-filtered from the start (3 of 1,495 billed strictly after their NPPES deactivation date).
 
 **The remaining directory-side problem persists** (H10: NPPES-deactivated still listed in NDH; H24/H25: federally-excluded still appearing in NDH bulk export). But the claims-side data shows the federal-program payment gate is mostly holding once exclusions take effect.
 
@@ -312,7 +312,7 @@ A: SAM aggregates HHS LEIE + OPM FEHBP debarment + DOJ + EPA + others into one f
 
 **Q: Can we use this in our SMD-letter response?** A: Yes, the framework is pinnable to release tags for audit reproducibility, and the citation language above is ready to paste. <https://ainpi.dev/smd-revalidation> is the methodology landing page mapped to the 5 elements of the SMD letter.
 
-**Q: What about the Anthem HealthKeepers Plus, Aetna BH of VA, and UHC Community Plan providers: does AINPI cover them too?**
+**Q: What about the Anthem HealthKeepers Plus, Aetna BH of VA, and UHC Community Plan providers? Does AINPI cover them too?**
 A: Two of six are covered as of 2026-05-02:
 
 - **UHC Community Plan**: covered via Optum's consolidated public FHIR endpoint (`https://flex.optum.com/fhirpublic/R4`: covers UHC commercial + UHC Community Plan + OptumRx in one tree of ~1,400 InsurancePlans). 0 of 125 federally excluded VA NPIs matched.

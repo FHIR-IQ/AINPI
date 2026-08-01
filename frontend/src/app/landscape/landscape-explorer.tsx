@@ -76,9 +76,16 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
           <div className="text-2xl font-bold text-gray-900 mt-0.5 tabular-nums">
             v{payload.methodology_version.split('-')[0]}
           </div>
-          <div className="text-xs text-gray-500 mt-0.5">
-            {payload.methodology_version.includes('seed') ? 'seed payload' : 'measured'}
-          </div>
+          {/* When the payload is synthetic, say so in a colour the reader
+              notices. Grey 11px next to a bold headline number reads as a
+              build tag, not as a warning that the number is not real. */}
+          {payload.methodology_version.includes('seed') ? (
+            <div className="text-xs font-semibold text-amber-700 mt-0.5">
+              synthetic seed, not measured
+            </div>
+          ) : (
+            <div className="text-xs text-gray-500 mt-0.5">measured</div>
+          )}
         </div>
       </div>
 
@@ -182,25 +189,19 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
                 Primary sources: NPPES Registry, OIG LEIE, SAM.gov SearchExclusions. Each link is a
                 direct query: no API key, no login.
               </p>
-              <div className="mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500 space-y-1.5">
-                <p className="font-semibold text-gray-700 uppercase tracking-wider text-[10px]">
-                  How to read this
-                </p>
+              {/* Deliberately short. The full "How to read this" sits below the
+                  chart; repeating it here put the same three rules on screen
+                  twice. This keeps only the one fact that block does not cover. */}
+              <div className="mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
                 <p>
-                  Parent boxes are labeled at the top with the group name and its practitioner count.
-                </p>
-                <p>
-                  Child cells inside each parent are colored by the selected layer: red is worse,
-                  green is better.
-                </p>
-                <p>
-                  Spatial layout doesn&apos;t change when you flip layers: only color animates.
+                  Parent boxes carry the group name and its practitioner count.
+                  Red is worse, green is better.
                 </p>
               </div>
               <div className="mt-4">
                 <InlineSubscribe
                   source="landscape_panel"
-                  prompt="New audit layers land monthly. Get them in your inbox."
+                  prompt="Get new findings by email when they publish."
                 />
               </div>
             </div>
@@ -317,8 +318,8 @@ function CellDetail({
             ))}
           </ul>
           <p className="text-xs text-gray-400 mt-3">
-            Sample NPIs are deterministic per cell. They are not investigative findings, they are the
-            substrate for you to verify the methodology yourself.
+            Sample NPIs are the same for a given cell every time. They are not
+            findings. They are a starting point for checking the data yourself.
           </p>
         </div>
       )}

@@ -7,13 +7,13 @@ import LandscapeExplorer from './landscape/landscape-explorer';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'AINPI: Provider data landscape',
+  title: 'AINPI: provider data landscape',
   description:
-    'A free, public audit substrate for the CMS National Provider Directory. Every US state × specialty cell scored across six dimensions of accuracy: completeness, cross-source agreement, currency, endpoint reachability, federal integrity, specialty validity. Designed for the REAL Health Providers Act compliance window.',
+    'Every state and specialty in the CMS National Provider Directory, scored on six dimensions of accuracy: completeness, cross-source agreement, currency, endpoint reachability, federal integrity, and specialty validity. Free and public, and the scoring maps to the REAL Health Providers Act.',
   openGraph: {
-    title: 'AINPI: Provider data landscape',
+    title: 'AINPI: provider data landscape',
     description:
-      'Every US state × specialty cell, scored across six dimensions of provider directory accuracy. The audit substrate behind HR 7148 § 6220.',
+      'Every state and specialty in the federal provider directory, scored on six dimensions of accuracy. Free, public, and mapped to HR 7148 § 6220.',
     url: 'https://ainpi.dev/',
     type: 'website',
   },
@@ -31,21 +31,24 @@ export default function HomePage() {
             Provider data landscape · One cell per state × specialty
           </p>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            The federal provider directory, decomposed
+            Where the federal provider directory is accurate, and where it is not
           </h1>
           <p className="text-gray-700">
-            A free, public audit substrate for the CMS National Provider Directory
-            and the{' '}
+            Every state and specialty in the CMS National Provider Directory,
+            scored on six dimensions of accuracy. One tile is one state and
+            specialty. Tile size is the number of active practitioners. Tile
+            color is whichever dimension you pick, and the layout holds still
+            when you switch, so you can watch one metric at a time. Click a tile
+            to check its providers against NPPES, the OIG exclusion list, and
+            SAM.gov. The scoring maps to the{' '}
             <Link href="/real-health-providers" className="underline text-primary-700">
               REAL Health Providers Act
             </Link>
-            . Each tile is one state × specialty cell. Area scales with the count
-            of active practitioners. Color is the metric in the layer you select: switch layers without losing your place. Click any cell to verify the
-            methodology against primary federal sources. Looking for the
-            state-by-state federally-excluded view?{' '}
+            . For excluded providers by state, open the{' '}
             <Link href="/map" className="underline text-primary-700">
-              Open the map →
+              map
             </Link>
+            .
           </p>
         </div>
 
@@ -60,6 +63,24 @@ export default function HomePage() {
           </div>
         ) : (
           <>
+            {/* The caveat belongs above the numbers it qualifies, not below
+                them. A reader who sees "1.1M practitioners" first and the word
+                "synthetic" 400px later has already believed the number. */}
+            {payload.methodology_version.includes('seed') && (
+              <div className="mb-4 bg-amber-50 border border-amber-300 rounded-lg p-4 text-sm text-amber-900">
+                <strong>These cell numbers are not measured yet.</strong> The
+                current payload is a deterministic synthetic seed used to build
+                and test the visualization. The shape of the data is real; the
+                values are not. Do not cite any cell-level number on this page.
+                Running{' '}
+                <code className="bg-amber-100 px-1 rounded">python analysis/landscape.py</code>{' '}
+                against BigQuery replaces it with measured values. Every
+                published finding at{' '}
+                <Link href="/findings" className="underline">/findings</Link> is
+                measured and citable; this page is not, yet.
+              </div>
+            )}
+
             <LandscapeExplorer payload={payload} />
 
             <section className="mt-8 bg-white rounded-lg border border-gray-200 p-5">
@@ -121,15 +142,6 @@ export default function HomePage() {
               </p>
             </section>
 
-            {payload.methodology_version.includes('seed') && (
-              <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-900">
-                <strong>Seed data notice:</strong> the current payload is a
-                deterministic synthetic seed used for UI development. Run{' '}
-                <code className="bg-amber-100 px-1 rounded">python analysis/landscape.py</code>{' '}
-                against BigQuery to replace with measured values before relying
-                on cell-level numbers for any external use.
-              </div>
-            )}
           </>
         )}
       </main>

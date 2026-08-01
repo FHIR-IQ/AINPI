@@ -15,7 +15,7 @@ Three things changed in the last 90 days that make the claims-side audit possibl
 2. **Medicare Provider Utilization & Payment Data (Part B and Part D)** continues annual publication at NPI granularity on data.cms.gov.
 3. **CMS Open Payments, Nursing Home Compare ownership data, and the Provider of Services file** are all publicly downloadable and NPI/CCN-joinable.
 
-The audit-side question, *is the federal directory exposing or protecting state and consumer interests?*: gets sharper when the question becomes: *and what got paid against those directory records.*
+The audit-side question, *is the federal directory exposing or protecting state and consumer interests?*, gets sharper when the question becomes: *and what got paid against those directory records.*
 
 The 2026-04-23 CMS State Medicaid Director letter explicitly asks states for "metrics to measure effectiveness and progress, *including links to any public-facing data or reporting*." Claims-side cross-audit is precisely the public-facing metric that strengthens a state's SMD response posture.
 

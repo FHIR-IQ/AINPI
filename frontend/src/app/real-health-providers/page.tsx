@@ -5,11 +5,11 @@ import AuthorByline from '@/components/AuthorByline';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'REAL Health Providers Act: independent audit substrate | AINPI',
+  title: 'REAL Health Providers Act: an independent way to measure accuracy | AINPI',
   description:
     'How AINPI maps to the verification, removal, and accuracy-scoring obligations of the Requiring Enhanced & Accurate Lists of Health Providers Act (HR 7148 § 6220). Public, reproducible, record-level cross-source verification for the 2028 compliance window and the 2029 machine-readable scoring requirement.',
   openGraph: {
-    title: 'REAL Health Providers Act: independent audit substrate',
+    title: 'REAL Health Providers Act: an independent way to measure accuracy',
     description:
       'Record-level, cross-source provider directory verification mapped to every § 6220 requirement. Public methodology, machine-readable output.',
     url: 'https://ainpi.dev/real-health-providers',
@@ -26,11 +26,11 @@ export default function RealHealthProvidersPage() {
           Policy brief · For MA plans, payer ops, and the CMS scoring methodology RFC
         </p>
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          REAL Health Providers Act, an independent audit substrate
+          REAL Health Providers Act: measuring accuracy from outside the plan
         </h1>
         <p className="text-lg text-gray-700 mb-2">
           HR 7148 § 6220, the Requiring Enhanced &amp; Accurate Lists of
-          Health Providers Act: was signed into law on 2026-02-03. Medicare
+          Health Providers Act, was signed into law on 2026-02-03. Medicare
           Advantage plans must verify every provider record every 90 days,
           remove departed providers within 5 business days, and submit an
           annual accuracy analysis to HHS. Starting with plan year 2029, CMS
@@ -45,8 +45,9 @@ export default function RealHealthProvidersPage() {
           yet defined which approach the 2029 published score will use.
         </p>
         <p className="text-lg text-gray-700 mb-6">
-          AINPI is a public, reproducible, record-level cross-source verification
-          substrate for the exact decomposed metrics § 6220 requires. This page
+          AINPI checks provider records against outside sources, one record at a
+          time, and publishes the result so anyone can re-run it. Those are the
+          same measurements § 6220 asks for. This page
           maps each obligation to the existing AINPI signal that measures it,
           and provides citation language for plans and submitters to the 2028
           rulemaking.
