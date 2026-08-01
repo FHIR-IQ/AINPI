@@ -291,7 +291,16 @@ When changing the cron cadence, edit `vercel.json#crons[0].schedule`. The endpoi
 
 ### Subscriber newsletters (`frontend/scripts/send-YYYY-MM-DD-update.ts`)
 
-One hand-written send script per release. Each new one copies the previous (same CLI shape) and rewrites `buildBody()`. **Run the draft through the `copy-reviewer` subagent before sending** (em-dash + AI-cruft + factual-claim check against the finding JSON). Hard conventions that prevent duplicate / accidental sends:
+One hand-written send script per release. Each new one copies the previous (same CLI shape) and rewrites `buildBody()`.
+
+**Two review gates before any send or publish. Both are required, and they catch different things:**
+
+1. **`anti-slop-writing` skill** (global, `~/.claude/skills/anti-slop-writing/`) — form plus generic claim discipline. Run its linter on the draft: `python3 ~/.claude/skills/anti-slop-writing/scripts/slop_lint.py <file>` (add `--diff before after` to report a rewrite delta). Analytical mode is the default for reports and newsletters. Read the flagged spans rather than chasing the score: passive voice with no known actor and "never resolves" describing behavior are legitimate. Baselines measured 2026-08-01: report 1.22, newsletter 1.09, both in the "edited" band.
+2. **`copy-reviewer` subagent** — project-specific fact checking the linter cannot do: every number verified against `frontend/public/api/v1/findings/*.json`, plus vague-attribution and overclaim checks.
+
+Known false positive: the `— Eugene Vestel, FHIR IQ` byline at the foot of every `docs/reports/*.md` uses an em dash and trips the linter. It is consistent across the whole series; do not change it in one report alone.
+
+Hard conventions that prevent duplicate / accidental sends:
 
 - **Dry-run by default; `--confirm` required to send.** `--email <addr>` targets one address (no DB hit); `--limit N` targets the first N subscribers. 250ms throttle between sends.
 - **In-blast dedup is mandatory.** The recipient list is collapsed case/whitespace-insensitively before sending so the same mailbox can never get two copies in one run (`email` is `@unique` in Postgres but that is case-sensitive). Carry the `seenNorm` Set filter forward into every new send script.
