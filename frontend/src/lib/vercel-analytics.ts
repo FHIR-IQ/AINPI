@@ -1,5 +1,5 @@
 /**
- * vercel-analytics — list every team project that has Web Analytics enabled
+ * vercel-analytics: list every team project that has Web Analytics enabled
  * and emit a per-project dashboard deep-link.
  *
  * **Why we don't fetch pageviews here**: Vercel does not publish a public
@@ -13,13 +13,13 @@
  * So this module does the next-best thing: discovers every project the
  * VERCEL_API_TOKEN can read, detects which ones have analytics enabled,
  * and produces a dashboard deep-link per project. The weekly admin email
- * renders one row per project — admins can click through.
+ * renders one row per project: admins can click through.
  *
  * Required env:
- *   VERCEL_API_TOKEN     personal/team token (any tier — project list is free)
- *   VERCEL_TEAM_ID       slug or ID — optional but used for the dashboard URL
+ *   VERCEL_API_TOKEN     personal/team token (any tier: project list is free)
+ *   VERCEL_TEAM_ID       slug or ID: optional but used for the dashboard URL
  *
- * Never throws — top-level failures yield `{ configured: false }`.
+ * Never throws: top-level failures yield `{ configured: false }`.
  */
 
 const API = 'https://api.vercel.com';

@@ -22,7 +22,7 @@ export interface CodeDisplay {
   display: string;
 }
 
-/** HealthcareServiceCategoryVS — all 15 codes. */
+/** HealthcareServiceCategoryVS: all 15 codes. */
 export const HCS_CATEGORIES: CodeDisplay[] = [
   { code: 'behav', display: 'Behavioral Health' },
   { code: 'dent', display: 'Dental' },
@@ -98,9 +98,9 @@ export const HCS_UPSTREAM_SOURCES: CodeDisplay[] = [
 
 /** Respondent role categories. Keep aligned with /developer audience labels. */
 export const HCS_ROLE_TYPES: CodeDisplay[] = [
-  { code: 'payer-ops', display: 'Payer — directory operations' },
-  { code: 'payer-data', display: 'Payer — provider data team' },
-  { code: 'payer-compliance', display: 'Payer — compliance / regulatory' },
+  { code: 'payer-ops', display: 'Payer: directory operations' },
+  { code: 'payer-data', display: 'Payer: provider data team' },
+  { code: 'payer-compliance', display: 'Payer: compliance / regulatory' },
   { code: 'health-system', display: 'Health system / hospital provider data' },
   { code: 'provider-individual', display: 'Individual provider' },
   { code: 'state-medicaid', display: 'State Medicaid program' },

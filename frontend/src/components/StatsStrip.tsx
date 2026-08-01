@@ -1,14 +1,14 @@
 import type { ApiV1Stats } from '@/lib/api-v1-types';
 
 function fmt(n: number | null): string {
-  if (n == null) return '—';
+  if (n == null) return 'n/a';
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
   if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
   return n.toLocaleString();
 }
 
 function pct(n: number | null): string {
-  return n == null ? '—' : n.toFixed(1) + '%';
+  return n == null ? 'n/a' : n.toFixed(1) + '%';
 }
 
 interface StatsStripProps {
@@ -36,7 +36,7 @@ export default function StatsStrip({ stats, variant = 'light' }: StatsStripProps
           label="NPIs flagged"
           value={
             stats.counters.npis_flagged == null || stats.counters.npis_checked == null
-              ? '—'
+              ? 'n/a'
               : pct(
                   (stats.counters.npis_flagged / stats.counters.npis_checked) * 100,
                 )

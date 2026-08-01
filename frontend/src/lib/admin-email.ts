@@ -1,12 +1,12 @@
 /**
- * admin-email — realtime admin notifications for subscriber + download events.
+ * admin-email: realtime admin notifications for subscriber + download events.
  *
  * Two top-level helpers:
  *   - sendSubscriptionAlert  fires on POST /api/v1/subscribe (and on
  *                            alsoSubscribe=true from /api/v1/download-report).
  *   - sendDownloadAlert      fires on POST /api/v1/download-report success.
  *
- * Both are fire-and-forget — the API handler should `void` the promise so
+ * Both are fire-and-forget, the API handler should `void` the promise so
  * the request doesn't block on SMTP. Errors are logged, not thrown.
  *
  * Auth model: no auth needed; this is server-only code calling Resend
@@ -73,8 +73,7 @@ export interface SubscriptionAlertArgs {
   email: string;
   source: string;
   /**
-   * Total subscriber count *after* this row was inserted. Optional —
-   * we'll show it in the email if the caller passes it (saves an extra
+   * Total subscriber count *after* this row was inserted. Optional: * we'll show it in the email if the caller passes it (saves an extra
    * Prisma round trip for callers that already counted).
    */
   totalAfter?: number;
@@ -197,7 +196,7 @@ export async function sendSurveyAlert(args: SurveyAlertArgs): Promise<void> {
         <tr><td style="padding:6px 0;color:#6b7280;">Role</td><td style="padding:6px 0;">${esc(roleType || '(unspecified)')}</td></tr>
         <tr><td style="padding:6px 0;color:#6b7280;">FHIR profile</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;">${esc(fhirProfile || '(unspecified)')}</td></tr>
         <tr><td style="padding:6px 0;color:#6b7280;">Categories</td><td style="padding:6px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;">${categoriesUsed.length > 0 ? esc(categoriesUsed.join(', ')) : '(none selected)'}</td></tr>
-        <tr><td style="padding:6px 0;color:#6b7280;">Follow-up</td><td style="padding:6px 0;font-weight:${wantsFollowUp ? 600 : 400};color:${wantsFollowUp ? '#059669' : '#9ca3af'};">${wantsFollowUp ? 'yes — wants to talk' : 'no'}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;">Follow-up</td><td style="padding:6px 0;font-weight:${wantsFollowUp ? 600 : 400};color:${wantsFollowUp ? '#059669' : '#9ca3af'};">${wantsFollowUp ? 'yes: wants to talk' : 'no'}</td></tr>
         ${totalAfter != null ? `<tr><td style="padding:6px 0;color:#6b7280;">Total responses</td><td style="padding:6px 0;font-weight:600;">${totalAfter}</td></tr>` : ''}
       </table>
       ${

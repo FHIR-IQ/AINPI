@@ -1,5 +1,5 @@
 /**
- * AINPI MCP server — https://ainpi.dev/api/mcp (streamable HTTP).
+ * AINPI MCP server: https://ainpi.dev/api/mcp (streamable HTTP).
  *
  * A thin, credential-free adapter over the public /api/v1 contract and the
  * existing public search routes, so AI agents (Claude, etc.) can query the
@@ -10,7 +10,7 @@
  * route). This server adds zero new BigQuery paths; anything expensive is
  * exactly as reachable with or without MCP. Static findings/states files
  * are fetched over HTTPS (not fs) because outputFileTracingExcludes strips
- * public/api/v1/** from lambda bundles — runtime fs reads would fail.
+ * public/api/v1/** from lambda bundles: runtime fs reads would fail.
  *
  * Tool names match the schemas published in /api/v1/manifest.json.
  *

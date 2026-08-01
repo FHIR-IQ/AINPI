@@ -5,7 +5,7 @@ import Footer from '@/components/Footer';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'AINPI for developers — API, schemas, examples',
+  title: 'AINPI for developers: API, schemas, examples',
   description:
     'Public AINPI APIs for building on top: stable /api/v1 JSON contract, NPI lookup, cross-source provider search across NDH + NPPES + 4 payer FHIR directories. Apache-2.0, no auth, no rate limit today.',
   openGraph: {
@@ -87,7 +87,7 @@ const STATIC_API: Endpoint[] = [
   {
     method: 'GET',
     path: '/api/v1/manifest.json',
-    summary: 'Discovery manifest — every published finding URL + state slice URL + schema reference. The list AI agents and crawlers should poll.',
+    summary: 'Discovery manifest: every published finding URL + state slice URL + schema reference. The list AI agents and crawlers should poll.',
     tier: 'static',
     exampleCurl: 'curl -s https://ainpi.dev/api/v1/manifest.json | jq',
   },
@@ -268,7 +268,7 @@ export default function DeveloperPage() {
           <p className="text-lg text-gray-700 max-w-3xl">
             Every number on this site is reachable as JSON. Apache-2.0, no auth, no rate limit today.
             The static <code className="font-mono text-sm">/api/v1/*</code> tier is the stable
-            contract — breaking changes bump to <code className="font-mono text-sm">/api/v2/</code>{' '}
+            contract: breaking changes bump to <code className="font-mono text-sm">/api/v2/</code>{' '}
             and never change shape in place. Live <code className="font-mono text-sm">/api/npd/*</code>{' '}
             and <code className="font-mono text-sm">/api/provider-search</code> are read-only against
             BigQuery + payer FHIR endpoints.
@@ -291,7 +291,7 @@ export default function DeveloperPage() {
               className="block bg-white border rounded-lg p-5 hover:border-primary-400 transition"
             >
               <p className="font-mono text-xs text-primary-600 mb-1">/api/v1/manifest.json</p>
-              <p className="text-sm text-gray-700">Discovery — every finding + state slice URL.</p>
+              <p className="text-sm text-gray-700">Discovery: every finding + state slice URL.</p>
             </a>
             <a
               href="https://github.com/FHIR-IQ/AINPI/blob/main/frontend/src/lib/api-v1-types.ts"
@@ -307,7 +307,7 @@ export default function DeveloperPage() {
         <section className="mb-14">
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              Static contract — <code className="font-mono text-base">/api/v1/*</code>
+              Static contract: <code className="font-mono text-base">/api/v1/*</code>
             </h2>
             <span className="text-xs uppercase tracking-wider text-emerald-700 font-semibold">
               stable
@@ -328,7 +328,7 @@ export default function DeveloperPage() {
         <section className="mb-14">
           <div className="flex items-baseline justify-between mb-4">
             <h2 className="text-xl font-semibold text-gray-900">
-              Live API — <code className="font-mono text-base">/api/npd/*</code> +{' '}
+              Live API: <code className="font-mono text-base">/api/npd/*</code> +{' '}
               <code className="font-mono text-base">/api/provider-search</code>
             </h2>
             <span className="text-xs uppercase tracking-wider text-blue-700 font-semibold">
@@ -397,22 +397,19 @@ export default function DeveloperPage() {
               <strong>Discovery:</strong>{' '}
               <code className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">
                 /api/v1/manifest.json
-              </code>{' '}
-              — single GET returns every published finding URL + schema reference.
+              </code>{' '}: single GET returns every published finding URL + schema reference.
             </li>
             <li>
               <strong>NPI lookup tool:</strong>{' '}
               <code className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">
                 GET /api/npd/search?npi=&lt;10-digit&gt;
-              </code>{' '}
-              — returns a single Practitioner profile with FHIR-friendly fields.
+              </code>{' '}: returns a single Practitioner profile with FHIR-friendly fields.
             </li>
             <li>
               <strong>Cross-source verification tool:</strong>{' '}
               <code className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">
                 POST /api/provider-search
-              </code>{' '}
-              — returns per-source agreement / disagreement so the model can surface conflicts to
+              </code>{' '}: returns per-source agreement / disagreement so the model can surface conflicts to
               the user instead of collapsing them.
             </li>
             <li>
@@ -423,8 +420,7 @@ export default function DeveloperPage() {
               and{' '}
               <code className="font-mono text-xs bg-gray-100 px-1.5 py-0.5 rounded">
                 /api/v1/findings/sam-exclusions.json
-              </code>{' '}
-              — pre-joined LEIE + SAM cohorts. Use the headline number directly.
+              </code>{' '}: pre-joined LEIE + SAM cohorts. Use the headline number directly.
             </li>
           </ul>
           <p className="text-sm text-gray-700">

@@ -38,7 +38,7 @@ export function TimelineEntryRow({ entry }: Props) {
   const hRange = entry.hNumbers?.length
     ? entry.hNumbers.length === 1
       ? entry.hNumbers[0]
-      : `${entry.hNumbers[0]}–${entry.hNumbers[entry.hNumbers.length - 1]}`
+      : `${entry.hNumbers[0]}-${entry.hNumbers[entry.hNumbers.length - 1]}`
     : null;
   return (
     <li className="flex gap-3 py-3">

@@ -3,8 +3,7 @@
  *
  * Aggregates published findings, release updates, articles, and methodology
  * version bumps into a single typed HubFeed consumed by the hub page and the
- * homepage's "Latest" strip. All filesystem reads happen at build time —
- * `loadHubFeed()` is only called from server components.
+ * homepage's "Latest" strip. All filesystem reads happen at build time: * `loadHubFeed()` is only called from server components.
  */
 
 import fs from 'node:fs';
@@ -21,9 +20,9 @@ const VERSION_LOG_PATH = path.join(REPO_ROOT, 'docs', 'methodology', 'version-lo
 export type TimelineCategory = 'finding' | 'update' | 'article' | 'methodology';
 /**
  * Status of a published finding.
- * - `published` — finding has a result (positive or negative numerator).
- * - `pre-registered` — finding catalog entry only; results not yet computed.
- * - `null` — the null hypothesis was NOT rejected; result is reported as null.
+ * - `published`: finding has a result (positive or negative numerator).
+ * - `pre-registered`: finding catalog entry only; results not yet computed.
+ * - `null`, the null hypothesis was NOT rejected; result is reported as null.
  */
 export type TimelineStatus = 'published' | 'pre-registered' | 'null';
 
@@ -38,7 +37,7 @@ export interface TimelineEntry {
   summary: string;
   /** Internal path; renderer wraps in next/link. */
   href: string;
-  /** H-numbers bundled into this entry (a single update can span H29–H36). */
+  /** H-numbers bundled into this entry (a single update can span H29-H36). */
   hNumbers?: string[];
 }
 
@@ -81,7 +80,7 @@ function normalizeStatus(s: FindingStatus): TimelineStatus {
  * Extract a per-finding updated date. v1 uses the first H-number in the
  * hypotheses array as a tag and looks up the most recent reports.ts entry
  * mentioning that H-number. If no match, falls back to a sensible default
- * (2026-05-08 — the date H1-H28 were captured against). Later refinement
+ * (2026-05-08, the date H1-H28 were captured against). Later refinement
  * could maintain a per-finding `updated` field on findings.ts directly.
  */
 function findingUpdatedDate(f: Finding): string {
@@ -113,7 +112,7 @@ function reportsToTimelineEntries(): TimelineEntry[] {
   const out: TimelineEntry[] = [];
   for (const r of REPORTS) {
     if (r.format !== 'web') continue; // Skip PDF + CSV reports
-    // va-briefing is format:'web' but lives at /briefings/va — without this
+    // va-briefing is format:'web' but lives at /briefings/va: without this
     // filter, briefings and any future web-format docs would bleed into the
     // release-updates feed.
     if (!r.url.startsWith('/reports/')) continue;

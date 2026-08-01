@@ -8,11 +8,11 @@ import NpiLookupForm from './NpiLookupForm';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Per-NPI report cards — AINPI',
+  title: 'Per-NPI report cards | AINPI',
   description:
     'Data-quality report cards for the federal provider directory high-risk cohort: OIG LEIE, SAM.gov, and NPPES cross-checks per NPI, each with primary-source verification links.',
   openGraph: {
-    title: 'Per-NPI report cards — AINPI',
+    title: 'Per-NPI report cards | AINPI',
     description:
       'Cross-source data-quality signals per NPI, with primary-source verification links. Signals, not investigative findings.',
     url: 'https://ainpi.dev/npi',
@@ -70,23 +70,23 @@ export default function NpiIndexPage() {
           </h2>
           <ul className="text-sm text-gray-700 space-y-2">
             <li>
-              <strong>OIG LEIE exclusion</strong> — the NPI appears on the HHS-OIG List
+              <strong>OIG LEIE exclusion</strong>, the NPI appears on the HHS-OIG List
               of Excluded Individuals/Entities with no reinstatement.
             </li>
             <li>
-              <strong>SAM.gov exclusion record</strong> — a SAM Public Extract exclusion
+              <strong>SAM.gov exclusion record</strong>, a SAM Public Extract exclusion
               carries this NPI (name-match caveat applies).
             </li>
             <li>
-              <strong>Not found in NPPES</strong> — listed in the federal directory but
+              <strong>Not found in NPPES</strong>: listed in the federal directory but
               absent from the NPPES public registry.
             </li>
             <li>
-              <strong>NPPES-deactivated</strong> — NPPES marks the NPI deactivated while
+              <strong>NPPES-deactivated</strong>: NPPES marks the NPI deactivated while
               the directory still lists it.
             </li>
             <li>
-              <strong>Luhn validity</strong> — the NPI fails its own check digit.
+              <strong>Luhn validity</strong>, the NPI fails its own check digit.
             </li>
           </ul>
           <p className="text-xs text-gray-500 mt-3">

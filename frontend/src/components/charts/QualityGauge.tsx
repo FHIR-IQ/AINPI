@@ -125,7 +125,7 @@ export default function QualityGauge({
       .attr('r', 5)
       .attr('fill', '#374151');
 
-    // Value text — scale font to gauge size so "100.0%" doesn't overflow
+    // Value text: scale font to gauge size so "100.0%" doesn't overflow
     // small gauges (size=160 gets ~23px, size=200 gets ~28px).
     const valueFontSize = Math.max(16, Math.floor(size / 7.1));
     const valueText = svg.append('text')

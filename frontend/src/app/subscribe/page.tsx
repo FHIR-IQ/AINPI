@@ -47,7 +47,7 @@ export default function SubscribePage() {
             <p className="font-semibold">You&apos;re on the list.</p>
             <p className="text-sm mt-1">
               We&apos;ll send the first update when the next material finding lands.
-              Your email sits in Supabase until then — see <a href="/privacy" className="underline">privacy policy</a> for how it&apos;s handled.
+              Your email sits in Supabase until then: see <a href="/privacy" className="underline">privacy policy</a> for how it&apos;s handled.
             </p>
           </div>
         ) : (

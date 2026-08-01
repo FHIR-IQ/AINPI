@@ -18,9 +18,9 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const finding = findBySlug(params.slug);
-  if (!finding) return { title: 'Finding not found — AINPI' };
+  if (!finding) return { title: 'Finding not found | AINPI' };
 
-  const title = `${finding.title} — AINPI`;
+  const title = `${finding.title}: AINPI`;
   const description = finding.ogTagline || finding.summary;
   const url = `https://ainpi.dev/findings/${finding.slug}`;
 
@@ -175,7 +175,7 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
 
         {!hasNumbers && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900">
-            <p className="font-medium mb-1">Pre-registered — results not yet published.</p>
+            <p className="font-medium mb-1">Pre-registered: results not yet published.</p>
             <p>
               This finding is listed here <em>before</em> results drop. That is the
               project&apos;s trust contract: the null hypothesis and the computation are

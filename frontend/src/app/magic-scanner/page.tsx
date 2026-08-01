@@ -102,7 +102,7 @@ export default function MagicScannerPage() {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        // No login required — user can fill form manually
+        // No login required: user can fill form manually
         setLoading(false);
         return;
       }

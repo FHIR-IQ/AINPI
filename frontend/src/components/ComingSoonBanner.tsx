@@ -2,7 +2,7 @@
  * Banner shown on exploratory / not-yet-shipped features so visitors
  * aren't mistaken about the audit's production surface.
  *
- * Used on /provider-search and /magic-scanner — both are pre-core-audit
+ * Used on /provider-search and /magic-scanner: both are pre-core-audit
  * prototypes kept around for reference but not part of the v1.0.0
  * pre-registration contract.
  */

@@ -1,7 +1,7 @@
 /**
  * scripts/send-2026-06-09-update.ts
  *
- * 2026-06-09 subscriber update — H43 practitioner phone-number reachability
+ * 2026-06-09 subscriber update: H43 practitioner phone-number reachability
  * published. Short, single-finding update.
  *
  * Same safety design as send-2026-06-02-update.ts (dry-run by default,
@@ -30,7 +30,7 @@ import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
 const SUBJECT =
-  'AINPI 2026-06-09 — practitioner phone numbers are on the record, not the location';
+  'AINPI 2026-06-09: practitioner phone numbers are on the record, not the location';
 const REPORT_URL = 'https://ainpi.dev/reports/2026-06-09-update';
 const FINDING_URL = 'https://ainpi.dev/findings/practitioner-phone-reachability';
 const UNSUB_REPLY = 'gene@fhiriq.com';
@@ -69,7 +69,7 @@ function buildBody(): { text: string; html: string } {
   const text = [
     'One new finding this week.',
     '',
-    'H43 — practitioner phone-number reachability.',
+    'H43: practitioner phone-number reachability.',
     '',
     'The question: can you associate a practitioner in the federal',
     'provider directory (NDH bulk export) with a phone number, and which',
@@ -109,7 +109,7 @@ function buildBody(): { text: string; html: string } {
 
   <p style="margin: 0 0 16px 0;">One new finding this week.</p>
 
-  <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">H43 — practitioner phone-number reachability.</h2>
+  <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">H43: practitioner phone-number reachability.</h2>
 
   <p style="margin: 0 0 12px 0;">The question: can you associate a practitioner in the federal provider directory (NDH bulk export) with a phone number, and which FHIR resource do you read to get it? A phone can live in three places: on the Practitioner record, on the PractitionerRole, or on the Location the role points at.</p>
 

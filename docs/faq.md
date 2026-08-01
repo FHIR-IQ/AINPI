@@ -22,15 +22,15 @@ No. AINPI is an independent open-source project. CMS publishes the raw public-us
 
 ## What data does AINPI use?
 
-- **CMS National Provider Directory, 2026-04-09 release** — 27.2M FHIR R4 resources across Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, and Endpoint. Loaded into BigQuery.
-- **NPPES monthly full dissemination file, 2026-02-09 update** — from the public BigQuery dataset `bigquery-public-data.nppes.npi_raw` (9.37M NPIs). Used for H10 (NPI match), H11 (name agreement), H13 (primary specialty agreement).
-- **NUCC healthcare provider taxonomy v17.0** — from `bigquery-public-data.nppes.healthcare_provider_taxonomy_code_set_170`. Used for H12 (taxonomy validity).
-- **Live FHIR endpoint probes** — the `FHIR-IQ/ainpi-probe` crawler hits each declared `Endpoint.address` URL in the NDH with polite rate limits (1 req/sec/host, named User-Agent, documented source IP). Used for H1–H5 and H22.
+- **CMS National Provider Directory, 2026-04-09 release**: 27.2M FHIR R4 resources across Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location, and Endpoint. Loaded into BigQuery.
+- **NPPES monthly full dissemination file, 2026-02-09 update**: from the public BigQuery dataset `bigquery-public-data.nppes.npi_raw` (9.37M NPIs). Used for H10 (NPI match), H11 (name agreement), H13 (primary specialty agreement).
+- **NUCC healthcare provider taxonomy v17.0**: from `bigquery-public-data.nppes.healthcare_provider_taxonomy_code_set_170`. Used for H12 (taxonomy validity).
+- **Live FHIR endpoint probes**: the `FHIR-IQ/ainpi-probe` crawler hits each declared `Endpoint.address` URL in the NDH with polite rate limits (1 req/sec/host, named User-Agent, documented source IP). Used for H1-H5 and H22.
 
 ## How often is AINPI refreshed?
 
-- **BigQuery-driven findings** (H6–H15, H18) re-run automatically every Monday 09:00 UTC via a GitHub Actions workflow and open a review PR with the diff.
-- **FHIR endpoint crawl** (H1–H5, H22) runs out-of-band on a dedicated host (not a CI runner, which would be a bad neighbor). Cadence: monthly until the behavior stabilizes, then weekly.
+- **BigQuery-driven findings** (H6-H15, H18) re-run automatically every Monday 09:00 UTC via a GitHub Actions workflow and open a review PR with the diff.
+- **FHIR endpoint crawl** (H1-H5, H22) runs out-of-band on a dedicated host (not a CI runner, which would be a bad neighbor). Cadence: monthly until the behavior stabilizes, then weekly.
 - **Methodology + check catalog**: versioned in the repo. Any change bumps `methodology_version` in `/api/v1/stats.json`.
 
 Each finding's JSON at `/api/v1/findings/<slug>.json` carries its `generated_at` timestamp and a `commit_sha` pinning the repo state that produced the numbers.
@@ -39,7 +39,7 @@ Each finding's JSON at `/api/v1/findings/<slug>.json` carries its `generated_at`
 
 Yes. Use the `CITATION.cff` file in the repository root for Zotero / reference managers, or follow this pattern:
 
-> Vestel, E. *AINPI — open-source audit of the CMS National Provider Directory.* FHIR IQ. <https://ainpi.dev>
+> Vestel, E. *AINPI: open-source audit of the CMS National Provider Directory.* FHIR IQ. <https://ainpi.dev>
 
 Pin to a specific release (`v1.0.0`, `v0.9.0-preview`, etc.) for reproducibility.
 
@@ -49,11 +49,11 @@ All code is **Apache-2.0**. Published findings and derived datasets are released
 
 ## Can I contribute?
 
-Yes — three shapes of contribution:
+Yes. Three shapes of contribution:
 
-1. **Data quality bug reports** — you think a number disagrees with the source. File an issue using the [Data quality bug template](https://github.com/FHIR-IQ/AINPI/issues/new/choose).
-2. **New metric proposals** — propose H23, H24, etc. Submit a [New metric proposal](https://github.com/FHIR-IQ/AINPI/issues/new/choose) before writing code so the null and methodology are public first.
-3. **Code contributions** — PRs welcome. Read [CONTRIBUTING.md](https://github.com/FHIR-IQ/AINPI/blob/main/CONTRIBUTING.md) first.
+1. **Data quality bug reports**: you think a number disagrees with the source. File an issue using the [Data quality bug template](https://github.com/FHIR-IQ/AINPI/issues/new/choose).
+2. **New metric proposals**: propose H23, H24, etc. Submit a [New metric proposal](https://github.com/FHIR-IQ/AINPI/issues/new/choose) before writing code so the null and methodology are public first.
+3. **Code contributions**: PRs welcome. Read [CONTRIBUTING.md](https://github.com/FHIR-IQ/AINPI/blob/main/CONTRIBUTING.md) first.
 
 ## Why are some pages marked "Coming Soon"?
 
@@ -61,7 +61,7 @@ The `/provider-search` and `/magic-scanner` pages are exploratory prototypes, ke
 
 ## How do I report a security issue?
 
-Email [gene@fhiriq.com](mailto:gene@fhiriq.com) — see [/security](/security) for the full disclosure policy. Please do not file public GitHub issues for vulnerabilities.
+Email [gene@fhiriq.com](mailto:gene@fhiriq.com). See [/security](/security) for the full disclosure policy. Please do not file public GitHub issues for vulnerabilities.
 
 ## What's not in NPD?
 
@@ -78,9 +78,9 @@ Any analysis that depends on these resources cannot be performed from NPD alone.
 
 The public roadmap lives in [GitHub Issues tagged `roadmap`](https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+is%3Aopen+label%3Aroadmap), grouped into three milestones:
 
-- [**`v1.1`**](https://github.com/FHIR-IQ/AINPI/milestone/1) — Data refinements on existing findings (phonetic name match, dual-board atlas, per-state drill-downs, methodology v1.0 prose, mobile layout, E2E tests).
-- [**`v1.2`**](https://github.com/FHIR-IQ/AINPI/milestone/2) — New findings in the H-catalog (H16 address geocoding, H17 USPS canonical drift, H19 per-state coverage, H20 state payload size, weekly endpoint-crawl host, downloadable disagreement CSV, `/findings` filters).
-- [**`v2.0`**](https://github.com/FHIR-IQ/AINPI/milestone/3) — Expansion beyond NPD's current 6 resources. Blocked until CMS ships `InsurancePlan`, `HealthcareService`, `Network`, `Verification` in the public-use export.
+- [**`v1.1`**](https://github.com/FHIR-IQ/AINPI/milestone/1): Data refinements on existing findings (phonetic name match, dual-board atlas, per-state drill-downs, methodology v1.0 prose, mobile layout, E2E tests).
+- [**`v1.2`**](https://github.com/FHIR-IQ/AINPI/milestone/2): New findings in the H-catalog (H16 address geocoding, H17 USPS canonical drift, H19 per-state coverage, H20 state payload size, weekly endpoint-crawl host, downloadable disagreement CSV, `/findings` filters).
+- [**`v2.0`**](https://github.com/FHIR-IQ/AINPI/milestone/3): Expansion beyond NPD's current 6 resources. Blocked until CMS ships `InsurancePlan`, `HealthcareService`, `Network`, `Verification` in the public-use export.
 
 Issues have `enhancement` / `new-finding` / `pipeline` / `crawler` / `web` / `methodology` labels so you can filter to your interest. PRs welcome.
 

@@ -3,8 +3,7 @@
  *
  * Each entry corresponds to one or more hypotheses (H1..H22) from the
  * methodology's check catalog. Entries here are the **pre-registration
- * record** — slug, hypothesis, null hypothesis, denominator, data source —
- * so they can be public *before* any results drop.
+ * record**: slug, hypothesis, null hypothesis, denominator, data source: * so they can be public *before* any results drop.
  *
  * Results (numbers, charts) come from a separate data file hydrated from
  * the pipeline output, not from this module.
@@ -56,27 +55,27 @@ export interface Finding {
   featured?: boolean;
   /** Stat row pairs shown in the hub hero block. Omit to render headline-only. */
   heroStats?: { label: string; value: string }[];
-  /** Audience-specific "so what" — what to do with this number */
+  /** Audience-specific "so what": what to do with this number */
   implications?: Implication[];
 }
 
 export const FINDINGS: Finding[] = [
-  // ── Claims-side cross-audit (Phase 1–3). Pre-registered 2026-05-14;
+  // ── Claims-side cross-audit (Phase 1-3). Pre-registered 2026-05-14;
   // results land per the roadmap at /smd-revalidation/cross-audit-roadmap.
   {
     slug: 'excluded-paid-by-medicaid',
     hypotheses: ['H29'],
     title: 'Federally excluded providers paid by Medicaid (HHS spending dataset)',
     summary:
-      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018–2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred — and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls. Virginia is shipped as the most-developed worked example; per-state CSVs published for all 51 jurisdictions.',
+      'Joins the AINPI federally-excluded cohort (active OIG LEIE or SAM.gov listings) against the HHS Medicaid Provider Spending dataset (2018-2024, NPI-keyed, public). Every match is a § 455.436 audit-referral candidate for the state where the spending occurred, and catches MCO-side exposures that AINPI\'s H26 4-payer sweep currently misses behind authentication walls. Virginia is shipped as the most-developed worked example; per-state CSVs published for all 51 jurisdictions.',
     nullHypothesis:
-      'Zero NPIs currently active on OIG LEIE or SAM.gov appear as Billing NPI or Servicing NPI in the HHS Medicaid Provider Spending dataset (2018–2024).',
+      'Zero NPIs currently active on OIG LEIE or SAM.gov appear as Billing NPI or Servicing NPI in the HHS Medicaid Provider Spending dataset (2018-2024).',
     denominator:
       'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Virginia subset comes from the existing 131-NPI cohort at `/api/v1/states/va-cohort-critical.csv`.',
     dataSource:
-      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset (2026-02-09 release, opendata.hhs.gov/datasets/medicaid-provider-spending — 238M rows, 7 columns: billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount; no state-of-payment column). State-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv` carries one row per matched NPI with the AINPI directory-side priors (exclusion source, top HCPCS codes, billing/servicing axis, first/last paid month) anchoring the paid-amount headline. See `/smd-revalidation/cross-audit-roadmap` §10b for the per-row schema and `analysis/claims_sources/medicaid_provider_spending.py` for the pyarrow filter implementation.',
+      'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset (2026-02-09 release, opendata.hhs.gov/datasets/medicaid-provider-spending: 238M rows, 7 columns: billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount; no state-of-payment column). State-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv` carries one row per matched NPI with the AINPI directory-side priors (exclusion source, top HCPCS codes, billing/servicing axis, first/last paid month) anchoring the paid-amount headline. See `/smd-revalidation/cross-audit-roadmap` §10b for the per-row schema and `analysis/claims_sources/medicaid_provider_spending.py` for the pyarrow filter implementation.',
     status: 'published',
-    ogTagline: 'Excluded providers were paid by Medicaid. AINPI quantifies how much — in context.',
+    ogTagline: 'Excluded providers were paid by Medicaid. AINPI quantifies how much, in context.',
     implications: [
       {
         audience: 'Regulators',
@@ -86,7 +85,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Payer ops teams',
         takeaway:
-          'The HHS file aggregates fee-for-service and managed care. Matches in your state\'s slice are operationally yours to investigate even when the payment flowed through an MCO. The row-level context columns are the de-noise layer — read entity_type=2 and high top_hcpcs_codes diversity together before treating a paid_amount as comparable.',
+          'The HHS file aggregates fee-for-service and managed care. Matches in your state\'s slice are operationally yours to investigate even when the payment flowed through an MCO. The row-level context columns are the de-noise layer: read entity_type=2 and high top_hcpcs_codes diversity together before treating a paid_amount as comparable.',
       },
       {
         audience: 'Researchers',
@@ -106,7 +105,7 @@ export const FINDINGS: Finding[] = [
     denominator:
       'VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part B by-Provider file.',
     dataSource:
-      'CMS Medicare Physician & Other Practitioners — by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, ~270 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partb.py`.',
+      'CMS Medicare Physician & Other Practitioners, by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, ~270 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partb.py`.',
     status: 'published',
     ogTagline: '8 of 125 federally-excluded VA NPIs are still billing Medicare Part B.',
   },
@@ -115,13 +114,13 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H30', 'H30b'],
     title: 'Federally excluded VA-resident NPIs prescribing Medicare Part D (CY 2023)',
     summary:
-      'Part D adds the prescribing dimension: an excluded prescriber writing reimbursed prescriptions. H30b joins the same 125-NPI VA cohort against the CMS Medicare Part D Prescribers by Provider file. Opioid prescribing by federally-excluded NPIs is a particularly elevated signal — the 21st Century Cures Act and 2018 SUPPORT Act extended controlled-substance enforcement to specifically cover Medicare/Medicaid prescribers.',
+      'Part D adds the prescribing dimension: an excluded prescriber writing reimbursed prescriptions. H30b joins the same 125-NPI VA cohort against the CMS Medicare Part D Prescribers by Provider file. Opioid prescribing by federally-excluded NPIs is a particularly elevated signal: the 21st Century Cures Act and 2018 SUPPORT Act extended controlled-substance enforcement to specifically cover Medicare/Medicaid prescribers.',
     nullHypothesis:
       'Zero currently-LEIE/SAM-excluded VA-resident NPIs appear as prescribers in the CMS Medicare Part D Prescribers by Provider file for CY 2023.',
     denominator:
       'VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part D by-Provider file.',
     dataSource:
-      'CMS Medicare Part D Prescribers — by Provider (MUP_DPR_RY25_P04_V10_DY23_NPI.csv, ~130 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partd.py`.',
+      'CMS Medicare Part D Prescribers, by Provider (MUP_DPR_RY25_P04_V10_DY23_NPI.csv, ~130 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partd.py`.',
     status: 'published',
     ogTagline: '10 of 125 federally-excluded VA NPIs are still prescribing Part D drugs.',
   },
@@ -130,7 +129,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H31'],
     title: 'NPPES-deactivated VA-state NPIs still billing public claims data',
     summary:
-      'NPPES deactivation should mean the provider is no longer in practice. Billing strictly after deactivation is either a data quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier — both are state PI flags. **Result: 3 of 1,495 VA-state NPPES-deactivated NPIs billed at least one public claims source strictly after their NPPES deactivation date.** Top: SHAHID, MUHAMMAD (deactivated 2015) — Medicaid \\$57K + Part B \\$178K + Part D \\$32K, all three sources, all post-deactivation.',
+      'NPPES deactivation should mean the provider is no longer in practice. Billing strictly after deactivation is either a data quality problem (NPI reused or misattributed) or evidence of work being done under a closed identifier. both are state PI flags. **Result: 3 of 1,495 VA-state NPPES-deactivated NPIs billed at least one public claims source strictly after their NPPES deactivation date.** Top: SHAHID, MUHAMMAD (deactivated 2015): Medicaid \\$57K + Part B \\$178K + Part D \\$32K, all three sources, all post-deactivation.',
     nullHypothesis:
       'Zero NPPES-deactivated VA-state NPIs appear in Medicaid Provider Spending, Medicare Part B, or Medicare Part D for the calendar month/year strictly following the NPPES deactivation date.',
     denominator:
@@ -160,7 +159,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H33'],
     title: 'DMEPOS suppliers on federal exclusion lists',
     summary:
-      'DMEPOS has historically been the highest-fraud category in Medicare. CMS imposed enrollment moratoria in multiple states (most recently Florida, March 2026). Cross-checking the active supplier directory against federal exclusion lists is a direct state and federal PI signal. **Result: 0 matches across 63,988 active DMEPOS suppliers** — the federal enrollment gate is working. Worth publishing as the comparison baseline against the H24, H25, H29, H30a, H30b non-zero findings.',
+      'DMEPOS has historically been the highest-fraud category in Medicare. CMS imposed enrollment moratoria in multiple states (most recently Florida, March 2026). Cross-checking the active supplier directory against federal exclusion lists is a direct state and federal PI signal. **Result: 0 matches across 63,988 active DMEPOS suppliers**: the federal enrollment gate is working. Worth publishing as the comparison baseline against the H24, H25, H29, H30a, H30b non-zero findings.',
     nullHypothesis:
       'Zero NPIs in the current CMS DMEPOS Supplier Directory appear on the OIG LEIE or SAM.gov active exclusion lists.',
     denominator:
@@ -175,11 +174,11 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H34'],
     title: 'Internal CMS contradiction: POS-certified providers also flagged NPPES-deactivated',
     summary:
-      'Medicare Provider of Services (POS) says the facility is certified; NPPES says the provider is deactivated. Would be a federal data quality finding that should never be true — but **blocked on a join-key problem**. The POS files (data.cms.gov: iQIES, CLIA, Hospital_and_other) are CCN-keyed and do not carry an NPI column, so the NPPES-NPI × POS-certification join cannot be computed without a CCN ↔ NPI cross-walk. PECOS publishes a partial cross-walk for facility owners (which we touch in H35); a comprehensive CCN→NPI cross-walk for all certified facilities is the missing piece.',
+      'Medicare Provider of Services (POS) says the facility is certified; NPPES says the provider is deactivated. Would be a federal data quality finding that should never be true, but **blocked on a join-key problem**. The POS files (data.cms.gov: iQIES, CLIA, Hospital_and_other) are CCN-keyed and do not carry an NPI column, so the NPPES-NPI × POS-certification join cannot be computed without a CCN ↔ NPI cross-walk. PECOS publishes a partial cross-walk for facility owners (which we touch in H35); a comprehensive CCN→NPI cross-walk for all certified facilities is the missing piece.',
     nullHypothesis:
       'Zero NPPES-deactivated NPIs appear in the current Medicare Provider of Services file as actively certified.',
     denominator:
-      '~260,551 NPPES-deactivated NPIs × every NPI appearing as actively certified in the latest POS quarterly release. Currently uncomputable — POS files are CCN-keyed and lack an NPI column.',
+      '~260,551 NPPES-deactivated NPIs × every NPI appearing as actively certified in the latest POS quarterly release. Currently uncomputable: POS files are CCN-keyed and lack an NPI column.',
     dataSource:
       'NPPES × CMS POS Files (data.cms.gov, quarterly). Files identified: POS_File_iQIES_Q1_2026.csv (post-acute care, 77K rows, CCN-keyed); Hospital_and_other.DATA.Q1_2026.csv (hospitals etc., 473 columns, CCN-keyed); CLIA.DATA.Q1_2026.csv (labs). None carries an NPI column. Stage B = build CCN↔NPI cross-walk via PECOS owner data or an authorized CMS source.',
     status: 'pre-registered',
@@ -189,11 +188,11 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H35'],
     title: 'SNF, hospice, HHA, hospital owners on federal exclusion lists (Stage B: NPI-keyed + facility-state demographic)',
     summary:
-      'Highest-stakes finding for vulnerable populations — the CMS Disclosure of Ownership IFR (2023) expanded ownership transparency precisely to surface concerning ownership structures. **Stage B result: 0 CONFIRMED-NPI matches and 1,779 CANDIDATE-DEMOGRAPHIC matches between owners in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital) and federal exclusion lists (OIG LEIE + SAM.gov, active).** Tier 1 NPI-keyed match resolves owner ASSOCIATE_ID → NPI via the CMS PPEF (Public Provider Enrollment File, 2.47M individual NPIs) and returns 0 because exclusion forces revocation of Medicare enrollment — only 25 of 8,619 LEIE∪SAM-active NPIs are still in PPEF, and none are listed as owners. The null is itself evidence that CMS\'s exclusion-revocation pipeline is working for the active cohort. Tier 2 demographic match uses (LAST, FIRST, FACILITY_STATE) — facility state stands in for owner state, which the All Owners files do not populate for individuals. 17 of the 1,779 candidate matches are VA-state facilities. **Methodology #2 fix vs v1**: v1 joined on owner STATE which is 100% empty for individual owners in the source files — that v1 "0 demographic matches" result was a structural null, not a true zero.',
+      'Highest-stakes finding for vulnerable populations: the CMS Disclosure of Ownership IFR (2023) expanded ownership transparency precisely to surface concerning ownership structures. **Stage B result: 0 CONFIRMED-NPI matches and 1,779 CANDIDATE-DEMOGRAPHIC matches between owners in the four CMS Quarterly All Owners files (SNF + Hospice + HHA + Hospital) and federal exclusion lists (OIG LEIE + SAM.gov, active).** Tier 1 NPI-keyed match resolves owner ASSOCIATE_ID → NPI via the CMS PPEF (Public Provider Enrollment File, 2.47M individual NPIs) and returns 0 because exclusion forces revocation of Medicare enrollment: only 25 of 8,619 LEIE∪SAM-active NPIs are still in PPEF, and none are listed as owners. The null is itself evidence that CMS\'s exclusion-revocation pipeline is working for the active cohort. Tier 2 demographic match uses (LAST, FIRST, FACILITY_STATE): facility state stands in for owner state, which the All Owners files do not populate for individuals. 17 of the 1,779 candidate matches are VA-state facilities. **Methodology #2 fix vs v1**: v1 joined on owner STATE which is 100% empty for individual owners in the source files: that v1 "0 demographic matches" result was a structural null, not a true zero.',
     nullHypothesis:
       'Zero owners listed in the CMS SNF / Hospice / HHA / Hospital All Owners files (2026-04-01) resolve to an NPI on OIG LEIE active or SAM.gov active. Secondary: zero owners under a (LAST, FIRST, FACILITY_STATE) demographic match against LEIE.',
     denominator:
-      '444,106 individual-owner rows across SNF (185,329) + Hospice (53,536) + HHA (80,208) + Hospital (125,033) in the 2026-04-01 release. PPEF cross-walk covers 2.47M individual NPIs; LEIE NPI-populated = 8,608; SAM-active with NPI = 4,707; LEIE demographic keys (LAST, FIRST, STATE) = 78,688. Tier 1 ceiling is bounded by the 25 LEIE∪SAM-active NPIs still in PPEF — most excluded providers are revoked and therefore not in PPEF.',
+      '444,106 individual-owner rows across SNF (185,329) + Hospice (53,536) + HHA (80,208) + Hospital (125,033) in the 2026-04-01 release. PPEF cross-walk covers 2.47M individual NPIs; LEIE NPI-populated = 8,608; SAM-active with NPI = 4,707; LEIE demographic keys (LAST, FIRST, STATE) = 78,688. Tier 1 ceiling is bounded by the 25 LEIE∪SAM-active NPIs still in PPEF: most excluded providers are revoked and therefore not in PPEF.',
     dataSource:
       'CMS Quarterly All Owners files × CMS Medicare Fee-For-Service Public Provider Enrollment File (PPEF, 2026-04-01, 2.98M rows) × OIG LEIE active × SAM.gov active. Tier 1: ASSOCIATE ID - OWNER → PECOS_ASCT_CNTL_ID → NPI → check against LEIE.NPI ∪ SAM.npi. Tier 2: (LAST, FIRST, FACILITY_STATE) demographic match against LEIE, with facility state resolved via PPEF ENRLMT_ID (100% lookup hit). See `analysis/claims_sources/nh_compare_ownership.py`.',
     status: 'published',
@@ -204,22 +203,22 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H36'],
     title: 'High-volume Medicare billers absent from NDH (directory completeness)',
     summary:
-      'The NDH is meant to be the federal source of truth on provider identity. Material billers absent from NDH are a directory-side failure of the federal system, distinct from H10 (NPPES match rate). **Result: 2 of 1,259,343 Medicare Part B billing NPIs in CY 2023 (0.00016%) are absent from NDH (practitioner ∪ organization tables, 2026-05-08 release) AND billed ≥ \\$10K in Medicare Part B.** Both are individual practitioners (entity_type=I) with material billing — \\$764K and \\$77K respectively. The 99.99984% NDH completeness rate against the Medicare Part B universe is a strong positive finding for the federal directory: when a provider bills Medicare materially, they are almost certainly in NDH.',
+      'The NDH is meant to be the federal source of truth on provider identity. Material billers absent from NDH are a directory-side failure of the federal system, distinct from H10 (NPPES match rate). **Result: 2 of 1,259,343 Medicare Part B billing NPIs in CY 2023 (0.00016%) are absent from NDH (practitioner ∪ organization tables, 2026-05-08 release) AND billed ≥ \\$10K in Medicare Part B.** Both are individual practitioners (entity_type=I) with material billing, \\$764K and \\$77K respectively. The 99.99984% NDH completeness rate against the Medicare Part B universe is a strong positive finding for the federal directory: when a provider bills Medicare materially, they are almost certainly in NDH.',
     nullHypothesis:
-      'The NDH is exhaustive — no NPI with material Medicare Part B billing in CY 2023 is missing from the pinned NDH bulk export.',
+      'The NDH is exhaustive: no NPI with material Medicare Part B billing in CY 2023 is missing from the pinned NDH bulk export.',
     denominator:
       '1,259,343 NPIs in the CMS Medicare Physician & Other Practitioners by Provider file for CY 2023. Numerator = NPIs absent from NDH (cms_npd.practitioner ∪ cms_npd.organization, 9,440,285 NPIs) AND paid amount ≥ \\$10K in CY 2023.',
     dataSource:
-      'CMS NDH bulk export (2026-05-08 release) × Medicare Physician & Other Practitioners by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, CY 2023, ~270 MB, NPI-aggregated). NDH NPI set = UNION of practitioner._npi and organization._npi — joining against just the practitioner table would over-count organizations (labs, IDTFs) that ARE in NDH-organization. See `analysis/claims_sources/ndh_completeness.py`.',
+      'CMS NDH bulk export (2026-05-08 release) × Medicare Physician & Other Practitioners by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, CY 2023, ~270 MB, NPI-aggregated). NDH NPI set = UNION of practitioner._npi and organization._npi. joining against just the practitioner table would over-count organizations (labs, IDTFs) that ARE in NDH-organization. See `analysis/claims_sources/ndh_completeness.py`.',
     status: 'published',
-    ogTagline: '99.99984% NDH completeness for material Medicare Part B billers — only 2 of 1.26M individual NPIs missing.',
+    ogTagline: '99.99984% NDH completeness for material Medicare Part B billers: only 2 of 1.26M individual NPIs missing.',
   },
   {
     slug: 'endpoint-url-validity',
     hypotheses: ['H28'],
     title: 'Endpoint URL validity + machine-readable share',
     summary:
-      'Of the 1.36M Endpoint resources in the NDH bulk export, only 8.4% are FHIR REST URLs an integrator can GET. The other 91.6% are Direct Trust HISP messaging addresses, which solve a different problem entirely. The right denominator for any "find FHIR endpoint by NPI" feature is the FHIR REST subset — not the full Endpoint resource count.',
+      'Of the 1.36M Endpoint resources in the NDH bulk export, only 8.4% are FHIR REST URLs an integrator can GET. The other 91.6% are Direct Trust HISP messaging addresses, which solve a different problem entirely. The right denominator for any "find FHIR endpoint by NPI" feature is the FHIR REST subset, not the full Endpoint resource count.',
     nullHypothesis:
       '100% of NDH `Endpoint.address` values are well-formed for their declared `connectionType`. There is no surprising shape mismatch between connection-type-by-count and machine-readable share.',
     denominator:
@@ -232,7 +231,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'When sizing a "find this provider\'s FHIR endpoint" product, the right population is 114K hl7-fhir-rest endpoints — not 1.36M total. Direct Trust HISP addresses (provider@hisp.example.com) are clinical-messaging routes, not API URLs; treating them as substitutable will fail at integration time.',
+          'When sizing a "find this provider\'s FHIR endpoint" product, the right population is 114K hl7-fhir-rest endpoints, not 1.36M total. Direct Trust HISP addresses (provider@hisp.example.com) are clinical-messaging routes, not API URLs; treating them as substitutable will fail at integration time.',
       },
       {
         audience: 'Payer ops teams',
@@ -258,11 +257,11 @@ export const FINDINGS: Finding[] = [
     summary:
       'Can you associate a practitioner in the NDH bulk export with a phone number? A phone can live on the Practitioner record (`Practitioner.telecom`), the role (`PractitionerRole.telecom`), or the referenced location (`Location.telecom`). H43 resolves all three. Result on the 2026-05-08 release: 7,195,270 of 7,196,385 active practitioners (99.98%) carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 (0.015%) have no phone on any path. A "call this provider" feature can read `Practitioner.telecom` directly.',
     nullHypothesis:
-      '`Practitioner.telecom` is sparse — fewer than half of active practitioners carry an on-record phone, and reachability requires the PractitionerRole → Location traversal (the NPPES pattern, where practice phone lives on the location). Rejected: 99.98% carry an on-record phone and the traversal adds nothing.',
+      '`Practitioner.telecom` is sparse: fewer than half of active practitioners carry an on-record phone, and reachability requires the PractitionerRole → Location traversal (the NPPES pattern, where practice phone lives on the location). Rejected: 99.98% carry an on-record phone and the traversal adds nothing.',
     denominator:
-      'All active Practitioner resources in the pinned NDH bulk export (7,196,385 at 2026-05-08, `_active = TRUE`). The numerator (7,195,270) counts those with a `system=\'phone\'` telecom entry on the Practitioner record, on any active PractitionerRole resolving to that practitioner, or on any Location referenced by such a role — unioned, then intersected back to the active set so dangling references drop out.',
+      'All active Practitioner resources in the pinned NDH bulk export (7,196,385 at 2026-05-08, `_active = TRUE`). The numerator (7,195,270) counts those with a `system=\'phone\'` telecom entry on the Practitioner record, on any active PractitionerRole resolving to that practitioner, or on any Location referenced by such a role, unioned, then intersected back to the active set so dangling references drop out.',
     dataSource:
-      'BigQuery scan of `cms_npd.practitioner`, `cms_npd.practitioner_role`, and `cms_npd.location` — JSON-extracting the `telecom[]` array on each resource and joining roles to locations via the pipe-joined `_location_ids` reference list. Compute script: `analysis/h43_practitioner_phone.py` (capped at the project default `maximum_bytes_billed` via `bq_job_config()`).',
+      'BigQuery scan of `cms_npd.practitioner`, `cms_npd.practitioner_role`, and `cms_npd.location`: JSON-extracting the `telecom[]` array on each resource and joining roles to locations via the pipe-joined `_location_ids` reference list. Compute script: `analysis/h43_practitioner_phone.py` (capped at the project default `maximum_bytes_billed` via `bq_job_config()`).',
     status: 'published',
     updated: '2026-06-09',
     ogTagline: '99.98% of active practitioners carry a phone right on the Practitioner record.',
@@ -270,12 +269,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'Read `Practitioner.telecom` directly — 99.98% of active practitioners carry a phone there. Keep the role → location traversal only as a fallback for the ~1,115 records with nothing on file.',
+          'Read `Practitioner.telecom` directly: 99.98% of active practitioners carry a phone there. Keep the role → location traversal only as a fallback for the ~1,115 records with nothing on file.',
       },
       {
         audience: 'FHIR implementers',
         takeaway:
-          'On-record telecom is phone + fax only in this release — email and url came back empty. Don\'t assume those channels exist without checking the source.',
+          'On-record telecom is phone + fax only in this release. email and url came back empty. Don\'t assume those channels exist without checking the source.',
       },
       {
         audience: 'CMS publishing the data',
@@ -294,13 +293,13 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H44'],
     title: 'Endpoint metadata coverage vs the HTE submission spec',
     summary:
-      'The HTE data-release spec (ftrotter-gov/HTE_data_release_specifications) asks submitters for nine endpoint-metadata fields. H44 maps each against the NDH FHIR Endpoint profile (STU1 v1.0.0): two have a structured home (`fhir_endpoint_url` → `Endpoint.address`; `fhir_endpoint_type` → `connectionType` + the use-case extension), two map partially (SMART capabilities → the dynamic-registration extension; general sandbox → the environment-type code), and five have no representation in STU1 at all — developer-documentation, developer-signup, swagger, OpenAPI, and per-instance sandbox URLs. Adopting the spec for those five needs STU2 extensions or out-of-band storage, not data entry. The fill rate of the fields that do have a home is measured against the FHIR-REST Endpoint records.',
+      'The HTE data-release spec (ftrotter-gov/HTE_data_release_specifications) asks submitters for nine endpoint-metadata fields. H44 maps each against the NDH FHIR Endpoint profile (STU1 v1.0.0): two have a structured home (`fhir_endpoint_url` → `Endpoint.address`; `fhir_endpoint_type` → `connectionType` + the use-case extension), two map partially (SMART capabilities → the dynamic-registration extension; general sandbox → the environment-type code), and five have no representation in STU1 at all: developer-documentation, developer-signup, swagger, OpenAPI, and per-instance sandbox URLs. Adopting the spec for those five needs STU2 extensions or out-of-band storage, not data entry. The fill rate of the fields that do have a home is measured against the FHIR-REST Endpoint records.',
     nullHypothesis:
       'Every field the HTE submission spec collects already has a home in the NDH STU1 Endpoint profile, and the FHIR-REST Endpoint records populate those fields at a high rate.',
     denominator:
-      'FHIR-REST Endpoint records in the pinned NDH bulk export (`connectionType.code = \'hl7-fhir-rest\'`, 114,071 at 2026-05-08 per H28). Direct Trust HISP addresses (the other 91.6% of the Endpoint table) are excluded — they are clinical-messaging addresses, not queryable FHIR APIs.',
+      'FHIR-REST Endpoint records in the pinned NDH bulk export (`connectionType.code = \'hl7-fhir-rest\'`, 114,071 at 2026-05-08 per H28). Direct Trust HISP addresses (the other 91.6% of the Endpoint table) are excluded: they are clinical-messaging addresses, not queryable FHIR APIs.',
     dataSource:
-      'Structural layer: the published NDH STU1 Endpoint profile (hl7.org/fhir/us/ndh/STU1). Empirical layer: one capped BigQuery scan of `cms_npd.endpoint`, presence-scanning the serialized resource for each NDH extension\'s canonical URL. Compute script: `analysis/h44_endpoint_metadata.py` (capped via `bq_job_config()`). Cross-references H1–H5 (SMART `.well-known` discoverability) and H28 (FHIR-REST vs HISP split).',
+      'Structural layer: the published NDH STU1 Endpoint profile (hl7.org/fhir/us/ndh/STU1). Empirical layer: one capped BigQuery scan of `cms_npd.endpoint`, presence-scanning the serialized resource for each NDH extension\'s canonical URL. Compute script: `analysis/h44_endpoint_metadata.py` (capped via `bq_job_config()`). Cross-references H1-H5 (SMART `.well-known` discoverability) and H28 (FHIR-REST vs HISP split).',
     status: 'pre-registered',
     updated: '2026-06-25',
     ogTagline: 'Five of nine HTE endpoint fields have no home in the NDH FHIR profile yet.',
@@ -308,12 +307,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'CMS publishing the data',
         takeaway:
-          'Five submission-spec fields (developer docs, signup, swagger, OpenAPI, per-instance sandbox URL) have no element or extension in the STU1 Endpoint profile. Collecting them via the CSV spec creates data with nowhere to land in the FHIR representation until STU2 — worth deciding deliberately, not by default.',
+          'Five submission-spec fields (developer docs, signup, swagger, OpenAPI, per-instance sandbox URL) have no element or extension in the STU1 Endpoint profile. Collecting them via the CSV spec creates data with nowhere to land in the FHIR representation until STU2, worth deciding deliberately, not by default.',
       },
       {
         audience: 'FHIR implementers',
         takeaway:
-          'Endpoint metadata is sparse in the current NDH. Do not assume the use-case, dynamic-registration, or environment-type extensions are present; check per record. SMART capability is largely auto-discoverable by crawl (81.6% of distinct hosts per H1–H5), so the declared field matters most for the crawl-invisible minority.',
+          'Endpoint metadata is sparse in the current NDH. Do not assume the use-case, dynamic-registration, or environment-type extensions are present; check per record. SMART capability is largely auto-discoverable by crawl (81.6% of distinct hosts per H1-H5), so the declared field matters most for the crawl-invisible minority.',
       },
       {
         audience: 'Payer data teams',
@@ -323,7 +322,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Methodology readers',
         takeaway:
-          'Extension presence is a JSON-wide canonical-URL scan — an upper bound on real usage, reported as a presence scan, not a strict cardinality count.',
+          'Extension presence is a JSON-wide canonical-URL scan, an upper bound on real usage, reported as a presence scan, not a strict cardinality count.',
       },
     ],
   },
@@ -414,17 +413,17 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'FHIR-REST endpoints are reachable and conformant at or above the implied 85% network-adequacy ceiling.',
     denominator:
-      'Distinct FHIR-REST hosts after deduping `Endpoint` resources by hostname (2,974 in the 2026-04-09 release). NOT the count of `Endpoint` records, NOT practitioners — many endpoint records share a base URL.',
+      'Distinct FHIR-REST hosts after deduping `Endpoint` resources by hostname (2,974 in the 2026-04-09 release). NOT the count of `Endpoint` records, NOT practitioners: many endpoint records share a base URL.',
     dataSource:
       'CMS NPD bulk export + live HTTP probes run by the `ainpi-probe` crawler against declared `Endpoint.address` URLs.',
     status: 'pre-registered',
     ogTagline: 'How many NDH endpoints are actually alive?',
     implications: [
       { audience: 'Methodology readers', takeaway: 'The reachability rates (93.3% HTTP, 85.4% CapabilityStatement, 81.6% SMART, 90.3% Practitioner search) describe distinct FHIR-REST HOSTS, not practitioners. Practitioner-level reachability is dramatically lower because 98.7% of organizations in the federal directory carry zero `Endpoint` references at all; even when a host is alive, only a small share of practitioners hang off it via the practitioner → role → managing_org → endpoint chain. Read host-level rates as upper-bound technical reachability, not a patient-access proxy.' },
-      { audience: 'Payer data teams', takeaway: 'If you build integrations against declared NDH FHIR endpoints, expect 14.6% to fail at /metadata and 18.4% to lack a valid SMART well-known — budget for partial availability rather than treating endpoint presence as functional.' },
-      { audience: 'Provider data teams', takeaway: 'An endpoint URL in NDH does not prove your endpoint works. Audit yours against ainpi-probe L0–L7: DNS, TLS cert expiry, CapabilityStatement conformance, SMART discovery, unauthenticated Practitioner search.' },
+      { audience: 'Payer data teams', takeaway: 'If you build integrations against declared NDH FHIR endpoints, expect 14.6% to fail at /metadata and 18.4% to lack a valid SMART well-known. budget for partial availability rather than treating endpoint presence as functional.' },
+      { audience: 'Provider data teams', takeaway: 'An endpoint URL in NDH does not prove your endpoint works. Audit yours against ainpi-probe L0-L7: DNS, TLS cert expiry, CapabilityStatement conformance, SMART discovery, unauthenticated Practitioner search.' },
       { audience: 'Regulators', takeaway: 'Technical reachability (90.4% L7) vs SMART discovery compliance (81.6%) is a 9-point gap. If rules start citing SMART conformance, current NDH is below the implied bar.' },
-      { audience: 'FHIR implementers', takeaway: 'Zero R5 endpoints, zero R2 — NDH is a pure R4 population. Don\u2019t spend cycles on R5 compatibility testing for this directory.' },
+      { audience: 'FHIR implementers', takeaway: 'Zero R5 endpoints, zero R2: NDH is a pure R4 population. Don\u2019t spend cycles on R5 compatibility testing for this directory.' },
     ],
   },
   {
@@ -442,8 +441,8 @@ export const FINDINGS: Finding[] = [
     status: 'pre-registered',
     ogTagline: 'Do NDH NPIs match NPPES?',
     implications: [
-      { audience: 'Payer data teams', takeaway: 'When comparing NDH specialty to NPPES, match against all 15 NPPES taxonomy slots — NOT just slot 1. 15% of NPPES records have their TRUE primary (switch=Y) in a non-slot-1 position, and 6% of NDH Practitioners legitimately match only an NPPES secondary board (dual-specialists).' },
-      { audience: 'FHIR implementers', takeaway: 'NDH uses TWO specialty code systems on two resources — NUCC on Practitioner.qualification, CMS Medicare Types on PractitionerRole.specialty. A consumer filtering on one won\u2019t interoperate with one using the other. Apply the CMS-published Medicare/NUCC crosswalk (updated quarterly) to bridge.' },
+      { audience: 'Payer data teams', takeaway: 'When comparing NDH specialty to NPPES, match against all 15 NPPES taxonomy slots, NOT just slot 1. 15% of NPPES records have their TRUE primary (switch=Y) in a non-slot-1 position, and 6% of NDH Practitioners legitimately match only an NPPES secondary board (dual-specialists).' },
+      { audience: 'FHIR implementers', takeaway: 'NDH uses TWO specialty code systems on two resources: NUCC on Practitioner.qualification, CMS Medicare Types on PractitionerRole.specialty. A consumer filtering on one won\u2019t interoperate with one using the other. Apply the CMS-published Medicare/NUCC crosswalk (updated quarterly) to bridge.' },
       { audience: 'Regulators', takeaway: '0.79% of NDH NPIs (86K) don\u2019t exist in NPPES at all. 3.49% (379K) are deactivated in NPPES but still live in NDH. NDH\u2019s update cadence lags NPPES by the gap window between releases.' },
       { audience: 'Researchers', takeaway: '99.98% CMS structural validity + 99.83% NUCC validity = the underlying code quality is excellent. The interesting signal is inconsistency BETWEEN code systems for the same practitioner (14% fail the crosswalk check), not invalid codes themselves.' },
     ],
@@ -484,7 +483,7 @@ export const FINDINGS: Finding[] = [
     implications: [
       { audience: 'Payer data teams', takeaway: '97% of NDH Endpoints have no managingOrganization back-reference. You can\u2019t reliably traverse Endpoint → Organization. Work around via NPI-based secondary joins (NPPES, CAQH).' },
       { audience: 'Provider data teams', takeaway: 'If your organization has Endpoints registered, audit whether they declare managingOrganization pointing back to you. The 97% coverage gap is in this exact pointer.' },
-      { audience: 'FHIR implementers', takeaway: 'Integrity of DECLARED references is 100% — zero dangling refs across 17M edges. The defect pattern is under-population, not broken pointers. Trust your resolver, but expect 4 of the 10 NDH IG resources (HealthcareService, InsurancePlan, Network, Verification) to be absent entirely.' },
+      { audience: 'FHIR implementers', takeaway: 'Integrity of DECLARED references is 100%: zero dangling refs across 17M edges. The defect pattern is under-population, not broken pointers. Trust your resolver, but expect 4 of the 10 NDH IG resources (HealthcareService, InsurancePlan, Network, Verification) to be absent entirely.' },
       { audience: 'Regulators', takeaway: 'The NDH bulk export omits 4 of the 10 NDH-IG resources (HealthcareService + InsurancePlan + Network + Verification). Any rule citing those resources cannot be measured from the current public-use artifact.' },
     ],
   },
@@ -530,7 +529,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Provider data teams',
         takeaway:
-          'If your practitioner or organization NPI appears here, that is a serious flag. The LEIE search portal at exclusions.oig.hhs.gov is the authoritative source — verify there first, then contact OIG\'s Exclusion Review Section if you believe the match is in error.',
+          'If your practitioner or organization NPI appears here, that is a serious flag. The LEIE search portal at exclusions.oig.hhs.gov is the authoritative source: verify there first, then contact OIG\'s Exclusion Review Section if you believe the match is in error.',
       },
       {
         audience: 'Payer data teams',
@@ -567,17 +566,17 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Payer data teams',
         takeaway:
-          'The OPM-debarred slice is the operationally interesting one — those providers are barred from FEHBP but may still be in commercial network listings if your data feed treats SAM as out-of-scope. Treat OPM exclusion as an independent signal from LEIE, not a duplicate.',
+          'The OPM-debarred slice is the operationally interesting one: those providers are barred from FEHBP but may still be in commercial network listings if your data feed treats SAM as out-of-scope. Treat OPM exclusion as an independent signal from LEIE, not a duplicate.',
       },
       {
         audience: 'Provider data teams',
         takeaway:
-          'If your NPI is matched here, sam.gov/search/?index=ex is the authoritative lookup. SAM exclusions can come from agencies other than HHS — read the excluding_agency and exclusion_type fields before assuming an OIG-LEIE issue.',
+          'If your NPI is matched here, sam.gov/search/?index=ex is the authoritative lookup. SAM exclusions can come from agencies other than HHS: read the excluding_agency and exclusion_type fields before assuming an OIG-LEIE issue.',
       },
       {
         audience: 'Researchers',
         takeaway:
-          'NPI population in SAM is the structural ceiling — only ~4% of SAM rows carry a real NPI, because SAM is a multi-domain feed (sanctions, contractor debarment, foreign-asset blocks). Healthcare-relevant matches are concentrated in the HHS and OPM agency slices.',
+          'NPI population in SAM is the structural ceiling: only ~4% of SAM rows carry a real NPI, because SAM is a multi-domain feed (sanctions, contractor debarment, foreign-asset blocks). Healthcare-relevant matches are concentrated in the HHS and OPM agency slices.',
       },
     ],
   },
@@ -599,12 +598,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Regulators',
         takeaway:
-          '42 CFR § 438.602 requires MCO directory oversight. v1 finds matches in Cigna\'s public directory — a payer that aggregates commercial + Medicaid managed care lines in one FHIR endpoint. Each match is a § 455.436-relevant flag for state PI staff to investigate. The substantive VA-Medicaid version requires Stage B (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan) which is not yet wired.',
+          '42 CFR § 438.602 requires MCO directory oversight. v1 finds matches in Cigna\'s public directory, a payer that aggregates commercial + Medicaid managed care lines in one FHIR endpoint. Each match is a § 455.436-relevant flag for state PI staff to investigate. The substantive VA-Medicaid version requires Stage B (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan) which is not yet wired.',
       },
       {
         audience: 'Payer data teams',
         takeaway:
-          'Cigna is the v1 hit surface — if your organization carries any of the listed NPIs in your published provider directory, run an internal sweep against your provider data management workflow. Directory listing is operationally separate from active billing privileges, but the directory is the public-facing artifact regulators read first.',
+          'Cigna is the v1 hit surface: if your organization carries any of the listed NPIs in your published provider directory, run an internal sweep against your provider data management workflow. Directory listing is operationally separate from active billing privileges, but the directory is the public-facing artifact regulators read first.',
       },
       {
         audience: 'Provider data teams',
@@ -641,12 +640,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Provider data teams',
         takeaway:
-          'If your provider data management platform pushes practitioner data to the NDH, audit the qualification identifier and name.given pipelines for SSN-pattern strings before serialization. The 41 AINPI flagged in May (down from 46 in April) are the tip of the iceberg — undashed 9-digit SSNs are not detected by this scan because they collide with too many other 9-digit identifiers (EINs, account IDs, claim IDs).',
+          'If your provider data management platform pushes practitioner data to the NDH, audit the qualification identifier and name.given pipelines for SSN-pattern strings before serialization. The 41 AINPI flagged in May (down from 46 in April) are the tip of the iceberg: undashed 9-digit SSNs are not detected by this scan because they collide with too many other 9-digit identifiers (EINs, account IDs, claim IDs).',
       },
       {
         audience: 'Researchers',
         takeaway:
-          'AINPI replicates the WaPo finding using the same publicly-distributed bulk file CMS released. The value-add is a precise count, JSON-location breakdown, and per-state distribution that the WaPo article did not publish. The SSN values themselves are NOT republished by AINPI even though they remain in the public NDH bulk — responsible-disclosure posture.',
+          'AINPI replicates the WaPo finding using the same publicly-distributed bulk file CMS released. The value-add is a precise count, JSON-location breakdown, and per-state distribution that the WaPo article did not publish. The SSN values themselves are NOT republished by AINPI even though they remain in the public NDH bulk, responsible-disclosure posture.',
       },
       {
         audience: 'Everyone using NDH',
@@ -673,7 +672,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Regulators',
         takeaway:
-          '42 CFR § 455.436 requires monthly NPPES + LEIE + SAM checks on all enrolled providers. AINPI today covers the NPPES leg with audit-trail-ready output (commit SHA, methodology version, generated_at). LEIE and SAM ingestion are roadmap items — the high-risk cohort will become a 4-database composite once ingested.',
+          '42 CFR § 455.436 requires monthly NPPES + LEIE + SAM checks on all enrolled providers. AINPI today covers the NPPES leg with audit-trail-ready output (commit SHA, methodology version, generated_at). LEIE and SAM ingestion are roadmap items: the high-risk cohort will become a 4-database composite once ingested.',
       },
       {
         audience: 'Payer data teams',
@@ -683,7 +682,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Researchers',
         takeaway:
-          'The composite weights (1.0 / 0.8 / 1.0 / 0.4 / 0.3 / 0.2) are pre-registered and visible in the analysis script. Sensitivity analyses welcome — file an issue with a reproducible alternative weighting and we will publish the comparison.',
+          'The composite weights (1.0 / 0.8 / 1.0 / 0.4 / 0.3 / 0.2) are pre-registered and visible in the analysis script. Sensitivity analyses welcome: file an issue with a reproducible alternative weighting and we will publish the comparison.',
       },
       {
         audience: 'Everyone using NDH',
@@ -701,13 +700,13 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'Measured endpoint liveness matches or exceeds the 85% regulatory ceiling.',
     denominator:
-      'Distinct FHIR-REST hosts after deduping `Endpoint` resources by hostname (2,974 in the 2026-04-09 release). Host-level, not endpoint-record-level and not practitioner-level — see /findings/endpoint-liveness for the chain.',
+      'Distinct FHIR-REST hosts after deduping `Endpoint` resources by hostname (2,974 in the 2026-04-09 release). Host-level, not endpoint-record-level and not practitioner-level: see /findings/endpoint-liveness for the chain.',
     dataSource:
       '`ainpi-probe` crawler results joined to the `Endpoint` resource table.',
     status: 'pre-registered',
     ogTagline: 'Empirical liveness vs the 85% regulatory line.',
     implications: [
-      { audience: 'Methodology readers', takeaway: 'The 90.3% L7 number is HOST-level reachability across 2,974 distinct FHIR-REST hosts, not patient-level network access. The 85% MA network-adequacy ceiling concerns active-provider share within a service area — a different denominator entirely. The comparison is illustrative of the technical reachability floor; it is NOT a regulatory-equivalent adequacy score.' },
+      { audience: 'Methodology readers', takeaway: 'The 90.3% L7 number is HOST-level reachability across 2,974 distinct FHIR-REST hosts, not patient-level network access. The 85% MA network-adequacy ceiling concerns active-provider share within a service area, a different denominator entirely. The comparison is illustrative of the technical reachability floor; it is NOT a regulatory-equivalent adequacy score.' },
       { audience: 'Regulators', takeaway: 'Empirical FHIR endpoint reachability (90.3% L7) clears the 85% MA network-adequacy implied ceiling on BASIC reachability, but SMART discovery (81.6%) sits below it. If policy adds SMART conformance to the adequacy frame, the floor moves.' },
       { audience: 'Payer data teams', takeaway: 'Technical reachability ≠ regulatory adequacy. The 85% ceiling concerns active-provider share, not endpoint liveness. Don\u2019t substitute one for the other; use both as independent signals.' },
       { audience: 'Researchers', takeaway: 'This gauge maps technical reachability ONTO a regulatory proxy. The mapping is defensible but imperfect. Treat the comparison as illustrative, not regulatory-equivalent.' },
@@ -718,20 +717,20 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H37'],
     title: 'PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy disagreement',
     summary:
-      'CMS designated PECOS as the authoritative source for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment with PECOS, and the window between "discrepancy found" and "enrollment affected" tightens. This finding cross-references each NPI\'s PECOS PROVIDER_TYPE_CD against its NPPES NUCC taxonomy via the CMS Medicare ↔ NUCC crosswalk. **Result: 508,064 of 1,860,307 comparable pairs (27.31%) show empty intersection between the PECOS-resolved NUCC set and the NPPES-registered NUCC set.** CA leads with 64,180, NY 43,590, TX 39,574, FL 36,190. Every mismatch is a denial-risk flag under the 2026 verification rules — the provider is Medicare-enrolled to bill services their NPPES record does not register them for.',
+      'CMS designated PECOS as the authoritative source for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment with PECOS, and the window between "discrepancy found" and "enrollment affected" tightens. This finding cross-references each NPI\'s PECOS PROVIDER_TYPE_CD against its NPPES NUCC taxonomy via the CMS Medicare ↔ NUCC crosswalk. **Result: 508,064 of 1,860,307 comparable pairs (27.31%) show empty intersection between the PECOS-resolved NUCC set and the NPPES-registered NUCC set.** CA leads with 64,180, NY 43,590, TX 39,574, FL 36,190. Every mismatch is a denial-risk flag under the 2026 verification rules: the provider is Medicare-enrolled to bill services their NPPES record does not register them for.',
     nullHypothesis:
       'Every Medicare-enrolled NPI in PPEF has a PROVIDER_TYPE that maps cleanly through the CMS Medicare ↔ NUCC taxonomy crosswalk to the NPI\'s NPPES NUCC taxonomy set. No mismatches at scale.',
     denominator:
       '1,860,307 NPIs that are (a) Medicare-enrolled in PPEF (2026-04-01) with a PROVIDER_TYPE_CD that maps through the CMS Medicare ↔ NUCC crosswalk (Oct 2025), AND (b) carry at least one NUCC taxonomy code on their NPPES record. Excludes 2,722 PPEF NPIs with only org-level / non-NUCC PROVIDER_TYPE codes (Part B SUPPLIER - CLINIC/GROUP PRACTICE etc.) and 693,627 PPEF NPIs not found in the NPPES public dataset.',
     dataSource:
-      'PPEF × NPPES (`bigquery-public-data.nppes.npi_optimized`) × CMS Medicare Provider and Supplier Taxonomy Crosswalk (loaded to `cms_npd.medicare_taxonomy_crosswalk`, same crosswalk H10–H13 use). Streams PPEF once, joins via NPI, applies the crosswalk in Python; intersection test on the resolved-NUCC sets. See `analysis/h37_pecos_taxonomy.py`.',
+      'PPEF × NPPES (`bigquery-public-data.nppes.npi_optimized`) × CMS Medicare Provider and Supplier Taxonomy Crosswalk (loaded to `cms_npd.medicare_taxonomy_crosswalk`, same crosswalk H10-H13 use). Streams PPEF once, joins via NPI, applies the crosswalk in Python; intersection test on the resolved-NUCC sets. See `analysis/h37_pecos_taxonomy.py`.',
     status: 'published',
     ogTagline: '508,064 PECOS-NPPES taxonomy mismatches nationally (27.31%). Under the 2026 verification rules, every one is a denial-risk flag.',
     implications: [
       {
         audience: 'State Medicaid CMOs',
         takeaway:
-          'Under the 2026 verification rules your MMIS must align with PECOS. A non-matching taxonomy on a behavioral-health provider does not generate a warning — it generates a denial, then recoupment over the entire window the wrong code was in place. AINPI\'s per-state CSV gives your PI team the cohort to pre-emptively verify.',
+          'Under the 2026 verification rules your MMIS must align with PECOS. A non-matching taxonomy on a behavioral-health provider does not generate a warning. it generates a denial, then recoupment over the entire window the wrong code was in place. AINPI\'s per-state CSV gives your PI team the cohort to pre-emptively verify.',
       },
       {
         audience: 'Individual providers',
@@ -741,7 +740,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Provider organizations',
         takeaway:
-          'Run AINPI\'s per-state list against your roster. Anyone with a PECOS-NPPES taxonomy mismatch is at active denial risk. The 2026 timelines compress the window between flag and enforcement — preemptive cleanup wins.',
+          'Run AINPI\'s per-state list against your roster. Anyone with a PECOS-NPPES taxonomy mismatch is at active denial risk. The 2026 timelines compress the window between flag and enforcement: preemptive cleanup wins.',
       },
     ],
   },
@@ -750,7 +749,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H38'],
     title: 'Behavioral-health PECOS taxonomy misalignment (highest-recoupment cohort)',
     summary:
-      'Subset of H37 narrowed to NPIs with at least one behavioral-health NUCC code on their NPPES record. **Result: 44,875 of 147,693 comparable behavioral-health pairs (30.38%) show PECOS-NPPES mismatch — higher than the all-comers rate of 27.31% (H37).** Behavioral-health wrong-taxonomy is the highest-recoupment-risk category under the 2026 verification rules: payer rejection is automatic (not a warning), and the rejection covers the entire period the wrong code was in place. CA 5,524, NY 2,884, FL 2,403, TX 2,220 lead.',
+      'Subset of H37 narrowed to NPIs with at least one behavioral-health NUCC code on their NPPES record. **Result: 44,875 of 147,693 comparable behavioral-health pairs (30.38%) show PECOS-NPPES mismatch: higher than the all-comers rate of 27.31% (H37).** Behavioral-health wrong-taxonomy is the highest-recoupment-risk category under the 2026 verification rules: payer rejection is automatic (not a warning), and the rejection covers the entire period the wrong code was in place. CA 5,524, NY 2,884, FL 2,403, TX 2,220 lead.',
     nullHypothesis:
       'Behavioral-health NPIs do not exhibit a higher PECOS-NPPES taxonomy mismatch rate than the all-comers H37 baseline. The subset matches at the same ~27% rate.',
     denominator:
@@ -782,7 +781,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H39'],
     title: 'Multi-enrollment NPIs with conflicting state addresses',
     summary:
-      'PPEF has ~2.98M rows but ~2.56M distinct NPIs — so ~400K NPIs have multiple enrollments. Many are legitimate telehealth or multi-state practice. **Result: 255,700 of 2,556,656 distinct NPIs (10.0%) have enrollment records in 2 or more distinct US states.** Top NPIs include telehealth companies enrolled in all 51 jurisdictions (VIRTA MEDICAL PC, ACCESS TELECARE PLLC). TX 36,364, FL 31,680, NY 30,320, DC 30,247 lead — DC is high because of national-scope organizations enrolling in DC for federal contracting. Under the 2026 verification rules, every multi-state enrollment is a flag requiring triage: telehealth (document) · stale (file CMS-855I to close) · fraudulent (refer).',
+      'PPEF has ~2.98M rows but ~2.56M distinct NPIs, so ~400K NPIs have multiple enrollments. Many are legitimate telehealth or multi-state practice. **Result: 255,700 of 2,556,656 distinct NPIs (10.0%) have enrollment records in 2 or more distinct US states.** Top NPIs include telehealth companies enrolled in all 51 jurisdictions (VIRTA MEDICAL PC, ACCESS TELECARE PLLC). TX 36,364, FL 31,680, NY 30,320, DC 30,247 lead. DC is high because of national-scope organizations enrolling in DC for federal contracting. Under the 2026 verification rules, every multi-state enrollment is a flag requiring triage: telehealth (document) · stale (file CMS-855I to close) · fraudulent (refer).',
     nullHypothesis:
       'Every NPI with multiple PPEF enrollment records has consistent state metadata across those records. Multi-state listings only occur with consistent metadata.',
     denominator:
@@ -809,7 +808,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H40'],
     title: 'Federally excluded NPIs billing Medicare Part B by HCPCS code post-exclusion',
     summary:
-      'H30a established that federally-excluded NPIs continue to bill Medicare Part B post-exclusion. H40 sharpens the signal from "billed Part B for $30K" to "billed HCPCS J0897 47 times from POS 02 (telehealth) in [year], strictly after the LEIE exclusion effective date" — the unit of work State Medicaid PI offices write recoupment letters against. Joins the federally-excluded cohort (active LEIE or SAM, score ≥ 1.5) against the CMS Medicare Physician & Other Practitioners by Provider AND Service file (one row per NPI × HCPCS × place-of-service × year). Strict-post-exclusion attribution uses the per-NPI leie_excldate / sam_active_date already carried by the cohort exporter (shipped 2026-05-14 with the H29/H30a/H30b/H32 retrofit). Per-state CSVs at `/api/v1/states/<state>/h40-excluded-partb-by-hcpcs.csv`.',
+      'H30a established that federally-excluded NPIs continue to bill Medicare Part B post-exclusion. H40 sharpens the signal from "billed Part B for $30K" to "billed HCPCS J0897 47 times from POS 02 (telehealth) in [year], strictly after the LEIE exclusion effective date", the unit of work State Medicaid PI offices write recoupment letters against. Joins the federally-excluded cohort (active LEIE or SAM, score ≥ 1.5) against the CMS Medicare Physician & Other Practitioners by Provider AND Service file (one row per NPI × HCPCS × place-of-service × year). Strict-post-exclusion attribution uses the per-NPI leie_excldate / sam_active_date already carried by the cohort exporter (shipped 2026-05-14 with the H29/H30a/H30b/H32 retrofit). Per-state CSVs at `/api/v1/states/<state>/h40-excluded-partb-by-hcpcs.csv`.',
     nullHypothesis:
       'Zero currently-LEIE/SAM-excluded NPIs appear as billing providers for any HCPCS code in any place of service in the CMS Medicare Physician & Other Practitioners by Provider AND Service file for any year strictly after their exclusion effective date.',
     denominator:
@@ -818,7 +817,7 @@ export const FINDINGS: Finding[] = [
       'CMS Medicare Physician & Other Practitioners by Provider AND Service (data.cms.gov/provider-summary-by-type-of-service/medicare-physician-other-practitioners/medicare-physician-other-practitioners-by-provider-and-service). One row per (Rndrng_NPI, HCPCS_Cd, Place_Of_Srvc, year) with services, beneficiaries, charges, and Medicare-allowed/paid amounts. Strict-post-exclusion filter at the (NPI, year) grain since CMS publishes year-level totals (same caveat as H30a). Streaming-once partition pattern at `analysis/claims_sources/medicare_partb_by_hcpcs.py` (to be added) mirrors `medicare_partb.py`. Public domain (CC0-equivalent), 2-year publication lag.',
     status: 'published',
     ogTagline:
-      'Sharpens H30a from "billed Part B" to per-HCPCS, per-place-of-service post-exclusion billing — the per-claim recoupment unit.',
+      'Sharpens H30a from "billed Part B" to per-HCPCS, per-place-of-service post-exclusion billing, the per-claim recoupment unit.',
     featured: true,
     heroStats: [
       { label: 'Confirmed cases', value: '1' },
@@ -839,7 +838,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Researchers',
         takeaway:
-          'Strict-post-exclusion filter applied at the (NPI, year) grain because CMS publishes year-level service totals — same temporal precision as H30a, with per-HCPCS, per-POS specificity added. Full-window sidecar available for sensitivity analysis.',
+          'Strict-post-exclusion filter applied at the (NPI, year) grain because CMS publishes year-level service totals, same temporal precision as H30a, with per-HCPCS, per-POS specificity added. Full-window sidecar available for sensitivity analysis.',
       },
     ],
   },
@@ -848,11 +847,11 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H41'],
     title: 'NPPES taxonomy vs Medicare-billed-specialty divergence (behavioral specialty drift)',
     summary:
-      'H37 tests whether PECOS PROVIDER_TYPE matches the NPPES NUCC taxonomy — a record-vs-record test. H41 is the billing-behavior counterpart: for each NPI active in Medicare Part B, does the actual procedure mix match what the NPPES-registered taxonomy would predict? An NPPES "Family Medicine" (207Q) provider whose Part B billing is 80% pain-management J-codes and trigger-point injections is *behaviorally* practicing a different specialty than the directory says. State Medicaid systems trust NPPES taxonomy for prior-authorization rules, network-adequacy counts, and credentialing — drift on the billing side means those downstream rules are operating on stale signal. Pairs with H37 (registration drift) and H38 (behavioral-health subset) as the three-leg PECOS-NPPES-billing audit triangle.',
+      'H37 tests whether PECOS PROVIDER_TYPE matches the NPPES NUCC taxonomy, a record-vs-record test. H41 is the billing-behavior counterpart: for each NPI active in Medicare Part B, does the actual procedure mix match what the NPPES-registered taxonomy would predict? An NPPES "Family Medicine" (207Q) provider whose Part B billing is 80% pain-management J-codes and trigger-point injections is *behaviorally* practicing a different specialty than the directory says. State Medicaid systems trust NPPES taxonomy for prior-authorization rules, network-adequacy counts, and credentialing. drift on the billing side means those downstream rules are operating on stale signal. Pairs with H37 (registration drift) and H38 (behavioral-health subset) as the three-leg PECOS-NPPES-billing audit triangle.',
     nullHypothesis:
       'Every NPI with both a NPPES NUCC taxonomy and Medicare Part B billing activity bills a procedure mix consistent with that taxonomy. No NPIs show ≥80% of billed services attributable to HCPCS codes whose modal NUCC (across the full population) differs from the NPI\'s registered NUCC.',
     denominator:
-      'NPIs that are (a) present in the CMS Medicare Physician & Other Practitioners by Provider AND Service file with ≥1 service row AND (b) carry ≥1 NUCC code on NPPES (~1.86M expected, same denominator as H37). Drift threshold operationalized as ≥80% of billed services attributable to HCPCS codes whose modal NUCC across the full population differs from the NPI\'s NPPES taxonomy. The 80% threshold is a publishable falsification line — sensitivity analysis at 60% / 90% as sidecar.',
+      'NPIs that are (a) present in the CMS Medicare Physician & Other Practitioners by Provider AND Service file with ≥1 service row AND (b) carry ≥1 NUCC code on NPPES (~1.86M expected, same denominator as H37). Drift threshold operationalized as ≥80% of billed services attributable to HCPCS codes whose modal NUCC across the full population differs from the NPI\'s NPPES taxonomy. The 80% threshold is a publishable falsification line. sensitivity analysis at 60% / 90% as sidecar.',
     dataSource:
       'NPPES (`bigquery-public-data.nppes.npi_optimized`) × CMS Medicare Physician & Other Practitioners by Provider AND Service (same file as H40). HCPCS↔NUCC affinity table built empirically from the full dataset: for each HCPCS code, the modal NPPES NUCC across all NPIs billing it. Then per-NPI billing-share against that affinity table. Streaming-once partition at `analysis/h41_specialty_drift.py` (to be added). See methodology doc §10d for the affinity-table construction and the falsification window.',
     status: 'pre-registered',
@@ -862,7 +861,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Payer ops teams',
         takeaway:
-          'Prior-authorization rules and network-adequacy counts trust NPPES taxonomy. H41 surfaces providers whose actual practice profile diverges sharply — the same population your specialty-of-record-based PA decisions are running against. Treat as a credentialing-team flag, not a denial trigger.',
+          'Prior-authorization rules and network-adequacy counts trust NPPES taxonomy. H41 surfaces providers whose actual practice profile diverges sharply, the same population your specialty-of-record-based PA decisions are running against. Treat as a credentialing-team flag, not a denial trigger.',
       },
       {
         audience: 'State Medicaid PI offices',
@@ -872,7 +871,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Researchers',
         takeaway:
-          'The HCPCS↔NUCC affinity table is data-derived, not normative — it reflects what providers in each taxonomy *actually* bill, not what they should bill. Useful as an empirical anchor, not as a coding-correctness ground truth. Sensitivity windows (60% / 90%) published as sidecar so readers can pick their own falsification threshold.',
+          'The HCPCS↔NUCC affinity table is data-derived, not normative: it reflects what providers in each taxonomy *actually* bill, not what they should bill. Useful as an empirical anchor, not as a coding-correctness ground truth. Sensitivity windows (60% / 90%) published as sidecar so readers can pick their own falsification threshold.',
       },
     ],
   },
@@ -881,7 +880,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H42'],
     title: 'Federally excluded NPIs whose post-exclusion Medicare Part B billing is telehealth-dominant',
     summary:
-      'Subset of H40 with the post-exclusion HCPCS mix filtered to telehealth-specific procedure codes. Federally-excluded providers whose post-exclusion billing concentrates in telehealth-delivery codes is a known fraud pattern — virtual practice lets the excluded provider continue without a physical office that would attract local oversight, and most telehealth platforms maintain their own LEIE/SAM screening that should have caught the exclusion. Cohort is small but each row carries unusually high prosecutorial weight because the "I didn\'t know I was excluded" defense is weaker for a provider actively credentialed through a telehealth platform. Per-state CSVs at `/api/v1/states/<state>/h42-excluded-telehealth-dominant.csv`. **Methodology note**: the published Medicare Physician & Other Practitioners by Provider AND Service file aggregates `Place_Of_Srvc` to F (Facility) / O (Office) at file build, so claim-level POS 02 / POS 10 codes are not directly recoverable. H42 therefore operationalizes "telehealth" via the HCPCS code list (G2010, G2012, G2061-G2063, 99421-99423, 99441-99443, G0425-G0427, G3002-G3003), which exist primarily or exclusively as telehealth-delivery procedures.',
+      'Subset of H40 with the post-exclusion HCPCS mix filtered to telehealth-specific procedure codes. Federally-excluded providers whose post-exclusion billing concentrates in telehealth-delivery codes is a known fraud pattern: virtual practice lets the excluded provider continue without a physical office that would attract local oversight, and most telehealth platforms maintain their own LEIE/SAM screening that should have caught the exclusion. Cohort is small but each row carries unusually high prosecutorial weight because the "I didn\'t know I was excluded" defense is weaker for a provider actively credentialed through a telehealth platform. Per-state CSVs at `/api/v1/states/<state>/h42-excluded-telehealth-dominant.csv`. **Methodology note**: the published Medicare Physician & Other Practitioners by Provider AND Service file aggregates `Place_Of_Srvc` to F (Facility) / O (Office) at file build, so claim-level POS 02 / POS 10 codes are not directly recoverable. H42 therefore operationalizes "telehealth" via the HCPCS code list (G2010, G2012, G2061-G2063, 99421-99423, 99441-99443, G0425-G0427, G3002-G3003), which exist primarily or exclusively as telehealth-delivery procedures.',
     nullHypothesis:
       'Zero LEIE/SAM-excluded NPIs have post-exclusion Medicare Part B billing where ≥80% of services bill under the published telehealth-specific HCPCS code list (see methodology note in summary).',
     denominator:
@@ -895,12 +894,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'State Medicaid PI offices',
         takeaway:
-          'High-prosecutorial-weight cohort — the recoupment math is per-claim and the credentialing-failure trail makes the platform itself a secondary inquiry target. Pair with H40\'s per-HCPCS detail for the recoupment letter\'s evidence section.',
+          'High-prosecutorial-weight cohort: the recoupment math is per-claim and the credentialing-failure trail makes the platform itself a secondary inquiry target. Pair with H40\'s per-HCPCS detail for the recoupment letter\'s evidence section.',
       },
       {
         audience: 'Regulators',
         takeaway:
-          'Telehealth-only post-exclusion is a defined pattern — § 455.436 screening was meant to catch exactly this. Where the pattern recurs across platforms, the screening-control failure is systemic, not provider-specific.',
+          'Telehealth-only post-exclusion is a defined pattern: § 455.436 screening was meant to catch exactly this. Where the pattern recurs across platforms, the screening-control failure is systemic, not provider-specific.',
       },
       {
         audience: 'Provider organizations',

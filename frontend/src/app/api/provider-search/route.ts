@@ -4,14 +4,14 @@
  * Real-time, multi-source practitioner lookup. Queries six sources in
  * parallel:
  *
- *   - ndh    — CMS National Provider Directory (our BigQuery copy)
- *   - nppes  — NPPES NPI Registry public API (authoritative)
- *   - humana — Humana FHIR provider directory
- *   - uhc    — Optum FLEX (UHC commercial + Community Plan + OptumRx)
- *   - molina — Molina via Sapphire360 (Azure APIM gateway)
- *   - cigna  — Cigna FHIR provider directory (name search only)
+ *   - ndh: CMS National Provider Directory (our BigQuery copy)
+ *   - nppes: NPPES NPI Registry public API (authoritative)
+ *   - humana: Humana FHIR provider directory
+ *   - uhc: Optum FLEX (UHC commercial + Community Plan + OptumRx)
+ *   - molina: Molina via Sapphire360 (Azure APIM gateway)
+ *   - cigna: Cigna FHIR provider directory (name search only)
  *
- * No auth — every endpoint is publicly queryable per CMS-9115-F or
+ * No auth: every endpoint is publicly queryable per CMS-9115-F or
  * (NPPES) is a federal public registry.
  *
  * Request bodies:
@@ -56,7 +56,7 @@ const SOURCES: SourceMeta[] = [
     id: 'nppes',
     name: 'NPPES NPI Registry',
     category: 'authoritative',
-    coverage: 'Federal NPI registry — authoritative for NPI assignment',
+    coverage: 'Federal NPI registry: authoritative for NPI assignment',
     npiSearchable: true,
     nameSearchable: true,
   },
@@ -129,11 +129,11 @@ interface NormalizedPractitioner {
     suffix: string | null;
     full: string;
   };
-  /** "M" / "F" / "U" — sourced from FHIR `gender` or NPPES `basic.sex`. */
+  /** "M" / "F" / "U": sourced from FHIR `gender` or NPPES `basic.sex`. */
   gender: string | null;
   /** True/false on FHIR `active`; null if source doesn't expose it. */
   active: boolean | null;
-  /** Credentials suffix (e.g. "MD, FACOG") — NPPES `basic.credential`. */
+  /** Credentials suffix (e.g. "MD, FACOG"): NPPES `basic.credential`. */
   credential: string | null;
   /** Taxonomies / specialties. */
   specialties: { code: string; display: string; system?: string; primary?: boolean; license?: string; state?: string }[];
@@ -145,7 +145,7 @@ interface NormalizedPractitioner {
   qualifications: { code?: string; display?: string; issuer?: string; period?: string }[];
   /** ISO 8601 timestamp when source last refreshed this record. */
   lastUpdated: string | null;
-  /** Identifier systems carried (e.g. "us-npi", "us-ssn") — trust signal. */
+  /** Identifier systems carried (e.g. "us-npi", "us-ssn"): trust signal. */
   identifierSystems: string[];
 }
 
@@ -231,7 +231,7 @@ function normalizeFhirPractitioner(resource: any): NormalizedPractitioner {
     country: typeof a?.country === 'string' ? a.country : undefined,
   }));
 
-  // Telecom — promote to address-level when applicable
+  // Telecom: promote to address-level when applicable
   const telecom = Array.isArray(resource?.telecom) ? resource.telecom : [];
   if (telecom.length && addresses.length) {
     addresses[0].telecom = telecom
@@ -263,7 +263,7 @@ function normalizeFhirPractitioner(resource: any): NormalizedPractitioner {
     .map((c: any) => c?.coding?.[0]?.display || c?.text || c?.coding?.[0]?.code)
     .filter((s: unknown): s is string => typeof s === 'string');
 
-  // FHIR Practitioner doesn't carry specialties directly — those live in
+  // FHIR Practitioner doesn't carry specialties directly: those live in
   // PractitionerRole. We surface specialty info inferred from qualifications.
 
   return {
@@ -430,7 +430,7 @@ async function queryPayer(
       return {
         practitioners: [],
         status: 'skipped',
-        errorMessage: 'Cigna does not support NPI search — switch to name search',
+        errorMessage: 'Cigna does not support NPI search: switch to name search',
       };
     }
     const npiIdentifier = `http://hl7.org/fhir/sid/us-npi|${query.npi}`;

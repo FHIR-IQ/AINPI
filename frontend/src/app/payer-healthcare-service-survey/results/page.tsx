@@ -103,12 +103,12 @@ export default function ResultsPage() {
             Live aggregate · counts only · no PII
           </p>
           <h1 className="text-3xl font-bold text-gray-900 mb-3">
-            HealthcareService survey — running results
+            HealthcareService survey: running results
           </h1>
           <p className="text-gray-700">
             What we&apos;re hearing from the community so far. These counts
             feed the AINPI recommendation back to the NPD weekly call. Small-n
-            disclaimer applies — read the numbers as directional, not statistical,
+            disclaimer applies: read the numbers as directional, not statistical,
             until response count gets meaningful (target 30+).
           </p>
         </header>

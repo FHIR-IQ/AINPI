@@ -11,7 +11,7 @@ import MetricSwitcher from './MetricSwitcher';
 import StateSidePanel, { type SidePanelState } from './StateSidePanel';
 import type { HomepageMapData, MapMetricSlug } from '@/lib/homepage-data';
 
-// USChoroplethMap is D3-heavy — keep out of SSR.
+// USChoroplethMap is D3-heavy: keep out of SSR.
 const USChoroplethMap = dynamic(
   () => import('@/components/charts/USChoroplethMap'),
   { ssr: false, loading: () => <div className="h-[600px] bg-slate-100 animate-pulse" /> },
@@ -155,7 +155,7 @@ export default function MapHomepage({ data }: MapHomepageProps) {
           />
         </div>
 
-        {/* Accessible state directory — keyboard-and-screen-reader navigable mirror
+        {/* Accessible state directory: keyboard-and-screen-reader navigable mirror
             of the choropleth's click affordance. Also indexed by search engines so
             every state name appears in the page body. */}
         <ul className="sr-only" aria-label="State directory">

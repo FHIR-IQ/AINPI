@@ -74,7 +74,7 @@ export default function SpecialtyTreemap({
       .attr('class', 'cell')
       .attr('transform', (d) => 'translate(' + d.x0 + ',' + d.y0 + ')');
 
-    // Rectangles — set opacity based on selection in a single attribute, no racing transitions
+    // Rectangles: set opacity based on selection in a single attribute, no racing transitions
     cells.append('rect')
       .attr('width', (d) => Math.max(0, d.x1 - d.x0))
       .attr('height', (d) => Math.max(0, d.y1 - d.y0))
@@ -114,7 +114,7 @@ export default function SpecialtyTreemap({
         onSpecialtyClick(d.data.name === selectedSpecialty ? '' : d.data.name);
       });
 
-    // Labels — name + provider count for cells big enough to hold them
+    // Labels: name + provider count for cells big enough to hold them
     cells.each(function (d) {
       const w = d.x1 - d.x0;
       const h = d.y1 - d.y0;

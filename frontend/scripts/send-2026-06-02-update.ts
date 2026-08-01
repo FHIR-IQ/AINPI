@@ -1,7 +1,7 @@
 /**
  * scripts/send-2026-06-02-update.ts
  *
- * 2026-06-02 subscriber update — landscape becomes the front door, REAL
+ * 2026-06-02 subscriber update: landscape becomes the front door, REAL
  * Health Providers Act audit framework published. Two coordinated releases
  * positioned as the pair that makes AINPI the audit substrate for the
  * 2028 CMS scoring-methodology RFC.
@@ -32,7 +32,7 @@ import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
 const SUBJECT =
-  'AINPI 2026-06-02 — landscape becomes the front door, REAL Health audit framework published';
+  'AINPI 2026-06-02: landscape becomes the front door, REAL Health audit framework published';
 const REPORT_URL = 'https://ainpi.dev/reports/2026-06-02-update';
 const HOMEPAGE_URL = 'https://ainpi.dev/';
 const POLICY_URL = 'https://ainpi.dev/real-health-providers';
@@ -70,7 +70,7 @@ function parseArgs(argv: string[]): CliArgs {
 function buildBody(): { text: string; html: string } {
   // Plain prose, no unicode arrows, no marketing language, no urgency words.
   // The structure reads like a personal note from Eugene rather than a
-  // designed campaign — that is the spam-filter optimization.
+  // designed campaign, that is the spam-filter optimization.
   const text = [
     'Two coordinated releases tonight. They are intentionally a pair.',
     '',
@@ -143,7 +143,7 @@ function buildBody(): { text: string; html: string } {
 
   // Plain semantic HTML, no gradients, no badges, no CTA button stacks,
   // no unicode arrows. Single column, single sans-serif font, neutral grey
-  // text. Reads like a hand-typed personal email — which it is.
+  // text. Reads like a hand-typed personal email, which it is.
   const html = `
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937; line-height: 1.55; padding: 20px;">
 

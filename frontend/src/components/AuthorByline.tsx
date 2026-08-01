@@ -5,7 +5,7 @@ interface AuthorBylineProps {
   credentials?: string;
   /** Whether to show 'Last reviewed' date next to the byline. */
   lastReviewed?: string;
-  /** Tone — 'analyst' (light gray border, dense) or 'card' (white card, padded). */
+  /** Tone: 'analyst' (light gray border, dense) or 'card' (white card, padded). */
   variant?: 'analyst' | 'card';
 }
 
@@ -56,7 +56,7 @@ export default function AuthorByline({
     <div className="border-l-2 border-gray-200 pl-4 py-1 text-sm">
       <p>
         <span className="font-medium text-gray-900">{AUTHOR.name}</span>
-        <span className="text-gray-600"> — {cred}</span>
+        <span className="text-gray-600">: {cred}</span>
       </p>
       <p className="mt-1 text-xs text-gray-500 space-x-3">
         <a

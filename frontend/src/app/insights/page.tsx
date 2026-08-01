@@ -148,7 +148,7 @@ export default function InsightsPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">NPD Provenance & Variance Insights</h1>
           <p className="text-gray-500 mt-1">
-            What does the CMS National Provider Directory actually tell you — and where does it fall short?
+            What does the CMS National Provider Directory actually tell you, and where does it fall short?
           </p>
         </div>
 
@@ -161,7 +161,7 @@ export default function InsightsPage() {
               <p className="text-gray-700 mt-2">
                 NPD today is an NPPES pass-through enriched with PECOS reassignment data and CEHRT vendor submissions.
                 CAQH is not in the pipeline. That means the same stale, self-attested data that plagued NPPES is
-                inherited intact — in a cleaner FHIR wrapper. Here&apos;s what we can verify by looking at 21.7M
+                inherited intact, in a cleaner FHIR wrapper. Here&apos;s what we can verify by looking at 21.7M
                 ingested records.
               </p>
             </div>
@@ -251,7 +251,7 @@ export default function InsightsPage() {
                       <p className="text-xs text-gray-600 mt-1">
                         {data.totals.inactive_organizations === 0
                           ? 'The active=true flag passes through from NPPES unchanged. NPPES self-attestation means dissolved or merged entities rarely get flagged inactive. This count is almost certainly implausibly clean.'
-                          : 'Some orgs are flagged inactive — better than zero, but the overall NPPES self-attestation problem still applies to active records.'}
+                          : 'Some orgs are flagged inactive: better than zero, but the overall NPPES self-attestation problem still applies to active records.'}
                       </p>
                     </div>
                   </div>
@@ -353,7 +353,7 @@ export default function InsightsPage() {
                     ['PractitionerRole.organization + .practitioner', 'CEHRT vendor bulk submissions (HTI-1) + PECOS reassignment', 'Vendor-dependent', 'HTI-1 publication mandate, not accuracy'],
                     ['PractitionerRole.specialty', 'PECOS Physician Specialty codes', 'Medicare enrollment events', 'PECOS validates'],
                     ['Endpoint.address + .connectionType', 'CEHRT vendor reporting (HTI-1) + payer submissions (CMS-9115-F)', 'Vendor self-report', 'HTI-1 publication'],
-                    ['Endpoint.managingOrganization', 'CEHRT vendor assertion', '—', 'None verified'],
+                    ['Endpoint.managingOrganization', 'CEHRT vendor assertion', 'n/a', 'None verified'],
                   ].map(([field, source, cadence, enforce]) => (
                     <tr key={field}>
                       <td className="py-2 pr-3 font-mono text-xs text-gray-800">{field}</td>
@@ -368,7 +368,7 @@ export default function InsightsPage() {
             <p className="text-sm text-gray-600 mt-4">
               <strong className="text-gray-900">Bottom line:</strong> NPD Practitioner + Organization is ~90% NPPES with
               PECOS enrichment for the Medicare subset. CAQH is not in the pipeline. Each field inherits the accuracy
-              guarantees of its upstream — for NPPES fields that means self-attestation with no enforcement.
+              guarantees of its upstream, for NPPES fields that means self-attestation with no enforcement.
             </p>
           </Collapsible>
 
@@ -391,7 +391,7 @@ export default function InsightsPage() {
               <div className="bg-gray-50 rounded-lg p-4">
                 <p className="text-xs font-semibold text-gray-500 uppercase">qualification.period</p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">Mostly empty</p>
-                <p className="text-xs text-gray-600 mt-1">License entries typically have no start/end dates — you cannot distinguish a current license from one that lapsed.</p>
+                <p className="text-xs text-gray-600 mt-1">License entries typically have no start/end dates: you cannot distinguish a current license from one that lapsed.</p>
               </div>
             </div>
             <p className="text-sm text-gray-600">
@@ -425,7 +425,7 @@ export default function InsightsPage() {
               <code className="text-xs bg-gray-100 px-1 py-0.5 rounded mx-1">VerificationResult</code> with
               <code className="text-xs bg-gray-100 px-1 py-0.5 rounded mx-1">attestation-who</code> and
               <code className="text-xs bg-gray-100 px-1 py-0.5 rounded mx-1">primarysource-who</code> extensions, but
-              these are aspirational — no one is populating them in the 2026-05-08 release.
+              these are aspirational: no one is populating them in the 2026-05-08 release.
             </p>
             <p className="text-sm text-gray-600">
               A CAQH-derived feed could theoretically enter NPD indirectly via the payer submission channel: a payer
@@ -433,7 +433,7 @@ export default function InsightsPage() {
               <strong className="text-gray-900"> (1)</strong> you lose CAQH field provenance once reshaped into FHIR
               Provider Directory format, <strong className="text-gray-900">(2)</strong> nothing in NPD will say
               &quot;this came from CAQH re-attestation on date X,&quot; and <strong className="text-gray-900">(3)</strong>
-              it&apos;s scoped to network participants only — not a general credentialing layer. For a single source of
+              it&apos;s scoped to network participants only, not a general credentialing layer. For a single source of
               truth that tells you who&apos;s actively practicing right now, the current NPD architecture does not
               deliver it.
             </p>
@@ -473,7 +473,7 @@ export default function InsightsPage() {
               <p className="text-sm text-gray-700 mt-2">
                 <strong>Anyone making a business or clinical decision off these numbers should verify against primary
                 sources.</strong> The core finding stands regardless: NPD today is a structural improvement over
-                searching NPPES by hand — not yet a provenance improvement.
+                searching NPPES by hand, not yet a provenance improvement.
               </p>
             </div>
           </div>

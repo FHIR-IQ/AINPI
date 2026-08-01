@@ -11,7 +11,7 @@ const VALID_SOURCES = new Set([
   'hero',
   'footer',
   'download_gate',
-  // Inline-capture surfaces (InlineSubscribe component) — one tag per
+  // Inline-capture surfaces (InlineSubscribe component), one tag per
   // placement so per-surface conversion shows up in the admin report.
   'finding_page',
   'landscape_panel',
@@ -53,8 +53,7 @@ export async function POST(req: NextRequest) {
     if (!existing) {
       // Fire-and-forget; the response shouldn't wait on SMTP
       void sendSubscribeWelcome(normalizedEmail);
-      // Realtime admin alert. Skip the totalAfter count if it errors —
-      // the alert itself is more important than the count enrichment.
+      // Realtime admin alert. Skip the totalAfter count if it errors: // the alert itself is more important than the count enrichment.
       void prisma.subscriber
         .count()
         .catch(() => undefined)

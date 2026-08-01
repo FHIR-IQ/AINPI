@@ -7,7 +7,7 @@ import { loadStateFindings } from '@/lib/load-api-v1';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'State directory audits — AINPI',
+  title: 'State directory audits | AINPI',
   description:
     'State-scoped slices of the AINPI audit of the CMS National Provider Directory, prepared as citable methodology for state Medicaid agencies responding to the 2026-04-23 CMS letter on provider revalidation.',
 };
@@ -134,7 +134,7 @@ export default function StatesIndex() {
               gene@fhiriq.com
             </a>{' '}
             with the state code. Underlying methodology is open under Apache-2.0,
-            so a state IT team can also run the analysis script directly — see{' '}
+            so a state IT team can also run the analysis script directly: see{' '}
             <a
               href="https://github.com/FHIR-IQ/AINPI/blob/main/analysis/state_findings.py"
               target="_blank"

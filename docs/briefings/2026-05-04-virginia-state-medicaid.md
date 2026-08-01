@@ -1,17 +1,17 @@
-# Virginia case study — provider directory data quality
+# Virginia case study: provider directory data quality
 
 **Authored by:** AINPI (Eugene Vestel, FHIR-IQ), independent public-good research
 **Reference date:** 2026-05-04 (numbers below refreshed for the 2026-05-08 NDH release)
 **AINPI methodology version:** 0.7.0-draft
 **NDH release pinned:** 2026-05-08 CMS National Provider Directory bulk export (April 2026-04-09 also archived)
 
-This is a worked example using only public federal data. It is published as part of AINPI's per-state catalog; the same shape and signals are available for every US state at `/api/v1/states/<state>/`. AINPI is not authored for, prepared for, or guided by Virginia DMAS or any other state agency — every number is derived from public CMS sources and is independently verifiable.
+This is a worked example using only public federal data. It is published as part of AINPI's per-state catalog; the same shape and signals are available for every US state at `/api/v1/states/<state>/`. AINPI is not authored for, prepared for, or guided by Virginia DMAS or any other state agency. every number is derived from public CMS sources and is independently verifiable.
 
 ---
 
 ## Urgent / critical findings
 
-### H27 — Social Security Numbers exposed in the NDH bulk export
+### H27: Social Security Numbers exposed in the NDH bulk export
 
 On **2026-04-30 the Washington Post reported** that the NDH bulk export AINPI ingests contains provider SSNs. CMS attributed the leak to "incorrect entries of provider or provider-representative-supplied information in the wrong places."
 
@@ -28,7 +28,7 @@ The detection regex is the dashed format only. Undashed 9-digit SSNs are out of 
 
 **This matters for the Virginia conversation even though no VA practitioners are flagged:**
 
-1. It validates the AINPI methodology — we found the same exposure WaPo did, using the same public file, in BigQuery, in a single SQL pass.
+1. It validates the AINPI methodology: we found the same exposure WaPo did, using the same public file, in BigQuery, in a single SQL pass.
 2. It demonstrates that **directory-quality controls at the federal-publication step are missing today**. State Medicaid agencies cannot rely on NDH as a clean upstream source without an independent validation layer.
 3. It strengthens the SMD-letter-response posture for any state Medicaid agency: AINPI provides the validation layer they would otherwise need to build.
 
@@ -44,10 +44,10 @@ Original reporting: [Washington Post, 2026-04-30](https://www.washingtonpost.com
 
 Of **130,127 Virginia-resident practitioners** in the May 2026-05-08 federal NDH bulk export (down from 141,660 in April after CMS dedup):
 
-- **131 are federally excluded today** (active OIG LEIE or SAM.gov listing) and still appear in the directory — direct 42 CFR § 455.436 flags (was 125 in April)
-- **4,090 are NPPES-deactivated** but still listed in NDH — secondary § 455.436 flags (was 4,657 in April)
-- **40.80% of Virginia organizations are NPI duplicates** (27,458 excess of 67,291) — directory-quality concern (was 42.5% in April)
-- **2 of those 131 are listed in Cigna's public Practitioner directory today; 0 in Humana's, 0 in UnitedHealthcare's, 0 in Molina Complete Care's** — across the 4 payer FHIR directories that publish unauthenticated NPI search (was 4 of 125 in April; movement is in the right direction). The substantive Anthem HealthKeepers Plus, Aetna BH of VA, Sentara, and Virginia Premier coverage is Stage B work
+- **131 are federally excluded today** (active OIG LEIE or SAM.gov listing) and still appear in the directory, direct 42 CFR § 455.436 flags (was 125 in April)
+- **4,090 are NPPES-deactivated** but still listed in NDH, secondary § 455.436 flags (was 4,657 in April)
+- **40.80% of Virginia organizations are NPI duplicates** (27,458 excess of 67,291): directory-quality concern (was 42.5% in April)
+- **2 of those 131 are listed in Cigna's public Practitioner directory today; 0 in Humana's, 0 in UnitedHealthcare's, 0 in Molina Complete Care's**: across the 4 payer FHIR directories that publish unauthenticated NPI search (was 4 of 125 in April; movement is in the right direction). The substantive Anthem HealthKeepers Plus, Aetna BH of VA, Sentara, and Virginia Premier coverage is Stage B work
 
 Every NPI cited in this briefing can be independently verified at:
 
@@ -63,10 +63,10 @@ State Medicaid agencies are required to perform monthly federal database checks 
 
 | Database | Source | AINPI coverage |
 | --- | --- | --- |
-| **NPPES** | CMS, free public API | ✅ H10 — VA NPPES match rate 99.50% (May); 4,090 NPPES-deactivated-but-listed |
-| **OIG LEIE** | HHS OIG, free CSV | ✅ H24 — joined to NDH practitioner._npi; weekly refresh in CI |
-| **SAM.gov** | GSA Public Extract V2 | ✅ H25 — joined; HHS slice overlaps LEIE, OPM slice is net-new |
-| **SSA Death Master File** | SSA, certification required | ❌ Out of scope — restricted access (42 USC § 1306c, Section 1110 certification) |
+| **NPPES** | CMS, free public API | Covered (H10): VA NPPES match rate 99.50% (May); 4,090 NPPES-deactivated-but-listed |
+| **OIG LEIE** | HHS OIG, free CSV | Covered (H24): joined to NDH practitioner._npi; weekly refresh in CI |
+| **SAM.gov** | GSA Public Extract V2 | Covered (H25): joined; HHS slice overlaps LEIE, OPM slice is net-new |
+| **SSA Death Master File** | SSA, certification required | Out of scope: restricted access (42 USC § 1306c, Section 1110 certification) |
 
 AINPI covers **3 of 4** federal database checks. The SSA-DMF leg is procurement-blocked at every state.
 
@@ -84,21 +84,21 @@ Source: <https://ainpi.dev/states/va> (`/api/v1/states/va.json`)
 | Organization | 83,163 | **67,291** |
 | Location | 84,640 | **34,157** |
 
-### NPI + taxonomy correctness (H10–H13)
+### NPI + taxonomy correctness (H10-H13)
 
 - **129,470 of 130,127 (99.4951%)** Virginia practitioner NPIs match an active NPPES record (May)
-- **657 NPIs** are in NDH but missing from NPPES — potential ghost providers worth a sampled audit (was 866 in April)
-- **4,090 NPPES-deactivated** providers are still listed in NDH — direct § 455.436 flag (was 4,657 in April)
+- **657 NPIs** are in NDH but missing from NPPES, potential ghost providers worth a sampled audit (was 866 in April)
+- **4,090 NPPES-deactivated** providers are still listed in NDH, direct § 455.436 flag (was 4,657 in April)
 
-### Organization duplicates (H14–H15)
+### Organization duplicates (H14-H15)
 
 - **67,291 Organization resources** in NDH for Virginia
 - **39,833 unique NPIs** carry those resources
-- **27,458 excess records (40.8049%)** — averaging 1.69 NDH records per real organization (was 1.74 in April)
+- **27,458 excess records (40.8049%)**: averaging 1.69 NDH records per real organization (was 1.74 in April)
 
 ### Temporal staleness (H18)
 
-- **231,575 of 231,575 (100%)** VA-resident resources carry the release-day `meta.lastUpdated` — no internal staleness within the bulk
+- **231,575 of 231,575 (100%)** VA-resident resources carry the release-day `meta.lastUpdated`: no internal staleness within the bulk
 
 ---
 
@@ -117,7 +117,7 @@ Composite high-risk score breakdown (score >= 1.5 threshold), May 2026-05-08:
 | `nppes_deactivated + sam_excluded` | 1 | 2.3 | 0.76% |
 | `sam_excluded` only | 1 | 1.5 | 0.76% |
 
-### Verification samples — the 10 highest-scoring NPIs
+### Verification samples: the 10 highest-scoring NPIs
 
 Each is triple-flagged (OIG LEIE active + SAM.gov active + NPPES deactivated). State PI staff can verify each in the three federal portals listed above.
 
@@ -138,7 +138,7 @@ Each is triple-flagged (OIG LEIE active + SAM.gov active + NPPES deactivated). S
 
 ---
 
-## 4. Payer directory exposure — H26 methodology demonstration
+## 4. Payer directory exposure: H26 methodology demonstration
 
 Source: <https://ainpi.dev/findings/mco-exposure-va>
 
@@ -153,10 +153,10 @@ Cross-referenced the 131 VA federally-excluded NPIs (May 2026-05-08) against 4 p
 
 The 2 May Cigna matches (each NPI-confirmed via the Bundle's `identifier[]` array):
 
-- 1710496161 — BURKHEAD, JASON (LEIE-excluded)
-- 1801070313 — BREWER, STEVEN (LEIE-excluded)
+- 1710496161: BURKHEAD, JASON (LEIE-excluded)
+- 1801070313: BREWER, STEVEN (LEIE-excluded)
 
-Each is listed in Cigna's public Practitioner directory as of 2026-05-08. Cigna's directory aggregates commercial + Medicaid managed care lines. Two NPIs that matched in April (JACOBSEN, WHATMOUGH) are no longer surfaced in May — movement is in the right direction; the floor is not zero.
+Each is listed in Cigna's public Practitioner directory as of 2026-05-08. Cigna's directory aggregates commercial + Medicaid managed care lines. Two NPIs that matched in April (JACOBSEN, WHATMOUGH) are no longer surfaced in May: movement is in the right direction; the floor is not zero.
 
 **Three of those four zeroes are themselves meaningful negatives:**
 
@@ -170,14 +170,14 @@ So as of 2026-05-08, the only public payer-directory exposure surface in our 4-c
 
 ---
 
-## 5. Stage B roadmap — what would close the substantive VA-Medicaid version
+## 5. Stage B roadmap: what would close the substantive VA-Medicaid version
 
 | Carrier | Status | What's needed |
 | --- | --- | --- |
 | Anthem HealthKeepers Plus (Anthem Medicaid in VA) | Public PDex endpoint exists at `https://totalview.healthos.elevancehealth.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/` but returns HTTP 500 on every Practitioner query (Elevance server bug, still failing 2026-05-08). Authenticated brand endpoints exist at `/resources/registered/HealthKeepersInc/api/v1/fhir` but require OAuth. | Wait for Elevance to fix the 500s, or register OAuth client. Search must use `family/given/name` per their CapabilityStatement (no `identifier` support); name+filter path like Cigna |
 | Aetna Better Health of Virginia | Endpoint known but OAuth-required | Free dev account at developerportal.aetna.com + client credential |
-| UHC Community Plan | **Now covered** via the consolidated Optum FLEX endpoint (`https://flex.optum.com/fhirpublic/R4`); 0 of 131 matched in May | — |
-| Molina Complete Care | **Now covered** via Azure APIM gateway (`https://api.interop.molinahealthcare.com/providerdirectory`); 0 of 131 matched in May. Dev-portal registration was needed to discover the gateway URL but the gateway itself accepts unauthenticated FHIR queries | — |
+| UHC Community Plan | **Now covered** via the consolidated Optum FLEX endpoint (`https://flex.optum.com/fhirpublic/R4`); 0 of 131 matched in May | n/a |
+| Molina Complete Care | **Now covered** via Azure APIM gateway (`https://api.interop.molinahealthcare.com/providerdirectory`); 0 of 131 matched in May. Dev-portal registration was needed to discover the gateway URL but the gateway itself accepts unauthenticated FHIR queries | n/a |
 | Sentara Community Plan | API delayed per parent payer notice | Wait or reach out to Sentara |
 | Virginia Premier | Discovery not started | Probe public endpoints |
 
@@ -187,24 +187,24 @@ Estimated lift: ~half-day per carrier to register, store credentials in GitHub A
 
 ## 6. What a state Medicaid Program Integrity unit can do tomorrow
 
-1. **Pull the 131-NPI CSV** at <https://ainpi.dev/api/v1/states/va-cohort-critical.csv> — feed into the MMIS reconciliation queue.
+1. **Pull the 131-NPI CSV** at <https://ainpi.dev/api/v1/states/va-cohort-critical.csv>: feed into the MMIS reconciliation queue.
 2. **For each NPI**, run the 42 CFR § 455.436 verification triad (LEIE + SAM + NPPES) using the URLs in the CSV. Document the match in the provider's MMIS record per § 455.436(b)(1).
 3. **For NPPES-deactivated providers** still appearing in NDH (4,090 statewide in May, down from 4,657 in April), evaluate whether they're contracted with any Cardinal Care MCO. If so, raise to the MCO under the directory accuracy provisions of § 438.602.
-4. **Cite the AINPI methodology** as one input in any state Medicaid agency's response to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation strategies — the framework is at <https://ainpi.dev/smd-revalidation>.
+4. **Cite the AINPI methodology** as one input in any state Medicaid agency's response to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation strategies: the framework is at <https://ainpi.dev/smd-revalidation>.
 
 ---
 
-## 6b. Claims-side cross-audit — H29 published 2026-05-14 (VA pilot)
+## 6b. Claims-side cross-audit: H29 published 2026-05-14 (VA pilot)
 
-Virginia is shipped as the most-developed worked example of the AINPI × public claims data cross-audit (pre-registered 2026-05-14; roadmap at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap>). H29 — the first claims-side finding — published the same day against the HHS Medicaid Provider Spending dataset (2026-02-09 release, T-MSIS 2018–2024, NPI-keyed, public). The same cross-audit has now shipped per-state CSVs for all 51 US jurisdictions.
+Virginia is shipped as the most-developed worked example of the AINPI × public claims data cross-audit (pre-registered 2026-05-14; roadmap at <https://ainpi.dev/smd-revalidation/cross-audit-roadmap>). H29, the first claims-side finding, published the same day against the HHS Medicaid Provider Spending dataset (2026-02-09 release, T-MSIS 2018-2024, NPI-keyed, public). The same cross-audit has now shipped per-state CSVs for all 51 US jurisdictions.
 
 ### Headline (per <https://ainpi.dev/findings/excluded-paid-by-medicaid>)
 
-**28 of 125 currently-active federally-excluded VA-resident NPIs (per NPPES practice state) received Medicaid payments somewhere in T-MSIS 2018–2024. Combined paid amount across all state Medicaid programs: $8,487,744 over 217,655 claim lines.**
+**28 of 125 currently-active federally-excluded VA-resident NPIs (per NPPES practice state) received Medicaid payments somewhere in T-MSIS 2018-2024. Combined paid amount across all state Medicaid programs: $8,487,744 over 217,655 claim lines.**
 
 Two source-data limits a state PI team should keep in mind when reading the per-row CSV:
 
-1. **The HHS file has no state-of-payment column.** Paid amounts aggregate across every state Medicaid program that paid the NPI. The VA-resident cohort is per NPPES practice state, not per state of payment — some matches may reflect billing in other states.
+1. **The HHS file has no state-of-payment column.** Paid amounts aggregate across every state Medicaid program that paid the NPI. The VA-resident cohort is per NPPES practice state, not per state of payment, some matches may reflect billing in other states.
 2. **The cohort export does not currently pin per-NPI exclusion-effective dates.** A row's paid amounts may include claim months that pre-date the exclusion. Per-NPI MMIS triage should reconcile against the LEIE / SAM effective date via the verification URLs in the CSV.
 
 Top 5 matched NPIs by paid amount (full list in the CSV):
@@ -217,42 +217,42 @@ Top 5 matched NPIs by paid amount (full list in the CSV):
 | 1609825553 | BUGARIN, LOPITO | $490,237 | 7,960 | 6,496 | 2018-01 | 2021-03 |
 | 1588611610 | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) | (see CSV) |
 
-### Phase 1 + Phase 2 deliverables — all published 2026-05-14
+### Phase 1 + Phase 2 deliverables: all published 2026-05-14
 
-The H23 cohort export now carries per-NPI `leie_excldate` and `sam_active_date` so each claims-side finding can be split into **strict post-exclusion** (claim date > exclusion-effective date) vs **full-window** (any claim in the source-file window). The strict-post-exclusion result is the regulatorily significant signal under 42 CFR § 455.436 / 42 USC § 1320a-7 — pre-exclusion billing reflects work the provider was authorized to do at the time.
+The H23 cohort export now carries per-NPI `leie_excldate` and `sam_active_date` so each claims-side finding can be split into **strict post-exclusion** (claim date > exclusion-effective date) vs **full-window** (any claim in the source-file window). The strict-post-exclusion result is the regulatorily significant signal under 42 CFR § 455.436 / 42 USC § 1320a-7: pre-exclusion billing reflects work the provider was authorized to do at the time.
 
 | Finding | Per-state CSV | Strict post-excl | Full window |
 | --- | --- | ---: | ---: |
-| **H29** Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | **0 of 125** ($0) | 28 of 125 ($8.5M, 2018–2024) |
+| **H29** Medicaid spending | `/api/v1/states/va/h29-excluded-paid.csv` | **0 of 125** ($0) | 28 of 125 ($8.5M, 2018-2024) |
 | **H30a** Medicare Part B | `/api/v1/states/va/h30a-excluded-billing-partb.csv` | **0 of 125** ($0) | 8 of 125 (CY 2023) |
 | **H30b** Medicare Part D | `/api/v1/states/va/h30b-excluded-prescribing-partd.csv` | **0 of 125** ($0) | 10 of 125 ($1.4M drug cost; 6 opioid prescribers) |
 | **H33** DMEPOS suppliers | `/api/v1/states/va/h33-dmepos-excluded-va.csv` | n/a | 0 of 63,988 nationally |
-| **H31** NPPES-deactivated × any billing | `/api/v1/states/va/h31-deactivated-paid.csv` | 3 of 1,495 | (same — H31 was strict-filtered from the start) |
+| **H31** NPPES-deactivated × any billing | `/api/v1/states/va/h31-deactivated-paid.csv` | 3 of 1,495 | (same, H31 was strict-filtered from the start) |
 | **H32** Industry payments (Sunshine Act) | `/api/v1/states/va/h32-excluded-industry-payments-va.csv` | **198 of 8,619 nationally** ($167K) · **2 VA** | 350 of 8,619 ($3.8M PY 2024) · 9 VA |
-| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | n/a | **0 confirmed-NPI / 17 candidate-demographic (VA)** — 0 confirmed-NPI / 1,779 candidate-demographic nationally |
+| **H35** SNF/Hospice/HHA/Hospital ownership | `/api/v1/states/va/h35-nh-ownership-flags.csv` | n/a | **0 confirmed-NPI / 17 candidate-demographic (VA)**: 0 confirmed-NPI / 1,779 candidate-demographic nationally |
 
 ### What the strict-filter shift means for state Medicaid Program Integrity
 
-The earlier "28 of 125 paid \$8.5M" (H29 full-window) framing was technically true but regulatorily incorrect — it was capturing **pre-exclusion legitimate billing**, not § 455.436 violations. The strict-post-exclusion column corrects this:
+The earlier "28 of 125 paid \$8.5M" (H29 full-window) framing was technically true but regulatorily incorrect: it was capturing **pre-exclusion legitimate billing**, not § 455.436 violations. The strict-post-exclusion column corrects this:
 
-- **For H29 / H30a / H30b**: 0 VA-cohort NPIs received Medicaid, Part B, or Part D payment in a calendar period strictly after their LEIE/SAM exclusion took effect. The system actually worked — once excluded, federal-program billing stopped in the data.
-- **For H32**: 198 of 350 industry-payment matches were strictly post-exclusion (\$167K — much smaller than the full-window \$3.8M because the \$3M FRANK, ALEXANDER payment was pre-exclusion). 2 of the 9 VA matches were strict post-exclusion.
+- **For H29 / H30a / H30b**: 0 VA-cohort NPIs received Medicaid, Part B, or Part D payment in a calendar period strictly after their LEIE/SAM exclusion took effect. The system actually worked: once excluded, federal-program billing stopped in the data.
+- **For H32**: 198 of 350 industry-payment matches were strictly post-exclusion (\$167K, much smaller than the full-window \$3.8M because the \$3M FRANK, ALEXANDER payment was pre-exclusion). 2 of the 9 VA matches were strict post-exclusion.
 - **For H31**: was strict-filtered from the start (3 of 1,495 billed strictly after their NPPES deactivation date).
 
 **The remaining directory-side problem persists** (H10: NPPES-deactivated still listed in NDH; H24/H25: federally-excluded still appearing in NDH bulk export). But the claims-side data shows the federal-program payment gate is mostly holding once exclusions take effect.
 
-**The compounding signal pattern still holds**: BREWER, STEVEN (NPI 1801070313) is in five independent public-data cross-references (H23/H24 + H26 + H29 + H30a + H30b) — those are all full-window matches in the regions before his current exclusion took effect. The directory-side flag (currently LEIE-excluded) is real and current; the claims-side billing patterns reflect his pre-exclusion practice. This is what makes the cohort itself actionable — these NPIs are *currently* excluded, even if their historical billing is technically pre-exclusion.
+**The compounding signal pattern still holds**: BREWER, STEVEN (NPI 1801070313) is in five independent public-data cross-references (H23/H24 + H26 + H29 + H30a + H30b): those are all full-window matches in the regions before his current exclusion took effect. The directory-side flag (currently LEIE-excluded) is real and current; the claims-side billing patterns reflect his pre-exclusion practice. This is what makes the cohort itself actionable: these NPIs are *currently* excluded, even if their historical billing is technically pre-exclusion.
 
 ### How state PI triage should read these files
 
 1. **Multi-source matches first.** Any NPI flagged in H29 + H30a + H30b + H31 is by definition stronger than a single-source match.
 2. **Opioid prescribers (H30b non-zero `opioid_claims_2023`) second.** Federal opioid-prescriber enforcement under the SUPPORT Act is its own referral path; DEA-OD coordination matters.
-3. **NPPES-deactivated billers (H31) third.** Each match is a closed identifier still in circulation — a discovery the MMIS reconciliation queue might miss without the H10 directory-side anchor.
+3. **NPPES-deactivated billers (H31) third.** Each match is a closed identifier still in circulation, a discovery the MMIS reconciliation queue might miss without the H10 directory-side anchor.
 4. **Industry payments (H32) for context, not action.** A LEIE-excluded NPI receiving \$X in industry payments is a compliance signal for the manufacturer, not a state PI signal specifically.
 
 ### Open methodology items
 
-- Cohort exporter enhancement to carry per-NPI `leie_excldate` and `sam_active_date` — lifts H29 from "paid 2018–2024 somewhere" to "paid strictly after exclusion date." **Shipped 2026-05-14 (methodology #1).**
+- Cohort exporter enhancement to carry per-NPI `leie_excldate` and `sam_active_date`: lifts H29 from "paid 2018-2024 somewhere" to "paid strictly after exclusion date." **Shipped 2026-05-14 (methodology #1).**
 - Stage B for H35 = NPI cross-walk via the CMS Medicare Fee-For-Service Public Provider Enrollment File (PPEF). PPEF publishes NPI ↔ PECOS_ASCT_CNTL_ID for 2.47M individual NPIs; the All Owners files publish ASSOCIATE ID - OWNER (same identifier space). **Shipped 2026-05-14 (methodology #2).** Result: 0 confirmed-NPI matches (exclusion forces Medicare revocation, so most excluded NPIs are not in PPEF) + 1,779 candidate-demographic matches via (LAST, FIRST, FACILITY_STATE). Methodology #2 also fixed the v1 structural-null caused by joining on owner STATE, which is 100% empty for individual owners in the source files.
 - Phase 3 (H34 POS-deactivated-contradiction) still blocked on CCN ↔ NPI cross-walk (the CMS POS files are CCN-keyed and do not carry NPI). H36 NDH-completeness-gap **shipped 2026-05-14**: 99.99984% NDH completeness against material Medicare Part B billers (2 of 1.26M individual NPIs missing).
 
@@ -260,7 +260,7 @@ The earlier "28 of 125 paid \$8.5M" (H29 full-window) framing was technically tr
 
 H29 is itself an Element 2 deliverable today. Citation language:
 
-> The Virginia Department of Medical Assistance Services references the AINPI methodology (<https://github.com/FHIR-IQ/AINPI>, version 0.6.0-draft, NDH release 2026-05-08) as one input to its provider revalidation strategy under 42 CFR § 455.436. The published claims-side cross-audit finding at <https://ainpi.dev/findings/excluded-paid-by-medicaid> identifies 28 of 125 VA-resident federally-excluded NPIs that received Medicaid payments in T-MSIS 2018–2024 totaling $8.5M, providing a public-facing measurement of the federal-data-quality gap the strategy is intended to close. Per-row data is at <https://ainpi.dev/api/v1/states/va/h29-excluded-paid.csv>.
+> The Virginia Department of Medical Assistance Services references the AINPI methodology (<https://github.com/FHIR-IQ/AINPI>, version 0.6.0-draft, NDH release 2026-05-08) as one input to its provider revalidation strategy under 42 CFR § 455.436. The published claims-side cross-audit finding at <https://ainpi.dev/findings/excluded-paid-by-medicaid> identifies 28 of 125 VA-resident federally-excluded NPIs that received Medicaid payments in T-MSIS 2018-2024 totaling $8.5M, providing a public-facing measurement of the federal-data-quality gap the strategy is intended to close. Per-row data is at <https://ainpi.dev/api/v1/states/va/h29-excluded-paid.csv>.
 
 ---
 
@@ -299,7 +299,7 @@ For a permanent reference, pin to the latest release tag: <https://github.com/FH
 ## 9. Anticipated Q&A
 
 **Q: How can we verify these federally excluded providers are actually still listed?**
-A: Each NPI in the CSV links to NPPES Registry, the LEIE search portal, and SAM.gov search. Pull a sample of 5–10 and cross-check.
+A: Each NPI in the CSV links to NPPES Registry, the LEIE search portal, and SAM.gov search. Pull a sample of 5-10 and cross-check.
 
 **Q: Are these fraud determinations?**
 A: No. Each match is a data-quality and triage flag. Investigation, hearing rights, and reinstatement claims belong to the excluding agency and the state Medicaid Program Integrity unit.
@@ -308,15 +308,14 @@ A: No. Each match is a data-quality and triage flag. Investigation, hearing righ
 A: Both are refreshed weekly by the AINPI weekly-refresh GitHub Action. LEIE pulls UPDATED.csv from oig.hhs.gov/exclusions/downloadables. SAM pulls the V2 monthly extract.
 
 **Q: What's the difference between the LEIE finding (H24) and the SAM finding (H25)?**
-A: SAM aggregates HHS LEIE + OPM FEHBP debarment + DOJ + EPA + others into one feed. The HHS slice substantially overlaps LEIE. The OPM slice (FEHBP debarment under 5 USC 8902a) is **net-new federal-screening signal not visible from LEIE alone** — that's where the value is.
+A: SAM aggregates HHS LEIE + OPM FEHBP debarment + DOJ + EPA + others into one feed. The HHS slice substantially overlaps LEIE. The OPM slice (FEHBP debarment under 5 USC 8902a) is **net-new federal-screening signal not visible from LEIE alone**: that's where the value is.
 
-**Q: Can we use this in our SMD-letter response?**
-A: Yes — the framework is pinnable to release tags for audit reproducibility, and the citation language above is ready to paste. <https://ainpi.dev/smd-revalidation> is the methodology landing page mapped to the 5 elements of the SMD letter.
+**Q: Can we use this in our SMD-letter response?** A: Yes, the framework is pinnable to release tags for audit reproducibility, and the citation language above is ready to paste. <https://ainpi.dev/smd-revalidation> is the methodology landing page mapped to the 5 elements of the SMD letter.
 
-**Q: What about the Anthem HealthKeepers Plus, Aetna BH of VA, and UHC Community Plan providers — does AINPI cover them too?**
+**Q: What about the Anthem HealthKeepers Plus, Aetna BH of VA, and UHC Community Plan providers: does AINPI cover them too?**
 A: Two of six are covered as of 2026-05-02:
 
-- **UHC Community Plan**: covered via Optum's consolidated public FHIR endpoint (`https://flex.optum.com/fhirpublic/R4` — covers UHC commercial + UHC Community Plan + OptumRx in one tree of ~1,400 InsurancePlans). 0 of 125 federally excluded VA NPIs matched.
+- **UHC Community Plan**: covered via Optum's consolidated public FHIR endpoint (`https://flex.optum.com/fhirpublic/R4`: covers UHC commercial + UHC Community Plan + OptumRx in one tree of ~1,400 InsurancePlans). 0 of 125 federally excluded VA NPIs matched.
 - **Molina Complete Care**: covered via the Azure APIM gateway (`https://api.interop.molinahealthcare.com/providerdirectory`, Sapphire360 backend, no auth required despite the registration-gated dev portal). 0 of 125 matched.
 
 The remaining four:

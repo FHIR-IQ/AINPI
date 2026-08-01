@@ -12,12 +12,12 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-07-13 update — no June release, and the missing endpoints are already public',
+    'AINPI 2026-07-13 update: no June release, and the missing endpoints are already public',
   description:
     'The NDH manifest still serves the May release after 66 days. Meanwhile the CMS directory team published a scrape of 31,255 certified-EHR FHIR endpoints with NPIs and states attached, while 98.7% of NDH organizations carried zero endpoints in the April release. H45 pre-registered: the per-state gap between publicly-published endpoints and what the NDH carries.',
   openGraph: {
     title:
-      'AINPI 2026-07-13 — the endpoints the NDH is missing are already public',
+      'AINPI 2026-07-13, the endpoints the NDH is missing are already public',
     description:
       'No June NDH release. The CMS team scraped 31,255 CEHRT FHIR endpoints from HTI-1 bundles; 98.7% of NDH orgs carried zero endpoints in April. H45 measures the gap, state by state.',
     url: 'https://ainpi.dev/reports/2026-07-13-update',

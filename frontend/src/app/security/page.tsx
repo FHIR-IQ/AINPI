@@ -8,11 +8,11 @@ const DOC_PATH = 'SECURITY.md';
 const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
-  title: 'Security policy — AINPI',
+  title: 'Security policy | AINPI',
   description:
     'How to report security vulnerabilities in AINPI. 48-hour acknowledgement, coordinated disclosure.',
   openGraph: {
-    title: 'Security policy — AINPI',
+    title: 'Security policy | AINPI',
     description: 'Report vulnerabilities to gene@fhiriq.com; see the disclosure SLA.',
     url: 'https://ainpi.dev/security',
     type: 'article',

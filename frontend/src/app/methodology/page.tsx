@@ -11,9 +11,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const { frontMatter } = loadMarkdown(DOC_PATH, 'AINPI methodology');
   const title = frontMatter.title || 'AINPI methodology';
   const description =
-    'Reproducible, versioned methodology for auditing the CMS National Provider Directory — data sources, DAMA DMBOK mapping, validation pipeline, referential integrity, endpoint liveness (L0–L7), identity correctness, and temporal analysis.';
+    'Reproducible, versioned methodology for auditing the CMS National Provider Directory: data sources, DAMA DMBOK mapping, validation pipeline, referential integrity, endpoint liveness (L0-L7), identity correctness, and temporal analysis.';
   return {
-    title: `${title} — AINPI`,
+    title: `${title}: AINPI`,
     description,
     openGraph: { title, description, type: 'article', url: 'https://ainpi.dev/methodology' },
     twitter: { card: 'summary_large_image', title, description },

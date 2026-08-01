@@ -78,8 +78,7 @@ export default function StateSidePanel({ state, onClose }: StateSidePanelProps) 
             audit.partbPartd.opioidPrescribers > 0 ? (
               <span className="text-rose-700">
                 <strong>{audit.partbPartd.opioidPrescribers}</strong> opioid
-                prescriber{audit.partbPartd.opioidPrescribers === 1 ? '' : 's'} —
-                DEA-coordination signal
+                prescriber{audit.partbPartd.opioidPrescribers === 1 ? '' : 's'}: DEA-coordination signal
               </span>
             ) : (
               <span className="text-slate-500">No opioid prescribers in cohort</span>

@@ -5,11 +5,11 @@ import AuthorByline from '@/components/AuthorByline';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'REAL Health Providers Act — independent audit substrate — AINPI',
+  title: 'REAL Health Providers Act: independent audit substrate | AINPI',
   description:
     'How AINPI maps to the verification, removal, and accuracy-scoring obligations of the Requiring Enhanced & Accurate Lists of Health Providers Act (HR 7148 § 6220). Public, reproducible, record-level cross-source verification for the 2028 compliance window and the 2029 machine-readable scoring requirement.',
   openGraph: {
-    title: 'REAL Health Providers Act — independent audit substrate',
+    title: 'REAL Health Providers Act: independent audit substrate',
     description:
       'Record-level, cross-source provider directory verification mapped to every § 6220 requirement. Public methodology, machine-readable output.',
     url: 'https://ainpi.dev/real-health-providers',
@@ -26,11 +26,11 @@ export default function RealHealthProvidersPage() {
           Policy brief · For MA plans, payer ops, and the CMS scoring methodology RFC
         </p>
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          REAL Health Providers Act — an independent audit substrate
+          REAL Health Providers Act, an independent audit substrate
         </h1>
         <p className="text-lg text-gray-700 mb-2">
-          HR 7148 § 6220 — the Requiring Enhanced &amp; Accurate Lists of
-          Health Providers Act — was signed into law on 2026-02-03. Medicare
+          HR 7148 § 6220, the Requiring Enhanced &amp; Accurate Lists of
+          Health Providers Act: was signed into law on 2026-02-03. Medicare
           Advantage plans must verify every provider record every 90 days,
           remove departed providers within 5 business days, and submit an
           annual accuracy analysis to HHS. Starting with plan year 2029, CMS
@@ -152,7 +152,7 @@ export default function RealHealthProvidersPage() {
           <p className="text-gray-800 mt-3">
             Decomposed cross-source scoring is the only approach a plan
             cannot grade itself on. It is what AINPI implements. It is also
-            what § 6220&apos;s eight required fields — taken together — most
+            what § 6220&apos;s eight required fields: taken together: most
             naturally map to.
           </p>
         </section>
@@ -208,11 +208,11 @@ export default function RealHealthProvidersPage() {
                 <td className="py-3 px-3 text-gray-700">
                   AINPI&apos;s{' '}
                   <a href="/findings/referential-integrity" className="underline">
-                    H6–H8
+                    H6-H8
                   </a>{' '}
                   and{' '}
                   <a href="/findings/npi-taxonomy-correctness" className="underline">
-                    H9–H13
+                    H9-H13
                   </a>{' '}
                   measure presence and validity of name, NPI, specialty
                   taxonomy, and address fields. New-patient acceptance, ADA
@@ -225,13 +225,13 @@ export default function RealHealthProvidersPage() {
                   Annual accuracy analysis
                 </td>
                 <td className="py-3 px-3 text-gray-700">
-                  AINPI&apos;s pre-registered H1–H42 hypothesis catalog is
+                  AINPI&apos;s pre-registered H1-H42 hypothesis catalog is
                   already a structured, reproducible accuracy analysis. Each
                   finding carries{' '}
                   <code>methodology_version</code>,{' '}
                   <code>commit_sha</code>,{' '}
                   <code>generated_at</code>, and a primary-source verify URL
-                  per flagged NPI. The L0–L7 trust scoring framework documented
+                  per flagged NPI. The L0-L7 trust scoring framework documented
                   at <a href="/methodology" className="underline">/methodology</a>{' '}
                   decomposes the score into independently citable dimensions.
                 </td>
@@ -241,7 +241,7 @@ export default function RealHealthProvidersPage() {
                   MH / SUD oversampling
                 </td>
                 <td className="py-3 px-3 text-gray-700">
-                  The H29–H36 claims-side cross-audit already filters by
+                  The H29-H36 claims-side cross-audit already filters by
                   taxonomy. Mental-health and SUD specialties can be sliced
                   cleanly from the same pipeline; the existing per-state
                   audit slice generator (<code>analysis/state_findings.py</code>)
@@ -319,7 +319,7 @@ export default function RealHealthProvidersPage() {
                   actually responds
                 </td>
                 <td className="py-2 px-3 text-gray-600">
-                  H1–H5 endpoint probe
+                  H1-H5 endpoint probe
                 </td>
               </tr>
               <tr className="align-top">

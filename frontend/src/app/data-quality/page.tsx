@@ -152,7 +152,7 @@ function DashboardContent() {
       <div className="max-w-[1400px] mx-auto px-4 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">CMS National Provider Directory</h1>
-          <p className="text-gray-500 mt-1">Cross-filtered, drill-down data quality intelligence — Release 2026-05-08</p>
+          <p className="text-gray-500 mt-1">Cross-filtered, drill-down data quality intelligence: Release 2026-05-08</p>
         </div>
 
         <FilterBreadcrumb />
@@ -173,7 +173,7 @@ function DashboardContent() {
         ) : summary && (
           <div className="space-y-8">
 
-            {/* Validation panel at the top — authoritative source-vs-ingested check */}
+            {/* Validation panel at the top: authoritative source-vs-ingested check */}
             <DataValidationPanel />
 
             {/* Row 1: KPI + Gauge */}
@@ -220,12 +220,12 @@ function DashboardContent() {
               />
             </div>
 
-            {/* State Detail Panel — appears when state is selected */}
+            {/* State Detail Panel: appears when state is selected */}
             {filters.state && <StateDetailPanel />}
 
             {/* Row 4: Top States Stacked Bar with click-to-filter */}
             <div className="card">
-              <ChartHeader title="States — Providers, Organizations & Locations" subtitle="Click a state bar to filter">
+              <ChartHeader title="States: Providers, Organizations & Locations" subtitle="Click a state bar to filter">
                 <ChartSelect label="Show" value={barTop} options={BAR_TOPS} onChange={setBarTop} />
               </ChartHeader>
               <StateBarChart
@@ -311,7 +311,7 @@ function DashboardContent() {
             {sankeyOrgs.length > 0 && (
               <div className="card">
                 <ChartHeader
-                  title={'Organization Network Flow' + (filters.state ? ' — ' + filters.state : '')}
+                  title={'Organization Network Flow' + (filters.state ? ': ' + filters.state : '')}
                   subtitle="Organization → Practitioners → Endpoints"
                 >
                   <ChartSelect label="Show" value={sankeyLimit} options={SANKEY_LIMITS} onChange={setSankeyLimit} />
@@ -353,7 +353,7 @@ function DashboardContent() {
               </div>
             )}
 
-            {/* Row 10: State table — respects state filter */}
+            {/* Row 10: State table: respects state filter */}
             <div className="card">
               <ChartHeader title="State-Level Data Quality" subtitle="Filterable table with completeness metrics. Click a state to drill down.">
                 <input
@@ -404,7 +404,7 @@ function DashboardContent() {
             </div>
 
             <p className="text-xs text-gray-400 text-center">
-              CMS National Provider Directory (directory.cms.gov) — Release 2026-05-08 — Powered by Google BigQuery
+              CMS National Provider Directory (directory.cms.gov): Release 2026-05-08: Powered by Google BigQuery
             </p>
           </div>
         )}

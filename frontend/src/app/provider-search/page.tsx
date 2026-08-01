@@ -155,7 +155,7 @@ export default function ProviderSearchPage() {
           <p className="mt-2 text-gray-600 text-sm max-w-3xl">
             Live query across the CMS National Provider Directory, the NPPES NPI
             Registry, and 4 payer FHIR directories. Each source returns whatever
-            fields it carries — see them side by side. Search by NPI, or by name.
+            fields it carries: see them side by side. Search by NPI, or by name.
           </p>
         </div>
 
@@ -505,7 +505,7 @@ function PractitionerBlock({ p }: { p: NormalizedPractitioner }) {
               <li key={i}>
                 <Award className="w-3 h-3 inline-block text-gray-400 mr-1" />
                 {q.display || q.code || '(unspecified)'}
-                {q.issuer && <span className="text-gray-500"> — {q.issuer}</span>}
+                {q.issuer && <span className="text-gray-500">: {q.issuer}</span>}
                 {q.period && <span className="text-gray-500 text-xs ml-1.5">{q.period}</span>}
               </li>
             ))}

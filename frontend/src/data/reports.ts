@@ -35,7 +35,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'aug-2026-08-01-update',
     version: '2026-08-01-update',
-    title: '2026-08-01 update — half the states have a Medicaid directory you can actually open',
+    title: '2026-08-01 update: half the states have a Medicaid directory you can actually open',
     description:
       'H46 published, computed entirely from public data at zero cost: CMS lists a Medicaid provider directory for 32 of 51 states and DC, and 5 of those listed URLs do not resolve, so 27 of 51 (52.9%) have a catalogued directory the public can open. Plus a baseline of the federated payer registry: 2,557 Medicare Advantage plans enumerated, zero payer-published files, zero endpoints.',
     format: 'web',
@@ -46,7 +46,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'jul-2026-07-13-update',
     version: '2026-07-13-update',
-    title: '2026-07-13 update — no June release, and the missing endpoints are already public',
+    title: '2026-07-13 update: no June release, and the missing endpoints are already public',
     description:
       'The NDH manifest still serves the May release after 66 days. The CMS directory team published a scrape of 31,255 certified-EHR FHIR endpoints (HTI-1 bundles) with NPIs and states attached; 98.7% of NDH orgs carried zero endpoints in the April release. H45 pre-registered: the per-state coverage gap, computed from public data on both sides.',
     format: 'web',
@@ -58,7 +58,7 @@ export const REPORTS: ReportOption[] = [
     version: 'state-of-ndh-v1.0.0',
     title: 'State of the National Provider Directory (v1.0)',
     description:
-      'The full white paper — pre-registered findings against the 2026-05-08 CMS NPD release. Printable.',
+      'The full white paper: pre-registered findings against the 2026-05-08 CMS NPD release. Printable.',
     format: 'pdf',
     url: '/downloads/ainpi-state-of-ndh-v1.0.0.pdf',
     length: '~30 pages',
@@ -66,9 +66,9 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'jun-2026-06-25-update',
     version: '2026-06-25-update',
-    title: '2026-06-25 update — what is actually in an NDH endpoint record? (H44)',
+    title: '2026-06-25 update: what is actually in an NDH endpoint record? (H44)',
     description:
-      'H44 — endpoint metadata coverage vs the HTE submission spec — published. Of the 9 endpoint fields the spec collects, 5 have no home in the NDH FHIR Endpoint profile (STU1); the extensions that could carry the others are 0% populated across all 114,071 FHIR-REST endpoints. Today the NDH knows an endpoint address and payload type (both 100%), and that is the whole record.',
+      'H44 (endpoint metadata coverage vs the HTE submission spec) published. Of the 9 endpoint fields the spec collects, 5 have no home in the NDH FHIR Endpoint profile (STU1); the extensions that could carry the others are 0% populated across all 114,071 FHIR-REST endpoints. Today the NDH knows an endpoint address and payload type (both 100%), and that is the whole record.',
     format: 'web',
     url: '/reports/2026-06-25-update',
     length: '~4 min read',
@@ -76,9 +76,9 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'jun-2026-06-09-update',
     version: '2026-06-09-update',
-    title: '2026-06-09 update — 99.98% of practitioners carry a phone on the record (H43)',
+    title: '2026-06-09 update: 99.98% of practitioners carry a phone on the record (H43)',
     description:
-      'H43 — practitioner phone-number reachability — published. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 release carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 have no phone on any resource. The pre-registered prior (phone on the location, NPPES-style) was rejected by the data.',
+      'H43 (practitioner phone-number reachability) published. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 release carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 have no phone on any resource. The pre-registered prior (phone on the location, NPPES-style) was rejected by the data.',
     format: 'web',
     url: '/reports/2026-06-09-update',
     length: '~4 min read',
@@ -86,7 +86,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'jun-2026-06-02-update',
     version: '2026-06-02-update',
-    title: '2026-06-02 update — landscape becomes the front door, REAL Health audit framework published',
+    title: '2026-06-02 update: landscape becomes the front door, REAL Health audit framework published',
     description:
       'Two coordinated releases: the homepage swaps to a Karpathy-style hierarchical treemap (548 cells, 6 audit dimensions, one per state × specialty) and a new policy brief maps every § 6220 obligation of the REAL Health Providers Act to the AINPI signal that measures it. The choropleth moves to /map.',
     format: 'web',
@@ -96,7 +96,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'may-2026-05-22-update',
     version: '2026-05-22-update',
-    title: '2026-05-22 update — H40 published, one confirmed case, three SAM-NPI false positives',
+    title: '2026-05-22 update: H40 published, one confirmed case, three SAM-NPI false positives',
     description:
       'Sharpened H30a to per-(NPI, HCPCS, place-of-service) detail. Cross-audit surfaced 4 strict-post-exclusion candidates nationally; primary-source verification confirms 1 (Eduardo Miranda MD, LEIE-excluded 2015, $880K Medicare Part B in CY 2023) and reveals 3 SAM-NPI-join false positives. H42 null result honestly framed.',
     format: 'web',
@@ -106,7 +106,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'may-2026-05-14-update',
     version: '2026-05-14-update',
-    title: '2026-05-14 update — claims-side cross-audit shipped',
+    title: '2026-05-14 update: claims-side cross-audit shipped',
     description:
       '8 new findings (H29-H36) link AINPI\'s directory cohort to Medicaid spending, Medicare Part B / Part D, Open Payments, DMEPOS, nursing-home ownership, and NDH completeness. Strict-post-exclusion attribution and the H35 Stage B PPEF cross-walk fix shipped this week.',
     format: 'web',
@@ -116,7 +116,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'may-2026-05-08-update',
     version: '2026-05-08-update',
-    title: '2026-05-08 update — first comparable-release deltas',
+    title: '2026-05-08 update: first comparable-release deltas',
     description:
       'CMS pushed a new NDH bulk export. Endpoint −73%, Location −61%, OrgAffiliation +147%; total 27.2M → 21.7M. SSN exposures 46 → 41 (CMS partially scrubbed). Organization NPI-duplicate excess 383K → 1.41M. Two source-side schema breaks AINPI caught.',
     format: 'web',
@@ -126,7 +126,7 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'may-2026-update',
     version: 'may-2026-update',
-    title: 'May 2 update — H26, H27, and SMD-letter readiness',
+    title: 'May 2 update: H26, H27, and SMD-letter readiness',
     description:
       'Independent verification of the 2026-04-30 Washington Post SSN-exposure finding (63 confirmed in the April release), the VA payer-directory cross-reference, and the v0.4.0 high-risk cohort closing 3 of 4 § 455.436 federal database checks.',
     format: 'web',

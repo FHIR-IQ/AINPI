@@ -1,6 +1,6 @@
 /**
  * Shared helpers for NPD search queries.
- * Pure functions — unit-tested in tests/lib/npd-search-utils.test.ts.
+ * Pure functions: unit-tested in tests/lib/npd-search-utils.test.ts.
  */
 
 // Common credential suffixes that users type into search boxes but that don't

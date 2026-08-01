@@ -20,11 +20,11 @@
  *   `CRON_SECRET` env var. Manual hits without that header 401.
  *
  * Required env:
- *   CRON_SECRET                   — Vercel Cron auth shared secret
- *   RESEND_API_KEY                — Resend API key
- *   POSTGRES_PRISMA_URL           — Supabase pooler URL
- *   ADMIN_EMAIL                   — optional override; defaults to gene@fhiriq.com
- *   VERCEL_DASHBOARD_URL          — optional override for the analytics deep-link
+ *   CRON_SECRET: Vercel Cron auth shared secret
+ *   RESEND_API_KEY: Resend API key
+ *   POSTGRES_PRISMA_URL: Supabase pooler URL
+ *   ADMIN_EMAIL: optional override; defaults to gene@fhiriq.com
+ *   VERCEL_DASHBOARD_URL: optional override for the analytics deep-link
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
@@ -51,7 +51,7 @@ function authorize(req: NextRequest): boolean {
 }
 
 function fmtDate(d: Date | null): string {
-  if (!d) return '—';
+  if (!d) return 'n/a';
   return d.toISOString().slice(0, 10);
 }
 
@@ -140,11 +140,11 @@ export async function GET(req: NextRequest) {
   const projSuffix = analytics.ok
     ? `, ${analytics.projectsWithAnalytics.length} of ${analytics.projectsDiscovered} projects with analytics`
     : '';
-  const subject = `AINPI weekly admin report — ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads${projSuffix}`;
+  const subject = `AINPI weekly admin report: ${fmtDate(now)} · ${subscribers.length} subscribers, ${newLast7} new, ${recentDownloads.length} downloads${projSuffix}`;
 
   // Plain text version.
   const text = [
-    `AINPI weekly admin report — ${fmtDate(now)}`,
+    `AINPI weekly admin report: ${fmtDate(now)}`,
     ``,
     `SUBSCRIBERS`,
     `  Total:           ${subscribers.length}`,
@@ -171,7 +171,7 @@ export async function GET(req: NextRequest) {
     ),
     ``,
     `PROJECTS + ANALYTICS DASHBOARDS`,
-    `  (Vercel has no public Web Analytics REST API — programmatic`,
+    `  (Vercel has no public Web Analytics REST API: programmatic`,
     `   pageview/visitor numbers aren't reachable from this cron. Below`,
     `   is every project + a one-click dashboard link.)`,
     ``,
@@ -225,7 +225,7 @@ export async function GET(req: NextRequest) {
           <td style="font-variant-numeric:tabular-nums;">${fmtDate(s.createdAt)}</td>
           <td>${escHtml(s.email)}</td>
           <td>${escHtml(s.source || '(unspecified)')}</td>
-          <td style="font-variant-numeric:tabular-nums;color:${s.confirmedAt ? '#10b981' : '#6b7280'};">${s.confirmedAt ? fmtDate(s.confirmedAt) : '—'}</td>
+          <td style="font-variant-numeric:tabular-nums;color:${s.confirmedAt ? '#10b981' : '#6b7280'};">${s.confirmedAt ? fmtDate(s.confirmedAt) : 'n/a'}</td>
         </tr>`,
     )
     .join('');

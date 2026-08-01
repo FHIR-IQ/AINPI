@@ -6,7 +6,7 @@ const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
 /**
  * Per-query maximum bytes billed cap. 100 GB ≈ $0.50 per query at on-demand
  * pricing ($5 per TB). Any query that would scan more than this errors out
- * instead of running — protects against runaway costs from accidental
+ * instead of running: protects against runaway costs from accidental
  * full-table scans on the 21.7M-record NDH dataset. Current production
  * queries scan well under 25 GB; this cap has 4× headroom.
  *

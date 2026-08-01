@@ -10,11 +10,11 @@ const DOC_PATH = 'docs/smd-revalidation/cross-audit-roadmap.md';
 const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
-  title: 'AINPI × public claims data — cross-audit roadmap',
+  title: 'AINPI × public claims data: cross-audit roadmap',
   description:
-    "Roadmap for adding a claims-side audit layer to AINPI's directory findings, using only publicly downloadable, NPI-keyed datasets. Pre-registers H29–H36 (LEIE/SAM × Medicaid Provider Spending, Medicare Part B/D, Open Payments, DMEPOS, POS, Nursing Home ownership, NDH completeness).",
+    "Roadmap for adding a claims-side audit layer to AINPI's directory findings, using only publicly downloadable, NPI-keyed datasets. Pre-registers H29-H36 (LEIE/SAM × Medicaid Provider Spending, Medicare Part B/D, Open Payments, DMEPOS, POS, Nursing Home ownership, NDH completeness).",
   openGraph: {
-    title: 'AINPI cross-audit roadmap — directory findings × public claims data',
+    title: 'AINPI cross-audit roadmap: directory findings × public claims data',
     description:
       'Phase-1 finding pre-registrations for H29 (excluded providers paid by Medicaid), H30 (excluded billing Medicare), H33 (excluded DMEPOS suppliers). State Medicaid PI deliverables enumerated.',
     url: 'https://ainpi.dev/smd-revalidation/cross-audit-roadmap',
@@ -41,7 +41,7 @@ export default function CrossAuditRoadmapPage() {
             draft v0.1
           </span>
           <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 text-amber-800 px-2.5 py-1 font-medium">
-            roadmap — findings pre-registered, results pending
+            roadmap: findings pre-registered, results pending
           </span>
           <span className="text-gray-500">drafted 2026-05-14</span>
         </div>

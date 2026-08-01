@@ -1,7 +1,7 @@
 /**
  * scripts/send-2026-06-04-update.ts
  *
- * 2026-06-04 follow-up — two methodology clarifications surfaced by a sharp
+ * 2026-06-04 follow-up: two methodology clarifications surfaced by a sharp
  * reader within 48h of the 2026-06-02 release. Same safety design as
  * send-2026-06-02-update.ts (dry-run by default, --confirm to send,
  * --email / --limit narrow targeting, 250ms throttle, plain-prose HTML
@@ -30,7 +30,7 @@ import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
 const SUBJECT =
-  'AINPI follow-up — two methodology clarifications from a sharp reader';
+  'AINPI follow-up: two methodology clarifications from a sharp reader';
 const FINDING_URL = 'https://ainpi.dev/findings/endpoint-liveness';
 const PROBE_REPO = 'https://github.com/FHIR-IQ/ainpi-probe';
 const POLICY_URL = 'https://ainpi.dev/real-health-providers';
@@ -104,7 +104,7 @@ function buildBody(): { text: string; html: string } {
     'inspecting the whole platform. Named User-Agent. Stable IP ranges',
     'via GitHub Actions. Accept header advertising FHIR JSON.',
     '',
-    'But the underlying question — anti-bot filtering — is broader than',
+    'But the underlying question: anti-bot filtering: is broader than',
     'AINPI. Everyone doing FHIR audit work hits it now. Three flavors of',
     'block, three different fixes:',
     '',
@@ -118,7 +118,7 @@ function buildBody(): { text: string; html: string } {
     '',
     '  - Vendor-specific agent blocking: some EHR and payer systems',
     '    explicitly block calls originating from LLM agents (Claude, GPT,',
-    '    etc.) regardless of UA. Different fix — requires a fixed egress',
+    '    etc.) regardless of UA. Different fix: requires a fixed egress',
     '    IP allowlisted in advance.',
     '',
     'The unspoken implication for CMS scoring methodology: if directory',
@@ -133,7 +133,7 @@ function buildBody(): { text: string; html: string } {
     'smart readers actually push back. This is the loop working.',
     '',
     'If you spot something else that needs sharpening, reply to this',
-    'email — same address — and I will dig in.',
+    'email: same address, and I will dig in.',
     '',
     `Updated finding: ${FINDING_URL}`,
     `Probe repo: ${PROBE_REPO}`,
@@ -144,7 +144,7 @@ function buildBody(): { text: string; html: string } {
     `Reply to this email to unsubscribe or ask a question (${UNSUB_REPLY}).`,
   ].join('\n');
 
-  // Same plain semantic HTML as the 2026-06-02 send — no gradients, no
+  // Same plain semantic HTML as the 2026-06-02 send: no gradients, no
   // badges, no CTA stacks, no unicode arrows. Reads as a maintainer
   // update.
   const html = `
@@ -174,19 +174,19 @@ function buildBody(): { text: string; html: string } {
 
   <p style="margin: 0 0 12px 0;">A real script. The probe is a standalone Python crawler at <a href="${PROBE_REPO}" style="color: #1d4ed8;">${PROBE_REPO}</a>, separated from the site repo specifically so operators can audit (or whitelist) just the probe code without inspecting the whole platform. Named User-Agent. Stable IP ranges via GitHub Actions. Accept header advertising FHIR JSON.</p>
 
-  <p style="margin: 0 0 12px 0;">But the underlying question — anti-bot filtering — is broader than AINPI. Everyone doing FHIR audit work hits it now. Three flavors of block, three different fixes:</p>
+  <p style="margin: 0 0 12px 0;">But the underlying question: anti-bot filtering: is broader than AINPI. Everyone doing FHIR audit work hits it now. Three flavors of block, three different fixes:</p>
 
   <ul style="margin: 0 0 12px 0; padding-left: 22px;">
     <li><strong>TLS fingerprint blocking</strong> (Akamai, Cloudflare): plain Python urllib and httpx get 403d even with valid headers. Shelling out to curl via subprocess works because curl uses the system TLS stack and gets fingerprinted as a real client.</li>
     <li><strong>User-Agent blocking</strong>: stable named UA plus a published allowlist path so ops teams can whitelist intentionally.</li>
-    <li><strong>Vendor-specific agent blocking</strong>: some EHR and payer systems explicitly block calls originating from LLM agents (Claude, GPT, etc.) regardless of UA. Different fix — requires a fixed egress IP allowlisted in advance.</li>
+    <li><strong>Vendor-specific agent blocking</strong>: some EHR and payer systems explicitly block calls originating from LLM agents (Claude, GPT, etc.) regardless of UA. Different fix: requires a fixed egress IP allowlisted in advance.</li>
   </ul>
 
   <p style="margin: 0 0 16px 0;">The unspoken implication for CMS scoring methodology: if directory accuracy is going to be measured at scale by 2029, regulators and plans will hit the same walls. The audit methodology has to be public enough that vendors can choose to allowlist it without it being either security-by-obscurity or vendor-by-vendor manual coordination. That is an unsolved problem worth flagging upstream of the 2028 CMS scoring RFC.</p>
 
   <p style="margin: 0 0 12px 0;">The broader point: the open audit substrate premise only works if smart readers actually push back. This is the loop working.</p>
 
-  <p style="margin: 0 0 16px 0;">If you spot something else that needs sharpening, reply to this email — same address — and I will dig in.</p>
+  <p style="margin: 0 0 16px 0;">If you spot something else that needs sharpening, reply to this email: same address, and I will dig in.</p>
 
   <p style="margin: 0 0 8px 0;">Updated finding: <a href="${FINDING_URL}" style="color: #1d4ed8;">${FINDING_URL}</a></p>
   <p style="margin: 0 0 8px 0;">Probe repo: <a href="${PROBE_REPO}" style="color: #1d4ed8;">${PROBE_REPO}</a></p>

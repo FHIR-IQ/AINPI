@@ -21,8 +21,8 @@ async function runQuery(sql: string, params?: Record<string, string>) {
 }
 
 /**
- * GET /api/npd/org?id=<org_id>   — resolve a single org by its internal _id
- * GET /api/npd/org?npi=<npi>     — resolve by NPI
+ * GET /api/npd/org?id=<org_id>: resolve a single org by its internal _id
+ * GET /api/npd/org?npi=<npi>: resolve by NPI
  *
  * Returns:
  *   - the org itself (with addresses, telecom, partOf)

@@ -1,8 +1,7 @@
 /**
  * GET /api/v1/subscribers/count
  *
- * Returns the current Subscriber count as a single integer. Public —
- * no PII (no emails, no metadata). Used by the homepage / footer
+ * Returns the current Subscriber count as a single integer. Public: * no PII (no emails, no metadata). Used by the homepage / footer
  * "Join N readers" counter.
  *
  * Caches for 60 seconds at the edge so we don't hit Supabase on every
@@ -28,7 +27,7 @@ export async function GET() {
     );
   } catch (err) {
     // If Supabase is unreachable / the table is missing in a fresh deploy,
-    // return null rather than 500 — the UI is purely cosmetic.
+    // return null rather than 500, the UI is purely cosmetic.
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[subscribers/count] failed:', msg);
     return NextResponse.json(

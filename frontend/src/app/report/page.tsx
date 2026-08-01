@@ -7,14 +7,14 @@ import PrintButton from '@/components/PrintButton';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'The State of the National Provider Directory — AINPI v1.0',
+  title: 'The State of the National Provider Directory: AINPI v1.0',
   description:
-    'Full AINPI v1.0 report — all six pre-registered findings against the CMS NPD 2026-05-08 release in one printable document.',
+    'Full AINPI v1.0 report: all six pre-registered findings against the CMS NPD 2026-05-08 release in one printable document.',
   robots: { index: true, follow: true },
 };
 
 function fmt(n: number | null | undefined): string {
-  if (n == null) return '—';
+  if (n == null) return 'n/a';
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
   if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
   return n.toLocaleString();
@@ -115,7 +115,7 @@ export default function ReportPage() {
           <p className="text-gray-700 leading-relaxed mb-3">
             The findings cluster in four narratives. First, the NPD&apos;s
             own <code>meta.lastUpdated</code> timestamp is a bulk-export
-            stamp, not a per-resource freshness signal — the 30-day and
+            stamp, not a per-resource freshness signal, the 30-day and
             90-day regulatory update cadences cannot be measured from the
             bulk files. Second, referential integrity is essentially
             perfect where references are declared, but coverage of the

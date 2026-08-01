@@ -31,7 +31,7 @@ const HERO_FINDING_CARDS: {
 ];
 
 function fmtBig(n: number | null | undefined): string {
-  if (n == null) return '—';
+  if (n == null) return 'n/a';
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M';
   if (n >= 1_000) return (n / 1_000).toFixed(1) + 'K';
   return n.toLocaleString();
@@ -615,7 +615,7 @@ export default function NpdSearchPage() {
                 </h3>
                 <p className="text-xs text-gray-500 mb-3">
                   {profile.specialties.length} distinct {profile.specialties.length === 1 ? 'specialty' : 'specialties'} across{' '}
-                  {profile.roles.length} PractitionerRole records. Same specialty at multiple organizations is correct FHIR — each row is one practitioner-at-org relationship.
+                  {profile.roles.length} PractitionerRole records. Same specialty at multiple organizations is correct FHIR, each row is one practitioner-at-org relationship.
                 </p>
                 <div className="space-y-3">
                   {profile.specialties.map((s) => (
@@ -704,7 +704,7 @@ export default function NpdSearchPage() {
                 </p>
                 <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside mb-3">
                   <li>
-                    <strong>Parent / holding companies</strong> often have no NPI — the operating subsidiaries do. Try
+                    <strong>Parent / holding companies</strong> often have no NPI, the operating subsidiaries do. Try
                     searching for the hospital or medical-group subsidiary by name instead.
                   </li>
                   <li>
@@ -712,17 +712,17 @@ export default function NpdSearchPage() {
                     have any <code>alias[]</code> entries). Use the legal registered name you see in NPPES.
                   </li>
                   <li>
-                    <strong>Name variations</strong> — NPPES is self-attested. Try last name alone, or strip suffixes like
+                    <strong>Name variations</strong>: NPPES is self-attested. Try last name alone, or strip suffixes like
                     &quot;MD&quot; / &quot;PA-C&quot;.
                   </li>
                   <li>
-                    <strong>State filter</strong> — we match your state against any address in the record&apos;s{' '}
+                    <strong>State filter</strong>: we match your state against any address in the record&apos;s{' '}
                     <code>address[]</code> array, but if the practitioner&apos;s address list is empty we can&apos;t filter them in.
                   </li>
                 </ul>
                 <p className="text-xs text-gray-500">
                   See <a className="underline text-primary-600" href="/insights">/insights</a> for the full
-                  provenance analysis — NPD today is structurally a FHIR improvement over NPPES, not yet a provenance
+                  provenance analysis: NPD today is structurally a FHIR improvement over NPPES, not yet a provenance
                   improvement.
                 </p>
               </div>

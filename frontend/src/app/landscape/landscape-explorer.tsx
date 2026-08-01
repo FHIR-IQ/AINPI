@@ -36,7 +36,7 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
 
   return (
     <div className="space-y-4">
-      {/* Stats strip — Karpathy-style summary card row */}
+      {/* Stats strip: Karpathy-style summary card row */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
@@ -82,7 +82,7 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
         </div>
       </div>
 
-      {/* Controls — Layer + Tile-By */}
+      {/* Controls: Layer + Tile-By */}
       <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
@@ -180,7 +180,7 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
               </p>
               <p className="mt-3 text-xs text-gray-500">
                 Primary sources: NPPES Registry, OIG LEIE, SAM.gov SearchExclusions. Each link is a
-                direct query — no API key, no login.
+                direct query: no API key, no login.
               </p>
               <div className="mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500 space-y-1.5">
                 <p className="font-semibold text-gray-700 uppercase tracking-wider text-[10px]">
@@ -190,11 +190,11 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
                   Parent boxes are labeled at the top with the group name and its practitioner count.
                 </p>
                 <p>
-                  Child cells inside each parent are colored by the selected layer — red is worse,
+                  Child cells inside each parent are colored by the selected layer: red is worse,
                   green is better.
                 </p>
                 <p>
-                  Spatial layout doesn&apos;t change when you flip layers — only color animates.
+                  Spatial layout doesn&apos;t change when you flip layers: only color animates.
                 </p>
               </div>
               <div className="mt-4">
@@ -278,7 +278,7 @@ function CellDetail({
       {cell.sample_npis.length > 0 && (
         <div className="border-t border-gray-100 pt-3 mt-3">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">
-            Verify a sample — primary sources
+            Verify a sample: primary sources
           </p>
           <p className="text-xs text-gray-500 mb-2">
             Each NPI links to the federal source of truth for that check. No login required.
@@ -317,7 +317,7 @@ function CellDetail({
             ))}
           </ul>
           <p className="text-xs text-gray-400 mt-3">
-            Sample NPIs are deterministic per cell. They are not investigative findings — they are the
+            Sample NPIs are deterministic per cell. They are not investigative findings, they are the
             substrate for you to verify the methodology yourself.
           </p>
         </div>

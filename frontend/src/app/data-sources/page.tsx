@@ -5,11 +5,11 @@ import AuthorByline from '@/components/AuthorByline';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Data sources — AINPI',
+  title: 'Data sources | AINPI',
   description:
     'Every public dataset AINPI ingests, considers, or rejects, with primary-source URLs, license terms, refresh cadence, and the AINPI hypothesis each maps to. Citation-grade reference for auditors, researchers, and state Medicaid teams.',
   openGraph: {
-    title: 'Data sources — AINPI',
+    title: 'Data sources | AINPI',
     description:
       'Every public dataset AINPI ingests, considers, or rejects, with primary-source URLs and citation context.',
     url: 'https://ainpi.dev/data-sources',
@@ -39,7 +39,7 @@ const FEDERAL_SCREENING: SourceRow[] = [
     license: 'Public domain',
     cadence: 'Continuous; full file dissemination monthly',
     ainpiStatus: 'ingested',
-    mappedTo: 'H10, H11, H13 — match rate, name agreement, specialty consistency',
+    mappedTo: 'H10, H11, H13: match rate, name agreement, specialty consistency',
     notes: 'Source: bigquery-public-data.nppes.npi_raw (BigQuery public dataset, dated). Switch-aware match against all 15 taxonomy slots per provider, not just slot 1.',
   },
   {
@@ -49,7 +49,7 @@ const FEDERAL_SCREENING: SourceRow[] = [
     license: 'Public domain',
     cadence: 'Monthly full file + monthly supplement',
     ainpiStatus: 'ingested',
-    mappedTo: 'H24 — LEIE-NDH match. Composite weight 1.5 in H23 high-risk cohort.',
+    mappedTo: 'H24: LEIE-NDH match. Composite weight 1.5 in H23 high-risk cohort.',
     notes: 'Direct download: oig.hhs.gov/exclusions/downloadables/UPDATED.csv. ~83K active rows; ~10.8% have a populated NPI (the rest are pre-NPI-era). Filter REINDATE = "00000000" to drop reinstatements.',
   },
   {
@@ -59,7 +59,7 @@ const FEDERAL_SCREENING: SourceRow[] = [
     license: 'Public domain (US federal government work)',
     cadence: 'Daily updates; Public Extract V2 published as CSV',
     ainpiStatus: 'ingested',
-    mappedTo: 'H25 — SAM-NDH match. Composite weight 1.5 in H23 high-risk cohort (independent of LEIE).',
+    mappedTo: 'H25: SAM-NDH match. Composite weight 1.5 in H23 high-risk cohort (independent of LEIE).',
     notes: 'Loaded from the SAM.gov Public Extract V2 (sam.gov/data-services/Exclusions/Public V2). 167K rows, ~4% with a real-format NPI; the rest are non-healthcare exclusions (OFAC sanctions, EPA contractor debarment). HHS slice overlaps OIG LEIE; OPM slice (FEHBP debarment under 5 USC 8902a) is net-new federal-screening signal not visible from LEIE alone.',
   },
   {
@@ -69,17 +69,17 @@ const FEDERAL_SCREENING: SourceRow[] = [
     license: 'Limited Access DMF requires Section 1110 certification under 42 USC § 1306c',
     cadence: 'Weekly updates to subscribed users',
     ainpiStatus: 'out-of-scope',
-    mappedTo: '—',
-    notes: 'The Public DMF excludes deaths within the prior 3 years. Full DMF requires NTIS subscription and SSA certification — a procurement effort each state Medicaid agency manages independently.',
+    mappedTo: 'n/a',
+    notes: 'The Public DMF excludes deaths within the prior 3 years. Full DMF requires NTIS subscription and SSA certification, a procurement effort each state Medicaid agency manages independently.',
   },
   {
     name: 'CMS Preclusion List',
     url: 'https://www.cms.gov/medicare/enrollment-renewal/providers-suppliers/chain-ownership-system-pecos/preclusion-list',
     description: 'Providers precluded from receiving payment for Medicare Advantage items, services, or Part D drugs. Created by 42 CFR § 422.222 / § 423.120.',
-    license: 'Restricted — Medicare Advantage Part C plans and Part D sponsors only',
+    license: 'Restricted: Medicare Advantage Part C plans and Part D sponsors only',
     cadence: 'Monthly, first business day of the month',
     ainpiStatus: 'out-of-scope',
-    mappedTo: '—',
+    mappedTo: 'n/a',
     notes: 'NOT publicly downloadable. AINPI cannot ingest this list. State Medicaid agencies relying on Preclusion signal must coordinate with their MCOs directly. Documenting it here so the limitation is explicit.',
   },
 ];
@@ -90,7 +90,7 @@ const AUDIT_SOURCES: SourceRow[] = [
     url: 'https://directory.cms.gov/',
     description: 'FHIR R4 NDJSON bulk export of the federal provider directory: 6 resource types, 21.7M resources at the 2026-05-08 release (down from 27.2M in April).',
     license: 'Public domain (US federal government work)',
-    cadence: 'Periodic — most recent release pinned per audit',
+    cadence: 'Periodic: most recent release pinned per audit',
     ainpiStatus: 'ingested',
     mappedTo: 'All findings. The NDH artifact is what AINPI audits.',
     notes: 'Distributed as zstd-compressed NDJSON (2.8 GB compressed, 40.7 GB uncompressed). Loaded into BigQuery as resource:JSON columns plus extracted flat _* fields per resource type.',
@@ -102,7 +102,7 @@ const AUDIT_SOURCES: SourceRow[] = [
     license: 'Public; permission required for redistribution',
     cadence: 'Quarterly',
     ainpiStatus: 'ingested',
-    mappedTo: 'H12 — taxonomy validity. Companion to H13.',
+    mappedTo: 'H12: taxonomy validity. Companion to H13.',
     notes: 'Source: bigquery-public-data.nppes.healthcare_provider_taxonomy_code_set_170. Pinned to v17.0 for the 2026-05-08 audit.',
   },
   {
@@ -112,18 +112,18 @@ const AUDIT_SOURCES: SourceRow[] = [
     license: 'Public domain',
     cadence: 'Quarterly',
     ainpiStatus: 'ingested',
-    mappedTo: 'H13 — bridges PractitionerRole.specialty (CMS Medicare codes) to Practitioner.qualification (NUCC codes). Pinned to October 2025 release.',
-    notes: 'CSV has embedded newlines that BigQuery\'s default loader rejects — pipeline parses with Python csv module (RFC-4180-compliant) and streams as NDJSON.',
+    mappedTo: 'H13: bridges PractitionerRole.specialty (CMS Medicare codes) to Practitioner.qualification (NUCC codes). Pinned to October 2025 release.',
+    notes: 'CSV has embedded newlines that BigQuery\'s default loader rejects: pipeline parses with Python csv module (RFC-4180-compliant) and streams as NDJSON.',
   },
   {
     name: 'Live FHIR endpoints (probe)',
     url: 'https://github.com/FHIR-IQ/ainpi-probe',
-    description: 'Empirical L0–L7 reachability scoring of every Endpoint.address declared in the NDH bulk export.',
+    description: 'Empirical L0-L7 reachability scoring of every Endpoint.address declared in the NDH bulk export.',
     license: 'Apache-2.0 (the crawler code); endpoints themselves are public APIs',
     cadence: 'Out-of-band; monthly today, weekly target',
     ainpiStatus: 'ingested',
-    mappedTo: 'H1–H5 endpoint liveness; H22 network adequacy gauge',
-    notes: 'Polite crawler — 1 req/sec/host, named User-Agent, documented source IP. Runs on a dedicated host outside CI runners to avoid bad-neighbor behavior.',
+    mappedTo: 'H1-H5 endpoint liveness; H22 network adequacy gauge',
+    notes: 'Polite crawler: 1 req/sec/host, named User-Agent, documented source IP. Runs on a dedicated host outside CI runners to avoid bad-neighbor behavior.',
   },
 ];
 
@@ -135,7 +135,7 @@ const CONSIDERED_NOT_INGESTED: SourceRow[] = [
     license: 'Subscription / member access only',
     cadence: 'Continuous',
     ainpiStatus: 'out-of-scope',
-    mappedTo: '—',
+    mappedTo: 'n/a',
     notes: 'Not in the federal NDH ingestion pipeline (commercial-payer data). See /insights for the full provenance discussion of the CAQH gap.',
   },
   {
@@ -145,7 +145,7 @@ const CONSIDERED_NOT_INGESTED: SourceRow[] = [
     license: 'Public domain',
     cadence: 'Annual + interim updates',
     ainpiStatus: 'roadmap',
-    mappedTo: 'Future — provider-context enrichment, not directory accuracy. Lower priority than 42 CFR § 455.436 sources.',
+    mappedTo: 'Future: provider-context enrichment, not directory accuracy. Lower priority than 42 CFR § 455.436 sources.',
     notes: 'Could enrich /findings/[slug] pages with payments context per NPI. Not relevant to revalidation decisions per se.',
   },
   {
@@ -155,7 +155,7 @@ const CONSIDERED_NOT_INGESTED: SourceRow[] = [
     license: 'Public domain',
     cadence: 'Annual',
     ainpiStatus: 'out-of-scope',
-    mappedTo: '—',
+    mappedTo: 'n/a',
     notes: 'Claims-derived; AINPI is provider-directory only. Out of scope.',
   },
   {
@@ -165,7 +165,7 @@ const CONSIDERED_NOT_INGESTED: SourceRow[] = [
     license: 'Public domain',
     cadence: 'Continuous',
     ainpiStatus: 'roadmap',
-    mappedTo: 'Future — geography enrichment for state-scoped pages (rural / underserved-area context).',
+    mappedTo: 'Future: geography enrichment for state-scoped pages (rural / underserved-area context).',
     notes: 'Could surface "% of state Medicaid roster in an HPSA" alongside state-scoped findings.',
   },
   {
@@ -175,7 +175,7 @@ const CONSIDERED_NOT_INGESTED: SourceRow[] = [
     license: 'Public per state',
     cadence: 'Varies (monthly to ad-hoc)',
     ainpiStatus: 'roadmap',
-    mappedTo: 'Future — state-specific high-risk cohort enrichment for /states/[state] pages.',
+    mappedTo: 'Future: state-specific high-risk cohort enrichment for /states/[state] pages.',
     notes: 'Aggregating these would be a meaningful contribution. Per-state ingestion adapters needed; some states publish CSV, others PDF, others web-scrape only.',
   },
 ];
@@ -264,7 +264,7 @@ export default function DataSourcesPage() {
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Data sources</h1>
         <p className="text-gray-700 mb-2">
-          Every public dataset AINPI ingests, considers, or rejects — with
+          Every public dataset AINPI ingests, considers, or rejects, with
           primary-source URLs, license terms, refresh cadence, and the
           hypothesis each maps to.
         </p>

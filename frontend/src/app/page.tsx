@@ -7,11 +7,11 @@ import LandscapeExplorer from './landscape/landscape-explorer';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'AINPI — Provider data landscape',
+  title: 'AINPI: Provider data landscape',
   description:
     'A free, public audit substrate for the CMS National Provider Directory. Every US state × specialty cell scored across six dimensions of accuracy: completeness, cross-source agreement, currency, endpoint reachability, federal integrity, specialty validity. Designed for the REAL Health Providers Act compliance window.',
   openGraph: {
-    title: 'AINPI — Provider data landscape',
+    title: 'AINPI: Provider data landscape',
     description:
       'Every US state × specialty cell, scored across six dimensions of provider directory accuracy. The audit substrate behind HR 7148 § 6220.',
     url: 'https://ainpi.dev/',
@@ -40,8 +40,7 @@ export default function HomePage() {
               REAL Health Providers Act
             </Link>
             . Each tile is one state × specialty cell. Area scales with the count
-            of active practitioners. Color is the metric in the layer you select —
-            switch layers without losing your place. Click any cell to verify the
+            of active practitioners. Color is the metric in the layer you select: switch layers without losing your place. Click any cell to verify the
             methodology against primary federal sources. Looking for the
             state-by-state federally-excluded view?{' '}
             <Link href="/map" className="underline text-primary-700">
@@ -70,7 +69,7 @@ export default function HomePage() {
               <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-700">
                 <li>
                   <strong>Spatial layout does not change</strong> when you flip
-                  layers — only color animates. The same cell sits in the same
+                  layers: only color animates. The same cell sits in the same
                   place, so you can learn the geography once and watch each
                   metric move across it.
                 </li>

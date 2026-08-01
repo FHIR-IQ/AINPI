@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 /**
- * SubscriberCount — fetches `/api/v1/subscribers/count` once on mount
+ * SubscriberCount: fetches `/api/v1/subscribers/count` once on mount
  * and renders "Join N readers" or a fallback. Cosmetic only; if the
  * count is unavailable (Supabase down, table missing in fresh deploy)
  * the component renders a neutral fallback.

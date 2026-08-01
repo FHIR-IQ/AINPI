@@ -72,7 +72,7 @@ export default function LandscapeTreemap({
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  // Live viewport size, only used when fullscreen — re-runs the D3 layout so
+  // Live viewport size, only used when fullscreen: re-runs the D3 layout so
   // cells and labels actually get bigger (not just CSS-scaled).
   const [viewport, setViewport] = useState({ w: 1600, h: 900 });
 
@@ -250,7 +250,7 @@ export default function LandscapeTreemap({
         onCellClick((d.data as ChildNode).cell);
       });
 
-    // Child labels — always show short identifier (state code or specialty short),
+    // Child labels: always show short identifier (state code or specialty short),
     // even on small cells. Big cells also get a metric value.
     cellG.each(function (d) {
       const w = d.x1 - d.x0;

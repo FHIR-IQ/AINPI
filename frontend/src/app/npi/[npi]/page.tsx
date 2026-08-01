@@ -16,8 +16,8 @@ export function generateStaticParams(): { npi: string }[] {
 
 export function generateMetadata({ params }: { params: { npi: string } }): Metadata {
   const row = getCohortRow(params.npi);
-  if (!row) return { title: 'NPI report card — AINPI' };
-  const title = `${row.name} (NPI ${row.npi}) — federal directory data-quality report — AINPI`;
+  if (!row) return { title: 'NPI report card | AINPI' };
+  const title = `${row.name} (NPI ${row.npi}): federal directory data-quality report: AINPI`;
   const description =
     `Data-quality signals for NPI ${row.npi} from public federal databases ` +
     `(OIG LEIE, SAM.gov, NPPES), with primary-source verification links. ` +
@@ -132,7 +132,7 @@ export default function NpiReportCardPage({ params }: { params: { npi: string } 
             <>
               {' '}
               <strong>
-                This record is flagged by SAM.gov only, without LEIE corroboration — the
+                This record is flagged by SAM.gov only, without LEIE corroboration, the
                 signal class with a known false-positive history. Treat as unverified
                 until the SAM record name is matched against NPPES.
               </strong>

@@ -6,8 +6,7 @@
  * client component binds the choropleth to this structure. No HTTP fetch on
  * the client.
  *
- * Each state entry carries enough data to populate the side panel inline —
- * the five claims-side summary rows (Medicaid, Part B+D with opioid count,
+ * Each state entry carries enough data to populate the side panel inline: * the five claims-side summary rows (Medicaid, Part B+D with opioid count,
  * NPPES-deactivated, Open Payments, directory hygiene) plus the first
  * cohort NPI for the "Verify a sample NPI" CTA.
  */

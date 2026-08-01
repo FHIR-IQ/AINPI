@@ -1,10 +1,10 @@
 /**
- * ReleaseTeaser — dark, data-forward hero for a specific NDH release update.
+ * ReleaseTeaser: dark, data-forward hero for a specific NDH release update.
  * Visual language adapted from the AINPI Update Video design (Claude Design,
  * 2026-05-08): Inter Tight headline, JetBrains Mono labels, accent / loss /
  * gain triad, hairline dividers, scanline-flavored dot grid backdrop.
  *
- * Static — no animation. The animated variant lives at
+ * Static: no animation. The animated variant lives at
  * /video/2026-05-08-update/ and links from the "Watch the update" CTA.
  */
 import Link from 'next/link';

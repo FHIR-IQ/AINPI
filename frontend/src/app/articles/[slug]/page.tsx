@@ -40,7 +40,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const docPath = slugToFile(slug);
-  if (!docPath) return { title: 'Article — AINPI' };
+  if (!docPath) return { title: 'Article | AINPI' };
   const doc = loadMarkdown(docPath, 'AINPI article');
   // Pull the first H1 as the title.
   const titleMatch = doc.body.match(/^#\s+(.+)$/m);
@@ -60,7 +60,7 @@ export async function generateMetadata({
 }
 
 // Hardcoded GitHub directory link for the article source. The per-article
-// filename is intentionally NOT interpolated into the href — CodeQL's
+// filename is intentionally NOT interpolated into the href: CodeQL's
 // stored-XSS analysis flags any filesystem-derived value flowing into an
 // anchor href even when (a) the route is statically generated via
 // generateStaticParams, (b) the slug is validated by slugToFile, and

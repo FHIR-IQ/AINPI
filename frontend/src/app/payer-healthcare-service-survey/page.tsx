@@ -152,7 +152,7 @@ export default function PayerHealthcareServiceSurveyPage() {
           </h1>
           <p className="text-gray-700 leading-relaxed mb-4">
             The NPD weekly raised that payers (and the integrators who serve
-            them) ship FHIR HealthcareService resources very differently — the
+            them) ship FHIR HealthcareService resources very differently, the
             categories don&apos;t line up, the must-support fields are
             half-populated, and the identifier system is whatever the team
             chose three releases ago. AINPI volunteered to analyse the gap and
@@ -172,7 +172,7 @@ export default function PayerHealthcareServiceSurveyPage() {
               className="block bg-white border rounded-md p-3 hover:border-primary-400"
             >
               <p className="font-mono text-primary-600 mb-1">NDH STU1 · HealthcareService profile →</p>
-              <p>Reference for must-support fields below. (NDH IG v1.0.0 — STU1.)</p>
+              <p>Reference for must-support fields below. (NDH IG v1.0.0: STU1.)</p>
             </a>
             <a
               href="https://hl7.org/fhir/us/ndh/STU1/ValueSet-HealthcareServiceCategoryVS.html"
@@ -255,7 +255,7 @@ export default function PayerHealthcareServiceSurveyPage() {
           {/* Categories used */}
           <section className="bg-white border rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-1">
-              HealthcareServiceCategoryVS — what you publish today
+              HealthcareServiceCategoryVS: what you publish today
             </h2>
             <p className="text-sm text-gray-600 mb-4">
               Check every category your team publishes a HealthcareService resource for.
@@ -283,7 +283,7 @@ export default function PayerHealthcareServiceSurveyPage() {
               Which categories cause the most rework?
             </h2>
             <p className="text-sm text-gray-600 mb-4">
-              Same 15 codes — flag the ones where you constantly fight upstream
+              Same 15 codes: flag the ones where you constantly fight upstream
               data quality, ambiguous mapping, or downstream consumer complaints.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -306,7 +306,7 @@ export default function PayerHealthcareServiceSurveyPage() {
           {/* Must-support */}
           <section className="bg-white border rounded-lg p-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-1">
-              NDH must-support — what you actually populate
+              NDH must-support: what you actually populate
             </h2>
             <p className="text-sm text-gray-600 mb-4">
               The NDH HealthcareService profile flags these as must-support.
@@ -424,7 +424,7 @@ export default function PayerHealthcareServiceSurveyPage() {
                 value={form.painPoints}
                 onChange={(e) => setForm({ ...form, painPoints: e.target.value })}
                 rows={5}
-                placeholder="What breaks for you today — fields that arrive empty, codes that mean different things across sources, downstream complaints, etc."
+                placeholder="What breaks for you today: fields that arrive empty, codes that mean different things across sources, downstream complaints, etc."
                 className="w-full px-3 py-2 border rounded-md text-sm font-mono"
                 maxLength={4000}
               />

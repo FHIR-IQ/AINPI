@@ -6,11 +6,11 @@ import { SEED_STATES } from '@/data/states';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Provider revalidation — citable methodology for state Medicaid agencies — AINPI',
+  title: 'Provider revalidation: citable methodology for state Medicaid agencies | AINPI',
   description:
     'How state Medicaid agencies can cite the AINPI methodology in their response to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation strategies. Anchored in 42 CFR 455.436 and 455.450.',
   openGraph: {
-    title: 'Provider revalidation — citable methodology for state Medicaid agencies',
+    title: 'Provider revalidation: citable methodology for state Medicaid agencies',
     description:
       'How state Medicaid agencies can cite the AINPI methodology in their response to the 2026-04-23 CMS State Medicaid Director letter.',
     url: 'https://ainpi.dev/smd-revalidation',
@@ -27,7 +27,7 @@ export default function SmdRevalidationPage() {
           Methodology brief · For state Medicaid agencies
         </p>
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Provider revalidation strategy — a citable open methodology
+          Provider revalidation strategy, a citable open methodology
         </h1>
         <p className="text-lg text-gray-700 mb-2">
           State Medicaid Directors received a letter from CMS on 2026-04-23
@@ -78,8 +78,7 @@ export default function SmdRevalidationPage() {
               under 42 CFR § 455.450 and on providers without an NPI.
             </li>
             <li>
-              <strong>Metrics</strong> to measure effectiveness and progress —
-              <em> including links to any public-facing data or reporting</em>.
+              <strong>Metrics</strong> to measure effectiveness and progress: <em> including links to any public-facing data or reporting</em>.
             </li>
             <li>
               <strong>Ongoing accuracy verification</strong> approach for
@@ -109,7 +108,7 @@ export default function SmdRevalidationPage() {
               rel="noopener"
               className="underline"
             >
-              42 CFR § 455.436 — Federal database checks
+              42 CFR § 455.436: Federal database checks
             </a>
             . State agencies must confirm provider identity and exclusion
             status against four federal databases:
@@ -136,7 +135,7 @@ export default function SmdRevalidationPage() {
                 </td>
                 <td className="py-2 px-3">At enrollment + reenrollment</td>
                 <td className="py-2 px-3 text-green-700">
-                  Yes — H10/H11/H13 join NDH against NPPES <code>npi_raw</code> snapshot,
+                  Yes: H10/H11/H13 join NDH against NPPES <code>npi_raw</code> snapshot,
                   matched switch-aware against all 15 taxonomy slots
                 </td>
               </tr>
@@ -153,7 +152,7 @@ export default function SmdRevalidationPage() {
                 </td>
                 <td className="py-2 px-3">Monthly</td>
                 <td className="py-2 px-3 text-green-700">
-                  Yes — H24 joins active LEIE NPIs (REINDATE = 00000000) to NDH
+                  Yes: H24 joins active LEIE NPIs (REINDATE = 00000000) to NDH
                   practitioner._npi and organization._npi. See{' '}
                   <a href="/findings/oig-leie-exclusions" className="underline">
                     /findings/oig-leie-exclusions
@@ -173,7 +172,7 @@ export default function SmdRevalidationPage() {
                 </td>
                 <td className="py-2 px-3">Monthly</td>
                 <td className="py-2 px-3 text-green-700">
-                  Yes — H25 joins active SAM exclusions to NDH
+                  Yes: H25 joins active SAM exclusions to NDH
                   practitioner._npi. See{' '}
                   <a href="/findings/sam-exclusions" className="underline">
                     /findings/sam-exclusions
@@ -193,7 +192,7 @@ export default function SmdRevalidationPage() {
                 </td>
                 <td className="py-2 px-3">At enrollment + reenrollment</td>
                 <td className="py-2 px-3 text-gray-600">
-                  Out of scope — Limited Access DMF requires SSA certification;
+                  Out of scope: Limited Access DMF requires SSA certification;
                   the public file excludes deaths in the last 3 years
                 </td>
               </tr>
@@ -203,7 +202,7 @@ export default function SmdRevalidationPage() {
             42 CFR § 455.436 also permits the Secretary to prescribe additional
             databases. The CMS Preclusion List is{' '}
             <strong>not in this category and is not publicly downloadable</strong>
-            {' '}— it is restricted to Medicare Advantage Part C plans and Part D
+            {' '}because it is restricted to Medicare Advantage Part C plans and Part D
             sponsors. AINPI cannot ingest it. State agencies relying on
             Preclusion List signal must coordinate with their MCOs directly.
           </p>
@@ -248,10 +247,10 @@ export default function SmdRevalidationPage() {
                   audit. State-scoped slices live at{' '}
                   <a href="/states" className="underline">/states/&lt;state&gt;</a>.{' '}
                   <strong>
-                    Claims-side cross-audit (H29–H36, pre-registered 2026-05-14)
+                    Claims-side cross-audit (H29-H36, pre-registered 2026-05-14)
                   </strong>{' '}
                   extends Element 2 with public Medicaid + Medicare spending +
-                  Open Payments + DMEPOS + nursing home ownership joins —{' '}
+                  Open Payments + DMEPOS + nursing home ownership joins:{' '}
                   <a
                     href="/smd-revalidation/cross-audit-roadmap"
                     className="underline"
@@ -283,7 +282,7 @@ export default function SmdRevalidationPage() {
                   </a>{' '}
                   already queries live commercial payer directories
                   (Anthem/BCBS, UnitedHealth, Aetna, Cigna, Humana). The MCO
-                  parity tool — currently in development — extends this to
+                  parity tool: currently in development: extends this to
                   compare a state FFS roster against its MCO directories. See{' '}
                   <a
                     href="https://github.com/FHIR-IQ/AINPI/issues?q=is%3Aissue+label%3Aroadmap+mco"
@@ -351,7 +350,7 @@ export default function SmdRevalidationPage() {
               gene@fhiriq.com
             </a>{' '}
             with the state code, or run{' '}
-            <code>analysis/state_findings.py</code> directly — the methodology
+            <code>analysis/state_findings.py</code> directly, the methodology
             is open under Apache-2.0.
           </p>
         </section>
@@ -368,7 +367,7 @@ export default function SmdRevalidationPage() {
             <p>
               For ongoing verification of provider-directory accuracy under 42
               CFR § 431.107 and § 455.436, [State agency] adopts the AINPI
-              methodology framework (Vestel, FHIR IQ) — an open, versioned,
+              methodology framework (Vestel, FHIR IQ), an open, versioned,
               reproducible audit of the federal CMS National Provider Directory
               and NPPES, distributed under Apache-2.0.
             </p>
@@ -419,8 +418,8 @@ export default function SmdRevalidationPage() {
             <li>
               <strong>SSA Death Master File is not yet ingested</strong> by
               AINPI (see below). The high-risk cohort covers three of the four
-              federal database checks under 42 CFR § 455.436 — NPPES, OIG LEIE,
-              and SAM.gov — but your team must still run independent monthly
+              federal database checks under 42 CFR § 455.436: NPPES, OIG LEIE,
+              and SAM.gov, but your team must still run independent monthly
               SSA-DMF checks until that leg lands.
             </li>
             <li>
@@ -437,8 +436,7 @@ export default function SmdRevalidationPage() {
             <li>
               <strong>AINPI is provider-directory only</strong>. It does not
               ingest claims, beneficiary, utilization, or quality data. Nothing
-              on this site implicates fraud evidence on individual providers —
-              flags here are data-quality signals, not investigative findings.
+              on this site implicates fraud evidence on individual providers: flags here are data-quality signals, not investigative findings.
             </li>
           </ul>
         </section>

@@ -1,7 +1,7 @@
 /**
  * scripts/send-2026-05-14-update.ts
  *
- * 2026-05-14 subscriber update — claims-side cross-audit shipped.
+ * 2026-05-14 subscriber update: claims-side cross-audit shipped.
  *
  * Same safety design as send-may-8-update.ts (dry-run by default, --confirm
  * to send, --email/--limit narrow targeting, 250ms throttle).
@@ -29,7 +29,7 @@ import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
 const SUBJECT =
-  'AINPI 2026-05-14 update — claims-side cross-audit shipped (8 new findings)';
+  'AINPI 2026-05-14 update: claims-side cross-audit shipped (8 new findings)';
 const REPORT_URL = 'https://ainpi.dev/reports/2026-05-14-update';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
@@ -148,7 +148,7 @@ function buildBody(): { text: string; html: string } {
   ];
 
   const text = [
-    'AINPI 2026-05-14 update — claims-side cross-audit shipped',
+    'AINPI 2026-05-14 update: claims-side cross-audit shipped',
     '',
     'Last week was the directory. This week is the money.',
     '',
@@ -162,32 +162,32 @@ function buildBody(): { text: string; html: string } {
     "program payment stops in the data. Strict-post-exclusion reads '0'",
     'across H29, H30a, H30b, and the strict subset of H32 dominates the',
     'dollar volume. The payment gate is mostly holding for the active cohort.',
-    'What persists is the directory-side problem — NPPES-deactivated NPIs',
+    'What persists is the directory-side problem: NPPES-deactivated NPIs',
     'still listed in NDH, federally-excluded NPIs still appearing in NDH bulk',
     'export, ownership candidates needing verification.',
     '',
     'The 8 new findings:',
     '',
-    '  H29   Medicaid spending             — 0/28 strict (full: $8.5M to 28/125)',
-    '  H30a  Medicare Part B               — 0/8 strict (CY 2023)',
-    '  H30b  Medicare Part D               — 0/10 strict (6 opioid full-window)',
-    '  H31   NPPES-deactivated × billing   — 3 of 1,495 VA-state',
-    '  H32   Open Payments × exclusions    — 198/350 strict ($167K vs $3.8M)',
-    '  H33   DMEPOS × exclusions           — 0 of 63,988',
-    '  H35   SNF/Hospice/HHA/Hospital      — 0 confirmed / 1,779 candidate (17 VA)',
-    '  H36   NDH completeness gap          — 99.99984% (2 of 1.26M absent)',
+    '  H29   Medicaid spending: 0/28 strict (full: $8.5M to 28/125)',
+    '  H30a  Medicare Part B: 0/8 strict (CY 2023)',
+    '  H30b  Medicare Part D: 0/10 strict (6 opioid full-window)',
+    '  H31   NPPES-deactivated × billing: 3 of 1,495 VA-state',
+    '  H32   Open Payments × exclusions: 198/350 strict ($167K vs $3.8M)',
+    '  H33   DMEPOS × exclusions: 0 of 63,988',
+    '  H35   SNF/Hospice/HHA/Hospital: 0 confirmed / 1,779 candidate (17 VA)',
+    '  H36   NDH completeness gap: 99.99984% (2 of 1.26M absent)',
     '',
     'Two methodology corrections shipped this week:',
     '',
     '  #1: Strict post-exclusion attribution.',
     '      H23 cohort exporter now carries per-NPI exclusion dates. Earlier',
-    "      headlines framed H29's $8.5M as a § 455.436 signal — most was",
+    "      headlines framed H29's $8.5M as a § 455.436 signal: most was",
     '      pre-exclusion legitimate billing. The strict-post-exclusion column',
     '      is the regulatory headline; full-window is sidecar.',
     '',
     '  #2: H35 Stage B via PPEF cross-walk.',
     '      The first H35 release reported 0 demographic matches. That zero',
-    '      was a STRUCTURAL NULL — owner STATE is 100% empty for individual',
+    '      was a STRUCTURAL NULL: owner STATE is 100% empty for individual',
     "      owners in CMS's All Owners files, and the v1 match joined on this",
     '      empty column. Stage B introduces the CMS Medicare Fee-For-Service',
     '      Public Provider Enrollment File (PPEF, 2.47M individual NPIs) as a',
@@ -213,7 +213,7 @@ function buildBody(): { text: string; html: string } {
     '    cross-walk. If anyone has a line on an authorized CMS source, reply.',
     '  - Second-state pilot: SC remains a candidate.',
     '',
-    '— Eugene Vestel, FHIR IQ',
+    'Eugene Vestel, FHIR IQ',
     '',
     `Reply to this email to unsubscribe or ask a question (${UNSUB_REPLY}).`,
   ].join('\n');
@@ -233,10 +233,10 @@ function buildBody(): { text: string; html: string } {
 
   <!-- Hero -->
   <div style="padding: 20px 28px; background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%); border-bottom: 1px solid #e5e7eb;">
-    <div style="font-size: 13px; color: #1e3a8a; margin-bottom: 6px; font-weight: 600;">Claims-side cross-audit shipped (H29–H36).</div>
+    <div style="font-size: 13px; color: #1e3a8a; margin-bottom: 6px; font-weight: 600;">Claims-side cross-audit shipped (H29-H36).</div>
     <div style="font-size: 14px; color: #374151;">
       8 new findings join AINPI's directory-side cohort to Medicaid spending, Medicare Part&nbsp;B&nbsp;/&nbsp;Part&nbsp;D billing, NPPES-deactivated billers, Open Payments, DMEPOS, nursing-home ownership disclosures, and NDH completeness against the Medicare Part&nbsp;B universe.
-      <strong>Pattern:</strong> when federal exclusion takes effect, federal-program payment stops in the data — the directory still lists them.
+      <strong>Pattern:</strong> when federal exclusion takes effect, federal-program payment stops in the data, the directory still lists them.
     </div>
   </div>
 
@@ -261,7 +261,7 @@ function buildBody(): { text: string; html: string } {
       </li>
       <li>
         <strong>H35 Stage B via PPEF cross-walk.</strong>
-        v1 reported "0 demographic matches" — that was a <em>structural null</em>. Owner STATE is 100% empty for individuals in the All Owners files; the v1 join collided on the empty key. Stage B introduces the CMS Medicare Fee-For-Service Public Provider Enrollment File (2.47M individual NPIs) as a cross-walk: <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">PECOS_ASCT_CNTL_ID</code> → <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">NPI</code> for Tier 1, <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">ENRLMT_ID</code> → <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">STATE_CD</code> for Tier 2. Result: 0 confirmed-NPI (exclusion forces Medicare revocation), 1,779 candidate-demographic.
+        v1 reported "0 demographic matches", that was a <em>structural null</em>. Owner STATE is 100% empty for individuals in the All Owners files; the v1 join collided on the empty key. Stage B introduces the CMS Medicare Fee-For-Service Public Provider Enrollment File (2.47M individual NPIs) as a cross-walk: <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">PECOS_ASCT_CNTL_ID</code> → <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">NPI</code> for Tier 1, <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">ENRLMT_ID</code> → <code style="background:#fffbeb;padding:1px 4px;border-radius:3px;font-size:11px;">STATE_CD</code> for Tier 2. Result: 0 confirmed-NPI (exclusion forces Medicare revocation), 1,779 candidate-demographic.
       </li>
     </ol>
   </div>
@@ -273,7 +273,7 @@ function buildBody(): { text: string; html: string } {
     </div>
     <h2 style="font-size: 16px; margin: 4px 0 8px 0; color: #111827;">One name in 5 independent public-data joins</h2>
     <p style="font-size: 14px; color: #374151; margin: 0 0 8px 0;">
-      <strong>BREWER, STEVEN</strong> (NPI 1801070313) — H23 (federally excluded) + H24 (active on OIG LEIE) + H26 (Cigna payer directory) + H29 (Medicaid full-window) + H30a + H30b (Medicare full-window). Each individual signal is a low-priority flag; the cross-product is the high-priority triage target.
+      <strong>BREWER, STEVEN</strong> (NPI 1801070313): H23 (federally excluded) + H24 (active on OIG LEIE) + H26 (Cigna payer directory) + H29 (Medicaid full-window) + H30a + H30b (Medicare full-window). Each individual signal is a low-priority flag; the cross-product is the high-priority triage target.
     </p>
     <p style="font-size: 13px; color: #6b7280; margin: 0;">
       Single-source flags are noise. Multi-source flags converge on real cases. The cross-audit roadmap is how that converging happens at scale.
@@ -287,7 +287,7 @@ function buildBody(): { text: string; html: string } {
     </div>
     <h2 style="font-size: 16px; margin: 4px 0 8px 0; color: #111827;">3 of 4 § 455.436 federal database checks closed</h2>
     <p style="font-size: 14px; color: #374151; margin: 0 0 14px 0;">
-      NPPES (H10–H13) + OIG LEIE (H24 + H29 / H30a / H30b / H32 / H35) + SAM.gov (H25 + the same cross-audit). SSA-DMF stays out of scope due to restricted access. The cross-audit findings are the public-facing metrics for Element 2 of the strategy submission.
+      NPPES (H10-H13) + OIG LEIE (H24 + H29 / H30a / H30b / H32 / H35) + SAM.gov (H25 + the same cross-audit). SSA-DMF stays out of scope due to restricted access. The cross-audit findings are the public-facing metrics for Element 2 of the strategy submission.
     </p>
     <p style="font-size: 13px; color: #4b5563; margin: 0 0 16px 0;">
       Virginia's MMIS-ready deliverables (per-cohort CSVs at <code style="background:#f3f4f6;padding:1px 4px;border-radius:3px;font-size:11px;">/api/v1/states/va/h{29..35}-*.csv</code>) carry LEIE / SAM / NPPES portal verification URLs on every row. Cohort dates travel with claim dates so strict-post-exclusion attribution is the regulatory frame, not the noisy full-window number.
@@ -307,7 +307,7 @@ function buildBody(): { text: string; html: string } {
 
   <!-- Footer -->
   <div style="padding: 20px 28px; font-size: 12px; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb;">
-    <p style="margin: 0 0 6px 0;">— Eugene Vestel, FHIR IQ</p>
+    <p style="margin: 0 0 6px 0;">Eugene Vestel, FHIR IQ</p>
     <p style="margin: 0;">
       Reply to this email to unsubscribe or ask a question
       (<a href="mailto:${UNSUB_REPLY}" style="color:#6b7280;">${UNSUB_REPLY}</a>).

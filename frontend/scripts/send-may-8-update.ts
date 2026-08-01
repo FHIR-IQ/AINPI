@@ -1,7 +1,7 @@
 /**
  * scripts/send-may-8-update.ts
  *
- * 2026-05-08 subscriber update — first comparable-release deltas.
+ * 2026-05-08 subscriber update: first comparable-release deltas.
  *
  * Same safety design as send-may-update.ts (dry-run by default, --confirm
  * to send, --email/--limit narrow targeting, 250ms throttle).
@@ -29,7 +29,7 @@ import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
 const SUBJECT =
-  'AINPI 2026-05-08 update — Endpoint −73%, Location −61%, SSN exposures 46 → 41';
+  'AINPI 2026-05-08 update: Endpoint −73%, Location −61%, SSN exposures 46 → 41';
 const REPORT_URL = 'https://ainpi.dev/reports/2026-05-08-update';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
@@ -156,7 +156,7 @@ function buildBody(): { text: string; html: string } {
   ];
 
   const text = [
-    'AINPI 2026-05-08 update — first comparable-release deltas',
+    'AINPI 2026-05-08 update: first comparable-release deltas',
     '',
     'CMS pushed a new NDH bulk export today. AINPI re-ingested every',
     'resource and re-ran every H-series check. This is the first time',
@@ -200,7 +200,7 @@ function buildBody(): { text: string; html: string } {
     '',
     `Read the full update: ${REPORT_URL}`,
     '',
-    '— Eugene Vestel, FHIR IQ',
+    'Eugene Vestel, FHIR IQ',
     '',
     `Reply to this email to unsubscribe or ask a question (${UNSUB_REPLY}).`,
   ].join('\n');
@@ -316,7 +316,7 @@ function buildBody(): { text: string; html: string } {
 
   <!-- Footer -->
   <div style="padding: 20px 28px; font-size: 12px; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb;">
-    <p style="margin: 0 0 6px 0;">— Eugene Vestel, FHIR IQ</p>
+    <p style="margin: 0 0 6px 0;">Eugene Vestel, FHIR IQ</p>
     <p style="margin: 0;">
       Reply to this email to unsubscribe or ask a question
       (<a href="mailto:${UNSUB_REPLY}" style="color:#6b7280;">${UNSUB_REPLY}</a>).

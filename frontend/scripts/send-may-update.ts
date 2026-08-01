@@ -1,8 +1,7 @@
 /**
  * scripts/send-may-update.ts
  *
- * Enriched May 2026 subscriber update — H26, H27, and the VA briefing —
- * with inline visual blocks (HTML+CSS bar charts, hero stat cards).
+ * Enriched May 2026 subscriber update: H26, H27, and the VA briefing: * with inline visual blocks (HTML+CSS bar charts, hero stat cards).
  *
  * Visuals are HTML+CSS rather than inline SVG because Outlook desktop
  * blocks SVGs while CSS background-color + width-percentage divs render
@@ -16,9 +15,9 @@
  *   - 250ms throttle between sends.
  *
  * Required env:
- *   RESEND_API_KEY                — Resend API key
- *   RESEND_FROM_ADDRESS           — optional, defaults to onboarding@resend.dev
- *   POSTGRES_PRISMA_URL           — Supabase pooler URL
+ *   RESEND_API_KEY: Resend API key
+ *   RESEND_FROM_ADDRESS: optional, defaults to onboarding@resend.dev
+ *   POSTGRES_PRISMA_URL: Supabase pooler URL
  *
  * Usage from frontend/:
  *
@@ -38,7 +37,7 @@ import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
 const SUBJECT =
-  'AINPI May 2026 update — 63 SSNs in the federal NDH bulk export + 4 of 125 in Cigna';
+  'AINPI May 2026 update: 63 SSNs in the federal NDH bulk export + 4 of 125 in Cigna';
 const REPORT_URL = 'https://ainpi.dev/reports/2026-05-update';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
@@ -161,7 +160,7 @@ function buildBody(): { text: string; html: string } {
     'Two new findings + the Virginia State Medicaid briefing landed',
     'this week. Top-line numbers:',
     '',
-    'H27 — Social Security Numbers exposed in the NDH bulk export',
+    'H27: Social Security Numbers exposed in the NDH bulk export',
     '   AINPI independently verified and extended the 2026-04-30',
     '   Washington Post finding.',
     '   • 63 confirmed SSN exposures in the public 2026-04-09 NDH bulk',
@@ -171,7 +170,7 @@ function buildBody(): { text: string; html: string } {
     '   • 21 NPI-as-name data-integrity violations',
     '   • Top states: IL 20, OH 7, NJ/TX/WA/AZ/FL/GA/MI/PA/TN at 2 each',
     '',
-    'H26 — VA payer-directory exposure (4-MCO sweep)',
+    'H26: VA payer-directory exposure (4-MCO sweep)',
     '   125 federally-excluded VA NPIs queried against:',
     '     - Humana                       0 of 125',
     '     - Cigna                        4 of 125 ← only matches',
@@ -192,12 +191,12 @@ function buildBody(): { text: string; html: string } {
     '',
     `Read the full update: ${REPORT_URL}`,
     '',
-    '— Eugene Vestel, FHIR IQ',
+    'Eugene Vestel, FHIR IQ',
     '',
     `Reply to this email to unsubscribe or ask a question (${UNSUB_REPLY}).`,
   ].join('\n');
 
-  // HTML version — visual cards + bar charts.
+  // HTML version: visual cards + bar charts.
   const html = `
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 640px; margin: 0 auto; color: #111827; line-height: 1.55; background: #ffffff;">
 
@@ -223,7 +222,7 @@ function buildBody(): { text: string; html: string } {
     </div>
   </div>
 
-  <!-- H27 — SSN exposure detail -->
+  <!-- H27: SSN exposure detail -->
   <div style="padding: 24px 28px;">
     <div style="display: inline-block; padding: 3px 10px; background: #fee2e2; color: #991b1b; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; margin-bottom: 10px;">
       H27 · Critical
@@ -240,7 +239,7 @@ function buildBody(): { text: string; html: string } {
     ${renderBarChart(h27Rows, { max: 22, barColor: '#dc2626', widthPx: 280 })}
 
     <div style="font-size: 12px; color: #6b7280; margin-top: 14px;">
-      Privacy posture: AINPI publishes counts, JSON locations, NPIs (professional IDs), and state breakdowns — never the SSN values themselves, even though they remain in the public NDH bulk file.
+      Privacy posture: AINPI publishes counts, JSON locations, NPIs (professional IDs), and state breakdowns: never the SSN values themselves, even though they remain in the public NDH bulk file.
     </div>
 
     <div style="margin-top: 18px;">
@@ -250,7 +249,7 @@ function buildBody(): { text: string; html: string } {
     </div>
   </div>
 
-  <!-- H26 — VA payer-directory exposure -->
+  <!-- H26: VA payer-directory exposure -->
   <div style="padding: 24px 28px; background: #f9fafb; border-top: 1px solid #e5e7eb;">
     <div style="display: inline-block; padding: 3px 10px; background: #dbeafe; color: #1e40af; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; border-radius: 999px; margin-bottom: 10px;">
       H26 · Methodology demo
@@ -334,7 +333,7 @@ function buildBody(): { text: string; html: string } {
 
   <!-- Footer -->
   <div style="padding: 20px 28px; font-size: 12px; color: #6b7280; text-align: center; border-top: 1px solid #e5e7eb;">
-    <p style="margin: 0 0 6px 0;">— Eugene Vestel, FHIR IQ</p>
+    <p style="margin: 0 0 6px 0;">Eugene Vestel, FHIR IQ</p>
     <p style="margin: 0;">
       Reply to this email to unsubscribe or ask a question
       (<a href="mailto:${UNSUB_REPLY}" style="color:#6b7280;">${UNSUB_REPLY}</a>).

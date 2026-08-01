@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 
 /**
  * Navigates to /npi/<npi>. Records outside the pre-rendered cohort return
- * the 404 page (by design — no runtime lookups); the index page explains
+ * the 404 page (by design: no runtime lookups); the index page explains
  * that and points at /npd search for everything else.
  */
 export default function NpiLookupForm() {

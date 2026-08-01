@@ -5,11 +5,11 @@ import Navbar from '@/components/Navbar';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'PECOS as authoritative source — AINPI',
+  title: 'PECOS as authoritative source | AINPI',
   description:
     'CMS designated PECOS as authoritative for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment. AINPI surfaces the three classes of misalignment: taxonomy code disagreement, stale practice locations, and ownership disclosure currency.',
   openGraph: {
-    title: 'PECOS as authoritative source — what the 2026 verification rules mean for your record',
+    title: 'PECOS as authoritative source: what the 2026 verification rules mean for your record',
     description:
       'Taxonomy code disagreement, stale practice locations, and ownership-disclosure currency under CMS\'s 2026 verification rules.',
     url: 'https://ainpi.dev/pecos',
@@ -95,7 +95,7 @@ export default function PecosPage() {
             <p className="text-slate-700 leading-relaxed mb-3">
               Your taxonomy code tells payers exactly what type of services
               you&apos;re billing for. In behavioral health especially,
-              the wrong code triggers automatic rejection — not a
+              the wrong code triggers automatic rejection, not a
               flag-and-investigate. Depending on how long the wrong code
               has been in your record, you&apos;re looking at a recoupment
               conversation that covers the entire period it was wrong.
@@ -112,7 +112,7 @@ export default function PecosPage() {
                 href="/findings/pecos-taxonomy-disagreement"
                 className="text-blue-700 hover:underline"
               >
-                H37 — PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy
+                H37: PECOS PROVIDER_TYPE vs NPPES NUCC taxonomy
                 disagreement
               </Link>
               {' · '}
@@ -120,7 +120,7 @@ export default function PecosPage() {
                 href="/findings/pecos-behavioral-health-taxonomy"
                 className="text-blue-700 hover:underline"
               >
-                H38 — behavioral-health subset (highest recoupment cohort)
+                H38: behavioral-health subset (highest recoupment cohort)
               </Link>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function PecosPage() {
               The PPEF (CMS Public Provider Enrollment Extract) has
               ~2.98M enrollment records but only ~2.47M individual NPIs.
               That means roughly half a million NPIs have multiple
-              enrollment records. Most are legitimate — telehealth,
+              enrollment records. Most are legitimate: telehealth,
               multi-state practice, hospital + private practice. But a
               meaningful subset have CONFLICTING state addresses that
               signal a stale record: a partnership move never refiled,
@@ -156,7 +156,7 @@ export default function PecosPage() {
                 href="/findings/pecos-multi-enrollment-state-mismatch"
                 className="text-blue-700 hover:underline"
               >
-                H39 — multi-enrollment NPIs with conflicting state
+                H39: multi-enrollment NPIs with conflicting state
                 addresses
               </Link>
             </div>
@@ -191,7 +191,7 @@ export default function PecosPage() {
                 href="/findings/nh-hospice-hh-ownership-flags"
                 className="text-blue-700 hover:underline"
               >
-                H35 — SNF / hospice / HHA / hospital owners on federal
+                H35: SNF / hospice / HHA / hospital owners on federal
                 exclusion lists (PPEF-cross-walked)
               </Link>
             </div>
@@ -259,7 +259,7 @@ export default function PecosPage() {
                 <strong>
                   If you operate a group practice, audit the roster.
                 </strong>{' '}
-                AINPI&apos;s per-state CSVs (forthcoming when H37–H39
+                AINPI&apos;s per-state CSVs (forthcoming when H37-H39
                 ship) will list NPIs in your state with PECOS misalignment
                 so you can triage before payer audits catch them.
               </div>

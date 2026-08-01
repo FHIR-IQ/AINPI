@@ -1,13 +1,13 @@
 /**
- * /for-state-medicaid/<state> — CMO-facing forwardable explainer.
+ * /for-state-medicaid/<state>: CMO-facing forwardable explainer.
  *
  * Built for the state Medicaid CMO listserve. Three-band layout
  * (per the audience-framing rule):
  *   1. Hero: count + action, the lede that earns interest.
- *   2. "What this is" + "What you can do today" — short, action-first.
- *   3. "Why this matters now" — anchors to the CMS State Medicaid
+ *   2. "What this is" + "What you can do today": short, action-first.
+ *   3. "Why this matters now": anchors to the CMS State Medicaid
  *      Director letter (2026-04-23, response due 2026-05-23).
- *   4. Collapsed "For your technical team" — links to the
+ *   4. Collapsed "For your technical team": links to the
  *      methodology, findings, GitHub, and per-state JSON for
  *      the PI / MMIS / data team to pick up after a CMO forward.
  *
@@ -80,7 +80,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
   );
 
   // Per-state claims-side cross-audit. Every state has its own findings
-  // now — H29 / H30a / H30b / H31 / H32 each ran against this state's
+  // now: H29 / H30a / H30b / H31 / H32 each ran against this state's
   // critical cohort and dropped per-state CSVs we read at build time.
   const claims = loadStateClaimsAudit(code);
   // Any state with ≥1 claims-side match anywhere shows the rich band.
@@ -101,7 +101,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      {/* Band 1 — Hero (the lede that earns interest) */}
+      {/* Band 1: Hero (the lede that earns interest) */}
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12 sm:py-16">
           <div className="text-xs font-bold tracking-wider uppercase text-blue-700 mb-3">
@@ -116,7 +116,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             Each one is currently on the OIG LEIE or SAM.gov exclusion list
             <em> and</em> still appears in the CMS National Directory of
             Healthcare. We have produced a per-provider file your
-            Program-Integrity and MMIS teams can act on this week — with
+            Program-Integrity and MMIS teams can act on this week, with
             primary-source verification links on every row so nothing has
             to be taken on faith.
           </p>
@@ -137,7 +137,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Band 2 — What this is */}
+      {/* Band 2: What this is */}
       <section className="bg-gray-50 border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
@@ -160,7 +160,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
                 <strong>It was built for state Medicaid agencies.</strong>{' '}
                 Specifically for the workflow CMS asked you to run in the
                 2026-04-23 State Medicaid Director letter on comprehensive
-                provider revalidation — and the response your team is
+                provider revalidation, and the response your team is
                 writing by 2026-05-23.
               </span>
             </li>
@@ -171,15 +171,14 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
                 federal database checks</strong> the SMD letter asks
                 each state to perform: NPPES, OIG LEIE, and SAM.gov.
                 The fourth (SSA Death Master File) requires restricted
-                access we do not have — but every state has access to
+                access we do not have, but every state has access to
                 it directly through SSA.
               </span>
             </li>
             <li className="flex gap-3">
               <span className="font-bold text-blue-600 shrink-0 w-6">4.</span>
               <span>
-                <strong>The output for {state.name} is the file above</strong>{' '}
-                — {cohortCount} provider NPIs your state may be paying
+                <strong>The output for {state.name} is the file above</strong>{' '}: {cohortCount} provider NPIs your state may be paying
                 today through Medicaid, managed care, or the Medicaid
                 directory, where the provider is on a current federal
                 exclusion list. Each row carries verification URLs to
@@ -201,7 +200,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Band 3 — What you can do today */}
+      {/* Band 3: What you can do today */}
       <section id="how-to-use" className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -253,7 +252,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
                   provider flagged, queue any unflagged matches for
                   revalidation or payment-suspension review. The
                   per-provider verification URLs mean no one has to take
-                  AINPI&apos;s word for it — every flag is independently
+                  AINPI&apos;s word for it: every flag is independently
                   checkable against the primary source.
                 </p>
               </div>
@@ -288,7 +287,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Sample-of-3 — credibility, primary-source verifiable */}
+      {/* Sample-of-3: credibility, primary-source verifiable */}
       {samples.length > 0 && (
         <section className="bg-gray-50 border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
@@ -386,7 +385,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </section>
       )}
 
-      {/* Band 4 — Why this matters now */}
+      {/* Band 4: Why this matters now */}
       <section className="bg-blue-50 border-b border-blue-100">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -402,8 +401,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
           </p>
           <ul className="space-y-2 text-gray-800 mb-4 list-disc list-inside">
             <li>
-              <strong>NPPES</strong> (national provider enumeration —
-              currency and deactivation status)
+              <strong>NPPES</strong> (national provider enumeration: currency and deactivation status)
             </li>
             <li>
               <strong>OIG LEIE</strong> (exclusion list)
@@ -414,7 +412,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             </li>
             <li>
               <strong>SSA Death Master File</strong> (deceased-provider
-              detection — restricted access; each state has its own
+              detection: restricted access; each state has its own
               channel)
             </li>
           </ul>
@@ -422,7 +420,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             AINPI has already completed the first three federal database
             checks for all states. For {state.name}, the output is the
             file above. Element 2 of the SMD letter asks for
-            &ldquo;public-facing data or reporting&rdquo; — AINPI is
+            &ldquo;public-facing data or reporting&rdquo;: AINPI is
             that data, free, citable, and continuously refreshed against
             new federal releases.
           </p>
@@ -434,7 +432,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Band 4b — Cross-audit findings beyond the directory.
+      {/* Band 4b: Cross-audit findings beyond the directory.
           Designed as citation-ready ammunition for Element 4 ("other
           comprehensive measures") of the SMD response. */}
       <section className="bg-white border-b border-gray-200">
@@ -467,7 +465,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
           </p>
 
           <div className="space-y-6">
-            {/* Finding 1 — Medicaid spending */}
+            {/* Finding 1: Medicaid spending */}
             <div className={`${claims.medicaid.strict_post_exclusion_matches === 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'} border rounded-lg p-5`}>
               <div className={`text-xs font-bold uppercase tracking-wider ${claims.medicaid.strict_post_exclusion_matches === 0 ? 'text-emerald-800' : 'text-rose-800'} mb-2`}>
                 {claims.medicaid.strict_post_exclusion_matches === 0 ? 'Working as designed' : 'Strict post-exclusion Medicaid payments'}
@@ -501,7 +499,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               </p>
             </div>
 
-            {/* Finding 2 — Medicare Part B + Part D */}
+            {/* Finding 2: Medicare Part B + Part D */}
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-5">
               <div className="text-xs font-bold uppercase tracking-wider text-amber-800 mb-2">
                 Medicare Part B + Part D · CY 2023
@@ -551,7 +549,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               </p>
             </div>
 
-            {/* Finding 3 — NPPES-deactivated × billing */}
+            {/* Finding 3: NPPES-deactivated × billing */}
             <div className="bg-rose-50 border border-rose-200 rounded-lg p-5">
               <div className="text-xs font-bold uppercase tracking-wider text-rose-800 mb-2">
                 MMIS reconciliation queue · closed identifiers
@@ -596,7 +594,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               </p>
             </div>
 
-            {/* Finding 4 — Open Payments (Sunshine Act) */}
+            {/* Finding 4: Open Payments (Sunshine Act) */}
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-5">
               <div className="text-xs font-bold uppercase tracking-wider text-orange-800 mb-2">
                 Sunshine Act surface · industry payments to excluded providers
@@ -631,7 +629,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               </p>
             </div>
 
-            {/* Finding 5 — Federal directory hygiene context (per-state) */}
+            {/* Finding 5: Federal directory hygiene context (per-state) */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-5">
               <div className="text-xs font-bold uppercase tracking-wider text-blue-800 mb-2">
                 Directory hygiene context · for Element 3
@@ -720,7 +718,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Band 5 — Cross-state context (so the CMO sees they're not alone) */}
+      {/* Band 5: Cross-state context (so the CMO sees they're not alone) */}
       <section className="bg-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -731,8 +729,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
             Each state&apos;s file is at{' '}
             <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm">
               ainpi.dev/for-state-medicaid/&lt;state&gt;
-            </code>{' '}
-            — for example,{' '}
+            </code>{' '}, for example,{' '}
             <Link
               href="/for-state-medicaid/va"
               className="text-blue-600 hover:underline"
@@ -785,7 +782,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Band 6 — Disclosure: for your technical team */}
+      {/* Band 6: Disclosure: for your technical team */}
       <section className="bg-gray-900 text-gray-200">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-12">
           <h2 className="text-xl font-bold text-white mb-2">
@@ -803,8 +800,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               >
                 /states/{code.toLowerCase()}
               </Link>{' '}
-              <span className="text-gray-400">
-                — the state-scoped audit page: directory denominators,
+              <span className="text-gray-400">, the state-scoped audit page: directory denominators,
                 state-vs-national findings table, MCO landscape
                 {state.medicaid_program_name ? `, ${state.medicaid_program_name} context` : ''}.
               </span>
@@ -816,8 +812,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               >
                 /findings
               </Link>{' '}
-              <span className="text-gray-400">
-                — the full audit catalog. 30+ pre-registered findings
+              <span className="text-gray-400">, the full audit catalog. 30+ pre-registered findings
                 with null hypothesis, denominator, source release,
                 methodology version, and reproducibility script for each.
               </span>
@@ -829,8 +824,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               >
                 /methodology
               </Link>{' '}
-              <span className="text-gray-400">
-                — DAMA DMBOK mapping, L0–L7 data-quality scoring,
+              <span className="text-gray-400">: DAMA DMBOK mapping, L0-L7 data-quality scoring,
                 reproducibility rules.
               </span>
             </li>
@@ -841,8 +835,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               >
                 /smd-revalidation
               </Link>{' '}
-              <span className="text-gray-400">
-                — citation language ready to paste into your SMD-letter
+              <span className="text-gray-400">: citation language ready to paste into your SMD-letter
                 response, mapped to each of the five elements.
               </span>
             </li>
@@ -853,8 +846,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               >
                 /api/v1/states/{code.toLowerCase()}.json
               </a>{' '}
-              <span className="text-gray-400">
-                — programmatic per-state JSON for data-team consumption.
+              <span className="text-gray-400">: programmatic per-state JSON for data-team consumption.
               </span>
             </li>
             <li>
@@ -866,8 +858,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
               >
                 github.com/FHIR-IQ/AINPI
               </a>{' '}
-              <span className="text-gray-400">
-                — every analysis script, every BigQuery extractor, the
+              <span className="text-gray-400">: every analysis script, every BigQuery extractor, the
                 full audit code. AINPI is open-source.
               </span>
             </li>
@@ -875,7 +866,7 @@ export default function ForStateMedicaidPage({ params }: PageParams) {
         </div>
       </section>
 
-      {/* Footer — who we are */}
+      {/* Footer: who we are */}
       <section className="bg-gray-50">
         <div className="max-w-4xl mx-auto px-6 sm:px-8 py-10 text-sm text-gray-600">
           <p className="mb-2">

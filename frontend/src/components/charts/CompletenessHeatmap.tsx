@@ -70,7 +70,7 @@ export default function CompletenessHeatmap({
           tooltipRef.current.style.left = `${event.clientX - svgRect.left + 12}px`;
           tooltipRef.current.style.top = `${event.clientY - svgRect.top - 40}px`;
           tooltipRef.current.innerHTML = `
-            <strong>${d.row}</strong> — ${d.col}<br/>
+            <strong>${d.row}</strong>: ${d.col}<br/>
             ${d.value.toFixed(1)}% complete
           `;
         }
@@ -84,7 +84,7 @@ export default function CompletenessHeatmap({
       .delay((_, i) => i * 50)
       .attr('fill', (d) => colorScale(d.value));
 
-    // Cell labels — set text statically so they always render regardless
+    // Cell labels: set text statically so they always render regardless
     // of animation state; only the opacity fade is animated.
     g.selectAll('text.cell-label')
       .data(data)

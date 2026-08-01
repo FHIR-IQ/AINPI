@@ -6,7 +6,7 @@
  * AINPI should standardize. Persists to Supabase (HealthcareServiceSurvey
  * Response model) and fires a realtime admin alert via lib/admin-email.
  *
- * Tolerant input shape — every field optional except a basic sanity check.
+ * Tolerant input shape: every field optional except a basic sanity check.
  * Anonymous responses allowed; email only required if `wantsFollowUp` is
  * true so we can actually follow up.
  *
@@ -169,7 +169,7 @@ export async function POST(req: NextRequest) {
 }
 
 /**
- * GET — public aggregate. Counts only, no PII. Drives the results page.
+ * GET: public aggregate. Counts only, no PII. Drives the results page.
  */
 export async function GET() {
   try {

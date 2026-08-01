@@ -13,7 +13,7 @@ AINPI is a research project. This privacy policy covers the public website at [a
 - No analytics, no cookies, no tracking pixels, no fingerprinting.
 - The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report).
 - Submitted emails are stored in Supabase Postgres (US region) and are used only for the stated purpose. No resale, no sharing with third parties.
-- Removal on request — email [gene@fhiriq.com](mailto:gene@fhiriq.com).
+- Removal on request: email [gene@fhiriq.com](mailto:gene@fhiriq.com).
 
 ## What we collect
 
@@ -21,16 +21,20 @@ AINPI is a research project. This privacy policy covers the public website at [a
 
 **When you subscribe to updates:** your email address and the timestamp of your submission. Nothing else.
 
-**When you download the full report:** your email address, name (optional), organization (optional), stated use case (optional), and the submission timestamp. This form exists so we can tell who's using AINPI research — the information helps us prioritize and reach back out when major findings land.
+**When you download the full report:** your email address, name (optional), organization (optional), stated use case (optional), and the submission timestamp. This form exists so we can tell who's using AINPI research. The information helps us prioritize and reach back out when major findings land.
 
 **When you file a GitHub issue or open a pull request:** that information is subject to [GitHub's privacy policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement), not ours.
 
 ## How we use submitted information
 
-- **Subscribe:** we send periodic updates about new findings and methodology changes, via a transactional-email service (TBD — no emails are sent until that service is connected; if you subscribe today your address simply sits in the database until the integration lands).
-- **Download report:** we record the capture for our own understanding of who's using the research. We may email you about a major update or a follow-up question once in a while.
+- **Subscribe:** we send periodic updates about new findings and methodology
+  changes. Resend delivers them. Every message carries a reply-to address, and
+  replying with a removal request is enough to unsubscribe.
+- **Download report:** we record the capture so we can tell who is using the
+  research. We may email you about a major update or a follow-up question.
 
-We do not sell, trade, or share your email address with any third party outside the transactional-email provider we eventually use to deliver updates.
+We do not sell, trade, or share your email address with any third party outside
+Resend, which delivers the updates.
 
 ## Where data is stored
 
@@ -50,8 +54,9 @@ Browser-level cookies you may see in DevTools (`__cf_bm` etc.) are set by the CD
 | Service | Purpose | Data sent |
 |---|---|---|
 | Vercel | Hosting + CDN | Request metadata (IP, user-agent, path) |
-| Supabase | Email + contact storage | Form submissions only, never browsing data |
-| Google BigQuery | Analytics warehouse for audit findings | No user data — only the public CMS NPD + NPPES datasets |
+| Supabase | Email + contact storage | Form submissions only, not browsing data |
+| Resend | Delivers subscriber updates | Your email address and the message |
+| Google BigQuery | Analytics warehouse for audit findings | No user data, only the public CMS NPD + NPPES datasets |
 | GitHub | Source hosting, issues, discussions | Your GitHub activity, per GitHub's privacy policy |
 
 No other third parties. No advertising networks. No data brokers.

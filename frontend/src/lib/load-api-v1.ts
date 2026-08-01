@@ -90,7 +90,7 @@ export interface StateCohortRow {
  * the /for-state-medicaid/<state> CMO-facing page so the hero lede
  * can show the real count plus a sample-of-3 verifiable rows.
  *
- * Lightweight CSV parse — the file format is internal (analysis script
+ * Lightweight CSV parse, the file format is internal (analysis script
  * output), no embedded newlines, only quoted commas in the name column.
  */
 export function loadStateCohort(state: string): StateCohortRow[] {
@@ -140,13 +140,13 @@ function parseCsvLine(line: string): string[] {
 }
 
 /**
- * Per-state claims-side cross-audit findings — read at build time from the
+ * Per-state claims-side cross-audit findings: read at build time from the
  * per-state CSVs the analysis pipeline produces. Returns a summary object
  * with counts and totals for each finding, plain-English ready for the
  * CMO-facing page band.
  */
 export interface StateClaimsAudit {
-  /** Medicaid spending (H29) — matches and dollar totals. */
+  /** Medicaid spending (H29): matches and dollar totals. */
   medicaid: {
     full_window_matches: number;
     strict_post_exclusion_matches: number;
@@ -175,7 +175,7 @@ export interface StateClaimsAudit {
     partb_post_deactivation_paid: number;
     partd_post_deactivation_drug_cost: number;
   };
-  /** Open Payments × exclusion (H32) — Sunshine Act surface. */
+  /** Open Payments × exclusion (H32): Sunshine Act surface. */
   industry_payments: {
     full_window_matches: number;
     strict_post_exclusion_matches: number;
@@ -220,8 +220,7 @@ function toNum(s: string | undefined): number {
 
 /**
  * Load all five claims-side per-state findings for a single state. Returns
- * a unified shape regardless of whether the underlying CSVs are present —
- * missing files just yield zero values.
+ * a unified shape regardless of whether the underlying CSVs are present: * missing files just yield zero values.
  */
 export function loadStateClaimsAudit(state: string): StateClaimsAudit {
   const medicaidRows = readStateCsv(state, 'h29-excluded-paid.csv');

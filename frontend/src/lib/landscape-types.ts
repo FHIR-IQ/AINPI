@@ -81,7 +81,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'reachability',
     label: 'Endpoint reachability',
     description:
-      'Share of practitioners whose managing organization has a FHIR endpoint that responds to a live probe (H1–H5).',
+      'Share of practitioners whose managing organization has a FHIR endpoint that responds to a live probe (H1-H5).',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },
@@ -97,7 +97,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'specialty_validity',
     label: 'Specialty validity',
     description:
-      'Share of practitioner_role.specialty codes that resolve cleanly against the NUCC ↔ CMS Medicare crosswalk (H10–H13).',
+      'Share of practitioner_role.specialty codes that resolve cleanly against the NUCC ↔ CMS Medicare crosswalk (H10-H13).',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },

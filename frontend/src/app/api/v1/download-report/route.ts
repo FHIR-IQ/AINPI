@@ -124,7 +124,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error('[download-report] capture failed:', msg);
-    // Fail open — still return the redirect so the user gets the report
+    // Fail open: still return the redirect so the user gets the report
   }
 
   // Build an absolute URL for whichever report was selected so the

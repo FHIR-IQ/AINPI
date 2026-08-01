@@ -1,7 +1,7 @@
 /**
  * Transactional email helpers via Resend.
  *
- * Sending is fire-and-forget from API routes — a delivery failure
+ * Sending is fire-and-forget from API routes, a delivery failure
  * should NEVER block the underlying user action (subscribe, download).
  * All helpers catch + log and return a boolean for "best effort"
  * telemetry.
@@ -40,7 +40,7 @@ export async function sendSubscribeWelcome(email: string): Promise<boolean> {
       replyTo: REPLY_TO,
       subject: "You're subscribed to AINPI updates",
       text: [
-        `Thanks for subscribing to AINPI — the open-source audit of the`,
+        `Thanks for subscribing to AINPI, the open-source audit of the`,
         `CMS National Provider Directory.`,
         ``,
         `What to expect:`,
@@ -53,11 +53,11 @@ export async function sendSubscribeWelcome(email: string): Promise<boolean> {
         `Methodology:    https://ainpi.dev/methodology`,
         `Full report:    https://ainpi.dev/download`,
         ``,
-        `— Eugene Vestel, FHIR IQ`,
+        `Eugene Vestel, FHIR IQ`,
       ].join('\n'),
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937; line-height: 1.5;">
-          <p>Thanks for subscribing to <strong>AINPI</strong> — the open-source audit of the CMS National Provider Directory.</p>
+          <p>Thanks for subscribing to <strong>AINPI</strong>, the open-source audit of the CMS National Provider Directory.</p>
           <p><strong>What to expect:</strong></p>
           <ul>
             <li>One email per major finding (typically once a month)</li>
@@ -69,7 +69,7 @@ export async function sendSubscribeWelcome(email: string): Promise<boolean> {
             <a href="https://ainpi.dev/methodology" style="color: #2557eb;">Methodology</a> ·
             <a href="https://ainpi.dev/download" style="color: #2557eb;">Download the full report</a>
           </p>
-          <p style="color: #6b7280; font-size: 14px;">— Eugene Vestel, FHIR IQ</p>
+          <p style="color: #6b7280; font-size: 14px;">Eugene Vestel, FHIR IQ</p>
         </div>
       `,
     });
@@ -108,7 +108,7 @@ export async function sendDownloadThanks(
         `If you have a question about methodology or a finding disagrees`,
         `with what you're seeing in the source, just reply to this email.`,
         ``,
-        `— Eugene Vestel, FHIR IQ`,
+        `Eugene Vestel, FHIR IQ`,
       ].join('\n'),
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937; line-height: 1.5;">
@@ -119,7 +119,7 @@ export async function sendDownloadThanks(
           </p>
           <p>You can also view the web version at <a href="https://ainpi.dev/report" style="color: #2557eb;">ainpi.dev/report</a>.</p>
           <p>If you have a question about methodology or a finding disagrees with what you're seeing in the source, just reply to this email.</p>
-          <p style="color: #6b7280; font-size: 14px;">— Eugene Vestel, FHIR IQ</p>
+          <p style="color: #6b7280; font-size: 14px;">Eugene Vestel, FHIR IQ</p>
         </div>
       `,
     });

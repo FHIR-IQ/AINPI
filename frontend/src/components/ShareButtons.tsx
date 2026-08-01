@@ -17,7 +17,7 @@ const LINKEDIN_INTENT = 'https://www.linkedin.com/sharing/share-offsite/';
 
 export default function ShareButtons({
   url = 'https://ainpi.dev',
-  title = 'AINPI — open-source audit of the CMS National Provider Directory',
+  title = 'AINPI: open-source audit of the CMS National Provider Directory',
   compact = false,
   variant = 'light',
 }: ShareButtonsProps) {
@@ -29,7 +29,7 @@ export default function ShareButtons({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // browsers without clipboard support — no-op
+      // browsers without clipboard support: no-op
     }
   }
 

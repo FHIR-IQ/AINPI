@@ -17,9 +17,9 @@ export async function generateMetadata({
   params: { state: string };
 }): Promise<Metadata> {
   const entry = findStateByCode(params.state);
-  if (!entry) return { title: 'State not found — AINPI' };
+  if (!entry) return { title: 'State not found | AINPI' };
 
-  const title = `${entry.name} provider directory audit — AINPI`;
+  const title = `${entry.name} provider directory audit: AINPI`;
   const description = `State-scoped slice of the AINPI audit of the CMS National Provider Directory, prepared as a citable methodology for ${entry.name}'s response to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation.`;
   const url = `https://ainpi.dev/states/${entry.code.toLowerCase()}`;
 
@@ -41,14 +41,14 @@ export async function generateMetadata({
 }
 
 function fmt(n: number | null): string {
-  if (n === null || n === undefined) return '—';
+  if (n === null || n === undefined) return 'n/a';
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(2) + 'M';
   if (n >= 1_000) return n.toLocaleString();
   return n.toString();
 }
 
 function pct(n: number | null): string {
-  if (n === null || n === undefined) return '—';
+  if (n === null || n === undefined) return 'n/a';
   return n.toFixed(2) + '%';
 }
 
@@ -122,8 +122,7 @@ function McoExposurePanel() {
                   className="underline"
                 >
                   {s.npi}
-                </a>{' '}
-                — {s.name} — matched: {s.matched_in.join(', ')}
+                </a>{' '}: {s.name}: matched: {s.matched_in.join(', ')}
               </li>
             ))}
           </ul>
@@ -493,7 +492,7 @@ export default function StatePage({ params }: { params: { state: string } }) {
             <div>
               <dt className="text-gray-500">Generated</dt>
               <dd className="text-gray-900 font-mono">
-                {data?.generated_at ?? '—'}
+                {data?.generated_at ?? 'n/a'}
               </dd>
             </div>
           </dl>

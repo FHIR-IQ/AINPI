@@ -56,7 +56,7 @@ export default function DownloadPage() {
         <p className="text-sm text-gray-500 mb-8">
           Pick a report below, give us a little context about how you&apos;ll use it,
           and we&apos;ll take you straight to the document. Name, organization,
-          and use-case are optional — only your email is required.
+          and use-case are optional: only your email is required.
         </p>
 
         <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-sm border p-6 space-y-6">

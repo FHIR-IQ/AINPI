@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     const params: Record<string, string> = { state };
     if (city) params.city = city;
 
-    // Top cities in state (from locations — highest quality address data)
+    // Top cities in state (from locations: highest quality address data)
     const cities = await runQuery(
       'SELECT _city AS city, COUNT(*) AS location_count, ' +
       'COUNT(DISTINCT _postal_code) AS unique_zips ' +

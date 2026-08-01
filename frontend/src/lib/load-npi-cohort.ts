@@ -1,5 +1,5 @@
 /**
- * Build-time loader for the national high-risk cohort export — the data
+ * Build-time loader for the national high-risk cohort export, the data
  * behind the per-NPI report-card pages at /npi/[npi].
  *
  * COST CONTRACT: this file is read at BUILD TIME ONLY. The /npi/[npi] route

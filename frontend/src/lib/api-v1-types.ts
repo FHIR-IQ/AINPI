@@ -3,8 +3,8 @@
  *
  * These types describe the static files served at:
  *
- *   /api/v1/stats.json              — site-wide counters
- *   /api/v1/findings/<slug>.json    — per-finding detail
+ *   /api/v1/stats.json: site-wide counters
+ *   /api/v1/findings/<slug>.json: per-finding detail
  *
  * External consumers (dashboards, academic citation, journalists) can
  * rely on this shape. Breaking changes here require a version bump in
@@ -20,7 +20,7 @@ export interface ApiV1Stats {
   release_date: string;
   /** When this JSON was generated (ISO 8601 timestamp, UTC). */
   generated_at: string;
-  /** Pinned methodology version — see docs/methodology/index.md front matter. */
+  /** Pinned methodology version: see docs/methodology/index.md front matter. */
   methodology_version: string;
   /** Git SHA of the repo at pipeline run time, or 'pending'. */
   commit_sha: string;
@@ -72,7 +72,7 @@ export interface ApiV1Finding {
   denominator: number | null;
   /** Optional supporting chart payload. */
   chart: ApiV1FindingChart | null;
-  /** Free-form notes — caveats, data-cleanup events, known edge cases. */
+  /** Free-form notes: caveats, data-cleanup events, known edge cases. */
   notes: string | null;
 }
 
