@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-07-27T12:32:24+00:00",
+  "generated_at": "2026-08-03T12:31:34+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "e5474d5",
+  "commit_sha": "d0fc715",
   "denominators": {
     "practitioner": 235956,
     "organization": 104896,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1366394199",
-      "display_name": "SORGI, RACHAEL",
+      "npi": "1104771153",
+      "display_name": "PENG, MEGAN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1366394199"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104771153"
     },
     {
-      "npi": "1992650170",
-      "display_name": "BARRETT, CHLOE",
+      "npi": "1790632909",
+      "display_name": "ROSS, BRITTANNY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992650170"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1790632909"
     },
     {
-      "npi": "1801748082",
-      "display_name": "BURRICHTER, ASHLEIGH",
+      "npi": "1639027345",
+      "display_name": "SHERWIN, KELLI",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801748082"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1639027345"
     },
     {
-      "npi": "1336097005",
-      "display_name": "MILBURN, OLIVIA",
+      "npi": "1629923735",
+      "display_name": "MOORE, LINDSAY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1336097005"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1629923735"
     },
     {
-      "npi": "1477401370",
-      "display_name": "ORNELAS, SARAH",
+      "npi": "1164377628",
+      "display_name": "LONG, CHARLOTTE",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1477401370"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1164377628"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five PA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
