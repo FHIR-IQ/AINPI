@@ -38,9 +38,7 @@ export interface PaHospital {
   county_rucc: number | null;
   /** Appears in a certified-EHR vendor's published service-base-URL bundle. */
   in_cehrt_bundle: boolean;
-  /** Endpoint reachable, following partOf when the vendor publishes a brand hierarchy. */
-  endpoint_resolvable: boolean;
-  /** Raw fact: the matched record itself carries Organization.endpoint. */
+  /** The Organization resource references an Endpoint resource. */
   org_endpoint_linked: boolean;
   ehr_vendor: string | null;
   vendor_record_synthetic: boolean;
@@ -62,7 +60,6 @@ export interface PaRuralPayload {
     critical_access_hospitals: number;
     in_cehrt_bundle: number;
     org_endpoint_linked: number;
-    endpoint_resolvable: number;
     rural_in_cehrt_bundle: number;
     cah_in_cehrt_bundle: number;
     match_exact: number;

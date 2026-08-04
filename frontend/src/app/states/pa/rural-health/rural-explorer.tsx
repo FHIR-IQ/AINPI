@@ -16,7 +16,7 @@ const PaCountyMap = dynamic(() => import('@/components/charts/PaCountyMap'), {
 });
 
 type RuralFilter = 'all' | 'rural_county' | 'critical_access' | 'metro';
-type EndpointFilter = 'all' | 'in_bundle' | 'no_bundle' | 'endpoint_linked';
+type EndpointFilter = 'all' | 'in_bundle' | 'no_bundle' | 'endpoint_linked' | 'resolvable';
 
 export default function RuralExplorer({ payload }: { payload: PaRuralPayload }) {
   const [overlay, setOverlay] = useState<PaOverlay>('rural');
@@ -46,6 +46,7 @@ export default function RuralExplorer({ payload }: { payload: PaRuralPayload }) 
       if (endpoint === 'in_bundle' && !h.in_cehrt_bundle) return false;
       if (endpoint === 'no_bundle' && h.in_cehrt_bundle) return false;
       if (endpoint === 'endpoint_linked' && !h.org_endpoint_linked) return false;
+      if (endpoint === 'resolvable' && !h.endpoint_resolvable) return false;
       if (vendor !== 'all' && h.ehr_vendor !== vendor) return false;
       if (system !== 'all' && h.health_system !== system) return false;
       return true;
@@ -139,7 +140,8 @@ export default function RuralExplorer({ payload }: { payload: PaRuralPayload }) 
               <option value="all">Any</option>
               <option value="in_bundle">In a certified-EHR bundle</option>
               <option value="no_bundle">No bundle found</option>
-              <option value="endpoint_linked">Cross-linked to an endpoint</option>
+              <option value="resolvable">Endpoint resolvable</option>
+              <option value="endpoint_linked">Direct Organization.endpoint</option>
             </select>
           </label>
 
@@ -278,7 +280,7 @@ function HospitalRow({ h }: { h: PaHospital }) {
               Published
             </span>
             <div className="text-xs text-gray-500 mt-0.5">
-              {h.org_endpoint_linked ? 'endpoint cross-linked' : 'no endpoint cross-link'}
+              {h.org_endpoint_linked ? 'direct endpoint link' : h.endpoint_resolvable ? 'endpoint via partOf' : 'endpoint not resolved'}
               {h.match_method === 'name_city_token' && ' · fuzzy match'}
             </div>
           </>

@@ -209,16 +209,6 @@ def index_cehrt(cache_root: pathlib.Path) -> tuple[dict, dict]:
     exact: dict[tuple[str, str], dict] = {}
     by_city: dict[str, list[dict]] = {}
     linkage: dict[str, dict] = {}
-    # Vendors publish organizations in one of two shapes and both are valid
-    # FHIR. Flat: one Organization per site, each carrying Organization.endpoint.
-    # Hierarchical: a brand-level Organization carries the endpoint and each
-    # facility points at it through partOf. Epic uses the second shape, where
-    # all 1,187 brand records carry an endpoint and the 83,678 facilities under
-    # them do not. Checking only the matched record therefore reports "no
-    # endpoint" for an Epic hospital whose endpoint is live, so resolve the
-    # partOf chain before deciding.
-    org_by_id: dict[str, dict] = {}
-    pending: list[dict] = []
     org_dirs = list(cache_root.rglob("organization/*.json"))
     if not org_dirs:
         raise SystemExit(f"no organization/*.json under {cache_root}")
@@ -259,8 +249,6 @@ def index_cehrt(cache_root: pathlib.Path) -> tuple[dict, dict]:
             None,
         )
         rec = {
-            "res_id": res.get("id"),
-            "part_of": (res.get("partOf") or {}).get("reference"),
             "org_name": res.get("name"),
             "vendor": vendor,
             "has_endpoint": bool(res.get("endpoint")),
@@ -271,26 +259,9 @@ def index_cehrt(cache_root: pathlib.Path) -> tuple[dict, dict]:
         }
         exact.setdefault(match_key(res.get("name"), addr.get("city")), rec)
         by_city.setdefault(rec["city"], []).append(rec)
-        if rec["res_id"]:
-            org_by_id[rec["res_id"]] = rec
-        pending.append(rec)
         v = linkage.setdefault(vendor, {"orgs": 0, "endpoint_linked": 0})
         v["orgs"] += 1
         v["endpoint_linked"] += bool(res.get("endpoint"))
-
-    # Second pass: an organization resolves to an endpoint if it carries one, or
-    # if any ancestor in its partOf chain does.
-    def resolves(rec: dict, depth: int = 0) -> bool:
-        if rec.get("has_endpoint"):
-            return True
-        ref = rec.get("part_of") or ""
-        if not ref or depth > 8:
-            return False
-        parent = org_by_id.get(ref.split("/")[-1].replace("urn:uuid:", ""))
-        return resolves(parent, depth + 1) if parent else False
-
-    for rec in pending:
-        rec["endpoint_resolvable"] = resolves(rec)
     return exact, by_city, linkage
 
 
@@ -388,10 +359,6 @@ def main() -> None:
                 # automated org-to-endpoint traversal fails even though the
                 # endpoint exists. Conflating the two would understate coverage.
                 "in_cehrt_bundle": bool(rec),
-                # Endpoint reachable for this hospital, following partOf when the
-                # vendor publishes a brand-level hierarchy.
-                "endpoint_resolvable": bool(rec and rec.get("endpoint_resolvable")),
-                # Raw fact: the matched record itself carries Organization.endpoint.
                 "org_endpoint_linked": bool(rec and rec["has_endpoint"]),
                 "ehr_vendor": vendor_label(rec["vendor"]) if rec else None,
                 "vendor_record_synthetic": bool(rec and rec["synthetic"]),
@@ -403,7 +370,6 @@ def main() -> None:
     cah = [h for h in hospitals if h["critical_access"]]
     in_bundle = [h for h in hospitals if h["in_cehrt_bundle"]]
     linked = [h for h in hospitals if h["org_endpoint_linked"]]
-    resolvable = [h for h in hospitals if h["endpoint_resolvable"]]
     rural_in_bundle = [h for h in rural_h if h["in_cehrt_bundle"]]
     cah_in_bundle = [h for h in cah if h["in_cehrt_bundle"]]
 
@@ -428,7 +394,6 @@ def main() -> None:
             "critical_access_hospitals": len(cah),
             "in_cehrt_bundle": len(in_bundle),
             "org_endpoint_linked": len(linked),
-            "endpoint_resolvable": len(resolvable),
             "rural_in_cehrt_bundle": len(rural_in_bundle),
             "cah_in_cehrt_bundle": len(cah_in_bundle),
             "match_exact": stats["exact"],
@@ -494,8 +459,7 @@ def main() -> None:
     print(
         f"in a certified-EHR bundle: {s['in_cehrt_bundle']} "
         f"(rural {s['rural_in_cehrt_bundle']}, CAH {s['cah_in_cehrt_bundle']}); "
-        f"endpoint resolvable (incl. partOf): {s['endpoint_resolvable']}; "
-        f"direct Organization.endpoint: {s['org_endpoint_linked']}"
+        f"org cross-linked to an endpoint: {s['org_endpoint_linked']}"
     )
     print(f"match: exact {s['match_exact']}, token {s['match_token']}, none {s['match_none']}")
     print("vendors:", s["ehr_vendors"])

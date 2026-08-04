@@ -332,26 +332,26 @@ export const FINDINGS: Finding[] = [
     title: 'Pennsylvania rural hospitals: FHIR endpoint publication and EHR concentration',
     updated: '2026-08-04',
     summary:
-      'All 187 hospitals CMS lists in Pennsylvania, joined to the certified-EHR service-base-URL bundles their vendors publish under HTI-1. The join answers two questions at once: whether a hospital is reachable by FHIR, and which EHR it runs. Result: 137 of 187 (73%) appear in a vendor bundle. Rural hospitals are not behind. 81% of hospitals in nonmetro counties appear, and 65% of Critical Access hospitals. The EHR market is concentrated: Epic 86, athenahealth 24, MEDITECH 8, TruBridge 7, Oracle Health 5. The sharper finding is structural: only 51 of the 137 have an Organization record that cross-links to an Endpoint resource, and the gap is almost entirely Epic, which publishes 4,445 Pennsylvania organizations and cross-links 49. Software that traverses Organization to Endpoint finds nothing for most Pennsylvania hospitals even though the endpoint exists.',
+      'All 187 hospitals CMS lists in Pennsylvania, joined to the certified-EHR service-base-URL bundles their vendors publish under HTI-1. The join answers two questions at once: whether a hospital is reachable by FHIR, and which EHR it runs. Result: 137 of 187 (73%) appear in a vendor bundle. Rural hospitals are not behind. 81% of hospitals in nonmetro counties appear, and 65% of Critical Access hospitals. The EHR market is concentrated: Epic 86, athenahealth 24, MEDITECH 8, TruBridge 7, Oracle Health 5. The structural finding is about how vendors publish, not about coverage: all 137 matched hospitals resolve to an endpoint, but only 51 carry `Organization.endpoint` on their own record. The rest sit beneath a brand-level organization that holds the endpoint, reached through `partOf`. Epic publishes that hierarchical shape (every one of its 1,187 national brand records carries an endpoint, while its 83,678 facility records do not), and the flat-shape vendors put an endpoint on each organization. Both are valid FHIR. An integration that checks only the matched record reports no endpoint for an Epic hospital whose endpoint is live. Separately, none of Epic\'s 84,865 published organizations carries an NPI, so its footprint cannot be joined to NPPES or the NDH on identifier at all.',
     nullHypothesis:
-      'Hospitals in nonmetro Pennsylvania counties and Critical Access hospitals publish FHIR endpoints at a materially lower rate than metro hospitals, and published organization records reliably resolve to an endpoint. Both halves rejected: rural publication runs above the statewide rate, and organization-to-endpoint resolution fails for the majority because of one vendor.',
+      'Hospitals in nonmetro Pennsylvania counties and Critical Access hospitals publish FHIR endpoints at a materially lower rate than metro hospitals, and a published organization record carries its own endpoint reference. The first half is rejected: rural publication runs above the statewide rate. The second half is rejected in a different way: resolution succeeds for every matched hospital, but for most of them only after following `partOf` to a brand-level record.',
     denominator:
       'The 187 hospitals with a Pennsylvania address in CMS Hospital General Information. County rural status is the USDA ERS Rural-Urban Continuum Code 2023 (4-9 nonmetro), covering 34 of 67 counties. Critical Access is the CMS facility-level federal rural designation, 17 hospitals. The endpoint denominator is the set of Pennsylvania organizations published in certified-EHR bundles (10,177 at the pinned snapshot).',
     dataSource:
       'Five public sources, no BigQuery and no paid API: CMS Hospital General Information; USDA ERS Rural-Urban Continuum Codes 2023; USDA ERS county median household income; Census Population Estimates vintage 2023 for median age and share 65+; and ftrotter-gov/npd_slurp_cehrt_clientfhir_cache, the CMS directory team\'s cache of ONC Lantern certified-EHR bundles. Compute script: `analysis/pa_rural_health.py`.',
     status: 'published',
     ogTagline:
-      '137 of 187 PA hospitals publish a FHIR endpoint. Only 51 resolve from organization to endpoint.',
+      '137 of 187 PA hospitals resolve to a FHIR endpoint, but only 51 without following partOf.',
     implications: [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'Do not resolve a Pennsylvania hospital by walking Organization to Endpoint. Epic cross-links 49 of its 4,445 published PA organizations, so the traversal fails for most hospitals whose endpoint is live. Resolve through the vendor bundle instead.',
+          'Resolve `partOf` before deciding a hospital has no endpoint. Vendors publish in two shapes: an endpoint on each organization, or an endpoint on the brand with facilities hanging beneath it. Checking only the record you matched reports a false negative for every hospital published in the second shape, which is most Epic sites.',
       },
       {
         audience: 'CMS publishing the data',
         takeaway:
-          'Bundle completeness varies by vendor in a way that changes what downstream software can do. Every vendor except Epic cross-links essentially all published organizations to an endpoint. A conformance expectation on that cross-reference would make the bundles traversable.',
+          'Two publishing shapes coexist in the HTI-1 bundles and a consumer must handle both. The larger obstacle for NDH ingestion is identifiers: Epic publishes 84,865 organizations nationally with no NPI on any of them, so that footprint cannot be joined to the federal directory on identifier. Naming an expected identifier in the submission spec would do more than requiring an endpoint reference.',
       },
       {
         audience: 'State Medicaid PI offices',

@@ -123,29 +123,34 @@ export default function PaRuralHealthPage() {
             sub={`${allShare}% of all hospitals`}
           />
           <Stat
-            label="Cross-linked to an endpoint"
-            value={String(s.org_endpoint_linked)}
-            sub="organization points at an Endpoint"
+            label="Endpoint resolvable"
+            value={String(s.endpoint_resolvable)}
+            sub={`${s.org_endpoint_linked} link directly, the rest via partOf`}
           />
         </div>
 
         <section className="mb-4 bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-900">
           <p className="mb-2">
-            <strong>Two numbers, because they answer different questions.</strong>{' '}
+            <strong>Vendors publish in two different shapes, and both are valid FHIR.</strong>{' '}
             {s.in_cehrt_bundle} of {s.hospitals} hospitals appear in a certified
-            EHR vendor&apos;s published bundle, so they are reachable through
-            that vendor and we know which EHR they run. Only {s.org_endpoint_linked}{' '}
-            have an Organization record that points at a specific Endpoint
-            resource.
+            EHR vendor&apos;s bundle, and all {s.endpoint_resolvable} of those
+            resolve to an endpoint. But only {s.org_endpoint_linked} carry{' '}
+            <code>Organization.endpoint</code> on their own record. The rest sit
+            under a brand-level organization that holds the endpoint, reached by
+            following <code>partOf</code>.
           </p>
           {epic && (
             <p>
-              The gap is almost entirely Epic. Epic publishes{' '}
-              {epic.pa_orgs.toLocaleString()} Pennsylvania organizations and
-              cross-links {epic.endpoint_linked} of them to an endpoint. Every
-              other major vendor links all of theirs. Software that walks
-              Organization to Endpoint will therefore find nothing for most
-              Pennsylvania hospitals, even though the endpoint exists.
+              Epic accounts for nearly all of the difference. It publishes{' '}
+              {epic.pa_orgs.toLocaleString()} Pennsylvania organizations, which
+              are mostly individual facilities, and puts the endpoint on the
+              brand record above them. Nationally every one of Epic&apos;s 1,187
+              brand records carries an endpoint. Vendors using the flat shape
+              put an endpoint on each organization directly. An integration that
+              checks only <code>Organization.endpoint</code> on the record it
+              matched will report no endpoint for an Epic hospital whose
+              endpoint is live, so resolve <code>partOf</code> before concluding
+              anything.
             </p>
           )}
         </section>
