@@ -154,7 +154,7 @@ ccn,name,city,county,county_fips,zip,hospital_type,critical_access,ownership,eme
 391315,PENN HIGHLANDS ELK,SAINT MARYS,ELK,42047,15857,Critical Access Hospitals,True,Voluntary non-profit - Private,True,Penn Highlands Healthcare,True,7,False,False,False,,False,
 391316,UPMC WELLSBORO,WELLSBORO,TIOGA,42117,16901,Critical Access Hospitals,True,Voluntary non-profit - Private,True,UPMC,True,8,True,True,False,Epic,False,name_city_exact
 391317,CONEMAUGH MINERS MEDICAL CENTER,HASTINGS,CAMBRIA,42021,16646,Critical Access Hospitals,True,Proprietary,True,Conemaugh Health System,False,3,True,True,False,Epic,False,name_city_exact
-391318,UPMC KANE,KANE,MC KEAN,,16735,Critical Access Hospitals,True,Voluntary non-profit - Private,True,UPMC,False,,True,True,True,TruBridge,False,name_city_exact
+391318,UPMC KANE,KANE,MC KEAN,42083,16735,Critical Access Hospitals,True,Voluntary non-profit - Private,True,UPMC,True,7,True,True,True,TruBridge,False,name_city_exact
 393302,UPMC CHILDREN'S HOSPITAL OF PITTSBURGH,PITTSBURGH,ALLEGHENY,42003,15224,Childrens,False,Voluntary non-profit - Other,True,UPMC,False,1,True,True,False,Epic,False,name_city_exact
 393303,CHILDREN'S HOSPITAL OF PHILADELPHIA,PHILADELPHIA,PHILADELPHIA,42101,19104,Childrens,False,Voluntary non-profit - Private,True,,False,1,True,True,False,Epic,False,name_city_exact
 393304,CHILDREN'S HOME OF PITTSBURGH,PITTSBURGH,ALLEGHENY,42003,15224,Childrens,False,Voluntary non-profit - Private,False,,False,1,False,False,False,,False,

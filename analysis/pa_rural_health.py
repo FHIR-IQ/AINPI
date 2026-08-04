@@ -133,6 +133,18 @@ def resolve_cms_csv_url() -> str:
     raise SystemExit("could not resolve the CMS hospital CSV URL from the metastore")
 
 
+def norm_county(s: str) -> str:
+    """Collapse county names to a comparison key.
+
+    CMS and USDA disagree on spacing and punctuation for the same county:
+    CMS writes "MC KEAN" and "MCKEAN", USDA writes "McKean". Comparing raw
+    uppercase strings silently drops the hospital from every county rollup,
+    which is how UPMC Kane once made McKean look like a county with no
+    hospital while also appearing in the hospital table.
+    """
+    return re.sub(r"[^A-Z0-9]", "", (s or "").upper())
+
+
 def norm_name(s: str) -> str:
     s = (s or "").upper().replace("&", " AND ")
     s = re.sub(r"[^A-Z0-9 ]", " ", s)
@@ -333,12 +345,12 @@ def main() -> None:
     exact, by_city, linkage = index_cehrt(pathlib.Path(args.cehrt_cache))
     print(f"counties: {len(counties)} | hospitals: {len(hospitals_raw)} | PA vendor orgs: {sum(len(v) for v in by_city.values())}")
 
-    by_county_name = {c["name"].upper(): c for c in counties.values()}
+    by_county_name = {norm_county(c["name"]): c for c in counties.values()}
 
     hospitals = []
     stats = {"exact": 0, "token": 0, "none": 0}
     for h in hospitals_raw:
-        cname = (h.get("County/Parish") or "").upper().strip()
+        cname = norm_county(h.get("County/Parish"))
         county = by_county_name.get(cname)
         city = (h.get("City/Town") or "").strip()
 
@@ -398,6 +410,12 @@ def main() -> None:
                 "match_method": method,
             }
         )
+
+    unresolved = [h for h in hospitals if not h["county_fips"]]
+    if unresolved:
+        print(f"WARNING: {len(unresolved)} hospitals did not resolve to a county:")
+        for h in unresolved:
+            print(f"   {h['name']} ({h['county']})")
 
     rural_h = [h for h in hospitals if h["county_rural"]]
     cah = [h for h in hospitals if h["critical_access"]]
