@@ -166,7 +166,13 @@ export interface VersionLogEntry {
   summary: string;
 }
 
-function methodologyToTimelineEntries(): TimelineEntry[] {
+/**
+ * Exported for tests. The timeline is trimmed to 10 entries, so whether a
+ * methodology entry survives depends on how much else published recently.
+ * The contract worth testing is that every version-log entry becomes a
+ * well-formed entry, which is what this returns before any trimming.
+ */
+export function methodologyToTimelineEntries(): TimelineEntry[] {
   if (!fs.existsSync(VERSION_LOG_PATH)) return [];
   const raw = fs.readFileSync(VERSION_LOG_PATH, 'utf-8');
   const { data } = matter(raw);

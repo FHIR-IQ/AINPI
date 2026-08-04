@@ -15,6 +15,7 @@ const VALID_SOURCES = new Set([
   // placement so per-surface conversion shows up in the admin report.
   'finding_page',
   'landscape_panel',
+  'pa_rural_health',
   'npi_page',
   'npi_index',
   'unspecified',

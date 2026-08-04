@@ -327,6 +327,50 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'pa-rural-hospital-connectivity',
+    hypotheses: ['H47'],
+    title: 'Pennsylvania rural hospitals: FHIR endpoint publication and EHR concentration',
+    updated: '2026-08-04',
+    summary:
+      'All 187 hospitals CMS lists in Pennsylvania, joined to the certified-EHR service-base-URL bundles their vendors publish under HTI-1. The join answers two questions at once: whether a hospital is reachable by FHIR, and which EHR it runs. Result: 137 of 187 (73%) appear in a vendor bundle. Rural hospitals are not behind. 81% of hospitals in nonmetro counties appear, and 65% of Critical Access hospitals. The EHR market is concentrated: Epic 86, athenahealth 24, MEDITECH 8, TruBridge 7, Oracle Health 5. The sharper finding is structural: only 51 of the 137 have an Organization record that cross-links to an Endpoint resource, and the gap is almost entirely Epic, which publishes 4,445 Pennsylvania organizations and cross-links 49. Software that traverses Organization to Endpoint finds nothing for most Pennsylvania hospitals even though the endpoint exists.',
+    nullHypothesis:
+      'Hospitals in nonmetro Pennsylvania counties and Critical Access hospitals publish FHIR endpoints at a materially lower rate than metro hospitals, and published organization records reliably resolve to an endpoint. Both halves rejected: rural publication runs above the statewide rate, and organization-to-endpoint resolution fails for the majority because of one vendor.',
+    denominator:
+      'The 187 hospitals with a Pennsylvania address in CMS Hospital General Information. County rural status is the USDA ERS Rural-Urban Continuum Code 2023 (4-9 nonmetro), covering 34 of 67 counties. Critical Access is the CMS facility-level federal rural designation, 17 hospitals. The endpoint denominator is the set of Pennsylvania organizations published in certified-EHR bundles (10,177 at the pinned snapshot).',
+    dataSource:
+      'Five public sources, no BigQuery and no paid API: CMS Hospital General Information; USDA ERS Rural-Urban Continuum Codes 2023; USDA ERS county median household income; Census Population Estimates vintage 2023 for median age and share 65+; and ftrotter-gov/npd_slurp_cehrt_clientfhir_cache, the CMS directory team\'s cache of ONC Lantern certified-EHR bundles. Compute script: `analysis/pa_rural_health.py`.',
+    status: 'published',
+    ogTagline:
+      '137 of 187 PA hospitals publish a FHIR endpoint. Only 51 resolve from organization to endpoint.',
+    implications: [
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'Do not resolve a Pennsylvania hospital by walking Organization to Endpoint. Epic cross-links 49 of its 4,445 published PA organizations, so the traversal fails for most hospitals whose endpoint is live. Resolve through the vendor bundle instead.',
+      },
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'Bundle completeness varies by vendor in a way that changes what downstream software can do. Every vendor except Epic cross-links essentially all published organizations to an endpoint. A conformance expectation on that cross-reference would make the bundles traversable.',
+      },
+      {
+        audience: 'State Medicaid PI offices',
+        takeaway:
+          'The 50 hospitals with no vendor-bundle match are the list to check first, not a list of hospitals without endpoints. Some publish under a parent system name and federal facilities publish differently. Every row carries its match tier.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'Rural disadvantage does not show up in endpoint publication here, which is worth stating because the opposite is usually assumed. Nonmetro PA counties do carry lower median household income ($59,743 against $71,832) and an older population (23.5% aged 65+ against 20.9%), so the demand-side gap is real even where the connectivity gap is not.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'Hospital-to-vendor matching is by name and city because most bundles omit the NPI, so results are tiered: 114 exact, 23 by token overlap, 50 unmatched. Per-hospital Health Information Organization and TEFCA participation are deliberately absent because no machine-readable participant list exists.',
+      },
+    ],
+  },
+  {
     slug: 'state-medicaid-directory-coverage',
     hypotheses: ['H46'],
     title: 'State Medicaid provider-directory coverage and liveness',

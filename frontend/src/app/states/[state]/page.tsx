@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AuthorByline from '@/components/AuthorByline';
 import { findStateByCode, allStateCodes } from '@/data/states';
@@ -263,6 +264,22 @@ export default function StatePage({ params }: { params: { state: string } }) {
               <a className="underline" href="https://github.com/FHIR-IQ/AINPI/issues">
                 github.com/FHIR-IQ/AINPI/issues
               </a>
+              .
+            </p>
+          </section>
+        )}
+
+        {entry.code === 'PA' && (
+          <section className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-5 text-sm text-blue-900">
+            <p className="font-semibold mb-1">Pennsylvania has a hospital connectivity dashboard.</p>
+            <p>
+              All 187 CMS-listed PA hospitals by rural designation, health
+              system, and EHR vendor, with whether each publishes a FHIR
+              endpoint. County overlays for income, age, and the USDA rural
+              classification.{' '}
+              <Link href="/states/pa/rural-health" className="underline font-medium">
+                Open the rural health dashboard
+              </Link>
               .
             </p>
           </section>

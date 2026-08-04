@@ -122,3 +122,6 @@ persona-walkthrough-*.png
 
 # Local Claude Code skill workspace (brainstorm sessions, etc.)
 .superpowers/
+
+# Downloaded source files for analysis scripts (regenerable)
+analysis/.cache/

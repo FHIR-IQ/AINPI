@@ -88,6 +88,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
+  // Standalone state dashboards that are not part of the per-state slice loop.
+  entries.push({
+    url: `${BASE}/states/pa/rural-health`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  });
+
   for (const r of REPORTS) {
     if (r.format === 'web' && r.url.startsWith('/reports/')) {
       entries.push({

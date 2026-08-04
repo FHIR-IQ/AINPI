@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { ApiV1Stats, ApiV1Finding, ApiV1StateFindings } from './api-v1-types';
 import type { LandscapePayload } from './landscape-types';
+import type { PaRuralPayload } from '@/lib/pa-rural-types';
 
 const PUBLIC_API_ROOT = path.join(process.cwd(), 'public', 'api', 'v1');
 
@@ -292,4 +293,21 @@ export function loadStateClaimsAudit(state: string): StateClaimsAudit {
       ),
     },
   };
+}
+
+/**
+ * Pennsylvania rural hospital connectivity payload (H47).
+ * Build-time filesystem read; the same file is served at
+ * /api/v1/states/pa-rural-health.json for external consumers.
+ */
+export function loadPaRuralHealth(): PaRuralPayload | null {
+  try {
+    const raw = fs.readFileSync(
+      path.join(PUBLIC_API_ROOT, 'states', 'pa-rural-health.json'),
+      'utf8',
+    );
+    return JSON.parse(raw) as PaRuralPayload;
+  } catch {
+    return null;
+  }
 }
