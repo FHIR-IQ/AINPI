@@ -88,7 +88,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     });
   }
 
-  // Standalone state dashboards that are not part of the per-state slice loop.
+  // Section landing pages and standalone dashboards outside the per-state loop.
+  entries.push({
+    url: `${BASE}/rural-health`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  });
   entries.push({
     url: `${BASE}/states/pa/rural-health`,
     lastModified: now,

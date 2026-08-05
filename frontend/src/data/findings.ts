@@ -327,6 +327,40 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'rural-hospital-baseline',
+    hypotheses: ['H48'],
+    title: 'National rural hospital baseline',
+    updated: '2026-08-04',
+    summary:
+      'Where are the country\'s rural hospitals, and how much of each state\'s hospital capacity is rural? Joining every hospital CMS lists to the USDA county rural classification: 1847 of 5,366 hospitals (34.4%) sit in nonmetro counties, which hold 13.8% of US residents. Rural facilities are roughly 2.5 times as numerous as population alone would imply, because distance rather than density decides where a hospital has to be. 1,338 carry the Critical Access designation, led by Texas (93), Iowa (82), Kansas (82). 239 hospitals could not be matched to a county code and are reported separately rather than assigned to either group.',
+    nullHypothesis:
+      'The share of a state\'s hospitals located in nonmetro counties tracks the share of its population living in nonmetro counties. Rejected: nationally the two differ by a factor of about 2.5, and the gap varies widely by state, so the two measures cannot substitute for one another in a funding formula.',
+    denominator:
+      'Every hospital in CMS Hospital General Information with a US state address (5,366 across 50 states and DC; territories are excluded because ERS publishes no continuum code for them). Rural means the hospital\'s county carries USDA ERS Rural-Urban Continuum Code 4 to 9 for 2023.',
+    dataSource:
+      'Two public files, joined on a normalized county name because CMS and USDA disagree on spacing and punctuation: CMS Hospital General Information and USDA ERS Rural-Urban Continuum Codes 2023. Compute script: `analysis/rural_health_national.py`. No BigQuery and no paid API.',
+    status: 'published',
+    ogTagline:
+      '34.4% of US hospitals sit in nonmetro counties serving 13.8% of the population.',
+    implications: [
+      {
+        audience: 'Regulators',
+        takeaway:
+          'A rural funding formula weighted by population under-serves facilities; one weighted by facility count over-serves them relative to residents. Both figures belong in the same sentence, and this payload carries them per state.',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'Rural hospital share and rural population share are separate measures that rank states differently. Sorting by either alone produces a misleading ordering, so the per-state payload publishes both.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'The county join is the fragile step. CMS writes "MC KEAN" where USDA writes "McKean", and a naive uppercase compare drops that hospital from its state rollup. Normalization is to alphanumerics only, and the 239 hospitals still unmatched are counted rather than silently discarded.',
+      },
+    ],
+  },
+  {
     slug: 'pa-rural-hospital-connectivity',
     hypotheses: ['H47'],
     title: 'Pennsylvania rural hospitals: FHIR endpoint publication and EHR concentration',

@@ -125,3 +125,14 @@ persona-walkthrough-*.png
 
 # Downloaded source files for analysis scripts (regenerable)
 analysis/.cache/
+
+# Client and consulting deliverables. This repo is the public research project;
+# engagement work, briefs prepared for clients, and anything personally
+# attributed to a consulting entity stay out of it entirely.
+.private/
+client/
+consulting/
+**/ForPeople/
+*-brief.pdf
+*-Brief.pdf
+*brief*.html

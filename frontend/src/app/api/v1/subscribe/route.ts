@@ -16,6 +16,7 @@ const VALID_SOURCES = new Set([
   'finding_page',
   'landscape_panel',
   'pa_rural_health',
+  'rural_health',
   'npi_page',
   'npi_index',
   'unspecified',
