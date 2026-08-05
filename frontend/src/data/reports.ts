@@ -33,6 +33,17 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'aug-2026-08-04-update',
+    version: '2026-08-04-update',
+    title: '2026-08-04 update: a third of American hospitals serve a seventh of the people',
+    description:
+      'New rural health section with a state-level map. 1,847 of 5,366 US hospitals (34.4%) sit in nonmetro counties holding 13.8% of residents; 1,338 are Critical Access. Plus a Pennsylvania deep dive showing rural hospitals are more findable than metro ones, and a correction to an earlier claim about Epic endpoint traversal.',
+    format: 'web',
+    url: '/reports/2026-08-04-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'aug-2026-08-01-update',
     version: '2026-08-01-update',
     title: '2026-08-01 update: half the states have a Medicaid directory you can actually open',
@@ -40,7 +51,6 @@ export const REPORTS: ReportOption[] = [
       'H46 published, computed entirely from public data at zero cost: CMS lists a Medicaid provider directory for 32 of 51 states and DC, and 5 of those listed URLs do not resolve, so 27 of 51 (52.9%) have a catalogued directory the public can open. Plus a baseline of the federated payer registry: 2,557 Medicare Advantage plans enumerated, zero payer-published files, zero endpoints.',
     format: 'web',
     url: '/reports/2026-08-01-update',
-    badge: 'NEW',
     length: '~5 min read',
   },
   {
