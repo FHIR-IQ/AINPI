@@ -216,7 +216,7 @@ function SourceTable({
         {rows.map((r) => (
           <div
             key={r.name}
-            className="bg-white rounded-lg border border-gray-200 p-4"
+            className="bg-white border border-gray-200 p-4"
           >
             <div className="flex items-start justify-between gap-4 mb-2">
               <h3 className="text-base font-semibold text-gray-900">
@@ -304,8 +304,8 @@ export default function DataSourcesPage() {
           rows={CONSIDERED_NOT_INGESTED}
         />
 
-        <section className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-8 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             How to add a new data source
           </h2>
           <ol className="list-decimal list-inside space-y-2 text-sm text-gray-800">

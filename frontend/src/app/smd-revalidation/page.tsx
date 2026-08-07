@@ -44,8 +44,8 @@ export default function SmdRevalidationPage() {
 
         <AuthorByline lastReviewed="2026-04-29" />
 
-        <section className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-8 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             What CMS asked for
           </h2>
           <p className="text-gray-800 mb-3">
@@ -96,8 +96,8 @@ export default function SmdRevalidationPage() {
           </ol>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             The regulatory anchor for ongoing verification
           </h2>
           <p className="text-gray-800 mb-3">
@@ -208,8 +208,8 @@ export default function SmdRevalidationPage() {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             How AINPI maps onto the five required strategy elements
           </h2>
           <table className="w-full text-sm border border-gray-200 rounded">
@@ -311,8 +311,8 @@ export default function SmdRevalidationPage() {
           </table>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Worked example: Virginia
           </h2>
           <p className="text-gray-800 mb-3">
@@ -355,8 +355,8 @@ export default function SmdRevalidationPage() {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Citation language for your CMS response
           </h2>
           <p className="text-sm text-gray-700 mb-3">
@@ -441,8 +441,8 @@ export default function SmdRevalidationPage() {
           </ul>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             For state agency staff
           </h2>
           <p className="text-sm text-gray-700">

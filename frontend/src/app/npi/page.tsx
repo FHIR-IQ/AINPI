@@ -41,8 +41,8 @@ export default function NpiIndexPage() {
           to verify each one yourself.
         </p>
 
-        <section className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="bg-white border border-gray-200 p-6 mb-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Look up an NPI
           </h2>
           <NpiLookupForm />
@@ -64,8 +64,8 @@ export default function NpiIndexPage() {
           verify in under a minute.
         </section>
 
-        <section className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="bg-white border border-gray-200 p-6 mb-8">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             What each card checks
           </h2>
           <ul className="text-sm text-gray-700 space-y-2">

@@ -26,14 +26,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-3xl mb-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-1">
+        <div className="max-w-3xl mb-8 rise">
+          <p className="eyebrow mb-3">
             Provider data landscape · One cell per state × specialty
           </p>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl sm:text-5xl mb-4 text-balance">
             Where the federal provider directory is accurate, and where it is not
           </h1>
-          <p className="text-gray-700">
+          <p className="lede measure">
             Every state and specialty in the CMS National Provider Directory,
             scored on six dimensions of accuracy. One tile is one state and
             specialty. Tile size is the number of active practitioners. Tile
@@ -83,8 +83,8 @@ export default function HomePage() {
 
             <LandscapeExplorer payload={payload} />
 
-            <section className="mt-8 bg-white rounded-lg border border-gray-200 p-5">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+            <section className="mt-8 bg-white border border-gray-200 p-6">
+              <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
                 How to read this
               </h2>
               <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-700">
@@ -113,8 +113,8 @@ export default function HomePage() {
               </ul>
             </section>
 
-            <section className="mt-4 bg-white rounded-lg border border-gray-200 p-5">
-              <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+            <section className="mt-4 bg-white border border-gray-200 p-6">
+              <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
                 Methodology &amp; data lineage
               </h2>
               <p className="text-sm text-gray-700 mb-2">

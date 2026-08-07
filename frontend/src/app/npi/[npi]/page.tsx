@@ -140,7 +140,7 @@ export default function NpiReportCardPage({ params }: { params: { npi: string } 
           )}
         </section>
 
-        <section className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <section className="bg-white border border-gray-200 p-6 mb-6">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">
             Signals present ({active.length})
           </h2>
@@ -165,8 +165,8 @@ export default function NpiReportCardPage({ params }: { params: { npi: string } 
           </div>
         </section>
 
-        <section className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="bg-white border border-gray-200 p-6 mb-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Checks that came back clean ({clean.length})
           </h2>
           <ul className="text-sm text-gray-600 space-y-1">
@@ -186,8 +186,8 @@ export default function NpiReportCardPage({ params }: { params: { npi: string } 
           </p>
         </section>
 
-        <section className="bg-white rounded-lg border border-gray-200 p-6 mb-8">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="bg-white border border-gray-200 p-6 mb-8">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Verify this record at the primary sources
           </h2>
           <div className="flex flex-wrap gap-3 text-sm">

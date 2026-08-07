@@ -197,8 +197,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
           </div>
         )}
 
-        <section className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-8 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Why this page exists
           </h2>
           <p className="text-gray-800 leading-relaxed">
@@ -220,8 +220,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
         </section>
 
         {entry.medicaid_program_name ? (
-          <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <section className="mt-6 bg-white border border-gray-200 p-6">
+            <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
               {entry.name} program context
             </h2>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
@@ -285,8 +285,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
           </section>
         )}
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             NDH resources tied to {entry.name}
           </h2>
           <p className="text-xs text-gray-500 mb-3">
@@ -317,8 +317,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
         </section>
 
         {data && data.findings && data.findings.length > 0 && (
-          <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <section className="mt-6 bg-white border border-gray-200 p-6">
+            <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
               Findings, {entry.name} vs national
             </h2>
             <p className="text-xs text-gray-500 mb-4">
@@ -374,8 +374,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
         )}
 
         {data && data.verify_samples && data.verify_samples.length > 0 && (
-          <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <section className="mt-6 bg-white border border-gray-200 p-6">
+            <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
               Verify a sample yourself
             </h2>
             <p className="text-xs text-gray-500 mb-4">
@@ -433,8 +433,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
           </section>
         )}
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             How to cite this page in your CMS PR strategy response
           </h2>
           <p className="text-sm text-gray-700 mb-3">
@@ -467,8 +467,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Methodology lineage
           </h2>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
@@ -552,8 +552,8 @@ export default function StatePage({ params }: { params: { state: string } }) {
           </ul>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Correction protocol
           </h2>
           <p className="text-sm text-gray-700">

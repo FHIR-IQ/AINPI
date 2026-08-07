@@ -124,7 +124,7 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
 
         {finding.implications && finding.implications.length > 0 && (
           <section className="mb-6">
-            <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+            <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
               What this means
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -144,21 +144,21 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
         )}
 
         <section className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-3 block">
             Null hypothesis
           </h2>
           <p className="text-gray-900">{finding.nullHypothesis}</p>
         </section>
 
         <section className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-3 block">
             Denominator
           </h2>
           <p className="text-gray-900">{finding.denominator}</p>
         </section>
 
         <section className="bg-white rounded-lg shadow-sm border p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-2">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-3 block">
             Data source
           </h2>
           <p className="text-gray-900">{finding.dataSource}</p>

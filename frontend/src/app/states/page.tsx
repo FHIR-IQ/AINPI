@@ -49,8 +49,8 @@ export default function StatesIndex() {
 
         <AuthorByline />
 
-        <section className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-8 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             What CMS asked for, in element 2
           </h2>
           <blockquote className="border-l-4 border-primary-200 pl-4 italic text-gray-700 text-sm">
@@ -68,7 +68,7 @@ export default function StatesIndex() {
         </section>
 
         <section className="mt-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Available states
           </h2>
           <div className="space-y-3">

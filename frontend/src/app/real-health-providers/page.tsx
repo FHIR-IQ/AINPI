@@ -58,8 +58,8 @@ export default function RealHealthProvidersPage() {
 
         <AuthorByline lastReviewed="2026-06-02" />
 
-        <section className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-8 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             What § 6220 actually requires
           </h2>
           <table className="w-full text-sm border border-gray-200 rounded">
@@ -119,8 +119,8 @@ export default function RealHealthProvidersPage() {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             The unresolved measurement question
           </h2>
           <p className="text-gray-800 mb-3">
@@ -158,8 +158,8 @@ export default function RealHealthProvidersPage() {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             How AINPI maps to each obligation
           </h2>
           <table className="w-full text-sm border border-gray-200 rounded">
@@ -268,8 +268,8 @@ export default function RealHealthProvidersPage() {
           </table>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Six decomposed dimensions
           </h2>
           <p className="text-gray-800 mb-3">
@@ -352,8 +352,8 @@ export default function RealHealthProvidersPage() {
           </p>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Citation language for the 2028 scoring methodology RFC
           </h2>
           <p className="text-sm text-gray-700 mb-3">
@@ -432,8 +432,8 @@ export default function RealHealthProvidersPage() {
           </ul>
         </section>
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             For MA plan ops, regulators, and CMS scoring methodology
             submitters
           </h2>

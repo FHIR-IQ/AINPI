@@ -2,40 +2,164 @@
 @tailwind components;
 @tailwind utilities;
 
+/**
+ * "The published record" base layer.
+ *
+ * The visual argument: this is a document, not an app. Depth comes from
+ * rules and alignment rather than shadow; numbers are always tabular so
+ * columns line up; prose is measured to a readable line length.
+ */
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 255, 255, 255;
-  --background-end-rgb: 255, 255, 255;
+  --paper: #faf8f5;
+  --ink: #171310;
+  --rule: #e4dfd6;
+  --accent: #08519c;
+  --signal: #a8321c;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--paper);
+    color: var(--ink);
+    /* A barely-there paper tooth. Visible as texture, never as pattern. */
+    background-image: radial-gradient(
+      rgba(23, 19, 16, 0.018) 1px,
+      transparent 1px
+    );
+    background-size: 3px 3px;
+  }
+
+  /* Every headline is set in the display serif. This is the single most
+     visible break from the scaffold look. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  h1 {
+    letter-spacing: -0.021em;
+  }
+
+  /* A data site should never have numbers that jitter between rows. */
+  table,
+  .tabular,
+  [class*='tabular-nums'] {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    background: #08519c;
+    color: #faf8f5;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [role='button']:focus-visible,
+  select:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-primary-600 text-white px-4 py-2 font-medium tracking-tight transition-colors hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed;
+    border-radius: 2px;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors;
+    @apply border border-gray-300 bg-transparent text-gray-800 px-4 py-2 font-medium transition-colors hover:bg-gray-100;
+    border-radius: 2px;
   }
 
   .input-field {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+    @apply w-full border border-gray-300 bg-white px-3 py-2 focus:outline-none focus:border-primary-600;
+    border-radius: 2px;
   }
 
   .card {
-    @apply bg-white rounded-lg shadow-md p-6;
+    @apply border border-gray-200 bg-white p-6;
+    border-radius: 3px;
   }
 
   .label {
     @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+
+  /* Editorial primitives, used by the redesigned surfaces. */
+
+  /* Small caps label above a headline. The publication's voice. */
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase text-gray-500;
+    letter-spacing: 0.14em;
+  }
+
+  /* A section rule that carries a label, the way a printed report does. */
+  .rule-heading {
+    @apply flex items-baseline gap-3 border-b border-gray-300 pb-2 mb-4;
+  }
+
+  /* Prose measured for reading, not for filling the viewport. */
+  .measure {
+    max-width: 68ch;
+  }
+
+  .lede {
+    @apply text-gray-700;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* A figure with a number and a caption, set like a statistical table
+     rather than a dashboard tile: no box, a rule above, tabular digits. */
+  .stat {
+    @apply border-t border-gray-300 pt-2;
+  }
+
+  .stat-value {
+    @apply text-2xl font-semibold text-ink;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.015em;
+  }
+
+  .stat-label {
+    @apply text-[11px] uppercase text-gray-500 mt-1;
+    letter-spacing: 0.1em;
+  }
+}
+
+@layer utilities {
+  /* Staggered entrance for a page's opening block. One orchestrated
+     reveal reads as craft; scattered micro-animations read as noise. */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .rise {
+    animation: rise 0.5s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rise {
+      animation: none;
+    }
   }
 }

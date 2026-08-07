@@ -71,7 +71,7 @@ export default function RuralExplorer({ payload }: { payload: PaRuralPayload }) 
   return (
     <div className="space-y-4">
       {/* Overlay picker */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4">
+      <div className="bg-white border border-gray-200 p-4">
         <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
           County overlay
         </div>
@@ -110,7 +110,7 @@ export default function RuralExplorer({ payload }: { payload: PaRuralPayload }) 
       </p>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+      <div className="bg-white border border-gray-200 p-4 space-y-3">
         <div className="flex flex-wrap gap-4">
           <label className="text-sm">
             <span className="block text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-1">
@@ -230,7 +230,7 @@ export default function RuralExplorer({ payload }: { payload: PaRuralPayload }) 
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-5">
+      <div className="bg-white border border-gray-200 p-6">
         <InlineSubscribe
           source="pa_rural_health"
           prompt="Get new findings by email when they publish."

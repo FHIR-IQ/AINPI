@@ -29,12 +29,10 @@ function Stat({
   sub?: string;
 }) {
   return (
-    <div>
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
-        {label}
-      </div>
-      <div className="text-2xl font-bold text-gray-900 mt-0.5 tabular-nums">{value}</div>
-      {sub && <div className="text-xs text-gray-500 mt-0.5">{sub}</div>}
+    <div className="stat">
+      <div className="stat-value">{value}</div>
+      <div className="stat-label">{label}</div>
+      {sub && <div className="text-xs text-gray-500 mt-1">{sub}</div>}
     </div>
   );
 }
@@ -74,14 +72,12 @@ export default function PaRuralHealthPage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-3xl mb-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-1">
-            Pennsylvania · Hospital connectivity · H47
-          </p>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="max-w-3xl mb-8 rise">
+          <p className="eyebrow mb-3">Pennsylvania · Hospital connectivity · H47</p>
+          <h1 className="text-4xl sm:text-5xl mb-4 text-balance">
             Which Pennsylvania hospitals publish a FHIR endpoint, and which do not
           </h1>
-          <p className="text-gray-700">
+          <p className="lede measure">
             All {s.hospitals} hospitals CMS lists in Pennsylvania, joined to the
             certified-EHR service-base-URL bundles their vendors publish. That
             join answers two questions at once: whether a hospital is reachable
@@ -106,7 +102,7 @@ export default function PaRuralHealthPage() {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4 grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 mb-8">
           <Stat
             label="Hospitals"
             value={String(s.hospitals)}
@@ -157,8 +153,8 @@ export default function PaRuralHealthPage() {
 
         <RuralExplorer payload={payload} />
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             What the numbers say
           </h2>
           <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-700">
@@ -187,8 +183,8 @@ export default function PaRuralHealthPage() {
           </ul>
         </section>
 
-        <section className="mt-4 bg-white rounded-lg border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-4 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Health information exchange and TEFCA
           </h2>
           <p className="text-sm text-gray-700">{payload.connectivity_note}</p>
@@ -208,8 +204,8 @@ export default function PaRuralHealthPage() {
           </p>
         </section>
 
-        <section className="mt-4 bg-white rounded-lg border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-4 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Method and limits
           </h2>
           <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-700">

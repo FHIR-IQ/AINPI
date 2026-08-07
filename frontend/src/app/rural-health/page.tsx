@@ -50,9 +50,9 @@ function load(): RuralPayload | null {
 
 function Stat({ v, l }: { v: string; l: string }) {
   return (
-    <div>
-      <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">{l}</div>
-      <div className="text-2xl font-bold text-gray-900 mt-0.5 tabular-nums">{v}</div>
+    <div className="stat">
+      <div className="stat-value">{v}</div>
+      <div className="stat-label">{l}</div>
     </div>
   );
 }
@@ -82,14 +82,12 @@ export default function RuralHealthPage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-3xl mb-6">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-1">
-            Rural health · National baseline
-          </p>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="max-w-3xl mb-8 rise">
+          <p className="eyebrow mb-3">Rural health · National baseline</p>
+          <h1 className="text-4xl sm:text-5xl mb-4 text-balance">
             A third of American hospitals serve a seventh of the population
           </h1>
-          <p className="text-gray-700">
+          <p className="lede measure">
             {s.rural_hospitals.toLocaleString()} of the {s.hospitals.toLocaleString()} hospitals CMS
             lists sit in nonmetro counties, which hold {s.rural_pop_share}% of US residents. Rural
             facilities are therefore about {ratio} times as numerous as population alone would
@@ -98,7 +96,7 @@ export default function RuralHealthPage() {
           </p>
         </div>
 
-        <div className="bg-white rounded-lg border border-gray-200 p-4 grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-6 mb-8">
           <Stat v={s.hospitals.toLocaleString()} l="Hospitals CMS lists" />
           <Stat v={`${s.rural_hospitals.toLocaleString()} (${s.rural_share}%)`} l="In nonmetro counties" />
           <Stat v={s.critical_access.toLocaleString()} l="Critical Access hospitals" />
@@ -107,8 +105,8 @@ export default function RuralHealthPage() {
 
         <RuralNational rows={payload.states} />
 
-        <section className="mt-6 bg-white rounded-lg border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-6 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             What the map shows
           </h2>
           <ul className="list-disc list-inside space-y-1.5 text-sm text-gray-700">
@@ -134,7 +132,7 @@ export default function RuralHealthPage() {
         </section>
 
         <section className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-5">
-          <h2 className="text-sm font-semibold text-blue-900 uppercase tracking-wider mb-2">
+          <h2 className="eyebrow text-primary-800 border-b border-primary-200 pb-2 mb-3 block">
             Pennsylvania: the connectivity layer
           </h2>
           <p className="text-sm text-blue-900 mb-2">
@@ -154,8 +152,8 @@ export default function RuralHealthPage() {
           </p>
         </section>
 
-        <section className="mt-4 bg-white rounded-lg border border-gray-200 p-5">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+        <section className="mt-4 bg-white border border-gray-200 p-6">
+          <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
             Method and limits
           </h2>
           <p className="text-sm text-gray-700">{payload.notes}</p>

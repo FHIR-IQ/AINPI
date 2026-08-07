@@ -37,7 +37,7 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
   return (
     <div className="space-y-4">
       {/* Stats strip: Karpathy-style summary card row */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="bg-white border border-gray-200 p-4 grid grid-cols-2 md:grid-cols-4 gap-4">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500">
             Active practitioners
@@ -90,7 +90,7 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
       </div>
 
       {/* Controls: Layer + Tile-By */}
-      <div className="bg-white rounded-lg border border-gray-200 p-4 space-y-3">
+      <div className="bg-white border border-gray-200 p-4 space-y-3">
         <div>
           <div className="text-[10px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
             Layer
@@ -177,7 +177,7 @@ export default function LandscapeExplorer({ payload }: LandscapeExplorerProps) {
         </div>
 
         {/* Side panel */}
-        <aside className="bg-white rounded-lg border border-gray-200 p-4 lg:sticky lg:top-4 h-fit">
+        <aside className="bg-white border border-gray-200 p-4 lg:sticky lg:top-4 h-fit">
           {!selectedCell ? (
             <div className="text-sm text-gray-600">
               <p className="font-medium text-gray-900 mb-2">Click any cell</p>

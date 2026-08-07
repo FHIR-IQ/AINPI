@@ -36,7 +36,7 @@ export default function RuralNational({ rows }: { rows: RuralStateRow[] }) {
       <RuralStateMap rows={rows} selected={selected} onSelect={setSelected} />
 
       {pick && (
-        <div className="bg-white rounded-lg border border-gray-200 p-4 flex flex-wrap items-center gap-x-8 gap-y-2">
+        <div className="bg-white border border-gray-200 p-4 flex flex-wrap items-center gap-x-8 gap-y-2">
           <div>
             <div className="text-lg font-bold text-gray-900">{pick.name}</div>
             <button
@@ -133,7 +133,7 @@ export default function RuralNational({ rows }: { rows: RuralStateRow[] }) {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-gray-200 p-5">
+      <div className="bg-white border border-gray-200 p-6">
         <InlineSubscribe
           source="rural_health"
           prompt="Get new findings by email when they publish."

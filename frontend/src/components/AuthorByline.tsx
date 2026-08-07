@@ -18,7 +18,7 @@ export default function AuthorByline({
 
   if (variant === 'card') {
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-4 text-sm">
+      <div className="bg-white border border-gray-200 p-4 text-sm">
         <p className="font-medium text-gray-900">{AUTHOR.name}</p>
         <p className="text-gray-600">{cred}</p>
         <p className="mt-2 space-x-3 text-gray-500">

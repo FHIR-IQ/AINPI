@@ -25,18 +25,25 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="bg-white shadow-sm border-b">
+    <nav className="bg-paper/85 backdrop-blur-sm border-b border-gray-300 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-2xl font-bold text-primary-600">
-            AINPI
+          {/* Masthead. Set in the display serif with a hairline underline on
+              hover, the way a publication's name behaves, not a logo button. */}
+          <Link href="/" className="group flex items-baseline gap-2">
+            <span className="font-serif text-2xl font-semibold tracking-tight text-ink">
+              AINPI
+            </span>
+            <span className="hidden sm:inline text-[10px] uppercase text-gray-500 tracking-[0.16em] border-l border-gray-300 pl-2">
+              Provider data audit
+            </span>
           </Link>
           <div className="hidden md:flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="flex items-center text-slate-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium"
+                className="flex items-center px-2.5 py-2 text-[13px] font-medium text-gray-700 transition-colors hover:text-primary-600 border-b-2 border-transparent hover:border-primary-600"
               >
                 {item.icon}
                 {item.label}
