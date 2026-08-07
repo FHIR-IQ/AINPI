@@ -89,6 +89,14 @@ export default function RuralHealthPage() {
         dateModified={payload.generated_at}
         keywords={['rural health', 'hospitals', 'Critical Access Hospital', 'RUCC', 'CMS', 'health policy']}
         measurementTechnique="County-level join of CMS Hospital General Information to USDA ERS Rural-Urban Continuum Codes 2023, normalising county names to alphanumerics."
+        variableMeasured="Hospitals per state, hospitals in nonmetro counties, Critical Access Hospital count, share of residents in nonmetro counties, and hospitals unmatched to a county code."
+        version={payload.methodology_version}
+        // Not the NDH bulk files: this dataset is built from the CMS
+        // provider-data catalog joined to USDA ERS.
+        basedOn={{
+          name: 'CMS Hospital General Information',
+          url: 'https://data.cms.gov/provider-data/dataset/xubh-q36u',
+        }}
       />
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

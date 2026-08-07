@@ -82,6 +82,13 @@ export default function PaRuralHealthPage() {
         dateModified={payload.generated_at}
         keywords={['FHIR', 'EHR', 'interoperability', 'Pennsylvania', 'rural hospitals', 'HTI-1', 'provider directory']}
         measurementTechnique="Name-and-city matching of CMS-listed hospitals against certified API developer service base URL publications, tiered as exact, token-overlap or unmatched."
+        variableMeasured="Per hospital: rural designation, health system, EHR vendor, whether a FHIR service base URL resolves, and county overlays for median household income, median age and share aged 65+."
+        version={payload.methodology_version}
+        spatialCoverage="Pennsylvania"
+        basedOn={{
+          name: 'CMS Hospital General Information',
+          url: 'https://data.cms.gov/provider-data/dataset/xubh-q36u',
+        }}
       />
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

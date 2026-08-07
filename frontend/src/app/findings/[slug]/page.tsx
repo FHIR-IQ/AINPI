@@ -88,7 +88,11 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
         dateModified={live?.generated_at ?? finding.updated}
         keywords={[...finding.hypotheses, 'provider directory', 'CMS', 'data quality', 'FHIR']}
         measurementTechnique={finding.dataSource}
-        citation={finding.denominator}
+        variableMeasured={finding.denominator}
+        version={live?.methodology_version}
+        // The NDH release the numbers describe, which is not the day we
+        // published them.
+        temporalCoverage={live?.release_date}
       />
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

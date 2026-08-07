@@ -59,6 +59,8 @@ export function WebSiteJsonLd() {
   );
 }
 
+const REPO = 'https://github.com/FHIR-IQ/AINPI';
+
 export function DatasetJsonLd({
   name,
   description,
@@ -67,9 +69,17 @@ export function DatasetJsonLd({
   dateModified,
   keywords,
   measurementTechnique,
-  citation,
+  variableMeasured,
+  version,
+  temporalCoverage,
+  spatialCoverage = 'United States',
+  basedOn = {
+    name: 'CMS National Provider Directory public use files',
+    url: 'https://directory.cms.gov/',
+  },
 }: {
   name: string;
+  /** Google requires 50 characters or more, else the dataset is dropped. */
   description: string;
   url: string;
   /** Direct links to the machine-readable payloads. */
@@ -77,8 +87,18 @@ export function DatasetJsonLd({
   dateModified?: string;
   keywords?: string[];
   measurementTechnique?: string;
-  citation?: string;
+  /** What the dataset counts: its denominator, stated in words. */
+  variableMeasured?: string;
+  /** Methodology version the numbers were produced under. */
+  version?: string;
+  /** The source release the numbers describe, not the day we published them. */
+  temporalCoverage?: string;
+  spatialCoverage?: string;
+  /** Upstream source, for datasets not derived from the NDH bulk files. */
+  basedOn?: { name: string; url: string };
 }) {
+  const abs = (u: string) => (u.startsWith('http') ? u : `${SITE}${u}`);
+
   return (
     <LdScript
       data={{
@@ -86,27 +106,40 @@ export function DatasetJsonLd({
         '@type': 'Dataset',
         name,
         description,
-        url: url.startsWith('http') ? url : `${SITE}${url}`,
+        url: abs(url),
+        // Google wants a stable handle. This project has no DOI, so the
+        // canonical page URL is the only persistent identifier available.
+        identifier: abs(url),
         license: 'https://www.apache.org/licenses/LICENSE-2.0',
         isAccessibleForFree: true,
         creator: { '@type': 'Organization', name: 'AINPI', url: SITE },
         publisher: { '@type': 'Organization', name: 'AINPI', url: SITE },
+        sameAs: REPO,
+        includedInDataCatalog: {
+          '@type': 'DataCatalog',
+          name: 'AINPI public API',
+          url: `${SITE}/developer`,
+        },
+        // citation is a reference to another work, not a description of the
+        // denominator. The denominator belongs in variableMeasured.
+        citation: {
+          '@type': 'CreativeWork',
+          name: 'AINPI audit methodology',
+          url: `${SITE}/methodology`,
+        },
+        spatialCoverage,
+        ...(version ? { version } : {}),
+        ...(temporalCoverage ? { temporalCoverage } : {}),
+        ...(variableMeasured ? { variableMeasured } : {}),
         ...(dateModified ? { dateModified } : {}),
         ...(keywords?.length ? { keywords } : {}),
         ...(measurementTechnique ? { measurementTechnique } : {}),
-        ...(citation ? { citation } : {}),
         distribution: distributionUrls.map((d) => ({
           '@type': 'DataDownload',
           encodingFormat: d.format,
-          contentUrl: d.url.startsWith('http') ? d.url : `${SITE}${d.url}`,
+          contentUrl: abs(d.url),
         })),
-        isBasedOn: [
-          {
-            '@type': 'Dataset',
-            name: 'CMS National Provider Directory public use files',
-            url: 'https://directory.cms.gov/',
-          },
-        ],
+        isBasedOn: [{ '@type': 'Dataset', ...basedOn }],
       }}
     />
   );

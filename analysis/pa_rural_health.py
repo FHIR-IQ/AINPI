@@ -463,13 +463,17 @@ def main() -> None:
         },
         "counties": sorted(counties.values(), key=lambda c: c["name"]),
         "hospitals": sorted(hospitals, key=lambda h: (h["county"] or "", h["name"] or "")),
+        # Deliberately carries no QHIN headcount. Designation is rolling, so any
+        # hardcoded number goes stale silently between runs, and the point here
+        # is roster availability rather than how many QHINs exist.
         "connectivity_note": (
             "Pennsylvania has five certified Health Information Organizations connected to the "
-            "P3N hub, and ten QHINs are designated under TEFCA. Neither the HIO participant lists "
-            "nor the QHIN participant rosters are published in machine-readable form, and the PA "
-            "eHealth Partnership states that the P3N and its HIOs are not sub-participants in any "
-            "QHIN. This dashboard therefore reports FHIR endpoint publication and EHR vendor, "
-            "which are measurable, and does not assign HIO or TEFCA participation per hospital."
+            "P3N hub, and QHIN designation under TEFCA continues on a rolling basis. Neither the "
+            "HIO participant lists nor the QHIN participant rosters are published in "
+            "machine-readable form, and the PA eHealth Partnership states that the P3N and its "
+            "HIOs are not sub-participants in any QHIN. This dashboard therefore reports FHIR "
+            "endpoint publication and EHR vendor, which are measurable, and does not assign HIO "
+            "or TEFCA participation per hospital."
         ),
         "sources": {
             "hospitals": "CMS Hospital General Information (data.cms.gov, provider-data catalog)",
