@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { loadPaRuralHealth } from '@/lib/load-api-v1';
 import RuralExplorer from './rural-explorer';
+import { DatasetJsonLd } from '@/components/JsonLd';
 
 export const dynamic = 'force-static';
 
@@ -70,6 +71,18 @@ export default function PaRuralHealthPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <DatasetJsonLd
+        name="Pennsylvania hospital FHIR endpoint and EHR vendor dataset"
+        description="All 187 hospitals CMS lists in Pennsylvania, joined to the certified-EHR service-base-URL bundles their vendors publish, with rural designation, health system, EHR vendor, and whether an endpoint resolves. County overlays for income, median age and share aged 65+."
+        url="/states/pa/rural-health"
+        distributionUrls={[
+          { url: '/api/v1/states/pa-rural-health.json', format: 'application/json' },
+          { url: '/api/v1/states/pa-rural-health.csv', format: 'text/csv' },
+        ]}
+        dateModified={payload.generated_at}
+        keywords={['FHIR', 'EHR', 'interoperability', 'Pennsylvania', 'rural hospitals', 'HTI-1', 'provider directory']}
+        measurementTechnique="Name-and-city matching of CMS-listed hospitals against certified API developer service base URL publications, tiered as exact, token-overlap or unmatched."
+      />
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-3xl mb-8 rise">

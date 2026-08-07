@@ -4,6 +4,7 @@ import path from 'node:path';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import RuralNational from './rural-national';
+import { DatasetJsonLd } from '@/components/JsonLd';
 import type { RuralStateRow } from '@/components/charts/RuralStateMap';
 
 export const dynamic = 'force-static';
@@ -80,6 +81,15 @@ export default function RuralHealthPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <DatasetJsonLd
+        name="US rural hospital baseline by state"
+        description="Every hospital CMS lists, joined to the USDA Rural-Urban Continuum Code 2023, aggregated per state: total hospitals, hospitals in nonmetro counties, Critical Access count, and the share of residents living in nonmetro counties."
+        url="/rural-health"
+        distributionUrls={[{ url: '/api/v1/rural-health.json', format: 'application/json' }]}
+        dateModified={payload.generated_at}
+        keywords={['rural health', 'hospitals', 'Critical Access Hospital', 'RUCC', 'CMS', 'health policy']}
+        measurementTechnique="County-level join of CMS Hospital General Information to USDA ERS Rural-Urban Continuum Codes 2023, normalising county names to alphanumerics."
+      />
       <Navbar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-3xl mb-8 rise">

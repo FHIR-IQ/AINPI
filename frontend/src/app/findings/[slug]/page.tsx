@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import FindingChart from '@/components/FindingChart';
 import { findBySlug, allSlugs } from '@/data/findings';
 import { loadFinding } from '@/lib/load-api-v1';
+import { DatasetJsonLd } from '@/components/JsonLd';
 import InlineSubscribe from '@/components/InlineSubscribe';
 
 export const dynamic = 'force-static';
@@ -75,6 +76,20 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Each published finding is a citable dataset with a stated denominator
+          and a downloadable payload, which is what Dataset markup is for. */}
+      <DatasetJsonLd
+        name={finding.title}
+        description={live?.headline ?? finding.summary}
+        url={`/findings/${finding.slug}`}
+        distributionUrls={[
+          { url: `/api/v1/findings/${finding.slug}.json`, format: 'application/json' },
+        ]}
+        dateModified={live?.generated_at ?? finding.updated}
+        keywords={[...finding.hypotheses, 'provider directory', 'CMS', 'data quality', 'FHIR']}
+        measurementTechnique={finding.dataSource}
+        citation={finding.denominator}
+      />
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <nav aria-label="breadcrumb" className="mb-4 text-sm text-gray-500">
