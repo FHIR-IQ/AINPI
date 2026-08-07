@@ -106,7 +106,9 @@ export default function HomePage() {
                 </li>
                 <li>
                   <strong>Color is normalized per layer</strong> to a constant
-                  diverging scale (red = worse, green = better). Higher completeness,
+                  diverging scale (rust = worse, blue = better; chosen so it
+                  survives colour-vision deficiency and greyscale printing,
+                  which a red-to-green scale does not). Higher completeness,
                   agreement, reachability, integrity, and specialty validity are
                   better; lower median update days are better.
                 </li>

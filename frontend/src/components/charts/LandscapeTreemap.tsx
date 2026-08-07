@@ -107,10 +107,16 @@ export default function LandscapeTreemap({
     };
   }, [isFullscreen]);
 
+  // Diverging is right here, because these metrics genuinely run worse to
+  // better and a midpoint means something. Red to green is not: those two
+  // endpoints are indistinguishable under deuteranopia and collapse to the
+  // same grey in print. This is the colourblind-safe equivalent, running
+  // rust through sand to the same blue the rest of the site uses, so the
+  // treemap and the maps speak one colour language.
   const colorScale = useMemo(
     () => d3.scaleLinear<string>()
       .domain([0, 0.5, 1])
-      .range(['#b91c1c', '#f59e0b', '#15803d'])
+      .range(['#a8321c', '#e0cba8', '#08519c'])
       .clamp(true),
     [],
   );

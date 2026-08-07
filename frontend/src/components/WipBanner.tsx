@@ -15,21 +15,21 @@ export default function WipBanner() {
   if (dismissed) return null;
 
   return (
-    <div className="bg-amber-50 border-b border-amber-200">
+    <div className="bg-gray-100 border-b border-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex items-center gap-3">
-        <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
-        <p className="text-xs sm:text-sm text-amber-900 flex-1">
+        <AlertTriangle className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
+        <p className="text-xs text-gray-600 flex-1">
           <strong>Work in progress.</strong> AINPI is an experimental exploration of the CMS National Provider Directory
           (2026-05-08 release). Data may be incomplete, stale, or incorrect: numbers should be independently verified
           before any business or clinical decision.{' '}
-          <a href="/insights" className="underline font-medium hover:text-amber-700">See provenance analysis →</a>
+          <a href="/insights" className="underline font-medium text-gray-800 hover:text-primary-600">See provenance analysis →</a>
         </p>
         <button
           onClick={() => {
             localStorage.setItem(STORAGE_KEY, '1');
             setDismissed(true);
           }}
-          className="text-amber-700 hover:text-amber-900 flex-shrink-0"
+          className="text-gray-500 hover:text-ink flex-shrink-0"
           aria-label="Dismiss banner"
         >
           <X className="w-4 h-4" />
