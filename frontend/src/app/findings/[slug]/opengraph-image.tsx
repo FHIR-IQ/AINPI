@@ -10,6 +10,21 @@ export function generateStaticParams() {
   return allSlugs().map((slug) => ({ slug }));
 }
 
+/**
+ * Rounding must not contradict the headline. H43 is 99.985%, which rounds to
+ * "100%" and would sit on the same card as a headline reading 99.98%. Keep
+ * decimals whenever the whole-number form would claim a 0 or 100 the data
+ * does not support.
+ */
+function pct(n: number, d: number): string {
+  const raw = (n / d) * 100;
+  const whole = Math.round(raw);
+  if ((whole === 100 && raw < 99.995) || (whole === 0 && raw > 0.005)) {
+    return `${raw.toFixed(2)}%`;
+  }
+  return `${whole}%`;
+}
+
 export default async function Image({ params }: { params: { slug: string } }) {
   const f = findBySlug(params.slug);
   const data = loadFinding(params.slug);
@@ -25,7 +40,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
   const stats =
     typeof n === 'number' && typeof d === 'number' && d > 0
       ? [
-          { value: `${Math.round((n / d) * 100)}%`, label: 'Of the denominator' },
+          { value: pct(n, d), label: 'Of the denominator' },
           { value: n.toLocaleString(), label: 'Numerator' },
           { value: d.toLocaleString(), label: 'Denominator' },
         ]
