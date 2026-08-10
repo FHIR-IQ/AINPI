@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-03T12:31:21+00:00",
+  "generated_at": "2026-08-10T10:24:26+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "d0fc715",
+  "commit_sha": "baecd21",
   "denominators": {
     "practitioner": 130127,
     "organization": 67291,
@@ -110,6 +110,20 @@
   ],
   "verify_samples": [
     {
+      "npi": "1588511976",
+      "display_name": "GILL, AMANDA",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1588511976"
+    },
+    {
+      "npi": "1083565675",
+      "display_name": "STEVENS, HEATHER",
+      "flagged_by": "npi-taxonomy-correctness",
+      "flag_reason": "Not present in NPPES npi_raw",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083565675"
+    },
+    {
       "npi": "1972450062",
       "display_name": "VILLALOBOS, ANA",
       "flagged_by": "npi-taxonomy-correctness",
@@ -117,32 +131,18 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972450062"
     },
     {
-      "npi": "1205781093",
-      "display_name": "CHUPASHKO, PATANIT",
+      "npi": "1487500435",
+      "display_name": "FERRARI, JENNIFER",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1205781093"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1487500435"
     },
     {
-      "npi": "1851247977",
-      "display_name": "HARDY, ELENA",
+      "npi": "1487506853",
+      "display_name": "DAVIS, BRANDI",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1851247977"
-    },
-    {
-      "npi": "1700731817",
-      "display_name": "MANANSALA, PAUL",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700731817"
-    },
-    {
-      "npi": "1700734316",
-      "display_name": "STURGILL, TYLER",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700734316"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1487506853"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

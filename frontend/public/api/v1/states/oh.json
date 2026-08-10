@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-03T12:31:47+00:00",
+  "generated_at": "2026-08-10T10:24:50+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "d0fc715",
+  "commit_sha": "baecd21",
   "denominators": {
     "practitioner": 268111,
     "organization": 94023,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1700739687",
-      "display_name": "LONG, DAVID",
+      "npi": "1275487035",
+      "display_name": "ROYSTER, JESSICA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700739687"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275487035"
     },
     {
-      "npi": "1316890676",
-      "display_name": "DUDIWKA, AMANDA",
+      "npi": "1275481871",
+      "display_name": "BENNETT, PHYLLIS",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316890676"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275481871"
     },
     {
-      "npi": "1316890411",
-      "display_name": "GOODLANDER, ISABELLA",
+      "npi": "1275485799",
+      "display_name": "LYON, BROOKE",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316890411"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275485799"
     },
     {
-      "npi": "1801742200",
-      "display_name": "ALLEN, TAYLOR",
+      "npi": "1275488249",
+      "display_name": "HUGHES, KELLY",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801742200"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275488249"
     },
     {
-      "npi": "1801749569",
-      "display_name": "DARST, JERILYN",
+      "npi": "1275489882",
+      "display_name": "ZHANG, CAROLYN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801749569"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275489882"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
