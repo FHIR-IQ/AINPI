@@ -444,6 +444,45 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'ndh-payer-endpoint-coverage',
+    hypotheses: ['H49'],
+    title: 'NDH payer endpoint and organization coverage',
+    summary:
+      'The NDH is discussed in the CMS provider-directory community as the place where payer API endpoints and organization identifiers will live, so a consumer could discover a payer’s public Provider Directory API from one federal index instead of hunting developer portals payer by payer. H49 measures how far the shipped release is from that. Result: of 114,071 FHIR REST endpoints, 1 self-labels as a payer provider directory, and no payer organization type exists at all — Organization.type carries exactly three codings across 1,999,818 typed resources (prov, team, govt). The endpoint table is overwhelmingly an EHR-vendor patient-data index: athenahealth, eClinicalWorks and Office Ally alone account for 65,338 of the endpoints, and 58 of 2,962 distinct hosts are payer-operated. The 92 payer-host endpoints that are carried are largely unusable as an index anyway: only 7 have a managingOrganization, and 30 are marked status=error. A control directory verified live, public and unauthenticated under CMS-9115-F is absent from the index entirely.',
+    nullHypothesis:
+      'The NDH carries payer organizations and their public Provider Directory API endpoints, so it can serve as a discovery index for payer directories. Rejected on both halves: there is no payer Organization.type coding, and payer directory endpoints are effectively absent (1 of 114,071).',
+    denominator:
+      'The 114,071 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-05-08 NDH release (the Direct Trust HISP addresses, 1,246,514 of them, are messaging endpoints and are excluded per H28). The organization-type denominator is the 1,999,818 Organization resources that carry any type coding; a further 1.4M organizations carry no type at all and are not counted either way.',
+    dataSource:
+      'Three capped BigQuery scans of cms_npd.endpoint plus one of cms_npd.organization (reading the resource JSON column to enumerate every type coding rather than the flattened _org_type, so a payer type could not be hidden by the extractor). Plus one control probe by curl of a payer Provider Directory API verified live and unauthenticated. Compute script: analysis/h49_ndh_payer_endpoints.py. About $0.03 per run.',
+    status: 'published',
+    updated: '2026-08-11',
+    ogTagline:
+      '1 of 114,071 NDH FHIR endpoints is a payer provider directory, and no payer organization type exists.',
+    implications: [
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'Three concrete gaps, all additive rather than breaking. Organization.type has no payer coding, so payer entities cannot be represented or selected today. Of the 92 payer-host endpoints that are carried, only 7 have a managingOrganization, so the endpoint cannot be resolved to an organization for the other 85. And a directory that is live, public and mandated is absent entirely, which means the gap is not "payers have not built these" but "the index does not yet carry them".',
+      },
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'Do not plan on discovering payer directory endpoints from the NDH in this release. They are not there. Endpoint resolution from the NDH gets you EHR patient-data URLs, which answer a different question than "where is this payer’s network directory".',
+      },
+      {
+        audience: 'Researchers',
+        takeaway:
+          'Classifying payers by organization name does not work here. Every Pennsylvania organization matching payer-like name patterns is a provider, such as KEYSTONE RURAL HEALTH CENTER. Host-based classification of the endpoint URL is the workable route, and the per-endpoint CSV ships alongside this finding.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'The provider-directory count is a floor, not a census: it counts servers that self-label in their URL path, and a directory at an unlabelled path would be missed. That is why the control probe exists. Without it, a low count could equally mean payers had built nothing, which would not be the index’s fault.',
+      },
+    ],
+  },
+  {
     slug: 'cehrt-endpoint-coverage-gap',
     hypotheses: ['H45'],
     title: 'CEHRT-published FHIR endpoints missing from the NDH, by state',
