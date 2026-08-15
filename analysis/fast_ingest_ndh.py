@@ -76,17 +76,80 @@ def ref_id(ref):
     return s if isinstance(s, str) else None
 
 
+# Multi-valued fields are pipe-joined rather than truncated to the first entry.
+# The existing _location_ids column already uses "|", so this matches. Callers
+# that want one value take the first split; callers that want all of them do
+# not have to fall back to scanning the resource JSON, which is the whole point
+# of the flattened columns.
+def _telecom_pairs(telecom):
+    """Return (first_phone, "system:value|system:value|...")."""
+    if not isinstance(telecom, list):
+        return None, None
+    first_phone, pairs = None, []
+    for t in telecom:
+        if not isinstance(t, dict):
+            continue
+        system, value = t.get("system"), t.get("value")
+        if not isinstance(value, str) or not value:
+            continue
+        if system == "phone" and first_phone is None:
+            first_phone = value
+        pairs.append(f"{system or 'unknown'}:{value}")
+    return first_phone, ("|".join(pairs) or None)
+
+
+def first_address(raw):
+    """First Address as a dict, whatever shape the source actually sent.
+
+    The NDH is a bulk export of self-attested data and does occasionally carry
+    values that do not match the profile. An AttributeError in here aborts the
+    entire file rather than being absorbed by --max_bad_records, so one bad
+    record would kill a multi-million-row load. Degrade to {} instead.
+    """
+    if isinstance(raw, list):
+        raw = next((a for a in raw if isinstance(a, dict)), None)
+    return raw if isinstance(raw, dict) else {}
+
+
+def _address_line(address):
+    """Join address.line entries. Accepts an Address or a list of them."""
+    addr = first_address(address)
+    lines = [l for l in (addr.get("line") or []) if isinstance(l, str) and l]
+    return "|".join(lines) or None
+
+
+def _position(r):
+    """Location.position is the only geo in the NDH. Returns (lat, lng)."""
+    pos = r.get("position")
+    if not isinstance(pos, dict):
+        return None, None
+    lat, lng = pos.get("latitude"), pos.get("longitude")
+    return (
+        float(lat) if isinstance(lat, (int, float)) else None,
+        float(lng) if isinstance(lng, (int, float)) else None,
+    )
+
+
 def extract_practitioner(r):
     names = r.get("name") or []
-    addresses = r.get("address") or []
+    if isinstance(names, list):
+        names = [n for n in names if isinstance(n, dict)]
+    else:
+        names = []
+    addresses = r.get("address")
+    addr = first_address(addresses)
+    phone, telecom = _telecom_pairs(r.get("telecom"))
     return {
         "_id": r.get("id"),
         "_npi": extract_npi(r.get("identifier")),
         "_family_name": (names[0].get("family") if names else None) or None,
         "_given_name": (names[0].get("given", [None])[0] if names and names[0].get("given") else None),
-        "_state": (addresses[0].get("state") if addresses else None) or None,
-        "_city": (addresses[0].get("city") if addresses else None) or None,
-        "_postal_code": (addresses[0].get("postalCode") if addresses else None) or None,
+        "_state": addr.get("state") or None,
+        "_city": addr.get("city") or None,
+        "_postal_code": addr.get("postalCode") or None,
+        "_address_line": _address_line(addresses),
+        "_phone": phone,
+        "_telecom": telecom,
         "_gender": r.get("gender") or None,
         "_active": r.get("active") is True,
     }
@@ -99,6 +162,7 @@ def extract_practitioner_role(r):
     location_ids = "|".join(
         l.get("reference", "") for l in locations if isinstance(l, dict) and l.get("reference")
     ) or None
+    phone, telecom = _telecom_pairs(r.get("telecom"))
     return {
         "_id": r.get("id"),
         "_practitioner_id": ref_id(r.get("practitioner")),
@@ -106,33 +170,55 @@ def extract_practitioner_role(r):
         "_specialty_code": coding.get("code") or None,
         "_specialty_display": coding.get("display") or None,
         "_location_ids": location_ids,
+        "_phone": phone,
+        "_telecom": telecom,
         "_active": r.get("active") is True,
     }
 
 
 def extract_organization(r):
-    addresses = r.get("address") or []
+    addresses = r.get("address")
+    addr = first_address(addresses)
     types = r.get("type") or []
+    types = [t for t in types if isinstance(t, dict)] if isinstance(types, list) else []
     type_coding = (types[0].get("coding", [{}])[0] if types else {}) or {}
+    org_phone, org_telecom = _telecom_pairs(r.get("telecom"))
     return {
         "_id": r.get("id"),
         "_npi": extract_npi(r.get("identifier")),
         "_name": r.get("name") or None,
-        "_state": (addresses[0].get("state") if addresses else None) or None,
-        "_city": (addresses[0].get("city") if addresses else None) or None,
+        "_state": addr.get("state") or None,
+        "_city": addr.get("city") or None,
+        "_address_line": _address_line(addresses),
+        "_phone": org_phone,
+        "_telecom": org_telecom,
         "_org_type": type_coding.get("code") or None,
         "_active": r.get("active") is True,
     }
 
 
 def extract_location(r):
+    # Location.address is 0..1 in FHIR, but defend against a list anyway: an
+    # exception here aborts the whole file rather than being absorbed by
+    # --max_bad_records, so one malformed record would kill a 1.3M-row load.
     address = r.get("address") or {}
+    if isinstance(address, list):
+        address = (address[0] if address else {}) or {}
+    if not isinstance(address, dict):
+        address = {}
+    phone, telecom = _telecom_pairs(r.get("telecom"))
+    lat, lng = _position(r)
     return {
         "_id": r.get("id"),
         "_name": r.get("name") or None,
         "_state": address.get("state") or None,
         "_city": address.get("city") or None,
         "_postal_code": address.get("postalCode") or None,
+        "_address_line": _address_line(address),
+        "_phone": phone,
+        "_telecom": telecom,
+        "_position_lat": lat,
+        "_position_lng": lng,
         "_status": r.get("status") or None,
         "_managing_org_id": ref_id(r.get("managingOrganization")),
     }

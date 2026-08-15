@@ -263,12 +263,16 @@ Each of the 6 resource tables stores the full FHIR resource as a `resource:JSON`
 
 | Table | Key extracted columns |
 |---|---|
-| `practitioner` | `_id, _npi, _family_name, _given_name, _state, _city, _postal_code, _gender, _active` |
-| `organization` | `_id, _npi, _name, _state, _city, _org_type, _active` |
-| `location` | `_id, _name, _state, _city, _postal_code, _status, _managing_org_id` |
+| `practitioner` | `_id, _npi, _family_name, _given_name, _state, _city, _postal_code, _address_line, _phone, _telecom, _gender, _active` |
+| `organization` | `_id, _npi, _name, _state, _city, _address_line, _phone, _telecom, _org_type, _active` |
+| `location` | `_id, _name, _state, _city, _postal_code, _address_line, _phone, _telecom, _position_lat, _position_lng, _status, _managing_org_id` |
 | `endpoint` | `_id, _connection_type, _status, _address, _name, _managing_org_id` |
-| `practitioner_role` | `_id, _practitioner_id, _org_id, _specialty_code, _specialty_display, _location_ids, _active` |
+| `practitioner_role` | `_id, _practitioner_id, _org_id, _specialty_code, _specialty_display, _location_ids, _phone, _telecom, _active` |
 | `organization_affiliation` | `_id, _org_id, _participating_org_id, _active` |
+
+**Multi-valued flattened columns are pipe-joined**, matching the existing `_location_ids` convention. `_telecom` is `system:value` pairs in source order (`fax:4129148635|phone:4123197866`); `_address_line` joins `address.line` entries (`200 Old Pond Rd|Ste 107`). `_phone` is the first entry whose **system is `phone`**, not the first telecom entry, because fax frequently precedes phone in NDH records. Coverage on the 2026-05-08 release: practitioner `_phone` 99.98% (independently reproduces H43), organization 99.93%, practitioner_role 74.9%, location 0.0% (Location.telecom is empty in this release, as H43 also found). `location._position_lat/lng` is populated for 93.86% of locations, which is the only geo in the NDH.
+
+**Adding a flattened column takes two steps, and skipping the first fails silently.** `bq load` runs with `--ignore_unknown_values`, so a new key emitted by the extractor is *discarded without error* unless the column already exists on the table. Run `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` first, then `analysis/backfill_flattened_columns.py` to populate it from the stored `resource` JSON without waiting for the next full ingest (~21 GB, ~$0.10 for all four tables). The extractors must also never raise: an exception in the Python transform aborts the whole file rather than being absorbed by `--max_bad_records`, so one malformed record would kill a 7.4M-row load. `analysis/tests/test_fast_ingest_flatteners.py` asserts every extractor degrades to `None` across 13 malformed shapes.
 
 **FHIR reference format**: `_practitioner_id` / `_org_id` / `_managing_org_id` hold full reference strings like `Practitioner/Practitioner-1234567890` or `Organization/Organization-1518732023`. Cross-resource JOINs reconstruct the reference from the target's `_id`, e.g.:
 
