@@ -483,6 +483,45 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'endpoint-org-linkage',
+    hypotheses: ['H50'],
+    title: 'Endpoint-to-organization linkage',
+    summary:
+      'An endpoint is only actionable if you can say whose it is. "There is a FHIR server at this URL" answers nothing on its own; "this URL belongs to the organization with NPI 1234567890" is what an integrator or a payer doing network validation needs. H50 measures how often Endpoint.managingOrganization is present and resolvable, and publishes the crosswalk it produces. Result: 19,334 of 114,071 FHIR REST endpoints (16.9%) resolve to a managing organization, leaving 94,737 URLs with no owner in the directory. The gap is absence rather than breakage — zero references dangle. Every endpoint that does resolve reaches an organization carrying an NPI, so the link yields a usable base-URL-to-NPI crosswalk covering 18,884 organizations, published as a CSV alongside this finding.',
+    nullHypothesis:
+      'Endpoints in the NDH carry a resolvable managingOrganization, so a FHIR base URL can be attributed to an organization. Rejected: 83.1% of FHIR REST endpoints have no organization link.',
+    denominator:
+      'The 114,071 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-05-08 release. Direct Trust addresses (1,246,514) are reported separately at 8.9% linkage and excluded from the crosswalk, because they are messaging addresses rather than callable base URLs per H28.',
+    dataSource:
+      'Three capped joins of cms_npd.endpoint against cms_npd.organization, reconstructing the FHIR reference as CONCAT("Organization/", o._id). Presence and resolvability are counted separately so a dangling reference could not be scored as a success. Compute script: analysis/h50_endpoint_org_linkage.py. Under a cent per run.',
+    status: 'published',
+    updated: '2026-08-15',
+    ogTagline:
+      '16.9% of NDH FHIR endpoints can be attributed to an organization. The rest are URLs with no owner.',
+    implications: [
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'The published crosswalk at /api/v1/findings/endpoint-org-crosswalk.csv resolves 19,334 FHIR base URLs to an organization and its NPI. Use it rather than re-deriving the join. For the other 83%, the NDH cannot tell you whose endpoint it is, so plan a fallback rather than assuming attribution is available.',
+      },
+      {
+        audience: 'FHIR implementers',
+        takeaway:
+          'Host is not a proxy for organization. EHR vendors host thousands of tenants on one domain, so api.platform.athenahealth.com identifies the vendor and never the practice. Only managingOrganization distinguishes them, which is precisely what is missing for most endpoints.',
+      },
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'The shortfall is concentrated, not uniform, so it is addressable per vendor. Of the 30 hosts carrying at least 100 endpoints, 16 publish no organization link on any of them, covering 49,036 endpoints; others attribute most of theirs. A host at 0% has never populated the field rather than populated it patchily.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'Presence and resolvability are reported separately on purpose. A reference can exist and point at nothing, and counting presence alone would score dangling references as successes. In this release they happen to be identical: zero references dangle. That distinction matters because absence is fixed by populating a field, while breakage would be fixed by repairing referential integrity.',
+      },
+    ],
+  },
+  {
     slug: 'cehrt-endpoint-coverage-gap',
     hypotheses: ['H45'],
     title: 'CEHRT-published FHIR endpoints missing from the NDH, by state',
