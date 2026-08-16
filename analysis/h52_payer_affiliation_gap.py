@@ -204,6 +204,12 @@ def run_gap_query(table):
       FROM `{PROJECT}.{DATASET}.practitioner_role`
       WHERE _active
     ),
+    -- Roles of any status. "The NDH gives no affiliation" is a stronger claim
+    -- if it holds when inactive roles are counted too, so both are measured.
+    roled_any AS (
+      SELECT DISTINCT _practitioner_id AS pref
+      FROM `{PROJECT}.{DATASET}.practitioner_role`
+    ),
     dac AS (
       SELECT DISTINCT npi FROM `{PROJECT}.{DATASET}.cms_dac_clinician_org`
     ),
@@ -215,19 +221,26 @@ def run_gap_query(table):
         EXISTS (
           SELECT 1 FROM UNNEST(IFNULL(n.pids, [])) pid
           JOIN roled r ON r.pref = CONCAT('Practitioner/', pid)
-        ) AS has_ndh_role
+        ) AS has_ndh_role,
+        EXISTS (
+          SELECT 1 FROM UNNEST(IFNULL(n.pids, [])) pid
+          JOIN roled_any r ON r.pref = CONCAT('Practitioner/', pid)
+        ) AS has_ndh_role_any_status
       FROM payer p
       LEFT JOIN ndh n USING (npi)
       LEFT JOIN dac d USING (npi)
     )
     SELECT
-      COUNT(*)                                                   AS payer_npis,
-      COUNTIF(in_ndh)                                            AS matched_ndh,
-      COUNTIF(NOT in_ndh)                                        AS absent_from_ndh,
-      COUNTIF(in_ndh AND has_ndh_role)                           AS ndh_has_affiliation,
-      COUNTIF(in_ndh AND NOT has_ndh_role)                       AS ndh_lacks_affiliation,
-      COUNTIF(in_ndh AND NOT has_ndh_role AND NOT in_dac)        AS net_new_vs_federal,
-      COUNTIF(in_dac)                                            AS in_cms_dac
+      COUNT(*)                                             AS payer_npis,
+      COUNTIF(in_ndh)                                      AS matched_ndh,
+      COUNTIF(NOT in_ndh)                                  AS absent_from_ndh,
+      COUNTIF(in_ndh AND has_ndh_role)                     AS ndh_has_affiliation,
+      COUNTIF(in_ndh AND NOT has_ndh_role)                 AS ndh_lacks_affiliation,
+      COUNTIF(in_ndh AND NOT has_ndh_role_any_status)      AS ndh_lacks_affiliation_any_status,
+      COUNTIF(in_ndh AND NOT has_ndh_role AND NOT in_dac)  AS net_new_vs_federal,
+      COUNTIF(in_ndh AND NOT has_ndh_role_any_status
+              AND NOT in_dac)                              AS net_new_strict,
+      COUNTIF(in_dac)                                      AS in_cms_dac
     FROM joined
     """
     row = list(client.query(sql, job_config=bq_job_config()).result())[0]
@@ -320,6 +333,17 @@ def build_finding(payer_cfg, prac, orgs, org_npi, counts, ckpts):
         f"{payer_cfg['name']} is one regional payer and it alone supplies "
         f"{net_new:,} affiliations that neither federal source carries.",
 
+        "The headline counts a practitioner as unaffiliated when the NDH gives "
+        "them no active PractitionerRole, which is the definition that matters "
+        "to anyone using the directory: an inactive role is not a usable "
+        "affiliation. Counting inactive roles as well is the more conservative "
+        "test, and the result survives it: "
+        f"{d['net_new_strict']:,} practitioners "
+        f"({pct(d['net_new_strict'], matched)}%) have no role of any status in "
+        f"the NDH and no CMS DAC record, against {net_new:,} "
+        f"({pct(net_new, matched)}%) on the active-role definition. Both "
+        "numbers are published.",
+
         "Two source-side defects, both measured rather than worked around. "
         "First, PractitionerRole ids are not unique: every role is served "
         "twice under one id, once naming the payer as the organization and "
@@ -407,8 +431,13 @@ def build_finding(payer_cfg, prac, orgs, org_npi, counts, ckpts):
             "ndh_already_has_affiliation_pct": pct(d["ndh_has_affiliation"], matched),
             "ndh_lacks_affiliation": gap,
             "ndh_lacks_affiliation_pct": pct(gap, matched),
+            "ndh_lacks_affiliation_any_role_status":
+                d["ndh_lacks_affiliation_any_status"],
             "net_new_vs_ndh_and_cms_dac": net_new,
             "net_new_pct": pct(net_new, matched),
+            "net_new_counting_inactive_ndh_roles": d["net_new_strict"],
+            "net_new_counting_inactive_ndh_roles_pct":
+                pct(d["net_new_strict"], matched),
             "present_in_cms_dac": d["in_cms_dac"],
         },
         "source_defects": {

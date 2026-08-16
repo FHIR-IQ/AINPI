@@ -19,7 +19,7 @@ AINPI/
 │   │   ├── app/              Routes (pages + API, including /api/v1/*)
 │   │   ├── components/       Shared UI (Navbar, WipBanner, Footer, charts/)
 │   │   ├── contexts/         FilterContext for cross-chart filtering
-│   │   ├── data/findings.ts  Pre-registration catalog (H1–H48 → 35 findings; some bundle multiple H#s)
+│   │   ├── data/findings.ts  Pre-registration catalog (H1–H52 → 39 findings; some bundle multiple H#s)
 │   │   ├── lib/              bigquery.ts, prisma.ts, auth.ts, api-v1-types.ts, load-api-v1.ts, hub-feed.ts, homepage-data.ts, og.tsx, load-npi-cohort.ts, landscape-types.ts, pa-rural-types.ts
 │   │   └── utils/supabase/   SSR-safe Supabase clients
 │   ├── public/api/v1/        Static JSON contract (stats.json, findings/<slug>.json)
@@ -28,7 +28,9 @@ AINPI/
 │   ├── tests/                Vitest unit tests
 │   └── e2e/                  Playwright tests
 ├── analysis/                 Python scripts per hypothesis (h9, h10_h13, h18, etc.) — outputs to frontend/public/api/v1/
-│   └── tests/                pytest unit tests (currently h26 + ndh_manifest)
+│   ├── fhir_identifiers.py   Four-way NPI extractor; every new FHIR parser must use it
+│   ├── harvest_payer_directory.py  Pulls a whole payer FHIR directory to analysis/data/ (gitignored)
+│   └── tests/                pytest unit tests (h26, ndh_manifest, fast-ingest flatteners, NPI extractor)
 ├── crawler/                  Local mirror of FHIR-IQ/ainpi-probe endpoint liveness crawler
 ├── docs/methodology/         Versioned methodology doc (index.md rendered at /methodology) + version-log.md (YAML frontmatter of past versions; surfaced by hub-feed timeline) + runs/ (per-run provenance docs)
 ├── docs/briefings/           State-meeting briefing markdown (rendered at /briefings/<state>)
@@ -82,7 +84,7 @@ npx playwright test e2e/findings-hub.spec.ts
 # Python analysis (from repo root, not frontend/)
 set -a; source analysis/.env; set +a
 python3 analysis/h43_practitioner_phone.py
-python3 -m pytest analysis/tests/            # h26 + ndh_manifest unit tests
+python3 -m pytest analysis/tests/            # 161 pure-function unit tests
 
 # Supabase/Prisma
 npm run db:generate           # prisma generate
@@ -202,9 +204,9 @@ The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js r
 
 **Google Dataset Search has no submission API or form.** It is crawl-driven off the Dataset markup. There is nothing to submit beyond the sitemap; markup quality is the whole lever. `sc-domain:ainpi.dev` is a verified domain property, and the local ADC token carries `webmasters.readonly`, so indexing status is readable with no extra auth (writes need a re-auth that would replace the ADC BigQuery depends on).
 
-## Pre-registration workflow (H1–H48)
+## Pre-registration workflow (H1–H52)
 
-Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H48** (35 findings; some bundle multiple H numbers). H44 and H45 are registered but unpublished, so **H49 is the next free number** — check `FINDINGS` before assuming.
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H52** (39 findings; some bundle multiple H numbers). H41, H44 and H45 are registered but unpublished, so **H53 is the next free number** — check `FINDINGS` before assuming.
 
 - H1–H28 — original directory-side audit (NDH-side checks).
 - H29–H36 — claims-side cross-audit (Medicaid spending, Medicare Part B/D, Open Payments, DMEPOS, nursing-home ownership, NDH completeness).
@@ -218,6 +220,10 @@ Each hypothesis in the check catalog is registered **before** numbers drop. Curr
 - H46 — published 2026-08-01. State Medicaid provider-directory coverage and liveness across the 56 jurisdiction rows in `Enterprise-CMCS/SMA-Endpoint-Directory`, pinned at commit `8efa0c2d`. Compute: `analysis/h46_sma_directory_coverage.py`. **Probe with curl, not urllib**: Python's TLS stack produced false negatives on three state directories (Iowa, Rhode Island, West Virginia) that return 200 to curl. Two header rows in the source markdown must be excluded or they inflate the jurisdiction count.
 - H47 — published 2026-08-04. Pennsylvania rural hospitals: FHIR endpoint publication and EHR concentration across all 187 CMS-listed PA hospitals. Compute: `analysis/pa_rural_health.py` (no BigQuery, five public files). Two bugs worth knowing: EHR vendors publish a **hierarchy**, so endpoint resolution must walk `Organization.partOf` to the brand-level org that carries `Organization.endpoint` (not doing so wrongly reported Epic as cross-linking almost nothing); and CMS writes county names as `MC KEAN` where USDA writes `McKean`, so joins go through `norm_county()`, which strips to alphanumerics.
 - H48 — published 2026-08-04. National rural hospital baseline: 1,847 of 5,366 hospitals (34.4%) in nonmetro counties, against 13.8% of population. Compute: `analysis/rural_health_national.py`, which imports the shared helpers from `pa_rural_health.py`. Territories are excluded because ERS publishes no continuum code for them; 239 unmatched hospitals are reported per-state rather than silently dropped.
+- H49 — published 2026-08-11. **The NDH carries no payer endpoints and no payer organization IDs.** Directly tests the expectation raised on the CMS NDH community call. Compute: `analysis/h49_ndh_payer_endpoints.py`, which reads the raw `resource` JSON rather than the flattened `_*` columns so a payer type could not be hidden by our own extractor. Includes a live control probe of a payer FHIR directory that does exist, to show the absence is in the NDH rather than in the world.
+- H50 — published 2026-08-15. **Endpoint-to-organization linkage: 16.9%.** Only 19,334 of the 114,071 FHIR-REST Endpoint resources carry a resolvable `managingOrganization`. Presence and resolvability are counted separately, because "the reference is missing" and "the reference points at nothing" are different defects with different fixes; here the gap is almost entirely absence. Compute: `analysis/h50_endpoint_org_linkage.py`. Also publishes `findings/endpoint-org-crosswalk.csv`, a resolved base-URL-to-NPI lookup.
+- H51 — published 2026-08-16. **76% of the endpoints the NDH cannot name are already named by the EHR vendors**, in public files: 71,857 of the 94,737 unattributed endpoints, 30,366 of them straight to an NPI, moving attribution from 16.9% to 79.9%. Compute: `analysis/h51_vendor_endpoint_attribution.py` over eight vendor publishers. **Index bundle entries by `fullUrl` as well as `Type/id`**: Epic references entries as `urn:uuid:`, and a resolver understanding only `Type/id` returns zero and does not error. That is the same failure that produced a wrong published claim about Epic in H47. Assert hierarchy roll-ups against the source org count; an early pass reported 105,562 sites against a 96,190 total.
+- H52 — 2026-08-16. **Payer directories carry the practitioner-to-organization affiliation the NDH leaves empty.** The role gap, not the endpoint gap, is the NDH's binding constraint: 73% of active practitioners have no `PractitionerRole`, so no organization, so no endpoint path at any confidence. Medicare claims closed only 2.5% of it. Measured against the whole Capital BlueCross public FHIR directory (CMS-9115-F). Compute: `analysis/h52_payer_affiliation_gap.py`, fed by `analysis/harvest_payer_directory.py`. Provenance: `docs/methodology/runs/2026-08-16-h52-payer-affiliation-gap.md`. See "Harvesting payer FHIR directories" below for the source-side defects, which change the counts.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
 2. **Compute** via `analysis/<hN>_*.py` (BigQuery-driven) or `crawler/` (endpoint probes for H1–H5, H22). Each script emits a `frontend/public/api/v1/findings/<slug>.json` conforming to `ApiV1Finding`.
@@ -244,6 +250,10 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `state-medicaid-directory-coverage` → H46 (`analysis/h46_sma_directory_coverage.py`) — no BigQuery; curl probes against the pinned CMS directory-of-directories
 - `pa-rural-hospital-connectivity` → H47 (`analysis/pa_rural_health.py`) — no BigQuery; writes `states/pa-rural-health.json` + `.csv`
 - `rural-hospital-baseline` → H48 (`analysis/rural_health_national.py`) — no BigQuery; writes `rural-health.json`
+- `ndh-payer-endpoints` → H49 (`analysis/h49_ndh_payer_endpoints.py`) — reads raw `resource` JSON, not the `_*` columns
+- `endpoint-org-linkage` → H50 (`analysis/h50_endpoint_org_linkage.py`) — also writes `findings/endpoint-org-crosswalk.csv`
+- `vendor-endpoint-attribution` → H51 (`analysis/h51_vendor_endpoint_attribution.py`) — eight public vendor endpoint files
+- `payer-affiliation-gap` → H52 (`analysis/h52_payer_affiliation_gap.py`) — needs a harvest from `analysis/harvest_payer_directory.py` first
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).
 
@@ -297,6 +307,20 @@ When the same dimension of the raw FHIR resources is interrogated by multiple fi
 Per-release row per practitioner with normalized phone arrays for each of the three resolution paths (`phones_p`, `phones_r`, `phones_l`) plus the union (`phones`) and an `invalid_dropped` count for telecom values that failed normalization. Partitioned by `release_date`, clustered by `practitioner_id`. ~15 GB scan per release build (~$0.08), idempotent within a release (DELETE + INSERT against the matching partition). Rebuilt once per NDH release via the dispatch-only `phones-helper-refresh.yml` workflow. Downstream consumers (H43 path-combo Venn, H44 phone-value agreement, future H45 phone-churn diff-since-last-release) query the helper instead of the raw resource tables.
 
 Phone normalization rules (encoded in the SQL): strip every non-digit character, drop a leading `1` if the result is 11 digits, require exactly 10 digits after. Anything else collapses to NULL and contributes to `invalid_dropped` instead of `phones`. Garbage-in-garbage-out is explicit, not hidden.
+
+### Harvesting payer FHIR directories (`analysis/harvest_payer_directory.py`)
+
+Payer directories published under CMS-9115-F carry `PractitionerRole` densely, which is the affiliation edge the NDH leaves empty (H52). The harvester pulls a whole directory to gitignored NDJSON under `analysis/data/payer/<slug>/`, resumable, with failed pages recorded in the checkpoint so a short run can be told apart from a complete one.
+
+**Every one of these was measured against Capital BlueCross, and every one silently corrupts a naive harvest.**
+
+- **Use curl, not urllib.** Same lesson as H26 and H46. Python's TLS stack fails against WAF-fronted payer endpoints and local TLS interception.
+- **`_count` is not honoured.** The page stride is fixed at 20 distinct resources whatever you ask for. Sizing a run from `_count` under-fetches with no error. Pagination ends at page 112,975 for `PractitionerRole`; the next page returns empty.
+- **`PractitionerRole` ids are not unique.** Every logical role is served **twice under one id**: one copy names the payer as the `organization`, the other names the real practice. Verified 140 of 140 ids sampled across the full page range. So `Bundle.total` double-counts (2,259,490 entries ≈ 1.13M logical roles), and **deduplicating on `id` discards the only useful organization half the time**. The harvester dedupes on (id, content-hash) and counts both. FHIR R4 requires resource ids to be unique per type on a server, so report this back rather than working around it silently.
+- **Never append to a shared `.gz`.** A run killed mid-write leaves a truncated gzip member, and everything appended after it is unreachable on read. Each run writes its own `.partNNNN.ndjson.gz`; read them via `read_resources()`.
+- **Throughput saturates near 8 workers** (measured: 1.05 / 3.11 / 3.63 / 4.25 req/s at 1 / 4 / 8 / 12 workers, with latency climbing 0.95s → 2.21s). Sustained rate over a long run settles near 1.2 pages/s. A full `PractitionerRole` sweep is ~20 hours, so H52 fetches roles by `practitioner=` for the gap cohort only (`--roles-for-ids`), ~25,000 requests instead of ~113,000.
+
+**NPI extraction is now centralized in `analysis/fhir_identifiers.py`, and new parsers must use it.** The NPI is marked four different ways and three of them return nothing to a parser reading only `identifier.system`: the May 2026 NDH URL change, `identifier.type.coding[]` (Capital BlueCross `Practitioner`), and no coded marker at all with only `assigner.display = "CMS"` (Capital BlueCross `Organization`). Each failure returns an empty list rather than raising, so nothing downstream notices — a first pass here read 2,000 practitioners and reported zero NPIs. The `assigner_hint=True` fallback is opt-in and requires a valid check digit, because the same organizations carry 10-digit NCPDP identifiers and 3 of 59 sampled passed Luhn; callers must report coded and inferred counts separately.
 
 ### Known data quality baseline
 
