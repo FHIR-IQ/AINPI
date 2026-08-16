@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "baecd21",
-  "generated_at": "2026-08-16T20:49:46+00:00",
+  "generated_at": "2026-08-16T21:16:55+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -663,6 +663,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ak",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ak-cohort-critical.csv",
       "cohort_critical_count": 23,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -674,6 +676,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/al",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/al-cohort-critical.csv",
       "cohort_critical_count": 79,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -685,6 +689,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ar",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ar-cohort-critical.csv",
       "cohort_critical_count": 52,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -696,6 +702,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/az",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/az-cohort-critical.csv",
       "cohort_critical_count": 125,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -707,6 +715,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ca",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ca-cohort-critical.csv",
       "cohort_critical_count": 932,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -718,6 +728,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/co",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/co-cohort-critical.csv",
       "cohort_critical_count": 114,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -729,6 +741,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ct",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ct-cohort-critical.csv",
       "cohort_critical_count": 66,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -740,6 +754,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/dc",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/dc-cohort-critical.csv",
       "cohort_critical_count": 47,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -751,6 +767,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/de",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/de-cohort-critical.csv",
       "cohort_critical_count": 16,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -762,6 +780,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/fl",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/fl-cohort-critical.csv",
       "cohort_critical_count": 614,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -773,6 +793,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ga",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ga-cohort-critical.csv",
       "cohort_critical_count": 136,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -784,6 +806,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/hi",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/hi-cohort-critical.csv",
       "cohort_critical_count": 17,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -795,6 +819,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ia",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ia-cohort-critical.csv",
       "cohort_critical_count": 66,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -806,6 +832,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/id",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/id-cohort-critical.csv",
       "cohort_critical_count": 31,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -817,6 +845,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/il",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/il-cohort-critical.csv",
       "cohort_critical_count": 217,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -828,6 +858,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/in",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/in-cohort-critical.csv",
       "cohort_critical_count": 76,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -839,6 +871,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ks",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ks-cohort-critical.csv",
       "cohort_critical_count": 49,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -850,6 +884,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ky",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ky-cohort-critical.csv",
       "cohort_critical_count": 126,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -861,6 +897,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/la",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/la-cohort-critical.csv",
       "cohort_critical_count": 109,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -872,6 +910,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ma",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ma-cohort-critical.csv",
       "cohort_critical_count": 100,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -883,6 +923,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/md",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/md-cohort-critical.csv",
       "cohort_critical_count": 116,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -894,6 +936,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/me",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/me-cohort-critical.csv",
       "cohort_critical_count": 58,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -905,6 +949,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mi",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/mi-cohort-critical.csv",
       "cohort_critical_count": 328,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -916,6 +962,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mn",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/mn-cohort-critical.csv",
       "cohort_critical_count": 66,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -927,6 +975,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mo",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/mo-cohort-critical.csv",
       "cohort_critical_count": 117,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -938,6 +988,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ms",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ms-cohort-critical.csv",
       "cohort_critical_count": 50,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -949,6 +1001,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mt",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/mt-cohort-critical.csv",
       "cohort_critical_count": 26,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -960,6 +1014,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nc",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/nc-cohort-critical.csv",
       "cohort_critical_count": 94,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -971,6 +1027,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nd",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/nd-cohort-critical.csv",
       "cohort_critical_count": 19,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -982,6 +1040,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ne",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ne-cohort-critical.csv",
       "cohort_critical_count": 29,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -993,6 +1053,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nh",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/nh-cohort-critical.csv",
       "cohort_critical_count": 24,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1004,6 +1066,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nj",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/nj-cohort-critical.csv",
       "cohort_critical_count": 141,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1015,6 +1079,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nm",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/nm-cohort-critical.csv",
       "cohort_critical_count": 43,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1026,6 +1092,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nv",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/nv-cohort-critical.csv",
       "cohort_critical_count": 106,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1037,6 +1105,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ny",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ny-cohort-critical.csv",
       "cohort_critical_count": 573,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1048,6 +1118,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/oh",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/oh-cohort-critical.csv",
       "cohort_critical_count": 296,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1059,6 +1131,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ok",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ok-cohort-critical.csv",
       "cohort_critical_count": 112,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1070,6 +1144,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/or",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/or-cohort-critical.csv",
       "cohort_critical_count": 67,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1081,6 +1157,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/pa",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/pa-cohort-critical.csv",
       "cohort_critical_count": 332,
+      "connectivity_url": "https://ainpi.dev/api/v1/states/pa-connectivity.json",
+      "connectivity_html_url": "https://ainpi.dev/states/pa/connectivity",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1092,6 +1170,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ri",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ri-cohort-critical.csv",
       "cohort_critical_count": 11,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1103,6 +1183,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/sc",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/sc-cohort-critical.csv",
       "cohort_critical_count": 33,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1114,6 +1196,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/sd",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/sd-cohort-critical.csv",
       "cohort_critical_count": 14,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1125,6 +1209,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/tn",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/tn-cohort-critical.csv",
       "cohort_critical_count": 172,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1136,6 +1222,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/tx",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/tx-cohort-critical.csv",
       "cohort_critical_count": 404,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1147,6 +1235,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ut",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/ut-cohort-critical.csv",
       "cohort_critical_count": 84,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1158,6 +1248,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/va",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/va-cohort-critical.csv",
       "cohort_critical_count": 125,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1169,6 +1261,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/vt",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/vt-cohort-critical.csv",
       "cohort_critical_count": 18,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1180,6 +1274,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wa",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/wa-cohort-critical.csv",
       "cohort_critical_count": 123,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1191,6 +1287,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wi",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/wi-cohort-critical.csv",
       "cohort_critical_count": 93,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1202,6 +1300,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wv",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/wv-cohort-critical.csv",
       "cohort_critical_count": 77,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1213,6 +1313,8 @@
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wy",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/wy-cohort-critical.csv",
       "cohort_critical_count": 16,
+      "connectivity_url": null,
+      "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     }
   ],

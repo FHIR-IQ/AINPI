@@ -4,7 +4,12 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AuthorByline from '@/components/AuthorByline';
 import { findStateByCode, allStateCodes } from '@/data/states';
-import { loadStateFindings, loadFinding, loadFindingDetail } from '@/lib/load-api-v1';
+import {
+  loadStateFindings,
+  loadFinding,
+  loadFindingDetail,
+  loadStateConnectivity,
+} from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -144,6 +149,7 @@ export default function StatePage({ params }: { params: { state: string } }) {
   if (!entry) notFound();
 
   const data = loadStateFindings(entry.code);
+  const hasConnectivity = loadStateConnectivity(entry.code) !== null;
   const isPublished = !!(data && data.status === 'published');
   const stateLower = entry.code.toLowerCase();
 
@@ -264,6 +270,27 @@ export default function StatePage({ params }: { params: { state: string } }) {
               <a className="underline" href="https://github.com/FHIR-IQ/AINPI/issues">
                 github.com/FHIR-IQ/AINPI/issues
               </a>
+              .
+            </p>
+          </section>
+        )}
+
+        {hasConnectivity && (
+          <section className="mt-6 border border-gray-300 bg-white p-5 text-sm">
+            <p className="mb-1 font-semibold text-ink">
+              {entry.name} has a full connectivity ledger.
+            </p>
+            <p className="text-gray-700">
+              Every active practitioner traced through role, organization,
+              location and endpoint to an EHR vendor, with each link banded by
+              the method that established it, plus a named work queue of the
+              organizations nothing public can reach.{' '}
+              <Link
+                href={`/states/${entry.code.toLowerCase()}/connectivity`}
+                className="font-medium text-primary-600 underline hover:text-signal"
+              >
+                Open the connectivity ledger
+              </Link>
               .
             </p>
           </section>

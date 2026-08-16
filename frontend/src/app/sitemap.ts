@@ -3,6 +3,7 @@ import path from 'node:path';
 import type { MetadataRoute } from 'next';
 import { allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
+import { allConnectivityStates } from '@/lib/load-api-v1';
 import { REPORTS } from '@/data/reports';
 import { allCohortNpis } from '@/lib/load-npi-cohort';
 
@@ -101,6 +102,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: 'monthly',
     priority: 0.7,
   });
+
+  // Per-state connectivity ledgers. Driven off the published payloads rather
+  // than a hardcoded list, so a new state appears in the sitemap the moment
+  // its JSON lands.
+  for (const code of allConnectivityStates()) {
+    entries.push({
+      url: `${BASE}/states/${code}/connectivity`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    });
+  }
 
   for (const r of REPORTS) {
     if (r.format === 'web' && r.url.startsWith('/reports/')) {

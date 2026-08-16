@@ -55,6 +55,9 @@ def main() -> None:
         except Exception:
             continue
         code_lower = p.stem
+        # Connectivity ledger: the whole practitioner-to-endpoint chain for a
+        # state. Only published for states that have been run.
+        conn = states_dir / f"{code_lower}-connectivity.json"
         # Per-state cohort CSV — only populated for states with ≥1 critical NPI
         cohort_csv = states_dir / f"{code_lower}-cohort-critical.csv"
         cohort_count = 0
@@ -74,6 +77,8 @@ def main() -> None:
             "cmo_html_url": f"{SITE}/for-state-medicaid/{code_lower}",
             "cohort_csv_url": f"{SITE}/api/v1/states/{code_lower}-cohort-critical.csv" if cohort_csv.exists() else None,
             "cohort_critical_count": cohort_count,
+            "connectivity_url": f"{SITE}/api/v1/states/{code_lower}-connectivity.json" if conn.exists() else None,
+            "connectivity_html_url": f"{SITE}/states/{code_lower}/connectivity" if conn.exists() else None,
             "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State",
         })
 
