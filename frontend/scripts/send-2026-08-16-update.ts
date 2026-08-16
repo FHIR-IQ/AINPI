@@ -20,6 +20,12 @@ const REPORT_URL = 'https://ainpi.dev/reports/2026-08-16-update';
 const CROSSWALK_URL = 'https://ainpi.dev/api/v1/findings/endpoint-org-crosswalk.csv';
 const FINDING_URL = 'https://ainpi.dev/findings/endpoint-org-linkage';
 const PAYER_FINDING_URL = 'https://ainpi.dev/findings/ndh-payer-endpoint-coverage';
+// Cite STU1, not the CI build: the ballot/CI URLs are not stable references.
+const NDH_IG_URL = 'https://hl7.org/fhir/us/ndh/STU1/';
+const COVERAGE_URL = 'https://ainpi.dev/api/v1/ndh-column-coverage.json';
+const CMS_PD_URL =
+  'https://www.cms.gov/priorities/burden-reduction/overview/interoperability/frequently-asked-questions/provider-directory-api';
+const CAPBLUE_URL = 'https://providerdirectory-api.capbluecross.com/r4';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
 const FROM_ADDRESS =
@@ -103,10 +109,14 @@ function buildBody(): { text: string; html: string } {
     '',
     'The directory does not yet carry payers',
     '',
-    'A separate question came out of the CMS provider-directory community.',
-    'People there describe the NDH as the eventual place to discover a payer\'s',
-    'public Provider Directory API, instead of hunting developer portals payer',
-    'by payer.',
+    'The published NDH Implementation Guide names payer organizations among the',
+    'environments the directory is built to serve, alongside provider',
+    'organizations, HIEs and HISPs. A reasonable question follows: can you',
+    'discover a payer\'s public Provider Directory API from the NDH today,',
+    'instead of hunting developer portals payer by payer? We measured it rather',
+    'than assumed either answer.',
+    '',
+    `  NDH IG: ${NDH_IG_URL}`,
     '',
     'Of 114,071 FHIR REST endpoints, 1 self-labels as a payer provider',
     'directory. No payer organization type exists at all: Organization.type',
@@ -120,9 +130,18 @@ function buildBody(): { text: string; html: string } {
     '',
     'A low count could simply mean payers have built nothing, which would not be',
     'the directory\'s fault. So we added a control: Capital BlueCross serves a',
-    'live, public, unauthenticated FHIR provider directory, mandated under',
-    'CMS-9115-F. It is absent from the NDH entirely. That separates "nothing to',
-    'index" from "not indexed yet."',
+    'live, unauthenticated FHIR provider directory, of the kind CMS requires',
+    'payers to publish without authentication. It is absent from the NDH',
+    'entirely. That separates "nothing to index" from "not indexed yet."',
+    '',
+    'Repeat the probe yourself. The server needs a FHIR Accept header and',
+    'answers 415 to a browser, so a plain click looks like a failure when it',
+    'is not:',
+    '',
+    "  curl -H 'Accept: application/fhir+json' \\",
+    `    '${CAPBLUE_URL}/Practitioner?family=Smith&_count=1'`,
+    '',
+    `  CMS Provider Directory API requirement: ${CMS_PD_URL}`,
     '',
     'This is coverage of one release, not a compliance claim.',
     '',
@@ -130,10 +149,12 @@ function buildBody(): { text: string; html: string } {
     '',
     'The BigQuery tables gained flattened columns for telecom, address.line and',
     'Location.position, so these no longer require scanning the raw FHIR JSON.',
-    'Practitioner phone lands at 99.98%, which reproduces our earlier H43',
-    'finding exactly, and location phone at 0.0% reproduces its separate',
-    'observation that Location.telecom is empty. Coordinates cover 93.9% of',
-    'locations and are the only geography in the NDH.',
+    'Practitioner phone lands at 99.98% for active practitioners, which',
+    'reproduces our earlier H43 finding exactly, and location phone at 0.0%',
+    'reproduces its separate observation that Location.telecom is empty.',
+    'Coordinates cover 93.9% of locations and are the only geography in the NDH.',
+    '',
+    `Every coverage figure is published so you can check it: ${COVERAGE_URL}`,
     '',
     'Everything here is public data and costs about three cents to reproduce.',
     '',
@@ -182,17 +203,24 @@ function buildBody(): { text: string; html: string } {
 
   <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">The directory does not yet carry payers</h2>
 
-  <p style="margin: 0 0 12px 0;">A separate question came out of the CMS provider-directory community. People there describe the NDH as the eventual place to discover a payer's public Provider Directory API, instead of hunting developer portals payer by payer.</p>
+  <p style="margin: 0 0 12px 0;">The <a href="${NDH_IG_URL}" style="color:#1d4ed8;">published NDH Implementation Guide</a> names payer organizations among the environments the directory is built to serve, alongside provider organizations, HIEs and HISPs. A reasonable question follows: can you discover a payer's public Provider Directory API from the NDH today, instead of hunting developer portals payer by payer? We measured it rather than assumed either answer.</p>
 
   <p style="margin: 0 0 12px 0;">Of 114,071 FHIR REST endpoints, <strong>1</strong> self-labels as a payer provider directory. No payer organization type exists at all: <code>Organization.type</code> carries exactly three codings across 1,999,818 typed resources, which are <code>prov</code>, <code>team</code> and <code>govt</code>. We read the raw FHIR JSON rather than our own flattened column, so a payer type could not have been hidden by our extractor.</p>
 
   <p style="margin: 0 0 12px 0;">The organization-identifier half is weaker. Of the 92 payer-host endpoints the directory does carry, 7 have a managing organization.</p>
 
-  <p style="margin: 0 0 16px 0;">A low count could simply mean payers have built nothing, which would not be the directory's fault. So we added a control: Capital BlueCross serves a live, public, unauthenticated FHIR provider directory, mandated under CMS-9115-F. It is absent from the NDH entirely. That separates "nothing to index" from "not indexed yet." This is coverage of one release, not a compliance claim.</p>
+  <p style="margin: 0 0 12px 0;">A low count could simply mean payers have built nothing, which would not be the directory's fault. So we added a control: Capital BlueCross serves a live, unauthenticated FHIR provider directory, of the kind <a href="${CMS_PD_URL}" style="color:#1d4ed8;">CMS requires payers to publish</a> without authentication. It is absent from the NDH entirely. That separates "nothing to index" from "not indexed yet." This is coverage of one release, not a compliance claim.</p>
+
+  <p style="margin: 0 0 8px 0;">Repeat the probe yourself. The server needs a FHIR <code>Accept</code> header and answers 415 to a browser, so a plain click looks like a failure when it is not:</p>
+
+  <pre style="margin: 0 0 16px 0; padding: 12px; background: #f3f4f6; border-radius: 4px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-all;"><code>curl -H 'Accept: application/fhir+json' \\
+  '${CAPBLUE_URL}/Practitioner?family=Smith&amp;_count=1'</code></pre>
 
   <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">Phone, street address and coordinates are now queryable</h2>
 
-  <p style="margin: 0 0 16px 0;">The BigQuery tables gained flattened columns for telecom, <code>address.line</code> and <code>Location.position</code>, so these no longer require scanning the raw FHIR JSON. Practitioner phone lands at <strong>99.98%</strong>, which reproduces our earlier H43 finding exactly, and location phone at 0.0% reproduces its separate observation that <code>Location.telecom</code> is empty. Coordinates cover <strong>93.9%</strong> of locations and are the only geography in the NDH.</p>
+  <p style="margin: 0 0 12px 0;">The BigQuery tables gained flattened columns for telecom, <code>address.line</code> and <code>Location.position</code>, so these no longer require scanning the raw FHIR JSON. Practitioner phone lands at <strong>99.98%</strong> for active practitioners, which reproduces our earlier H43 finding exactly, and location phone at 0.0% reproduces its separate observation that <code>Location.telecom</code> is empty. Coordinates cover <strong>93.9%</strong> of locations and are the only geography in the NDH.</p>
+
+  <p style="margin: 0 0 16px 0;">Every coverage figure is <a href="${COVERAGE_URL}" style="color:#1d4ed8;">published</a> so you can check it rather than take it on trust.</p>
 
   <p style="margin: 0 0 16px 0; color: #6b7280; font-size: 13px;">Everything here is public data and costs about three cents to reproduce.</p>
 

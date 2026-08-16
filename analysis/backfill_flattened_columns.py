@@ -28,7 +28,10 @@ bq_job_config(). Roughly $0.15 for all four tables.
 from __future__ import annotations
 
 import argparse
+import json
+import pathlib
 import sys
+from datetime import datetime, timezone
 
 from google.cloud import bigquery
 
@@ -91,11 +94,74 @@ def statements() -> dict[str, str]:
     }
 
 
+COVERAGE_OUT = (
+    __file__.rsplit("/", 1)[0] + "/../frontend/public/api/v1/ndh-column-coverage.json"
+)
+
+
+def write_coverage(client: bigquery.Client) -> None:
+    """Publish per-column coverage so the numbers we quote are checkable.
+
+    Anything asserted in a report should be verifiable from a public payload
+    rather than from an internal query someone has to take on trust. These
+    percentages appear in release notes, so they get published.
+    """
+    t = f"`{PROJECT}.{DATASET}`"
+    sql = f"""
+    SELECT 'practitioner_active' AS scope, COUNT(*) AS rows_scored,
+           ROUND(COUNTIF(_phone IS NOT NULL)/COUNT(*)*100, 2) AS phone_pct,
+           ROUND(COUNTIF(_address_line IS NOT NULL)/COUNT(*)*100, 2) AS address_line_pct,
+           CAST(NULL AS FLOAT64) AS position_pct
+    FROM {t}.practitioner WHERE _active
+    UNION ALL SELECT 'practitioner_all', COUNT(*),
+           ROUND(COUNTIF(_phone IS NOT NULL)/COUNT(*)*100, 2),
+           ROUND(COUNTIF(_address_line IS NOT NULL)/COUNT(*)*100, 2), NULL
+    FROM {t}.practitioner
+    UNION ALL SELECT 'organization', COUNT(*),
+           ROUND(COUNTIF(_phone IS NOT NULL)/COUNT(*)*100, 2),
+           ROUND(COUNTIF(_address_line IS NOT NULL)/COUNT(*)*100, 2), NULL
+    FROM {t}.organization
+    UNION ALL SELECT 'practitioner_role', COUNT(*),
+           ROUND(COUNTIF(_phone IS NOT NULL)/COUNT(*)*100, 2), NULL, NULL
+    FROM {t}.practitioner_role
+    UNION ALL SELECT 'location', COUNT(*),
+           ROUND(COUNTIF(_phone IS NOT NULL)/COUNT(*)*100, 2),
+           ROUND(COUNTIF(_address_line IS NOT NULL)/COUNT(*)*100, 2),
+           ROUND(COUNTIF(_position_lat IS NOT NULL)/COUNT(*)*100, 2)
+    FROM {t}.location
+    ORDER BY scope
+    """
+    rows = [dict(r) for r in client.query(sql, job_config=bq_job_config()).result()]
+    payload = {
+        "release_date": "2026-05-08",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "description": (
+            "Coverage of the flattened telecom, address.line and Location.position "
+            "columns extracted from the NDH bulk export. phone_pct counts the first "
+            "telecom entry whose system is 'phone', not the first telecom entry. "
+            "position is Location-only and is the only geography in the NDH."
+        ),
+        "columns": rows,
+    }
+    out = pathlib.Path(COVERAGE_OUT).resolve()
+    out.write_text(json.dumps(payload, indent=2) + "\n")
+    print(f"\n  wrote {out}")
+    for r in rows:
+        print(f"    {r['scope']:<20} n={r['rows_scored']:>9,}  phone={r['phone_pct']}  "
+              f"line={r['address_line_pct']}  position={r['position_pct']}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dry-run", action="store_true", help="Report bytes only, change nothing.")
     ap.add_argument("--table", help="Backfill one table instead of all four.")
+    ap.add_argument("--report-only", action="store_true",
+                    help="Skip the backfill, just publish the coverage payload.")
     args = ap.parse_args()
+
+    if args.report_only:
+        write_coverage(bigquery.Client(project=PROJECT))
+        return 0
 
     client = bigquery.Client(project=PROJECT)
     stmts = statements()
