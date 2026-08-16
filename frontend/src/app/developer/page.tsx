@@ -86,6 +86,15 @@ const STATIC_API: Endpoint[] = [
   },
   {
     method: 'GET',
+    path: '/api/v1/findings/endpoint-org-crosswalk.csv',
+    summary:
+      'Resolved FHIR base URL → organization, for the 19,334 NDH endpoints that carry a managing organization. Columns: endpoint_id, base_url, host, status, org_id, org_npi, org_name, org_state. Every row resolves to an org with an NPI, so this doubles as a base-URL-to-NPI lookup across 18,884 organizations. Covers 16.9% of FHIR REST endpoints; the rest have no owner in the directory (H50). Direct Trust addresses are excluded, being messaging addresses rather than callable base URLs.',
+    tier: 'static',
+    exampleCurl:
+      'curl -s https://ainpi.dev/api/v1/findings/endpoint-org-crosswalk.csv | head -5',
+  },
+  {
+    method: 'GET',
     path: '/api/v1/manifest.json',
     summary: 'Discovery manifest: every published finding URL + state slice URL + schema reference. The list AI agents and crawlers should poll.',
     tier: 'static',

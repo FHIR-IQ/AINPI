@@ -170,6 +170,7 @@ Static files under `frontend/public/api/v1/` are the **stable public contract** 
 | `/api/v1/stats.json` | weekly-refresh workflow | `ApiV1Stats` in `frontend/src/lib/api-v1-types.ts` |
 | `/api/v1/manifest.json` | `analysis/build_manifest.py` | Discovery index — every published finding URL + state slice URL + schema ref + AI-agent tool schemas (lookup_npi, cross_source_search, get_finding, get_state_audit) |
 | `/api/v1/findings/<slug>.json` | `analysis/h*.py` scripts | `ApiV1Finding` in same file |
+| `/api/v1/findings/endpoint-org-crosswalk.csv` | `analysis/h50_endpoint_org_linkage.py` | Resolved FHIR base URL → org (id, NPI, name, state) for the 19,334 endpoints carrying a managingOrganization. Doubles as a base-URL-to-NPI lookup. FHIR REST only. |
 | `/api/v1/states/<state>.json` | `analysis/state_findings.py <state>` | state-scoped payload consumed by `loadStateFindings(state)`. All 50 + DC published. |
 | `/api/v1/states/va-cohort-critical.csv` | `analysis/build_va_briefing.py` | 131 federally-excluded VA NPIs (May release; was 125 in April) + LEIE/SAM/NPPES verification URLs |
 | `/api/v1/states/va-briefing-summary.json` | `analysis/build_va_briefing.py` | Consolidated VA briefing payload (findings + cohort breakdown + H26 results in one fetch) |

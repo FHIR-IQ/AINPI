@@ -33,6 +33,17 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'aug-2026-08-16-update',
+    version: '2026-08-16-update',
+    title: '2026-08-16 update: a crosswalk from FHIR base URL to NPI',
+    description:
+      'New free download resolving 19,334 FHIR base URLs in the CMS National Provider Directory to the organization that runs them, with NPI attached. Only 16.9% of the 114,071 FHIR endpoints can be attributed to anyone, and the gap is concentrated: 16 vendor hosts publish no organization link on any endpoint. Plus why the directory does not yet carry payer endpoints, and new queryable columns for phone, street address and coordinates.',
+    format: 'web',
+    url: '/reports/2026-08-16-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'aug-2026-08-04-update',
     version: '2026-08-04-update',
     title: '2026-08-04 update: a third of American hospitals serve a seventh of the people',
@@ -40,7 +51,6 @@ export const REPORTS: ReportOption[] = [
       'New rural health section with a state-level map. 1,847 of 5,366 US hospitals (34.4%) sit in nonmetro counties holding 13.8% of residents; 1,338 are Critical Access. Plus a Pennsylvania deep dive showing rural hospitals are more findable than metro ones, and a correction to an earlier claim about Epic endpoint traversal.',
     format: 'web',
     url: '/reports/2026-08-04-update',
-    badge: 'NEW',
     length: '~4 min read',
   },
   {
