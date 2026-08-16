@@ -167,13 +167,58 @@ both sources, 2,061,511 of 7,196,385 active NDH practitioners (28.6%) have any
 organizational affiliation from any public source. The remaining 5.1M are
 active NPIs with no role in the NDH and no Medicare enrollment record.
 
-Before treating that 5.1M as a gap to close, someone has to establish what it
-actually is. An NPI is issued once and effectively never retired, so the tail
-plausibly contains retired clinicians, residents, administrative NPIs and people
-who never billed Medicare. If most of it is not practising, then completeness
-measured against 7.2M is measuring against a denominator that does not exist,
-and any percentage quoted against it is misleading in both directions. That
-question should be answered before any completeness claim is published.
+### Is the 5.1M tail real, or is it dormant NPIs?
+
+This decides whether a completeness percentage means anything, so it was tested
+against current NPPES rather than assumed. The hypothesis was that the tail is
+mostly retired or never-practising NPIs, which would make 7.2M a denominator
+that does not exist.
+
+**The hypothesis is wrong. The tail is real.**
+
+| Cohort | Practitioners | NPPES-deactivated | Absent from NPPES | No NPPES update in 10y |
+| --- | ---: | ---: | ---: | ---: |
+| Has an NDH role | 1,931,044 | 10 | 0 | 23.8% |
+| No role, in CMS DAC | 130,467 | 0 | 3,815 | 25.1% |
+| No role, not in DAC | 5,134,874 | 379 | 52,308 | 36.6% |
+
+The registry does retire NPIs: 333,563 of 9,368,082 (3.56%) are currently
+deactivated NPPES-wide. So deactivation is a real signal that CMS uses.
+
+The NDH is already filtering on it correctly. Only 389 of 7.2M active NDH
+practitioners are NPPES-deactivated, against a 3.56% base rate. The `_active`
+flag is doing its job, which is worth stating because it is the kind of thing
+usually assumed rather than checked.
+
+That leaves the 5.1M as current, non-deactivated, NPPES-present NPIs with no
+published organizational affiliation anywhere. They are staler than average
+(36.6% untouched for a decade against 23.8% for the role-having cohort) but
+staleness is not absence.
+
+**So the denominator is legitimate and completeness is measurable.** The
+honest baseline against all 7,196,385 active practitioners:
+
+| Measure | Practitioners | Share |
+| --- | ---: | ---: |
+| Any organizational affiliation from any public source | 2,061,511 | 28.6% |
+| Reachable to a FHIR endpoint today | 85,619 | 1.2% |
+| Reachable after the deterministic vendor-NPI join | 253,202 | 3.5% |
+
+One caution when comparing against prior art. A 60-70% figure is almost
+certainly measured against practising or claims-visible clinicians, not against
+all active NPIs. Against the 2.06M affiliated population these numbers look very
+different from how they look against 7.2M. Any comparison has to name which
+denominator it uses, or it is not a comparison.
+
+### A landmine for anyone reusing this work
+
+`bigquery-public-data.nppes.npi_optimized` is **frozen at 2019-04-08** and still
+present in the catalogue. Joining to it silently reports every NPI issued since
+April 2019 as "absent from NPPES", which produced a fake 2.39M-provider finding
+in the first run of this analysis before the table's vintage was checked.
+
+Use `bigquery-public-data.nppes.npi_raw`: 9,368,082 rows, current to 2026-02-09.
+H10 to H13 already uses `npi_raw` and is unaffected.
 
 ## Confidence model
 
