@@ -334,6 +334,23 @@ class Harvester:
         done_through = self.first_page - 1
         t0 = time.time()
         with gzip.open(part_path, "wt", compresslevel=6) as out_fh:
+            # Retry pages that failed on an earlier run before doing anything
+            # else. Recording a failure is only half the job: without this the
+            # gap survives every resume, and a harvest short by a few pages
+            # looks identical to a directory that is genuinely smaller.
+            if resumed and self.failed_pages:
+                retry = sorted(set(self.failed_pages))
+                print(f"  retrying {len(retry)} previously failed page(s)")
+                self.failed_pages = []
+                with ThreadPoolExecutor(max_workers=self.workers) as ex:
+                    for pg, entries, _ in ex.map(self.fetch_page, retry):
+                        if entries is None:
+                            self.failed_pages.append(pg)
+                        elif entries:
+                            self.absorb(entries, out_fh)
+                recovered = len(retry) - len(self.failed_pages)
+                print(f"  recovered {recovered} of {len(retry)}")
+
             page = self.first_page
             hit_end = False
             while not hit_end:

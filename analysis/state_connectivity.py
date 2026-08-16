@@ -46,6 +46,10 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
 from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
+from analysis.org_systems import (  # noqa: E402
+    build_systems,
+    describe_affiliation_graph,
+)
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 API_V1 = REPO_ROOT / "frontend" / "public" / "api" / "v1"
@@ -246,6 +250,50 @@ ORDER BY practitioners DESC
 """
 
 
+AFFILIATION_SQL = f"""
+-- Affiliation edges where both ends are organizations in this state. The
+-- resources carry no `code`, so the edge is undirected here: reading direction
+-- as parent-to-child would assume a meaning the data does not state.
+WITH orgs AS (
+  SELECT _id, _name
+  FROM `{PROJECT}.{DATASET}.organization`
+  WHERE _active AND _state = @state
+)
+SELECT DISTINCT
+  a._id AS org_a,
+  a._name AS name_a,
+  b._id AS org_b,
+  b._name AS name_b
+FROM `{PROJECT}.{DATASET}.organization_affiliation` oa
+JOIN orgs a ON oa._org_id = CONCAT('Organization/', a._id)
+JOIN orgs b ON oa._participating_org_id = CONCAT('Organization/', b._id)
+WHERE oa._active AND a._id != b._id
+"""
+
+
+PARENT_SQL = """
+-- Corporate parentage from NPPES. `is_organization_subpart` plus
+-- `parent_organization_lbn` is CMS's own subpart-to-parent relationship, so
+-- unlike OrganizationAffiliation it states what it means: ownership.
+--
+-- npi_raw, never npi_optimized. npi_optimized is frozen at 2019-04-08 and is
+-- still in the catalogue; joining to it reports every NPI issued since as
+-- absent, which produced a fake 2.39M-provider finding earlier in this project.
+--
+-- parent_organization_tin is deliberately not selected. It is a tax
+-- identification number, it is not needed to group, and republishing it is a
+-- privacy posture this project does not take (compare H27, which publishes
+-- counts and locations of exposed SSNs but never the values).
+SELECT
+  CAST(npi AS STRING)                        AS org_npi,
+  CAST(parent_organization_lbn AS STRING)    AS parent_lbn
+FROM `bigquery-public-data.nppes.npi_raw`
+WHERE CAST(entity_type_code AS STRING) = "2"
+  AND provider_business_practice_location_address_state_name = @state
+  AND CAST(parent_organization_lbn AS STRING) NOT IN ("", "null")
+"""
+
+
 def run_query(sql, state):
     from google.cloud import bigquery
 
@@ -265,8 +313,8 @@ def pct(n, d):
     return round(100.0 * n / d, 1) if d else 0.0
 
 
-def build(state, rows, org_rows, ep_by_id, ep_by_npi, url_vendor, npi_url,
-          name_url, hospitals):
+def build(state, rows, org_rows, edges, edge_names, parent_by_npi, ep_by_id,
+          ep_by_npi, url_vendor, npi_url, name_url, hospitals):
     total = len(rows)
     with_role = 0
     with_org = 0
@@ -450,6 +498,45 @@ def build(state, rows, org_rows, ep_by_id, ep_by_npi, url_vendor, npi_url,
             "vendor": url_vendor.get(url) if url else None,
         })
 
+    # Health-system rollup. Organizations are the leaves; the systems that own
+    # them are mostly not in the directory. Where a system member reaches an
+    # endpoint, every practitioner in that system gets a system-level path,
+    # which is weaker than a direct one and is reported as its own number.
+    org_by_id = {o["org_id"]: o for o in org_rows}
+    systems = build_systems(org_rows, parent_by_npi)
+    affiliation = describe_affiliation_graph(edges, edge_names)
+    for sysrow in systems:
+        # Collect every endpoint anywhere in the system, not the first one
+        # found. A health system does not have "an endpoint": UPMC publishes an
+        # Epic endpoint for its physicians and separate athenahealth endpoints
+        # for individual surgery centres. Taking the first member with a hit
+        # handed all 7,308 UPMC practitioners an ambulatory surgery centre's
+        # athenahealth URL, which is not where their records live.
+        found = {}
+        for oid in sysrow["member_org_ids"]:
+            member = org_by_id.get(oid)
+            if not member:
+                continue
+            url, basis = resolve_org(member)
+            if basis in ("ndh", "vendor-npi") and url not in found:
+                found[url] = {
+                    "url": url,
+                    "vendor": url_vendor.get(url),
+                    "via_member": member["org_name"],
+                }
+        sysrow["endpoints"] = list(found.values())[:10]
+        sysrow["endpoint_count"] = len(found)
+        sysrow["vendors"] = sorted(
+            {e["vendor"] for e in found.values() if e["vendor"]}
+        )
+        # Trim the id list: useful in aggregate, noise in a published payload.
+        sysrow["member_org_ids"] = sysrow["member_org_ids"][:25]
+
+    systems_with_endpoint = [s for s in systems if s["endpoint_count"]]
+    practitioners_gained = sum(
+        s["practitioners"] for s in systems_with_endpoint
+    )
+
     payload = {
         "state": state.upper(),
         "state_name": STATE_NAMES.get(state.upper(), state.upper()),
@@ -493,6 +580,36 @@ def build(state, rows, org_rows, ep_by_id, ep_by_npi, url_vendor, npi_url,
             "none": bands["none"],
         },
         "vendors": dict(vendors.most_common()),
+        "systems": {
+            "note": (
+                "Health systems, best evidence first. `nppes-parent` groups "
+                "come from NPPES is_organization_subpart plus "
+                "parent_organization_lbn, which is CMS's own corporate "
+                "subpart-to-parent relationship and states what it means. "
+                "`brand-name` groups are inferred from the organization name "
+                "and cover the rest. The obvious third method, the directory's "
+                "own OrganizationAffiliation resource, was tried and rejected: "
+                "see affiliation_graph below."
+            ),
+            "affiliation_graph": affiliation,
+            "organizations_with_nppes_parent": sum(
+                1 for o in org_rows if parent_by_npi.get(o["org_npi"] or "")),
+            "systems_found": len(systems),
+            "systems_by_basis": dict(collections.Counter(
+                s["basis"] for s in systems)),
+            "systems_reaching_an_endpoint": len(systems_with_endpoint),
+            "practitioners_in_a_system_that_reaches_an_endpoint":
+                practitioners_gained,
+            "routing_caveat": (
+                "A system reaching an endpoint is not a routing answer. Large "
+                "systems publish several: UPMC has an Epic endpoint for its "
+                "physicians and separate athenahealth endpoints for individual "
+                "surgery centres. Every endpoint found in a system is listed "
+                "with the member that carries it, and none of them is "
+                "presented as the one serving a given practitioner."
+            ),
+            "rows": systems[:60],
+        },
         "organizations_top": orgs,
         "organizations_unlinked": {
             "note": (
@@ -586,9 +703,23 @@ def main():
         print(f"\n{code} ...")
         rows = [dict(r.items()) for r in run_query(PRACTITIONER_SQL, code)]
         org_rows = [dict(r.items()) for r in run_query(ORG_SQL, code)]
-        print(f"  {len(rows):,} practitioners, {len(org_rows):,} organizations")
-        payload = build(code, rows, org_rows, ep_by_id, ep_by_npi,
-                        url_vendor, npi_url, name_url, load_hospitals(code))
+        edge_rows = [dict(r.items()) for r in run_query(AFFILIATION_SQL, code)]
+        edges = [(r["org_a"], r["org_b"]) for r in edge_rows]
+        # Hub names must come from the edge query, not from org_rows: org_rows
+        # only holds organizations that have practitioners, and the biggest
+        # hubs in this graph are pharmacy chains that have none.
+        edge_names = {}
+        for r in edge_rows:
+            edge_names[r["org_a"]] = r["name_a"]
+            edge_names[r["org_b"]] = r["name_b"]
+        print(f"  {len(rows):,} practitioners, {len(org_rows):,} organizations, "
+              f"{len(edges):,} affiliation edges")
+        parent_by_npi = {r["org_npi"]: r["parent_lbn"]
+                         for r in run_query(PARENT_SQL, code)}
+        print(f"  {len(parent_by_npi):,} organizations with an NPPES corporate parent")
+        payload = build(code, rows, org_rows, edges, edge_names, parent_by_npi,
+                        ep_by_id, ep_by_npi, url_vendor, npi_url, name_url,
+                        load_hospitals(code))
         path = out_dir / f"{code.lower()}-connectivity.json"
         path.write_text(json.dumps(payload, indent=2) + "\n")
         s = payload["summary"]

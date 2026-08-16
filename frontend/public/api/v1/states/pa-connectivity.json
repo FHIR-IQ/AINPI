@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-16T21:12:30+00:00",
+  "generated_at": "2026-08-16T21:36:54+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "f72f2b8",
+  "commit_sha": "c74e7dc",
   "summary": {
     "practitioners": 227727,
     "with_role": 86816,
@@ -89,6 +89,1953 @@
     "Epic (User-access Brands)": 495,
     "Veradigm": 191,
     "Practice Fusion": 91
+  },
+  "systems": {
+    "note": "Health systems, best evidence first. `nppes-parent` groups come from NPPES is_organization_subpart plus parent_organization_lbn, which is CMS's own corporate subpart-to-parent relationship and states what it means. `brand-name` groups are inferred from the organization name and cover the rest. The obvious third method, the directory's own OrganizationAffiliation resource, was tried and rejected: see affiliation_graph below.",
+    "affiliation_graph": {
+      "note": "OrganizationAffiliation carries no `code`, so an edge does not state what the relationship is. The hubs below show the resource is dominated by retail pharmacy corporate structure, so connected components are not health systems and are not used as such.",
+      "edges": 9000,
+      "organizations_in_graph": 9206,
+      "components": 950,
+      "largest_component_size": 823,
+      "top_hubs": [
+        {
+          "name": "ECKERD CORPORATION",
+          "children": 577
+        },
+        {
+          "name": "THRIFTY PAYLESS INC",
+          "children": 534
+        },
+        {
+          "name": "PENNSYLVANIA CVS PHARMACY LLC",
+          "children": 444
+        },
+        {
+          "name": "RITE AID OF PENNSYLVANIA LLC",
+          "children": 342
+        },
+        {
+          "name": "THRIFT DRUG INC",
+          "children": 245
+        },
+        {
+          "name": "RITE AID OF NEW YORK INC",
+          "children": 230
+        },
+        {
+          "name": "THE GIANT COMPANY LLC",
+          "children": 139
+        },
+        {
+          "name": "GIANT EAGLE INC",
+          "children": 120
+        },
+        {
+          "name": "WEIS MARKETS INC",
+          "children": 120
+        },
+        {
+          "name": "MOSSO'S MEDICAL SUPPLY COMPANY LLC",
+          "children": 106
+        }
+      ]
+    },
+    "organizations_with_nppes_parent": 309,
+    "systems_found": 2631,
+    "systems_by_basis": {
+      "brand-name": 2599,
+      "nppes-parent": 32
+    },
+    "systems_reaching_an_endpoint": 663,
+    "practitioners_in_a_system_that_reaches_an_endpoint": 43912,
+    "routing_caveat": "A system reaching an endpoint is not a routing answer. Large systems publish several: UPMC has an Epic endpoint for its physicians and separate athenahealth endpoints for individual surgery centres. Every endpoint found in a system is listed with the member that carries it, and none of them is presented as the one serving a given practitioner.",
+    "rows": [
+      {
+        "system_key": "brand:GEISINGER",
+        "label": "GEISINGER CLINIC",
+        "basis": "brand-name",
+        "organizations": 15,
+        "practitioners": 6968,
+        "member_org_ids": [
+          "Organization-1366493868",
+          "Organization-1376518365",
+          "Organization-1144876137",
+          "Organization-1396207015",
+          "Organization-1366407587",
+          "Organization-1558313023",
+          "Organization-1134175581",
+          "Organization-1952076119",
+          "Organization-1255382784",
+          "Organization-1437706140",
+          "Organization-1427086065",
+          "Organization-1215970223",
+          "Organization-1841995214",
+          "Organization-1861545683",
+          "Organization-1528010006"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:UNIVERSITY OF PITTSBURGH",
+        "label": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
+        "basis": "brand-name",
+        "organizations": 4,
+        "practitioners": 6562,
+        "member_org_ids": [
+          "Organization-1619935004",
+          "Organization-1033125455",
+          "Organization-1427025840",
+          "Organization-1528192473"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:ST LUKE",
+        "label": "ST LUKE'S PHYSICIAN GROUP INC",
+        "basis": "brand-name",
+        "organizations": 22,
+        "practitioners": 4324,
+        "member_org_ids": [
+          "Organization-1700984622",
+          "Organization-1750488029",
+          "Organization-1467725184",
+          "Organization-1376965731",
+          "Organization-1578500344",
+          "Organization-1629481973",
+          "Organization-1740232719",
+          "Organization-1225052616",
+          "Organization-1609311257",
+          "Organization-1679847396",
+          "Organization-1033296157",
+          "Organization-1508874538",
+          "Organization-1083708226",
+          "Organization-1790718229",
+          "Organization-1295009918",
+          "Organization-1902845068",
+          "Organization-1568459287",
+          "Organization-1073553939",
+          "Organization-1871545889",
+          "Organization-1801835970",
+          "Organization-1942397328",
+          "Organization-1558503656"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:UNIVERSITY OF PENN",
+        "label": "UNIVERSITY OF PENN-MEDICAL GROUP",
+        "basis": "brand-name",
+        "organizations": 15,
+        "practitioners": 4228,
+        "member_org_ids": [
+          "Organization-1235527342",
+          "Organization-1053447151",
+          "Organization-1194829739",
+          "Organization-1679677975",
+          "Organization-1093725145",
+          "Organization-1629181912",
+          "Organization-1477660173",
+          "Organization-1477658599",
+          "Organization-1194832899",
+          "Organization-1043670805",
+          "Organization-1831443142",
+          "Organization-1568579266",
+          "Organization-1497767495",
+          "Organization-1912014614",
+          "Organization-1720553001"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:PINNACLE",
+        "label": "PINNACLE HEALTH MEDICAL SERVICES",
+        "basis": "brand-name",
+        "organizations": 23,
+        "practitioners": 3194,
+        "member_org_ids": [
+          "Organization-1932143427",
+          "Organization-1013441690",
+          "Organization-1023458148",
+          "Organization-1487693404",
+          "Organization-1043250384",
+          "Organization-1952603342",
+          "Organization-1538230313",
+          "Organization-1316341241",
+          "Organization-1184984809",
+          "Organization-1477070241",
+          "Organization-1922512227",
+          "Organization-1134167729",
+          "Organization-1588858211",
+          "Organization-1528563970",
+          "Organization-1508664871",
+          "Organization-1588989941",
+          "Organization-1811777824",
+          "Organization-1205103777",
+          "Organization-1619153251",
+          "Organization-1356577688",
+          "Organization-1013365808",
+          "Organization-1578799417",
+          "Organization-1710430657"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:ALLEGHENY",
+        "label": "ALLEGHENY CLINIC",
+        "basis": "brand-name",
+        "organizations": 18,
+        "practitioners": 3167,
+        "member_org_ids": [
+          "Organization-1073081493",
+          "Organization-1275533515",
+          "Organization-1992183164",
+          "Organization-1912001082",
+          "Organization-1619986528",
+          "Organization-1417926767",
+          "Organization-1710005566",
+          "Organization-1528131331",
+          "Organization-1114927530",
+          "Organization-1003962895",
+          "Organization-1811671092",
+          "Organization-1366451106",
+          "Organization-1104848597",
+          "Organization-1699798918",
+          "Organization-1326436619",
+          "Organization-1558536599",
+          "Organization-1609052224",
+          "Organization-1710378427"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/13366/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ALLEGHENY MEDICAL P C"
+          },
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/IGBCBA",
+            "vendor": null,
+            "via_member": "ALLEGHENY BRAIN AND SPINE SURGEONS PC"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:LEHIGH",
+        "label": "LEHIGH VALLEY PHYSICIAN GROUP",
+        "basis": "brand-name",
+        "organizations": 21,
+        "practitioners": 3050,
+        "member_org_ids": [
+          "Organization-1457309650",
+          "Organization-1730174731",
+          "Organization-1356769616",
+          "Organization-1508842246",
+          "Organization-1356330369",
+          "Organization-1396402053",
+          "Organization-1063588549",
+          "Organization-1902835788",
+          "Organization-1619325636",
+          "Organization-1619961018",
+          "Organization-1679013098",
+          "Organization-1700837671",
+          "Organization-1316986763",
+          "Organization-1437157161",
+          "Organization-1811128390",
+          "Organization-1083313662",
+          "Organization-1710924071",
+          "Organization-1164400131",
+          "Organization-1841461852",
+          "Organization-1275666232",
+          "Organization-1568833291"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:WELLSPAN",
+        "label": "WELLSPAN MEDICAL GROUP",
+        "basis": "brand-name",
+        "organizations": 5,
+        "practitioners": 2813,
+        "member_org_ids": [
+          "Organization-1669770004",
+          "Organization-1760568885",
+          "Organization-1396404943",
+          "Organization-1881762995",
+          "Organization-1760787576"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:UPMC",
+        "label": "UPMC COMMUNITY MEDICINE INC",
+        "basis": "brand-name",
+        "organizations": 28,
+        "practitioners": 2710,
+        "member_org_ids": [
+          "Organization-1558976092",
+          "Organization-1396724217",
+          "Organization-1689797466",
+          "Organization-1730693979",
+          "Organization-1891744041",
+          "Organization-1184772113",
+          "Organization-1821007881",
+          "Organization-1841690542",
+          "Organization-1689296147",
+          "Organization-1275163362",
+          "Organization-1861478307",
+          "Organization-1053417527",
+          "Organization-1144384082",
+          "Organization-1447976584",
+          "Organization-1073617718",
+          "Organization-1184769952",
+          "Organization-1639184567",
+          "Organization-1497022198",
+          "Organization-1295033298",
+          "Organization-1063587103",
+          "Organization-1750559852",
+          "Organization-1609984889",
+          "Organization-1952311508",
+          "Organization-1417636895",
+          "Organization-1558381988"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:JEFFERSON",
+        "label": "JEFFERSON UNIVERSITY PHYSICIANS",
+        "basis": "brand-name",
+        "organizations": 22,
+        "practitioners": 2217,
+        "member_org_ids": [
+          "Organization-1326093675",
+          "Organization-1730571324",
+          "Organization-1083039200",
+          "Organization-1295011419",
+          "Organization-1578512224",
+          "Organization-1891763249",
+          "Organization-1972169902",
+          "Organization-1487813515",
+          "Organization-1275587222",
+          "Organization-1700804572",
+          "Organization-1891722377",
+          "Organization-1578560504",
+          "Organization-1508818014",
+          "Organization-1396795951",
+          "Organization-1932157674",
+          "Organization-1356492953",
+          "Organization-1164511747",
+          "Organization-1992307979",
+          "Organization-1992726236",
+          "Organization-1598546764",
+          "Organization-1609559699",
+          "Organization-1720495336"
+        ],
+        "endpoints": [
+          {
+            "url": "https://app.meldrx.com/api/fhir/ei-jefferson",
+            "vendor": null,
+            "via_member": "JEFFERSON RADIOLOGY PC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/14272/brand/115/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "JEFFERSON EMERGENCY SERVICES PLLC"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:THE MILTON",
+        "label": "THE MILTON S HERSHEY MEDICAL CENTER PHYSICIANS GROUP",
+        "basis": "brand-name",
+        "organizations": 2,
+        "practitioners": 2008,
+        "member_org_ids": [
+          "Organization-1710951744",
+          "Organization-1538134267"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:MAIN",
+        "label": "MAIN LINE HEALTHCARE",
+        "basis": "brand-name",
+        "organizations": 27,
+        "practitioners": 1982,
+        "member_org_ids": [
+          "Organization-1922077643",
+          "Organization-1316919368",
+          "Organization-1477504264",
+          "Organization-1346676830",
+          "Organization-1386932366",
+          "Organization-1467429365",
+          "Organization-1497787246",
+          "Organization-1548260482",
+          "Organization-1760415913",
+          "Organization-1962402172",
+          "Organization-1750361978",
+          "Organization-1437104460",
+          "Organization-1487619235",
+          "Organization-1780830620",
+          "Organization-1093438517",
+          "Organization-1699016147",
+          "Organization-1780742841",
+          "Organization-1750077129",
+          "Organization-1083913859",
+          "Organization-1073718599",
+          "Organization-1760277693",
+          "Organization-1538937123",
+          "Organization-1194112573",
+          "Organization-1598130916",
+          "Organization-1881166643"
+        ],
+        "endpoints": [
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/IIEIBA",
+            "vendor": null,
+            "via_member": "MAIN LINE ALLERGY LLP"
+          },
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/JEGCCA",
+            "vendor": null,
+            "via_member": "MAIN LINE INSTITUTE OF PLASTIC SURGERY INC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/3480/brand/1/csg/21/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "MAIN LINE INTERNAL MEDICINE LLC"
+          }
+        ],
+        "endpoint_count": 3,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:TOWER",
+        "label": "TOWER HEALTH MEDICAL GROUP",
+        "basis": "brand-name",
+        "organizations": 6,
+        "practitioners": 1549,
+        "member_org_ids": [
+          "Organization-1609291350",
+          "Organization-1194293647",
+          "Organization-1710085501",
+          "Organization-1780227488",
+          "Organization-1467654244",
+          "Organization-1023315074"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:LANCASTER",
+        "label": "LANCASTER GENERAL MEDICAL GROUP",
+        "basis": "brand-name",
+        "organizations": 25,
+        "practitioners": 1444,
+        "member_org_ids": [
+          "Organization-1952392383",
+          "Organization-1316912785",
+          "Organization-1720430812",
+          "Organization-1154331775",
+          "Organization-1700972338",
+          "Organization-1598740508",
+          "Organization-1740268184",
+          "Organization-1063929115",
+          "Organization-1508293994",
+          "Organization-1023219482",
+          "Organization-1669427100",
+          "Organization-1598038804",
+          "Organization-1699202671",
+          "Organization-1831175884",
+          "Organization-1962766279",
+          "Organization-1023247228",
+          "Organization-1649365321",
+          "Organization-1740213412",
+          "Organization-1891889721",
+          "Organization-1801873690",
+          "Organization-1093781783",
+          "Organization-1558785725",
+          "Organization-1174872048",
+          "Organization-1730140625",
+          "Organization-1194947655"
+        ],
+        "endpoints": [
+          {
+            "url": "https://fhir.fhirpoint.open.allscripts.com/fhirroute/open/10063205",
+            "vendor": "Veradigm",
+            "via_member": "LANCASTER SKIN CENTER PC"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": [
+          "Veradigm"
+        ]
+      },
+      {
+        "system_key": "brand:GUTHRIE",
+        "label": "GUTHRIE MEDICAL GROUP PC",
+        "basis": "brand-name",
+        "organizations": 4,
+        "practitioners": 1428,
+        "member_org_ids": [
+          "Organization-1962451153",
+          "Organization-1134178635",
+          "Organization-1245246644",
+          "Organization-1649225855"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:TEMPLE",
+        "label": "TEMPLE FACULTY PRACTICE PLAN INC",
+        "basis": "brand-name",
+        "organizations": 3,
+        "practitioners": 1390,
+        "member_org_ids": [
+          "Organization-1881176949",
+          "Organization-1871067116",
+          "Organization-1407638794"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:CLINICAL",
+        "label": "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA HEALTH",
+        "basis": "brand-name",
+        "organizations": 25,
+        "practitioners": 1266,
+        "member_org_ids": [
+          "Organization-1972682995",
+          "Organization-1508019241",
+          "Organization-1649940107",
+          "Organization-1538728357",
+          "Organization-1447260435",
+          "Organization-1184431900",
+          "Organization-1689620254",
+          "Organization-1902844806",
+          "Organization-1124122387",
+          "Organization-1437326683",
+          "Organization-1144511783",
+          "Organization-1457447799",
+          "Organization-1992725766",
+          "Organization-1629009048",
+          "Organization-1356102859",
+          "Organization-1104632546",
+          "Organization-1730367731",
+          "Organization-1871729772",
+          "Organization-1871973628",
+          "Organization-1184414955",
+          "Organization-1316399967",
+          "Organization-1831303320",
+          "Organization-1437288263",
+          "Organization-1902428709",
+          "Organization-1194818054"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/3389/brand/1/csg/21/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "CLINICAL RENAL ASSOCIATES LLC"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:EINSTEIN",
+        "label": "EINSTEIN PRACTICE PLAN INC",
+        "basis": "brand-name",
+        "organizations": 8,
+        "practitioners": 1237,
+        "member_org_ids": [
+          "Organization-1760434468",
+          "Organization-1558316109",
+          "Organization-1922047463",
+          "Organization-1366653818",
+          "Organization-1427662931",
+          "Organization-1699495259",
+          "Organization-1679525372",
+          "Organization-1023262250"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:EMERGENCY",
+        "label": "EMERGENCY CARE SERVICES OF PENNSYLVANIA PC",
+        "basis": "brand-name",
+        "organizations": 95,
+        "practitioners": 1231,
+        "member_org_ids": [
+          "Organization-1114955010",
+          "Organization-1619990900",
+          "Organization-1023044278",
+          "Organization-1093759847",
+          "Organization-1134117393",
+          "Organization-1427005008",
+          "Organization-1043917180",
+          "Organization-1376917070",
+          "Organization-1861243818",
+          "Organization-1093762353",
+          "Organization-1215965231",
+          "Organization-1831539568",
+          "Organization-1497783419",
+          "Organization-1679514467",
+          "Organization-1437103942",
+          "Organization-1639236656",
+          "Organization-1912232182",
+          "Organization-1992972830",
+          "Organization-1578032058",
+          "Organization-1033136841",
+          "Organization-1578598199",
+          "Organization-1346281268",
+          "Organization-1245938729",
+          "Organization-1053351593",
+          "Organization-1164462586"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/18378/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "EMERGENCY MEDICINE ASSOCIATES PA PC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/14171/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "EMERGENCY PHYSICIANS IMMEDIATE CARE CENTER 1 PLLC"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:PENNSYLVANIA",
+        "label": "PENNSYLVANIA URGENT CARE CENTERS PLLC",
+        "basis": "brand-name",
+        "organizations": 44,
+        "practitioners": 1050,
+        "member_org_ids": [
+          "Organization-1902128721",
+          "Organization-1528689445",
+          "Organization-1841637865",
+          "Organization-1669474979",
+          "Organization-1023382918",
+          "Organization-1497059802",
+          "Organization-1558126342",
+          "Organization-1154720423",
+          "Organization-1861091290",
+          "Organization-1861501801",
+          "Organization-1881829976",
+          "Organization-1184443921",
+          "Organization-1447233424",
+          "Organization-1497739973",
+          "Organization-1376526111",
+          "Organization-1790768471",
+          "Organization-1447233317",
+          "Organization-1932435021",
+          "Organization-1457334336",
+          "Organization-1023075454",
+          "Organization-1154304483",
+          "Organization-1942357454",
+          "Organization-1568428126",
+          "Organization-1336298124",
+          "Organization-1851374698"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/14272/brand/135/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PENNSYLVANIA PHYSICIAN SERVICES LLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/14272/brand/216/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PENNSYLVANIA HOSPITALIST GROUP LLC"
+          },
+          {
+            "url": "https://PAPCBH.fhir.cbh4.crediblebh.com/R4/",
+            "vendor": null,
+            "via_member": "PENNSYLVANIA COMPREHENSIVE BEHAVIORAL HEALTH SERVICES LLC"
+          },
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/HIIBDD",
+            "vendor": null,
+            "via_member": "PENNSYLVANIA REGIONAL ORTHOPEDICS LLC"
+          },
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/AHGABA",
+            "vendor": null,
+            "via_member": "PENNSYLVANIA RHEUMATOLOGY ASSOCIATES PC"
+          },
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/FJJGBA",
+            "vendor": null,
+            "via_member": "PENNSYLVANIA INSTITUTE OF ENDOCRINOLOGY LLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/16001/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PENNSYLVANIA MUSCLE BONE AND JOINT LLC"
+          }
+        ],
+        "endpoint_count": 7,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "parent:PENN STATE HEALTH",
+        "label": "PENN STATE HEALTH MEDICAL GROUP LLC",
+        "basis": "nppes-parent",
+        "organizations": 2,
+        "practitioners": 1037,
+        "member_org_ids": [
+          "Organization-1861988644",
+          "Organization-1457824013"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:AHN",
+        "label": "AHN EMERGENCY GROUP OF PITTSBURGH LTD",
+        "basis": "brand-name",
+        "organizations": 11,
+        "practitioners": 1023,
+        "member_org_ids": [
+          "Organization-1043635402",
+          "Organization-1437814696",
+          "Organization-1336564798",
+          "Organization-1235554692",
+          "Organization-1790100154",
+          "Organization-1770984304",
+          "Organization-1235518499",
+          "Organization-1033534490",
+          "Organization-1144603762",
+          "Organization-1821475872",
+          "Organization-1194262980"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:ABINGTON",
+        "label": "ABINGTON EMERGENCY PHYSICIAN ASSOCIATES PC",
+        "basis": "brand-name",
+        "organizations": 45,
+        "practitioners": 994,
+        "member_org_ids": [
+          "Organization-1659359099",
+          "Organization-1770508319",
+          "Organization-1548825243",
+          "Organization-1952330805",
+          "Organization-1316189855",
+          "Organization-1225084528",
+          "Organization-1730122789",
+          "Organization-1881864635",
+          "Organization-1275575482",
+          "Organization-1235286253",
+          "Organization-1790701837",
+          "Organization-1891724795",
+          "Organization-1275083800",
+          "Organization-1487028262",
+          "Organization-1821042508",
+          "Organization-1154432227",
+          "Organization-1871628024",
+          "Organization-1710184023",
+          "Organization-1013961101",
+          "Organization-1265593586",
+          "Organization-1366985566",
+          "Organization-1144421306",
+          "Organization-1871523415",
+          "Organization-1649415639",
+          "Organization-1962554576"
+        ],
+        "endpoints": [
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/AIGIAA",
+            "vendor": null,
+            "via_member": "ABINGTON NEUROLOGICAL ASSOCIATES LTD"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:DLP",
+        "label": "DLP CONEMAUGH PHYSICIAN PRACTICES LLC",
+        "basis": "brand-name",
+        "organizations": 21,
+        "practitioners": 979,
+        "member_org_ids": [
+          "Organization-1932515905",
+          "Organization-1902687973",
+          "Organization-1669873881",
+          "Organization-1184620486",
+          "Organization-1659376358",
+          "Organization-1629471768",
+          "Organization-1932500154",
+          "Organization-1164509261",
+          "Organization-1609281641",
+          "Organization-1487902995",
+          "Organization-1154005965",
+          "Organization-1992970891",
+          "Organization-1215273628",
+          "Organization-1275128944",
+          "Organization-1407607575",
+          "Organization-1053667550",
+          "Organization-1154834687",
+          "Organization-1184163883",
+          "Organization-1679637482",
+          "Organization-1730437245",
+          "Organization-1033485925"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/9865/brand/1/csg/21/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "DLP WESTERN CAROLINA PHYSICIAN PRACTICES LLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/8233/brand/3/csg/21/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "DLP MARQUETTE PHYSICIAN PRACTICES INC"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:SUSQUEHANNA",
+        "label": "SUSQUEHANNA PHYSICIAN SERVICES",
+        "basis": "brand-name",
+        "organizations": 45,
+        "practitioners": 958,
+        "member_org_ids": [
+          "Organization-1972548337",
+          "Organization-1639114689",
+          "Organization-1992743868",
+          "Organization-1083677868",
+          "Organization-1861431116",
+          "Organization-1629006606",
+          "Organization-1881622868",
+          "Organization-1205870904",
+          "Organization-1083655542",
+          "Organization-1023065885",
+          "Organization-1770719882",
+          "Organization-1952398125",
+          "Organization-1831132927",
+          "Organization-1184652133",
+          "Organization-1386637296",
+          "Organization-1700962701",
+          "Organization-1578543054",
+          "Organization-1962446971",
+          "Organization-1346263266",
+          "Organization-1780631226",
+          "Organization-1235366857",
+          "Organization-1801830807",
+          "Organization-1477793172",
+          "Organization-1992722524",
+          "Organization-1316975881"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/18404/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "SUSQUEHANNA OB-GYN LLC"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "parent:PENN HIGHLANDS HEALTHCARE",
+        "label": "DUBOIS REGIONAL MEDICAL CENTER",
+        "basis": "nppes-parent",
+        "organizations": 40,
+        "practitioners": 936,
+        "member_org_ids": [
+          "Organization-1992802391",
+          "Organization-1659472447",
+          "Organization-1861575938",
+          "Organization-1245410554",
+          "Organization-1093956617",
+          "Organization-1235239963",
+          "Organization-1447357843",
+          "Organization-1093812406",
+          "Organization-1225006703",
+          "Organization-1578733093",
+          "Organization-1861556193",
+          "Organization-1548960297",
+          "Organization-1285728915",
+          "Organization-1558472696",
+          "Organization-1952554602",
+          "Organization-1801094222",
+          "Organization-1083727796",
+          "Organization-1982780979",
+          "Organization-1659534337",
+          "Organization-1679673099",
+          "Organization-1508046814",
+          "Organization-1285821835",
+          "Organization-1932464039",
+          "Organization-1679584742",
+          "Organization-1801994652"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:FOX",
+        "label": "FOX REHABILITATION SERVICES INC",
+        "basis": "brand-name",
+        "organizations": 27,
+        "practitioners": 933,
+        "member_org_ids": [
+          "Organization-1326092503",
+          "Organization-1609814755",
+          "Organization-1174560650",
+          "Organization-1588901847",
+          "Organization-1073850343",
+          "Organization-1902133689",
+          "Organization-1265968481",
+          "Organization-1881649416",
+          "Organization-1497174437",
+          "Organization-1912577214",
+          "Organization-1710582580",
+          "Organization-1083387013",
+          "Organization-1639610629",
+          "Organization-1336719624",
+          "Organization-1053199844",
+          "Organization-1588918569",
+          "Organization-1114443462",
+          "Organization-1053199117",
+          "Organization-1184269664",
+          "Organization-1245584234",
+          "Organization-1114430766",
+          "Organization-1811754112",
+          "Organization-1174884944",
+          "Organization-1952129140",
+          "Organization-1306184924"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:REGIONAL HEALTH SERVICES",
+        "label": "REGIONAL HEALTH SERVICES INC",
+        "basis": "brand-name",
+        "organizations": 2,
+        "practitioners": 921,
+        "member_org_ids": [
+          "Organization-1174520654",
+          "Organization-1730283326"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:PROSPECT",
+        "label": "PROSPECT HEALTH ACCESS NETWORK INC",
+        "basis": "brand-name",
+        "organizations": 15,
+        "practitioners": 840,
+        "member_org_ids": [
+          "Organization-1568819084",
+          "Organization-1780031005",
+          "Organization-1619322112",
+          "Organization-1912354432",
+          "Organization-1144677568",
+          "Organization-1285059287",
+          "Organization-1588089759",
+          "Organization-1154343739",
+          "Organization-1154776797",
+          "Organization-1326463548",
+          "Organization-1205283538",
+          "Organization-1316394638",
+          "Organization-1205251204",
+          "Organization-1629493135",
+          "Organization-1235122425"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/9000/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PROSPECT CHARTERCARE RWMC LLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/9000/brand/3/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PROSPECT CHARTERCARE SJHSRI LLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/9000/brand/2/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PROSPECT CHARTERCARE PHYSICIANS LLC"
+          }
+        ],
+        "endpoint_count": 3,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:ORTHOPEDIC",
+        "label": "ORTHOPEDIC AND SPORTS PHYSICAL THERAPY SERVICES INC",
+        "basis": "brand-name",
+        "organizations": 25,
+        "practitioners": 776,
+        "member_org_ids": [
+          "Organization-1588661235",
+          "Organization-1689636581",
+          "Organization-1609835933",
+          "Organization-1386620755",
+          "Organization-1093139248",
+          "Organization-1801033782",
+          "Organization-1982631206",
+          "Organization-1760993000",
+          "Organization-1811095631",
+          "Organization-1013903038",
+          "Organization-1801339502",
+          "Organization-1669469359",
+          "Organization-1689728669",
+          "Organization-1720187495",
+          "Organization-1255341566",
+          "Organization-1740344886",
+          "Organization-1013158450",
+          "Organization-1285683656",
+          "Organization-1548289697",
+          "Organization-1063507226",
+          "Organization-1235170283",
+          "Organization-1295766376",
+          "Organization-1770812828",
+          "Organization-1548268600",
+          "Organization-1841264835"
+        ],
+        "endpoints": [
+          {
+            "url": "https://osswf.mmi.prod.fhir.ema-api.com/fhir/r4",
+            "vendor": null,
+            "via_member": "ORTHOPEDIC SPECIALISTS OF SW FLORIDA PA"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/34012/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ORTHOPEDIC FRACTURE CLINIC PC"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:NORTH AMERICAN PARTNERS",
+        "label": "NORTH AMERICAN PARTNERS IN ANESTHESIA PENNSYLVANIA LLC",
+        "basis": "brand-name",
+        "organizations": 7,
+        "practitioners": 723,
+        "member_org_ids": [
+          "Organization-1639137854",
+          "Organization-1093707879",
+          "Organization-1649264706",
+          "Organization-1548433048",
+          "Organization-1457867020",
+          "Organization-1699032524",
+          "Organization-1316994775"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "parent:LEHIGH VALLEY PHYSICIAN GROUP",
+        "label": "LEHIGH VALLEY PHYSICIAN GROUP",
+        "basis": "nppes-parent",
+        "organizations": 2,
+        "practitioners": 706,
+        "member_org_ids": [
+          "Organization-1669480034",
+          "Organization-1033094289"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:BUTLER",
+        "label": "BUTLER MEDICAL PROVIDERS",
+        "basis": "brand-name",
+        "organizations": 9,
+        "practitioners": 705,
+        "member_org_ids": [
+          "Organization-1619493046",
+          "Organization-1982939567",
+          "Organization-1154350981",
+          "Organization-1649519778",
+          "Organization-1659518389",
+          "Organization-1548279136",
+          "Organization-1710333406",
+          "Organization-1982056545",
+          "Organization-1467721134"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:GROW",
+        "label": "GROW HEALTHCARE GROUP PA",
+        "basis": "brand-name",
+        "organizations": 4,
+        "practitioners": 690,
+        "member_org_ids": [
+          "Organization-1245845932",
+          "Organization-1841949328",
+          "Organization-1154994846",
+          "Organization-1831848316"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:ANESTHESIA",
+        "label": "ANESTHESIA SPECIALISTS OF BETHLEHEM PC",
+        "basis": "brand-name",
+        "organizations": 62,
+        "practitioners": 628,
+        "member_org_ids": [
+          "Organization-1851349302",
+          "Organization-1053366377",
+          "Organization-1104354422",
+          "Organization-1871548156",
+          "Organization-1073001012",
+          "Organization-1649360041",
+          "Organization-1508843004",
+          "Organization-1659752921",
+          "Organization-1528500329",
+          "Organization-1467410191",
+          "Organization-1104248699",
+          "Organization-1598700379",
+          "Organization-1740370147",
+          "Organization-1366778227",
+          "Organization-1437464120",
+          "Organization-1760421788",
+          "Organization-1669581997",
+          "Organization-1336530997",
+          "Organization-1407132830",
+          "Organization-1467880500",
+          "Organization-1164932901",
+          "Organization-1083688220",
+          "Organization-1487662300",
+          "Organization-1316945173",
+          "Organization-1679774343"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:FAMILY PRACTICE",
+        "label": "FAMILY PRACTICE CENTER PC",
+        "basis": "brand-name",
+        "organizations": 12,
+        "practitioners": 598,
+        "member_org_ids": [
+          "Organization-1154376937",
+          "Organization-1043204811",
+          "Organization-1952329914",
+          "Organization-1811921166",
+          "Organization-1407096910",
+          "Organization-1588640379",
+          "Organization-1487693347",
+          "Organization-1942242631",
+          "Organization-1710929161",
+          "Organization-1669514592",
+          "Organization-1952593873",
+          "Organization-1306884820"
+        ],
+        "endpoints": [
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/BEFDBD",
+            "vendor": null,
+            "via_member": "FAMILY PRACTICE ASSOCIATES OF UPPER DUBLIN"
+          },
+          {
+            "url": "https://app.azaleahealth.com/fhir/R4/142932",
+            "vendor": null,
+            "via_member": "FAMILY PRACTICE OF HONEY BROOK PC"
+          },
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/GBHGDD",
+            "vendor": null,
+            "via_member": "FAMILY PRACTICE ASSOCIATES PC"
+          }
+        ],
+        "endpoint_count": 3,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:ARIA",
+        "label": "ARIA HEALTH PHYSICIAN SERVICES",
+        "basis": "brand-name",
+        "organizations": 6,
+        "practitioners": 592,
+        "member_org_ids": [
+          "Organization-1750949806",
+          "Organization-1508097882",
+          "Organization-1376895342",
+          "Organization-1164260741",
+          "Organization-1477225035",
+          "Organization-1437436599"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:TRINITY",
+        "label": "TRINITY HEALTH MID-ATLANTIC MEDICAL GROUP",
+        "basis": "brand-name",
+        "organizations": 21,
+        "practitioners": 587,
+        "member_org_ids": [
+          "Organization-1972982361",
+          "Organization-1548509185",
+          "Organization-1003882812",
+          "Organization-1043234677",
+          "Organization-1285715144",
+          "Organization-1083653752",
+          "Organization-1992096192",
+          "Organization-1003997966",
+          "Organization-1487669016",
+          "Organization-1295043149",
+          "Organization-1376897090",
+          "Organization-1841853256",
+          "Organization-1275134363",
+          "Organization-1073594156",
+          "Organization-1245789064",
+          "Organization-1508408998",
+          "Organization-1487807277",
+          "Organization-1629221965",
+          "Organization-1902086861",
+          "Organization-1447867452",
+          "Organization-1730193657"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/17876/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "TRINITY MEDICAL ASSOCIATES PA"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/2020/brand/1/csg/21/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "TRINITY FAMILY MEDICINE"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:FAMILY CARE CENTERS",
+        "label": "FAMILY CARE CENTERS INC",
+        "basis": "brand-name",
+        "organizations": 2,
+        "practitioners": 578,
+        "member_org_ids": [
+          "Organization-1669563037",
+          "Organization-1114189719"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:APOGEE",
+        "label": "APOGEE MEDICAL GROUP OF PENNSYLVANIA PC",
+        "basis": "brand-name",
+        "organizations": 25,
+        "practitioners": 523,
+        "member_org_ids": [
+          "Organization-1568633535",
+          "Organization-1841520236",
+          "Organization-1043518228",
+          "Organization-1326485285",
+          "Organization-1477500999",
+          "Organization-1619028545",
+          "Organization-1629025143",
+          "Organization-1861660540",
+          "Organization-1093973885",
+          "Organization-1629415591",
+          "Organization-1558302174",
+          "Organization-1053655134",
+          "Organization-1760652218",
+          "Organization-1578717682",
+          "Organization-1932347903",
+          "Organization-1689856825",
+          "Organization-1356503114",
+          "Organization-1386916104",
+          "Organization-1669708442",
+          "Organization-1528544608",
+          "Organization-1558318071",
+          "Organization-1134868300",
+          "Organization-1154102242",
+          "Organization-1659152742",
+          "Organization-1831568450"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:DELAWARE",
+        "label": "DELAWARE COUNTY PROFESSIONAL SERVICES INC",
+        "basis": "brand-name",
+        "organizations": 30,
+        "practitioners": 519,
+        "member_org_ids": [
+          "Organization-1952485864",
+          "Organization-1386864502",
+          "Organization-1538619333",
+          "Organization-1558722561",
+          "Organization-1902907371",
+          "Organization-1871517540",
+          "Organization-1801325717",
+          "Organization-1770676629",
+          "Organization-1467496638",
+          "Organization-1740706175",
+          "Organization-1457987521",
+          "Organization-1336393081",
+          "Organization-1578618930",
+          "Organization-1568602969",
+          "Organization-1083705230",
+          "Organization-1073641148",
+          "Organization-1821361072",
+          "Organization-1013097484",
+          "Organization-1073567418",
+          "Organization-1891126009",
+          "Organization-1659116770",
+          "Organization-1497377592",
+          "Organization-1356487854",
+          "Organization-1518092659",
+          "Organization-1417940719"
+        ],
+        "endpoints": [
+          {
+            "url": "https://fhir-api.fhirprod.aws.greenwayhealth.com/fhir/R4/2.16.840.1.113883.3.140.72127",
+            "vendor": null,
+            "via_member": "DELAWARE NEUROSURGICAL GROUP PA"
+          },
+          {
+            "url": "https://fhir.fhirpoint.open.allscripts.com/fhirroute/open/55841",
+            "vendor": "Veradigm",
+            "via_member": "DELAWARE FAMILY CARE ASSOCIATES"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/17257/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "DELAWARE VALLEY WOUND CARE SPECIALISTS LLC"
+          },
+          {
+            "url": "https://app.azaleahealth.com/fhir/R4/142960",
+            "vendor": null,
+            "via_member": "DELAWARE MEDICAL ASSOCIATES PA"
+          }
+        ],
+        "endpoint_count": 4,
+        "vendors": [
+          "Veradigm",
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "parent:LANCASTER GENERAL HOSPITAL",
+        "label": "LANCASTER GENERAL HOSPITAL",
+        "basis": "nppes-parent",
+        "organizations": 8,
+        "practitioners": 517,
+        "member_org_ids": [
+          "Organization-1750399507",
+          "Organization-1730323759",
+          "Organization-1487904769",
+          "Organization-1538502380",
+          "Organization-1306961800",
+          "Organization-1114012002",
+          "Organization-1265535645",
+          "Organization-1982614541"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:PHOENIXVILLE",
+        "label": "PHOENIXVILLE CLINIC COMPANY LLC",
+        "basis": "brand-name",
+        "organizations": 10,
+        "practitioners": 510,
+        "member_org_ids": [
+          "Organization-1891866182",
+          "Organization-1275173957",
+          "Organization-1801146691",
+          "Organization-1992455828",
+          "Organization-1457333197",
+          "Organization-1245285972",
+          "Organization-1194258772",
+          "Organization-1629076609",
+          "Organization-1619678752",
+          "Organization-1235229923"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/1606/brand/1/csg/101/fhir/r4",
+            "vendor": null,
+            "via_member": "PHOENIXVILLE CLINIC COMPANY LLC"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:CHRISTIANA",
+        "label": "CHRISTIANA CARE HEALTH SERVICES INC",
+        "basis": "brand-name",
+        "organizations": 27,
+        "practitioners": 509,
+        "member_org_ids": [
+          "Organization-1770568107",
+          "Organization-1467298299",
+          "Organization-1922078476",
+          "Organization-1245474329",
+          "Organization-1760811681",
+          "Organization-1639956451",
+          "Organization-1164061867",
+          "Organization-1942553615",
+          "Organization-1952335556",
+          "Organization-1871375899",
+          "Organization-1245674993",
+          "Organization-1457593949",
+          "Organization-1821302472",
+          "Organization-1306375373",
+          "Organization-1083083216",
+          "Organization-1821059387",
+          "Organization-1255618070",
+          "Organization-1679727028",
+          "Organization-1104854850",
+          "Organization-1487083069",
+          "Organization-1023732203",
+          "Organization-1659578425",
+          "Organization-1376058800",
+          "Organization-1194073411",
+          "Organization-1467294298"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:METHODIST",
+        "label": "METHODIST ASSOCIATES IN HEALTHCARE INC",
+        "basis": "brand-name",
+        "organizations": 13,
+        "practitioners": 500,
+        "member_org_ids": [
+          "Organization-1053355131",
+          "Organization-1023052172",
+          "Organization-1457386328",
+          "Organization-1649636754",
+          "Organization-1982656575",
+          "Organization-1801677083",
+          "Organization-1023899291",
+          "Organization-1609657873",
+          "Organization-1184670663",
+          "Organization-1467890566",
+          "Organization-1164829214",
+          "Organization-1265966048",
+          "Organization-1609850692"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/14272/brand/207/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "METHODIST NORTH EMERGENCY PHYSICIANS PLLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/14272/brand/209/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "METHODIST UNIVERSITY EMERGENCY PHYSICIANS PLLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/14272/brand/208/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "METHODIST SOUTH EMERGENCY PHYSICIANS PLLC"
+          }
+        ],
+        "endpoint_count": 3,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:HOSPITALIST",
+        "label": "HOSPITALIST MEDICINE PHYSICIANS OF PENNSYLVANIA PC",
+        "basis": "brand-name",
+        "organizations": 60,
+        "practitioners": 484,
+        "member_org_ids": [
+          "Organization-1639464308",
+          "Organization-1629307095",
+          "Organization-1043572290",
+          "Organization-1770756991",
+          "Organization-1588021851",
+          "Organization-1992945471",
+          "Organization-1184663965",
+          "Organization-1093322257",
+          "Organization-1639119027",
+          "Organization-1205944329",
+          "Organization-1649575101",
+          "Organization-1447577572",
+          "Organization-1497366207",
+          "Organization-1649816380",
+          "Organization-1164724902",
+          "Organization-1558696153",
+          "Organization-1265275887",
+          "Organization-1386122844",
+          "Organization-1720416555",
+          "Organization-1063228120",
+          "Organization-1366920993",
+          "Organization-1306576277",
+          "Organization-1861038069",
+          "Organization-1881173060",
+          "Organization-1184354524"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:POTTSTOWN",
+        "label": "POTTSTOWN CLINIC COMPANY LLC",
+        "basis": "brand-name",
+        "organizations": 7,
+        "practitioners": 478,
+        "member_org_ids": [
+          "Organization-1649341934",
+          "Organization-1053428425",
+          "Organization-1093225369",
+          "Organization-1669983011",
+          "Organization-1285638817",
+          "Organization-1447600416",
+          "Organization-1346332020"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/34754/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "POTTSTOWN MEDICAL SPECIALISTS INC"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:SCHUYLKILL",
+        "label": "SCHUYLKILL HEALTH SYSTEM MEDICAL GROUP INC",
+        "basis": "brand-name",
+        "organizations": 2,
+        "practitioners": 470,
+        "member_org_ids": [
+          "Organization-1588603567",
+          "Organization-1427050376"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:SIGNIFY",
+        "label": "SIGNIFY HEALTH MEDICAL ASSOCIATES PLLC",
+        "basis": "brand-name",
+        "organizations": 5,
+        "practitioners": 450,
+        "member_org_ids": [
+          "Organization-1750845863",
+          "Organization-1689158487",
+          "Organization-1174187728",
+          "Organization-1124685169",
+          "Organization-1023625662"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:NORTHSTAR",
+        "label": "NORTHSTAR ANESTHESIA OF PENNSYLVANIA LLC",
+        "basis": "brand-name",
+        "organizations": 21,
+        "practitioners": 449,
+        "member_org_ids": [
+          "Organization-1700218989",
+          "Organization-1316544976",
+          "Organization-1417276429",
+          "Organization-1194488791",
+          "Organization-1821448150",
+          "Organization-1912978610",
+          "Organization-1972126209",
+          "Organization-1356968952",
+          "Organization-1528747490",
+          "Organization-1962822395",
+          "Organization-1477066405",
+          "Organization-1871986372",
+          "Organization-1043516628",
+          "Organization-1629475421",
+          "Organization-1568056166",
+          "Organization-1124415567",
+          "Organization-1043561541",
+          "Organization-1194340414",
+          "Organization-1437268026",
+          "Organization-1821390451",
+          "Organization-1578187670"
+        ],
+        "endpoints": [
+          {
+            "url": "https://fhir4.healow.com/fhir/r4/FIACCD",
+            "vendor": null,
+            "via_member": "NORTHSTAR NEUROLOGY OF COLORADO SPRINGS PC"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:READING",
+        "label": "READING HOSPITAL",
+        "basis": "brand-name",
+        "organizations": 6,
+        "practitioners": 421,
+        "member_org_ids": [
+          "Organization-1992387518",
+          "Organization-1780742593",
+          "Organization-1194883306",
+          "Organization-1558426833",
+          "Organization-1942442553",
+          "Organization-1548332836"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:EVANGELICAL",
+        "label": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
+        "basis": "brand-name",
+        "organizations": 3,
+        "practitioners": 411,
+        "member_org_ids": [
+          "Organization-1205928967",
+          "Organization-1942227632",
+          "Organization-1154766251"
+        ],
+        "endpoints": [
+          {
+            "url": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
+            "vendor": "Epic (User-access Brands)",
+            "via_member": "EVANGELICAL MEDICAL SERVICES ORGANIZATION"
+          }
+        ],
+        "endpoint_count": 1,
+        "vendors": [
+          "Epic (User-access Brands)"
+        ]
+      },
+      {
+        "system_key": "brand:ST JOSEPH",
+        "label": "ST JOSEPH MEDICAL GROUP",
+        "basis": "brand-name",
+        "organizations": 23,
+        "practitioners": 410,
+        "member_org_ids": [
+          "Organization-1184754657",
+          "Organization-1396786414",
+          "Organization-1366757973",
+          "Organization-1497791297",
+          "Organization-1154321545",
+          "Organization-1154376770",
+          "Organization-1316075419",
+          "Organization-1093787384",
+          "Organization-1730464108",
+          "Organization-1104031798",
+          "Organization-1881799153",
+          "Organization-1992947956",
+          "Organization-1356316921",
+          "Organization-1568791192",
+          "Organization-1205368404",
+          "Organization-1396166971",
+          "Organization-1497038343",
+          "Organization-1568415974",
+          "Organization-1811952070",
+          "Organization-1659499705",
+          "Organization-1649223603",
+          "Organization-1053358903",
+          "Organization-1750635579"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/16883/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ST JOSEPH HOSPITAL LLC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/2310/brand/26/csg/61/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ST JOSEPH MEDICAL GROUP INC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/15595/brand/4/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ST JOSEPH MERCY HOSPITAL"
+          }
+        ],
+        "endpoint_count": 3,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:RADIOLOGY",
+        "label": "RADIOLOGY ASSOCIATES OF THE MAIN LINE PC",
+        "basis": "brand-name",
+        "organizations": 70,
+        "practitioners": 399,
+        "member_org_ids": [
+          "Organization-1750332003",
+          "Organization-1467403261",
+          "Organization-1477541035",
+          "Organization-1811994791",
+          "Organization-1861478489",
+          "Organization-1083491906",
+          "Organization-1255385183",
+          "Organization-1699759183",
+          "Organization-1174528707",
+          "Organization-1285735571",
+          "Organization-1356767651",
+          "Organization-1104205046",
+          "Organization-1447761101",
+          "Organization-1437196979",
+          "Organization-1912982034",
+          "Organization-1033215710",
+          "Organization-1841015245",
+          "Organization-1841261989",
+          "Organization-1346333598",
+          "Organization-1750337143",
+          "Organization-1396737961",
+          "Organization-1639124118",
+          "Organization-1659319671",
+          "Organization-1003866773",
+          "Organization-1427437367"
+        ],
+        "endpoints": [
+          {
+            "url": "https://app.meldrx.com/api/fhir/ei-rciowa",
+            "vendor": null,
+            "via_member": "RADIOLOGY CONSULTANTS OF IOWA PLC"
+          },
+          {
+            "url": "https://app.meldrx.com/api/fhir/ei-raverad",
+            "vendor": null,
+            "via_member": "RADIOLOGY ASSOCIATES OF VENICE AND ENGLEWOOD PA"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": []
+      },
+      {
+        "system_key": "parent:TEMPLE PHYSICIANS",
+        "label": "TEMPLE PHYSICIANS INC",
+        "basis": "nppes-parent",
+        "organizations": 2,
+        "practitioners": 395,
+        "member_org_ids": [
+          "Organization-1942444088",
+          "Organization-1386796837"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:UNITED ANESTHESIA",
+        "label": "UNITED ANESTHESIA SERVICES PC",
+        "basis": "brand-name",
+        "organizations": 2,
+        "practitioners": 387,
+        "member_org_ids": [
+          "Organization-1053366062",
+          "Organization-1477512408"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:ST VINCENT",
+        "label": "ST VINCENT MEDICAL EDUCATION AND RESEARCH INSTITUTE INC",
+        "basis": "brand-name",
+        "organizations": 13,
+        "practitioners": 374,
+        "member_org_ids": [
+          "Organization-1902881477",
+          "Organization-1144513375",
+          "Organization-1043544489",
+          "Organization-1285613638",
+          "Organization-1578587150",
+          "Organization-1669422234",
+          "Organization-1407021058",
+          "Organization-1013967736",
+          "Organization-1689694911",
+          "Organization-1134176480",
+          "Organization-1245278613",
+          "Organization-1497710958",
+          "Organization-1144560350"
+        ],
+        "endpoints": [
+          {
+            "url": "https://api.platform.athenahealth.com/10861/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ST VINCENT'S MULTISPECIALTY GROUP INC"
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/16856/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "ST VINCENT GENERAL HOSPITAL DISTRICT"
+          }
+        ],
+        "endpoint_count": 2,
+        "vendors": [
+          "athenahealth"
+        ]
+      },
+      {
+        "system_key": "brand:DREXEL",
+        "label": "DREXEL UNIVERSITY",
+        "basis": "brand-name",
+        "organizations": 5,
+        "practitioners": 357,
+        "member_org_ids": [
+          "Organization-1902900095",
+          "Organization-1336160027",
+          "Organization-1629005152",
+          "Organization-1104822253",
+          "Organization-1386894301"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:MERCY",
+        "label": "MERCY LIFE CENTER CORPORATION",
+        "basis": "brand-name",
+        "organizations": 66,
+        "practitioners": 347,
+        "member_org_ids": [
+          "Organization-1720075104",
+          "Organization-1477509768",
+          "Organization-1649892225",
+          "Organization-1598718603",
+          "Organization-1245277631",
+          "Organization-1972771657",
+          "Organization-1306468418",
+          "Organization-1164464921",
+          "Organization-1154636066",
+          "Organization-1386874550",
+          "Organization-1700408093",
+          "Organization-1518589803",
+          "Organization-1386832764",
+          "Organization-1700834165",
+          "Organization-1659348506",
+          "Organization-1629078712",
+          "Organization-1205887023",
+          "Organization-1437130705",
+          "Organization-1972126381",
+          "Organization-1477957819",
+          "Organization-1083052492",
+          "Organization-1609000769",
+          "Organization-1023347192",
+          "Organization-1902073620",
+          "Organization-1154942795"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      },
+      {
+        "system_key": "brand:STC",
+        "label": "STC PEDIATRICS LLC",
+        "basis": "brand-name",
+        "organizations": 2,
+        "practitioners": 333,
+        "member_org_ids": [
+          "Organization-1144864547",
+          "Organization-1972184869"
+        ],
+        "endpoints": [],
+        "endpoint_count": 0,
+        "vendors": []
+      }
+    ]
   },
   "organizations_top": [
     {
