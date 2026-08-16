@@ -91,6 +91,71 @@ The specification supports site-level connectivity, the vendors publish enough
 to reconstruct most of it, and the federal directory currently carries neither
 the site-to-endpoint link nor the owner of 83% of its endpoints.
 
+## Measured baseline: how connected is a provider today?
+
+The end goal is that searching a provider returns their NPI, locations, roles,
+organization and a reachable endpoint. Measured on the 2026-05-08 release, the
+chain breaks early and badly.
+
+| Step | Practitioners | Share |
+| --- | ---: | ---: |
+| Active, with an NPI | 7,196,385 | 100% |
+| Have any active PractitionerRole | 1,931,044 | 26.8% |
+| Role names an organization | 1,931,044 | 100% of those |
+| Organization resolves, and has an NPI | 1,931,044 | 100% of those |
+| Role names a location | 1,791,382 | 92.8% of those |
+| **Organization reaches a FHIR endpoint** | **85,619** | **1.2% of all** |
+
+Two separate problems, and they need separate fixes.
+
+**The role ceiling.** 73% of active practitioners have no active PractitionerRole
+at all. With no role there is no organization, so no endpoint path exists at any
+confidence. No amount of endpoint work fixes this, and it caps every org-routed
+approach at 1,931,044 people. It should be reported as its own finding rather
+than buried as a denominator.
+
+**The endpoint gap.** Among practitioners who do have a role, the chain is
+otherwise sound: organization resolves 100% of the time and carries an NPI 100%
+of the time. Only the endpoint link is missing.
+
+### What the vendor files add
+
+Joining on NPI, where a vendor publishes one alongside the endpoint, is
+deterministic rather than inferred:
+
+| | Practitioners |
+| --- | ---: |
+| Endpoint-reachable today | 85,619 |
+| Added by vendor-published NPI | +167,583 |
+| **Combined** | **253,202** |
+
+That is roughly a tripling, from 21,668 vendor-published organization NPIs
+matching 34,901 NDH organizations. Against the honest denominator of
+practitioners who have a role at all, coverage moves from 4.4% to 13.1%.
+
+## Confidence model
+
+Every linkage carries a band, and the band is a statement about method, not a
+feeling about quality.
+
+**Green, deterministic.** The vendor publishes an NPI beside the endpoint and
+that NPI matches an NDH organization exactly. No inference. Currently 167,583
+practitioners. A green link that turns out wrong is a bug, and should be
+treated as one.
+
+**Yellow, corroborated.** No published NPI, but normalized organization name and
+state agree, and the endpoint host matches the vendor that published the record.
+Two independent signals. Publishable with a measured error rate from a hand-checked
+sample, never without one.
+
+**Red, single-signal.** Name similarity alone, or host-based vendor inference
+alone. Useful for triage and for telling someone where to look. Not publishable
+as a directory linkage, and never counted in a headline coverage number.
+
+The bands must be reported separately everywhere. Collapsing them into one
+coverage figure is the failure mode that makes a directory look complete while
+being wrong in ways nobody can see.
+
 ## Scope
 
 **Phase 1. Endpoint attribution (mostly done).** H50 measured the gap, H51
