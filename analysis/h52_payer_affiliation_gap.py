@@ -288,6 +288,49 @@ def run_gap_detail(table, limit=200000):
             for r in client.query(sql, job_config=bq_job_config()).result()]
 
 
+def run_state_breakdown(table):
+    """Where the gap cohort actually practises, per the NDH.
+
+    Capital BlueCross is described as a Pennsylvania payer, and a network can
+    reach well beyond its home state. Measuring the distribution keeps the PA
+    framing honest rather than assumed.
+    """
+    from google.cloud import bigquery
+
+    client = bigquery.Client(project=PROJECT)
+    sql = f"""
+    WITH payer AS (
+      SELECT DISTINCT npi FROM `{PROJECT}.{DATASET}.{table}`
+    ),
+    ndh AS (
+      SELECT _npi AS npi,
+             ANY_VALUE(_state)       AS state,
+             ARRAY_AGG(DISTINCT _id) AS pids
+      FROM `{PROJECT}.{DATASET}.practitioner`
+      WHERE _active AND _npi IS NOT NULL
+      GROUP BY _npi
+    ),
+    roled AS (
+      SELECT DISTINCT _practitioner_id AS pref
+      FROM `{PROJECT}.{DATASET}.practitioner_role`
+      WHERE _active
+    )
+    SELECT
+      IFNULL(n.state, 'UNKNOWN') AS state,
+      COUNT(*) AS matched,
+      COUNTIF(NOT EXISTS (
+        SELECT 1 FROM UNNEST(n.pids) pid
+        JOIN roled r ON r.pref = CONCAT('Practitioner/', pid)
+      )) AS gap
+    FROM payer p
+    JOIN ndh n USING (npi)
+    GROUP BY state
+    ORDER BY matched DESC
+    """
+    return [dict(r.items())
+            for r in client.query(sql, job_config=bq_job_config()).result()]
+
+
 # --------------------------------------------------------------------------
 # crosswalk: practitioner NPI -> organization, with a confidence band
 # --------------------------------------------------------------------------
@@ -441,7 +484,7 @@ def _commit_sha():
         return "pending"
 
 
-def build_finding(payer_cfg, prac, orgs, org_npi, counts, ckpts):
+def build_finding(payer_cfg, prac, orgs, org_npi, counts, ckpts, states=None):
     d = counts
     denom = d["payer_npis"]
     matched = d["matched_ndh"]
@@ -602,6 +645,14 @@ def build_finding(payer_cfg, prac, orgs, org_npi, counts, ckpts):
                 "consequence": "Sizing a harvest from _count under-fetches silently.",
             },
         },
+        "geography": {
+            "note": (
+                "Where the payer-listed practitioners practise according to the "
+                "NDH. A network can reach beyond its home state, so this is "
+                "measured rather than assumed."
+            ),
+            "by_state": states or [],
+        },
         "limitations": [
             f"{payer_cfg['name']} is regional to central Pennsylvania. It is not "
             "a statewide or national measurement, and the net-new share will "
@@ -663,9 +714,16 @@ def main():
     print("Running the affiliation-gap query ...")
     counts = run_gap_query(table)
     for k, v in counts.items():
-        print(f"  {k:34s} {v:,}")
+        print(f"  {k:38s} {v:,}")
 
-    finding = build_finding(cfg, prac, orgs, org_npi, counts, ckpts)
+    print("Measuring where the cohort practises ...")
+    states = run_state_breakdown(table)
+    top = sum(r["matched"] for r in states[:1])
+    print(f"  {len(states)} states; top is {states[0]['state']} "
+          f"({top:,}, {pct(top, counts['matched_ndh'])}% of matched)"
+          if states else "  no states")
+
+    finding = build_finding(cfg, prac, orgs, org_npi, counts, ckpts, states)
     out_path = out_dir / f"{SLUG}.json"
     out_path.write_text(json.dumps(finding, indent=2) + "\n")
     print(f"Wrote {out_path}")
