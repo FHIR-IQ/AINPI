@@ -289,6 +289,142 @@ def run_gap_detail(table, limit=200000):
 
 
 # --------------------------------------------------------------------------
+# crosswalk: practitioner NPI -> organization, with a confidence band
+# --------------------------------------------------------------------------
+
+def build_edges(payer_dir, prac, orgs, self_org_names=("capital blue",)):
+    """Collapse harvested roles into distinct (practitioner NPI, organization).
+
+    The payer emits one role per (practitioner, organization, location,
+    network) combination, and then emits each of those twice. Roles naming the
+    payer itself as the organization are dropped: "contracted with Capital Blue
+    Cross" is not an affiliation a directory can route on.
+
+    `self_org_names` is a list of lowercase name prefixes identifying the
+    payer's own organization records. It is configuration rather than
+    inference: guessing from role share would silently drop a genuinely large
+    health system, and that failure would look exactly like a smaller network.
+    """
+    id_to_npis = collections.defaultdict(set)
+    for npi, pids in prac["npi_to_ids"].items():
+        for pid in pids:
+            id_to_npis[pid].add(npi)
+
+    payer_org_ids = {
+        oid for oid, o in orgs.items()
+        if any((o["name"] or "").strip().lower().startswith(p)
+               for p in self_org_names)
+    }
+
+    edges = {}
+    n_roles = 0
+    n_payer_org = 0
+    n_unresolved_prac = 0
+    for res in read_resources(payer_dir, "PractitionerRole"):
+        n_roles += 1
+        pref = (res.get("practitioner") or {}).get("reference") or ""
+        oref = (res.get("organization") or {}).get("reference") or ""
+        pid = pref.rsplit("/", 1)[-1]
+        oid = oref.rsplit("/", 1)[-1]
+        if oid in payer_org_ids:
+            n_payer_org += 1
+            continue
+        npis = id_to_npis.get(pid)
+        if not npis:
+            n_unresolved_prac += 1
+            continue
+        locs = [l.get("reference", "").rsplit("/", 1)[-1]
+                for l in (res.get("location") or []) if isinstance(l, dict)]
+        spec = None
+        for s in res.get("specialty") or []:
+            for c in (s.get("coding") or []):
+                if c.get("code"):
+                    spec = (c.get("code"), c.get("display"))
+                    break
+            if spec:
+                break
+        for npi in npis:
+            key = (npi, oid)
+            row = edges.setdefault(key, {"locations": set(), "specialties": set()})
+            row["locations"].update(locs)
+            if spec:
+                row["specialties"].add(spec)
+    return edges, {
+        "roles_read": n_roles,
+        "roles_naming_the_payer": n_payer_org,
+        "roles_with_unresolvable_practitioner": n_unresolved_prac,
+        "distinct_edges": len(edges),
+    }
+
+
+def write_crosswalk(edges, orgs, gap_rows, cfg, out_path, ndh_org_npis):
+    """Emit the crosswalk with an explicit confidence band per row.
+
+    Bands are statements about method, never about how good the row feels:
+
+      green  both ends deterministic. The practitioner NPI matched an active
+             NDH practitioner, and the organization carries a coded NPI that
+             resolves to an NDH organization. A wrong green row is a bug.
+      yellow one end inferred. The organization NPI came from the CMS-assigner
+             convention rather than a coded marker, or it does not resolve to
+             an NDH organization.
+      red    name only. The payer published no organization NPI, so the link
+             rests on a name string and is triage material, not a directory
+             linkage.
+    """
+    by_npi = {r["npi"]: r for r in gap_rows}
+    counts = collections.Counter()
+    with pathlib.Path(out_path).open("w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow([
+            "npi", "family_name", "given_name", "ndh_state", "in_cms_dac",
+            "payer", "payer_org_id", "org_name", "org_npi", "org_npi_basis",
+            "org_resolves_in_ndh", "org_city", "org_state",
+            "location_count", "specialty_code", "specialty_display",
+            "confidence", "nppes_verify_url",
+        ])
+        for (npi, oid), edge in sorted(edges.items()):
+            person = by_npi.get(npi)
+            if person is None:
+                continue  # not in the gap cohort; nothing new to publish
+            org = orgs.get(oid, {})
+            org_npi = org.get("npi")
+            basis = org.get("npi_basis")
+            resolves = bool(org_npi and org_npi in ndh_org_npis)
+            if org_npi and basis == "coded" and resolves:
+                band = "green"
+            elif org_npi:
+                band = "yellow"
+            else:
+                band = "red"
+            counts[band] += 1
+            spec = sorted(edge["specialties"])[0] if edge["specialties"] else (None, None)
+            w.writerow([
+                npi, person["family_name"], person["given_name"], person["state"],
+                "yes" if person["in_cms_dac"] else "no",
+                cfg["name"], oid, org.get("name"), org_npi, basis,
+                "yes" if resolves else "no",
+                org.get("city"), org.get("state"),
+                len(edge["locations"]), spec[0], spec[1],
+                band, f"https://npiregistry.cms.hhs.gov/provider-view/{npi}",
+            ])
+    return dict(counts)
+
+
+def ndh_organization_npis():
+    """Every NPI on an active NDH organization, for the green-band test."""
+    from google.cloud import bigquery
+
+    client = bigquery.Client(project=PROJECT)
+    sql = f"""
+    SELECT DISTINCT _npi AS npi
+    FROM `{PROJECT}.{DATASET}.organization`
+    WHERE _active AND _npi IS NOT NULL
+    """
+    return {r.npi for r in client.query(sql, job_config=bq_job_config()).result()}
+
+
+# --------------------------------------------------------------------------
 # output
 # --------------------------------------------------------------------------
 
@@ -534,21 +670,66 @@ def main():
     out_path.write_text(json.dumps(finding, indent=2) + "\n")
     print(f"Wrote {out_path}")
 
-    if not args.no_csv:
-        print("Fetching per-NPI gap rows ...")
-        rows = run_gap_detail(table)
-        csv_path = out_dir / "payer-affiliation-crosswalk.csv"
+    if args.no_csv:
+        print()
+        print(finding["headline"])
+        return 0
+
+    print("Fetching per-NPI gap rows ...")
+    gap_rows = run_gap_detail(table)
+    print(f"  {len(gap_rows):,} practitioners in the gap cohort")
+
+    # The gap cohort's payer-side practitioner ids drive the targeted role
+    # fetch. Written even when roles are not harvested yet, because it is the
+    # input to the next command.
+    gap_ids = sorted({pid for r in gap_rows
+                      for pid in prac["npi_to_ids"].get(r["npi"], ())})
+    ids_path = payer_dir / "gap-practitioner-ids.txt"
+    ids_path.write_text("\n".join(gap_ids) + "\n")
+    print(f"Wrote {ids_path} ({len(gap_ids):,} practitioner ids)")
+
+    csv_path = out_dir / "payer-affiliation-crosswalk.csv"
+    role_ckpt = read_checkpoint(payer_dir, "PractitionerRole")
+    if not role_ckpt:
+        # No roles harvested yet: publish the cohort without organizations
+        # rather than nothing, and say so.
         with csv_path.open("w", newline="") as fh:
             w = csv.writer(fh)
             w.writerow(["npi", "family_name", "given_name", "ndh_state",
                         "in_cms_dac", "payer", "nppes_verify_url"])
-            for r in rows:
+            for r in gap_rows:
                 w.writerow([
                     r["npi"], r["family_name"], r["given_name"], r["state"],
                     "yes" if r["in_cms_dac"] else "no", cfg["name"],
                     f"https://npiregistry.cms.hhs.gov/provider-view/{r['npi']}",
                 ])
-        print(f"Wrote {csv_path} ({len(rows):,} rows)")
+        print(f"Wrote {csv_path} ({len(gap_rows):,} rows, no organizations yet). "
+              f"Run harvest_payer_directory.py --roles-for-ids {ids_path} next.")
+    else:
+        print("Building the organization crosswalk from harvested roles ...")
+        edges, edge_stats = build_edges(
+            payer_dir, prac, orgs,
+            self_org_names=cfg.get("self_org_names", ()))
+        for k, v in edge_stats.items():
+            print(f"  {k:38s} {v:,}")
+        bands = write_crosswalk(edges, orgs, gap_rows, cfg, csv_path,
+                                ndh_organization_npis())
+        total = sum(bands.values())
+        print(f"Wrote {csv_path} ({total:,} rows) "
+              f"green={bands.get('green', 0):,} "
+              f"yellow={bands.get('yellow', 0):,} red={bands.get('red', 0):,}")
+        finding["crosswalk"] = {
+            "url": "https://ainpi.dev/api/v1/findings/payer-affiliation-crosswalk.csv",
+            "rows": total,
+            "confidence_bands": bands,
+            "role_coverage": (
+                "Roles were fetched for the gap cohort only, not the whole "
+                "directory, because a full sweep is ~113,000 requests against "
+                "~25,000 for the cohort."
+            ),
+            **edge_stats,
+        }
+        out_path.write_text(json.dumps(finding, indent=2) + "\n")
 
     print()
     print(finding["headline"])

@@ -82,6 +82,13 @@ PAYERS = {
         "name": "Capital BlueCross",
         "base": "https://providerdirectory-api.capbluecross.com/r4",
         "state_focus": "PA",
+        # The payer's own Organization records, by lowercase name prefix. Half
+        # the roles name these instead of a real practice, and "contracted with
+        # the payer" is not an affiliation a directory can route on. Configured
+        # rather than inferred from role share: guessing would silently drop a
+        # genuinely large health system, and that looks identical to a smaller
+        # network.
+        "self_org_names": ("capital blue",),
         # Every supported search param is a filter; there is no "match all"
         # query. `_lastUpdated=gt<early date>` is the least-selective filter the
         # server accepts and is how enumeration is bootstrapped.
