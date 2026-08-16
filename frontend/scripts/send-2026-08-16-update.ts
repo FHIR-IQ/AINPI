@@ -1,30 +1,26 @@
 /**
  * scripts/send-2026-08-16-update.ts
  *
- * 2026-08-16 release blast. Publishes the base-URL-to-NPI crosswalk (19,334
- * endpoints resolved), the endpoint-to-organization linkage finding (16.9%),
- * the payer-endpoint coverage finding, and the new flattened columns for
- * phone, street address and coordinates.
+ * 2026-08-16 release blast. Written in plain language for a general audience:
+ * most web addresses in the national directory do not say who they belong to,
+ * here is a free list of the ones that do, and here is what we think the
+ * community should push for next.
  *
  * Same safety design as prior send scripts: dry-run by default, --confirm to
- * send, --email / --limit narrow targeting, 250ms throttle, in-blast dedup,
- * plain semantic HTML with no marketing chrome.
+ * send, --preview writes the HTML and exits, --email / --limit narrow
+ * targeting, 250ms throttle, in-blast dedup, plain semantic HTML.
  *
  * Required env: RESEND_API_KEY, RESEND_FROM_ADDRESS, POSTGRES_PRISMA_URL
  */
 import { PrismaClient } from '@prisma/client';
 import { Resend } from 'resend';
 
-const SUBJECT = 'AINPI 2026-08-16: a crosswalk from FHIR base URL to NPI';
+const SUBJECT =
+  "AINPI: most web addresses in the national doctor directory don't say who they belong to";
 const REPORT_URL = 'https://ainpi.dev/reports/2026-08-16-update';
 const CROSSWALK_URL = 'https://ainpi.dev/api/v1/findings/endpoint-org-crosswalk.csv';
 const FINDING_URL = 'https://ainpi.dev/findings/endpoint-org-linkage';
 const PAYER_FINDING_URL = 'https://ainpi.dev/findings/ndh-payer-endpoint-coverage';
-// Cite STU1, not the CI build: the ballot/CI URLs are not stable references.
-const NDH_IG_URL = 'https://hl7.org/fhir/us/ndh/STU1/';
-const COVERAGE_URL = 'https://ainpi.dev/api/v1/ndh-column-coverage.json';
-const CMS_PD_URL =
-  'https://www.cms.gov/priorities/burden-reduction/overview/interoperability/frequently-asked-questions/provider-directory-api';
 const CAPBLUE_URL = 'https://providerdirectory-api.capbluecross.com/r4';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
@@ -62,175 +58,239 @@ function parseArgs(argv: string[]): CliArgs {
 
 function buildBody(): { text: string; html: string } {
   const text = [
-    'New download: a crosswalk resolving 19,334 FHIR base URLs in the CMS',
-    'National Provider Directory to the organization that runs them, with the',
-    'NPI attached. No login, no key.',
+    'The US government keeps a big list of doctors, clinics and hospitals. It is',
+    'called the National Provider Directory.',
+    '',
+    'Part of that list is web addresses. Software uses them to look up a',
+    "patient's records. We checked 114,071 of these addresses and asked one",
+    'simple question: does the list say who each address belongs to?',
+    '',
+    'Usually it does not.',
+    '',
+    'What we found',
+    '',
+    'Only 19,334 of the 114,071 addresses say who owns them. That is about one',
+    'in six. The other 94,737 are web addresses with no name attached.',
+    '',
+    'Picture a phone book where five out of every six numbers have no name next',
+    'to them. The numbers might ring fine. You still would not know who answers.',
+    '',
+    'Why this matters',
+    '',
+    "A doctor's office wants to send your records to a specialist. Software looks",
+    'up the specialist in the directory and finds an address.',
+    '',
+    'If nothing says whose address it is, the software cannot safely use it.',
+    'Sending medical records to the wrong place is not a small mistake.',
+    '',
+    'The good news, and a free list',
+    '',
+    'Nothing here is broken. The names were simply never filled in.',
+    '',
+    'We checked that carefully. Every time the directory does name an owner, that',
+    'name points to a real organization. Not one was wrong or led nowhere. So',
+    'this is a blank box, not a bug, and a blank box is much easier to fix.',
+    '',
+    'We also built a free list of the 19,334 addresses that do name an owner.',
+    'Each row gives you the web address, the organization, and that',
+    "organization's ID number. No login, no key.",
     '',
     `  ${CROSSWALK_URL}`,
     '',
-    'That number is also the finding. The directory holds 114,071 FHIR REST',
-    'endpoints. Only 19,334 of them can be attributed to anyone.',
+    'Some companies fill the name in and some never do',
     '',
-    'Why attribution is the whole problem',
+    'We expected the missing names to be spread out evenly. They are not.',
     '',
-    '"There is a FHIR server at this URL" answers nothing on its own. The',
-    'question an integrator, a payer validating a network, or an auditor',
-    'actually has is whose server it is.',
+    'Most doctors do not run their own software. They buy it from a company, and',
+    'that company publishes the addresses for them. Grouped by company:',
     '',
-    '  - FHIR REST:    19,334 of 114,071 resolve to an organization (16.9%)',
-    '  - Direct Trust: 110,984 of 1,246,514 (8.9%)',
+    '  healow            6,617 addresses, 68.4% name an owner',
+    '  athenahealth     35,439 addresses, 24.5%',
+    '  Allscripts        4,977 addresses, 21.2%',
+    '  eClinicalWorks   16,809 addresses,     0%',
+    '  Office Ally      13,090 addresses,     0%',
+    '  Practice Fusion   4,714 addresses,     0%',
     '',
-    'Two things make that more useful than it first looks.',
+    'Sixteen companies have not filled in the name a single time. Together they',
+    'account for 49,036 addresses.',
     '',
-    'Nothing is broken, it is missing. Zero references dangle. We counted',
-    'presence and resolvability separately so we could not score a dangling',
-    'reference as a success, and the two came out identical. Populating a field',
-    'fixes absence; breakage would need referential-integrity repair. The first',
-    'is a publishing change, the second is an engineering project.',
+    'This is oddly encouraging. A company sitting at zero has not half-finished',
+    'the job. It has not started. That is usually an easier conversation than',
+    'fixing something half broken.',
     '',
-    'Every endpoint that resolves reaches an organization with an NPI. There',
-    'were no partial wins to discard. That is why the crosswalk works as a base',
-    'URL to NPI lookup across 18,884 organizations.',
+    'One warning if you use this data. The company name is not the doctor. One',
+    'company can run software for thousands of clinics on the same web address.',
     '',
-    'The gap is per-vendor, not systemic',
+    'Health insurers are not in the directory yet',
     '',
-    'Of the 30 hosts carrying at least 100 endpoints, 16 publish no organization',
-    'link on any endpoint at all, covering 49,036 endpoints. Others attribute',
-    'most of theirs:',
+    'The published rulebook for the directory says it is meant to serve health',
+    'insurers too. So we checked whether you can look up an insurer\'s public',
+    'doctor list through the directory today. You cannot.',
     '',
-    '  - fhir4.healow.com                    6,617 endpoints, 68.4% attributed',
-    '  - api.platform.athenahealth.com      35,439 endpoints, 24.5%',
-    '  - fhir4.eclinicalworks.com           16,809 endpoints,  0.0%',
-    '  - fhirpt.officeally.com              13,090 endpoints,  0.0%',
+    'Out of 114,071 addresses, one belongs to an insurer\'s doctor list. The',
+    'directory also has no category for "insurer" at all.',
     '',
-    'A host at 0% has never populated the field rather than populated it',
-    'patchily, which makes this addressable one vendor at a time.',
+    'We wanted to be fair. Maybe insurers have not built these lists yet, which',
+    'would not be the directory\'s fault. So we picked one and checked. Capital',
+    'BlueCross publishes a working public doctor list right now, and the',
+    'government requires insurers to publish one. It is not in the directory.',
     '',
-    'One warning: host is not a proxy for organization. EHR vendors run',
-    'thousands of tenants on one domain, so api.platform.athenahealth.com',
-    'identifies the vendor and never the practice.',
+    'So the lists exist. The directory just does not carry them yet.',
     '',
-    'The directory does not yet carry payers',
+    'What we still do not know',
     '',
-    'The published NDH Implementation Guide names payer organizations among the',
-    'environments the directory is built to serve, alongside provider',
-    'organizations, HIEs and HISPs. A reasonable question follows: can you',
-    'discover a payer\'s public Provider Directory API from the NDH today,',
-    'instead of hunting developer portals payer by payer? We measured it rather',
-    'than assumed either answer.',
+    'We can measure what is missing. We cannot yet explain it.',
     '',
-    `  NDH IG: ${NDH_IG_URL}`,
+    'We do not know why some software companies fill in the name and others never',
+    'do. It could be a setting nobody switched on, or something harder. Nobody',
+    'has asked them.',
     '',
-    'Of 114,071 FHIR REST endpoints, 1 self-labels as a payer provider',
-    'directory. No payer organization type exists at all: Organization.type',
-    'carries exactly three codings across 1,999,818 typed resources, which are',
-    'prov, team and govt. We read the raw FHIR JSON rather than our own',
-    'flattened column, so a payer type could not have been hidden by our',
-    'extractor.',
+    'We do not know if the 94,737 unnamed addresses have an owner recorded',
+    'somewhere we cannot see.',
     '',
-    'The organization-identifier half is weaker. Of the 92 payer-host endpoints',
-    'the directory does carry, 7 have a managing organization.',
+    'We do not know whether a future version of the directory will carry insurer',
+    'lists, or how far off that would be.',
     '',
-    'A low count could simply mean payers have built nothing, which would not be',
-    'the directory\'s fault. So we added a control: Capital BlueCross serves a',
-    'live, unauthenticated FHIR provider directory, of the kind CMS requires',
-    'payers to publish without authentication. It is absent from the NDH',
-    'entirely. That separates "nothing to index" from "not indexed yet."',
+    'What we think should happen next',
     '',
-    'Repeat the probe yourself. The server needs a FHIR Accept header and',
-    'answers 415 to a browser, so a plain click looks like a failure when it',
-    'is not:',
+    'CMS is building this directory in the open and asking people to help shape',
+    'it. Here is where we think the effort pays off most.',
+    '',
+    'Start with the sixteen companies at zero. They cover 49,036 addresses',
+    'between them. Fixing that one field would move the largest single block of',
+    'addresses from unusable to usable.',
+    '',
+    'Add a category for health insurers. Right now the directory has no way to',
+    'file one, so nobody could add an insurer list even if they wanted to.',
+    '',
+    'Treat a web address with no owner as incomplete. If the directory asks for',
+    'the name up front, this problem does not come back later.',
+    '',
+    'Check our work',
+    '',
+    'We would rather you did not take our word for any of this. Every number',
+    'above comes from a file anyone can download.',
+    '',
+    `  The free list:  ${CROSSWALK_URL}`,
+    `  The addresses:  ${FINDING_URL}`,
+    `  The insurers:   ${PAYER_FINDING_URL}`,
+    `  Full write-up:  ${REPORT_URL}`,
+    '',
+    'The insurer list we tested is public too. It needs one extra setting and',
+    'returns an error in a normal browser, so use this:',
     '',
     "  curl -H 'Accept: application/fhir+json' \\",
     `    '${CAPBLUE_URL}/Practitioner?family=Smith&_count=1'`,
     '',
-    `  CMS Provider Directory API requirement: ${CMS_PD_URL}`,
-    '',
-    'This is coverage of one release, not a compliance claim.',
-    '',
-    'Phone, street address and coordinates are now queryable',
-    '',
-    'The BigQuery tables gained flattened columns for telecom, address.line and',
-    'Location.position, so these no longer require scanning the raw FHIR JSON.',
-    'Practitioner phone lands at 99.98% for active practitioners, which',
-    'reproduces our earlier H43 finding exactly, and location phone at 0.0%',
-    'reproduces its separate observation that Location.telecom is empty.',
-    'Coordinates cover 93.9% of locations and are the only geography in the NDH.',
-    '',
-    `Every coverage figure is published so you can check it: ${COVERAGE_URL}`,
-    '',
-    'Everything here is public data and costs about three cents to reproduce.',
-    '',
-    `Crosswalk: ${CROSSWALK_URL}`,
-    `Finding: ${FINDING_URL}`,
-    `Payer coverage: ${PAYER_FINDING_URL}`,
-    `Full update: ${REPORT_URL}`,
+    'All of it is public data. Repeating our work costs about three cents.',
     '',
     `Reply to this email to unsubscribe or ask a question (${UNSUB_REPLY}).`,
   ].join('\n');
 
+  const h2 =
+    'font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;';
+  const p = 'margin: 0 0 12px 0;';
+
   const html = `
 <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937; line-height: 1.55; padding: 20px;">
 
-  <p style="margin: 0 0 16px 0;">New download: a <a href="${CROSSWALK_URL}" style="color:#1d4ed8;">crosswalk</a> resolving <strong>19,334 FHIR base URLs</strong> in the CMS National Provider Directory to the organization that runs them, with the NPI attached. No login, no key.</p>
+  <p style="${p}">The US government keeps a big list of doctors, clinics and hospitals. It is called the National Provider Directory.</p>
 
-  <p style="margin: 0 0 16px 0;">That number is also the finding. The directory holds 114,071 FHIR REST endpoints. Only 19,334 of them can be attributed to anyone.</p>
+  <p style="${p}">Part of that list is web addresses. Software uses them to look up a patient's records. We checked 114,071 of these addresses and asked one simple question: does the list say who each address belongs to?</p>
 
-  <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">Why attribution is the whole problem</h2>
+  <p style="margin: 0 0 16px 0;">Usually it does not.</p>
 
-  <p style="margin: 0 0 12px 0;">"There is a FHIR server at this URL" answers nothing on its own. The question an integrator, a payer validating a network, or an auditor actually has is whose server it is.</p>
+  <h2 style="${h2}">What we found</h2>
 
-  <ul style="margin: 0 0 12px 0; padding-left: 22px;">
-    <li><strong>FHIR REST:</strong> 19,334 of 114,071 resolve to an organization (<strong>16.9%</strong>)</li>
-    <li><strong>Direct Trust:</strong> 110,984 of 1,246,514 (8.9%)</li>
-  </ul>
+  <p style="${p}">Only <strong>19,334</strong> of the 114,071 addresses say who owns them. That is about one in six. The other 94,737 are web addresses with no name attached.</p>
 
-  <p style="margin: 0 0 12px 0;"><strong>Nothing is broken, it is missing.</strong> Zero references dangle. We counted presence and resolvability separately so we could not score a dangling reference as a success, and the two came out identical. Populating a field fixes absence; breakage would need referential-integrity repair. The first is a publishing change, the second is an engineering project.</p>
+  <p style="margin: 0 0 16px 0;">Picture a phone book where five out of every six numbers have no name next to them. The numbers might ring fine. You still would not know who answers.</p>
 
-  <p style="margin: 0 0 16px 0;"><strong>Every endpoint that resolves reaches an organization with an NPI.</strong> There were no partial wins to discard. That is why the crosswalk works as a base URL to NPI lookup across 18,884 organizations.</p>
+  <h2 style="${h2}">Why this matters</h2>
 
-  <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">The gap is per-vendor, not systemic</h2>
+  <p style="${p}">A doctor's office wants to send your records to a specialist. Software looks up the specialist in the directory and finds an address.</p>
 
-  <p style="margin: 0 0 12px 0;">Of the 30 hosts carrying at least 100 endpoints, <strong>16 publish no organization link on any endpoint at all</strong>, covering 49,036 endpoints. Others attribute most of theirs:</p>
+  <p style="margin: 0 0 16px 0;">If nothing says whose address it is, the software cannot safely use it. Sending medical records to the wrong place is not a small mistake.</p>
 
-  <ul style="margin: 0 0 12px 0; padding-left: 22px;">
-    <li><code>fhir4.healow.com</code> &mdash; 6,617 endpoints, <strong>68.4%</strong> attributed</li>
-    <li><code>api.platform.athenahealth.com</code> &mdash; 35,439 endpoints, 24.5%</li>
-    <li><code>fhir4.eclinicalworks.com</code> &mdash; 16,809 endpoints, <strong>0.0%</strong></li>
-    <li><code>fhirpt.officeally.com</code> &mdash; 13,090 endpoints, <strong>0.0%</strong></li>
-  </ul>
+  <h2 style="${h2}">The good news, and a free list</h2>
 
-  <p style="margin: 0 0 12px 0;">A host at 0% has never populated the field rather than populated it patchily, which makes this addressable one vendor at a time.</p>
+  <p style="${p}">Nothing here is broken. The names were simply never filled in.</p>
 
-  <p style="margin: 0 0 16px 0;">One warning: host is not a proxy for organization. EHR vendors run thousands of tenants on one domain, so <code>api.platform.athenahealth.com</code> identifies the vendor and never the practice.</p>
+  <p style="${p}">We checked that carefully. Every time the directory does name an owner, that name points to a real organization. Not one was wrong or led nowhere. So this is a blank box, not a bug, and a blank box is much easier to fix.</p>
 
-  <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">The directory does not yet carry payers</h2>
+  <p style="margin: 0 0 16px 0;">We also built a <a href="${CROSSWALK_URL}" style="color:#1d4ed8;">free list</a> of the 19,334 addresses that do name an owner. Each row gives you the web address, the organization, and that organization's ID number. No login, no key.</p>
 
-  <p style="margin: 0 0 12px 0;">The <a href="${NDH_IG_URL}" style="color:#1d4ed8;">published NDH Implementation Guide</a> names payer organizations among the environments the directory is built to serve, alongside provider organizations, HIEs and HISPs. A reasonable question follows: can you discover a payer's public Provider Directory API from the NDH today, instead of hunting developer portals payer by payer? We measured it rather than assumed either answer.</p>
+  <h2 style="${h2}">Some companies fill the name in and some never do</h2>
 
-  <p style="margin: 0 0 12px 0;">Of 114,071 FHIR REST endpoints, <strong>1</strong> self-labels as a payer provider directory. No payer organization type exists at all: <code>Organization.type</code> carries exactly three codings across 1,999,818 typed resources, which are <code>prov</code>, <code>team</code> and <code>govt</code>. We read the raw FHIR JSON rather than our own flattened column, so a payer type could not have been hidden by our extractor.</p>
+  <p style="${p}">We expected the missing names to be spread out evenly. They are not.</p>
 
-  <p style="margin: 0 0 12px 0;">The organization-identifier half is weaker. Of the 92 payer-host endpoints the directory does carry, 7 have a managing organization.</p>
+  <p style="${p}">Most doctors do not run their own software. They buy it from a company, and that company publishes the addresses for them. Grouped by company:</p>
 
-  <p style="margin: 0 0 12px 0;">A low count could simply mean payers have built nothing, which would not be the directory's fault. So we added a control: Capital BlueCross serves a live, unauthenticated FHIR provider directory, of the kind <a href="${CMS_PD_URL}" style="color:#1d4ed8;">CMS requires payers to publish</a> without authentication. It is absent from the NDH entirely. That separates "nothing to index" from "not indexed yet." This is coverage of one release, not a compliance claim.</p>
+  <table style="border-collapse: collapse; width: 100%; font-size: 14px; margin: 0 0 12px 0;">
+    <tr style="text-align: left; color: #6b7280;">
+      <th style="padding: 4px 8px 4px 0;">Company</th>
+      <th style="padding: 4px 8px; text-align: right;">Addresses</th>
+      <th style="padding: 4px 0; text-align: right;">Name an owner</th>
+    </tr>
+    <tr><td style="padding: 4px 8px 4px 0;">healow</td><td style="padding: 4px 8px; text-align: right;">6,617</td><td style="padding: 4px 0; text-align: right;">68.4%</td></tr>
+    <tr><td style="padding: 4px 8px 4px 0;">athenahealth</td><td style="padding: 4px 8px; text-align: right;">35,439</td><td style="padding: 4px 0; text-align: right;">24.5%</td></tr>
+    <tr><td style="padding: 4px 8px 4px 0;">Allscripts</td><td style="padding: 4px 8px; text-align: right;">4,977</td><td style="padding: 4px 0; text-align: right;">21.2%</td></tr>
+    <tr><td style="padding: 4px 8px 4px 0;">eClinicalWorks</td><td style="padding: 4px 8px; text-align: right;">16,809</td><td style="padding: 4px 0; text-align: right;">0%</td></tr>
+    <tr><td style="padding: 4px 8px 4px 0;">Office Ally</td><td style="padding: 4px 8px; text-align: right;">13,090</td><td style="padding: 4px 0; text-align: right;">0%</td></tr>
+    <tr><td style="padding: 4px 8px 4px 0;">Practice Fusion</td><td style="padding: 4px 8px; text-align: right;">4,714</td><td style="padding: 4px 0; text-align: right;">0%</td></tr>
+  </table>
 
-  <p style="margin: 0 0 8px 0;">Repeat the probe yourself. The server needs a FHIR <code>Accept</code> header and answers 415 to a browser, so a plain click looks like a failure when it is not:</p>
+  <p style="${p}">Sixteen companies have not filled in the name a single time. Together they account for <strong>49,036</strong> addresses.</p>
+
+  <p style="${p}">This is oddly encouraging. A company sitting at zero has not half-finished the job. It has not started. That is usually an easier conversation than fixing something half broken.</p>
+
+  <p style="margin: 0 0 16px 0;">One warning if you use this data. The company name is not the doctor. One company can run software for thousands of clinics on the same web address.</p>
+
+  <h2 style="${h2}">Health insurers are not in the directory yet</h2>
+
+  <p style="${p}">The published rulebook for the directory says it is meant to serve health insurers too. So we checked whether you can look up an insurer's public doctor list through the directory today. You cannot.</p>
+
+  <p style="${p}">Out of 114,071 addresses, one belongs to an insurer's doctor list. The directory also has no category for "insurer" at all.</p>
+
+  <p style="${p}">We wanted to be fair. Maybe insurers have not built these lists yet, which would not be the directory's fault. So we picked one and checked. Capital BlueCross publishes a working public doctor list right now, and the government requires insurers to publish one. It is not in the directory.</p>
+
+  <p style="margin: 0 0 16px 0;">So the lists exist. The directory just does not carry them yet.</p>
+
+  <h2 style="${h2}">What we still do not know</h2>
+
+  <p style="${p}">We can measure what is missing. We cannot yet explain it.</p>
+
+  <p style="${p}">We do not know why some software companies fill in the name and others never do. It could be a setting nobody switched on, or something harder. Nobody has asked them.</p>
+
+  <p style="${p}">We do not know if the 94,737 unnamed addresses have an owner recorded somewhere we cannot see.</p>
+
+  <p style="margin: 0 0 16px 0;">We do not know whether a future version of the directory will carry insurer lists, or how far off that would be.</p>
+
+  <h2 style="${h2}">What we think should happen next</h2>
+
+  <p style="${p}">CMS is building this directory in the open and asking people to help shape it. Here is where we think the effort pays off most.</p>
+
+  <p style="${p}">Start with the sixteen companies at zero. They cover 49,036 addresses between them. Fixing that one field would move the largest single block of addresses from unusable to usable.</p>
+
+  <p style="${p}">Add a category for health insurers. Right now the directory has no way to file one, so nobody could add an insurer list even if they wanted to.</p>
+
+  <p style="margin: 0 0 16px 0;">Treat a web address with no owner as incomplete. If the directory asks for the name up front, this problem does not come back later.</p>
+
+  <h2 style="${h2}">Check our work</h2>
+
+  <p style="${p}">We would rather you did not take our word for any of this. Every number above comes from a file anyone can download.</p>
+
+  <p style="margin: 0 0 6px 0;">The free list: <a href="${CROSSWALK_URL}" style="color: #1d4ed8;">endpoint-org-crosswalk.csv</a></p>
+  <p style="margin: 0 0 6px 0;">The addresses: <a href="${FINDING_URL}" style="color: #1d4ed8;">how we counted them</a></p>
+  <p style="margin: 0 0 6px 0;">The insurers: <a href="${PAYER_FINDING_URL}" style="color: #1d4ed8;">how we counted those</a></p>
+  <p style="margin: 0 0 16px 0;">Full write-up: <a href="${REPORT_URL}" style="color: #1d4ed8;">${REPORT_URL}</a></p>
+
+  <p style="margin: 0 0 8px 0;">The insurer list we tested is public too. It needs one extra setting and returns an error in a normal browser, so use this:</p>
 
   <pre style="margin: 0 0 16px 0; padding: 12px; background: #f3f4f6; border-radius: 4px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; word-break: break-all;"><code>curl -H 'Accept: application/fhir+json' \\
   '${CAPBLUE_URL}/Practitioner?family=Smith&amp;_count=1'</code></pre>
 
-  <h2 style="font-size: 16px; font-weight: 600; margin: 24px 0 8px 0; color: #111827;">Phone, street address and coordinates are now queryable</h2>
-
-  <p style="margin: 0 0 12px 0;">The BigQuery tables gained flattened columns for telecom, <code>address.line</code> and <code>Location.position</code>, so these no longer require scanning the raw FHIR JSON. Practitioner phone lands at <strong>99.98%</strong> for active practitioners, which reproduces our earlier H43 finding exactly, and location phone at 0.0% reproduces its separate observation that <code>Location.telecom</code> is empty. Coordinates cover <strong>93.9%</strong> of locations and are the only geography in the NDH.</p>
-
-  <p style="margin: 0 0 16px 0;">Every coverage figure is <a href="${COVERAGE_URL}" style="color:#1d4ed8;">published</a> so you can check it rather than take it on trust.</p>
-
-  <p style="margin: 0 0 16px 0; color: #6b7280; font-size: 13px;">Everything here is public data and costs about three cents to reproduce.</p>
-
-  <p style="margin: 0 0 8px 0;">Crosswalk: <a href="${CROSSWALK_URL}" style="color: #1d4ed8;">endpoint-org-crosswalk.csv</a></p>
-  <p style="margin: 0 0 8px 0;">Finding: <a href="${FINDING_URL}" style="color: #1d4ed8;">${FINDING_URL}</a></p>
-  <p style="margin: 0 0 8px 0;">Payer coverage: <a href="${PAYER_FINDING_URL}" style="color: #1d4ed8;">${PAYER_FINDING_URL}</a></p>
-  <p style="margin: 0 0 16px 0;">Full update: <a href="${REPORT_URL}" style="color: #1d4ed8;">${REPORT_URL}</a></p>
+  <p style="margin: 0 0 16px 0; color: #6b7280; font-size: 13px;">All of it is public data. Repeating our work costs about three cents.</p>
 
   <p style="margin: 0; color: #6b7280; font-size: 13px;">Reply to this email to unsubscribe or ask a question (<a href="mailto:${UNSUB_REPLY}" style="color: #6b7280;">${UNSUB_REPLY}</a>).</p>
 

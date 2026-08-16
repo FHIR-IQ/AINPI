@@ -11,13 +11,14 @@ const DOC_PATH = 'docs/reports/2026-08-16-update.md';
 const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
-  title: 'AINPI 2026-08-16 update: a crosswalk from FHIR base URL to NPI',
+  title:
+    "AINPI: most web addresses in the national doctor directory don't say who they belong to",
   description:
-    'New download resolving 19,334 FHIR base URLs in the CMS National Provider Directory to the organization that runs them, with NPI attached. Only 16.9% of the 114,071 FHIR endpoints can be attributed to anyone, and the gap is concentrated in 16 vendor hosts that publish no organization link at all.',
+    'We checked 114,071 web addresses in the CMS National Provider Directory. Only 19,334 say who owns them, about one in six. Nothing is broken, the names were never filled in. Free list of the ones that work, plus why health insurers are not in the directory yet.',
   openGraph: {
-    title: 'AINPI 2026-08-16: a crosswalk from FHIR base URL to NPI',
+    title: "Most addresses in the national doctor directory don't say who they belong to",
     description:
-      '19,334 FHIR base URLs resolved to an organization and NPI, free to download. The other 83% of endpoints in the federal directory have no owner.',
+      'Only one in six web addresses in the federal directory names an owner. Here is a free list of the 19,334 that do, and what we think should happen next.',
     url: 'https://ainpi.dev/reports/2026-08-16-update',
     type: 'article',
   },
@@ -31,13 +32,13 @@ export default function August2026Update0816Page() {
       <Navbar />
       <ReleaseTeaser
         eyebrow="Release update · 2026-08-16"
-        headlineA="19,334 endpoints have an owner."
-        headlineB="94,737 do not."
-        caption="A new download resolves 19,334 FHIR base URLs in the CMS National Provider Directory to the organization that runs them, with the NPI attached. That is 16.9% of the 114,071 FHIR endpoints in the directory. Nothing is broken: zero references dangle. The rest were never populated, and 16 vendor hosts account for 49,036 of them."
+        headlineA="One in six web addresses"
+        headlineB="says who owns it."
+        caption="The national directory of doctors holds 114,071 web addresses that software uses to look up patient records. Only 19,334 of them say who they belong to. Picture a phone book where five out of six numbers have no name. Nothing here is broken, the names were simply never filled in, and we have published a free list of the ones that work."
         stats={[
-          { label: 'FHIR endpoints resolved to an organization', delta: '16.9%', tone: 'gain' },
-          { label: 'Base URLs in the published crosswalk', delta: '19,334', tone: 'gain' },
-          { label: 'Endpoints on hosts publishing no org link', delta: '49,036', tone: 'loss' },
+          { label: 'Addresses that name an owner', delta: '19,334', tone: 'gain' },
+          { label: 'Addresses with no name attached', delta: '94,737', tone: 'loss' },
+          { label: 'Covered by 16 companies that never fill it in', delta: '49,036', tone: 'loss' },
         ]}
         reportSlug="2026-08-16-update"
         releaseDate="2026-08-16"

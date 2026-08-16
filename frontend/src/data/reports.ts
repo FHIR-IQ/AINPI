@@ -35,9 +35,9 @@ export const REPORTS: ReportOption[] = [
   {
     id: 'aug-2026-08-16-update',
     version: '2026-08-16-update',
-    title: '2026-08-16 update: a crosswalk from FHIR base URL to NPI',
+    title: "2026-08-16 update: most addresses in the national doctor directory don't say who they belong to",
     description:
-      'New free download resolving 19,334 FHIR base URLs in the CMS National Provider Directory to the organization that runs them, with NPI attached. Only 16.9% of the 114,071 FHIR endpoints can be attributed to anyone, and the gap is concentrated: 16 vendor hosts publish no organization link on any endpoint. Plus why the directory does not yet carry payer endpoints, and new queryable columns for phone, street address and coordinates.',
+      'We checked 114,071 web addresses in the national directory of doctors. Only 19,334 say who owns them, about one in six. Nothing is broken, the names were simply never filled in. Includes a free list of the ones that work, why sixteen software companies have never filled the name in once, why health insurers are not in the directory yet, and what we think the community should push for next.',
     format: 'web',
     url: '/reports/2026-08-16-update',
     badge: 'NEW',
