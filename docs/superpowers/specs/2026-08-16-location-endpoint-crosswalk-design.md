@@ -226,14 +226,42 @@ Payer directories carry `PractitionerRole`, which is the affiliation resource
 the NDH leaves empty. Tested against Capital BlueCross, which is a Pennsylvania
 payer already verified live.
 
-The directory publishes **2,259,490 PractitionerRole resources** across 67,336
+The directory reports **2,259,490 PractitionerRole resources** across 67,336
 practitioners. Each role carries practitioner, organization, one or more
 locations, healthcareService and a NUCC-coded specialty.
 
-Half the roles name the payer itself as the organization, which is useless for
-affiliation. The other half name a real practice: Penn Medicine LGHP Geriatrics,
-Geisinger Lewistown, St Lukes Internal Medicine, Reading Pediatrics. 91 distinct
-organizations appeared in a 200-role sample, at roughly 1.9 locations per role.
+**Correction to the first pass.** That reported total is inflated, and the
+earlier reading of it here was wrong. The first pass described the roles as two
+halves, one naming the payer and one naming a real practice. They are not two
+halves of one set. Every logical role is emitted **twice under the same `id`**:
+one copy sets `organization` to "Capital Blue Cross", the other names the real
+practice. Verified on 140 ids sampled across the full page range, from page 1 to
+the last page: 140 of 140 had exactly one payer-org copy and one real-practice
+copy, and zero had only one or the other.
+
+So the directory holds roughly **1.13M logical roles**, not 2.26M, and
+`Bundle.total` double-counts. Two consequences that matter to anyone reusing
+this:
+
+- A consumer deduplicating on `id`, which is the obvious thing to do, keeps
+  whichever copy arrives first and discards the other. Half the time that
+  discards the only useful organization.
+- FHIR R4 requires a resource id to be unique per resource type on a server, so
+  this is a conformance defect, not a modelling choice. It is worth reporting
+  back to the payer.
+
+The real-practice copies name Penn Medicine LGHP Geriatrics, Geisinger
+Lewistown, St Lukes Internal Medicine, Reading Pediatrics and similar. 91
+distinct organizations appeared in a 200-role sample, at roughly 1.9 locations
+per role.
+
+Two further paging facts, both measured, both capable of silently truncating a
+harvest:
+
+- `_count` is not honoured. The page stride is fixed at 20 distinct resources
+  whatever is requested, so sizing a run from `_count` under-fetches.
+- Practitioner resources are also duplicated, though not systematically: 67 of
+  800 entries across the first 40 pages were exact duplicates (8.4%).
 
 A 2,000-practitioner sample, matched to the NDH by NPI:
 
@@ -261,7 +289,7 @@ the engineering cost.
 
 | Payer | Enumeration | Totals | Assessment |
 | --- | --- | --- | --- |
-| Capital BlueCross (PA) | `_lastUpdated`, next links | 2,259,490 roles / 67,336 practitioners | **Easiest.** Clean paging, honest totals, modest size |
+| Capital BlueCross (PA) | `_lastUpdated`, `page=N` | 2,259,490 role entries (~1.13M logical) / 67,336 practitioners | **Easiest.** Deep paging works to the last page; totals are double-counted, not absent |
 | Humana | bare `_count`, next links | 14,932,846 roles / 1,034,323 practitioners | Easy, national, large |
 | Molina | bare `_count`, next links | 16,346,251 roles | Easy to page, but `_lastUpdated` 500s and the gateway is WAF-sensitive |
 | Cigna | next links only | none reported | Workable but blind: no total to plan or verify against |

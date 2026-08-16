@@ -51,6 +51,10 @@ sample-data/*.csv
 sample-data/*.zip
 sample-data/*.zst
 
+# Payer FHIR directory harvests (analysis/harvest_payer_directory.py).
+# Multi-GB NDJSON pulled from live payer endpoints; regenerable, never committed.
+analysis/data/
+
 # Node
 node_modules/
 .next/

@@ -561,6 +561,38 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'payer-affiliation-gap',
+    hypotheses: ['H52'],
+    title: 'Payer directories carry the affiliation the NDH leaves empty',
+    summary:
+      'The NDH’s largest structural gap is not endpoints, it is roles: 73% of active practitioners carry no PractitionerRole at all, so they have no organization, so no endpoint path exists for them at any confidence. Medicare claims data was the obvious way through, and it closed only 2.5% of the gap, because CMS’s Doctors and Clinicians file draws on the same Medicare enrollment population that already has roles. Payer directories draw on network contracts instead. H52 takes one payer’s entire public FHIR directory, published under the CMS-9115-F Patient Access rule, and measures how much affiliation it adds against the NDH and CMS DAC together.',
+    nullHypothesis:
+      'A payer FHIR directory adds no organizational affiliation beyond what the NDH and CMS DAC already publish, so the share of payer-listed practitioners gaining a net-new affiliation is indistinguishable from zero.',
+    denominator:
+      'Every practitioner published in the Capital BlueCross public FHIR provider directory carrying a well-formed, check-digit-valid NPI, measured against the whole directory rather than a sample. Reported alongside the directory’s own practitioner count so the NPI publication rate stays visible.',
+    dataSource:
+      'The Capital BlueCross public unauthenticated FHIR provider directory (providerdirectory-api.capbluecross.com/r4), a Da Vinci PDex Plan-Net server published under CMS-9115-F, harvested in full by analysis/harvest_payer_directory.py and joined against cms_npd.practitioner, cms_npd.practitioner_role and cms_npd.cms_dac_clinician_org. Compute script: analysis/h52_payer_affiliation_gap.py.',
+    status: 'in-progress',
+    updated: '2026-08-16',
+    implications: [
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'Every payer subject to CMS-9115-F already publishes a provider directory containing the practitioner-to-organization edge the NDH is missing. The affiliation does not have to be collected from providers again; it has to be read from directories that are already public and already mandated.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'Two source-side defects change the counts and are measured rather than worked around. Capital BlueCross serves every PractitionerRole twice under one id, once naming the payer and once naming the real practice, so Bundle.total double-counts and any consumer deduplicating on id discards half the organizations. And _count is ignored: the page stride is fixed at 20 whatever is requested, so sizing a harvest from _count silently under-fetches.',
+      },
+      {
+        audience: 'FHIR implementers',
+        takeaway:
+          'The NPI is present but marked four different ways across publishers, and three of them return nothing to a parser that reads only identifier.system. Capital BlueCross puts the practitioner NPI in identifier.type.coding and marks organization NPIs with no code at all, only assigner.display "CMS". A first pass here read 2,000 practitioners and reported zero NPIs.',
+      },
+    ],
+  },
+  {
     slug: 'cehrt-endpoint-coverage-gap',
     hypotheses: ['H45'],
     title: 'CEHRT-published FHIR endpoints missing from the NDH, by state',
