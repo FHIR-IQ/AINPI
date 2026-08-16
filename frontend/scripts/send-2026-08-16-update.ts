@@ -35,13 +35,16 @@ interface CliArgs {
   confirm: boolean;
   email: string | null;
   limit: number | null;
+  /** Write the rendered HTML to this path and exit. Sends nothing. */
+  preview: string | null;
 }
 
 function parseArgs(argv: string[]): CliArgs {
-  const out: CliArgs = { confirm: false, email: null, limit: null };
+  const out: CliArgs = { confirm: false, email: null, limit: null, preview: null };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--confirm') out.confirm = true;
+    else if (a === '--preview') out.preview = argv[++i] ?? null;
     else if (a === '--email') out.email = argv[++i] ?? null;
     else if (a === '--limit') {
       const n = Number(argv[++i]);
@@ -240,6 +243,25 @@ function buildBody(): { text: string; html: string } {
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const { text, html } = buildBody();
+
+  // Preview writes the exact HTML a subscriber receives, then exits. It runs
+  // before every other branch so it can never send by accident.
+  if (args.preview) {
+    const { writeFileSync } = await import('node:fs');
+    writeFileSync(
+      args.preview,
+      `<!doctype html><meta charset="utf-8"><title>${SUBJECT}</title>` +
+        `<div style="background:#f3f4f6;padding:24px 12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">` +
+        `<div style="max-width:600px;margin:0 auto 16px;padding:12px 16px;background:#fff;border:1px solid #e5e7eb;border-radius:4px;font-size:13px;color:#374151;">` +
+        `<div><strong>Subject:</strong> ${SUBJECT}</div>` +
+        `<div><strong>From:</strong> ${FROM_ADDRESS}</div>` +
+        `<div><strong>Reply-To:</strong> ${UNSUB_REPLY}</div>` +
+        `</div>` +
+        `<div style="max-width:600px;margin:0 auto;background:#fff;border:1px solid #e5e7eb;border-radius:4px;">${html}</div></div>`,
+    );
+    console.log(`Wrote HTML preview to ${args.preview}. Nothing was sent.`);
+    return;
+  }
 
   console.log(`Subject: ${SUBJECT}`);
   console.log(`From:    ${FROM_ADDRESS}`);
