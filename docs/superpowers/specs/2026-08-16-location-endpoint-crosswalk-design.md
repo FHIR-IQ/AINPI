@@ -133,6 +133,48 @@ That is roughly a tripling, from 21,668 vendor-published organization NPIs
 matching 34,901 NDH organizations. Against the honest denominator of
 practitioners who have a role at all, coverage moves from 4.4% to 13.1%.
 
+### Testing the claims-data route against the role gap
+
+Prior art at b.well reached roughly 60-70% completeness across public sources,
+partly by inferring provider-to-organization relationships from claims. That is
+the obvious way through the 73% role gap, so it was tested rather than assumed.
+
+CMS publishes the Doctors and Clinicians National Downloadable File, which is
+exactly the right shape: one row per clinician, enrollment, group and address.
+Loaded to `cms_npd.cms_dac_clinician_org`.
+
+- 3,230,874 deduped clinician-org-address rows
+- 1,622,454 distinct clinician NPIs
+- 83,430 distinct organizations by PAC ID
+- 99.4% carry a street address
+
+It does not fill the gap.
+
+| | Practitioners |
+| --- | ---: |
+| Active in the NDH | 7,196,385 |
+| Have an NDH role | 1,931,044 |
+| No NDH role | 5,265,341 |
+| Present in CMS DAC | 1,617,305 |
+| **No NDH role, but present in DAC** | **130,467** |
+
+DAC closes **2.5%** of the role gap. Its 1.6M clinicians overlap almost entirely
+with practitioners who already have a role, because both derive from Medicare
+enrollment. Adding a second view of the same population does not extend coverage.
+
+**This reframes the denominator, which matters more than the result.** Combining
+both sources, 2,061,511 of 7,196,385 active NDH practitioners (28.6%) have any
+organizational affiliation from any public source. The remaining 5.1M are
+active NPIs with no role in the NDH and no Medicare enrollment record.
+
+Before treating that 5.1M as a gap to close, someone has to establish what it
+actually is. An NPI is issued once and effectively never retired, so the tail
+plausibly contains retired clinicians, residents, administrative NPIs and people
+who never billed Medicare. If most of it is not practising, then completeness
+measured against 7.2M is measuring against a denominator that does not exist,
+and any percentage quoted against it is misleading in both directions. That
+question should be answered before any completeness claim is published.
+
 ## Confidence model
 
 Every linkage carries a band, and the band is a statement about method, not a
