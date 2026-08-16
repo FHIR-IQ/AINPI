@@ -1,0 +1,110 @@
+{
+  "_readme": [
+    "Curated legal-name to brand aliases for organization-to-endpoint resolution.",
+    "",
+    "String matching gets a long way and then stops dead. The directory records",
+    "legal entities and the EHR vendors publish brands, and for the largest",
+    "health systems the two share no tokens at all: 'UNIVERSITY OF PITTSBURGH",
+    "PHYSICIANS' is UPMC's physician group and the strings have nothing in",
+    "common. No normalization rule recovers that, and every attempt to loosen",
+    "one produced a false merge instead (see the Penn Medicine / Penn State",
+    "Health case in h53_org_endpoint_resolution.py).",
+    "",
+    "So the remaining links are curated rather than inferred. Each entry names",
+    "one publicly verifiable corporate fact and carries the source that states",
+    "it. That is auditable in a way a similarity threshold is not: a reader can",
+    "disagree with a specific row and check it, and a wrong row is a wrong",
+    "claim about one organization rather than a silent systematic error.",
+    "",
+    "Rules for adding an entry:",
+    "  - `ndh_name` must be the exact normalized NDH organization name.",
+    "  - `brand` must match an organization name a vendor actually publishes.",
+    "  - `basis` must be checkable by a reader without insider knowledge.",
+    "  - If the relationship is uncertain, leave it out. Coverage is not worth",
+    "    a wrong endpoint: sending a patient's app to the wrong health system",
+    "    is a worse outcome than telling them we do not know.",
+    "",
+    "Aliased links are reported as their own tier and never counted as",
+    "deterministic."
+  ],
+  "aliases": [
+    {
+      "ndh_name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
+      "brand": "UPMC",
+      "state": "PA",
+      "basis": "University of Pittsburgh Physicians is UPMC's employed physician group; UPMC publishes it as part of the UPMC system on upmc.com and it shares UPMC's Epic tenancy."
+    },
+    {
+      "ndh_name": "UPMC COMMUNITY MEDICINE INC",
+      "brand": "UPMC",
+      "state": "PA",
+      "basis": "Named UPMC in its own legal business name."
+    },
+    {
+      "ndh_name": "UNIVERSITY OF PENN MEDICAL GROUP",
+      "brand": "Penn Medicine",
+      "state": "PA",
+      "basis": "The University of Pennsylvania Health System trades as Penn Medicine."
+    },
+    {
+      "ndh_name": "CLINICAL PRACTICES OF THE UNIVERSITY OF PENNSYLVANIA",
+      "brand": "Penn Medicine",
+      "state": "PA",
+      "basis": "Clinical Practices of the University of Pennsylvania is the faculty practice plan of Penn Medicine."
+    },
+    {
+      "ndh_name": "LANCASTER GENERAL MEDICAL GROUP",
+      "brand": "Penn Medicine",
+      "state": "PA",
+      "basis": "Lancaster General Health joined the University of Pennsylvania Health System in 2015 and trades as Penn Medicine Lancaster General Health."
+    },
+    {
+      "ndh_name": "ALLEGHENY CLINIC",
+      "brand": "Allegheny Health Network",
+      "state": "PA",
+      "basis": "Allegheny Clinic is the employed physician organization of Allegheny Health Network."
+    },
+    {
+      "ndh_name": "JEFFERSON UNIVERSITY PHYSICIANS",
+      "brand": "Jefferson Health",
+      "state": "PA",
+      "basis": "Jefferson University Physicians is the faculty practice of Thomas Jefferson University, which operates Jefferson Health."
+    },
+    {
+      "ndh_name": "TEMPLE FACULTY PRACTICE PLAN INC",
+      "brand": "Temple Health",
+      "state": "PA",
+      "basis": "Temple Faculty Practice Plan is the physician organization of Temple University Health System, which trades as Temple Health."
+    },
+    {
+      "ndh_name": "TEMPLE PHYSICIANS INC",
+      "brand": "Temple Health",
+      "state": "PA",
+      "basis": "Temple Physicians Inc is a subsidiary of Temple University Health System."
+    },
+    {
+      "ndh_name": "THE MILTON S HERSHEY MEDICAL CENTER PHYSICIANS",
+      "brand": "Penn State Health",
+      "state": "PA",
+      "basis": "Penn State Milton S. Hershey Medical Center is the academic medical centre of Penn State Health."
+    },
+    {
+      "ndh_name": "PENN STATE HEALTH MEDICAL GROUP LLC",
+      "brand": "Penn State Health",
+      "state": "PA",
+      "basis": "Named Penn State Health in its own legal business name. Recorded explicitly because a token rule wrongly matched this to Penn Medicine, a different system."
+    },
+    {
+      "ndh_name": "PINNACLE HEALTH MEDICAL SERVICES",
+      "brand": "UPMC",
+      "state": "PA",
+      "basis": "PinnacleHealth was acquired by UPMC in 2017 and operates as UPMC in Central Pa."
+    },
+    {
+      "ndh_name": "REGIONAL HEALTH SERVICES INC",
+      "brand": "UPMC",
+      "state": "PA",
+      "basis": "Bradford Regional and Elk Regional joined UPMC as UPMC Cole and UPMC Bradford."
+    }
+  ]
+}

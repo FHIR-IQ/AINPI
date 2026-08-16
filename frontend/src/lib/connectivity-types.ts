@@ -101,7 +101,9 @@ export interface ConnectivityPayload {
     reaches_endpoint: number;
     reaches_endpoint_pct: number;
     reaches_endpoint_ndh_only: number;
-    reaches_endpoint_after_fill: number;
+    reaches_endpoint_after_vendor_npi_fill: number;
+    reaches_endpoint_after_resolution: number;
+    reaches_endpoint_pct_of_affiliated: number;
     vendor_known: number;
     organizations: number;
     organizations_with_endpoint: number;
@@ -113,6 +115,7 @@ export interface ConnectivityPayload {
     note: string;
     green: number;
     yellow: number;
+    resolved: number;
     candidate: number;
     red: number;
     none: number;

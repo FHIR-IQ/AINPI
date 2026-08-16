@@ -172,6 +172,26 @@ def load_vendor_attribution():
     return url_vendor, npi_url, name_url
 
 
+def load_org_resolution(state):
+    """org_id -> (endpoint, tier) from H53 entity resolution.
+
+    Separate from the NPI-based maps because it is a different kind of
+    evidence: name and brand agreement rather than a published identifier. It
+    is loaded as its own tier so it can be reported and, if a reader disagrees
+    with the method, subtracted.
+    """
+    path = STATES_DIR / f"{state.lower()}-org-endpoint-resolution.csv"
+    if not path.exists():
+        return {}
+    out = {}
+    with path.open() as fh:
+        for row in csv.DictReader(fh):
+            tier = row.get("tier")
+            if tier in ("alias", "name-state", "brand-state") and row.get("endpoint"):
+                out[row["org_id"]] = (row["endpoint"], tier)
+    return out
+
+
 def load_hospital_owners(state):
     """NPI -> corporate owner, from CMS enrollment ownership data.
 
@@ -343,7 +363,8 @@ def pct(n, d):
 
 
 def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
-          ep_by_id, ep_by_npi, url_vendor, npi_url, name_url, hospitals):
+          org_resolution, ep_by_id, ep_by_npi, url_vendor, npi_url, name_url,
+          hospitals):
     total = len(rows)
     with_role = 0
     with_org = 0
@@ -352,6 +373,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     reaches_endpoint = 0
     vendor_known = 0
     fill_only = 0
+    resolved_only = 0
     vendors = collections.Counter()
     bands = collections.Counter()
 
@@ -384,19 +406,32 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                     filled = True
                     break
 
+        # H53 resolution: name or brand agreement with a vendor-published
+        # organization, plus state. Inference, so it never counts as green.
+        resolved = None
+        if not native:
+            for oid in r["org_ids"] or []:
+                hit = org_resolution.get(oid)
+                if hit:
+                    resolved = hit
+                    if not filled:
+                        url = hit[0]
+                    break
+
         # Candidate layer: the vendor published an endpoint against an
         # organization name that normalizes to one of this practitioner's NDH
         # organization names. Never added to `reaches_endpoint`.
         candidate_url = None
-        if not (native or filled):
+        if not (native or filled or resolved):
             for oname in r["org_names"] or []:
                 candidate_url = name_url.get(norm_org_name(oname))
                 if candidate_url:
                     break
 
-        if native or filled:
+        if native or filled or resolved:
             reaches_endpoint += 1
-            fill_only += filled
+            fill_only += bool(filled)
+            resolved_only += bool(resolved and not (native or filled))
             vendor = url_vendor.get(url)
             if vendor:
                 vendor_known += 1
@@ -406,6 +441,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             bands["green"] += 1
         elif filled:
             bands["yellow"] += 1
+        elif resolved:
+            bands["resolved"] += 1
         elif candidate_url:
             bands["candidate"] += 1
         elif has_org:
@@ -618,8 +655,19 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "with_role_pct": pct(with_role, total),
             "reaches_endpoint": reaches_endpoint,
             "reaches_endpoint_pct": pct(reaches_endpoint, total),
-            "reaches_endpoint_ndh_only": reaches_endpoint - fill_only,
-            "reaches_endpoint_after_fill": reaches_endpoint,
+            # NDH-only must subtract every added tier, not just the NPI fill.
+            "reaches_endpoint_ndh_only":
+                reaches_endpoint - fill_only - resolved_only,
+            "reaches_endpoint_after_vendor_npi_fill":
+                reaches_endpoint - resolved_only,
+            "reaches_endpoint_after_resolution": reaches_endpoint,
+            # The role gap is a separate finding with a separate fix, so
+            # endpoint coverage is also reported against practitioners who have
+            # an affiliation at all. Quoting only the share of every
+            # practitioner in the state hides how much of the endpoint problem
+            # has actually been solved; quoting only this one hides the role
+            # gap. Both ship.
+            "reaches_endpoint_pct_of_affiliated": pct(reaches_endpoint, with_role),
             "vendor_known": vendor_known,
             "organizations": len(org_rows),
             "organizations_with_endpoint": orgs_with_endpoint,
@@ -799,15 +847,21 @@ def main():
         print(f"  {len(parent_by_npi):,} organizations with an NPPES corporate parent")
         owner_by_npi = load_hospital_owners(code)
         print(f"  {len(owner_by_npi):,} organizations with a CMS-attested owner")
+        org_resolution = load_org_resolution(code)
+        print(f"  {len(org_resolution):,} organizations resolved to an endpoint "
+              f"by name or brand (H53)")
         payload = build(code, rows, org_rows, edges, edge_names, parent_by_npi,
-                        owner_by_npi, ep_by_id, ep_by_npi, url_vendor, npi_url,
-                        name_url, load_hospitals(code))
+                        owner_by_npi, org_resolution, ep_by_id, ep_by_npi,
+                        url_vendor, npi_url, name_url, load_hospitals(code))
         path = out_dir / f"{code.lower()}-connectivity.json"
         path.write_text(json.dumps(payload, indent=2) + "\n")
         s = payload["summary"]
-        print(f"  role {s['with_role_pct']}%  endpoint {s['reaches_endpoint_pct']}% "
-              f"(NDH alone {s['reaches_endpoint_ndh_only']:,}, "
-              f"after fill {s['reaches_endpoint_after_fill']:,})")
+        print(f"  role {s['with_role_pct']}%  "
+              f"endpoint {s['reaches_endpoint_pct']}% of all, "
+              f"{s['reaches_endpoint_pct_of_affiliated']}% of affiliated")
+        print(f"    NDH alone {s['reaches_endpoint_ndh_only']:,} -> "
+              f"+vendor NPI {s['reaches_endpoint_after_vendor_npi_fill']:,} -> "
+              f"+resolution {s['reaches_endpoint_after_resolution']:,}")
         print(f"  wrote {path}")
     return 0
 

@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "baecd21",
-  "generated_at": "2026-08-16T21:54:59+00:00",
+  "generated_at": "2026-08-16T23:17:06+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -1634,6 +1634,12 @@
     {
       "name": "pa-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/pa-cohort-critical.csv",
+      "format": "csv",
+      "scope": "states"
+    },
+    {
+      "name": "pa-org-endpoint-resolution",
+      "url": "https://ainpi.dev/api/v1/states/pa-org-endpoint-resolution.csv",
       "format": "csv",
       "scope": "states"
     },

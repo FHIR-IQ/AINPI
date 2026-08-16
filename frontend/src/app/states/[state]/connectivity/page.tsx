@@ -88,6 +88,10 @@ const BAND_STYLE: Record<string, { label: string; className: string }> = {
     label: 'Vendor NPI',
     className: 'bg-primary-100 text-primary-900 border-primary-300',
   },
+  resolved: {
+    label: 'Name/brand resolved',
+    className: 'bg-primary-50 text-primary-900 border-primary-400',
+  },
   candidate: {
     label: 'Name candidate',
     className: 'bg-amber-50 text-amber-900 border-amber-300',
@@ -136,7 +140,9 @@ function Connectivity({
     methodology_version,
   } = payload;
 
-  const bands = (['green', 'yellow', 'candidate', 'red', 'none'] as const).map(
+  const bands = (
+    ['green', 'yellow', 'resolved', 'candidate', 'red', 'none'] as const
+  ).map(
     (key) => ({ key, count: confidence[key] }),
   );
   const bandTotal = bands.reduce((a, b) => a + b.count, 0) || 1;
@@ -193,7 +199,9 @@ function Connectivity({
             practitioners the National Provider Directory lists as active in{' '}
             {state_name}. Follow each one through the chain a patient app has to
             walk: role, organization, location, endpoint, EHR vendor. Only{' '}
-            <strong>{fmt(summary.reaches_endpoint)}</strong> get to the end.
+            <strong>{fmt(summary.reaches_endpoint)}</strong> get to the end, and{' '}
+            <strong>{fmt(summary.practitioners - summary.with_role)}</strong> never
+            start because the directory gives them no organization at all.
           </p>
           <p className="mt-4 text-sm text-gray-600">
             NDH release {release_date}. Methodology {methodology_version}. Every
@@ -216,8 +224,8 @@ function Connectivity({
           />
           <Stat
             label="Reach an endpoint"
-            value={`${summary.reaches_endpoint_pct}%`}
-            sub={`${fmt(summary.reaches_endpoint_ndh_only)} from the NDH alone`}
+            value={`${summary.reaches_endpoint_pct_of_affiliated}%`}
+            sub={`of those with an affiliation; ${summary.reaches_endpoint_pct}% of all`}
           />
           <Stat
             label="Organizations"
@@ -252,7 +260,7 @@ function Connectivity({
               ),
             )}
           </div>
-          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-5">
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-6">
             {bands.map(({ key, count }) => (
               <div key={key} className="border border-gray-200 bg-white p-3">
                 <dt className="flex items-center gap-2 text-xs text-gray-600">
