@@ -537,6 +537,43 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, ep_by_id,
         s["practitioners"] for s in systems_with_endpoint
     )
 
+    # Graph payload, precomputed here so the browser renders rather than
+    # derives. Capped at the 50 largest systems: a force layout of 19,535
+    # organizations is a hairball that answers no question, and the point of
+    # this picture is which large systems hang unconnected.
+    g_nodes = []
+    g_links = []
+    seen_vendor = {}
+    for sysrow in systems[:50]:
+        sid = f"sys:{sysrow['system_key']}"
+        g_nodes.append({
+            "id": sid,
+            "label": sysrow["label"],
+            "type": "system",
+            "practitioners": sysrow["practitioners"],
+            "organizations": sysrow["organizations"],
+            "basis": sysrow["basis"],
+            "connected": bool(sysrow["endpoint_count"]),
+        })
+        for ep in sysrow["endpoints"][:3]:
+            host = (ep["url"] or "").split("/")[2] if "//" in (ep["url"] or "") else ep["url"]
+            eid = f"ep:{host}"
+            if not any(n["id"] == eid for n in g_nodes):
+                g_nodes.append({
+                    "id": eid, "label": host, "type": "endpoint",
+                    "vendor": ep["vendor"], "via": ep["via_member"],
+                })
+            g_links.append({"source": sid, "target": eid, "kind": "reaches"})
+            if ep["vendor"]:
+                vid = f"vendor:{ep['vendor']}"
+                if vid not in seen_vendor:
+                    seen_vendor[vid] = {
+                        "id": vid, "label": ep["vendor"], "type": "vendor",
+                    }
+                g_links.append({"source": eid, "target": vid,
+                                "kind": "served-by"})
+    g_nodes.extend(seen_vendor.values())
+
     payload = {
         "state": state.upper(),
         "state_name": STATE_NAMES.get(state.upper(), state.upper()),
@@ -609,6 +646,16 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, ep_by_id,
                 "presented as the one serving a given practitioner."
             ),
             "rows": systems[:60],
+        },
+        "graph": {
+            "note": (
+                "The 50 largest systems, the endpoints any of their members "
+                "reach, and the EHR vendor behind each endpoint. Systems with "
+                "no edge are the finding: they hold practitioners and nothing "
+                "public connects them to a system that serves records."
+            ),
+            "nodes": g_nodes,
+            "links": g_links,
         },
         "organizations_top": orgs,
         "organizations_unlinked": {

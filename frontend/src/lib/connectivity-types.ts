@@ -55,6 +55,37 @@ export interface ConnectivityUnlinkedOrg {
   nppes_verify_url: string | null;
 }
 
+export interface ConnectivityGraphNode {
+  id: string;
+  label: string;
+  type: 'system' | 'endpoint' | 'vendor';
+  practitioners?: number;
+  organizations?: number;
+  basis?: string;
+  /** Systems only. False is the state the picture exists to show. */
+  connected?: boolean;
+  vendor?: string | null;
+  via?: string | null;
+}
+
+export interface ConnectivityGraph {
+  note: string;
+  nodes: ConnectivityGraphNode[];
+  links: { source: string; target: string; kind: 'reaches' | 'served-by' }[];
+}
+
+export interface ConnectivitySystem {
+  system_key: string;
+  label: string;
+  basis: 'nppes-parent' | 'brand-name';
+  organizations: number;
+  practitioners: number;
+  member_org_ids: string[];
+  endpoint_count: number;
+  endpoints: { url: string; vendor: string | null; via_member: string }[];
+  vendors: string[];
+}
+
 export interface ConnectivityPayload {
   state: string;
   state_name: string;
@@ -88,6 +119,25 @@ export interface ConnectivityPayload {
   };
   vendors: Record<string, number>;
   organizations_top: ConnectivityOrg[];
+  graph: ConnectivityGraph;
+  systems: {
+    note: string;
+    affiliation_graph: {
+      note: string;
+      edges: number;
+      organizations_in_graph: number;
+      components: number;
+      largest_component_size: number;
+      top_hubs: { name: string | null; children: number }[];
+    };
+    organizations_with_nppes_parent: number;
+    systems_found: number;
+    systems_by_basis: Record<string, number>;
+    systems_reaching_an_endpoint: number;
+    practitioners_in_a_system_that_reaches_an_endpoint: number;
+    routing_caveat: string;
+    rows: ConnectivitySystem[];
+  };
   organizations_unlinked: {
     note: string;
     practitioners_affected: number;

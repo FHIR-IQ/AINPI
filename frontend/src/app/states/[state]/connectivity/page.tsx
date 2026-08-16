@@ -10,6 +10,15 @@ import {
 } from '@/lib/load-api-v1';
 import type { ConnectivityPayload } from '@/lib/connectivity-types';
 import ConnectivityChain from './connectivity-chain';
+// Aliased: this file also exports `const dynamic = 'force-static'`, and the
+// bare import name collides with it.
+import nextDynamic from 'next/dynamic';
+
+// D3 stays out of SSR, matching every other chart in this codebase.
+const ConnectivityGraph = nextDynamic(
+  () => import('@/components/charts/ConnectivityGraph'),
+  { ssr: false, loading: () => <div className="h-[560px] border border-gray-200 bg-white" /> },
+);
 
 export const dynamic = 'force-static';
 export const dynamicParams = false;
@@ -118,6 +127,8 @@ function Connectivity({
     vendors,
     organizations_top,
     organizations_unlinked,
+    systems,
+    graph,
     hospitals,
     limits,
     release_date,
@@ -296,6 +307,107 @@ function Connectivity({
             </div>
           </section>
         )}
+
+        <section className="mb-14">
+          <h2 className="mb-1 font-serif text-2xl text-ink">
+            The web, and the holes in it
+          </h2>
+          <p className="measure mb-6 text-sm text-gray-600">{graph.note}</p>
+          <ConnectivityGraph graph={graph} />
+        </section>
+
+        <section className="mb-14">
+          <h2 className="mb-1 font-serif text-2xl text-ink">
+            Health systems, and how we know
+          </h2>
+          <p className="measure mb-3 text-sm text-gray-600">{systems.note}</p>
+          <p className="measure mb-6 text-sm text-gray-600">
+            {systems.routing_caveat}
+          </p>
+
+          <div className="mb-6 border border-gray-300 bg-white p-4 text-sm">
+            <p className="mb-2 font-medium text-ink">
+              Why the directory&rsquo;s own affiliation resource is not used
+            </p>
+            <p className="measure mb-3 text-gray-700">
+              {systems.affiliation_graph.note}
+            </p>
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-xs">
+                <thead className="border-b border-gray-200 text-left">
+                  <tr>
+                    <th className="py-1 pr-4 font-medium text-gray-700">
+                      Largest hubs in the affiliation graph
+                    </th>
+                    <th className="py-1 text-right font-medium text-gray-700">
+                      Linked organizations
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {systems.affiliation_graph.top_hubs.slice(0, 8).map((hub) => (
+                    <tr key={`${hub.name}-${hub.children}`}>
+                      <td className="py-1 pr-4 text-gray-700">{hub.name ?? '—'}</td>
+                      <td className="py-1 text-right font-mono">{fmt(hub.children)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto border border-gray-200 bg-white">
+            <table className="min-w-full text-sm">
+              <thead className="border-b border-gray-200 bg-gray-50 text-left">
+                <tr>
+                  <th className="px-4 py-2 font-medium text-gray-700">System</th>
+                  <th className="px-4 py-2 text-right font-medium text-gray-700">
+                    Orgs
+                  </th>
+                  <th className="px-4 py-2 text-right font-medium text-gray-700">
+                    Practitioners
+                  </th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Grouped by</th>
+                  <th className="px-4 py-2 text-right font-medium text-gray-700">
+                    Endpoints
+                  </th>
+                  <th className="px-4 py-2 font-medium text-gray-700">Vendors</th>
+                </tr>
+              </thead>
+              <tbody>
+                {systems.rows.slice(0, 30).map((row) => (
+                  <tr
+                    key={row.system_key}
+                    className="border-b border-gray-100 last:border-0"
+                  >
+                    <td className="px-4 py-2 text-ink">{row.label}</td>
+                    <td className="px-4 py-2 text-right font-mono">
+                      {fmt(row.organizations)}
+                    </td>
+                    <td className="px-4 py-2 text-right font-mono">
+                      {fmt(row.practitioners)}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span className="border border-gray-300 px-1.5 py-0.5 text-xs text-gray-700">
+                        {row.basis}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 text-right font-mono">
+                      {row.endpoint_count === 0 ? (
+                        <span className="text-signal">0</span>
+                      ) : (
+                        fmt(row.endpoint_count)
+                      )}
+                    </td>
+                    <td className="px-4 py-2 text-gray-700">
+                      {row.vendors.join(', ') || '—'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
         <section className="mb-14">
           <h2 className="mb-1 font-serif text-2xl text-ink">

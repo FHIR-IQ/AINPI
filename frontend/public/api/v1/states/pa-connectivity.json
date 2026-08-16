@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-16T21:36:54+00:00",
+  "generated_at": "2026-08-16T21:38:33+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "c74e7dc",
+  "commit_sha": "26a6208",
   "summary": {
     "practitioners": 227727,
     "with_role": 86816,
@@ -2034,6 +2034,834 @@
         "endpoints": [],
         "endpoint_count": 0,
         "vendors": []
+      }
+    ]
+  },
+  "graph": {
+    "note": "The 50 largest systems, the endpoints any of their members reach, and the EHR vendor behind each endpoint. Systems with no edge are the finding: they hold practitioners and nothing public connects them to a system that serves records.",
+    "nodes": [
+      {
+        "id": "sys:brand:GEISINGER",
+        "label": "GEISINGER CLINIC",
+        "type": "system",
+        "practitioners": 6968,
+        "organizations": 15,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:UNIVERSITY OF PITTSBURGH",
+        "label": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
+        "type": "system",
+        "practitioners": 6562,
+        "organizations": 4,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:ST LUKE",
+        "label": "ST LUKE'S PHYSICIAN GROUP INC",
+        "type": "system",
+        "practitioners": 4324,
+        "organizations": 22,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:UNIVERSITY OF PENN",
+        "label": "UNIVERSITY OF PENN-MEDICAL GROUP",
+        "type": "system",
+        "practitioners": 4228,
+        "organizations": 15,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:PINNACLE",
+        "label": "PINNACLE HEALTH MEDICAL SERVICES",
+        "type": "system",
+        "practitioners": 3194,
+        "organizations": 23,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:ALLEGHENY",
+        "label": "ALLEGHENY CLINIC",
+        "type": "system",
+        "practitioners": 3167,
+        "organizations": 18,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:api.platform.athenahealth.com",
+        "label": "api.platform.athenahealth.com",
+        "type": "endpoint",
+        "vendor": "athenahealth",
+        "via": "ALLEGHENY MEDICAL P C"
+      },
+      {
+        "id": "ep:fhir4.healow.com",
+        "label": "fhir4.healow.com",
+        "type": "endpoint",
+        "vendor": null,
+        "via": "ALLEGHENY BRAIN AND SPINE SURGEONS PC"
+      },
+      {
+        "id": "sys:brand:LEHIGH",
+        "label": "LEHIGH VALLEY PHYSICIAN GROUP",
+        "type": "system",
+        "practitioners": 3050,
+        "organizations": 21,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:WELLSPAN",
+        "label": "WELLSPAN MEDICAL GROUP",
+        "type": "system",
+        "practitioners": 2813,
+        "organizations": 5,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:UPMC",
+        "label": "UPMC COMMUNITY MEDICINE INC",
+        "type": "system",
+        "practitioners": 2710,
+        "organizations": 28,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:JEFFERSON",
+        "label": "JEFFERSON UNIVERSITY PHYSICIANS",
+        "type": "system",
+        "practitioners": 2217,
+        "organizations": 22,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:app.meldrx.com",
+        "label": "app.meldrx.com",
+        "type": "endpoint",
+        "vendor": null,
+        "via": "JEFFERSON RADIOLOGY PC"
+      },
+      {
+        "id": "sys:brand:THE MILTON",
+        "label": "THE MILTON S HERSHEY MEDICAL CENTER PHYSICIANS GROUP",
+        "type": "system",
+        "practitioners": 2008,
+        "organizations": 2,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:MAIN",
+        "label": "MAIN LINE HEALTHCARE",
+        "type": "system",
+        "practitioners": 1982,
+        "organizations": 27,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:TOWER",
+        "label": "TOWER HEALTH MEDICAL GROUP",
+        "type": "system",
+        "practitioners": 1549,
+        "organizations": 6,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:LANCASTER",
+        "label": "LANCASTER GENERAL MEDICAL GROUP",
+        "type": "system",
+        "practitioners": 1444,
+        "organizations": 25,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:fhir.fhirpoint.open.allscripts.com",
+        "label": "fhir.fhirpoint.open.allscripts.com",
+        "type": "endpoint",
+        "vendor": "Veradigm",
+        "via": "LANCASTER SKIN CENTER PC"
+      },
+      {
+        "id": "sys:brand:GUTHRIE",
+        "label": "GUTHRIE MEDICAL GROUP PC",
+        "type": "system",
+        "practitioners": 1428,
+        "organizations": 4,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:TEMPLE",
+        "label": "TEMPLE FACULTY PRACTICE PLAN INC",
+        "type": "system",
+        "practitioners": 1390,
+        "organizations": 3,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:CLINICAL",
+        "label": "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA HEALTH",
+        "type": "system",
+        "practitioners": 1266,
+        "organizations": 25,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:EINSTEIN",
+        "label": "EINSTEIN PRACTICE PLAN INC",
+        "type": "system",
+        "practitioners": 1237,
+        "organizations": 8,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:EMERGENCY",
+        "label": "EMERGENCY CARE SERVICES OF PENNSYLVANIA PC",
+        "type": "system",
+        "practitioners": 1231,
+        "organizations": 95,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:PENNSYLVANIA",
+        "label": "PENNSYLVANIA URGENT CARE CENTERS PLLC",
+        "type": "system",
+        "practitioners": 1050,
+        "organizations": 44,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:PAPCBH.fhir.cbh4.crediblebh.com",
+        "label": "PAPCBH.fhir.cbh4.crediblebh.com",
+        "type": "endpoint",
+        "vendor": null,
+        "via": "PENNSYLVANIA COMPREHENSIVE BEHAVIORAL HEALTH SERVICES LLC"
+      },
+      {
+        "id": "sys:parent:PENN STATE HEALTH",
+        "label": "PENN STATE HEALTH MEDICAL GROUP LLC",
+        "type": "system",
+        "practitioners": 1037,
+        "organizations": 2,
+        "basis": "nppes-parent",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:AHN",
+        "label": "AHN EMERGENCY GROUP OF PITTSBURGH LTD",
+        "type": "system",
+        "practitioners": 1023,
+        "organizations": 11,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:ABINGTON",
+        "label": "ABINGTON EMERGENCY PHYSICIAN ASSOCIATES PC",
+        "type": "system",
+        "practitioners": 994,
+        "organizations": 45,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:DLP",
+        "label": "DLP CONEMAUGH PHYSICIAN PRACTICES LLC",
+        "type": "system",
+        "practitioners": 979,
+        "organizations": 21,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:SUSQUEHANNA",
+        "label": "SUSQUEHANNA PHYSICIAN SERVICES",
+        "type": "system",
+        "practitioners": 958,
+        "organizations": 45,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:parent:PENN HIGHLANDS HEALTHCARE",
+        "label": "DUBOIS REGIONAL MEDICAL CENTER",
+        "type": "system",
+        "practitioners": 936,
+        "organizations": 40,
+        "basis": "nppes-parent",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:FOX",
+        "label": "FOX REHABILITATION SERVICES INC",
+        "type": "system",
+        "practitioners": 933,
+        "organizations": 27,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:REGIONAL HEALTH SERVICES",
+        "label": "REGIONAL HEALTH SERVICES INC",
+        "type": "system",
+        "practitioners": 921,
+        "organizations": 2,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:PROSPECT",
+        "label": "PROSPECT HEALTH ACCESS NETWORK INC",
+        "type": "system",
+        "practitioners": 840,
+        "organizations": 15,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:ORTHOPEDIC",
+        "label": "ORTHOPEDIC AND SPORTS PHYSICAL THERAPY SERVICES INC",
+        "type": "system",
+        "practitioners": 776,
+        "organizations": 25,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:osswf.mmi.prod.fhir.ema-api.com",
+        "label": "osswf.mmi.prod.fhir.ema-api.com",
+        "type": "endpoint",
+        "vendor": null,
+        "via": "ORTHOPEDIC SPECIALISTS OF SW FLORIDA PA"
+      },
+      {
+        "id": "sys:brand:NORTH AMERICAN PARTNERS",
+        "label": "NORTH AMERICAN PARTNERS IN ANESTHESIA PENNSYLVANIA LLC",
+        "type": "system",
+        "practitioners": 723,
+        "organizations": 7,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:parent:LEHIGH VALLEY PHYSICIAN GROUP",
+        "label": "LEHIGH VALLEY PHYSICIAN GROUP",
+        "type": "system",
+        "practitioners": 706,
+        "organizations": 2,
+        "basis": "nppes-parent",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:BUTLER",
+        "label": "BUTLER MEDICAL PROVIDERS",
+        "type": "system",
+        "practitioners": 705,
+        "organizations": 9,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:GROW",
+        "label": "GROW HEALTHCARE GROUP PA",
+        "type": "system",
+        "practitioners": 690,
+        "organizations": 4,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:ANESTHESIA",
+        "label": "ANESTHESIA SPECIALISTS OF BETHLEHEM PC",
+        "type": "system",
+        "practitioners": 628,
+        "organizations": 62,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:FAMILY PRACTICE",
+        "label": "FAMILY PRACTICE CENTER PC",
+        "type": "system",
+        "practitioners": 598,
+        "organizations": 12,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:app.azaleahealth.com",
+        "label": "app.azaleahealth.com",
+        "type": "endpoint",
+        "vendor": null,
+        "via": "FAMILY PRACTICE OF HONEY BROOK PC"
+      },
+      {
+        "id": "sys:brand:ARIA",
+        "label": "ARIA HEALTH PHYSICIAN SERVICES",
+        "type": "system",
+        "practitioners": 592,
+        "organizations": 6,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:TRINITY",
+        "label": "TRINITY HEALTH MID-ATLANTIC MEDICAL GROUP",
+        "type": "system",
+        "practitioners": 587,
+        "organizations": 21,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:FAMILY CARE CENTERS",
+        "label": "FAMILY CARE CENTERS INC",
+        "type": "system",
+        "practitioners": 578,
+        "organizations": 2,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:APOGEE",
+        "label": "APOGEE MEDICAL GROUP OF PENNSYLVANIA PC",
+        "type": "system",
+        "practitioners": 523,
+        "organizations": 25,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:DELAWARE",
+        "label": "DELAWARE COUNTY PROFESSIONAL SERVICES INC",
+        "type": "system",
+        "practitioners": 519,
+        "organizations": 30,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "ep:fhir-api.fhirprod.aws.greenwayhealth.com",
+        "label": "fhir-api.fhirprod.aws.greenwayhealth.com",
+        "type": "endpoint",
+        "vendor": null,
+        "via": "DELAWARE NEUROSURGICAL GROUP PA"
+      },
+      {
+        "id": "sys:parent:LANCASTER GENERAL HOSPITAL",
+        "label": "LANCASTER GENERAL HOSPITAL",
+        "type": "system",
+        "practitioners": 517,
+        "organizations": 8,
+        "basis": "nppes-parent",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:PHOENIXVILLE",
+        "label": "PHOENIXVILLE CLINIC COMPANY LLC",
+        "type": "system",
+        "practitioners": 510,
+        "organizations": 10,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:CHRISTIANA",
+        "label": "CHRISTIANA CARE HEALTH SERVICES INC",
+        "type": "system",
+        "practitioners": 509,
+        "organizations": 27,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:METHODIST",
+        "label": "METHODIST ASSOCIATES IN HEALTHCARE INC",
+        "type": "system",
+        "practitioners": 500,
+        "organizations": 13,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:HOSPITALIST",
+        "label": "HOSPITALIST MEDICINE PHYSICIANS OF PENNSYLVANIA PC",
+        "type": "system",
+        "practitioners": 484,
+        "organizations": 60,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:POTTSTOWN",
+        "label": "POTTSTOWN CLINIC COMPANY LLC",
+        "type": "system",
+        "practitioners": 478,
+        "organizations": 7,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "sys:brand:SCHUYLKILL",
+        "label": "SCHUYLKILL HEALTH SYSTEM MEDICAL GROUP INC",
+        "type": "system",
+        "practitioners": 470,
+        "organizations": 2,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:SIGNIFY",
+        "label": "SIGNIFY HEALTH MEDICAL ASSOCIATES PLLC",
+        "type": "system",
+        "practitioners": 450,
+        "organizations": 5,
+        "basis": "brand-name",
+        "connected": false
+      },
+      {
+        "id": "sys:brand:NORTHSTAR",
+        "label": "NORTHSTAR ANESTHESIA OF PENNSYLVANIA LLC",
+        "type": "system",
+        "practitioners": 449,
+        "organizations": 21,
+        "basis": "brand-name",
+        "connected": true
+      },
+      {
+        "id": "vendor:athenahealth",
+        "label": "athenahealth",
+        "type": "vendor"
+      },
+      {
+        "id": "vendor:Veradigm",
+        "label": "Veradigm",
+        "type": "vendor"
+      }
+    ],
+    "links": [
+      {
+        "source": "sys:brand:ALLEGHENY",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:ALLEGHENY",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:JEFFERSON",
+        "target": "ep:app.meldrx.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:JEFFERSON",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:MAIN",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:MAIN",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:MAIN",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:LANCASTER",
+        "target": "ep:fhir.fhirpoint.open.allscripts.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:fhir.fhirpoint.open.allscripts.com",
+        "target": "vendor:Veradigm",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:CLINICAL",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:EMERGENCY",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:EMERGENCY",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PENNSYLVANIA",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PENNSYLVANIA",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PENNSYLVANIA",
+        "target": "ep:PAPCBH.fhir.cbh4.crediblebh.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:ABINGTON",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:DLP",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:DLP",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:SUSQUEHANNA",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PROSPECT",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PROSPECT",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PROSPECT",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:ORTHOPEDIC",
+        "target": "ep:osswf.mmi.prod.fhir.ema-api.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:ORTHOPEDIC",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:FAMILY PRACTICE",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:FAMILY PRACTICE",
+        "target": "ep:app.azaleahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:FAMILY PRACTICE",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:TRINITY",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:TRINITY",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:DELAWARE",
+        "target": "ep:fhir-api.fhirprod.aws.greenwayhealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:DELAWARE",
+        "target": "ep:fhir.fhirpoint.open.allscripts.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:fhir.fhirpoint.open.allscripts.com",
+        "target": "vendor:Veradigm",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:DELAWARE",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PHOENIXVILLE",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "sys:brand:METHODIST",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:METHODIST",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:METHODIST",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:POTTSTOWN",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:NORTHSTAR",
+        "target": "ep:fhir4.healow.com",
+        "kind": "reaches"
       }
     ]
   },
