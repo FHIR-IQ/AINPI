@@ -220,6 +220,82 @@ in the first run of this analysis before the table's vintage was checked.
 Use `bigquery-public-data.nppes.npi_raw`: 9,368,082 rows, current to 2026-02-09.
 H10 to H13 already uses `npi_raw` and is unaffected.
 
+## Proving the payer route: it works, and it beats the claims route
+
+Payer directories carry `PractitionerRole`, which is the affiliation resource
+the NDH leaves empty. Tested against Capital BlueCross, which is a Pennsylvania
+payer already verified live.
+
+The directory publishes **2,259,490 PractitionerRole resources** across 67,336
+practitioners. Each role carries practitioner, organization, one or more
+locations, healthcareService and a NUCC-coded specialty.
+
+Half the roles name the payer itself as the organization, which is useless for
+affiliation. The other half name a real practice: Penn Medicine LGHP Geriatrics,
+Geisinger Lewistown, St Lukes Internal Medicine, Reading Pediatrics. 91 distinct
+organizations appeared in a 200-role sample, at roughly 1.9 locations per role.
+
+A 2,000-practitioner sample, matched to the NDH by NPI:
+
+| | Providers | Share |
+| --- | ---: | ---: |
+| Payer-listed, with a usable NPI | 1,822 | 91.1% of sampled |
+| Matched to an active NDH practitioner | 1,788 | 98.1% |
+| NDH already gives them an affiliation | 1,301 | 71.4% |
+| **NDH gives none, the payer does** | **487** | **26.7%** |
+| ...and CMS DAC does not cover them either | 469 | **25.7%** |
+
+**A quarter of payer-listed providers gain a net-new affiliation**, against 2.5%
+from the Medicare claims route. Extrapolated across Capital BlueCross's 67,336
+practitioners that is roughly 17,000 providers from a single regional payer.
+
+The NPI match rate of 98.1% is the other important result: payer NPIs join to
+the NDH cleanly, so this is a green-band deterministic link rather than
+inference.
+
+### Which payers are easy, measured rather than assumed
+
+Every payer already wired into `/api/provider-search` exposes `PractitionerRole`.
+They differ enormously in whether they can be enumerated, which is what decides
+the engineering cost.
+
+| Payer | Enumeration | Totals | Assessment |
+| --- | --- | --- | --- |
+| Capital BlueCross (PA) | `_lastUpdated`, next links | 2,259,490 roles / 67,336 practitioners | **Easiest.** Clean paging, honest totals, modest size |
+| Humana | bare `_count`, next links | 14,932,846 roles / 1,034,323 practitioners | Easy, national, large |
+| Molina | bare `_count`, next links | 16,346,251 roles | Easy to page, but `_lastUpdated` 500s and the gateway is WAF-sensitive |
+| Cigna | next links only | none reported | Workable but blind: no total to plan or verify against |
+| UHC / Optum FLEX | none | returns 0 | **Hardest.** Enumeration returns empty and bare `_count` 504s; search-only |
+
+### Where to start, by state
+
+**Pennsylvania is the easiest and is already underway.** Capital BlueCross is
+the cleanest directory of the five and is a PA payer; H47 already maps all 187
+PA hospitals to EHR vendor and endpoint; the PA provider crosswalk spec is
+written. The 25.7% net-new figure above is a PA measurement.
+
+The gap is that Capital BlueCross is regional to central PA. Highmark and
+Independence Blue Cross cover the rest of the state and neither published a
+discoverable FHIR base URL when probed, so statewide PA coverage needs those two
+located first.
+
+**Virginia is second.** H26 already cross-references four payers against a VA
+cohort, and the VA briefing and cohort CSV exist. But those four are national
+payers rather than VA-specific, so the state slice is a filter on a national
+harvest rather than a clean regional pull.
+
+### The trap that cost a run here
+
+The first sample returned **zero** NPIs from 2,000 practitioners, and the
+extractor looked correct. Capital BlueCross puts the NPI marker in
+`identifier[].type.coding[].system`, not `identifier[].system`, so a resolver
+reading only the latter finds nothing and reports it as "the payer does not
+publish NPIs".
+
+This is the exact three-way match already documented for `provider-search`:
+match `identifier.system`, `type.coding[].system`, **and** `type.coding[].code
+== "NPI"`. Any new payer parser must do all three. Corrected, the rate is 91.1%.
+
 ## Confidence model
 
 Every linkage carries a band, and the band is a statement about method, not a
