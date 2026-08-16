@@ -512,12 +512,51 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'CMS publishing the data',
         takeaway:
-          'The shortfall is concentrated, not uniform, so it is addressable per vendor. Of the 30 hosts carrying at least 100 endpoints, 16 publish no organization link on any of them, covering 49,036 endpoints; others attribute most of theirs. A host at 0% has never populated the field rather than populated it patchily.',
+          'The shortfall is concentrated, not uniform, so it is addressable per vendor. Of the 30 hosts carrying at least 100 endpoints, 16 publish no organization link on any of them, covering 49,036 endpoints; others attribute most of theirs. H51 then found the stronger version of this: those same vendors publish the organization names themselves, against the same URLs, so 76% of the gap can be closed by ingesting files that are already public rather than by asking anyone to collect anything new.',
       },
       {
         audience: 'Methodology readers',
         takeaway:
           'Presence and resolvability are reported separately on purpose. A reference can exist and point at nothing, and counting presence alone would score dangling references as successes. In this release they happen to be identical: zero references dangle. That distinction matters because absence is fixed by populating a field, while breakage would be fixed by repairing referential integrity.',
+      },
+    ],
+  },
+  {
+    slug: 'vendor-endpoint-attribution',
+    hypotheses: ['H51'],
+    title: 'Vendor-published endpoint files can name most of what the NDH cannot',
+    summary:
+      'The point of a provider directory is to get someone from a name they recognise to a system they can connect to. A patient leaves an appointment and wants their records; an app has to turn "the clinic I visited" into "the FHIR endpoint that serves it". H50 found that 94,737 of the NDH’s FHIR endpoints carry no organization, which breaks exactly that lookup. H51 asks whether the missing names exist anywhere. They do: certified EHR vendors publish their own endpoint directories, naming the organization against the same URLs. Matching eight of the largest against the NDH, 71,857 of the 94,737 unattributed endpoints (76%) could be named from files that are public today, and 30,366 resolve to an NPI directly. That moves endpoint attribution from 16.9% to 79.9% without anyone collecting new data.',
+    nullHypothesis:
+      'The organization behind an unattributed NDH endpoint is not recorded in any public source, so the gap can only be closed by new collection. Rejected: 76% of the gap is already published by the EHR vendors against the same URLs.',
+    denominator:
+      'The 94,737 Endpoint resources with connectionType.code = hl7-fhir-rest and no managingOrganization in the pinned 2026-05-08 NDH release. The vendor side is eight of the largest publishers catalogued in ONC’s Lantern; over 200 further sources exist, so every figure here is a floor.',
+    dataSource:
+      'Eight public vendor endpoint files (Epic’s SMART User-access Brands bundle plus HTI-1 service base URL lists from athenahealth, eClinicalWorks, Office Ally, Practice Fusion, PointClickCare, Veradigm and Oracle Health), matched by exact normalized URL against one capped scan of cms_npd.endpoint. Compute script: analysis/h51_vendor_endpoint_attribution.py.',
+    status: 'published',
+    updated: '2026-08-16',
+    ogTagline:
+      '76% of the endpoints the NDH cannot name are already named by the vendors, in public files.',
+    implications: [
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'This changes the ask from "get vendors to populate a field" to "ingest the field the vendors already publish". PointClickCare publishes 4,015 endpoints and the NDH holds exactly 4,015 of them at zero attribution, so the name was available at ingest time. ONC’s Lantern already aggregates over 200 of these sources.',
+      },
+      {
+        audience: 'FHIR implementers',
+        takeaway:
+          'Epic publishes a SMART User-access Brands bundle rather than a flat list: 96,190 organizations hanging off 764 endpoint URLs, every one resolving through partOf, refreshed daily. The hierarchy is the more useful shape, because naming one endpoint names every care site beneath it. Resolving it requires handling urn:uuid references and walking partOf; a naive resolver returns zero matches.',
+      },
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'The merged crosswalk ships as a CSV: URL, organization, NPI where the vendor publishes one, and whether the NDH already knows the owner. It is the missing half of the post-appointment connection problem, which needs an organization-to-endpoint lookup rather than a provider search.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'Two traps worth repeating. Epic references bundle entries by urn:uuid rather than Type/id, and a naive resolver silently returns zero rather than erroring, which is the same failure that produced a wrong published claim about Epic in H47. And the vendor files carry visible test data, including an organization called "Practice Fusion Test Test account" and an address line reading "Helloooo This is important", so anything built on them needs a junk filter.',
       },
     ],
   },
