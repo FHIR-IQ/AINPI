@@ -77,13 +77,19 @@ def main() -> None:
             "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State",
         })
 
+    # Downloadable CSVs live under both findings/ and states/. Globbing only
+    # states/ left the finding-level crosswalks out of the discovery index even
+    # though CLAUDE.md documents them as part of the public contract, so an
+    # agent reading the manifest could not find them.
     csvs = []
-    for p in sorted(states_dir.glob("*.csv")):
-        csvs.append({
-            "name": p.stem,
-            "url": f"{SITE}/api/v1/states/{p.name}",
-            "format": "csv",
-        })
+    for directory, prefix in ((findings_dir, "findings"), (states_dir, "states")):
+        for p in sorted(directory.glob("*.csv")):
+            csvs.append({
+                "name": p.stem,
+                "url": f"{SITE}/api/v1/{prefix}/{p.name}",
+                "format": "csv",
+                "scope": prefix,
+            })
 
     # Read live stats to surface the canonical release_date / commit_sha
     stats_path = API_V1 / "stats.json"

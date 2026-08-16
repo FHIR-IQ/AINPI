@@ -152,6 +152,17 @@ jobs:
           p.write_text(json.dumps(stats, indent=2) + '\n')
           PY
 
+      - name: Rebuild the discovery manifest
+        # Must run after every finding script and after the stats.json stamp,
+        # because it reads both. Nothing regenerated this before, so the
+        # manifest drifted three months and ten findings behind while the
+        # workflow itself kept reporting success: agents reading
+        # /api/v1/manifest.json could not discover anything published since
+        # 2026-05-18. `if: always()` so an earlier finding failing does not
+        # also strand the index for everything that did succeed.
+        if: always()
+        run: python analysis/build_manifest.py
+
       - name: Detect changes
         id: diff
         run: |

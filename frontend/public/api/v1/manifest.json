@@ -9,8 +9,8 @@
   },
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
-  "commit_sha": "pending",
-  "generated_at": "2026-05-18T13:18:13+00:00",
+  "commit_sha": "baecd21",
+  "generated_at": "2026-08-16T20:49:46+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -201,6 +201,30 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
+      "slug": "endpoint-metadata-coverage",
+      "title": "Endpoint metadata coverage vs the HTE submission spec",
+      "hypotheses": [
+        "H44"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/endpoint-metadata-coverage.json",
+      "html_url": "https://ainpi.dev/findings/endpoint-metadata-coverage",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "endpoint-org-linkage",
+      "title": "Endpoint-to-organization linkage",
+      "hypotheses": [
+        "H50"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/endpoint-org-linkage.json",
+      "html_url": "https://ainpi.dev/findings/endpoint-org-linkage",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "endpoint-url-validity",
       "title": "Endpoint URL validity + machine-readable share",
       "hypotheses": [
@@ -210,6 +234,18 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/findings/endpoint-url-validity.json",
       "html_url": "https://ainpi.dev/findings/endpoint-url-validity",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "excluded-billing-medicare-partb-by-hcpcs",
+      "title": "Federally excluded NPIs billing Medicare Part B by HCPCS code (CY 2023, all states)",
+      "hypotheses": [
+        "H40"
+      ],
+      "status": "published",
+      "release_date": "CY 2023 (RY2025)",
+      "url": "https://ainpi.dev/api/v1/findings/excluded-billing-medicare-partb-by-hcpcs.json",
+      "html_url": "https://ainpi.dev/findings/excluded-billing-medicare-partb-by-hcpcs",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
@@ -283,6 +319,18 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
+      "slug": "excluded-telehealth-dominant-post-exclusion",
+      "title": "Federally excluded NPIs whose post-exclusion Medicare Part B billing is telehealth-dominant",
+      "hypotheses": [
+        "H42"
+      ],
+      "status": "published",
+      "release_date": "CY 2023 (RY2025)",
+      "url": "https://ainpi.dev/api/v1/findings/excluded-telehealth-dominant-post-exclusion.json",
+      "html_url": "https://ainpi.dev/findings/excluded-telehealth-dominant-post-exclusion",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "high-risk-cohort",
       "title": "High-risk provider cohort",
       "hypotheses": [
@@ -339,6 +387,18 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
+      "slug": "ndh-payer-endpoint-coverage",
+      "title": "NDH payer endpoint and organization coverage",
+      "hypotheses": [
+        "H49"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/ndh-payer-endpoint-coverage.json",
+      "html_url": "https://ainpi.dev/findings/ndh-payer-endpoint-coverage",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "network-adequacy-gauge",
       "title": "Network adequacy gauge",
       "hypotheses": [
@@ -382,7 +442,7 @@
         "H12",
         "H13"
       ],
-      "status": "in-progress",
+      "status": "published",
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/findings/npi-taxonomy-correctness.json",
       "html_url": "https://ainpi.dev/findings/npi-taxonomy-correctness",
@@ -499,6 +559,28 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
+      "slug": "practitioner-phone-reachability",
+      "title": null,
+      "hypotheses": [],
+      "status": null,
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/practitioner-phone-reachability-detail.json",
+      "html_url": "https://ainpi.dev/findings/practitioner-phone-reachability",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "practitioner-phone-reachability",
+      "title": "Practitioner phone-number reachability",
+      "hypotheses": [
+        "H43"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/practitioner-phone-reachability.json",
+      "html_url": "https://ainpi.dev/findings/practitioner-phone-reachability",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "referential-integrity",
       "title": "Referential integrity",
       "hypotheses": [
@@ -535,6 +617,18 @@
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     },
     {
+      "slug": "state-medicaid-directory-coverage",
+      "title": "State Medicaid provider-directory coverage and liveness",
+      "hypotheses": [
+        "H46"
+      ],
+      "status": "published",
+      "release_date": "2026-06-23",
+      "url": "https://ainpi.dev/api/v1/findings/state-medicaid-directory-coverage.json",
+      "html_url": "https://ainpi.dev/findings/state-medicaid-directory-coverage",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
       "slug": "temporal-staleness",
       "title": "Temporal staleness",
       "hypotheses": [
@@ -544,6 +638,18 @@
       "release_date": "2026-05-08",
       "url": "https://ainpi.dev/api/v1/findings/temporal-staleness.json",
       "html_url": "https://ainpi.dev/findings/temporal-staleness",
+      "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
+    },
+    {
+      "slug": "vendor-endpoint-attribution",
+      "title": "Vendor-published endpoint files can name most of what the NDH cannot",
+      "hypotheses": [
+        "H51"
+      ],
+      "status": "published",
+      "release_date": "2026-05-08",
+      "url": "https://ainpi.dev/api/v1/findings/vendor-endpoint-attribution.json",
+      "html_url": "https://ainpi.dev/findings/vendor-endpoint-attribution",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
     }
   ],
@@ -1112,264 +1218,400 @@
   ],
   "downloads_csv": [
     {
+      "name": "deactivated-still-billing-detail",
+      "url": "https://ainpi.dev/api/v1/findings/deactivated-still-billing-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "dmepos-excluded-detail",
+      "url": "https://ainpi.dev/api/v1/findings/dmepos-excluded-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "endpoint-org-crosswalk",
+      "url": "https://ainpi.dev/api/v1/findings/endpoint-org-crosswalk.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "excluded-receiving-industry-payments-detail",
+      "url": "https://ainpi.dev/api/v1/findings/excluded-receiving-industry-payments-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "high-risk-cohort-export",
+      "url": "https://ainpi.dev/api/v1/findings/high-risk-cohort-export.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "ndh-completeness-gap-detail",
+      "url": "https://ainpi.dev/api/v1/findings/ndh-completeness-gap-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "ndh-payer-endpoint-coverage-detail",
+      "url": "https://ainpi.dev/api/v1/findings/ndh-payer-endpoint-coverage-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "nh-hospice-hh-ownership-flags-detail",
+      "url": "https://ainpi.dev/api/v1/findings/nh-hospice-hh-ownership-flags-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "pecos-behavioral-health-taxonomy-detail",
+      "url": "https://ainpi.dev/api/v1/findings/pecos-behavioral-health-taxonomy-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "pecos-multi-enrollment-state-mismatch-detail",
+      "url": "https://ainpi.dev/api/v1/findings/pecos-multi-enrollment-state-mismatch-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "pecos-taxonomy-disagreement-detail",
+      "url": "https://ainpi.dev/api/v1/findings/pecos-taxonomy-disagreement-detail.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "state-medicaid-directory-coverage",
+      "url": "https://ainpi.dev/api/v1/findings/state-medicaid-directory-coverage.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "vendor-endpoint-attribution",
+      "url": "https://ainpi.dev/api/v1/findings/vendor-endpoint-attribution.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
       "name": "ak-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ak-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "al-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/al-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ar-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ar-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "az-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/az-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ca-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ca-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "co-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/co-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ct-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ct-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "dc-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/dc-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "de-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/de-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "fl-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/fl-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ga-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ga-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "hi-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/hi-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ia-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ia-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "id-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/id-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "il-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/il-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "in-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/in-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ks-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ks-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ky-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ky-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "la-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/la-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ma-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ma-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "md-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/md-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "me-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/me-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "mi-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/mi-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "mn-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/mn-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "mo-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/mo-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ms-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ms-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "mt-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/mt-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "nc-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/nc-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "nd-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/nd-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ne-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ne-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "nh-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/nh-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "nj-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/nj-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "nm-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/nm-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "nv-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/nv-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ny-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ny-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "oh-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/oh-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ok-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ok-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "or-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/or-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "pa-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/pa-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
+    },
+    {
+      "name": "pa-rural-health",
+      "url": "https://ainpi.dev/api/v1/states/pa-rural-health.csv",
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "pr-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/pr-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ri-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ri-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "sc-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/sc-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "sd-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/sd-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "tn-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/tn-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "tx-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/tx-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "ut-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/ut-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "va-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/va-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "vt-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/vt-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "wa-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/wa-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "wi-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/wi-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "wv-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/wv-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     },
     {
       "name": "wy-cohort-critical",
       "url": "https://ainpi.dev/api/v1/states/wy-cohort-critical.csv",
-      "format": "csv"
+      "format": "csv",
+      "scope": "states"
     }
   ]
 }
