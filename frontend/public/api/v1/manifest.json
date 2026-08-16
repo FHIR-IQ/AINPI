@@ -10,7 +10,7 @@
   "release_date": "2026-05-08",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "baecd21",
-  "generated_at": "2026-08-16T21:46:56+00:00",
+  "generated_at": "2026-08-16T21:54:59+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -1346,6 +1346,12 @@
     {
       "name": "high-risk-cohort-export",
       "url": "https://ainpi.dev/api/v1/findings/high-risk-cohort-export.csv",
+      "format": "csv",
+      "scope": "findings"
+    },
+    {
+      "name": "hospital-ownership-crosswalk",
+      "url": "https://ainpi.dev/api/v1/findings/hospital-ownership-crosswalk.csv",
       "format": "csv",
       "scope": "findings"
     },

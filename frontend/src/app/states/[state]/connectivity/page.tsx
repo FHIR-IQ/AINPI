@@ -325,6 +325,26 @@ function Connectivity({
             {systems.routing_caveat}
           </p>
 
+          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <Stat
+              label="Orgs with a CMS-attested owner"
+              value={fmt(systems.organizations_with_cms_attested_owner)}
+              sub="hospitals only; states ownership"
+            />
+            <Stat
+              label="Orgs with an NPPES parent"
+              value={fmt(systems.organizations_with_nppes_parent)}
+              sub="subparts only; can be stale"
+            />
+            <Stat
+              label="Systems found"
+              value={fmt(systems.systems_found)}
+              sub={Object.entries(systems.systems_by_basis)
+                .map(([k, v]) => `${v} ${k}`)
+                .join(', ')}
+            />
+          </div>
+
           <div className="mb-6 border border-gray-300 bg-white p-4 text-sm">
             <p className="mb-2 font-medium text-ink">
               Why the directory&rsquo;s own affiliation resource is not used

@@ -195,15 +195,20 @@ def describe_affiliation_graph(edges, name_by_id, top_n=10):
     }
 
 
-def build_systems(org_rows, parent_by_npi=None, min_practitioners=1,
-                  min_members=2):
+def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
+                  min_practitioners=1, min_members=2):
     """Group organizations into health systems, best evidence first.
 
-    Tier 1, attested: NPPES `parent_organization_lbn`. CMS's own
-    subpart-to-parent relationship, so unlike OrganizationAffiliation it states
-    what it means. Covers about 8.6% of Pennsylvania organization NPIs.
+    Tier 1, attested ownership: CMS enrollment ownership data. It states
+    ownership, names holding companies and chain home offices explicitly, and
+    joins to an NPI with no loss. Hospitals only; it does not cover physician
+    groups. See analysis/ingest_cms_ownership.py.
 
-    Tier 2, inferred: brand key from the organization name. Covers the rest and
+    Tier 2, attested subpart: NPPES `parent_organization_lbn`. CMS's own
+    subpart-to-parent relationship. Real but sparse, sometimes stale, and
+    sometimes a program rather than an owner, so it sits below tier 1.
+
+    Tier 3, inferred: brand key from the organization name. Covers the rest and
     is labelled as inference everywhere it surfaces.
 
     The affiliation graph is used for neither: see the module docstring for why
@@ -214,11 +219,16 @@ def build_systems(org_rows, parent_by_npi=None, min_practitioners=1,
     and emitting it as one inflates the count with noise.
     """
     parent_by_npi = parent_by_npi or {}
+    owner_by_npi = owner_by_npi or {}
     groups = collections.defaultdict(
         lambda: {"members": [], "practitioners": 0, "bases": set()})
     for o in org_rows:
-        parent = parent_by_npi.get(o["org_npi"] or "")
-        if parent:
+        npi = o["org_npi"] or ""
+        owner = owner_by_npi.get(npi)
+        parent = parent_by_npi.get(npi)
+        if owner:
+            key, basis = f"owner:{normalize(owner)}", "cms-ownership"
+        elif parent:
             key, basis = f"parent:{normalize(parent)}", "nppes-parent"
         else:
             bk = brand_key(o["org_name"])
@@ -241,7 +251,8 @@ def build_systems(org_rows, parent_by_npi=None, min_practitioners=1,
         out.append({
             "system_key": key,
             "label": lead["org_name"],
-            "basis": ("nppes-parent" if entry["bases"] == {"nppes-parent"}
+            "basis": ("cms-ownership" if "cms-ownership" in entry["bases"]
+                      else "nppes-parent" if "nppes-parent" in entry["bases"]
                       else "brand-name"),
             "organizations": len(entry["members"]),
             "practitioners": entry["practitioners"],

@@ -172,6 +172,35 @@ def load_vendor_attribution():
     return url_vendor, npi_url, name_url
 
 
+def load_hospital_owners(state):
+    """NPI -> corporate owner, from CMS enrollment ownership data.
+
+    Prefers the owner holding the largest stake, falling back to the first
+    named owner. Built by analysis/ingest_cms_ownership.py; absent until that
+    has been run, in which case the tier is simply skipped.
+    """
+    path = FINDINGS_DIR / "hospital-ownership-crosswalk.csv"
+    if not path.exists():
+        return {}
+    best = {}
+    with path.open() as fh:
+        for row in csv.DictReader(fh):
+            if state and row.get("state") != state.upper():
+                continue
+            npi = (row.get("npi") or "").strip()
+            owner = (row.get("owner") or "").strip()
+            if not npi or not owner:
+                continue
+            try:
+                pct = float(row.get("percentage") or 0)
+            except ValueError:
+                pct = 0.0
+            current = best.get(npi)
+            if current is None or pct > current[1]:
+                best[npi] = (owner, pct)
+    return {npi: owner for npi, (owner, _) in best.items()}
+
+
 def load_hospitals(state):
     """H47: per-hospital connectivity. Only Pennsylvania has this today."""
     path = STATES_DIR / f"{state.lower()}-rural-health.json"
@@ -313,8 +342,8 @@ def pct(n, d):
     return round(100.0 * n / d, 1) if d else 0.0
 
 
-def build(state, rows, org_rows, edges, edge_names, parent_by_npi, ep_by_id,
-          ep_by_npi, url_vendor, npi_url, name_url, hospitals):
+def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
+          ep_by_id, ep_by_npi, url_vendor, npi_url, name_url, hospitals):
     total = len(rows)
     with_role = 0
     with_org = 0
@@ -503,7 +532,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, ep_by_id,
     # endpoint, every practitioner in that system gets a system-level path,
     # which is weaker than a direct one and is reported as its own number.
     org_by_id = {o["org_id"]: o for o in org_rows}
-    systems = build_systems(org_rows, parent_by_npi)
+    systems = build_systems(org_rows, parent_by_npi, owner_by_npi)
     affiliation = describe_affiliation_graph(edges, edge_names)
     for sysrow in systems:
         # Collect every endpoint anywhere in the system, not the first one
@@ -619,16 +648,20 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, ep_by_id,
         "vendors": dict(vendors.most_common()),
         "systems": {
             "note": (
-                "Health systems, best evidence first. `nppes-parent` groups "
-                "come from NPPES is_organization_subpart plus "
-                "parent_organization_lbn, which is CMS's own corporate "
-                "subpart-to-parent relationship and states what it means. "
-                "`brand-name` groups are inferred from the organization name "
-                "and cover the rest. The obvious third method, the directory's "
-                "own OrganizationAffiliation resource, was tried and rejected: "
-                "see affiliation_graph below."
+                "Health systems, best evidence first. `cms-ownership` groups "
+                "come from CMS enrollment ownership data, which states "
+                "ownership and names holding companies explicitly, but covers "
+                "hospitals only. `nppes-parent` groups come from NPPES "
+                "is_organization_subpart plus parent_organization_lbn: real, "
+                "but sparse, sometimes stale, and sometimes a program rather "
+                "than an owner. `brand-name` groups are inferred from the "
+                "organization name and cover the rest. The directory's own "
+                "OrganizationAffiliation resource was tried and rejected: see "
+                "affiliation_graph below."
             ),
             "affiliation_graph": affiliation,
+            "organizations_with_cms_attested_owner": sum(
+                1 for o in org_rows if owner_by_npi.get(o["org_npi"] or "")),
             "organizations_with_nppes_parent": sum(
                 1 for o in org_rows if parent_by_npi.get(o["org_npi"] or "")),
             "systems_found": len(systems),
@@ -764,9 +797,11 @@ def main():
         parent_by_npi = {r["org_npi"]: r["parent_lbn"]
                          for r in run_query(PARENT_SQL, code)}
         print(f"  {len(parent_by_npi):,} organizations with an NPPES corporate parent")
+        owner_by_npi = load_hospital_owners(code)
+        print(f"  {len(owner_by_npi):,} organizations with a CMS-attested owner")
         payload = build(code, rows, org_rows, edges, edge_names, parent_by_npi,
-                        ep_by_id, ep_by_npi, url_vendor, npi_url, name_url,
-                        load_hospitals(code))
+                        owner_by_npi, ep_by_id, ep_by_npi, url_vendor, npi_url,
+                        name_url, load_hospitals(code))
         path = out_dir / f"{code.lower()}-connectivity.json"
         path.write_text(json.dumps(payload, indent=2) + "\n")
         s = payload["summary"]

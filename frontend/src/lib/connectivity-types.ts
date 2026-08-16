@@ -77,7 +77,7 @@ export interface ConnectivityGraph {
 export interface ConnectivitySystem {
   system_key: string;
   label: string;
-  basis: 'nppes-parent' | 'brand-name';
+  basis: 'cms-ownership' | 'nppes-parent' | 'brand-name';
   organizations: number;
   practitioners: number;
   member_org_ids: string[];
@@ -130,6 +130,7 @@ export interface ConnectivityPayload {
       largest_component_size: number;
       top_hubs: { name: string | null; children: number }[];
     };
+    organizations_with_cms_attested_owner: number;
     organizations_with_nppes_parent: number;
     systems_found: number;
     systems_by_basis: Record<string, number>;
