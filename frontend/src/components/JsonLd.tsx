@@ -94,10 +94,16 @@ export function DatasetJsonLd({
   /** The source release the numbers describe, not the day we published them. */
   temporalCoverage?: string;
   spatialCoverage?: string;
-  /** Upstream source, for datasets not derived from the NDH bulk files. */
-  basedOn?: { name: string; url: string };
+  /**
+   * Upstream source(s), for datasets not derived from the NDH bulk files.
+   * Accepts a list, because a finding can legitimately derive from more than
+   * one: H52 joins a payer FHIR directory to the NDH, and naming only one of
+   * them misattributes provenance.
+   */
+  basedOn?: { name: string; url: string } | { name: string; url: string }[];
 }) {
   const abs = (u: string) => (u.startsWith('http') ? u : `${SITE}${u}`);
+  const sources = Array.isArray(basedOn) ? basedOn : [basedOn];
 
   return (
     <LdScript
@@ -139,7 +145,7 @@ export function DatasetJsonLd({
           encodingFormat: d.format,
           contentUrl: abs(d.url),
         })),
-        isBasedOn: [{ '@type': 'Dataset', ...basedOn }],
+        isBasedOn: sources.map((s) => ({ '@type': 'Dataset', ...s })),
       }}
     />
   );

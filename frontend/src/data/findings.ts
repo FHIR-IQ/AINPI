@@ -57,6 +57,14 @@ export interface Finding {
   heroStats?: { label: string; value: string }[];
   /** Audience-specific "so what": what to do with this number */
   implications?: Implication[];
+  /**
+   * Upstream dataset(s) this finding derives from, for schema.org `isBasedOn`.
+   * Omit when the source is the NDH bulk files, which is the default. Set it
+   * on every finding whose numbers come from somewhere else, or the Dataset
+   * markup misattributes provenance to CMS. The rural pages already override
+   * this at the page level; findings pages read it from here.
+   */
+  basedOn?: { name: string; url: string }[];
 }
 
 export const FINDINGS: Finding[] = [
@@ -329,6 +337,16 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'rural-hospital-baseline',
     hypotheses: ['H48'],
+    basedOn: [
+      {
+        name: 'CMS Hospital General Information',
+        url: 'https://data.cms.gov/provider-data/dataset/xubh-q36u',
+      },
+      {
+        name: 'USDA ERS Rural-Urban Continuum Codes 2023',
+        url: 'https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/',
+      },
+    ],
     title: 'National rural hospital baseline',
     updated: '2026-08-04',
     summary:
@@ -363,6 +381,16 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'pa-rural-hospital-connectivity',
     hypotheses: ['H47'],
+    basedOn: [
+      {
+        name: 'CMS Hospital General Information',
+        url: 'https://data.cms.gov/provider-data/dataset/xubh-q36u',
+      },
+      {
+        name: 'USDA ERS Rural-Urban Continuum Codes 2023',
+        url: 'https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/',
+      },
+    ],
     title: 'Pennsylvania rural hospitals: FHIR endpoint publication and EHR concentration',
     updated: '2026-08-04',
     summary:
@@ -407,6 +435,12 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'state-medicaid-directory-coverage',
     hypotheses: ['H46'],
+    basedOn: [
+      {
+        name: 'CMS Enterprise-CMCS SMA-Endpoint-Directory',
+        url: 'https://github.com/Enterprise-CMCS/SMA-Endpoint-Directory',
+      },
+    ],
     title: 'State Medicaid provider-directory coverage and liveness',
     summary:
       'CMS publishes a directory-of-directories for state Medicaid provider directories (Enterprise-CMCS/SMA-Endpoint-Directory). H46 measures two layers the catalog itself does not report: how many jurisdictions carry a URL, and whether those URLs answer. Result: 32 of the 51 jurisdictions (50 states plus DC) have a listed directory, and 0 of 5 territories do. Of the 32 listed URLs, 27 answered an unauthenticated GET; 5 did not (Arizona times out, Delaware and Kansas redirect-loop, Maine returns 404, Ohio returns 500). So 27 of 51, 52.9%, have a federally-catalogued Medicaid provider directory that a member of the public can actually open. The companion Interoperability and Patient Access endpoint directory in the same repository is still an empty data-gathering workbook with zero states populated.',
@@ -563,6 +597,20 @@ export const FINDINGS: Finding[] = [
   {
     slug: 'payer-affiliation-gap',
     hypotheses: ['H52'],
+    basedOn: [
+      {
+        name: 'Capital BlueCross public FHIR provider directory (CMS-9115-F)',
+        url: 'https://providerdirectory-api.capbluecross.com/r4',
+      },
+      {
+        name: 'CMS National Provider Directory public use files',
+        url: 'https://directory.cms.gov/',
+      },
+      {
+        name: 'CMS Doctors and Clinicians National Downloadable File',
+        url: 'https://data.cms.gov/provider-data/dataset/mj5m-pzi6',
+      },
+    ],
     title: 'Payer directories carry the affiliation the NDH leaves empty',
     summary:
       'The NDH’s largest structural gap is not endpoints, it is roles: 73% of active practitioners carry no PractitionerRole at all, so they have no organization, so no endpoint path exists for them at any confidence. Medicare claims data was the obvious way through, and it closed only 2.5% of the gap, because CMS’s Doctors and Clinicians file draws on the same Medicare enrollment population that already has roles. Payer directories draw on network contracts instead. H52 takes one payer’s entire public FHIR directory, published under the CMS-9115-F Patient Access rule, and measures how much affiliation it adds against the NDH and CMS DAC together.',

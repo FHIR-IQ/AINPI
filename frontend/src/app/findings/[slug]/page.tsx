@@ -89,6 +89,12 @@ export default function FindingPage({ params }: { params: { slug: string } }) {
         keywords={[...finding.hypotheses, 'provider directory', 'CMS', 'data quality', 'FHIR']}
         measurementTechnique={finding.dataSource}
         variableMeasured={finding.denominator}
+        // Findings whose numbers come from somewhere other than the NDH bulk
+        // files declare their own sources. Without this the markup credits CMS
+        // for data CMS did not publish: the rural findings derive from CMS
+        // Hospital General Information joined to USDA ERS, H46 from the CMCS
+        // endpoint directory, and H52 from a payer FHIR directory.
+        basedOn={finding.basedOn}
         version={live?.methodology_version}
         // The NDH release the numbers describe, which is not the day we
         // published them.
