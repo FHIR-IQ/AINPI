@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { loadHubFeed, methodologyToTimelineEntries } from '@/lib/hub-feed';
+import { FINDINGS } from '@/data/findings';
 
 describe('loadHubFeed - methodology + finding entries', () => {
   // These assert on the untrimmed generator, not the timeline. The timeline
@@ -36,9 +37,14 @@ describe('loadHubFeed - methodology + finding entries', () => {
     expect(published.length).toBeGreaterThan(0);
   });
 
-  it('H40 is the featured lead and therefore absent from the timeline', () => {
+  // Asserts the relationship rather than the current lead's slug: the lead
+  // rotates every release, and pinning it here made a rotation look like a
+  // regression in the timeline code.
+  it('the featured lead is published and therefore absent from the timeline', () => {
     const { lead, timeline } = loadHubFeed();
-    expect(lead.href).toBe('/findings/excluded-billing-medicare-partb-by-hcpcs');
+    const featured = FINDINGS.find((f) => f.featured);
+    expect(featured, 'no finding is marked featured').toBeDefined();
+    expect(lead.href).toBe(`/findings/${featured!.slug}`);
     expect(lead.status).toBe('published');
     const inTimeline = timeline.find((e) => e.href === lead.href);
     expect(inTimeline).toBeUndefined();

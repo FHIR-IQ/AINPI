@@ -662,6 +662,18 @@ export const FINDINGS: Finding[] = [
       },
     ],
     title: 'The role gap is a Medicare-billing gap',
+    // Lead story. It is the newest finding and it changes how every other
+    // number on this site should be read: a coverage percentage is really a
+    // statement about Medicare-billing specialties. A reader who sees any
+    // other headline first will over-read it.
+    featured: true,
+    ogTagline:
+      'Directory coverage is not evenly spread across the professions it appears to describe. It tracks who bills Medicare.',
+    heroStats: [
+      { label: 'Advanced practice with a role', value: '77.9%' },
+      { label: 'Pharmacy with a role', value: '1 of 12,995' },
+      { label: 'PA practitioners measured', value: '227,727' },
+    ],
     summary:
       'Every coverage percentage this project publishes divides by the NDH’s active Practitioner set, and nobody had checked what is in it. Measured across all 227,727 active Pennsylvania practitioners against their NPPES taxonomy: role coverage does not vary a little between professions, it varies by two orders of magnitude, and it tracks who bills Medicare rather than who practises. 77.9% of advanced-practice clinicians and 69.8% of physicians carry a PractitionerRole, against 19.6% of therapists, 14.8% of behavioral-health providers, 4.7% of dentists, 2.7% of nurses and 1 of 12,995 pharmacy providers. The consequence is that an endpoint-coverage number is really a statement about Medicare-billing specialties, and the directory publishes no field that says so.',
     nullHypothesis:
@@ -1143,7 +1155,9 @@ export const FINDINGS: Finding[] = [
     status: 'published',
     ogTagline:
       'Sharpens H30a from "billed Part B" to per-HCPCS, per-place-of-service post-exclusion billing, the per-claim recoupment unit.',
-    featured: true,
+    // Was the hub lead until 2026-08-17. Still the strongest single case on
+    // the site; H54 leads now because it changes how every other number here
+    // should be read, and a reader needs that before the rest.
     heroStats: [
       { label: 'Confirmed cases', value: '1' },
       { label: 'CY 2023 paid', value: '$880K' },

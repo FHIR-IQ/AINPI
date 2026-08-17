@@ -33,6 +33,18 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'aug-2026-08-17-update',
+    version: '2026-08-17-update',
+    title:
+      '2026-08-17 update: the directory knows doctors, and barely knows nurses, dentists and pharmacists',
+    description:
+      'We checked all 227,727 health workers the national directory lists as active in Pennsylvania, and asked which ones it says have a workplace. It is not evenly spread. 77.9% of nurse practitioners and physician assistants have one, and 1 of 12,995 pharmacy workers does. The split tracks who bills Medicare, not who provides care. Includes a new county map you can zoom, and an honest account of the guess we got wrong.',
+    format: 'web',
+    url: '/reports/2026-08-17-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'aug-2026-08-16-update',
     version: '2026-08-16-update',
     title: "2026-08-16 update: most addresses in the national doctor directory don't say who they belong to",
@@ -40,7 +52,6 @@ export const REPORTS: ReportOption[] = [
       'We checked 114,071 web addresses in the national directory of doctors. Only 19,334 say who owns them, about one in six. Nothing is broken, the names were simply never filled in. Includes a free list of the ones that work, why sixteen software companies have never filled the name in once, why health insurers are not in the directory yet, and what we think the community should push for next.',
     format: 'web',
     url: '/reports/2026-08-16-update',
-    badge: 'NEW',
     length: '~4 min read',
   },
   {

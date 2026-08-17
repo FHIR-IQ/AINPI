@@ -3,14 +3,29 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Map, FileText, MapPin, BookOpen, Code2, LayoutGrid, IdCard, Stethoscope } from 'lucide-react';
+import { LogOut, User, Map, FileText, MapPin, BookOpen, Code2, LayoutGrid, IdCard, Stethoscope, Landmark } from 'lucide-react';
 
+/**
+ * Top-level navigation.
+ *
+ * `/states` was missing entirely, which left 51 published state slices, the
+ * Pennsylvania connectivity ledger and its county map reachable only from
+ * links inside other pages. That is a lot of finished work sitting behind no
+ * front door.
+ *
+ * "For States" (/for-state-medicaid) is a different thing to "States"
+ * (/states): the first is the plain-language explainer written for state
+ * Medicaid CMOs, the second is the audit data. Both earn a slot, and they sit
+ * next to each other so the similar names read as a pair rather than as a
+ * duplicate.
+ */
 const NAV_ITEMS: { href: string; label: string; icon: React.ReactNode }[] = [
   { href: '/', label: 'Landscape', icon: <LayoutGrid className="w-4 h-4 mr-1.5" /> },
   { href: '/map', label: 'Map', icon: <Map className="w-4 h-4 mr-1.5" /> },
   { href: '/findings', label: 'Findings', icon: <FileText className="w-4 h-4 mr-1.5" /> },
   { href: '/npi', label: 'NPI check', icon: <IdCard className="w-4 h-4 mr-1.5" /> },
   { href: '/rural-health', label: 'Rural health', icon: <Stethoscope className="w-4 h-4 mr-1.5" /> },
+  { href: '/states', label: 'States', icon: <Landmark className="w-4 h-4 mr-1.5" /> },
   { href: '/for-state-medicaid', label: 'For States', icon: <MapPin className="w-4 h-4 mr-1.5" /> },
   { href: '/methodology', label: 'Methodology', icon: <BookOpen className="w-4 h-4 mr-1.5" /> },
   { href: '/developer', label: 'Developer', icon: <Code2 className="w-4 h-4 mr-1.5" /> },

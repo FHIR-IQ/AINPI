@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AuthorByline from '@/components/AuthorByline';
 import { SEED_STATES } from '@/data/states';
@@ -48,6 +49,35 @@ export default function StatesIndex() {
         </p>
 
         <AuthorByline />
+
+        {/*
+          The connectivity ledger is the deepest artifact on the site and was
+          reachable only by opening a state page and scrolling. Anything that
+          takes two unsignposted clicks to find is, in practice, unpublished.
+        */}
+        <section className="mt-8 border border-primary-200 bg-primary-50 p-6">
+          <p className="eyebrow mb-2">Start here</p>
+          <h2 className="mb-2 font-serif text-2xl text-ink">
+            Pennsylvania: the whole chain, end to end
+          </h2>
+          <p className="measure mb-4 text-sm text-gray-700">
+            One state traced all the way through: every active practitioner,
+            whether the directory gives them an organization, whether that
+            organization has a working address for software, and which vendor
+            is behind it. Includes a county map you can zoom, and a named list
+            of the organizations nothing public reaches.
+          </p>
+          <p className="mb-4 text-sm text-gray-700">
+            227,727 practitioners. 38.1% have an organization at all. 19.3%
+            reach an address software can use.
+          </p>
+          <Link
+            href="/states/pa/connectivity"
+            className="inline-block border border-primary-600 bg-primary-600 px-4 py-2 text-sm text-white hover:bg-primary-700"
+          >
+            Open the Pennsylvania ledger
+          </Link>
+        </section>
 
         <section className="mt-8 bg-white border border-gray-200 p-6">
           <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
