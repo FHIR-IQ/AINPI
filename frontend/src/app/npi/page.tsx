@@ -8,7 +8,7 @@ import NpiLookupForm from './NpiLookupForm';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Per-NPI report cards | AINPI',
+  title: 'Per-NPI report cards',
   description:
     'Data-quality report cards for the federal provider directory high-risk cohort: OIG LEIE, SAM.gov, and NPPES cross-checks per NPI, each with primary-source verification links.',
   openGraph: {

@@ -16,7 +16,7 @@ export function generateStaticParams(): { npi: string }[] {
 
 export function generateMetadata({ params }: { params: { npi: string } }): Metadata {
   const row = getCohortRow(params.npi);
-  if (!row) return { title: 'NPI report card | AINPI' };
+  if (!row) return { title: 'NPI report card' };
   const title = `${row.name} (NPI ${row.npi}): federal directory data-quality report: AINPI`;
   const description =
     `Data-quality signals for NPI ${row.npi} from public federal databases ` +

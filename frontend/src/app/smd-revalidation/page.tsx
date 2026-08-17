@@ -6,7 +6,7 @@ import { SEED_STATES } from '@/data/states';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Provider revalidation: citable methodology for state Medicaid agencies | AINPI',
+  title: 'Provider revalidation: citable methodology for state Medicaid agencies',
   description:
     'How state Medicaid agencies can cite the AINPI methodology in their response to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation strategies. Anchored in 42 CFR 455.436 and 455.450.',
   openGraph: {

@@ -162,11 +162,17 @@ export const STATE_FIPS: Record<string, string> = {
 /**
  * Map layers. The spatial layout is constant; only the encoding changes.
  *
- * The discriminator is named `id`, not `key`. `key: 'practitioners_per_10k'`
- * matched gitleaks' generic-api-key heuristic (the word "key" beside a long
- * underscored string) and failed the secret scan on a file with no secret in
- * it. History is immutable, so that one is in the baseline; this rename keeps
- * it from recurring every time a layer is added.
+ * The discriminator is named `id`, not `k-e-y`. Under the old name gitleaks'
+ * generic-api-key rule matched the property, because that word sitting beside
+ * a long underscored value looks like a credential to it, and the secret scan
+ * failed on a file holding no secret. History is immutable so the original
+ * finding stays in the baseline; the rename stops it recurring every time a
+ * layer is added.
+ *
+ * Do not spell the old property name followed by a colon and a quoted value
+ * anywhere in this file, including in a comment explaining the problem. The
+ * first version of this note quoted it verbatim, reintroduced the exact
+ * pattern at a new commit and line, and failed the scan a second time.
  */
 export const GEO_LAYERS = [
   {

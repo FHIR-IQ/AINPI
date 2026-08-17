@@ -23,7 +23,7 @@ export async function generateMetadata({
   params: { state: string };
 }): Promise<Metadata> {
   const entry = findStateByCode(params.state);
-  if (!entry) return { title: 'State not found | AINPI' };
+  if (!entry) return { title: 'State not found' };
 
   const title = `${entry.name} provider directory audit: AINPI`;
   const description = `State-scoped slice of the AINPI audit of the CMS National Provider Directory, prepared as a citable methodology for ${entry.name}'s response to the 2026-04-23 CMS State Medicaid Director letter on provider revalidation.`;

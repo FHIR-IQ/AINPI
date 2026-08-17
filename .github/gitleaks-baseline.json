@@ -338,5 +338,25 @@
     "Tags": [],
     "RuleID": "generic-api-key",
     "Fingerprint": "2ccc789205c881414d8e6525ae38c7ce62020939:frontend/src/lib/connectivity-types.ts:generic-api-key:179"
+  },
+  {
+    "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+    "StartLine": 165,
+    "EndLine": 165,
+    "StartColumn": 50,
+    "EndColumn": 77,
+    "Match": "key: 'REDACTED'",
+    "Secret": "REDACTED",
+    "File": "frontend/src/lib/connectivity-types.ts",
+    "SymlinkFile": "",
+    "Commit": "04b4903a0b20a9ccaa619412ad734c45475dc34e",
+    "Entropy": 3.6897037,
+    "Author": "Eugene Vestel",
+    "Email": "44978768+aks129@users.noreply.github.com",
+    "Date": "2026-08-17T01:27:43Z",
+    "Message": "Put the measured work on the front page, and fix the secret scan\n\nThe homepage led with the landscape treemap, which carries its own\nbanner saying the numbers are a synthetic seed and must not be cited.\nEvery measured finding sat behind a nav click. A first-time visitor met\nuncitable data first.\n\nAdds a two-card block above the treemap: the current lead finding, and\nthe Pennsylvania connectivity ledger with its map. Both carry hero stats\nand CTA links. The lead comes from loadHubFeed(), the same source\n/findings uses, so it follows `featured` and needs no edit each release.\n\nVerified the cost contract this triggers: hub-feed.ts on a new route is\nexactly the case CLAUDE.md warns about. The homepage .nft.json has 0\nreferences to public/api/v1/states and 0 to public/api/v1/findings.\n\nSecret scan fix. The scan started failing at my first push on\n`key: 'practitioners_per_10k'` in connectivity-types.ts, which matched\ngitleaks' generic-api-key heuristic: the word \"key\" beside a long\nunderscored string. No secret involved.\n\nTwo parts, because history is immutable:\n\n- Renamed the layer discriminator from `key` to `id` so it cannot\n  re-trigger every time a map layer is added.\n- Added the historical finding to the baseline.\n\nThree things went wrong getting that baseline entry right, all worth\nrecording. Regenerating the baseline wholesale dropped 7 existing\nentries, so it is appended to rather than replaced: a baseline that\nforgets a historical leak stops protecting against it reappearing. My\nfirst verification ran from frontend/, where the baseline path does not\nexist, so gitleaks silently scanned without it and I read a stale\nfailure as a real one. And the entry has to be generated with --redact,\nbecause gitleaks compares the whole finding rather than the fingerprint,\nso an unredacted Secret never matches the redacted scan CI runs.\n\nVerified from the repo root with CI's exact flags: exit 0, no leaks.\n\nCo-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>",
+    "Tags": [],
+    "RuleID": "generic-api-key",
+    "Fingerprint": "04b4903a0b20a9ccaa619412ad734c45475dc34e:frontend/src/lib/connectivity-types.ts:generic-api-key:165"
   }
 ]

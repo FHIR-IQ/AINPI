@@ -5,7 +5,7 @@ import AuthorByline from '@/components/AuthorByline';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Data sources | AINPI',
+  title: 'Data sources',
   description:
     'Every public dataset AINPI ingests, considers, or rejects, with primary-source URLs, license terms, refresh cadence, and the AINPI hypothesis each maps to. Citation-grade reference for auditors, researchers, and state Medicaid teams.',
   openGraph: {

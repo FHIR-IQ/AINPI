@@ -5,7 +5,7 @@ import AuthorByline from '@/components/AuthorByline';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'REAL Health Providers Act: an independent way to measure accuracy | AINPI',
+  title: 'REAL Health Providers Act: an independent way to measure accuracy',
   description:
     'How AINPI maps to the verification, removal, and accuracy-scoring obligations of the Requiring Enhanced & Accurate Lists of Health Providers Act (HR 7148 § 6220). Public, reproducible, record-level cross-source verification for the 2028 compliance window and the 2029 machine-readable scoring requirement.',
   openGraph: {

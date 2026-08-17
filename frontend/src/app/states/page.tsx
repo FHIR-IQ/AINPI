@@ -8,7 +8,7 @@ import { loadStateFindings } from '@/lib/load-api-v1';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'State directory audits | AINPI',
+  title: 'State directory audits',
   description:
     'State-scoped slices of the AINPI audit of the CMS National Provider Directory, prepared as citable methodology for state Medicaid agencies responding to the 2026-04-23 CMS letter on provider revalidation.',
 };

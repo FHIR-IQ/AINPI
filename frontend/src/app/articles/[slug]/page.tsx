@@ -40,7 +40,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const docPath = slugToFile(slug);
-  if (!docPath) return { title: 'Article | AINPI' };
+  if (!docPath) return { title: 'Article' };
   const doc = loadMarkdown(docPath, 'AINPI article');
   // Pull the first H1 as the title.
   const titleMatch = doc.body.match(/^#\s+(.+)$/m);

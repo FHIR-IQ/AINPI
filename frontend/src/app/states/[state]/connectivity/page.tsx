@@ -185,8 +185,36 @@ function Connectivity({
           'interoperability',
           state_name,
         ]}
-        measurementTechnique="Join of NDH practitioner, practitioner_role and organization resources to the published AINPI endpoint and vendor attribution crosswalks, banded by whether each link is deterministic or inferred."
+        measurementTechnique="Join of NDH practitioner, practitioner_role and organization resources to the published AINPI endpoint and vendor attribution crosswalks, plus CMS enrollment for practitioners the directory does not affiliate, banded by whether each link is deterministic or inferred. County geography is assigned from the practitioner postal code by dominant population share."
         variableMeasured={`Practitioners with a role, with a resolvable organization, with a named location, reaching a FHIR endpoint, and with a known EHR vendor, out of ${fmt(summary.practitioners)} active ${state_name} practitioners.`}
+        // The default attributes a Dataset to the NDH bulk files alone, which
+        // is wrong here and the exact failure mode CLAUDE.md calls out: this
+        // ledger also derives from vendor-published endpoint files, CMS
+        // enrollment, and the federal county files behind the map. Crediting
+        // CMS for USDA's rural codes misstates provenance to every consumer
+        // that reads the markup.
+        basedOn={[
+          {
+            name: 'CMS National Provider Directory public use files',
+            url: 'https://directory.cms.gov/',
+          },
+          {
+            name: 'CMS Doctors and Clinicians National Downloadable File',
+            url: 'https://data.cms.gov/provider-data/dataset/mj5m-pzi6',
+          },
+          {
+            name: 'CMS Medicare Revalidation Reassignment List',
+            url: 'https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment',
+          },
+          {
+            name: 'USDA ERS Rural-Urban Continuum Codes',
+            url: 'https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/',
+          },
+          {
+            name: 'US Census Bureau county population estimates and ZCTA-county relationship file',
+            url: 'https://www.census.gov/programs-surveys/popest.html',
+          },
+        ]}
       />
       <Navbar />
 

@@ -5,7 +5,7 @@ import Navbar from '@/components/Navbar';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'PECOS as authoritative source | AINPI',
+  title: 'PECOS as authoritative source',
   description:
     'CMS designated PECOS as authoritative for Medicare enrollment under the 2026 verification rules. State Medicaid systems must demonstrate alignment. AINPI surfaces the three classes of misalignment: taxonomy code disagreement, stale practice locations, and ownership disclosure currency.',
   openGraph: {

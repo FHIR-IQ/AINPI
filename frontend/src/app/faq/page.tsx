@@ -8,7 +8,7 @@ const DOC_PATH = 'docs/faq.md';
 const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
-  title: 'FAQ | AINPI',
+  title: 'FAQ',
   description:
     'Frequently asked questions about AINPI, the open-source audit of the CMS National Provider Directory: what it is, who built it, data sources, refresh cadence, contribution paths, and licensing.',
   openGraph: {

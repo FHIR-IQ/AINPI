@@ -8,7 +8,7 @@ import { DatasetJsonLd } from '@/components/JsonLd';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Pennsylvania rural hospitals: who publishes a FHIR endpoint | AINPI',
+  title: 'Pennsylvania rural hospitals: who publishes a FHIR endpoint',
   description:
     'Every Pennsylvania hospital mapped by rural designation, health system, and EHR vendor, with whether it publishes a FHIR endpoint through its certified EHR. County overlays for median household income, age, and rural classification.',
   openGraph: {

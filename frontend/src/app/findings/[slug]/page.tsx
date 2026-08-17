@@ -19,9 +19,14 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const finding = findBySlug(params.slug);
-  if (!finding) return { title: 'Finding not found | AINPI' };
+  if (!finding) return { title: 'Finding not found' };
 
-  const title = `${finding.title}: AINPI`;
+  // The root layout applies a '%s | AINPI' template to `title`, so appending
+  // the brand here rendered "<finding>: AINPI | AINPI" in every tab and every
+  // search result. openGraph.title is NOT templated by Next, so it keeps a
+  // brand of its own.
+  const title = finding.title;
+  const ogTitle = `${finding.title}: AINPI`;
   const description = finding.ogTagline || finding.summary;
   const url = `https://ainpi.dev/findings/${finding.slug}`;
 
@@ -29,7 +34,7 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
-      title,
+      title: ogTitle,
       description,
       url,
       type: 'article',
@@ -37,7 +42,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title,
+      title: ogTitle,
       description,
     },
   };

@@ -8,7 +8,7 @@ import { FindingsCatalogTable } from '@/components/findings-hub/FindingsCatalogT
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Findings | AINPI',
+  title: 'Findings',
   description:
     'AINPI audit findings + recent updates from the audit of the CMS National Provider Directory. Latest published research, methodology bumps, and the full catalog of pre-registered findings.',
   openGraph: {

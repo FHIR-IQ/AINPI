@@ -10,7 +10,7 @@ import type { RuralStateRow } from '@/components/charts/RuralStateMap';
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
-  title: 'Rural health: where the hospitals are, and who can reach them | AINPI',
+  title: 'Rural health: where the hospitals are, and who can reach them',
   description:
     'A national baseline of rural hospital capacity built from public federal data. 34.4% of US hospitals sit in nonmetro counties serving 13.8% of the population, and 1,338 carry the Critical Access designation. State by state, with a Pennsylvania deep dive on FHIR endpoint reachability.',
   openGraph: {
