@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-10T10:24:26+00:00",
+  "generated_at": "2026-08-17T09:50:54+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "baecd21",
+  "commit_sha": "bda819c",
   "denominators": {
     "practitioner": 130127,
     "organization": 67291,
@@ -110,39 +110,39 @@
   ],
   "verify_samples": [
     {
-      "npi": "1588511976",
-      "display_name": "GILL, AMANDA",
+      "npi": "1386592822",
+      "display_name": "HERMAN, LEA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1588511976"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1386592822"
     },
     {
-      "npi": "1083565675",
-      "display_name": "STEVENS, HEATHER",
+      "npi": "1811848377",
+      "display_name": "LEITNER, KRISTEN",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083565675"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1811848377"
     },
     {
-      "npi": "1972450062",
-      "display_name": "VILLALOBOS, ANA",
+      "npi": "1669329769",
+      "display_name": "MCQUAY, JADE",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972450062"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669329769"
     },
     {
-      "npi": "1487500435",
-      "display_name": "FERRARI, JENNIFER",
+      "npi": "1144178914",
+      "display_name": "SILVERSTEIN, DANIEL",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1487500435"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144178914"
     },
     {
-      "npi": "1487506853",
-      "display_name": "DAVIS, BRANDI",
+      "npi": "1134076870",
+      "display_name": "VARSHAPALLY, LAKSHMIPRIYA",
       "flagged_by": "npi-taxonomy-correctness",
       "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1487506853"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1134076870"
     }
   ],
   "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."

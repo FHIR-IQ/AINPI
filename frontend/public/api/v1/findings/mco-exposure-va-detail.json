@@ -1,12 +1,12 @@
 {
-  "queried_at": "2026-08-10T10:35:58+00:00",
-  "cohort_source": "high-risk-cohort-export.csv@baecd21",
+  "queried_at": "2026-08-17T10:03:23+00:00",
+  "cohort_source": "high-risk-cohort-export.csv@bda819c",
   "mcos": [
     {
       "name": "Humana",
       "endpoint": "https://fhir.humana.com/api",
       "search": "identifier",
-      "queried": 125,
+      "queried": 128,
       "matched": 0,
       "errors": 0
     },
@@ -14,15 +14,15 @@
       "name": "Cigna",
       "endpoint": "https://fhir.cigna.com/ProviderDirectory/v1",
       "search": "name",
-      "queried": 125,
-      "matched": 2,
+      "queried": 128,
+      "matched": 3,
       "errors": 0
     },
     {
       "name": "UnitedHealthcare",
       "endpoint": "https://flex.optum.com/fhirpublic/R4",
       "search": "identifier",
-      "queried": 125,
+      "queried": 128,
       "matched": 0,
       "errors": 0
     },
@@ -30,12 +30,25 @@
       "name": "Molina",
       "endpoint": "https://api.interop.molinahealthcare.com/providerdirectory",
       "search": "identifier",
-      "queried": 125,
+      "queried": 128,
       "matched": 0,
       "errors": 0
     }
   ],
   "samples": [
+    {
+      "npi": "1639208705",
+      "name": "CHASE, BRIDGETTE",
+      "reason_codes": [
+        "oig_excluded"
+      ],
+      "matched_in": [
+        "Cigna"
+      ],
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1639208705"
+    },
     {
       "npi": "1710496161",
       "name": "BURKHEAD, JASON",

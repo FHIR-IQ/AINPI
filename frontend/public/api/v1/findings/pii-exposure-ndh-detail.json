@@ -1,5 +1,5 @@
 {
-  "queried_at": "2026-08-10T10:48:32+00:00",
+  "queried_at": "2026-08-17T10:15:51+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
     "flagged_pattern_match": 50,
@@ -74,27 +74,6 @@
   ],
   "samples": [
     {
-      "npi": "1538276639",
-      "name": "REDDEN, GINGER",
-      "state": "",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1538276639"
-    },
-    {
-      "npi": "1336193671",
-      "name": "BROWN, REBECCA",
-      "state": "",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1336193671"
-    },
-    {
-      "npi": "1922121656",
-      "name": "GINSBERG, DAVID",
-      "state": "IL",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1922121656"
-    },
-    {
       "npi": "1861030215",
       "name": "BOUTON SANCHEZ, A",
       "state": "IL",
@@ -102,11 +81,32 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861030215"
     },
     {
-      "npi": "1619955713",
-      "name": "KNAPP, MEREDITH",
-      "state": "",
+      "npi": "1417109950",
+      "name": "TURNER, GEOFFREY",
+      "state": "OR",
       "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619955713"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417109950"
+    },
+    {
+      "npi": "1396918496",
+      "name": "MAKIM, SHITAL",
+      "state": "MA",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396918496"
+    },
+    {
+      "npi": "1396751012",
+      "name": "SUTTON, BARBARA",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396751012"
+    },
+    {
+      "npi": "1922121656",
+      "name": "GINSBERG, DAVID",
+      "state": "IL",
+      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1922121656"
     }
   ],
   "limitations": [
