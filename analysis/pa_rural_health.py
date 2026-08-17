@@ -63,7 +63,11 @@ CACHE_DIR = REPO_ROOT / "analysis" / ".cache"
 CMS_METASTORE = "https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items/xubh-q36u"
 ERS_RUCC = "https://ers.usda.gov/sites/default/files/_laserfiche/DataFiles/53251/Ruralurbancontinuumcodes2023.csv"
 ERS_INCOME = "https://ers.usda.gov/sites/default/files/_laserfiche/DataFiles/48747/Unemployment2023.csv"
-CENSUS_PEP = "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/counties/asrh/cc-est2023-agesex-42.csv"
+# The Census population estimates are published one file per state, keyed by
+# the two-digit state FIPS in the filename. Formatted rather than hardcoded so
+# load_counties() works for any state; PA (42) stays the default.
+CENSUS_PEP_TEMPLATE = "https://www2.census.gov/programs-surveys/popest/datasets/2020-2023/counties/asrh/cc-est2023-agesex-{fips}.csv"
+CENSUS_PEP = CENSUS_PEP_TEMPLATE.format(fips="42")
 
 INCOME_ATTR = "Median_Household_Income_2022"
 PEP_YEAR = "5"  # vintage 2023 estimate
@@ -160,13 +164,19 @@ def match_key(name: str, city: str) -> tuple[str, str]:
     return (core, (city or "").upper().strip())
 
 
-def load_counties(refresh: bool) -> dict[str, dict]:
-    """FIPS -> county record with rural class, income, age."""
+def load_counties(refresh: bool, state: str = "PA",
+                  state_fips: str = "42") -> dict[str, dict]:
+    """FIPS -> county record with rural class, income, age.
+
+    Defaults to Pennsylvania so H47 is unchanged. Parameterized so the
+    connectivity ledger's geography can be built for any state from the same
+    three federal files rather than a second copy of this loader.
+    """
     counties: dict[str, dict] = {}
 
     rucc = csv.DictReader(io.StringIO(fetch(ERS_RUCC, "rucc2023.csv", refresh, "latin-1")))
     for r in rucc:
-        if r["State"] != "PA":
+        if r["State"] != state:
             continue
         fips = r["FIPS"].zfill(5)
         c = counties.setdefault(fips, {"fips": fips, "name": r["County_Name"].replace(" County", "")})
@@ -179,13 +189,15 @@ def load_counties(refresh: bool) -> dict[str, dict]:
 
     inc = csv.DictReader(io.StringIO(fetch(ERS_INCOME, "ers_income.csv", refresh, "latin-1")))
     for r in inc:
-        if r["State"] != "PA" or r["Attribute"] != INCOME_ATTR:
+        if r["State"] != state or r["Attribute"] != INCOME_ATTR:
             continue
         fips = r["FIPS_Code"].zfill(5)
         if fips in counties and r["Value"]:
             counties[fips]["median_household_income"] = int(float(r["Value"].replace(",", "")))
 
-    pep = csv.DictReader(io.StringIO(fetch(CENSUS_PEP, "pep_pa_agesex.csv", refresh, "latin-1")))
+    pep = csv.DictReader(io.StringIO(fetch(
+        CENSUS_PEP_TEMPLATE.format(fips=state_fips),
+        f"pep_{state.lower()}_agesex.csv", refresh, "latin-1")))
     for r in pep:
         if r.get("YEAR") != PEP_YEAR:
             continue

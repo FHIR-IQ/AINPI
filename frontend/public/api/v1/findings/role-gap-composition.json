@@ -6,10 +6,10 @@
   ],
   "status": "published",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T00:13:30.620240+00:00",
+  "generated_at": "2026-08-17T00:34:56.231213+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "0e95ed792aff33d07066d2b71402e22cf1b14059",
-  "headline": "NDH role coverage tracks Medicare billing, not clinical practice: 77.9% of PA advanced practice providers carry a PractitionerRole against 0.0% of pharmacy providers (1 of 12,995).",
+  "commit_sha": "c8b9a28aa4d35c16fe2b100c20cc2376fe54abbd",
+  "headline": "NDH role coverage tracks Medicare billing, not clinical practice: 77.9% of PA advanced practice providers carry a PractitionerRole against 0.008% of pharmacy providers (1 of 12,995).",
   "numerator": 1,
   "denominator": 12995,
   "chart": {
@@ -66,11 +66,11 @@
       },
       {
         "label": "support",
-        "value": 0.4
+        "value": 0.434
       },
       {
         "label": "pharmacy",
-        "value": 0.0
+        "value": 0.008
       }
     ]
   },
@@ -182,13 +182,13 @@
           "category": "support",
           "with_role": 6,
           "total": 1384,
-          "pct": 0.4
+          "pct": 0.434
         },
         {
           "category": "pharmacy",
           "with_role": 1,
           "total": 12995,
-          "pct": 0.0
+          "pct": 0.008
         }
       ],
       "role_coverage_spread": {
@@ -198,7 +198,7 @@
         },
         "lowest": {
           "category": "pharmacy",
-          "pct": 0.0
+          "pct": 0.008
         }
       },
       "by_category": [

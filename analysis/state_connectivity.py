@@ -50,6 +50,8 @@ from analysis.org_systems import (  # noqa: E402
     build_systems,
     describe_affiliation_graph,
 )
+from analysis.pa_rural_health import load_counties  # noqa: E402
+from analysis.zip_county import STATE_FIPS, load_zip_county  # noqa: E402
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 API_V1 = REPO_ROOT / "frontend" / "public" / "api" / "v1"
@@ -261,7 +263,7 @@ def load_hospitals(state):
 
 PRACTITIONER_SQL = f"""
 WITH prac AS (
-  SELECT _id AS pid, _npi AS npi
+  SELECT _id AS pid, _npi AS npi, _postal_code AS zip
   FROM `{PROJECT}.{DATASET}.practitioner`
   WHERE _active AND _state = @state AND _npi IS NOT NULL
 ),
@@ -280,6 +282,7 @@ orgs AS (
 )
 SELECT
   p.npi,
+  ANY_VALUE(p.zip)                                         AS zip,
   COUNTIF(r.pref IS NOT NULL)                              AS n_roles,
   COUNTIF(o._id IS NOT NULL)                               AS n_resolved_orgs,
   COUNTIF(o._npi IS NOT NULL)                              AS n_orgs_with_npi,
@@ -322,6 +325,59 @@ JOIN roles r ON r.pref = CONCAT('Practitioner/', p.pid)
 JOIN orgs  o ON r.oref = CONCAT('Organization/', o._id)
 GROUP BY org_id, org_npi, org_name, org_city, org_state
 ORDER BY practitioners DESC
+"""
+
+
+# One representative sited location per organization that actually holds
+# practitioners in this state. Plotting all 47,930 geocoded PA locations is a
+# hairball that answers nothing, and most of them are separate address records
+# for the same operator. Aggregating to the organization keeps the unit of the
+# map the same as the unit of the ledger.
+#
+# `_position_lat/lng` is the only geography the NDH publishes and it is present
+# on 93.86% of locations, so organizations whose sites are all ungeocoded are
+# absent from the point layer while still counted everywhere else. The payload
+# reports that count rather than letting the map imply they do not exist.
+ORG_POINT_SQL = f"""
+WITH prac AS (
+  SELECT _id AS pid, _npi AS npi
+  FROM `{PROJECT}.{DATASET}.practitioner`
+  WHERE _active AND _state = @state AND _npi IS NOT NULL
+),
+roles AS (
+  SELECT _practitioner_id AS pref, _org_id AS oref
+  FROM `{PROJECT}.{DATASET}.practitioner_role`
+  WHERE _active
+),
+org_prac AS (
+  SELECT o._id AS org_id, o._name AS org_name, o._npi AS org_npi,
+         COUNT(DISTINCT p.npi) AS practitioners
+  FROM prac p
+  JOIN roles r ON r.pref = CONCAT('Practitioner/', p.pid)
+  JOIN `{PROJECT}.{DATASET}.organization` o
+    ON r.oref = CONCAT('Organization/', o._id) AND o._active
+  GROUP BY org_id, org_name, org_npi
+),
+sites AS (
+  SELECT
+    _managing_org_id AS oref,
+    COUNT(*) AS sites,
+    -- Deterministic representative: the northernmost geocoded site, so the
+    -- same organization lands on the same point across releases. ANY_VALUE
+    -- would move the dot for no reason between runs.
+    ARRAY_AGG(STRUCT(_position_lat AS lat, _position_lng AS lng, _city AS city)
+              ORDER BY _position_lat DESC LIMIT 1)[OFFSET(0)] AS site
+  FROM `{PROJECT}.{DATASET}.location`
+  WHERE _state = @state
+    AND _position_lat IS NOT NULL AND _position_lng IS NOT NULL
+  GROUP BY oref
+)
+SELECT
+  op.org_id, op.org_name, op.org_npi, op.practitioners,
+  s.sites, s.site.lat AS lat, s.site.lng AS lng, s.site.city AS city
+FROM org_prac op
+LEFT JOIN sites s ON s.oref = CONCAT('Organization/', op.org_id)
+ORDER BY op.practitioners DESC
 """
 
 
@@ -388,10 +444,134 @@ def pct(n, d):
     return round(100.0 * n / d, 1) if d else 0.0
 
 
+def load_npi_categories(state):
+    """NPI -> NUCC category from the published H54 artifact.
+
+    Reused rather than recomputed so the map's specialty layer cannot disagree
+    with the finding it is drawn from. Absent until H54 has been run for the
+    state, in which case the category layer is simply omitted.
+    """
+    path = FINDINGS_DIR / f"role-gap-composition-{state.lower()}.csv"
+    if not path.exists():
+        return {}
+    with path.open() as fh:
+        return {r["npi"]: r["category"] for r in csv.DictReader(fh)}
+
+
+def build_geo(state, prac_bands, org_points, counties, categories, zip_xw):
+    """County rollups and an organization point layer for the map.
+
+    Built from `prac_bands`, the same per-practitioner banding the funnel is
+    counted from, so a county total can never disagree with the state total.
+
+    Rates, never counts, drive the colour. A choropleth of counts is a
+    population map wearing a different hat: Philadelphia has the most of
+    everything because Philadelphia has the most people. Every layer here is
+    either a share of that county's practitioners or a rate per 10,000
+    residents, and counts ride along in the payload for the tooltip.
+    """
+    by_fips = collections.defaultdict(
+        lambda: collections.Counter())
+    unmatched_zip = 0
+    for npi, zip_code, has_role, reaches in prac_bands:
+        hit = zip_xw.county(zip_code)
+        if not hit:
+            unmatched_zip += 1
+            continue
+        fips = hit[0]
+        bucket = by_fips[fips]
+        bucket["practitioners"] += 1
+        bucket["with_role"] += bool(has_role)
+        bucket["reaches_endpoint"] += bool(reaches)
+        cat = categories.get(npi)
+        if cat:
+            bucket[f"cat:{cat}"] += 1
+
+    rows = []
+    for fips, meta in sorted(counties.items()):
+        b = by_fips.get(fips)
+        pop = meta.get("population") or meta.get("population_2020")
+        n = b["practitioners"] if b else 0
+        # A county with no practitioners is distinct from a county whose rate
+        # is zero, and the map must render them differently. `None` means the
+        # denominator does not exist; 0.0 means it does and nothing filled it.
+        rows.append({
+            "fips": fips,
+            "name": meta.get("name"),
+            "population": pop,
+            "rucc": meta.get("rucc"),
+            "rural": (meta.get("rucc") or 0) >= 4 if meta.get("rucc") else None,
+            "median_household_income": meta.get("median_household_income"),
+            "pct_65_plus": meta.get("pct_65_plus"),
+            "practitioners": n,
+            "with_role": b["with_role"] if b else 0,
+            "reaches_endpoint": b["reaches_endpoint"] if b else 0,
+            "role_pct": pct(b["with_role"], n) if n else None,
+            "endpoint_pct": pct(b["reaches_endpoint"], n) if n else None,
+            "practitioners_per_10k": (
+                round(10000.0 * n / pop, 1) if pop else None),
+            "behavioral_health_pct": (
+                pct(b["cat:behavioral-health"], n) if n and categories else None),
+            "physician_pct": (
+                pct(b["cat:physician"], n) if n and categories else None),
+        })
+
+    # The endpoint URL is deliberately not carried per point. `tier` already
+    # says whether the organization is reachable and by what evidence, and the
+    # URLs cost 0.8 MB of a 1.5 MB payload for a string no map draws. They
+    # remain on the organization table below the map and in the H50 crosswalk
+    # CSV, so nothing is lost, only unduplicated.
+    points = []
+    for o in org_points:
+        if o["lat"] is None or o["lng"] is None:
+            continue
+        points.append({
+            "name": o["org_name"],
+            "npi": o["org_npi"],
+            "practitioners": o["practitioners"],
+            "sites": o["sites"],
+            "city": o["city"],
+            # Five decimals is ~1 m. The coordinates are rooftop-ish at best,
+            # and more digits would imply a precision the source does not have.
+            "lat": round(float(o["lat"]), 5),
+            "lng": round(float(o["lng"]), 5),
+            "vendor": o.get("vendor"),
+            "tier": o.get("tier"),
+        })
+    ungeocoded = sum(1 for o in org_points
+                     if o["lat"] is None or o["lng"] is None)
+
+    return {
+        "note": "County assignment is by the practitioner's postal code, "
+                "because a postal code is the only geography every "
+                "practitioner has: only those with a role reach a Location, "
+                "and Location is where the NDH's coordinates live. Colour "
+                "encodes rates, never counts, so the map does not simply "
+                "redraw population.",
+        "county_assignment": {
+            "method": "dominant population share, Census ZCTA-county "
+                      "relationship file",
+            "zips_spanning_more_than_one_county": zip_xw.split_zips,
+            "zips_where_dominant_county_holds_under_75_pct":
+                zip_xw.ambiguous_zips,
+            "practitioners_with_unmatched_postal_code": unmatched_zip,
+        },
+        "point_layer": {
+            "unit": "one representative site per organization holding "
+                    "practitioners in this state",
+            "organizations_plotted": len(points),
+            "organizations_without_any_geocoded_site": ungeocoded,
+        },
+        "counties": rows,
+        "organizations": points,
+    }
+
+
 def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
           org_resolution, ep_by_id, ep_by_npi, url_vendor, npi_url, name_url,
-          hospitals, enrollment_endpoints=None):
+          hospitals, enrollment_endpoints=None, geo_inputs=None):
     enrollment_endpoints = enrollment_endpoints or {}
+    prac_bands = []
     total = len(rows)
     with_role = 0
     with_org = 0
@@ -480,6 +660,9 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 vendor_known += 1
                 vendors[vendor] += 1
 
+        prac_bands.append((r["npi"], r.get("zip"), has_role,
+                           bool(native or filled or resolved or enrolled)))
+
         if native:
             bands["green"] += 1
         elif filled:
@@ -567,6 +750,27 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             orgs_with_endpoint += 1
         elif basis == "name-candidate":
             orgs_with_candidate += 1
+
+    geo = None
+    if geo_inputs:
+        # Attribute each plotted organization through the same ladder the
+        # practitioner loop uses, including the H53 resolution tier, so a dot
+        # on the map and the practitioner it represents never disagree about
+        # whether an endpoint exists.
+        for o in geo_inputs["org_points"]:
+            url, basis = resolve_org(o)
+            if basis == "name-candidate":
+                url, basis = None, None  # a candidate is not a linkage
+            if not url:
+                hit = org_resolution.get(o["org_id"])
+                if hit:
+                    url, basis = hit[0], hit[1]
+            o["endpoint"] = url
+            o["tier"] = basis
+            o["vendor"] = url_vendor.get(url) if url else None
+        geo = build_geo(state, prac_bands, geo_inputs["org_points"],
+                        geo_inputs["counties"], geo_inputs["categories"],
+                        geo_inputs["zip_xw"])
 
     # The work queue: the organizations holding the most practitioners that no
     # method reaches. This is the most actionable output on the page, because
@@ -757,6 +961,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "red": bands["red"],
             "none": bands["none"],
         },
+        "geo": geo,
         "vendors": dict(vendors.most_common()),
         "systems": {
             "note": (
@@ -872,6 +1077,9 @@ def main():
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("states", nargs="*", help="two-letter state codes")
     ap.add_argument("--all", action="store_true")
+    ap.add_argument("--no-geo", action="store_true",
+                    help="skip the county and point layers (one extra capped "
+                         "query and three federal file downloads per state)")
     ap.add_argument("--out-dir", default=str(STATES_DIR))
     args = ap.parse_args()
 
@@ -917,10 +1125,32 @@ def main():
         enrollment = load_enrollment_endpoints(code)
         print(f"  {len(enrollment):,} practitioners with an endpoint via their "
               f"CMS-enrolled group (H54)")
+
+        geo_inputs = None
+        if not args.no_geo:
+            try:
+                fips = STATE_FIPS[code]
+                zip_xw = load_zip_county(fips)
+                counties = load_counties(False, state=code, state_fips=fips)
+                org_points = [dict(r.items())
+                              for r in run_query(ORG_POINT_SQL, code)]
+                geo_inputs = {
+                    "zip_xw": zip_xw, "counties": counties,
+                    "org_points": org_points,
+                    "categories": load_npi_categories(code),
+                }
+                print(f"  geo: {len(counties):,} counties, {len(zip_xw):,} ZIPs, "
+                      f"{len(org_points):,} organizations to plot")
+            except Exception as exc:
+                # The map is an addition to the ledger, not a precondition for
+                # it. A county file that moves or a state with no ERS row must
+                # not take the whole state slice down with it.
+                print(f"  geo unavailable, continuing without it: {exc}")
+
         payload = build(code, rows, org_rows, edges, edge_names, parent_by_npi,
                         owner_by_npi, org_resolution, ep_by_id, ep_by_npi,
                         url_vendor, npi_url, name_url, load_hospitals(code),
-                        enrollment)
+                        enrollment, geo_inputs)
         path = out_dir / f"{code.lower()}-connectivity.json"
         path.write_text(json.dumps(payload, indent=2) + "\n")
         s = payload["summary"]

@@ -86,6 +86,125 @@ export interface ConnectivitySystem {
   vendors: string[];
 }
 
+/**
+ * One county. Rates are `null` rather than 0 when the denominator does not
+ * exist, because a county with no practitioners and a county where nobody
+ * reaches an endpoint are different facts and must not share a colour.
+ */
+export interface ConnectivityCounty {
+  fips: string;
+  name: string | null;
+  population: number | null;
+  /** USDA Rural-Urban Continuum Code, 1-3 metro and 4-9 nonmetro. */
+  rucc: number | null;
+  rural: boolean | null;
+  median_household_income: number | null;
+  pct_65_plus: number | null;
+  practitioners: number;
+  with_role: number;
+  reaches_endpoint: number;
+  role_pct: number | null;
+  endpoint_pct: number | null;
+  practitioners_per_10k: number | null;
+  behavioral_health_pct: number | null;
+  physician_pct: number | null;
+}
+
+/**
+ * One plotted organization. `tier` is the evidence that reached its endpoint,
+ * and `null` means nothing public does. The endpoint URL is deliberately not
+ * here: see the note in analysis/state_connectivity.py.
+ */
+export interface ConnectivityGeoOrg {
+  name: string | null;
+  npi: string | null;
+  practitioners: number;
+  sites: number | null;
+  city: string | null;
+  lat: number;
+  lng: number;
+  vendor: string | null;
+  tier: string | null;
+}
+
+export interface ConnectivityGeo {
+  note: string;
+  county_assignment: {
+    method: string;
+    zips_spanning_more_than_one_county: number;
+    zips_where_dominant_county_holds_under_75_pct: number;
+    practitioners_with_unmatched_postal_code: number;
+  };
+  point_layer: {
+    unit: string;
+    organizations_plotted: number;
+    organizations_without_any_geocoded_site: number;
+  };
+  counties: ConnectivityCounty[];
+  organizations: ConnectivityGeoOrg[];
+}
+
+/**
+ * Two-letter code to state FIPS prefix, for filtering the county atlas.
+ * Territories are absent because the us-atlas county file does not carry them.
+ */
+export const STATE_FIPS: Record<string, string> = {
+  AL: '01', AK: '02', AZ: '04', AR: '05', CA: '06', CO: '08', CT: '09',
+  DE: '10', DC: '11', FL: '12', GA: '13', HI: '15', ID: '16', IL: '17',
+  IN: '18', IA: '19', KS: '20', KY: '21', LA: '22', ME: '23', MD: '24',
+  MA: '25', MI: '26', MN: '27', MS: '28', MO: '29', MT: '30', NE: '31',
+  NV: '32', NH: '33', NJ: '34', NM: '35', NY: '36', NC: '37', ND: '38',
+  OH: '39', OK: '40', OR: '41', PA: '42', RI: '44', SC: '45', SD: '46',
+  TN: '47', TX: '48', UT: '49', VT: '50', VA: '51', WA: '53', WV: '54',
+  WI: '55', WY: '56',
+};
+
+/** Map layers. The spatial layout is constant; only the encoding changes. */
+export const GEO_LAYERS = [
+  {
+    key: 'endpoint_pct',
+    label: 'Reaches an endpoint',
+    unit: '%',
+    blurb:
+      'Share of the county’s practitioners for whom some public source reaches a FHIR endpoint.',
+  },
+  {
+    key: 'role_pct',
+    label: 'Has an affiliation',
+    unit: '%',
+    blurb:
+      'Share carrying an active PractitionerRole. Without one the directory names no organization at all.',
+  },
+  {
+    key: 'practitioners_per_10k',
+    label: 'Practitioners per 10k residents',
+    unit: '',
+    blurb:
+      'Supply, not connectivity. Counties hosting a health system’s headquarters run far above their own population.',
+  },
+  {
+    key: 'behavioral_health_pct',
+    label: 'Behavioral health share',
+    unit: '%',
+    blurb:
+      'The profession with the largest affiliation gap. Where this is high, directory coverage is structurally worse.',
+  },
+  {
+    key: 'pct_65_plus',
+    label: 'Residents 65 and older',
+    unit: '%',
+    blurb: 'Demand context, from Census population estimates.',
+  },
+  {
+    key: 'median_household_income',
+    label: 'Median household income',
+    unit: '$',
+    blurb: 'Context from USDA ERS.',
+  },
+] as const;
+
+export type GeoLayerKey = (typeof GEO_LAYERS)[number]['key'];
+
 export interface ConnectivityPayload {
   state: string;
   state_name: string;
@@ -128,6 +247,7 @@ export interface ConnectivityPayload {
     name_matched_candidates: number;
     organizations_with_name_candidate_only: number;
   };
+  geo: ConnectivityGeo | null;
   funnel: ConnectivityFunnelStep[];
   confidence: {
     note: string;

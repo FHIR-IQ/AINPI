@@ -8,6 +8,7 @@ import {
   allConnectivityStates,
   loadStateConnectivity,
 } from '@/lib/load-api-v1';
+import { STATE_FIPS } from '@/lib/connectivity-types';
 import type { ConnectivityPayload } from '@/lib/connectivity-types';
 import ConnectivityChain from './connectivity-chain';
 // Aliased: this file also exports `const dynamic = 'force-static'`, and the
@@ -17,6 +18,11 @@ import nextDynamic from 'next/dynamic';
 // D3 stays out of SSR, matching every other chart in this codebase.
 const ConnectivityGraph = nextDynamic(
   () => import('@/components/charts/ConnectivityGraph'),
+  { ssr: false, loading: () => <div className="h-[560px] border border-gray-200 bg-white" /> },
+);
+
+const StateGeoMap = nextDynamic(
+  () => import('@/components/charts/StateGeoMap'),
   { ssr: false, loading: () => <div className="h-[560px] border border-gray-200 bg-white" /> },
 );
 
@@ -130,6 +136,7 @@ function Connectivity({
   const {
     state_name,
     summary,
+    geo,
     funnel,
     confidence,
     vendors,
@@ -249,6 +256,25 @@ function Connectivity({
           </p>
           <ConnectivityChain steps={funnel} total={summary.practitioners} />
         </section>
+
+        {geo && (
+          <section className="mb-14">
+            <h2 className="mb-1 font-serif text-2xl text-ink">
+              Where the chain breaks, geographically
+            </h2>
+            <p className="measure mb-6 text-sm text-gray-600">
+              The same practitioners as the funnel above, placed by postal
+              code. Colour is always a rate and never a count, so the map does
+              not simply redraw where people live. Switch layers to change the
+              encoding; the geometry stays put.
+            </p>
+            <StateGeoMap
+              geo={geo}
+              stateFips={STATE_FIPS[state.toUpperCase()] ?? '42'}
+              stateName={state_name}
+            />
+          </section>
+        )}
 
         <section className="mb-14">
           <h2 className="mb-1 font-serif text-2xl text-ink">

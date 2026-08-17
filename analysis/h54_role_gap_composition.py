@@ -160,6 +160,20 @@ def pct(n, d):
     return round(100.0 * n / d, 1) if d else 0.0
 
 
+def rate(n, d):
+    """Percentage that keeps its meaning when it is very small.
+
+    One decimal is right for 77.9% and destroys 1 of 12,995: it rounds to 0.0
+    and the chart then prints "0.000%", which asserts an exact zero where the
+    true value is 0.008% and one pharmacist really does carry a role. The
+    difference between "none" and "one" is the whole point of that row.
+    """
+    if not d:
+        return None
+    value = 100.0 * n / d
+    return round(value, 3 if value < 1 else 1)
+
+
 def _commit_sha():
     try:
         return subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT,
@@ -228,7 +242,7 @@ def build_state(state, prac_rows, taxonomy, pecos_npis, pecos_present):
     # would otherwise top the ranking at 67%.
     MIN_FOR_RATE = 1000
     rates = sorted(
-        ((c, b["with_role"], b["total"], pct(b["with_role"], b["total"]))
+        ((c, b["with_role"], b["total"], rate(b["with_role"], b["total"]))
          for c, b in by_cat.items()
          if b["total"] >= MIN_FOR_RATE and c not in ("not-in-nppes",
                                                      "no-taxonomy",
