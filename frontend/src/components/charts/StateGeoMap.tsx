@@ -116,7 +116,7 @@ export default function StateGeoMap({
     };
   }, []);
 
-  const meta = GEO_LAYERS.find((l) => l.key === layer)!;
+  const meta = GEO_LAYERS.find((l) => l.id === layer)!;
   const byFips = useMemo(
     () => new Map(geo.counties.map((c) => [c.fips, c])),
     [geo.counties],
@@ -369,12 +369,12 @@ export default function StateGeoMap({
       <div className="mb-3 flex flex-wrap items-center gap-2">
         {GEO_LAYERS.map((l) => (
           <button
-            key={l.key}
+            key={l.id}
             type="button"
-            onClick={() => setLayer(l.key)}
-            aria-pressed={layer === l.key}
+            onClick={() => setLayer(l.id)}
+            aria-pressed={layer === l.id}
             className={`border px-2.5 py-1 text-xs transition-colors ${
-              layer === l.key
+              layer === l.id
                 ? 'border-primary-600 bg-primary-600 text-white'
                 : 'border-gray-300 bg-white text-gray-700 hover:border-gray-500'
             }`}

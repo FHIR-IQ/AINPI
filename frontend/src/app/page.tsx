@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import { loadLandscape } from '@/lib/load-api-v1';
+import { loadHubFeed } from '@/lib/hub-feed';
 import LandscapeExplorer from './landscape/landscape-explorer';
 
 export const dynamic = 'force-static';
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const payload = loadLandscape();
+  const { lead } = loadHubFeed();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -51,6 +53,99 @@ export default function HomePage() {
             .
           </p>
         </div>
+
+        {/*
+          Measured work, above the treemap.
+
+          The landscape below is a deterministic synthetic seed and says so in
+          its own banner. Until it is replaced with BigQuery values, the front
+          page was leading with numbers a reader is told not to cite, while
+          every measured finding sat behind a nav click. This block puts the
+          current lead finding and the deepest state slice above it.
+
+          The lead comes from loadHubFeed(), the same source /findings uses, so
+          it follows `featured` and does not need editing each release.
+        */}
+        <section className="mb-10 grid gap-4 md:grid-cols-2">
+          <div className="flex flex-col border border-gray-300 bg-white p-6">
+            <p className="eyebrow mb-2">Latest finding · measured</p>
+            <h2 className="mb-2 font-serif text-2xl leading-snug text-ink">
+              <Link href={lead.href} className="hover:text-signal">
+                {lead.title}
+              </Link>
+            </h2>
+            {lead.heroStats?.length ? (
+              <dl className="mb-3 flex flex-wrap gap-x-6 gap-y-2">
+                {lead.heroStats.map((s) => (
+                  <div key={s.label}>
+                    <dd className="stat text-2xl text-ink">{s.value}</dd>
+                    <dt className="text-xs text-gray-600">{s.label}</dt>
+                  </div>
+                ))}
+              </dl>
+            ) : null}
+            <p className="measure mb-4 flex-1 text-sm text-gray-700">
+              {lead.summary}
+            </p>
+            <div className="flex flex-wrap gap-3 text-sm">
+              <Link
+                href={lead.href}
+                className="border border-primary-600 bg-primary-600 px-3 py-1.5 text-white hover:bg-primary-700"
+              >
+                Read the finding
+              </Link>
+              <Link
+                href="/findings"
+                className="border border-gray-300 px-3 py-1.5 text-gray-700 hover:border-gray-500"
+              >
+                All findings
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex flex-col border border-gray-300 bg-white p-6">
+            <p className="eyebrow mb-2">Worked example · one state, end to end</p>
+            <h2 className="mb-2 font-serif text-2xl leading-snug text-ink">
+              <Link href="/states/pa/connectivity" className="hover:text-signal">
+                Can software actually reach your clinician?
+              </Link>
+            </h2>
+            <dl className="mb-3 flex flex-wrap gap-x-6 gap-y-2">
+              <div>
+                <dd className="stat text-2xl text-ink">227,727</dd>
+                <dt className="text-xs text-gray-600">PA practitioners traced</dt>
+              </div>
+              <div>
+                <dd className="stat text-2xl text-ink">38.1%</dd>
+                <dt className="text-xs text-gray-600">have an organization</dt>
+              </div>
+              <div>
+                <dd className="stat text-2xl text-ink">19.3%</dd>
+                <dt className="text-xs text-gray-600">reach an endpoint</dt>
+              </div>
+            </dl>
+            <p className="measure mb-4 flex-1 text-sm text-gray-700">
+              Pennsylvania traced the whole way through: practitioner to
+              organization to location to endpoint to EHR vendor, with a county
+              map you can zoom and a named list of the organizations nothing
+              public reaches.
+            </p>
+            <div className="flex flex-wrap gap-3 text-sm">
+              <Link
+                href="/states/pa/connectivity"
+                className="border border-primary-600 bg-primary-600 px-3 py-1.5 text-white hover:bg-primary-700"
+              >
+                Open the map
+              </Link>
+              <Link
+                href="/states"
+                className="border border-gray-300 px-3 py-1.5 text-gray-700 hover:border-gray-500"
+              >
+                All 51 states
+              </Link>
+            </div>
+          </div>
+        </section>
 
         {!payload ? (
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 text-amber-900">

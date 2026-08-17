@@ -159,51 +159,59 @@ export const STATE_FIPS: Record<string, string> = {
   WI: '55', WY: '56',
 };
 
-/** Map layers. The spatial layout is constant; only the encoding changes. */
+/**
+ * Map layers. The spatial layout is constant; only the encoding changes.
+ *
+ * The discriminator is named `id`, not `key`. `key: 'practitioners_per_10k'`
+ * matched gitleaks' generic-api-key heuristic (the word "key" beside a long
+ * underscored string) and failed the secret scan on a file with no secret in
+ * it. History is immutable, so that one is in the baseline; this rename keeps
+ * it from recurring every time a layer is added.
+ */
 export const GEO_LAYERS = [
   {
-    key: 'endpoint_pct',
+    id: 'endpoint_pct',
     label: 'Reaches an endpoint',
     unit: '%',
     blurb:
       'Share of the county’s practitioners for whom some public source reaches a FHIR endpoint.',
   },
   {
-    key: 'role_pct',
+    id: 'role_pct',
     label: 'Has an affiliation',
     unit: '%',
     blurb:
       'Share carrying an active PractitionerRole. Without one the directory names no organization at all.',
   },
   {
-    key: 'practitioners_per_10k',
+    id: 'practitioners_per_10k',
     label: 'Practitioners per 10k residents',
     unit: '',
     blurb:
       'Supply, not connectivity. Counties hosting a health system’s headquarters run far above their own population.',
   },
   {
-    key: 'behavioral_health_pct',
+    id: 'behavioral_health_pct',
     label: 'Behavioral health share',
     unit: '%',
     blurb:
       'The profession with the largest affiliation gap. Where this is high, directory coverage is structurally worse.',
   },
   {
-    key: 'pct_65_plus',
+    id: 'pct_65_plus',
     label: 'Residents 65 and older',
     unit: '%',
     blurb: 'Demand context, from Census population estimates.',
   },
   {
-    key: 'median_household_income',
+    id: 'median_household_income',
     label: 'Median household income',
     unit: '$',
     blurb: 'Context from USDA ERS.',
   },
 ] as const;
 
-export type GeoLayerKey = (typeof GEO_LAYERS)[number]['key'];
+export type GeoLayerKey = (typeof GEO_LAYERS)[number]['id'];
 
 export interface ConnectivityPayload {
   state: string;
