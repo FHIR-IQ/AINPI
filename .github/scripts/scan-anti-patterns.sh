@@ -91,6 +91,19 @@ done
 # Catches: client.query("…")  where the file does NOT also reference
 # either maximum_bytes_billed or the project's bq_job_config() helper.
 # Exempts: tests/ + the _cohorts helper itself (defines bq_job_config)
+#
+# Matches any call to bq_job_config(), not only the inline
+# `job_config=bq_job_config()` spelling. A query that needs named parameters
+# has to assign the config first and then attach them:
+#
+#     cfg = bq_job_config()
+#     cfg.query_parameters = [ScalarQueryParameter("state", "STRING", code)]
+#     client.query(sql, job_config=cfg)
+#
+# which is capped exactly as tightly, and which the inline-only pattern
+# reported as a violation. This rule has always been a file-level presence
+# check rather than a per-call one, so accepting the assigned form is no
+# weaker than what it already did; it just stops failing correct code.
 # ---------------------------------------------------------------------------
 echo "→ Rule 3: Python BQ queries missing per-query cap"
 for f in $(filter_files '\.py$'); do
@@ -98,7 +111,7 @@ for f in $(filter_files '\.py$'); do
     analysis/claims_sources/_cohorts.py) continue ;;  # defines the helper
   esac
   if grep -qE 'client\.query\(' "$f"; then
-    if ! grep -qE 'job_config=bq_job_config\(|maximum_bytes_billed' "$f"; then
+    if ! grep -qE 'bq_job_config\(|maximum_bytes_billed' "$f"; then
       record "$f: BQ query without per-query cap  [Rule 3: import bq_job_config from analysis.claims_sources._cohorts and pass job_config=bq_job_config()]"
     fi
   fi
