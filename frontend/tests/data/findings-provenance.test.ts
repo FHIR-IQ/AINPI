@@ -12,14 +12,17 @@ import { describe, expect, it } from 'vitest';
 import { FINDINGS } from '@/data/findings';
 
 /**
- * Findings whose numbers do not come from the NDH bulk export. Adding a finding
- * here without setting `basedOn` on it fails the suite.
+ * Findings that must declare their own sources: either their numbers do not
+ * come from the NDH bulk export at all, or the NDH is one source among
+ * several and the default would credit CMS for the rest. Adding a finding here
+ * without setting `basedOn` on it fails the suite.
  */
 const NON_NDH_SLUGS = [
   'rural-hospital-baseline',
   'pa-rural-hospital-connectivity',
   'state-medicaid-directory-coverage',
   'payer-affiliation-gap',
+  'role-gap-composition',
 ];
 
 describe('finding provenance (schema.org isBasedOn)', () => {

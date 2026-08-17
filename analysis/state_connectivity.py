@@ -192,6 +192,32 @@ def load_org_resolution(state):
     return out
 
 
+def load_enrollment_endpoints(state):
+    """practitioner NPI -> (endpoint, tier, vendor) via CMS enrollment.
+
+    This is the only path here that does not start from a `PractitionerRole`.
+    CMS enrollment names the practitioner's group directly, so it reaches
+    practitioners the directory never affiliates at all, and it gives a second
+    organization for practitioners whose directory organization resolves to
+    nothing.
+
+    Weakest tier that ships. It rests on two inferences stacked: that CMS
+    enrollment and the directory describe the same practitioner, and that the
+    enrolled group name resolves to the right brand. Reported separately for
+    exactly that reason, and never counted as the directory's own statement.
+    """
+    path = STATES_DIR / f"{state.lower()}-enrollment-endpoint.csv"
+    if not path.exists():
+        return {}
+    out = {}
+    with path.open() as fh:
+        for row in csv.DictReader(fh):
+            if row.get("endpoint"):
+                out.setdefault(row["npi"], (row["endpoint"], row["tier"],
+                                            row.get("vendor") or None))
+    return out
+
+
 def load_hospital_owners(state):
     """NPI -> corporate owner, from CMS enrollment ownership data.
 
@@ -364,7 +390,8 @@ def pct(n, d):
 
 def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
           org_resolution, ep_by_id, ep_by_npi, url_vendor, npi_url, name_url,
-          hospitals):
+          hospitals, enrollment_endpoints=None):
+    enrollment_endpoints = enrollment_endpoints or {}
     total = len(rows)
     with_role = 0
     with_org = 0
@@ -374,6 +401,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     vendor_known = 0
     fill_only = 0
     resolved_only = 0
+    enrolled_only = 0
+    enrolled_without_role = 0
     vendors = collections.Counter()
     bands = collections.Counter()
 
@@ -418,21 +447,35 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                         url = hit[0]
                     break
 
+        # CMS enrollment layer: the practitioner's enrolled group resolves to
+        # an endpoint. Unlike every layer above it, this does not require a
+        # PractitionerRole, so it is the only one that can reach a practitioner
+        # the directory never affiliates.
+        enrolled = None
+        if not (native or filled or resolved):
+            hit = enrollment_endpoints.get(r["npi"])
+            if hit:
+                enrolled = hit
+                url = hit[0]
+                if not has_role:
+                    enrolled_without_role += 1
+
         # Candidate layer: the vendor published an endpoint against an
         # organization name that normalizes to one of this practitioner's NDH
         # organization names. Never added to `reaches_endpoint`.
         candidate_url = None
-        if not (native or filled or resolved):
+        if not (native or filled or resolved or enrolled):
             for oname in r["org_names"] or []:
                 candidate_url = name_url.get(norm_org_name(oname))
                 if candidate_url:
                     break
 
-        if native or filled or resolved:
+        if native or filled or resolved or enrolled:
             reaches_endpoint += 1
             fill_only += bool(filled)
             resolved_only += bool(resolved and not (native or filled))
-            vendor = url_vendor.get(url)
+            enrolled_only += bool(enrolled)
+            vendor = url_vendor.get(url) or (enrolled[2] if enrolled else None)
             if vendor:
                 vendor_known += 1
                 vendors[vendor] += 1
@@ -443,6 +486,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             bands["yellow"] += 1
         elif resolved:
             bands["resolved"] += 1
+        elif enrolled:
+            bands["enrolled"] += 1
         elif candidate_url:
             bands["candidate"] += 1
         elif has_org:
@@ -475,8 +520,12 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         {"step": "Reaches a FHIR endpoint", "count": reaches_endpoint,
          "pct": pct(reaches_endpoint, total),
          "note": f"Includes {fill_only:,} reachable only after the "
-                 f"vendor-published NPI fill. The NDH alone reaches "
-                 f"{reaches_endpoint - fill_only:,}.",
+                 f"vendor-published NPI fill, {resolved_only:,} only after "
+                 f"name or brand resolution, and {enrolled_only:,} only via "
+                 f"the practitioner's CMS-enrolled group, of which "
+                 f"{enrolled_without_role:,} carry no PractitionerRole at "
+                 f"all. The NDH alone reaches "
+                 f"{reaches_endpoint - fill_only - resolved_only - enrolled_only:,}.",
          "finding": "endpoint-org-linkage"},
         {"step": "Name-matched endpoint candidate (not a linkage)",
          "count": bands["candidate"],
@@ -657,17 +706,32 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "reaches_endpoint_pct": pct(reaches_endpoint, total),
             # NDH-only must subtract every added tier, not just the NPI fill.
             "reaches_endpoint_ndh_only":
-                reaches_endpoint - fill_only - resolved_only,
+                reaches_endpoint - fill_only - resolved_only - enrolled_only,
             "reaches_endpoint_after_vendor_npi_fill":
-                reaches_endpoint - resolved_only,
-            "reaches_endpoint_after_resolution": reaches_endpoint,
+                reaches_endpoint - resolved_only - enrolled_only,
+            "reaches_endpoint_after_resolution":
+                reaches_endpoint - enrolled_only,
+            "reaches_endpoint_after_cms_enrollment": reaches_endpoint,
+            "reaches_endpoint_via_enrollment_only": enrolled_only,
+            "reaches_endpoint_via_enrollment_without_role":
+                enrolled_without_role,
             # The role gap is a separate finding with a separate fix, so
             # endpoint coverage is also reported against practitioners who have
             # an affiliation at all. Quoting only the share of every
             # practitioner in the state hides how much of the endpoint problem
             # has actually been solved; quoting only this one hides the role
             # gap. Both ship.
-            "reaches_endpoint_pct_of_affiliated": pct(reaches_endpoint, with_role),
+            #
+            # CMS enrollment affiliates practitioners the directory does not,
+            # so the affiliated denominator grows with it. Reported against the
+            # old denominator as well, because moving a denominator and a
+            # numerator in the same release is how a number stops being
+            # comparable to the one published last week.
+            "affiliated_any_source": with_role + enrolled_without_role,
+            "reaches_endpoint_pct_of_affiliated":
+                pct(reaches_endpoint, with_role + enrolled_without_role),
+            "reaches_endpoint_pct_of_ndh_affiliated":
+                pct(reaches_endpoint - enrolled_without_role, with_role),
             "vendor_known": vendor_known,
             "organizations": len(org_rows),
             "organizations_with_endpoint": orgs_with_endpoint,
@@ -850,9 +914,13 @@ def main():
         org_resolution = load_org_resolution(code)
         print(f"  {len(org_resolution):,} organizations resolved to an endpoint "
               f"by name or brand (H53)")
+        enrollment = load_enrollment_endpoints(code)
+        print(f"  {len(enrollment):,} practitioners with an endpoint via their "
+              f"CMS-enrolled group (H54)")
         payload = build(code, rows, org_rows, edges, edge_names, parent_by_npi,
                         owner_by_npi, org_resolution, ep_by_id, ep_by_npi,
-                        url_vendor, npi_url, name_url, load_hospitals(code))
+                        url_vendor, npi_url, name_url, load_hospitals(code),
+                        enrollment)
         path = out_dir / f"{code.lower()}-connectivity.json"
         path.write_text(json.dumps(payload, indent=2) + "\n")
         s = payload["summary"]
@@ -861,7 +929,8 @@ def main():
               f"{s['reaches_endpoint_pct_of_affiliated']}% of affiliated")
         print(f"    NDH alone {s['reaches_endpoint_ndh_only']:,} -> "
               f"+vendor NPI {s['reaches_endpoint_after_vendor_npi_fill']:,} -> "
-              f"+resolution {s['reaches_endpoint_after_resolution']:,}")
+              f"+resolution {s['reaches_endpoint_after_resolution']:,} -> "
+              f"+CMS enrollment {s['reaches_endpoint_after_cms_enrollment']:,}")
         print(f"  wrote {path}")
     return 0
 

@@ -1,0 +1,179 @@
+{
+  "generated": null,
+  "sources": {
+    "dac": {
+      "file": "dac_national.csv",
+      "modified": "2026-07-31"
+    },
+    "facility": {
+      "file": "facility_affiliation.csv",
+      "modified": "2026-07-31"
+    },
+    "reassignment": {
+      "file": "revalidation_reassignment.csv",
+      "modified": "2026-08-05"
+    },
+    "ppef": {
+      "file": "ppef_enrollment.csv",
+      "modified": "2026-07-27"
+    }
+  },
+  "states": {
+    "PA": {
+      "clinicians_with_group": 95054,
+      "enrolled_without_group": 4205,
+      "distinct_organizations": 8028,
+      "edges": 151733,
+      "edges_by_source": {
+        "reassignment": 69988,
+        "dac-group": 81745
+      },
+      "by_category": {
+        "practitioner": 148860,
+        "facility": 2502,
+        "other": 79,
+        "unknown": 292
+      },
+      "clinicians_with_facility_link": 54659,
+      "accepts_assignment": 69182,
+      "telehealth": 16461,
+      "top_organizations": [
+        {
+          "org": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
+          "pac_id": "8729990239",
+          "clinicians": 7586
+        },
+        {
+          "org": "University Of Penn-Medical Group",
+          "pac_id": "6204730955",
+          "clinicians": 5439
+        },
+        {
+          "org": "Geisinger Clinic",
+          "pac_id": "5395657001",
+          "clinicians": 5010
+        },
+        {
+          "org": "WELLSPAN MEDICAL GROUP",
+          "pac_id": "1951213115",
+          "clinicians": 3336
+        },
+        {
+          "org": "LEHIGH VALLEY PHYSICIAN GROUP",
+          "pac_id": "3072425123",
+          "clinicians": 3314
+        },
+        {
+          "org": "St Lukes Physician Group Inc",
+          "pac_id": "6709798333",
+          "clinicians": 3289
+        },
+        {
+          "org": "ALLEGHENY CLINIC",
+          "pac_id": "5395649586",
+          "clinicians": 3224
+        },
+        {
+          "org": "PHOENIX REHABILITATION AND HEALTH SERVICES INC",
+          "pac_id": "3476464298",
+          "clinicians": 2720
+        },
+        {
+          "org": "The Milton S Hershey Medical Center Physicians Group",
+          "pac_id": "3870405483",
+          "clinicians": 2393
+        },
+        {
+          "org": "Jefferson University Physicians",
+          "pac_id": "7911819180",
+          "clinicians": 2094
+        },
+        {
+          "org": "TEMPLE FACULTY PRACTICE PLAN INC",
+          "pac_id": "0345588711",
+          "clinicians": 2046
+        },
+        {
+          "org": "PINNACLE HEALTH MEDICAL SERVICES",
+          "pac_id": "7618960493",
+          "clinicians": 2023
+        },
+        {
+          "org": "MAIN LINE HEALTHCARE",
+          "pac_id": "1951215201",
+          "clinicians": 1690
+        },
+        {
+          "org": "TOWER HEALTH MEDICAL GROUP",
+          "pac_id": "7618889213",
+          "clinicians": 1511
+        },
+        {
+          "org": "Geisinger-Hm Joint Venture Llc",
+          "pac_id": "1355676370",
+          "clinicians": 1428
+        },
+        {
+          "org": "Upmc Community Medicine Inc",
+          "pac_id": "2062318975",
+          "clinicians": 1321
+        },
+        {
+          "org": "Einstein Practice Plan Inc",
+          "pac_id": "2769395896",
+          "clinicians": 1268
+        },
+        {
+          "org": "Childrens Health Care Associates Inc",
+          "pac_id": "1355253527",
+          "clinicians": 1229
+        },
+        {
+          "org": "REGIONAL HEALTH SERVICES INC",
+          "pac_id": "4880593722",
+          "clinicians": 1073
+        },
+        {
+          "org": "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA HEALTH.",
+          "pac_id": "4688588866",
+          "clinicians": 1022
+        },
+        {
+          "org": "Gslpg, Inc",
+          "pac_id": "7810226875",
+          "clinicians": 978
+        },
+        {
+          "org": "Penn State Health Medical Group Llc",
+          "pac_id": "8729351077",
+          "clinicians": 967
+        },
+        {
+          "org": "SUSQUEHANNA PHYSICIAN SERVICES",
+          "pac_id": "2264336460",
+          "clinicians": 935
+        },
+        {
+          "org": "North American Partners In Anesthesia, Pennsylvania , Llc",
+          "pac_id": "7517960834",
+          "clinicians": 929
+        },
+        {
+          "org": "GUTHRIE MEDICAL GROUP PC",
+          "pac_id": "6002728656",
+          "clinicians": 878
+        }
+      ],
+      "crosswalk_csv": "/api/v1/findings/pecos-org-crosswalk-pa.csv"
+    }
+  },
+  "facility_types": {
+    "Hospital": 129208,
+    "Home health agency": 10958,
+    "Hospice": 2774,
+    "Nursing home": 2519,
+    "Inpatient rehabilitation facility": 1495,
+    "Long-term care hospital": 857,
+    "Dialysis facility": 846
+  }
+}

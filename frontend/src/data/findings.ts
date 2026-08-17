@@ -641,6 +641,56 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'role-gap-composition',
+    hypotheses: ['H54'],
+    basedOn: [
+      {
+        name: 'CMS National Provider Directory public use files',
+        url: 'https://directory.cms.gov/',
+      },
+      {
+        name: 'NPPES NPI registry (BigQuery public dataset)',
+        url: 'https://download.cms.gov/nppes/NPI_Files.html',
+      },
+      {
+        name: 'NUCC Health Care Provider Taxonomy code set',
+        url: 'https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40',
+      },
+      {
+        name: 'CMS Medicare Fee-For-Service Public Provider Enrollment',
+        url: 'https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment',
+      },
+    ],
+    title: 'The role gap is a Medicare-billing gap',
+    summary:
+      'Every coverage percentage this project publishes divides by the NDH’s active Practitioner set, and nobody had checked what is in it. Measured across all 227,727 active Pennsylvania practitioners against their NPPES taxonomy: role coverage does not vary a little between professions, it varies by two orders of magnitude, and it tracks who bills Medicare rather than who practises. 77.9% of advanced-practice clinicians and 69.8% of physicians carry a PractitionerRole, against 19.6% of therapists, 14.8% of behavioral-health providers, 4.7% of dentists, 2.7% of nurses and 1 of 12,995 pharmacy providers. The consequence is that an endpoint-coverage number is really a statement about Medicare-billing specialties, and the directory publishes no field that says so.',
+    nullHypothesis:
+      'Role coverage is independent of provider taxonomy, so the share of practitioners carrying a PractitionerRole is statistically indistinguishable across NUCC groupings.',
+    denominator:
+      'Every active Practitioner resource in the pinned NDH release whose practice state is the audited state and which carries a non-null NPI, joined to NPPES for taxonomy. Reported whole; no sampling. The NPPES join is unfiltered by state on purpose, because a state predicate costs the same in BigQuery and would drop the 6,383 Pennsylvania practitioners whose NPPES practice address is recorded elsewhere.',
+    dataSource:
+      'cms_npd.practitioner and cms_npd.practitioner_role from the pinned NDH release, joined to bigquery-public-data.nppes.npi_raw for taxonomy and deactivation, categorized through the NUCC Health Care Provider Taxonomy code set (analysis/nucc_taxonomy.py, newest available release), with the CMS enrollment path supplied by analysis/ingest_pecos_affiliations.py. Compute script: analysis/h54_role_gap_composition.py.',
+    status: 'published',
+    updated: '2026-08-16',
+    implications: [
+      {
+        audience: 'Everyone using NDH',
+        takeaway:
+          'A directory-wide endpoint or affiliation percentage is not evenly distributed across the professions it appears to describe. Quoting it without the profession breakdown reads as a claim about all clinicians when the measurement is dominated by the Medicare-billing ones. The per-category rates ship in the finding JSON so the qualified version is as easy to cite as the headline.',
+      },
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'A consumer cannot currently tell a specialty with genuinely no digital presence from one the directory simply does not describe. Both look like an empty PractitionerRole. Publishing the provenance of each role, or its absence, would separate them without collecting anything new.',
+      },
+      {
+        audience: 'Methodology readers',
+        takeaway:
+          'The registered prior was that the gap is mostly NPIs holding no patient record, and the data rejected it. Students, pharmacy, aides, transport, suppliers and facilities together are 5.2% of the active set, so removing them moves coverage by about a point. That prior is kept in the record rather than quietly replaced, and it is why the finding reports profession spread instead.',
+      },
+    ],
+  },
+  {
     slug: 'cehrt-endpoint-coverage-gap',
     hypotheses: ['H45'],
     title: 'CEHRT-published FHIR endpoints missing from the NDH, by state',

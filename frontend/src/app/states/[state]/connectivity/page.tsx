@@ -92,6 +92,10 @@ const BAND_STYLE: Record<string, { label: string; className: string }> = {
     label: 'Name/brand resolved',
     className: 'bg-primary-50 text-primary-900 border-primary-400',
   },
+  enrolled: {
+    label: 'CMS-enrolled group',
+    className: 'bg-primary-50 text-primary-900 border-primary-200',
+  },
   candidate: {
     label: 'Name candidate',
     className: 'bg-amber-50 text-amber-900 border-amber-300',
@@ -141,9 +145,12 @@ function Connectivity({
   } = payload;
 
   const bands = (
-    ['green', 'yellow', 'resolved', 'candidate', 'red', 'none'] as const
+    ['green', 'yellow', 'resolved', 'enrolled', 'candidate', 'red', 'none'] as const
   ).map(
-    (key) => ({ key, count: confidence[key] }),
+    // A payload generated before the enrollment tier existed has no `enrolled`
+    // key. Coercing to 0 keeps an older published state slice rendering rather
+    // than showing NaN across the whole bar.
+    (key) => ({ key, count: confidence[key] ?? 0 }),
   );
   const bandTotal = bands.reduce((a, b) => a + b.count, 0) || 1;
   const vendorRows = Object.entries(vendors).sort((a, b) => b[1] - a[1]);

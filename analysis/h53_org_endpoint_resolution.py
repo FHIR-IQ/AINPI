@@ -385,6 +385,70 @@ def resolve(org_rows, vendor_rows, ep_by_npi, npi_url, aliases=None):
     return out, tiers, practitioners, ambiguous
 
 
+def resolve_enrollment_orgs(state, vendor_rows, ep_by_npi, npi_url, aliases):
+    """Resolve the organizations named by CMS enrollment, not by the directory.
+
+    The directory and CMS enrollment name the same legal entities, and they
+    disagree about which practitioners belong to them. A practitioner whose
+    NDH role points at an organization nothing resolves may be named by CMS
+    enrollment against a group that does resolve, so this is a second opinion
+    on the same question rather than a new one.
+
+    Run through the identical resolver, so an organization cannot resolve here
+    under a rule it would fail in the directory pass. Written to its own file
+    with its own tier labels so the ledger can report what enrollment added
+    and a reader can subtract it.
+
+    Silently skipped when the enrollment crosswalk has not been generated;
+    `analysis/ingest_pecos_affiliations.py` produces it.
+    """
+    src = OUT_DIR / f"pecos-org-crosswalk-{state.lower()}.csv"
+    if not src.exists():
+        print(f"  no CMS enrollment crosswalk for {state}; skipping that pass")
+        return
+
+    orgs = {}
+    for row in csv.DictReader(src.open()):
+        name = (row.get("org_name") or "").strip()
+        if not name:
+            continue  # a PAC ID with no name cannot be matched to a brand
+        key = row.get("org_pac_id") or name
+        rec = orgs.setdefault(key, {"org_id": key, "org_npi": None,
+                                    "org_name": name, "org_city": row.get("city", ""),
+                                    "org_state": state, "npis": set()})
+        rec["npis"].add(row["npi"])
+
+    org_rows = [{**{k: v for k, v in o.items() if k != "npis"},
+                 "practitioners": len(o["npis"])} for o in orgs.values()]
+    rows, tiers, prac, ambiguous = resolve(
+        org_rows, vendor_rows, ep_by_npi, npi_url, aliases)
+
+    by_org = {r["org_id"]: r for r in rows}
+    out = STATES_DIR / f"{state.lower()}-enrollment-endpoint.csv"
+    written = 0
+    with out.open("w", newline="") as fh:
+        w = csv.writer(fh)
+        w.writerow(["npi", "org_pac_id", "org_name", "tier", "endpoint",
+                    "vendor", "evidence"])
+        for key, o in orgs.items():
+            hit = by_org.get(key)
+            if not hit or hit["tier"] == "unresolved" or not hit["endpoint"]:
+                continue
+            for npi in sorted(o["npis"]):
+                w.writerow([npi, key if key != o["org_name"] else "", o["org_name"],
+                            hit["tier"], hit["endpoint"], hit["vendor"] or "",
+                            hit["evidence"] or ""])
+                written += 1
+
+    resolved_prac = sum(v for k, v in prac.items() if k != "unresolved")
+    total_prac = sum(prac.values())
+    print(f"  CMS enrollment: {len(org_rows):,} organizations, "
+          f"{resolved_prac:,} of {total_prac:,} clinician slots resolved "
+          f"({100.0 * resolved_prac / total_prac:.1f}%), "
+          f"{ambiguous:,} refused as ambiguous")
+    print(f"  wrote {out} ({written:,} rows)")
+
+
 def main():
     ap = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -445,6 +509,8 @@ def main():
             for r in sorted(rows, key=lambda r: -r["practitioners"]):
                 w.writerow(r)
         print(f"  wrote {csv_path}")
+
+        resolve_enrollment_orgs(code, vendor_rows, ep_by_npi, npi_url, aliases)
 
         print(f"\n  Hand-check sample (largest {args.sample} resolved):")
         shown = 0

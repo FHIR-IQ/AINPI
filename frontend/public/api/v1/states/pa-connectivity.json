@@ -3,23 +3,28 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-16T22:09:29+00:00",
+  "generated_at": "2026-08-17T00:09:01+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "9d7819e",
+  "commit_sha": "0e95ed7",
   "summary": {
     "practitioners": 227727,
     "with_role": 86816,
     "with_role_pct": 38.1,
-    "reaches_endpoint": 42933,
-    "reaches_endpoint_pct": 18.9,
+    "reaches_endpoint": 43980,
+    "reaches_endpoint_pct": 19.3,
     "reaches_endpoint_ndh_only": 2347,
     "reaches_endpoint_after_vendor_npi_fill": 5705,
     "reaches_endpoint_after_resolution": 42933,
-    "reaches_endpoint_pct_of_affiliated": 49.5,
-    "vendor_known": 41280,
+    "reaches_endpoint_after_cms_enrollment": 43980,
+    "reaches_endpoint_via_enrollment_only": 1047,
+    "reaches_endpoint_via_enrollment_without_role": 623,
+    "affiliated_any_source": 87439,
+    "reaches_endpoint_pct_of_affiliated": 50.3,
+    "reaches_endpoint_pct_of_ndh_affiliated": 49.9,
+    "vendor_known": 42327,
     "organizations": 19535,
     "organizations_with_endpoint": 1459,
-    "name_matched_candidates": 3119,
+    "name_matched_candidates": 3066,
     "organizations_with_name_candidate_only": 1116
   },
   "funnel": [
@@ -57,23 +62,23 @@
     },
     {
       "step": "Reaches a FHIR endpoint",
-      "count": 42933,
-      "pct": 18.9,
-      "note": "Includes 3,358 reachable only after the vendor-published NPI fill. The NDH alone reaches 39,575.",
+      "count": 43980,
+      "pct": 19.3,
+      "note": "Includes 3,358 reachable only after the vendor-published NPI fill, 37,228 only after name or brand resolution, and 1,047 only via the practitioner's CMS-enrolled group, of which 623 carry no PractitionerRole at all. The NDH alone reaches 2,347.",
       "finding": "endpoint-org-linkage"
     },
     {
       "step": "Name-matched endpoint candidate (not a linkage)",
-      "count": 3119,
-      "pct": 1.4,
+      "count": 3066,
+      "pct": 1.3,
       "excluded_from_total": true,
       "note": "An endpoint is published against an organization name that matches, but nothing deterministic connects them. This is where the large health systems land: the vendor names the brand, the NDH holds the practitioners under separate legal entities, and the NDH carries no hierarchy to bridge them. Triage material, not a directory linkage.",
       "finding": "vendor-endpoint-attribution"
     },
     {
       "step": "Endpoint attributed to an EHR vendor",
-      "count": 41280,
-      "pct": 18.1,
+      "count": 42327,
+      "pct": 18.6,
       "note": "The vendor is derived from the endpoint host and cross-checked against the file that published the URL.",
       "finding": "vendor-endpoint-attribution"
     }
@@ -82,12 +87,12 @@
     "note": "Bands describe method, not quality. Green means the NDH itself carries the whole chain. Yellow means the last link came from a vendor-published NPI that matches an NDH organization: deterministic, but not the directory's own statement. Red means the practitioner reaches an organization and stops. None means no organization at all. Candidate is weaker than red on evidence and is never counted as connectivity: an endpoint exists under a matching name, with nothing deterministic tying it to this organization.",
     "green": 2347,
     "yellow": 3358,
-    "candidate": 3119,
-    "red": 40764,
-    "none": 140911
+    "candidate": 3066,
+    "red": 40393,
+    "none": 140288
   },
   "vendors": {
-    "Epic (User-access Brands)": 37723,
+    "Epic (User-access Brands)": 38770,
     "athenahealth": 3275,
     "Veradigm": 191,
     "Practice Fusion": 91

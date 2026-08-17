@@ -1,0 +1,406 @@
+{
+  "slug": "role-gap-composition",
+  "title": "What the role gap is made of",
+  "hypotheses": [
+    "H54"
+  ],
+  "status": "published",
+  "release_date": "2026-05-08",
+  "generated_at": "2026-08-17T00:13:30.620240+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "0e95ed792aff33d07066d2b71402e22cf1b14059",
+  "headline": "NDH role coverage tracks Medicare billing, not clinical practice: 77.9% of PA advanced practice providers carry a PractitionerRole against 0.0% of pharmacy providers (1 of 12,995).",
+  "numerator": 1,
+  "denominator": 12995,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "advanced practice",
+        "value": 77.9
+      },
+      {
+        "label": "physician",
+        "value": 69.8
+      },
+      {
+        "label": "eye vision",
+        "value": 62.4
+      },
+      {
+        "label": "podiatry",
+        "value": 61.6
+      },
+      {
+        "label": "chiropractic",
+        "value": 39.4
+      },
+      {
+        "label": "rehab therapy",
+        "value": 19.6
+      },
+      {
+        "label": "dietary",
+        "value": 18.4
+      },
+      {
+        "label": "other clinical",
+        "value": 17.8
+      },
+      {
+        "label": "behavioral health",
+        "value": 14.8
+      },
+      {
+        "label": "student",
+        "value": 6.5
+      },
+      {
+        "label": "dental",
+        "value": 4.7
+      },
+      {
+        "label": "nursing",
+        "value": 2.7
+      },
+      {
+        "label": "support",
+        "value": 0.4
+      },
+      {
+        "label": "pharmacy",
+        "value": 0.0
+      }
+    ]
+  },
+  "notes": "The registered prior was that the role gap is mostly NPIs that hold no patient record. It is not supported: categories that are not an independently practising clinician total 11,858 of 227,727 (5.2%), so removing them moves coverage by about a point. The measured signal is the spread between professions instead. Categories are NUCC groupings mapped one-to-one, which is a lookup rather than a judgement about any provider; no category is asserted to be incapable of holding a record. Rates are shown only for categories of at least 1,000 NPIs, because a three-member category would otherwise top the ranking. NPPES is joined unfiltered because BigQuery bills for columns read rather than rows returned, so a state predicate costs the same and drops practitioners whose NPPES practice address is out of state. Per-NPI detail ships as role-gap-composition-<state>.csv.",
+  "states": {
+    "PA": {
+      "state": "PA",
+      "active_practitioners": 227727,
+      "with_ndh_role": 86816,
+      "with_ndh_role_pct": 38.1,
+      "with_cms_enrollment_org_only": 2614,
+      "affiliated_any_source": 89430,
+      "affiliated_any_source_pct": 39.3,
+      "no_organization_any_source": 138297,
+      "cms_enrollment_crosswalk_present": true,
+      "nppes_matched": 226813,
+      "nppes_deactivated_but_ndh_active": 499,
+      "non_clinical_categories": [
+        "student",
+        "support",
+        "transport",
+        "supplier",
+        "agency",
+        "facility",
+        "payer",
+        "group"
+      ],
+      "non_clinical_npis": 11858,
+      "non_clinical_npis_pct": 5.2,
+      "non_clinical_unaffiliated": 10974,
+      "unaffiliated_excluding_non_clinical": 127323,
+      "clinical_denominator": 215869,
+      "affiliated_pct_of_clinical_denominator": 41.0,
+      "role_coverage_min_category_size": 1000,
+      "role_coverage_by_category": [
+        {
+          "category": "advanced-practice",
+          "with_role": 27392,
+          "total": 35175,
+          "pct": 77.9
+        },
+        {
+          "category": "physician",
+          "with_role": 39811,
+          "total": 57020,
+          "pct": 69.8
+        },
+        {
+          "category": "eye-vision",
+          "with_role": 1802,
+          "total": 2888,
+          "pct": 62.4
+        },
+        {
+          "category": "podiatry",
+          "with_role": 883,
+          "total": 1434,
+          "pct": 61.6
+        },
+        {
+          "category": "chiropractic",
+          "with_role": 1516,
+          "total": 3847,
+          "pct": 39.4
+        },
+        {
+          "category": "rehab-therapy",
+          "with_role": 6235,
+          "total": 31753,
+          "pct": 19.6
+        },
+        {
+          "category": "dietary",
+          "with_role": 443,
+          "total": 2409,
+          "pct": 18.4
+        },
+        {
+          "category": "other-clinical",
+          "with_role": 845,
+          "total": 4734,
+          "pct": 17.8
+        },
+        {
+          "category": "behavioral-health",
+          "with_role": 6526,
+          "total": 44162,
+          "pct": 14.8
+        },
+        {
+          "category": "student",
+          "with_role": 642,
+          "total": 9804,
+          "pct": 6.5
+        },
+        {
+          "category": "dental",
+          "with_role": 442,
+          "total": 9451,
+          "pct": 4.7
+        },
+        {
+          "category": "nursing",
+          "with_role": 242,
+          "total": 9034,
+          "pct": 2.7
+        },
+        {
+          "category": "support",
+          "with_role": 6,
+          "total": 1384,
+          "pct": 0.4
+        },
+        {
+          "category": "pharmacy",
+          "with_role": 1,
+          "total": 12995,
+          "pct": 0.0
+        }
+      ],
+      "role_coverage_spread": {
+        "highest": {
+          "category": "advanced-practice",
+          "pct": 77.9
+        },
+        "lowest": {
+          "category": "pharmacy",
+          "pct": 0.0
+        }
+      },
+      "by_category": [
+        {
+          "category": "physician",
+          "total": 57020,
+          "with_role": 39811,
+          "pecos_only": 347,
+          "none": 16862,
+          "deactivated": 170,
+          "unaffiliated_pct_of_category": 29.6
+        },
+        {
+          "category": "behavioral-health",
+          "total": 44162,
+          "with_role": 6526,
+          "pecos_only": 728,
+          "none": 36908,
+          "deactivated": 89,
+          "unaffiliated_pct_of_category": 83.6
+        },
+        {
+          "category": "advanced-practice",
+          "total": 35175,
+          "with_role": 27392,
+          "pecos_only": 661,
+          "none": 7122,
+          "deactivated": 41,
+          "unaffiliated_pct_of_category": 20.2
+        },
+        {
+          "category": "rehab-therapy",
+          "total": 31753,
+          "with_role": 6235,
+          "pecos_only": 321,
+          "none": 25197,
+          "deactivated": 28,
+          "unaffiliated_pct_of_category": 79.4
+        },
+        {
+          "category": "pharmacy",
+          "total": 12995,
+          "with_role": 1,
+          "pecos_only": 0,
+          "none": 12994,
+          "deactivated": 5,
+          "unaffiliated_pct_of_category": 100.0
+        },
+        {
+          "category": "student",
+          "total": 9804,
+          "with_role": 642,
+          "pecos_only": 206,
+          "none": 8956,
+          "deactivated": 82,
+          "unaffiliated_pct_of_category": 91.4
+        },
+        {
+          "category": "dental",
+          "total": 9451,
+          "with_role": 442,
+          "pecos_only": 22,
+          "none": 8987,
+          "deactivated": 11,
+          "unaffiliated_pct_of_category": 95.1
+        },
+        {
+          "category": "nursing",
+          "total": 9034,
+          "with_role": 242,
+          "pecos_only": 65,
+          "none": 8727,
+          "deactivated": 2,
+          "unaffiliated_pct_of_category": 96.6
+        },
+        {
+          "category": "other-clinical",
+          "total": 4734,
+          "with_role": 845,
+          "pecos_only": 5,
+          "none": 3884,
+          "deactivated": 13,
+          "unaffiliated_pct_of_category": 82.0
+        },
+        {
+          "category": "chiropractic",
+          "total": 3847,
+          "with_role": 1516,
+          "pecos_only": 48,
+          "none": 2283,
+          "deactivated": 15,
+          "unaffiliated_pct_of_category": 59.3
+        },
+        {
+          "category": "eye-vision",
+          "total": 2888,
+          "with_role": 1802,
+          "pecos_only": 43,
+          "none": 1043,
+          "deactivated": 13,
+          "unaffiliated_pct_of_category": 36.1
+        },
+        {
+          "category": "dietary",
+          "total": 2409,
+          "with_role": 443,
+          "pecos_only": 37,
+          "none": 1929,
+          "deactivated": 3,
+          "unaffiliated_pct_of_category": 80.1
+        },
+        {
+          "category": "podiatry",
+          "total": 1434,
+          "with_role": 883,
+          "pecos_only": 27,
+          "none": 524,
+          "deactivated": 10,
+          "unaffiliated_pct_of_category": 36.5
+        },
+        {
+          "category": "support",
+          "total": 1384,
+          "with_role": 6,
+          "pecos_only": 0,
+          "none": 1378,
+          "deactivated": 0,
+          "unaffiliated_pct_of_category": 99.6
+        },
+        {
+          "category": "not-in-nppes",
+          "total": 914,
+          "with_role": 0,
+          "pecos_only": 104,
+          "none": 810,
+          "deactivated": 0,
+          "unaffiliated_pct_of_category": 88.6
+        },
+        {
+          "category": "agency",
+          "total": 270,
+          "with_role": 6,
+          "pecos_only": 0,
+          "none": 264,
+          "deactivated": 0,
+          "unaffiliated_pct_of_category": 97.8
+        },
+        {
+          "category": "facility",
+          "total": 244,
+          "with_role": 24,
+          "pecos_only": 0,
+          "none": 220,
+          "deactivated": 1,
+          "unaffiliated_pct_of_category": 90.2
+        },
+        {
+          "category": "supplier",
+          "total": 128,
+          "with_role": 0,
+          "pecos_only": 0,
+          "none": 128,
+          "deactivated": 0,
+          "unaffiliated_pct_of_category": 100.0
+        },
+        {
+          "category": "emergency-medical",
+          "total": 38,
+          "with_role": 0,
+          "pecos_only": 0,
+          "none": 38,
+          "deactivated": 0,
+          "unaffiliated_pct_of_category": 100.0
+        },
+        {
+          "category": "transport",
+          "total": 21,
+          "with_role": 0,
+          "pecos_only": 0,
+          "none": 21,
+          "deactivated": 1,
+          "unaffiliated_pct_of_category": 100.0
+        },
+        {
+          "category": "no-taxonomy",
+          "total": 15,
+          "with_role": 0,
+          "pecos_only": 0,
+          "none": 15,
+          "deactivated": 15,
+          "unaffiliated_pct_of_category": 100.0
+        },
+        {
+          "category": "payer",
+          "total": 7,
+          "with_role": 0,
+          "pecos_only": 0,
+          "none": 7,
+          "deactivated": 0,
+          "unaffiliated_pct_of_category": 100.0
+        }
+      ]
+    }
+  }
+}

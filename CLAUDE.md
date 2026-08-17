@@ -175,6 +175,9 @@ Static files under `frontend/public/api/v1/` are the **stable public contract** 
 | `/api/v1/findings/<slug>.json` | `analysis/h*.py` scripts | `ApiV1Finding` in same file |
 | `/api/v1/findings/endpoint-org-crosswalk.csv` | `analysis/h50_endpoint_org_linkage.py` | Resolved FHIR base URL → org (id, NPI, name, state) for the 19,334 endpoints carrying a managingOrganization. Doubles as a base-URL-to-NPI lookup. FHIR REST only. |
 | `/api/v1/states/<state>.json` | `analysis/state_findings.py <state>` | state-scoped payload consumed by `loadStateFindings(state)`. All 50 + DC published. |
+| `/api/v1/findings/pecos-org-crosswalk-<state>.csv` | `analysis/ingest_pecos_affiliations.py` | NPI → CMS-enrolled organization (PAC ID + legal name), practice address, specialty, category, Medicare assignment, telehealth, facility CCNs. PA only today. |
+| `/api/v1/findings/role-gap-composition.json` + `-<state>.csv` | `analysis/h54_role_gap_composition.py` | Role coverage by NUCC category, plus per-NPI detail (`grouping`/`classification` omitted on purpose: derivable from `taxonomy_code`, and repeating them cost 13 MB of a 24 MB file). |
+| `/api/v1/states/<state>-enrollment-endpoint.csv` | `analysis/h53_org_endpoint_resolution.py` | practitioner NPI → endpoint via the CMS-enrolled group. The only path that reaches a practitioner carrying no `PractitionerRole`. |
 | `/api/v1/states/va-cohort-critical.csv` | `analysis/build_va_briefing.py` | 131 federally-excluded VA NPIs (May release; was 125 in April) + LEIE/SAM/NPPES verification URLs |
 | `/api/v1/states/va-briefing-summary.json` | `analysis/build_va_briefing.py` | Consolidated VA briefing payload (findings + cohort breakdown + H26 results in one fetch) |
 
@@ -207,7 +210,7 @@ The writable `/api/v1/` endpoints (`subscribe`, `download-report`) are Next.js r
 
 ## Pre-registration workflow (H1–H52)
 
-Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H52** (39 findings; some bundle multiple H numbers). H41, H44 and H45 are registered but unpublished, so **H53 is the next free number** — check `FINDINGS` before assuming.
+Each hypothesis in the check catalog is registered **before** numbers drop. Current range: **H1–H54** (40 findings; some bundle multiple H numbers). H41, H44 and H45 are registered but unpublished; H53 is the organization-to-endpoint resolver that feeds the connectivity ledger rather than a standalone finding page, so **H55 is the next free number** — check `FINDINGS` before assuming.
 
 - H1–H28 — original directory-side audit (NDH-side checks).
 - H29–H36 — claims-side cross-audit (Medicaid spending, Medicare Part B/D, Open Payments, DMEPOS, nursing-home ownership, NDH completeness).
@@ -224,6 +227,7 @@ Each hypothesis in the check catalog is registered **before** numbers drop. Curr
 - H49 — published 2026-08-11. **The NDH carries no payer endpoints and no payer organization IDs.** Directly tests the expectation raised on the CMS NDH community call. Compute: `analysis/h49_ndh_payer_endpoints.py`, which reads the raw `resource` JSON rather than the flattened `_*` columns so a payer type could not be hidden by our own extractor. Includes a live control probe of a payer FHIR directory that does exist, to show the absence is in the NDH rather than in the world.
 - H50 — published 2026-08-15. **Endpoint-to-organization linkage: 16.9%.** Only 19,334 of the 114,071 FHIR-REST Endpoint resources carry a resolvable `managingOrganization`. Presence and resolvability are counted separately, because "the reference is missing" and "the reference points at nothing" are different defects with different fixes; here the gap is almost entirely absence. Compute: `analysis/h50_endpoint_org_linkage.py`. Also publishes `findings/endpoint-org-crosswalk.csv`, a resolved base-URL-to-NPI lookup.
 - H51 — published 2026-08-16. **76% of the endpoints the NDH cannot name are already named by the EHR vendors**, in public files: 71,857 of the 94,737 unattributed endpoints, 30,366 of them straight to an NPI, moving attribution from 16.9% to 79.9%. Compute: `analysis/h51_vendor_endpoint_attribution.py` over eight vendor publishers. **Index bundle entries by `fullUrl` as well as `Type/id`**: Epic references entries as `urn:uuid:`, and a resolver understanding only `Type/id` returns zero and does not error. That is the same failure that produced a wrong published claim about Epic in H47. Assert hierarchy roll-ups against the source org count; an early pass reported 105,562 sites against a 96,190 total.
+- H54 — published 2026-08-16. **The role gap is a Medicare-billing gap.** Every coverage percentage this project publishes divides by the NDH's active Practitioner set, and nothing had checked what is in it. Across all 227,727 active PA practitioners joined to NPPES taxonomy, role coverage varies by two orders of magnitude between professions and tracks Medicare billing rather than clinical practice: 77.9% of advanced-practice clinicians and 69.8% of physicians carry a `PractitionerRole`, against 19.6% of therapists, 14.8% of behavioral-health providers, 4.7% of dentists, 2.7% of nurses and **1 of 12,995 pharmacy providers**. Compute: `analysis/h54_role_gap_composition.py`. **The registered prior was rejected**: the gap is not padded with non-record-holding NPIs (students, pharmacy, aides, transport, suppliers and facilities together are 5.2% of the set, worth about one point of coverage). Two things follow. Any directory-wide coverage number is really a statement about Medicare-billing specialties, and a consumer cannot tell a specialty with no digital presence from one the directory does not describe. It also predicts why the CMS-enrollment path adds so little: Medicare-enrolled clinicians already have roles.
 - H52 — 2026-08-16. **Payer directories carry the practitioner-to-organization affiliation the NDH leaves empty.** The role gap, not the endpoint gap, is the NDH's binding constraint: 73% of active practitioners have no `PractitionerRole`, so no organization, so no endpoint path at any confidence. Medicare claims closed only 2.5% of it. Measured against the whole Capital BlueCross public FHIR directory (CMS-9115-F). Compute: `analysis/h52_payer_affiliation_gap.py`, fed by `analysis/harvest_payer_directory.py`. Provenance: `docs/methodology/runs/2026-08-16-h52-payer-affiliation-gap.md`. See "Harvesting payer FHIR directories" below for the source-side defects, which change the counts.
 
 1. **Register** in `frontend/src/data/findings.ts`: slug, hypotheses list, null hypothesis, denominator, data source, audience implications. This is publishable on its own.
@@ -255,6 +259,7 @@ Hypothesis-to-slug mapping (check `FINDINGS` in `frontend/src/data/findings.ts` 
 - `endpoint-org-linkage` → H50 (`analysis/h50_endpoint_org_linkage.py`) — also writes `findings/endpoint-org-crosswalk.csv`
 - `vendor-endpoint-attribution` → H51 (`analysis/h51_vendor_endpoint_attribution.py`) — eight public vendor endpoint files
 - `payer-affiliation-gap` → H52 (`analysis/h52_payer_affiliation_gap.py`) — needs a harvest from `analysis/harvest_payer_directory.py` first
+- `role-gap-composition` → H54 (`analysis/h54_role_gap_composition.py`) — NDH joined to `bigquery-public-data.nppes.npi_raw` and categorized via `analysis/nucc_taxonomy.py`
 
 H10–H13 apply the CMS Medicare Provider and Supplier Taxonomy Crosswalk (Oct 2025, downloaded fresh each run) to bridge NUCC ↔ CMS Medicare Specialty codes, and match against all 15 NPPES taxonomy slots with switch-aware logic (not just slot 1).
 
@@ -320,6 +325,35 @@ Grouping is best-evidence-first instead: **NPPES `is_organization_subpart` + `pa
 **A system does not have "an endpoint".** Collect every endpoint found anywhere in a system with the member carrying it; never pick the first. UPMC publishes an Epic endpoint for its physicians and separate athenahealth endpoints for individual surgery centres.
 
 Known open gap: no public federal source links UPMC's physician group to UPMC. Not the affiliation resource, not NPPES subparts, not the vendor files (which name brands). That is a concrete ask, not something to infer around.
+
+### CMS enrollment as a practitioner-to-organization source (`analysis/ingest_pecos_affiliations.py`)
+
+Four public CMS files carry the affiliation edge the NDH leaves empty, with no harvest and no credentials. All four are resolved through a catalog rather than hardcoded, because the download URLs carry a content hash that rotates on every refresh.
+
+| File | Gives |
+| --- | --- |
+| Doctors and Clinicians National Downloadable File (`mj5m-pzi6`) | NPI → `org_pac_id` + group legal name, practice address, phone, primary specialty, telehealth flag, Medicare assignment |
+| Facility Affiliation Data (`27ea-46a8`) | NPI → facility CCN by facility type |
+| Revalidation Reassignment List | Individual NPI → group PAC ID; reassignment is the enrollment act that creates the employment link |
+| PPEF Enrollment Extract | NPI → CMS provider type, the category |
+
+**PAC ID is the public stand-in for the tax ID.** A claim carries an NPI and a TIN, and the TIN is what groups billing under one legal entity. TIN is not public. The PECOS Associate Control ID is: one per legal entity, published, stable across enrollments. NPPES does carry `parent_organization_tin` and this project deliberately does not read or republish it.
+
+**An empty `org_pac_id` is a finding, not a missing value.** A solo practitioner has no group. Counting them as an unclosed gap overstates the problem.
+
+**Encoding is inconsistent across these files** and there is no way to tell from the response. Read utf-8-sig first and fall back to latin-1; getting it wrong raises partway through a 400 MB file and looks exactly like a truncated download.
+
+**Per-NPI CSVs do not scale to 51 states.** Pennsylvania alone adds ~40 MB across the enrollment crosswalk, the composition detail and the enrollment-endpoint map, against a `public/api/v1/` tree that is already ~345 MB. Publishing all 51 would add roughly 2 GB to the repo. PA is the worked example on purpose; before extending, either trim to summary JSON per state or move the per-NPI detail out of git.
+
+**Measured yield, so nobody re-runs this expecting more.** PA: 95,054 clinicians with a group, 74,405 of them present in the NDH, but only **2,614 of the 140,911 role-gap practitioners (1.9%)** gain a net-new affiliation. H54 explains why: Medicare-enrolled clinicians are already the ones the NDH gives roles to. The value is not gap closure, it is the second opinion on organization identity for practitioners whose directory organization resolves to nothing, which adds 1,047 endpoint-reaching practitioners in PA, 623 of them carrying no `PractitionerRole` at all.
+
+### Categorizing NPIs (`analysis/nucc_taxonomy.py`)
+
+Shared module mapping a NUCC taxonomy code to grouping, classification, section (Individual / Non-Individual) and a coarse reporting `category`. Any new work that needs to know what kind of provider an NPI belongs to must use it rather than pattern-matching specialty strings.
+
+It deliberately does **not** decide which categories "should" reach an endpoint. That is an empirical question, and answering it by assertion bakes an opinion into a denominator. Callers measure reach per category and report it.
+
+The NUCC release version in the filename (`nucc_taxonomy_261.csv`) is `<two-digit year><release number>`, two per year. The loader tries a window of versions newest-first, because a hardcoded version silently 404s six months after it is written. A 404 from that host can return an HTML body with a success-looking status, so the loader validates the header shape rather than trusting the status code.
 
 ### Harvesting payer FHIR directories (`analysis/harvest_payer_directory.py`)
 

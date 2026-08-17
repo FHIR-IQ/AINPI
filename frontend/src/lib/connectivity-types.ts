@@ -103,7 +103,25 @@ export interface ConnectivityPayload {
     reaches_endpoint_ndh_only: number;
     reaches_endpoint_after_vendor_npi_fill: number;
     reaches_endpoint_after_resolution: number;
+    /** Cumulative total after the CMS-enrollment tier, which is the headline. */
+    reaches_endpoint_after_cms_enrollment: number;
+    /** Reachable only through the practitioner's CMS-enrolled group. */
+    reaches_endpoint_via_enrollment_only: number;
+    /**
+     * The subset of the enrollment tier carrying no PractitionerRole at all.
+     * The only practitioners any tier reaches without the directory first
+     * affiliating them.
+     */
+    reaches_endpoint_via_enrollment_without_role: number;
+    /** with_role plus practitioners affiliated only by CMS enrollment. */
+    affiliated_any_source: number;
     reaches_endpoint_pct_of_affiliated: number;
+    /**
+     * The same rate against the pre-enrollment denominator. Both ship because
+     * moving a numerator and a denominator in one release is how a published
+     * number stops being comparable to last week's.
+     */
+    reaches_endpoint_pct_of_ndh_affiliated: number;
     vendor_known: number;
     organizations: number;
     organizations_with_endpoint: number;
@@ -116,6 +134,8 @@ export interface ConnectivityPayload {
     green: number;
     yellow: number;
     resolved: number;
+    /** Reached through CMS enrollment rather than through the directory. */
+    enrolled: number;
     candidate: number;
     red: number;
     none: number;
