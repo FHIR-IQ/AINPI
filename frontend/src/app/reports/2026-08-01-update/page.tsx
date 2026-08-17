@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-08-01 update: half the states have a Medicaid directory you can actually open',
+    '2026-08-01 update: half the states have a Medicaid directory you can actually open',
   description:
     'H46 published: CMS lists a Medicaid provider directory for 32 of 51 states and DC, and 5 of those listed URLs do not resolve. 27 of 51 (52.9%) have a catalogued directory the public can open. Plus the federated payer registry baseline: 2,557 plans enumerated, zero endpoints published.',
   openGraph: {

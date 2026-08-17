@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-06-25 update: what is actually in an NDH endpoint record? (H44)',
+    '2026-06-25 update: what is actually in an NDH endpoint record? (H44)',
   description:
     'H44 published: endpoint metadata coverage vs the HTE submission spec. Of the 9 endpoint fields the spec collects, 5 have no home in the NDH FHIR Endpoint profile (STU1), and the extensions that could carry the others are 0% populated across all 114,071 FHIR-REST endpoints. Today the NDH knows an endpoint address and payload type, and that is the whole record.',
   openGraph: {

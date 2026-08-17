@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-05-22 update: H40 published, 1 confirmed case, 3 SAM-NPI false positives caught',
+    '2026-05-22 update: H40 published, 1 confirmed case, 3 SAM-NPI false positives caught',
   description:
     'Sharpened H30a to per-(NPI, HCPCS, place-of-service) detail. Cross-audit surfaced 4 strict-post-exclusion candidates; primary-source verification confirms 1 (Eduardo Miranda MD, LEIE-excluded 2015, $880K Medicare Part B in CY 2023) and reveals 3 SAM-NPI-join false positives.',
   openGraph: {

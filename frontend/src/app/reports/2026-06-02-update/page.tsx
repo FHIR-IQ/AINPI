@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-06-02 update: landscape becomes the front door, REAL Health audit framework published',
+    '2026-06-02 update: landscape becomes the front door, REAL Health audit framework published',
   description:
     'The provider data landscape replaces the choropleth as the AINPI homepage, a hierarchical treemap that shows the federal directory by structure, mass, and quality in one frame. Paired with a policy brief that maps every § 6220 obligation to the AINPI signal that measures it.',
   openGraph: {

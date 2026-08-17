@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-08-04 update: a third of American hospitals serve a seventh of the people',
+    '2026-08-04 update: a third of American hospitals serve a seventh of the people',
   description:
     'New rural health section: 1,847 of 5,366 US hospitals (34.4%) sit in nonmetro counties holding 13.8% of residents, and 1,338 are Critical Access. Plus a Pennsylvania deep dive on which hospitals software can actually find, and a correction to an earlier Epic claim.',
   openGraph: {

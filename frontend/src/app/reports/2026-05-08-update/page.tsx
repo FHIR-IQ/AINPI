@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 const VIDEO_HREF = '/video/2026-05-08-update/';
 
 export const metadata: Metadata = {
-  title: 'AINPI 2026-05-08 update: first comparable-release deltas',
+  title: '2026-05-08 update: first comparable-release deltas',
   description:
     'CMS pushed a new NDH bulk export. AINPI re-ingested everything and reports release-to-release deltas: Endpoint −73%, Location −61%, OrgAffiliation +147%, SSN exposures 46 → 41, Org NPI duplicates 383K → 1.41M, plus two source-side schema breaks consumers should know about.',
   openGraph: {

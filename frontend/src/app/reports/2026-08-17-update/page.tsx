@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI: the directory knows doctors, and barely knows nurses, dentists and pharmacists',
+    'The directory knows doctors, and barely knows nurses, dentists and pharmacists',
   description:
     'We checked all 227,727 health workers the CMS National Provider Directory lists as active in Pennsylvania. 77.9% of nurse practitioners and physician assistants have a workplace recorded, against 1 of 12,995 pharmacy workers. The split tracks who bills Medicare, not who provides care.',
   openGraph: {

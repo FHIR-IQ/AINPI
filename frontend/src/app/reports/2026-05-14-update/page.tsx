@@ -11,7 +11,7 @@ const DOC_PATH = 'docs/reports/2026-05-14-update.md';
 const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
-  title: 'AINPI 2026-05-14 update: claims-side cross-audit shipped',
+  title: '2026-05-14 update: claims-side cross-audit shipped',
   description:
     '8 new findings link AINPI\'s directory cohort to the money: Medicaid spending, Medicare Part B/D, Open Payments, DMEPOS, nursing-home ownership, and NDH completeness. Plus two methodology corrections: strict post-exclusion attribution and the H35 Stage B structural-null fix.',
   openGraph: {

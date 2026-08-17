@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    "AINPI: most web addresses in the national doctor directory don't say who they belong to",
+    "Most web addresses in the national doctor directory don't say who they belong to",
   description:
     'We checked 114,071 web addresses in the CMS National Provider Directory. Only 19,334 say who owns them, about one in six. Nothing is broken, the names were never filled in. Free list of the ones that work, plus why health insurers are not in the directory yet.',
   openGraph: {

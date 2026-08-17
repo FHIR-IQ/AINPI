@@ -12,7 +12,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 
 export const metadata: Metadata = {
   title:
-    'AINPI 2026-06-09 update: 99.98% of practitioners carry a phone on the record (H43)',
+    '2026-06-09 update: 99.98% of practitioners carry a phone on the record (H43)',
   description:
     'H43 published: practitioner phone-number reachability. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 NDH release carry a phone directly on the Practitioner record; the role/location traversal adds nothing.',
   openGraph: {
