@@ -37,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/findings', priority: 0.9 },
     { path: '/real-health-providers', priority: 0.9 },
     { path: '/map', priority: 0.8 },
+    { path: '/primer', priority: 0.9 },
     { path: '/methodology', priority: 0.8 },
     { path: '/for-state-medicaid', priority: 0.8 },
     { path: '/smd-revalidation', priority: 0.7 },

@@ -1,0 +1,69 @@
+{
+  "title": "Provider directory scoreboard",
+  "note": "Six metrics with a current baseline, each reproducible from public data. Stated so progress is arguable rather than felt. Recompute them against the next release with analysis/primer_scoreboard.py.",
+  "release_date": "2026-05-08",
+  "generated_at": "2026-08-19T02:43:16+00:00",
+  "commit_sha": "bda819c4be55dae8ba978c2f0439394a0dd6f2f6",
+  "metrics": [
+    {
+      "key": "endpoint-attribution",
+      "label": "Endpoint attribution",
+      "question": "Does the directory say who an endpoint belongs to?",
+      "value": 16.9,
+      "unit": "%",
+      "detail": "19,334 of 114,071 FHIR REST endpoints name a managing organization.",
+      "headroom": "79.9% using only public vendor files that exist today.",
+      "finding": "endpoint-org-linkage"
+    },
+    {
+      "key": "partof-resolution",
+      "label": "partOf resolution",
+      "question": "Does the organization hierarchy point at anything?",
+      "value": 0.0,
+      "unit": "%",
+      "detail": "148,834 references to 43,833 distinct parent organizations. 0 resolve to a record in the export.",
+      "headroom": "Publish the parents, or drop the field.",
+      "finding": null
+    },
+    {
+      "key": "organization-typing",
+      "label": "Organization typing",
+      "question": "Can a consumer tell entities from tax records?",
+      "value": 41.4,
+      "unit": "% untyped",
+      "detail": "1,414,522 of 3,414,375 Organization records are tax-entity records carrying free text rather than a coding, against 1,999,118 provider records.",
+      "headroom": "Give them a real code so they can be filtered.",
+      "finding": null
+    },
+    {
+      "key": "endpoint-usability",
+      "label": "Endpoint usability",
+      "question": "How many endpoints can software actually query?",
+      "value": 8.4,
+      "unit": "%",
+      "detail": "114,071 of 1,360,585 Endpoint resources are FHIR REST. The rest are Direct messaging addresses.",
+      "headroom": "Not a defect. It is the right denominator to publish.",
+      "finding": "endpoint-url-validity"
+    },
+    {
+      "key": "affiliation-coverage",
+      "label": "Affiliation coverage",
+      "question": "Does the directory say where a clinician works?",
+      "value": 38.1,
+      "unit": "% have one",
+      "detail": "86,816 of 227,727 active Pennsylvania practitioners carry a PractitionerRole. Coverage is uneven by profession, from 77.9% of advanced practice to 0.008% of pharmacy providers.",
+      "headroom": "Publish role provenance so absence can be read.",
+      "finding": "role-gap-composition"
+    },
+    {
+      "key": "brand-coverage",
+      "label": "Brand coverage",
+      "question": "Can a patient's hospital be identified as itself?",
+      "value": 0,
+      "unit": "%",
+      "detail": "No brand or health-system layer exists in the directory. Nothing states that an organization belongs to a system a patient would recognize.",
+      "headroom": "Vendor User Access Brands files are already public.",
+      "finding": "vendor-endpoint-attribution"
+    }
+  ]
+}

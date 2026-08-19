@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { LogOut, User, Map, FileText, MapPin, BookOpen, Code2, LayoutGrid, IdCard, Stethoscope, Landmark } from 'lucide-react';
+import { LogOut, User, Map, FileText, MapPin, BookOpen, Code2, LayoutGrid, IdCard, Stethoscope, Landmark, GraduationCap } from 'lucide-react';
 
 /**
  * Top-level navigation.
@@ -27,6 +27,7 @@ const NAV_ITEMS: { href: string; label: string; icon: React.ReactNode }[] = [
   { href: '/rural-health', label: 'Rural health', icon: <Stethoscope className="w-4 h-4 mr-1.5" /> },
   { href: '/states', label: 'States', icon: <Landmark className="w-4 h-4 mr-1.5" /> },
   { href: '/for-state-medicaid', label: 'For States', icon: <MapPin className="w-4 h-4 mr-1.5" /> },
+  { href: '/primer', label: 'Primer', icon: <GraduationCap className="w-4 h-4 mr-1.5" /> },
   { href: '/methodology', label: 'Methodology', icon: <BookOpen className="w-4 h-4 mr-1.5" /> },
   { href: '/developer', label: 'Developer', icon: <Code2 className="w-4 h-4 mr-1.5" /> },
 ];
