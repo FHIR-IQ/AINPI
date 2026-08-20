@@ -78,7 +78,11 @@ export const PARTNERS: Partner[] = [
         url: 'https://defacto.health/2026/04/17/cms-0062-p-and-what-mandatory-payer-api-endpoint-reporting-means-for-provider-directories/',
         date: '2026-04-17',
         relatedTo: {
-          label: 'We measured zero payer endpoints in the NDH',
+          // Deliberately past tense and release-scoped. We measured zero payer
+          // endpoints against 2026-05-08. CMS added InsurancePlan on
+          // 2026-08-20, so the finding needs re-running before anyone reads it
+          // as a claim about the current file.
+          label: 'What we found against the May release',
           href: '/findings/ndh-payer-endpoint-coverage',
         },
       },

@@ -15,6 +15,8 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from ndh_manifest import (  # noqa: E402
+    ALL_NDH_RESOURCES,
+    NDH_NEW_RESOURCES,
     NDH_RESOURCES,
     expected_compressed_size,
     parse_release_date,
@@ -148,3 +150,72 @@ class TestResolveAllFiles:
         for url in urls.values():
             assert url.startswith("https://directory.cms.gov/downloads/")
             assert url.endswith(".ndjson.zst")
+
+
+class TestManifestKeyFormats:
+    """The 2026-08-20 release renumbered every manifest key and resolved
+    nothing under the previous `startswith(f"{resource}_")` test. These pin
+    all three key formats that have shipped, and the boundary that keeps
+    Organization off the OrganizationAffiliation file."""
+
+    NUMBERED = {
+        "files": {
+            "01-Organization.ndjson": {},
+            "02-Location.ndjson": {},
+            "03-Endpoint.ndjson": {},
+            "04-HealthcareService.ndjson": {},
+            "05-InsurancePlan.ndjson": {},
+            "06-Practitioner.ndjson": {},
+            "07-PractitionerRole.ndjson": {},
+            "08-OrganizationAffiliation.ndjson": {},
+        }
+    }
+    DATED = {
+        "files": {
+            "Organization_2026-05-07_2128.ndjson": {},
+            "OrganizationAffiliation_2026-05-07_2128.ndjson": {},
+            "Practitioner_2026-05-07_2128.ndjson": {},
+        }
+    }
+    PLAIN = {"files": {"Organization.ndjson": {}, "OrganizationAffiliation.ndjson": {}}}
+
+    @pytest.mark.parametrize(
+        "resource,expected",
+        [
+            ("Organization", "01-Organization.ndjson.zst"),
+            ("Location", "02-Location.ndjson.zst"),
+            ("Endpoint", "03-Endpoint.ndjson.zst"),
+            ("Practitioner", "06-Practitioner.ndjson.zst"),
+            ("PractitionerRole", "07-PractitionerRole.ndjson.zst"),
+            ("OrganizationAffiliation", "08-OrganizationAffiliation.ndjson.zst"),
+        ],
+    )
+    def test_numbered_keys_resolve(self, resource, expected):
+        _, basename = resolve_file_url(self.NUMBERED, resource)
+        assert basename == expected
+
+    def test_organization_does_not_match_organization_affiliation(self):
+        """The whole-stem boundary. Without it Organization also matches the
+        affiliation file and 1.09M affiliation rows land in the organization
+        table, which would look like a plausible number rather than an error."""
+        for manifest in (self.NUMBERED, self.DATED, self.PLAIN):
+            _, basename = resolve_file_url(manifest, "Organization")
+            assert "Affiliation" not in basename
+
+    def test_dated_keys_still_resolve(self):
+        """The pre-2026-08-20 format must keep working: archived releases are
+        still fetched by date."""
+        _, basename = resolve_file_url(self.DATED, "Practitioner")
+        assert basename == "Practitioner_2026-05-07_2128.ndjson.zst"
+
+    def test_plain_keys_resolve(self):
+        _, basename = resolve_file_url(self.PLAIN, "Organization")
+        assert basename == "Organization.ndjson.zst"
+
+    def test_new_resources_are_discoverable_but_not_in_ingest_tuple(self):
+        """They have no BigQuery tables yet, so folding them into
+        NDH_RESOURCES would turn a discovery change into a failing load."""
+        assert "InsurancePlan" in NDH_NEW_RESOURCES
+        assert "HealthcareService" in NDH_NEW_RESOURCES
+        assert "InsurancePlan" not in NDH_RESOURCES
+        assert set(ALL_NDH_RESOURCES) == set(NDH_RESOURCES) | set(NDH_NEW_RESOURCES)

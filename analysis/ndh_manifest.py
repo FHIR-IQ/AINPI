@@ -52,7 +52,7 @@ from typing import Any
 MANIFEST_URL = "https://directory.cms.gov/downloads/manifest.json"
 DOWNLOADS_BASE = "https://directory.cms.gov/downloads"
 
-# The six resources in the NDH bulk export, in the order most pipelines
+# The six resources this project ingests, in the order most pipelines
 # process them (small → large).
 NDH_RESOURCES = (
     "Endpoint",
@@ -62,6 +62,25 @@ NDH_RESOURCES = (
     "PractitionerRole",
     "Practitioner",
 )
+
+# Added by CMS in the 2026-08-20 release. Kept separate from NDH_RESOURCES on
+# purpose: callers iterate that tuple to drive ingestion, and there are no
+# BigQuery tables for these yet, so folding them in would turn a discovery
+# change into a failing load. Resolvable by name today; promote them once the
+# tables exist.
+#
+#   HealthcareService  54,445 rows, and nearly empty. 100% carry only a
+#                      network-reference extension; 0.5% carry a location and
+#                      exactly one carries providedBy. Network membership,
+#                      not a service description.
+#   InsurancePlan         233 Medicare Advantage plans across 27 owning
+#                      organizations, each with an ownedBy reference.
+NDH_NEW_RESOURCES = (
+    "HealthcareService",
+    "InsurancePlan",
+)
+
+ALL_NDH_RESOURCES = NDH_RESOURCES + NDH_NEW_RESOURCES
 
 
 def fetch_manifest(timeout: float = 30.0) -> dict[str, Any]:
@@ -114,12 +133,25 @@ def resolve_file_url(manifest: dict[str, Any], resource: str) -> tuple[str, str]
             f"manifest.files is not a dict ({type(files).__name__}); manifest schema may have changed"
         )
 
-    candidates = [
-        k for k in files
-        if isinstance(k, str)
-        and k.startswith(f"{resource}_")
-        and (k.endswith(".ndjson") or k.endswith(".ndjson.zst"))
-    ]
+    # Match the resource as a whole filename stem, allowing an optional
+    # ordering prefix and an optional dated suffix. Three forms have shipped:
+    #
+    #   Practitioner_2026-05-07_2128.ndjson   through 2026-05-08
+    #   06-Practitioner.ndjson                2026-08-20 onward
+    #   Practitioner.ndjson                   undated form
+    #
+    # The 2026-08-20 release renumbered every key and broke the previous
+    # `startswith(f"{resource}_")` test, which resolved nothing at all.
+    #
+    # The boundary after the resource name is load-bearing: without it
+    # "Organization" also matches "08-OrganizationAffiliation.ndjson" and the
+    # affiliation file gets loaded into the organization table. The old
+    # underscore test got that right by accident; this gets it right on
+    # purpose.
+    pattern = re.compile(
+        rf"^(?:\d+-)?{re.escape(resource)}(?:_[^/]*)?\.ndjson(?:\.zst)?$"
+    )
+    candidates = [k for k in files if isinstance(k, str) and pattern.match(k)]
 
     if not candidates:
         # Forward-compat: maybe Fred's fix puts the URL on a top-level
