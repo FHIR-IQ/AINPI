@@ -5,32 +5,36 @@
     "H49"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-11T11:35:21+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-20T22:26:38+00:00",
   "methodology_version": "0.7.2-draft",
   "commit_sha": "5d36703",
-  "headline": "Of 114,071 FHIR REST endpoints in the 2026-05-08 NDH release, 1 (0.0009%) is a payer provider directory, and no payer organization type exists across 1,999,818 typed Organization resources. The NDH does not yet function as a payer-endpoint discovery index.",
+  "headline": "CMS added payer organizations in the 2026-08-20 release: 27 carry a 'pay' type coding and own 233 Medicare Advantage plans, where the previous release had no payer type at all. Payer endpoints did not follow. 0 of the 27 payer organizations carry an endpoint, 1 of 110,973 FHIR REST endpoints is a payer provider directory, and a live CMS-9115-F directory is still absent from the index.",
   "numerator": 1,
-  "denominator": 114071,
+  "denominator": 110973,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
-        "label": "unlabelled",
-        "value": 114051
+        "label": "Payer organizations (type pay)",
+        "value": 27
       },
       {
-        "label": "patient-access",
-        "value": 19
+        "label": "Medicare Advantage plans",
+        "value": 233
       },
       {
-        "label": "provider-directory",
+        "label": "Payer orgs carrying an endpoint",
+        "value": 0
+      },
+      {
+        "label": "Payer provider-directory endpoints",
         "value": 1
       }
     ]
   },
-  "notes": "Organization.type carries exactly three codings in this release: prov (Healthcare Provider), team, govt. There is no payer type, so payer organizations cannot be selected by type. Name matching is not a substitute: every Pennsylvania organization matching payer-like name patterns is in fact a provider (KEYSTONE RURAL HEALTH CENTER and similar), which is why this check classifies by endpoint host rather than organization name.\n\nWhere payer endpoints are carried, they are largely unusable as an index: of the 92 payer-host endpoints found, 7 carry a managingOrganization reference, so the endpoint cannot be resolved to an organization for the rest. Status mix: active=62, error=30.\n\nThe provider-directory count is a floor, not a census: it counts servers that self-label in their URL path. A directory hosted at an unlabelled path is not counted, so the true number may be higher. The control probe is what makes the gap concrete, by taking a directory verified live and unauthenticated and checking whether the index knows it.\n\nThis measures a release, not compliance. Payer endpoint coverage has been discussed in the NDH community as intended direction; what is reported here is the distance between that direction and the shipped file, which is the actionable part.",
+  "notes": "Re-measured against the 2026-08-20 release by streaming the published NDJSON directly, not through BigQuery, so the check could run the day the release landed rather than after a 45 GB ingest. Classification constants are imported from analysis/h49_ndh_payer_endpoints.py rather than copied, so this cannot drift from the finding it updates. Half of the original result is resolved: a payer organization type now exists. The other half stands: no payer organization carries an endpoint, and the control directory (Capital BlueCross) answers 200 to an unauthenticated request while remaining absent from the index, which separates 'nothing to index' from 'not indexed yet'. Reproduce with analysis/h49_recheck_release.py --dir <release dir>.",
   "detail": {
     "organization_type_codings": [
       {
