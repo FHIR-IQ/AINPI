@@ -116,3 +116,63 @@ export const PARTNERS: Partner[] = [
     ],
   },
 ];
+
+/**
+ * Places this work gets discussed, as opposed to people publishing research.
+ *
+ * Separate from PARTNERS on purpose. These are venues a reader can join, and
+ * the useful field is how to get in, not what they published.
+ *
+ * `joinNote` is deliberately honest when we cannot publish a join path. The
+ * CMS provider directory Slack and its weekly call are real, and we have been
+ * in both, but neither publishes an open invite link we could verify. Printing
+ * a guessed invite URL would be worse than saying to ask, because a dead
+ * invite makes a reader think the community is dead.
+ */
+export interface Community {
+  name: string;
+  what: string;
+  cadence?: string;
+  /** Verified public URL, or null when there is no public landing page. */
+  url: string | null;
+  joinNote: string;
+  links?: { label: string; url: string }[];
+}
+
+export const COMMUNITIES: Community[] = [
+  {
+    name: 'CMS Health Technology Ecosystem',
+    what:
+      'The CMS initiative the National Provider Directory sits inside, covering the interoperability framework and the patient-facing tools built on it.',
+    url: 'https://www.cms.gov/initiatives/health-technology-ecosystem/overview',
+    joinNote:
+      'Public initiative page. CMS has run webinars and a request for information; watch the overview page for the current comment window.',
+    links: [
+      {
+        label: 'One year on, CMS readout',
+        url: 'https://www.cms.gov/newsroom/press-releases/readout-cms-celebrates-delivery-health-technology-ecosystem-one-year-after-launch',
+      },
+    ],
+  },
+  {
+    name: 'CMS provider directory community',
+    what:
+      'The working group around the National Provider Directory itself: a Slack workspace and a recurring community call where the CMS directory team takes questions from implementers. Most of what this project has learned about intent, as opposed to contents, came from there.',
+    cadence: 'Weekly call, plus an ongoing Slack workspace',
+    url: 'https://directory.cms.gov/',
+    joinNote:
+      'There is no public invite link we can point at. Ask the CMS directory team through the bulk download site, or ask anyone already participating to bring you in.',
+  },
+  {
+    name: 'HL7 Patient Administration',
+    what:
+      'The HL7 work group that owns the National Directory of Healthcare Providers and Services implementation guide, which is the specification the CMS files are built against.',
+    url: 'http://www.hl7.org/Special/committees/pafm',
+    joinNote:
+      'HL7 work groups are open to attend. Cite the published STU1 rather than the continuous build: per its co-author the ballot and CI URLs are not stable references.',
+    links: [
+      { label: 'NDH IG, published STU1', url: 'https://hl7.org/fhir/us/ndh/STU1/' },
+      { label: 'NDH bulk downloads', url: 'https://directory.cms.gov/downloads/' },
+    ],
+  },
+];

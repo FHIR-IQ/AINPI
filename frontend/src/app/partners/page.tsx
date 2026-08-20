@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import { PARTNERS } from '@/data/partners';
+import { COMMUNITIES, PARTNERS } from '@/data/partners';
 
 export const dynamic = 'force-static';
 
@@ -109,6 +109,58 @@ export default function PartnersPage() {
             </section>
           ))}
         </div>
+
+        <section className="mt-14">
+          <h2 className="mb-1 font-serif text-2xl text-ink">
+            Where this gets discussed
+          </h2>
+          <p className="measure mb-6 text-sm text-gray-600">
+            Venues rather than publications. Most of what we know about what
+            the directory is <em>meant</em> to do, as opposed to what it
+            contains, came out of these rooms.
+          </p>
+
+          <div className="space-y-4">
+            {COMMUNITIES.map((c) => (
+              <div key={c.name} className="border border-gray-300 bg-white p-5">
+                <div className="mb-1 flex flex-wrap items-baseline justify-between gap-x-4">
+                  <h3 className="font-medium text-ink">
+                    {c.url ? (
+                      <a href={c.url} rel="noopener" className="hover:text-signal">
+                        {c.name}
+                      </a>
+                    ) : (
+                      c.name
+                    )}
+                  </h3>
+                  {c.cadence && (
+                    <span className="text-xs text-gray-500">{c.cadence}</span>
+                  )}
+                </div>
+                <p className="measure text-sm text-gray-700">{c.what}</p>
+                <p className="measure mt-2 text-sm text-gray-600">
+                  <span className="eyebrow mr-2">Getting in</span>
+                  {c.joinNote}
+                </p>
+                {c.links?.length ? (
+                  <ul className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+                    {c.links.map((l) => (
+                      <li key={l.url}>
+                        <a
+                          href={l.url}
+                          rel="noopener"
+                          className="text-primary-700 underline"
+                        >
+                          {l.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="mt-10 border border-gray-300 bg-white p-6">
           <h2 className="mb-2 font-serif text-2xl text-ink">
