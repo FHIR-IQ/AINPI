@@ -14,6 +14,8 @@ export default function Footer() {
           <ul className="space-y-2">
             <li><Link href="/methodology" className="hover:text-white">Methodology</Link></li>
             <li><Link href="/data-sources" className="hover:text-white">Data sources</Link></li>
+            <li><Link href="/primer" className="hover:text-white">Primer</Link></li>
+            <li><Link href="/partners" className="hover:text-white">Related work</Link></li>
             <li><Link href="/smd-revalidation" className="hover:text-white">SMD-response citation language</Link></li>
             <li><a href="https://github.com/FHIR-IQ/AINPI" target="_blank" rel="noopener noreferrer" className="hover:text-white">GitHub</a></li>
             <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>

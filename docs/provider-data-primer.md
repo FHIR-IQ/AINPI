@@ -116,6 +116,13 @@ That gap is why endpoint attribution is hard. The vendor that runs the software
 publishes a brand. The directory publishes legal entities. Joining the two is
 the unsolved problem, and it is solvable, because the vendor files are public.
 
+## Who else is measuring this
+
+We audit one federal file. Other people work the payer side, directory
+accuracy scoring, and what breaks when an application actually tries to use
+this data. Their research is listed, with links and quotes, at
+[related work](/partners).
+
 ## Reading the scoreboard
 
 The metrics below are reproducible from public data. They are stated so that

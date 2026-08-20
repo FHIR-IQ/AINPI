@@ -1,0 +1,118 @@
+/**
+ * People and organizations doing adjacent work on provider and payer directory
+ * data, surfaced at /partners.
+ *
+ * Rules for adding an entry, because a links page decays faster than anything
+ * else on a site:
+ *
+ *  - Every URL was opened and read. No link goes in from memory or from a
+ *    search-result snippet.
+ *  - Every `quote` is verbatim from the piece it cites. Paraphrase belongs in
+ *    `why`, in our own voice, never inside quotation marks next to someone
+ *    else's name. Misquoting a peer is worse than not quoting them.
+ *  - `why` says what their work does that ours does not. A partners page that
+ *    only says "great folks" is an advertisement; one that says where the
+ *    other party is stronger is useful to a reader deciding who to read.
+ *  - Listing someone here is not a claim of endorsement in either direction.
+ *    The page says so in as many words.
+ */
+export interface PartnerLink {
+  title: string;
+  url: string;
+  /** ISO date the piece was published, for ordering and staleness. */
+  date: string;
+  /** Verbatim, from the linked piece. Never a paraphrase. */
+  quote?: string;
+  /** Where this connects to something AINPI publishes. */
+  relatedTo?: { label: string; href: string };
+}
+
+export interface Partner {
+  name: string;
+  person?: string;
+  role?: string;
+  url: string;
+  what: string;
+  /** What they cover that we do not. Written in our voice. */
+  why: string;
+  links: PartnerLink[];
+}
+
+export const PARTNERS: Partner[] = [
+  {
+    name: 'Defacto Health',
+    person: 'Ron Urwongse',
+    role: 'Co-founder',
+    url: 'https://defacto.health/',
+    what:
+      'Payer network and provider directory data, with an accuracy scoring and monitoring service built on top of it.',
+    why:
+      'We audit the federal directory as published. Defacto works the payer side, which is the half of the problem the federal files do not cover, and has been tracking payer directory API behaviour since 2022. Where we measure what a file contains, they measure whether a patient could actually act on it.',
+    links: [
+      {
+        title:
+          'Swift Revalidation of High-Risk Medicaid Providers, National Directory, and Payer APIs',
+        url: 'https://defacto.health/2026/07/03/swift-revalidation-of-high-risk-medicaid-providers-national-directory-and-payer-apis/',
+        date: '2026-07-03',
+        quote:
+          'The value of compliant directory APIs for program integrity is not that directory errors are themselves evidence of fraud. What directory data provides is a map of which providers are enrolled in Medicaid.',
+        relatedTo: {
+          label: 'Our § 455.436 revalidation work',
+          href: '/smd-revalidation',
+        },
+      },
+      {
+        title: 'REAL Health Providers Act: How should we measure accuracy?',
+        url: 'https://defacto.health/2026/06/01/real-health-providers-act-how-should-we-measure-accuracy/',
+        date: '2026-06-01',
+        quote:
+          'Directory accuracy is not defined simply by an attestation or by a contract. It is defined by whether a patient can find, book, and see a provider at the place and time the directory states.',
+        relatedTo: {
+          label: 'Our REAL Health Providers Act brief',
+          href: '/real-health-providers',
+        },
+      },
+      {
+        title:
+          'CMS-0062-P and What Mandatory Payer API Endpoint Reporting Means for Provider Directories',
+        url: 'https://defacto.health/2026/04/17/cms-0062-p-and-what-mandatory-payer-api-endpoint-reporting-means-for-provider-directories/',
+        date: '2026-04-17',
+        relatedTo: {
+          label: 'We measured zero payer endpoints in the NDH',
+          href: '/findings/ndh-payer-endpoint-coverage',
+        },
+      },
+      {
+        title: 'National Provider Directory Accuracy: July 2025 Report',
+        url: 'https://defacto.health/2025/07/29/national-provider-directory-accuracy-july-2025-report/',
+        date: '2025-07-29',
+      },
+      {
+        title: 'State of Provider Directory APIs 2024',
+        url: 'https://defacto.health/2024/06/24/state-of-provider-directory-apis-2024/',
+        date: '2024-06-24',
+      },
+    ],
+  },
+  {
+    name: 'Fasten Health',
+    person: 'Jason Kulatunga',
+    role: 'Founder',
+    url: 'https://www.fastenhealth.com/',
+    what:
+      'A unified medical record API that connects to health systems on a patient’s behalf, plus an open-source personal health record.',
+    why:
+      'They consume this data rather than audit it, which makes them the best evidence of what actually breaks. Their catalogue is built on the SMART User Access Brands specification, so they hit the missing brand layer in the federal directory before anyone measuring the files would notice it.',
+    links: [
+      {
+        title: 'Fasten Connect',
+        url: 'https://www.fastenhealth.com/',
+        date: '2026-08-18',
+        relatedTo: {
+          label: 'Why we recommend Brands as the spine, not the NDH',
+          href: '/primer',
+        },
+      },
+    ],
+  },
+];

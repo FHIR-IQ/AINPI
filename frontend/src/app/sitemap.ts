@@ -44,6 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/smd-revalidation/cross-audit-roadmap', priority: 0.5 },
     { path: '/pecos', priority: 0.7 },
     { path: '/states', priority: 0.7 },
+    { path: '/partners', priority: 0.6 },
     { path: '/data-sources', priority: 0.6 },
     { path: '/data-quality', priority: 0.6 },
     { path: '/npd', priority: 0.6 },
