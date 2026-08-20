@@ -167,12 +167,17 @@ export const COMMUNITIES: Community[] = [
     name: 'HL7 Patient Administration',
     what:
       'The HL7 work group that owns the National Directory of Healthcare Providers and Services implementation guide, which is the specification the CMS files are built against.',
-    url: 'http://www.hl7.org/Special/committees/pafm',
+    // Points at the published IG rather than hl7.org/Special/committees/pafm.
+    // That committee page sits behind bot protection and answers 202 with an
+    // empty body, so we cannot confirm a reader would see anything. The IG
+    // names the owning work group anyway. Do not "fix" this back to the
+    // committee URL without checking it renders.
+    url: 'https://hl7.org/fhir/us/ndh/STU1/',
     joinNote:
-      'HL7 work groups are open to attend. Cite the published STU1 rather than the continuous build: per its co-author the ballot and CI URLs are not stable references.',
+      'HL7 work groups are open to attend, and chat.fhir.org is where implementers actually argue about the guide. Cite the published STU1 rather than the continuous build: per its co-author the ballot and CI URLs are not stable references.',
     links: [
-      { label: 'NDH IG, published STU1', url: 'https://hl7.org/fhir/us/ndh/STU1/' },
-      { label: 'NDH bulk downloads', url: 'https://directory.cms.gov/downloads/' },
+      { label: 'chat.fhir.org', url: 'https://chat.fhir.org/' },
+      { label: 'NDH bulk downloads', url: 'https://directory.cms.gov/downloads' },
     ],
   },
 ];
