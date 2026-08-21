@@ -5,13 +5,13 @@
     "H26"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T10:15:46+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:44:33+00:00",
   "methodology_version": "0.5.0",
-  "commit_sha": "bda819c",
-  "headline": "3 of 128 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 3, UnitedHealthcare 0, Molina 0.",
-  "numerator": 3,
-  "denominator": 128,
+  "commit_sha": "be51fe6",
+  "headline": "5 of 106 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 5, UnitedHealthcare 0, Molina 0.",
+  "numerator": 5,
+  "denominator": 106,
   "chart": {
     "type": "bar",
     "unit": "count",
@@ -22,7 +22,7 @@
       },
       {
         "label": "Cigna",
-        "value": 3
+        "value": 5
       },
       {
         "label": "UnitedHealthcare",
