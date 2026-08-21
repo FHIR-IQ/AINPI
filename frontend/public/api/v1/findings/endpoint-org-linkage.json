@@ -5,206 +5,194 @@
     "H50"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-15T11:29:41+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T10:37:44+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "67adcef",
-  "headline": "Of 114,071 FHIR REST endpoints in the 2026-05-08 NDH release, 19,334 (16.9%) resolve to a managing organization. The remaining 94,737 are URLs with no owner in the directory. Every endpoint that does resolve reaches an organization carrying an NPI, so the link yields a usable base-URL-to-NPI crosswalk for 19,334 endpoints across 18,884 organizations.",
-  "numerator": 19334,
-  "denominator": 114071,
+  "commit_sha": "95feac2",
+  "headline": "Of 110,973 FHIR REST endpoints in the 2026-08-20 NDH release, 16,262 (14.7%) resolve to a managing organization. The remaining 94,711 are URLs with no owner in the directory. Every endpoint that does resolve reaches an organization carrying an NPI, so the link yields a usable base-URL-to-NPI crosswalk for 16,262 endpoints across 15,940 organizations.",
+  "numerator": 16262,
+  "denominator": 110973,
   "chart": {
     "type": "bar",
     "unit": "percent",
     "data": [
       {
         "label": "direct-project resolvable",
-        "value": 8.9
+        "value": 9.0
       },
       {
         "label": "hl7-fhir-rest resolvable",
-        "value": 16.9
+        "value": 14.7
       }
     ]
   },
-  "notes": "Presence and resolvability are reported separately because a reference can exist and point at nothing. In this release they are identical: 0 of the managingOrganization references across both connection types dangle. The gap is absence, not breakage, which matters because absence is fixed by populating a field and breakage would be fixed by repairing referential integrity.\n\nHost is not a substitute for the organization link. EHR vendors host thousands of tenants on one domain, so a host identifies the vendor and never the practice. The rate is bimodal rather than uniformly low. Of the 30 hosts carrying at least 100 endpoints, 16 publish no organization link on any of them, covering 49,036 endpoints; others attribute most of theirs. That is a publishing-behaviour difference between vendors rather than one systemic cause, and it means the fix is per-vendor: a host sitting at 0% is not partially populated, it has never populated the field at all.\n\nDirect Trust addresses are excluded from the crosswalk. They are messaging addresses rather than callable base URLs (H28), though their linkage rate is reported in the chart for completeness. The crosswalk covers the FHIR REST subset only, which is the right denominator for anything that resolves a base URL.",
+  "notes": "Presence and resolvability are reported separately because a reference can exist and point at nothing. In this release they are identical: 724 of the managingOrganization references across both connection types dangle. The gap is absence, not breakage, which matters because absence is fixed by populating a field and breakage would be fixed by repairing referential integrity.\n\nHost is not a substitute for the organization link. EHR vendors host thousands of tenants on one domain, so a host identifies the vendor and never the practice. The rate is bimodal rather than uniformly low. Of the 23 hosts carrying at least 100 endpoints, 13 publish no organization link on any of them, covering 43,601 endpoints; others attribute most of theirs. That is a publishing-behaviour difference between vendors rather than one systemic cause, and it means the fix is per-vendor: a host sitting at 0% is not partially populated, it has never populated the field at all.\n\nDirect Trust addresses are excluded from the crosswalk. They are messaging addresses rather than callable base URLs (H28), though their linkage rate is reported in the chart for completeness. The crosswalk covers the FHIR REST subset only, which is the right denominator for anything that resolves a base URL.",
   "detail": {
     "by_connection_type": [
       {
         "connection_type": "direct-project",
-        "total": 1246514,
-        "reference_present": 110984,
-        "resolvable": 110984,
-        "resolves_to_npi": 110984,
-        "distinct_orgs": 18311
+        "total": 1017196,
+        "reference_present": 92234,
+        "resolvable": 91598,
+        "resolves_to_npi": 91598,
+        "distinct_orgs": 4560
       },
       {
         "connection_type": "hl7-fhir-rest",
-        "total": 114071,
-        "reference_present": 19334,
-        "resolvable": 19334,
-        "resolves_to_npi": 19334,
-        "distinct_orgs": 18884
+        "total": 110973,
+        "reference_present": 16350,
+        "resolvable": 16262,
+        "resolves_to_npi": 16262,
+        "distinct_orgs": 15940
       }
     ],
-    "all_endpoints_total": 1360585,
-    "all_endpoints_resolvable": 130318,
-    "dangling_references": 0,
-    "crosswalk_rows": 19334,
+    "all_endpoints_total": 1128169,
+    "all_endpoints_resolvable": 107860,
+    "dangling_references": 724,
+    "crosswalk_rows": 16262,
     "crosswalk_url": "/api/v1/findings/endpoint-org-crosswalk.csv",
     "top_hosts_by_linkage": [
       {
         "host": "api.platform.athenahealth.com",
-        "endpoints": 35439,
-        "resolvable": 8700,
-        "resolvable_pct": 24.5
+        "endpoints": 35012,
+        "resolvable": 8560,
+        "resolvable_pct": 24.4
+      },
+      {
+        "host": "fhir4.healow.com",
+        "endpoints": 23179,
+        "resolvable": 4449,
+        "resolvable_pct": 19.2
       },
       {
         "host": "fhir4.eclinicalworks.com",
-        "endpoints": 16809,
+        "endpoints": 16619,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "fhirpt.officeally.com",
-        "endpoints": 13090,
+        "endpoints": 12886,
         "resolvable": 0,
         "resolvable_pct": 0.0
-      },
-      {
-        "host": "fhir4.healow.com",
-        "endpoints": 6617,
-        "resolvable": 4527,
-        "resolvable_pct": 68.4
-      },
-      {
-        "host": "fhir.fhirpoint.open.allscripts.com",
-        "endpoints": 4977,
-        "resolvable": 1054,
-        "resolvable_pct": 21.2
       },
       {
         "host": "api.practicefusion.com",
-        "endpoints": 4714,
+        "endpoints": 4354,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
-        "host": "connect.pointclickcare.com",
-        "endpoints": 4015,
+        "host": "fhir.qualifacts.org",
+        "endpoints": 2573,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "app.meldrx.com",
-        "endpoints": 3129,
-        "resolvable": 692,
-        "resolvable_pct": 22.1
-      },
-      {
-        "host": "fhir-myrecord.cerner.com",
-        "endpoints": 2790,
-        "resolvable": 986,
-        "resolvable_pct": 35.3
-      },
-      {
-        "host": "fhir.qualifacts.org",
-        "endpoints": 2607,
-        "resolvable": 0,
-        "resolvable_pct": 0.0
-      },
-      {
-        "host": "fhir-usa.unify.chbase.com",
-        "endpoints": 2258,
-        "resolvable": 306,
-        "resolvable_pct": 13.6
+        "endpoints": 1859,
+        "resolvable": 401,
+        "resolvable_pct": 21.6
       },
       {
         "host": "fhirendpoint.curemd.net",
-        "endpoints": 1763,
+        "endpoints": 1742,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "api.patientfusion.com",
-        "endpoints": 1737,
+        "endpoints": 1597,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "fhir-api.fhirprod.aws.greenwayhealth.com",
-        "endpoints": 1501,
-        "resolvable": 523,
-        "resolvable_pct": 34.8
+        "endpoints": 1475,
+        "resolvable": 512,
+        "resolvable_pct": 34.7
       },
       {
-        "host": "app.azaleahealth.com",
-        "endpoints": 1355,
-        "resolvable": 848,
-        "resolvable_pct": 62.6
+        "host": "fhir-myrecord.cerner.com",
+        "endpoints": 1367,
+        "resolvable": 935,
+        "resolvable_pct": 68.4
       },
       {
         "host": "ac-fhir.harrisambulatory.com",
-        "endpoints": 1124,
+        "endpoints": 1101,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
-        "host": "api.qualifacts.org",
-        "endpoints": 957,
-        "resolvable": 398,
-        "resolvable_pct": 41.6
+        "host": "fhir-usa.unify.chbase.com",
+        "endpoints": 886,
+        "resolvable": 290,
+        "resolvable_pct": 32.7
       },
       {
         "host": "ct-fhir.harrisambulatory.com",
-        "endpoints": 836,
+        "endpoints": 826,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "fhir-service.medicscloud.com",
-        "endpoints": 654,
+        "endpoints": 651,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "fhir.glaceemr.com",
-        "endpoints": 567,
+        "endpoints": 564,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
+        "host": "fhir.fhirpoint.open.allscripts.com",
+        "endpoints": 479,
+        "resolvable": 171,
+        "resolvable_pct": 35.7
+      },
+      {
+        "host": "api.qualifacts.org",
+        "endpoints": 461,
+        "resolvable": 379,
+        "resolvable_pct": 82.2
+      },
+      {
         "host": "fhir.maximeyes.com",
-        "endpoints": 413,
+        "endpoints": 339,
+        "resolvable": 0,
+        "resolvable_pct": 0.0
+      },
+      {
+        "host": "doxpodfhir-dmezayd2cbead2f8.centralus-01.azurewebsites.net",
+        "endpoints": 220,
         "resolvable": 0,
         "resolvable_pct": 0.0
       },
       {
         "host": "fhir.yourcareuniverse.net",
-        "endpoints": 234,
-        "resolvable": 56,
-        "resolvable_pct": 23.9
-      },
-      {
-        "host": "doxpodfhir-dmezayd2cbead2f8.centralus-01.azurewebsites.net",
-        "endpoints": 230,
-        "resolvable": 0,
-        "resolvable_pct": 0.0
-      },
-      {
-        "host": "revolutionehr.dynamicfhir.com",
-        "endpoints": 228,
-        "resolvable": 0,
-        "resolvable_pct": 0.0
+        "endpoints": 204,
+        "resolvable": 53,
+        "resolvable_pct": 26.0
       },
       {
         "host": "drchrono-fhirpresentation.everhealthsoftware.com",
-        "endpoints": 181,
-        "resolvable": 55,
-        "resolvable_pct": 30.4
+        "endpoints": 176,
+        "resolvable": 53,
+        "resolvable_pct": 30.1
+      },
+      {
+        "host": "dhfhirpresentation.smartcarenet.com",
+        "endpoints": 129,
+        "resolvable": 0,
+        "resolvable_pct": 0.0
       }
     ],
-    "hosts_scored": 30,
-    "hosts_with_zero_linkage": 16,
-    "endpoints_on_zero_linkage_hosts": 49036
+    "hosts_scored": 23,
+    "hosts_with_zero_linkage": 13,
+    "endpoints_on_zero_linkage_hosts": 43601
   }
 }

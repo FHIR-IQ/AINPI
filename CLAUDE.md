@@ -380,20 +380,33 @@ Payer directories published under CMS-9115-F carry `PractitionerRole` densely, w
 
 ### Known data quality baseline
 
-Measured on the 2026-05-08 release after ingestion via `analysis/fast_ingest_ndh.py` (bq load):
+**The warehouse is loaded with 2026-08-20.** `analysis/release.py` holds `CURRENT_RELEASE`; bump it in the same commit as a reload. Before any reload run `analysis/release_snapshot.py --release <outgoing>`: the tables carry no release column and `fast_ingest_ndh.py` loads with `--replace`, so the outgoing release is otherwise unrecoverable. Snapshots live in `analysis/release-snapshots/` (tracked, not under the gitignored `analysis/data/`).
 
 ```text
-Resource                       April-09     May-08         Δ
-practitioner                  7,441,213   7,441,211       flat
-organization                  3,603,262   3,414,375    −5.2%
-location                      3,494,239   1,362,869    −61%
-endpoint                      5,043,524   1,360,585    −73%
-practitioner_role             7,178,732   7,028,001    −2.1%
-organization_affiliation        439,599   1,086,694    +147%
-TOTAL                        27,200,569  21,693,735    −20%
+Resource                        May-08      Aug-20         Δ
+practitioner                 7,441,211   7,373,232    −0.9%
+organization                 3,414,375   4,402,671    +28.9%
+location                     1,362,869   2,535,686    +86.1%
+endpoint                     1,360,585   1,128,169    −17.1%
+practitioner_role            7,028,001  16,545,158   +135.4%
+organization_affiliation     1,086,694     483,992    −55.5%
+TOTAL                       21,693,735  32,468,908    +49.7%
 ```
 
-Significant compositional shift in the May release: Endpoint and Location dropped sharply (CMS appears to have deduped multi-address rows), while OrganizationAffiliation more than doubled. Two source-side schema changes broke ingestion until the extractor was patched: NPI identifier system URL changed from `http://hl7.org/fhir/sid/us-npi` to `http://terminology.hl7.org/NamingSystem/npi`, and `PractitionerRole.specialty` codes shifted from CMS Medicare format (`14-50`) to NUCC taxonomy codes (`207R00000X`).
+**The 2026-08-20 release is the largest change since this project started measuring, and it broke three things.** The manifest renumbered every key (`Practitioner_2026-05-07_2128.ndjson` → `06-Practitioner.ndjson`), which resolved nothing under the old `startswith(f"{resource}_")` matcher and blocked ingestion entirely; `parse_release_date` crashed because the new keys carry no date and it received a dict; and the export went from six files to eight. See `analysis/ndh_manifest.py` for the whole-stem regex that now accepts all three key formats, including the boundary that stops `Organization` matching `08-OrganizationAffiliation.ndjson`.
+
+What moved, measured (`/api/v1/release-deltas.json`, `/api/v1/role-gap-delta.json`):
+
+- **PractitionerRole more than doubled** (active 3,952,445 → 10,806,327) and national role coverage moved only 27% → 31.4%, PA 38.1% → 43.7%. Most new records went to practitioners who already had one: roles per covered practitioner went ~2.0 → 4.67. A doubling of records is not a doubling of coverage, and the headline count hides which happened.
+- **Every profession improved, most at the bottom.** PA pharmacy 1 → 526 practitioners with a role, dental 4.7% → 13.3%, behavioral health 14.8% → 22.9%, against advanced practice 77.9% → 82.0%. The Medicare-billing gradient H54 found is still there and much smaller.
+- **`Organization.partOf` went from 0% to 100% resolvable.** May had 148,834 references to unpublished parents; Aug has 140,017 references, 43,551 targets, none dangling. Anything built around that field being useless needs rebuilding, and anyone told it was broken deserves the correction.
+- **Payer identity arrived, reachability did not.** 27 organizations now carry a `pay` type that did not exist, owning 233 health plans, and none of them carries an endpoint (H49, H55).
+- **Endpoint attribution regressed**, 16.9% → 14.7% (H50). Total FHIR REST also fell, so some is removal rather than lost names. Reported rather than buried.
+- Half the Organization file is now `ein` tax records (2,199,519 of 4,402,671), up from 41.4%.
+
+Earlier source-side schema changes that still bite: the NPI identifier system URL changed from `http://hl7.org/fhir/sid/us-npi` to `http://terminology.hl7.org/NamingSystem/npi` in May, and `PractitionerRole.specialty` shifted from CMS Medicare format (`14-50`) to NUCC taxonomy codes (`207R00000X`).
+
+**32 analysis scripts still hardcode a release-date string literal.** `analysis/release.py` exists to end that; H28, H50 and H54 import from it. Migrate the rest when touching them.
 
 ## Supabase Prisma Schema (app database)
 

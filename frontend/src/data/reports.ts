@@ -33,6 +33,18 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'aug-2026-08-21-update',
+    version: '2026-08-21-update',
+    title:
+      '2026-08-21 update: the directory just changed more in one release than in the last four',
+    description:
+      'We reloaded all 45 GB of the 2026-08-20 release and re-ran every measurement. Where-they-work records went from 7.0M to 16.5M, and coverage moved only five points because most landed on clinicians who already had one. Every profession improved, most at the bottom of the table. A hierarchy field that resolved to nothing in May now resolves completely. 233 health plans and 27 insurers appeared. Endpoint attribution went backwards, 16.9% to 14.7%.',
+    format: 'web',
+    url: '/reports/2026-08-21-update',
+    badge: 'NEW',
+    length: '~5 min read',
+  },
+  {
     id: 'aug-2026-08-17-update',
     version: '2026-08-17-update',
     title:
@@ -41,7 +53,6 @@ export const REPORTS: ReportOption[] = [
       'We checked all 227,727 health workers the national directory lists as active in Pennsylvania, and asked which ones it says have a workplace. It is not evenly spread. 77.9% of nurse practitioners and physician assistants have one, and 1 of 12,995 pharmacy workers does. The split tracks who bills Medicare, not who provides care. Includes a new county map you can zoom, and an honest account of the guess we got wrong.',
     format: 'web',
     url: '/reports/2026-08-17-update',
-    badge: 'NEW',
     length: '~4 min read',
   },
   {

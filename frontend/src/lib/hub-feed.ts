@@ -129,7 +129,16 @@ function reportsToTimelineEntries(): TimelineEntry[] {
   return out;
 }
 
-function articlesToTimelineEntries(): TimelineEntry[] {
+/**
+ * Every article under docs/articles/, newest first.
+ *
+ * Exported so tests can assert on the generator rather than on the trimmed
+ * timeline. The timeline keeps only the 10 most-recent entries across all
+ * categories, so an article ages out the moment enough findings and reports
+ * land after it, and a test that counts articles in the timeline is really
+ * testing the publishing calendar.
+ */
+export function articlesToTimelineEntries(): TimelineEntry[] {
   if (!fs.existsSync(ARTICLES_DIR)) return [];
   const out: TimelineEntry[] = [];
   for (const name of fs.readdirSync(ARTICLES_DIR)) {

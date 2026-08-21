@@ -47,7 +47,7 @@ from claims_sources._cohorts import bq_job_config  # noqa: E402
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.7.2-draft"
 SLUG = "endpoint-org-linkage"
 

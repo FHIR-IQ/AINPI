@@ -103,7 +103,12 @@ pharmacy chains rather than health systems.
 *Pseudo-EIN as a corporate parent.* It is a tax key and it does its job. It is
 not a brand or a health system. The largest groups are national retail chains.
 
-*Organization.partOf as a hierarchy.* See the scoreboard below.
+*Organization.partOf as a hierarchy.* This one **changed**, and it is worth
+knowing which release you are holding. In the 2026-05-08 export all 148,834
+`partOf` references pointed at organizations that were not published, so the
+field resolved to nothing at all. In 2026-08-20 CMS shipped the parents:
+140,017 references, 43,551 distinct targets, none dangling. If you built
+around the field being useless, rebuild.
 
 ## What is actually missing
 
@@ -128,3 +133,7 @@ this data. Their research is listed, with links and quotes, at
 The metrics below are reproducible from public data. They are stated so that
 progress is arguable rather than felt, and so anyone can recompute them against
 the next release without taking our word for anything.
+
+That is not decorative. Between 2026-05-08 and 2026-08-20 one of these went
+from 0% to 100% and another went backwards, which is exactly the kind of
+movement a single snapshot hides.

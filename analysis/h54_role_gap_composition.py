@@ -88,7 +88,7 @@ OUT_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE = "2026-05-08"
+from analysis.release import CURRENT_RELEASE as RELEASE  # noqa: E402
 METHODOLOGY = "0.7.2-draft"
 
 _TAX_COLS = ", ".join(f"n.healthcare_provider_taxonomy_code_{i}"
