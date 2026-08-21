@@ -641,6 +641,40 @@ export const FINDINGS: Finding[] = [
     ],
   },
   {
+    slug: 'ndh-new-resource-types',
+    hypotheses: ['H55'],
+    title: 'What arrived when the NDH went from six resource types to eight',
+    summary:
+      'The 2026-08-20 release added HealthcareService and InsurancePlan, announced as payer and health-plan data arriving. It is, and the shape of what arrived decides whether a consumer can use it. InsurancePlan is complete on arrival: 233 health plans, every one naming an owning organization, across 27 payers now carrying a `pay` organization type that did not exist in the previous release. HealthcareService is not: 54,445 resources of which 0.5% name a location, exactly one names a provider, and none carry a service name, type or specialty. It is a network-membership join wearing the name of a service description.',
+    nullHypothesis:
+      'A newly added resource type is populated to the same completeness as the established ones, so field presence on HealthcareService and InsurancePlan is indistinguishable from that on Organization or Practitioner.',
+    denominator:
+      'Every resource in the 04-HealthcareService and 05-InsurancePlan files of the named release, read whole from the published NDJSON. No sampling. Field presence is counted at the top level of each resource.',
+    dataSource:
+      'The NDH bulk export resolved through directory.cms.gov/downloads/manifest.json, streamed directly rather than through BigQuery: there are no warehouse tables for these types yet, and a release should be characterizable the day it lands. Compute script: analysis/h55_new_resource_types.py.',
+    status: 'published',
+    updated: '2026-08-20',
+    ogTagline:
+      'One of the two new resource types is complete on arrival. The other carries no descriptive field at all.',
+    implications: [
+      {
+        audience: 'Startups + integrators',
+        takeaway:
+          'Do not design against HealthcareService as a service catalogue yet. It carries a network-reference extension and almost nothing else, so it answers "is this provider in this network" and not "what is offered here". InsurancePlan, by contrast, is usable today and gives you plan-to-payer ownership directly.',
+      },
+      {
+        audience: 'CMS publishing the data',
+        takeaway:
+          'InsurancePlan.type is free text rather than a coded element, and the same product appears under several spellings in one file. Coding that field costs nothing now and saves every downstream consumer writing their own normaliser.',
+      },
+      {
+        audience: 'Everyone using NDH',
+        takeaway:
+          'Payer identity arrived in this release and payer reachability did not. 27 payer organizations now exist and none of them carries an endpoint, which is the companion result in H49.',
+      },
+    ],
+  },
+  {
     slug: 'role-gap-composition',
     hypotheses: ['H54'],
     basedOn: [

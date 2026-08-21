@@ -1,0 +1,79 @@
+{
+  "slug": "ndh-new-resource-types",
+  "title": "What arrived when the NDH went from six resource types to eight",
+  "hypotheses": [
+    "H55"
+  ],
+  "status": "published",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T01:50:36+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "22c05470a89e0f97e5bb74bb2f40c65d4531e151",
+  "headline": "The 2026-08-20 release adds two resource types. InsurancePlan arrives usable: 233 health plans, every one naming an owning organization, across 27 payers. HealthcareService arrives empty: 54,445 resources of which 0.5% name a location, 1 name a provider, and none carry a service name, type or specialty. It is a network-membership join, not a description of a service.",
+  "numerator": 273,
+  "denominator": 54445,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "InsurancePlan names an owner",
+        "value": 100.0
+      },
+      {
+        "label": "HealthcareService names a location",
+        "value": 0.5
+      },
+      {
+        "label": "HealthcareService names a provider",
+        "value": 0.0018
+      },
+      {
+        "label": "HealthcareService names the service",
+        "value": 0.0
+      }
+    ]
+  },
+  "notes": "Measured by streaming the release's own NDJSON rather than through BigQuery, because there are no tables for these types yet and a release should be characterizable the day it lands. HealthcareService carries active, extension, id, location, meta, providedBy, resourceType and nothing else; the descriptive fields that would make it a service record (name, type, specialty, category, telecom, comment, availableTime, serviceProvisionCode) are absent from every resource. The registered prior, that a new resource carries identity before it carries detail, holds for HealthcareService and is rejected for InsurancePlan, which is complete enough to use on arrival. One caveat on InsurancePlan: `type` is free text and not coded, and the same product appears under several spellings (Medicare Advantage PPO Plan, CSNP-COPD, mediadv, MAPD, CSNP, Qualified Health Plan), so grouping plans by type requires normalising strings rather than reading a code. Reproduce with analysis/h55_new_resource_types.py.",
+  "detail": {
+    "healthcare_service": {
+      "resources": 54445,
+      "field_presence": {
+        "resourceType": 54445,
+        "id": 54445,
+        "meta": 54445,
+        "active": 54445,
+        "providedBy": 1,
+        "location": 273,
+        "extension": 54445
+      }
+    },
+    "insurance_plan": {
+      "resources": 233,
+      "owning_organizations": 27,
+      "field_presence": {
+        "resourceType": 233,
+        "id": 233,
+        "meta": 233,
+        "status": 233,
+        "name": 233,
+        "type": 233,
+        "alias": 233,
+        "period": 233,
+        "ownedBy": 233,
+        "network": 233
+      },
+      "plan_types": {
+        "Medicare Advantage PPO Plan": 165,
+        "CSNP-COPD": 5,
+        "mediadv": 15,
+        "MAPD": 17,
+        "CSNP": 9,
+        "Qualified Health Plan": 15,
+        "medi": 4,
+        "DSNP": 2,
+        "MA": 1
+      }
+    }
+  }
+}
