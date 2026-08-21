@@ -183,13 +183,37 @@ def resolve_file_url(manifest: dict[str, Any], resource: str) -> tuple[str, str]
     return url, basename
 
 
-def parse_release_date(filename: str) -> str:
-    """Extract the YYYY-MM-DD release date from a manifest filename.
+def parse_release_date(source: "str | dict[str, Any]") -> str:
+    """Extract the YYYY-MM-DD release date from a manifest or a filename.
 
-    Filenames look like `Practitioner_2026-05-07_2128.ndjson(.zst)`.
-    Returns the captured date string or empty string if unparseable.
+    Accepts either, because the two releases carry it in different places:
+
+      2026-05-08 and earlier  the date is embedded in each filename, as
+                              `Practitioner_2026-05-07_2128.ndjson`
+      2026-08-20 onward       filenames are `06-Practitioner.ndjson` with no
+                              date at all, and the manifest carries a
+                              top-level `generated_at` instead
+
+    Passing the manifest is preferred: one authoritative date for the release
+    beats six filenames that could in principle disagree. Passing a filename
+    still works so callers holding only a name keep functioning.
+
+    Returns the date string, or empty string if unparseable. Callers treat
+    empty as unknown rather than crashing, because a missing release label
+    should not stop an ingest that is otherwise fine.
     """
-    m = re.search(r"_(\d{4}-\d{2}-\d{2})_", filename)
+    if isinstance(source, dict):
+        generated = source.get("generated_at") or ""
+        m = re.search(r"(\d{4}-\d{2}-\d{2})", str(generated))
+        if m:
+            return m.group(1)
+        # Fall back to any dated filename still present in the manifest.
+        for key in source.get("files", {}):
+            m = re.search(r"_(\d{4}-\d{2}-\d{2})_", str(key))
+            if m:
+                return m.group(1)
+        return ""
+    m = re.search(r"_(\d{4}-\d{2}-\d{2})_", source)
     return m.group(1) if m else ""
 
 
