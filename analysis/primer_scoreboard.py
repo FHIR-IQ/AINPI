@@ -37,7 +37,7 @@ REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 API = REPO_ROOT / "frontend" / "public" / "api" / "v1"
 FINDINGS = API / "findings"
 PROJECT = "thematic-fort-453901-t7"
-RELEASE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE  # noqa: E402
 
 ORG_SQL = f"""
 SELECT

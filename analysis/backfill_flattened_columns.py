@@ -38,6 +38,10 @@ from google.cloud import bigquery
 sys.path.insert(0, __file__.rsplit("/", 1)[0])
 from claims_sources._cohorts import bq_job_config  # noqa: E402
 
+import sys as _sys, pathlib as _pathlib
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent))
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
+
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 
@@ -133,7 +137,7 @@ def write_coverage(client: bigquery.Client) -> None:
     """
     rows = [dict(r) for r in client.query(sql, job_config=bq_job_config()).result()]
     payload = {
-        "release_date": "2026-05-08",
+        "release_date": RELEASE_DATE,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "description": (
             "Coverage of the flattened telecom, address.line and Location.position "

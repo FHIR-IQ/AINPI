@@ -1,5 +1,5 @@
 {
-  "_seed_note": "Synthetic seed for UI development. Replaced when analysis/landscape.py runs against BigQuery.",
+  "_seed_note": "Synthetic seed for UI development, not measured data. The `release` field below records which release the seed was shaped against and is NOT a provenance claim: no number in this file was computed from the NDH. Replaced when analysis/landscape.py runs against BigQuery.",
   "cell_count": 548,
   "cells": [
     {
