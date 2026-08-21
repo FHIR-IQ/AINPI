@@ -38,6 +38,7 @@ METHODOLOGY_VERSION = "0.6.0-draft"
 import sys as _sys, pathlib as _pathlib
 _sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent.parent))
 from release import CURRENT_RELEASE as _NDH_RELEASE  # noqa: E402
+from claims_sources._cohorts import bq_job_config  # noqa: E402
 
 # The claims year is fixed by the source file; the NDH side is whatever the
 # warehouse currently holds, so it must not be a literal. This label read
@@ -81,7 +82,8 @@ def load_ndh_npis() -> set[str]:
     UNION DISTINCT
     SELECT DISTINCT _npi FROM `thematic-fort-453901-t7.cms_npd.organization` WHERE _npi IS NOT NULL
     """
-    ndh = {row._npi for row in client.query(sql).result()}
+    ndh = {row._npi for row in client.query(
+        sql, job_config=bq_job_config()).result()}
     print(f"  loaded {len(ndh):,} NDH NPIs (practitioner ∪ organization)")
     return ndh
 
@@ -166,7 +168,7 @@ def main() -> None:
     headline = (
         f"{len(material):,} of {total_partb:,} Medicare Part B billing NPIs in "
         f"CY 2023 ({100*len(material)/total_partb:.2f}%) are absent from "
-        f"NDH (practitioner ∪ organization tables, 2026-05-08 release) "
+        f"NDH (practitioner ∪ organization tables, {_NDH_RELEASE} release) "
         f"AND billed ≥ ${MATERIAL_THRESHOLD:,} in Medicare Part B. Combined "
         f"paid amount: ${total_paid_material:,.0f}. The NDH is the federal "
         f"source of truth on provider identity; material Medicare billers "
