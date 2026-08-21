@@ -1,0 +1,84 @@
+npi,name,billing_state,provider_type,entity_type,medicare_paid_2023,medicare_allowed_2023,services_2023,beneficiaries_2023,nppes_lookup_url
+1063417707,Saman Shaker,VA,Hematology-Oncology,I,2762427.72,3458352.2,113425,1105,https://npiregistry.cms.hhs.gov/provider-view/1063417707
+1306815287,Mccollum Michael,VA,Gynecological Oncology,I,1141460.88,1434306.62,86405,347,https://npiregistry.cms.hhs.gov/provider-view/1306815287
+1275537649,Falkenberg Thomas,VA,Ophthalmology,I,594114.19,781509.72,5338,884,https://npiregistry.cms.hhs.gov/provider-view/1275537649
+1962468397,Overby Terry,VA,Nephrology,I,375928.85,487556.36,3880,872,https://npiregistry.cms.hhs.gov/provider-view/1962468397
+1578545596,Coker William,VA,Dermatology,I,374230.86,519519.6,9606,1421,https://npiregistry.cms.hhs.gov/provider-view/1578545596
+1225005903,Hess Randal,VA,Radiation Oncology,I,200513.41,253131.16,3065,271,https://npiregistry.cms.hhs.gov/provider-view/1225005903
+1518938547,Beute Trisha,VA,Dermatology,I,198508.19,277845.13,4790,1032,https://npiregistry.cms.hhs.gov/provider-view/1518938547
+1639186992,Murphy Michael,VA,Hospitalist,I,141907.7,178002.85,1410,649,https://npiregistry.cms.hhs.gov/provider-view/1639186992
+1356344964,Rowell Diane,VA,Emergency Medicine,I,133943.41,172728.91,2051,670,https://npiregistry.cms.hhs.gov/provider-view/1356344964
+1659479111,Virginia Cvs Pharmacy Llc,VA,Mass Immunizer Roster Biller,O,127812.88,127812.88,2224,607,https://npiregistry.cms.hhs.gov/provider-view/1659479111
+1619581436,Thorpe Samuel,VA,Nurse Practitioner,I,113799.37,150085.49,1627,399,https://npiregistry.cms.hhs.gov/provider-view/1619581436
+1003910779,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,109930.09,109930.09,2152,577,https://npiregistry.cms.hhs.gov/provider-view/1003910779
+1528058047,Rathinasamy Palani,VA,Diagnostic Radiology,I,109552.38,142372.45,6773,3624,https://npiregistry.cms.hhs.gov/provider-view/1528058047
+1417026055,Shaffrey Mark,VA,Neurosurgery,I,96756.58,121231.01,264,107,https://npiregistry.cms.hhs.gov/provider-view/1417026055
+1487657383,Kornetsky Kenneth,VA,Nephrology,I,84008.86,107431.25,804,351,https://npiregistry.cms.hhs.gov/provider-view/1487657383
+1265536932,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,79432.45,79432.45,1365,377,https://npiregistry.cms.hhs.gov/provider-view/1265536932
+1912287145,Midlothian Apothecary Watkins Centre Inc,VA,Mass Immunizer Roster Biller,O,76963.47,76963.47,1117,416,https://npiregistry.cms.hhs.gov/provider-view/1912287145
+1447210893,Skibinski Bernard,VA,Physical Therapist in Private Practice,I,75745.26,98832.75,3297,68,https://npiregistry.cms.hhs.gov/provider-view/1447210893
+1245333764,Virginia Cvs Pharmacy Llc,VA,Mass Immunizer Roster Biller,O,75187.84,75187.84,1915,456,https://npiregistry.cms.hhs.gov/provider-view/1245333764
+1790174191,Sarker Moumita,VA,Infectious Disease,I,73024.63,93548.39,958,300,https://npiregistry.cms.hhs.gov/provider-view/1790174191
+1346293214,Pieters Philip,VA,Internal Medicine,I,71115.51,89716.65,934,274,https://npiregistry.cms.hhs.gov/provider-view/1346293214
+1568401610,Cochran Daniel,VA,Family Practice,I,69772.63,96805.76,1523,417,https://npiregistry.cms.hhs.gov/provider-view/1568401610
+1598764425,Ng Edmond,VA,General Surgery,I,67131.57,84321.88,556,289,https://npiregistry.cms.hhs.gov/provider-view/1598764425
+1063428480,Neveldine Thomas,VA,Diagnostic Radiology,I,61603.83,82077.31,1757,1199,https://npiregistry.cms.hhs.gov/provider-view/1063428480
+1861095069,"Aditxt, Inc.",VA,Clinical Laboratory,O,59995.0,59995.0,1245,305,https://npiregistry.cms.hhs.gov/provider-view/1861095069
+1245200062,Kluger Daniel,VA,Infectious Disease,I,58637.07,76027.35,1519,315,https://npiregistry.cms.hhs.gov/provider-view/1245200062
+1437257995,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,58115.38,58115.38,1120,308,https://npiregistry.cms.hhs.gov/provider-view/1437257995
+1699904961,Osman Sherif,VA,Diagnostic Radiology,I,55016.18,72070.79,2222,1336,https://npiregistry.cms.hhs.gov/provider-view/1699904961
+1578667234,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,54767.89,54767.89,1044,295,https://npiregistry.cms.hhs.gov/provider-view/1578667234
+1013913268,Wampler James,VA,Physical Therapist in Private Practice,I,53861.72,70303.99,2551,151,https://npiregistry.cms.hhs.gov/provider-view/1013913268
+1417982778,Blaylock Wilmer,VA,Dermatology,I,52875.01,73157.72,1383,313,https://npiregistry.cms.hhs.gov/provider-view/1417982778
+1932386703,Patel Dhaval,VA,Cardiology,I,52149.01,70266.96,563,405,https://npiregistry.cms.hhs.gov/provider-view/1932386703
+1952459638,Caterine Anthony,VA,Psychiatry,I,50413.51,64962.01,556,289,https://npiregistry.cms.hhs.gov/provider-view/1952459638
+1114593332,Brasher Amelie,VA,Physical Therapist in Private Practice,I,49950.03,66080.75,2505,50,https://npiregistry.cms.hhs.gov/provider-view/1114593332
+1811989536,Reinker Frances,VA,"Psychologist, Clinical",I,48734.76,63044.91,443,31,https://npiregistry.cms.hhs.gov/provider-view/1811989536
+1396844056,Dales Danny,VA,Chiropractic,I,46923.36,69108.34,1824,149,https://npiregistry.cms.hhs.gov/provider-view/1396844056
+1538267018,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,46700.78,46700.78,893,262,https://npiregistry.cms.hhs.gov/provider-view/1538267018
+1336142777,Sager Dennis,VA,Internal Medicine,I,43157.44,55358.44,511,132,https://npiregistry.cms.hhs.gov/provider-view/1336142777
+1992024392,Vap Alexander,VA,Orthopedic Surgery,I,40145.41,53053.14,427,171,https://npiregistry.cms.hhs.gov/provider-view/1992024392
+1588658108,Towe James,VA,Family Practice,I,39391.49,53623.66,696,270,https://npiregistry.cms.hhs.gov/provider-view/1588658108
+1326141078,Virginia Cvs Pharmacy Llc,VA,Mass Immunizer Roster Biller,O,38568.77,38568.77,1035,223,https://npiregistry.cms.hhs.gov/provider-view/1326141078
+1104920875,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,37787.65,37787.65,657,211,https://npiregistry.cms.hhs.gov/provider-view/1104920875
+1437336146,Kelleher Lisa,VA,Nurse Practitioner,I,37505.35,48318.98,636,115,https://npiregistry.cms.hhs.gov/provider-view/1437336146
+1063624872,Malpass Howard,VA,Pulmonary Disease,I,37263.39,49812.54,391,213,https://npiregistry.cms.hhs.gov/provider-view/1063624872
+1891030532,Marshall Eric,VA,Physical Therapist in Private Practice,I,36571.98,46163.49,1793,31,https://npiregistry.cms.hhs.gov/provider-view/1891030532
+1407947443,Sabonya Linda,VA,Psychiatry,I,35855.36,52240.9,536,157,https://npiregistry.cms.hhs.gov/provider-view/1407947443
+1275644239,Leahman Courtenay,VA,Critical Care (Intensivists),I,35593.51,45743.45,223,111,https://npiregistry.cms.hhs.gov/provider-view/1275644239
+1245248640,Daughdrille John,VA,Diagnostic Radiology,I,35568.32,45470.07,1472,1036,https://npiregistry.cms.hhs.gov/provider-view/1245248640
+1245333111,Fowler Michael,VA,Anesthesiology,I,34462.35,43720.57,206,167,https://npiregistry.cms.hhs.gov/provider-view/1245333111
+1982607768,Osborne Susan,VA,Family Practice,I,33542.54,45941.25,503,68,https://npiregistry.cms.hhs.gov/provider-view/1982607768
+1932203601,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,32849.8,32849.8,1101,242,https://npiregistry.cms.hhs.gov/provider-view/1932203601
+1043240138,Payne Catherine,VA,"Psychologist, Clinical",I,31590.13,40235.31,272,17,https://npiregistry.cms.hhs.gov/provider-view/1043240138
+1679547731,Parks David,VA,Hospice and Palliative Care,I,31461.04,40103.83,454,104,https://npiregistry.cms.hhs.gov/provider-view/1679547731
+1992762595,Lewis Robert,VA,Emergency Medicine,I,30962.7,38537.43,356,229,https://npiregistry.cms.hhs.gov/provider-view/1992762595
+1902830326,Mccole Andrew,VA,Physical Therapist in Private Practice,I,30956.04,41097.26,1489,78,https://npiregistry.cms.hhs.gov/provider-view/1902830326
+1932126489,Dudley James,VA,Emergency Medicine,I,30054.41,39361.79,354,311,https://npiregistry.cms.hhs.gov/provider-view/1932126489
+1497089825,Russell Hortense,VA,Family Practice,I,27413.98,38823.43,796,341,https://npiregistry.cms.hhs.gov/provider-view/1497089825
+1144241662,Doyle Margaret,VA,Certified Clinical Nurse Specialist,I,26785.4,36306.17,300,31,https://npiregistry.cms.hhs.gov/provider-view/1144241662
+1114596699,Knox Pharmacy Inc,VA,Pharmacy,O,26401.01,26401.01,387,160,https://npiregistry.cms.hhs.gov/provider-view/1114596699
+1538749114,Nassiri Roya,VA,Nurse Practitioner,I,25547.22,37050.65,398,390,https://npiregistry.cms.hhs.gov/provider-view/1538749114
+1659433969,Bogdonoff David,VA,Anesthesiology,I,24673.17,31049.4,92,71,https://npiregistry.cms.hhs.gov/provider-view/1659433969
+1841305109,Nixon John,VA,Cardiology,I,24603.18,33815.21,298,95,https://npiregistry.cms.hhs.gov/provider-view/1841305109
+1316016942,Lipson Lewis,VA,Cardiology,I,22979.19,31366.36,284,181,https://npiregistry.cms.hhs.gov/provider-view/1316016942
+1548268972,Resnick Richard,VA,Podiatry,I,21289.07,33669.88,260,126,https://npiregistry.cms.hhs.gov/provider-view/1548268972
+1700944857,Mccafferty Phyllis,VA,Licensed Clinical Social Worker,I,20146.69,27906.17,292,25,https://npiregistry.cms.hhs.gov/provider-view/1700944857
+1902863079,Rose Leslie,VA,Internal Medicine,I,19866.75,29390.89,299,86,https://npiregistry.cms.hhs.gov/provider-view/1902863079
+1366532640,Grieger Russell,VA,"Psychologist, Clinical",I,19847.02,26019.46,264,15,https://npiregistry.cms.hhs.gov/provider-view/1366532640
+1821098559,Bruno Jennifer,VA,Physician Assistant,I,17395.37,24860.1,375,155,https://npiregistry.cms.hhs.gov/provider-view/1821098559
+1053372011,Lloyd Patricia,VA,Physician Assistant,I,17012.68,25566.88,537,142,https://npiregistry.cms.hhs.gov/provider-view/1053372011
+1396787073,Sismanis Aristides,VA,Otolaryngology,I,16347.99,23256.64,265,127,https://npiregistry.cms.hhs.gov/provider-view/1396787073
+1487628848,Noreika Danielle,VA,Internal Medicine,I,16199.97,20602.76,218,97,https://npiregistry.cms.hhs.gov/provider-view/1487628848
+1093720674,Murray Kevin,VA,Internal Medicine,I,15596.23,20661.03,210,73,https://npiregistry.cms.hhs.gov/provider-view/1093720674
+1285395210,"Virginia Cvs Pharmacy, L.L.C.",VA,Mass Immunizer Roster Biller,O,14586.35,14586.35,335,82,https://npiregistry.cms.hhs.gov/provider-view/1285395210
+1609494178,Virginia Cvs Pharmacy Llc,VA,Mass Immunizer Roster Biller,O,13957.52,13957.52,198,71,https://npiregistry.cms.hhs.gov/provider-view/1609494178
+1376996967,Jeong Paul,VA,Hospitalist,I,13906.82,17809.23,152,99,https://npiregistry.cms.hhs.gov/provider-view/1376996967
+1598768772,Hurt George,VA,Neurosurgery,I,12810.45,16025.44,130,63,https://npiregistry.cms.hhs.gov/provider-view/1598768772
+1992714315,Julius Demetrios,VA,Psychiatry,I,12522.52,17921.32,101,70,https://npiregistry.cms.hhs.gov/provider-view/1992714315
+1912372509,Chang Han-Ding,VA,Certified Registered Nurse Anesthetist (CRNA),I,12013.49,15078.11,62,62,https://npiregistry.cms.hhs.gov/provider-view/1912372509
+1689126294,Ndagire Joyce,VA,Nurse Practitioner,I,11955.14,14266.85,234,119,https://npiregistry.cms.hhs.gov/provider-view/1689126294
+1437220217,Alemayehu Dereje,VA,Internal Medicine,I,11817.37,15057.3,174,23,https://npiregistry.cms.hhs.gov/provider-view/1437220217
+1841768801,Lockhart Emily,VA,Certified Registered Nurse Anesthetist (CRNA),I,11611.91,14759.13,111,108,https://npiregistry.cms.hhs.gov/provider-view/1841768801
+1740226588,Watson Mark,VA,Physician Assistant,I,10559.64,13752.25,114,45,https://npiregistry.cms.hhs.gov/provider-view/1740226588
+1770594921,Conley Joseph,VA,"Psychologist, Clinical",I,10113.6,13169.54,130,19,https://npiregistry.cms.hhs.gov/provider-view/1770594921

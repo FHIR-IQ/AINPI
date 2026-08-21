@@ -10,7 +10,7 @@
   "release_date": "2026-08-20",
   "methodology_version": "0.7.3-draft",
   "commit_sha": "51bf5d5",
-  "generated_at": "2026-08-21T12:44:56+00:00",
+  "generated_at": "2026-08-21T12:48:44+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -381,7 +381,7 @@
         "H36"
       ],
       "status": "published",
-      "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-05-08",
+      "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-08-20",
       "url": "https://ainpi.dev/api/v1/findings/ndh-completeness-gap.json",
       "html_url": "https://ainpi.dev/findings/ndh-completeness-gap",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"

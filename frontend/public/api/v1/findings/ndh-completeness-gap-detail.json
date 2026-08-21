@@ -1,47 +1,180 @@
 {
-  "queried_at": "2026-05-14T23:06:58+00:00",
+  "queried_at": "2026-08-21T12:48:30+00:00",
   "part_b_total_npis": 1259343,
-  "absent_from_ndh_any": 3,
-  "absent_from_ndh_material": 2,
+  "absent_from_ndh_any": 5356,
+  "absent_from_ndh_material": 3575,
   "material_threshold_usd": 10000,
-  "total_paid_absent_any": 845279.6,
-  "total_paid_absent_material": 840825.72,
+  "total_paid_absent_any": 426342423.32000047,
+  "total_paid_absent_material": 418133909.07,
   "entity_type_breakdown_material": {
-    "I": 2
+    "I": 2695,
+    "O": 880
   },
   "top_states_by_material_absences": [
     {
-      "state": "UT",
-      "matches": 1
+      "state": "FL",
+      "matches": 375
     },
     {
-      "state": "MT",
-      "matches": 1
+      "state": "CA",
+      "matches": 342
+    },
+    {
+      "state": "TX",
+      "matches": 270
+    },
+    {
+      "state": "NY",
+      "matches": 242
+    },
+    {
+      "state": "PA",
+      "matches": 167
+    },
+    {
+      "state": "IL",
+      "matches": 155
+    },
+    {
+      "state": "GA",
+      "matches": 142
+    },
+    {
+      "state": "OH",
+      "matches": 122
+    },
+    {
+      "state": "MI",
+      "matches": 122
+    },
+    {
+      "state": "NJ",
+      "matches": 111
+    },
+    {
+      "state": "MA",
+      "matches": 104
+    },
+    {
+      "state": "NC",
+      "matches": 91
+    },
+    {
+      "state": "VA",
+      "matches": 83
+    },
+    {
+      "state": "TN",
+      "matches": 83
+    },
+    {
+      "state": "MO",
+      "matches": 78
     }
   ],
   "top_10_material_absences_nationally": [
     {
-      "npi": "1215977517",
-      "name": "Thomas Richard",
-      "billing_state": "UT",
-      "provider_type": "General Surgery",
-      "entity_type": "I",
-      "medicare_paid_2023": 764132.21,
-      "services_2023": 179,
-      "beneficiaries_2023": 47
+      "npi": "1073251336",
+      "name": "Apprise Diagnostics Llc",
+      "billing_state": "FL",
+      "provider_type": "Clinical Laboratory",
+      "entity_type": "O",
+      "medicare_paid_2023": 14987053.75,
+      "services_2023": 100323,
+      "beneficiaries_2023": 7460
     },
     {
-      "npi": "1417342601",
-      "name": "Shepard Jennifer",
-      "billing_state": "MT",
-      "provider_type": "Internal Medicine",
+      "npi": "1730662271",
+      "name": "Medsbyme Llc",
+      "billing_state": "NY",
+      "provider_type": "Pharmacy",
+      "entity_type": "O",
+      "medicare_paid_2023": 13103583.53,
+      "services_2023": 1114255,
+      "beneficiaries_2023": 84164
+    },
+    {
+      "npi": "1538814678",
+      "name": "Cardinal5 Labs Llc",
+      "billing_state": "TX",
+      "provider_type": "Clinical Laboratory",
+      "entity_type": "O",
+      "medicare_paid_2023": 10610591.53,
+      "services_2023": 901241,
+      "beneficiaries_2023": 69408
+    },
+    {
+      "npi": "1629093174",
+      "name": "Bankovich Linda",
+      "billing_state": "AE",
+      "provider_type": "Physical Therapist in Private Practice",
       "entity_type": "I",
-      "medicare_paid_2023": 76693.51,
-      "services_2023": 968,
-      "beneficiaries_2023": 401
+      "medicare_paid_2023": 9753638.16,
+      "services_2023": 829391,
+      "beneficiaries_2023": 82748
+    },
+    {
+      "npi": "1225554843",
+      "name": "Global Diagnostic Lab Inc",
+      "billing_state": "CA",
+      "provider_type": "Clinical Laboratory",
+      "entity_type": "O",
+      "medicare_paid_2023": 7843293.16,
+      "services_2023": 180690,
+      "beneficiaries_2023": 3274
+    },
+    {
+      "npi": "1063515195",
+      "name": "Channelview Pharmacy Limited Liability Company",
+      "billing_state": "TX",
+      "provider_type": "Mass Immunizer Roster Biller",
+      "entity_type": "O",
+      "medicare_paid_2023": 7475561.51,
+      "services_2023": 635757,
+      "beneficiaries_2023": 75989
+    },
+    {
+      "npi": "1851062715",
+      "name": "Spartan Laboratories Inc",
+      "billing_state": "FL",
+      "provider_type": "Clinical Laboratory",
+      "entity_type": "O",
+      "medicare_paid_2023": 7203859.01,
+      "services_2023": 420151,
+      "beneficiaries_2023": 25250
+    },
+    {
+      "npi": "1447518543",
+      "name": "Continuum Services Llc",
+      "billing_state": "FL",
+      "provider_type": "All Other Suppliers",
+      "entity_type": "O",
+      "medicare_paid_2023": 6790002.76,
+      "services_2023": 5406,
+      "beneficiaries_2023": 1633
+    },
+    {
+      "npi": "1881342293",
+      "name": "White Glove Med Labs Llc",
+      "billing_state": "NJ",
+      "provider_type": "Clinical Laboratory",
+      "entity_type": "O",
+      "medicare_paid_2023": 6085256.28,
+      "services_2023": 15298,
+      "beneficiaries_2023": 1433
+    },
+    {
+      "npi": "1457091324",
+      "name": "Triple Helix Diagnostics",
+      "billing_state": "TX",
+      "provider_type": "Clinical Laboratory",
+      "entity_type": "O",
+      "medicare_paid_2023": 5574983.84,
+      "services_2023": 455888,
+      "beneficiaries_2023": 18444
     }
   ],
-  "va_material_absences": 0,
+  "va_material_absences": 83,
   "csv_url_national": "/api/v1/findings/ndh-completeness-gap-detail.csv",
   "csv_url_va": "/api/v1/states/va/h36-billers-absent-from-ndh.csv"
 }

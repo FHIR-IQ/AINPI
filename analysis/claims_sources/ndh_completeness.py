@@ -35,7 +35,14 @@ from datetime import datetime, timezone
 from google.cloud import bigquery
 
 METHODOLOGY_VERSION = "0.6.0-draft"
-DATA_SOURCE_RELEASE = "CY 2023 (RY2025 P05) Part B × NDH 2026-05-08"
+import sys as _sys, pathlib as _pathlib
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent.parent))
+from release import CURRENT_RELEASE as _NDH_RELEASE  # noqa: E402
+
+# The claims year is fixed by the source file; the NDH side is whatever the
+# warehouse currently holds, so it must not be a literal. This label read
+# "NDH 2026-05-08" while the tables held 2026-08-20.
+DATA_SOURCE_RELEASE = f"CY 2023 (RY2025 P05) Part B × NDH {_NDH_RELEASE}"
 PROJECT = "thematic-fort-453901-t7"
 MATERIAL_THRESHOLD = 10_000  # paid USD
 
