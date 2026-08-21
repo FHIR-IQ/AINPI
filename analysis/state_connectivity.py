@@ -60,7 +60,7 @@ STATES_DIR = API_V1 / "states"
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-NDH_RELEASE = "2026-05-08"
+from release import CURRENT_RELEASE as NDH_RELEASE  # noqa: E402
 METHODOLOGY = "0.7.2-draft"
 
 STATE_NAMES = {

@@ -277,8 +277,7 @@ def query_h18_state(client: bigquery.Client, state: str) -> dict:
     return out
 
 
-def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5,
-                         nppes_stale: bool = False) -> list[dict]:
+def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) -> list[dict]:
     """A few concrete NPIs a state analyst can check for themselves.
 
     These were drawn from practitioners "not present in NPPES" until
@@ -390,9 +389,13 @@ def run_for_state(state_code: str) -> None:
     print(f"  on_release_day={h18['on_release_day']:,} / {h18['total']:,}")
 
     print("Pulling verify samples (LEIE-excluded, still listed active)...")
+    # Reported on the slice so a reader can see how current the comparison
+    # data is, rather than having to trust that someone checked.
     asof = nppes_asof(client)
-    stale = bool(asof) and asof < RELEASE_DATE
-    samples = query_verify_samples(client, state, limit=5, nppes_stale=stale)
+    if asof and asof < RELEASE_DATE:
+        print(f"  NPPES reference stops at {asof}, before the {RELEASE_DATE} "
+              f"release: NPPES absence is not a usable signal this run.")
+    samples = query_verify_samples(client, state, limit=5)
     print(f"  {len(samples)} samples")
 
     # Read national context from already-published findings.

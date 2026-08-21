@@ -1,7 +1,22 @@
 /**
- * accuracy-2026-05-08.spec.ts — confirm that every page + API surface
- * AINPI publishes reflects the May 2026-05-08 NDH refresh, not stale
- * April numbers.
+ * accuracy-2026-05-08.spec.ts — ARCHIVED. Pinned to a superseded release.
+ *
+ * Production has served the 2026-08-20 release since 2026-08-21, so every
+ * assertion in this file now fails against prod. Those failures are the spec
+ * being out of date, not a regression. `accuracy-2026-08-20.spec.ts` is the
+ * live one.
+ *
+ * Kept rather than deleted because it documents what the May release measured,
+ * and because running it against an archived deployment is the only way to
+ * reproduce those numbers now: the warehouse tables carry no release column
+ * and the ingest loads with --replace.
+ *
+ * The whole describe block is skipped so a full `npx playwright test` run does
+ * not report 24 red tests that mean nothing. Remove the `.skip` deliberately,
+ * against an archived base URL, if you need it.
+ *
+ * Original purpose: confirm that every page + API surface AINPI publishes
+ * reflects the May 2026-05-08 NDH refresh, not stale April numbers.
  *
  * Runs against `process.env.PLAYWRIGHT_BASE_URL` (default http://localhost:3000),
  * so the same spec covers local dev + production smoke tests.
@@ -16,7 +31,7 @@ const BASE = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000';
 
 // ---- Static /api/v1 contract ----------------------------------------------
 
-test.describe('static /api/v1 contract — May 2026-05-08', () => {
+test.describe.skip('static /api/v1 contract — May 2026-05-08', () => {
   test('stats.json reports the May release with 21.69M total records', async () => {
     const ctx = await request.newContext();
     const res = await ctx.get(`${BASE}/api/v1/stats.json`);
@@ -118,7 +133,7 @@ test.describe('static /api/v1 contract — May 2026-05-08', () => {
 
 // ---- State slices ---------------------------------------------------------
 
-test.describe('state slices — May 2026-05-08', () => {
+test.describe.skip('state slices — May 2026-05-08', () => {
   for (const [code, expectedPractitioners] of [
     ['va', 130_127],
     ['pa', 235_956],
@@ -159,7 +174,7 @@ test.describe('state slices — May 2026-05-08', () => {
 
 // ---- Live BigQuery-backed routes ------------------------------------------
 
-test.describe('live /api/npd routes — May aggregates', () => {
+test.describe.skip('live /api/npd routes — May aggregates', () => {
   test('validation API has no false-alarm deltas', async () => {
     const ctx = await request.newContext();
     const res = await ctx.get(`${BASE}/api/npd/validation`, { timeout: 60_000 });
@@ -186,7 +201,7 @@ test.describe('live /api/npd routes — May aggregates', () => {
 
 // ---- Server-rendered pages ------------------------------------------------
 
-test.describe('pages — release date in chrome', () => {
+test.describe.skip('pages — release date in chrome', () => {
   test('/data-quality prints "Release 2026-05-08"', async ({ page }) => {
     await page.goto(`${BASE}/data-quality`);
     await expect(page.locator('text=Release 2026-05-08').first()).toBeVisible({ timeout: 30_000 });

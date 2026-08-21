@@ -141,16 +141,16 @@ jobs:
         # One capped scan each of practitioner, practitioner_role, location.
         run: python analysis/h43_practitioner_phone.py
 
-      - name: Stamp stats.json with run metadata
-        run: |
-          python - <<'PY'
-          import json, os, pathlib, subprocess
-          p = pathlib.Path('frontend/public/api/v1/stats.json')
-          stats = json.loads(p.read_text())
-          stats['commit_sha'] = os.environ['GITHUB_SHA'][:7]
-          stats['generated_at'] = os.environ['GITHUB_RUN_STARTED'] if 'GITHUB_RUN_STARTED' in os.environ else stats['generated_at']
-          p.write_text(json.dumps(stats, indent=2) + '\n')
-          PY
+      - name: Regenerate stats.json
+        # Must run after every finding script and before the manifest, which
+        # reads it. This step used to stamp commit_sha onto a hand-written file
+        # and change nothing else, so release_date, resource counts, the
+        # published-finding count and the methodology version all held whatever
+        # was typed by hand when the file was created. By 2026-08-21 it was
+        # announcing the 2026-05-08 release, 21,693,735 resources and 12
+        # published findings against a warehouse holding 32.5M and 24. Every
+        # field is derived now; see the script header.
+        run: python analysis/build_stats.py
 
       - name: Rebuild the discovery manifest
         # Must run after every finding script and after the stats.json stamp,
