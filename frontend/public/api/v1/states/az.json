@@ -2,14 +2,14 @@
   "state": "AZ",
   "state_name": "Arizona",
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-09T00:17:13+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:21:22+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "bebebde",
+  "commit_sha": "51bf5d5",
   "denominators": {
-    "practitioner": 113337,
-    "organization": 67424,
-    "location": 30422
+    "practitioner": 109257,
+    "organization": 76917,
+    "location": 58108
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 112637,
-      "state_denominator": 113337,
-      "state_pct": 99.3824,
-      "national_pct": null,
-      "state_headline": "112,637 of 113,337 AZ practitioner NPIs (99.3824%) match NPPES; 4,375 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 106207,
+      "state_denominator": 109257,
+      "state_pct": 97.2084,
+      "national_pct": 99.9985,
+      "state_headline": "106,207 of 109,257 AZ practitioner NPIs (97.2084%) match NPPES; 306 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 27330,
-      "state_denominator": 67424,
-      "state_pct": 40.5345,
-      "national_pct": 13.5464,
-      "state_headline": "AZ has 67,424 Organization resources covering 40,094 unique NPIs \u2014 27,330 excess resources (40.5345%) appear duplicated.",
+      "state_numerator": 39625,
+      "state_denominator": 76917,
+      "state_pct": 51.5166,
+      "national_pct": 11.3992,
+      "state_headline": "AZ has 76,917 Organization resources covering 37,292 unique NPIs \u2014 39,625 excess resources (51.5166%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -53,10 +53,10 @@
       "title": "Temporal staleness",
       "state_computable": true,
       "state_numerator": 0,
-      "state_denominator": 211183,
+      "state_denominator": 244282,
       "state_pct": 0.0,
       "national_pct": 0.0,
-      "state_headline": "0 of 211,183 AZ-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "0 of 244,282 AZ-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0,
+      "national_pct": 0.0022,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,40 +110,45 @@
   ],
   "verify_samples": [
     {
-      "npi": "1629923826",
-      "display_name": "GARCIA, JESSICA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1629923826"
+      "npi": "1174780415",
+      "display_name": "RIMA, RUSSELL",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-02-04 (exclusion type 1128b14)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1174780415",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1467304758",
-      "display_name": "PAEZ, ASHLEY",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1467304758"
+      "npi": "1376545772",
+      "display_name": "JUROW, JAMES",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-06-18 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1376545772",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1134074479",
-      "display_name": "WRIGHT, FLORENCETINE",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1134074479"
+      "npi": "1528114998",
+      "display_name": "ABRAMYAN, OGANES",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-09-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1528114998",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1326990128",
-      "display_name": "SANCHEZ, ABRAHAM",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326990128"
+      "npi": "1972513703",
+      "display_name": "FERNANDEZ, RENEE",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-10-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972513703",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1720933922",
-      "display_name": "SMITH, VARENA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1720933922"
+      "npi": "1346286762",
+      "display_name": "GREENE, DAVID",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-05-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346286762",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five AZ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five AZ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

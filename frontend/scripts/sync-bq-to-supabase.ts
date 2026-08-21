@@ -11,10 +11,14 @@
 
 import { BigQuery } from '@google-cloud/bigquery';
 import { PrismaClient } from '@prisma/client';
+import { CURRENT_RELEASE } from '../src/lib/release';
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
-const RELEASE_DATE = process.env.NPD_RELEASE_DATE || '2026-05-08';
+// Falls back to the shared constant rather than a literal. When these drift,
+// the sync writes rows under one release label while /api/npd/data-quality
+// queries another, and the dashboard goes empty with no error anywhere.
+const RELEASE_DATE = process.env.NPD_RELEASE_DATE || CURRENT_RELEASE;
 
 const bigquery = new BigQuery({ projectId: PROJECT_ID });
 const prisma = new PrismaClient();

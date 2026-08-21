@@ -1,114 +1,17 @@
 {
-  "queried_at": "2026-08-17T10:15:51+00:00",
+  "queried_at": "2026-08-21T11:39:58+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
-    "flagged_pattern_match": 50,
-    "confirmed_ssn_exposures": 41,
-    "in_qualification_identifier_value": 41,
+    "flagged_pattern_match": 0,
+    "confirmed_ssn_exposures": 0,
+    "in_qualification_identifier_value": 0,
     "in_given_name": 0,
     "in_family_name": 0,
-    "intl_phone_false_positives": 5,
+    "intl_phone_false_positives": 0,
     "organization_pattern_matches": 0
   },
-  "state_breakdown": [
-    {
-      "state": "IL",
-      "count": 13
-    },
-    {
-      "state": "(unknown)",
-      "count": 10
-    },
-    {
-      "state": "OH",
-      "count": 6
-    },
-    {
-      "state": "AZ",
-      "count": 1
-    },
-    {
-      "state": "CA",
-      "count": 1
-    },
-    {
-      "state": "CO",
-      "count": 1
-    },
-    {
-      "state": "MA",
-      "count": 1
-    },
-    {
-      "state": "MN",
-      "count": 1
-    },
-    {
-      "state": "NC",
-      "count": 1
-    },
-    {
-      "state": "NY",
-      "count": 1
-    },
-    {
-      "state": "OR",
-      "count": 1
-    },
-    {
-      "state": "PA",
-      "count": 1
-    },
-    {
-      "state": "PR",
-      "count": 1
-    },
-    {
-      "state": "WA",
-      "count": 1
-    },
-    {
-      "state": "WI",
-      "count": 1
-    }
-  ],
-  "samples": [
-    {
-      "npi": "1861030215",
-      "name": "BOUTON SANCHEZ, A",
-      "state": "IL",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861030215"
-    },
-    {
-      "npi": "1417109950",
-      "name": "TURNER, GEOFFREY",
-      "state": "OR",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417109950"
-    },
-    {
-      "npi": "1396918496",
-      "name": "MAKIM, SHITAL",
-      "state": "MA",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396918496"
-    },
-    {
-      "npi": "1396751012",
-      "name": "SUTTON, BARBARA",
-      "state": "IL",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396751012"
-    },
-    {
-      "npi": "1922121656",
-      "name": "GINSBERG, DAVID",
-      "state": "IL",
-      "exposure_location": "qualification[].identifier[].value (state-license slot \u2014 provider entered SSN where license number belongs)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1922121656"
-    }
-  ],
+  "state_breakdown": [],
+  "samples": [],
   "limitations": [
     "Detection regex is the dashed SSN format \\d{3}-\\d{2}-\\d{4}. Undashed 9-digit SSNs are NOT detected here because they collide with too many other 9-digit identifiers (EINs, account numbers, claim IDs). True coverage is therefore a lower bound \u2014 actual SSN exposure may be higher.",
     "False positive guard: international phone-number formats (Italy '39-XXX-XX-XXXX', etc.) match the same regex. We classify any record whose JSON also contains the prefix-extended pattern \\d{2}-\\d{3}-\\d{2}-\\d{4} as a phone false positive and exclude it from the confirmed total.",

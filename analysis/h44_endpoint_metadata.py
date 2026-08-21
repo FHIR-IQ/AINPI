@@ -40,7 +40,7 @@ from claims_sources._cohorts import bq_job_config
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.7.2-draft"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -136,7 +136,9 @@ SELECT
   COUNTIF(rj LIKE '%"payloadType"%')                               AS has_payload_type,
   COUNTIF(rj LIKE '%base-ext-secureExchangeArtifacts%')            AS has_secure_artifacts,
   COUNTIF(rj LIKE '%base-ext-trustFramework%')                     AS has_trust_framework,
-  COUNTIF(rj LIKE '%base-ext-usage-restriction%')                  AS has_usage_restriction
+  COUNTIF(rj LIKE '%base-ext-usage-restriction%')                  AS has_usage_restriction,
+  -- New at 2026-08-20 and the only extension any Endpoint now carries.
+  COUNTIF(rj LIKE '%base-ext-verification-status%')                AS has_verification_status
 FROM fhir_rest
 """
 
@@ -174,6 +176,7 @@ def main() -> None:
         "secure_exchange_artifacts": int(row.has_secure_artifacts),
         "trust_framework": int(row.has_trust_framework),
         "usage_restriction": int(row.has_usage_restriction),
+        "verification_status": int(row.has_verification_status),
     }
 
     # Build the per-spec-field coverage rows.

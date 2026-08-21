@@ -110,6 +110,36 @@ field resolved to nothing at all. In 2026-08-20 CMS shipped the parents:
 140,017 references, 43,551 distinct targets, none dangling. If you built
 around the field being useless, rebuild.
 
+## The failure mode to design around
+
+Every break this project has hit in this data has the same shape. Something in
+the source changes. The code reading it does not crash. It returns nothing, and
+nothing looks like an answer.
+
+Three examples, all real, all from the 2026-08-20 release:
+
+- The provider-taxonomy code system URL changed from
+  `http://nucc.org/provider-taxonomy` to
+  `http://hl7.org/fhir/us/ndh/ValueSet/HealthcareIndividualTaxonomyVS`. A
+  parser matching the old string reports that no provider in the country has a
+  valid specialty. (The new URL is also a ValueSet canonical in a field FHIR
+  defines as a CodeSystem canonical, which is worth raising upstream.)
+- The NPI identifier system URL changed in the May release, from
+  `http://hl7.org/fhir/sid/us-npi` to
+  `http://terminology.hl7.org/NamingSystem/npi`. Same result: zero NPIs, no
+  error.
+- `PractitionerRole.specialty` switched from CMS Medicare specialty codes to
+  NUCC taxonomy codes. Validating against the old code set gives 0% valid.
+
+None of these raise an exception. If you match on a system URL, match on every
+URL the field has ever carried, and alert when a count you expect to be large
+comes back small. A hard failure you can see beats a soft one you cannot.
+
+The same applies to your reference data, not just to the source. Comparing this
+directory against a copy of NPPES that stops six months earlier makes a quarter
+of a million working clinicians look like ghosts. Check how current your
+reference file is before you trust a mismatch against it.
+
 ## What is actually missing
 
 There is no brand or health-system layer. Nothing in the directory says that

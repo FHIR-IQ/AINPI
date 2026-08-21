@@ -1,16 +1,16 @@
 /**
  * scripts/send-2026-08-21-update.ts
  *
- * 2026-08-17 release blast. Plain language for a general audience: the
- * national directory records a workplace for nearly 8 in 10 nurse
- * practitioners and 1 in 12,995 pharmacy workers, and the split tracks who
- * bills Medicare rather than who provides care.
+ * 2026-08-21 release blast. Plain language for a general audience, covering
+ * the reload from the 2026-08-20 NDH release: where-they-work records went
+ * from 7.0M to 16.5M while coverage moved only five points, every profession
+ * improved, a hierarchy field that resolved to nothing now resolves, and the
+ * Social Security numbers we tracked across three releases are gone.
  *
- * **This blast also carries the 2026-08-16 story.** That report was written,
- * published and registered, and its blast was never sent. Rather than mail
- * two updates in two days, this one leads with the new finding and points at
- * the earlier report in a short second section. If you are copying this file
- * for the next release, drop that section: it is not a standing fixture.
+ * It also carries two corrections, which is why they are in the mail rather
+ * than only on the site. We told subscribers a field was broken and it is now
+ * fixed, and we caught a check of our own that would have flagged 245,374
+ * working clinicians as ghosts because our reference data was stale.
  *
  * Same safety design as prior send scripts: dry-run by default, --confirm to
  * send, --preview writes the HTML and exits, --email / --limit narrow
@@ -27,8 +27,8 @@ const REPORT_URL = 'https://ainpi.dev/reports/2026-08-21-update';
 const FINDING_URL = 'https://ainpi.dev/findings/ndh-new-resource-types';
 const MAP_URL = 'https://ainpi.dev/states/pa/connectivity';
 const CSV_URL = 'https://ainpi.dev/api/v1/release-deltas.json';
-const PRIOR_REPORT_URL = 'https://ainpi.dev/api/v1/role-gap-delta.json';
-const PRIOR_CSV_URL = 'https://ainpi.dev/primer';
+const PROFESSION_DELTA_URL = 'https://ainpi.dev/api/v1/role-gap-delta.json';
+const PRIMER_URL = 'https://ainpi.dev/primer';
 const UNSUB_REPLY = 'gene@fhiriq.com';
 const SEND_THROTTLE_MS = 250;
 const FROM_ADDRESS =
@@ -80,7 +80,8 @@ function buildBody(): { text: string; html: string } {
     '20 August. It is not a routine refresh. We reloaded all 45 GB of it and',
     're-ran every measurement against the previous version.',
     '',
-    'Five things moved, and one of them corrects an email we sent you last week.',
+    'Seven things moved. Two are corrections: one to something we told you',
+    'was broken, and one to a check of our own that was wrong.',
     '',
     '1. THE WHERE-THEY-WORK RECORDS MORE THAN DOUBLED',
     '',
@@ -138,12 +139,44 @@ function buildBody(): { text: string; html: string } {
     'guess. It is the one number that moved the wrong way and we are not',
     'burying it.',
     '',
+    '6. THE SOCIAL SECURITY NUMBERS ARE GONE',
+    '',
+    'The Washington Post reported last year that this file contained doctors\'',
+    'Social Security numbers. We checked ourselves and found 46 in April and',
+    '41 in May. In this release there are none, in any of the 7,373,232',
+    'records.',
+    '',
+    'A search that finds nothing looks the same as a search pointed at the',
+    'wrong place, so we checked that ours still works. 7,371,126 records still',
+    'contain the field the numbers used to sit in. The field is there. The',
+    'numbers are not. 46, then 41, then zero.',
+    '',
+    '7. WE ALMOST SENT YOU A FALSE ALARM ABOUT 245,000 PROVIDERS',
+    '',
+    'One of our checks compares the directory against the federal registry of',
+    'providers. This time it said 245,374 people were in the directory but not',
+    'in the registry.',
+    '',
+    'That was our mistake. The public copy of the registry we compare against',
+    'stops in February, and this release is from August, so everyone who',
+    'registered in between looked like a ghost. We picked eight at random and',
+    'looked them up. All eight were real, active providers.',
+    '',
+    'We have changed the check so it scores nothing while our reference data',
+    'is behind. We are telling you because you would have had no way to know.',
+    '',
+    'While we were at it we found the same shape of problem in two other',
+    'places: a code change that made every specialty look invalid, and a',
+    'failed download that made it look like software vendors publish nothing.',
+    'None of the three raised an error. Each returned a zero that read like a',
+    'finding. The full update walks through all of them.',
+    '',
     'CHECK OUR WORK',
     '',
     `  Full update:  ${REPORT_URL}`,
     `  Every number as data:  ${CSV_URL}`,
-    `  Profession by profession:  ${PRIOR_REPORT_URL}`,
-    `  Plain-language guide to all of it:  ${PRIOR_CSV_URL}`,
+    `  Profession by profession:  ${PROFESSION_DELTA_URL}`,
+    `  Plain-language guide to all of it:  ${PRIMER_URL}`,
     '',
     'All of it is public data. We reloaded the whole thing and re-ran every',
     'measurement, and the scripts are open, so you can check any of it.',
@@ -169,7 +202,7 @@ function buildBody(): { text: string; html: string } {
   const html = `
 <div style="padding:28px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
   <p style="${p}">CMS published a new version of the national provider directory on 20 August. It is not a routine refresh. We reloaded all 45 GB of it and re-ran every measurement against the previous version.</p>
-  <p style="${p}">Five things moved, and one of them corrects an email we sent you last week.</p>
+  <p style="${p}">Seven things moved. Two are corrections: one to something we told you was broken, and one to a check of our own that was wrong.</p>
 
   <h2 style="${h2}">1. The where-they-work records more than doubled</h2>
   <p style="${p}">The most important fact in the directory is where each clinician works. Without it, software cannot find your records. There were 7.0 million of those records. Now there are 16.5 million.</p>
@@ -198,12 +231,21 @@ function buildBody(): { text: string; html: string } {
   <p style="${p}">The directory now carries 233 health plans from 27 insurers, filed under a category that did not exist before. You can look up who an insurer is. You still cannot reach them: none publishes a working address for software. Identity arrived, reachability did not.</p>
   <p style="${p}">And the share of web addresses that say who they belong to fell, from 16.9% to 14.7%. We do not know why, and we would rather say that than guess. It is the one number that moved the wrong way and we are not burying it.</p>
 
+  <h2 style="${h2}">6. The Social Security numbers are gone</h2>
+  <p style="${p}">The Washington Post reported last year that this file contained doctors' Social Security numbers. We checked ourselves and found 46 in April and 41 in May. In this release there are none, in any of the 7,373,232 records.</p>
+  <p style="${p}">A search that finds nothing looks the same as a search pointed at the wrong place, so we checked that ours still works. 7,371,126 records still contain the field the numbers used to sit in. The field is there. The numbers are not. 46, then 41, then zero.</p>
+
+  <h2 style="${h2}">7. We almost sent you a false alarm about 245,000 providers</h2>
+  <p style="${p}">One of our checks compares the directory against the federal registry of providers. This time it said 245,374 people were in the directory but not in the registry.</p>
+  <p style="${p}">That was our mistake. The public copy of the registry we compare against stops in February, and this release is from August, so everyone who registered in between looked like a ghost. We picked eight at random and looked them up. All eight were real, active providers. We have changed the check so it scores nothing while our reference data is behind. We are telling you because you would have had no way to know.</p>
+  <p style="${p}">While we were at it we found the same shape of problem in two other places: a code change that made every specialty look invalid, and a failed download that made it look like software vendors publish nothing. None of the three raised an error. Each returned a zero that read like a finding. <a href="${REPORT_URL}" style="${a}">The full update</a> walks through all of them.</p>
+
   <h2 style="${h2}">Check our work</h2>
   <ul style="margin:0 0 14px;padding-left:20px;font-size:15px;line-height:1.6;color:#374151;">
     <li><a href="${REPORT_URL}" style="${a}">The full update</a></li>
     <li><a href="${CSV_URL}" style="${a}">Every number as data</a></li>
-    <li><a href="${PRIOR_REPORT_URL}" style="${a}">Profession by profession</a></li>
-    <li><a href="${PRIOR_CSV_URL}" style="${a}">Plain-language guide to all of it</a></li>
+    <li><a href="${PROFESSION_DELTA_URL}" style="${a}">Profession by profession</a></li>
+    <li><a href="${PRIMER_URL}" style="${a}">Plain-language guide to all of it</a></li>
   </ul>
   <p style="${p}">All of it is public data. We reloaded the whole thing and re-ran every measurement, and the scripts are open, so you can check any of it.</p>
 

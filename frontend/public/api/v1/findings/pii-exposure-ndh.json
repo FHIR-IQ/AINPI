@@ -5,78 +5,17 @@
     "H27"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T10:15:51+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:39:58+00:00",
   "methodology_version": "0.6.0",
-  "commit_sha": "bda819c",
-  "headline": "41 of 50 flagged Practitioner resources in the 2026-05-08 NDH bulk export contain a Social Security Number, independently verifying the 2026-04-30 Washington Post finding. Of those, 41 appear in the qualification[].identifier[].value slot (state-license credential), 0 are embedded in the name[].given[] slot (literally as a name token), and 0 in name[].family. 5 additional matches are international phone-format false positives (e.g. Italy 39-XXX-XX-XXXX), filtered out. 0 Organization resources also carry SSN-pattern strings.",
-  "numerator": 41,
-  "denominator": 7441211,
+  "commit_sha": "51bf5d5",
+  "headline": "No Social Security Numbers remain in the 2026-08-20 NDH bulk export. The dashed-SSN pattern matches zero of 7,373,232 Practitioner and zero Organization resources, against 46 confirmed exposures in 2026-04-09 and 41 in 2026-05-08. CMS has now removed them rather than partially scrubbing them. The scan is unchanged and still reads the same fields: 7,371,126 of those Practitioner resources still carry the qualification array the exposures were found in, so the zero is an empty result and not an empty query.",
+  "numerator": 0,
+  "denominator": 7373232,
   "chart": {
     "type": "bar",
     "unit": "count",
-    "data": [
-      {
-        "label": "IL",
-        "value": 13
-      },
-      {
-        "label": "(unknown)",
-        "value": 10
-      },
-      {
-        "label": "OH",
-        "value": 6
-      },
-      {
-        "label": "AZ",
-        "value": 1
-      },
-      {
-        "label": "CA",
-        "value": 1
-      },
-      {
-        "label": "CO",
-        "value": 1
-      },
-      {
-        "label": "MA",
-        "value": 1
-      },
-      {
-        "label": "MN",
-        "value": 1
-      },
-      {
-        "label": "NC",
-        "value": 1
-      },
-      {
-        "label": "NY",
-        "value": 1
-      },
-      {
-        "label": "OR",
-        "value": 1
-      },
-      {
-        "label": "PA",
-        "value": 1
-      },
-      {
-        "label": "PR",
-        "value": 1
-      },
-      {
-        "label": "WA",
-        "value": 1
-      },
-      {
-        "label": "WI",
-        "value": 1
-      }
-    ]
+    "data": []
   },
-  "notes": "Independently verifies the 2026-04-30 Washington Post finding by scanning the 2026-05-08 NDH bulk export (already loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. WaPo reported 'dozens'; the AINPI scan identifies 41 confirmed exposures across 15 states. CMS attributed the leak to 'incorrect entries of provider or provider-representative-supplied information in the wrong places' \u2014 borne out by the JSON-location breakdown: most SSNs are in qualification.identifier.value (the state-license slot), with 0 cases of providers entering their SSN literally as a name token. Privacy posture: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII), and state breakdowns. The SSN values themselves are NOT republished in this finding's output, even though they remain in the public NDH bulk file CMS distributed. State Medicaid PI teams that want to validate or remediate should contact CMS NDH operations directly."
+  "notes": "Independently verifies the 2026-04-30 Washington Post finding by scanning the 2026-08-20 NDH bulk export (already loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. WaPo reported 'dozens'; the AINPI scan identifies 0 confirmed exposures across 0 states. CMS attributed the leak to 'incorrect entries of provider or provider-representative-supplied information in the wrong places' \u2014 borne out by the JSON-location breakdown: most SSNs are in qualification.identifier.value (the state-license slot), with 0 cases of providers entering their SSN literally as a name token. Privacy posture: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII), and state breakdowns. The SSN values themselves are NOT republished in this finding's output, even though they remain in the public NDH bulk file CMS distributed. State Medicaid PI teams that want to validate or remediate should contact CMS NDH operations directly."
 }

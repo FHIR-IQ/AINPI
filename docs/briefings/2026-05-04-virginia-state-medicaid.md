@@ -5,6 +5,17 @@
 **AINPI methodology version:** 0.7.0-draft
 **NDH release pinned:** 2026-05-08 CMS National Provider Directory bulk export (April 2026-04-09 also archived)
 
+> **Superseded numbers.** Every figure in this case study is measured against
+> the 2026-05-08 NDH release. CMS published a much larger release on
+> 2026-08-20, and the warehouse behind AINPI now holds it. The Virginia
+> federally-excluded cohort is **106 NPIs** at the current release, not the 131
+> stated below, and the live file at
+> [`/api/v1/states/va-cohort-critical.csv`](/api/v1/states/va-cohort-critical.csv)
+> reflects that. The case study is kept as written because it is a dated worked
+> example and rewriting it would erase the comparison; read
+> [the current Virginia slice](/states/va) for today's figures and
+> [the 2026-08-21 update](/reports/2026-08-21-update) for what moved.
+
 This is a worked example using only public federal data. It is published as part of AINPI's per-state catalog; the same shape and signals are available for every US state at `/api/v1/states/<state>/`. AINPI is not authored for, prepared for, or guided by Virginia DMAS or any other state agency. every number is derived from public CMS sources and is independently verifiable.
 
 ---

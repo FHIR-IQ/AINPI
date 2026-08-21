@@ -5,12 +5,12 @@
     "H25"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T09:51:37+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:40:23+00:00",
   "methodology_version": "0.4.0",
-  "commit_sha": "bda819c",
-  "headline": "4,517 distinct NPIs on SAM.gov's active exclusion list appear as NDH practitioners \u2014 3,765 still flagged `active=true` in the 2026-05-08 bulk export. SAM aggregates HHS LEIE + OPM FEHBP debarment + other federal-agency actions. The OPM slice is net-new federal-screening signal beyond what LEIE alone surfaces.",
-  "numerator": 4517,
+  "commit_sha": "51bf5d5",
+  "headline": "3,715 distinct NPIs on SAM.gov's active exclusion list appear as NDH practitioners \u2014 3,715 still flagged `active=true` in the 2026-08-20 bulk export. SAM aggregates HHS LEIE + OPM FEHBP debarment + other federal-agency actions. The OPM slice is net-new federal-screening signal beyond what LEIE alone surfaces.",
+  "numerator": 3715,
   "denominator": 7063,
   "chart": {
     "type": "bar",
@@ -18,11 +18,11 @@
     "data": [
       {
         "label": "HHS",
-        "value": 3693
+        "value": 3643
       },
       {
         "label": "OPM",
-        "value": 1720
+        "value": 1697
       },
       {
         "label": "(unattributed)",

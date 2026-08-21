@@ -175,8 +175,9 @@ export default function RealHealthProvidersPage() {
                   90-day verification cadence
                 </td>
                 <td className="py-3 px-3 text-gray-700">
-                  AINPI ingests every public NDH release (2026-04-09 and
-                  2026-05-08 archived to date) and computes per-NPI delta. The
+                  AINPI ingests every public NDH release (2026-04-09,
+                  2026-05-08 and 2026-08-20 archived to date) and computes
+                  per-NPI delta. The
                   in-development{' '}
                   <a href="/" className="underline">
                     landscape view

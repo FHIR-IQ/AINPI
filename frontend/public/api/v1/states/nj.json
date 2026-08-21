@@ -2,14 +2,14 @@
   "state": "NJ",
   "state_name": "New Jersey",
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-09T00:22:30+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:26:58+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "bebebde",
+  "commit_sha": "51bf5d5",
   "denominators": {
-    "practitioner": 148927,
-    "organization": 96514,
-    "location": 41214
+    "practitioner": 144940,
+    "organization": 113014,
+    "location": 73328
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 148129,
-      "state_denominator": 148927,
-      "state_pct": 99.4642,
-      "national_pct": null,
-      "state_headline": "148,129 of 148,927 NJ practitioner NPIs (99.4642%) match NPPES; 5,557 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 141120,
+      "state_denominator": 144940,
+      "state_pct": 97.3644,
+      "national_pct": 99.9985,
+      "state_headline": "141,120 of 144,940 NJ practitioner NPIs (97.3644%) match NPPES; 398 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 39372,
-      "state_denominator": 96514,
-      "state_pct": 40.7941,
-      "national_pct": 13.5464,
-      "state_headline": "NJ has 96,514 Organization resources covering 57,142 unique NPIs \u2014 39,372 excess resources (40.7941%) appear duplicated.",
+      "state_numerator": 59039,
+      "state_denominator": 113014,
+      "state_pct": 52.2404,
+      "national_pct": 11.3992,
+      "state_headline": "NJ has 113,014 Organization resources covering 53,975 unique NPIs \u2014 59,039 excess resources (52.2404%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -53,10 +53,10 @@
       "title": "Temporal staleness",
       "state_computable": true,
       "state_numerator": 0,
-      "state_denominator": 286655,
+      "state_denominator": 331282,
       "state_pct": 0.0,
       "national_pct": 0.0,
-      "state_headline": "0 of 286,655 NJ-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "0 of 331,282 NJ-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0,
+      "national_pct": 0.0022,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,40 +110,45 @@
   ],
   "verify_samples": [
     {
-      "npi": "1194672931",
-      "display_name": "GIBSON, EMMA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1194672931"
+      "npi": "1598832560",
+      "display_name": "AMBROSE, DEAN",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2005-05-19 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1598832560",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1275485476",
-      "display_name": "D'ALOIA, ALEXIS",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275485476"
+      "npi": "1053443705",
+      "display_name": "MELKER, NEIL",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-01-23 (exclusion type 1128b14)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053443705",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1578419594",
-      "display_name": "CASSIMATIS, JANICE",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1578419594"
+      "npi": "1700813011",
+      "display_name": "KLINMAN, STEVEN",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700813011",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1013862507",
-      "display_name": "DIAZ DOMINGUEZ, GENESIS",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1013862507"
+      "npi": "1093835308",
+      "display_name": "FEIT, FREDERIC",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-11-19 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093835308",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1750234431",
-      "display_name": "PAGANO, BRIANNA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1750234431"
+      "npi": "1972681674",
+      "display_name": "EATOUGH, PHILIP",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972681674",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NJ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NJ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

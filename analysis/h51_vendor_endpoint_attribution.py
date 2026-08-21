@@ -49,7 +49,6 @@ import pathlib
 import re
 import subprocess
 import sys
-import urllib.request
 from datetime import datetime, timezone
 
 from google.cloud import bigquery
@@ -58,7 +57,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config  # noqa: E402
 
 PROJECT = "thematic-fort-453901-t7"
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.7.2-draft"
 SLUG = "vendor-endpoint-attribution"
 OUT_DIR = (pathlib.Path(__file__).resolve().parent.parent
@@ -100,10 +99,23 @@ def npi_of(org: dict) -> str | None:
 
 
 def fetch(url: str, dest: pathlib.Path) -> dict:
+    """Download a vendor endpoint file, via curl.
+
+    urllib was used here until 2026-08-21 and failed every one of these hosts
+    with CERTIFICATE_VERIFY_FAILED, which the caller then swallowed into a
+    "skipped" line. The run completed, reported success, and published that
+    vendors name 0% of unattributed endpoints, overwriting a measured 76%.
+    Same conclusion as H26, H46 and the payer harvester: use curl.
+    """
     if not dest.exists():
-        req = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
-        with urllib.request.urlopen(req, timeout=300) as r, dest.open("wb") as fh:
-            fh.write(r.read())
+        r = subprocess.run(
+            ["curl", "-sSL", "--fail", "--max-time", "300",
+             "-A", UA, "-H", "Accept: application/json", url, "-o", str(dest)],
+            capture_output=True, text=True,
+        )
+        if r.returncode != 0:
+            dest.unlink(missing_ok=True)
+            raise RuntimeError(f"curl exit {r.returncode}: {r.stderr.strip()[:160]}")
     return json.loads(dest.read_text(errors="ignore"))
 
 
@@ -229,11 +241,36 @@ def main() -> int:
         print(f"    {len(n):,} url->org pairs, {n_orgs:,} organizations"
               + (f", {reach:,} reachable via partOf" if brands else ""))
 
+    # A vendor file that does not download is a missing input, not a vendor
+    # that publishes nothing. Continuing past every source failing turns a
+    # network problem into a published claim that the gap cannot be closed.
+    fetched = [v for v in per_vendor if "error" not in v]
+    if not fetched:
+        raise SystemExit(
+            "every vendor source failed to download; refusing to publish a "
+            "0% attribution finding assembled from no inputs. Errors:\n  "
+            + "\n  ".join(f"{v['vendor']}: {v['error']}" for v in per_vendor)
+        )
+    if len(fetched) < len(per_vendor):
+        print(f"\n  WARNING: {len(per_vendor) - len(fetched)} of {len(per_vendor)} "
+              f"vendor sources failed; every number below is a floor.")
+
     print("\n  querying the NDH ...")
     client = bigquery.Client(project=PROJECT)
+    # Attributed means the managingOrganization reference RESOLVES, not merely
+    # that it is present. H50 counts it that way, and counting presence here
+    # instead published two different totals for "endpoints with no owner"
+    # (94,623 against H50's 94,711) with nothing on either page explaining the
+    # gap. The difference is 88 references that point at an organization the
+    # file does not contain, and for this finding's question, an endpoint whose
+    # owner cannot be looked up is unnamed regardless of why.
     ndh = [dict(r) for r in client.query(
-        "SELECT LOWER(_address) AS addr, _managing_org_id FROM "
-        f"`{PROJECT}.cms_npd.endpoint` WHERE _connection_type='hl7-fhir-rest'",
+        "SELECT LOWER(e._address) AS addr, "
+        "       IF(o._id IS NULL, NULL, e._managing_org_id) AS _managing_org_id "
+        f"FROM `{PROJECT}.cms_npd.endpoint` e "
+        f"LEFT JOIN `{PROJECT}.cms_npd.organization` o "
+        "  ON e._managing_org_id = CONCAT('Organization/', o._id) "
+        "WHERE e._connection_type='hl7-fhir-rest'",
         job_config=bq_job_config()).result()]
 
     total = len(ndh)

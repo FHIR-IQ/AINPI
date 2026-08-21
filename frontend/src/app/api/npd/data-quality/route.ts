@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { CURRENT_RELEASE } from '@/lib/release';
 
 /**
  * CMS NPD Data Quality API
@@ -18,7 +19,10 @@ export async function GET(req: NextRequest) {
   try {
     const url = new URL(req.url);
     const view = url.searchParams.get('view') || 'summary';
-    const releaseDate = url.searchParams.get('release') || '2026-05-08';
+    // Defaulting to a literal meant this route kept serving May metrics after
+    // the warehouse was reloaded, with no error and no empty result: the
+    // Supabase rows for the old release are still there.
+    const releaseDate = url.searchParams.get('release') || CURRENT_RELEASE;
 
     switch (view) {
       case 'summary': {

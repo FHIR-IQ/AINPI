@@ -5,11 +5,11 @@
     "H44"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-06-25T11:39:42+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:39:23+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "ca78bfe",
-  "headline": "The HTE submission spec collects 9 endpoint-metadata fields. Mapped against the NDH FHIR Endpoint profile (STU1 v1.0.0): 2 have a structured home, 2 map partially, and 5 have no representation in STU1 at all (developer documentation, developer signup, swagger, OpenAPI, and per-instance sandbox URLs). Adopting the spec for those five needs STU2 extensions or out-of-band storage, not data entry. Across 114,071 FHIR-REST Endpoint records in the 2026-05-08 NDH release, the fields that DO have a home are sparsely populated: endpoint use-case 0.0%, SMART/UDAP dynamic-registration 0.0%, environment-type 0.0%.",
+  "commit_sha": "51bf5d5",
+  "headline": "The HTE submission spec collects 9 endpoint-metadata fields. Mapped against the NDH FHIR Endpoint profile (STU1 v1.0.0): 2 have a structured home, 2 map partially, and 5 have no representation in STU1 at all (developer documentation, developer signup, swagger, OpenAPI, and per-instance sandbox URLs). Adopting the spec for those five needs STU2 extensions or out-of-band storage, not data entry. Across 110,973 FHIR-REST Endpoint records in the 2026-08-20 NDH release, the fields that DO have a home are sparsely populated: endpoint use-case 0.0%, SMART/UDAP dynamic-registration 0.0%, environment-type 0.0%.",
   "numerator": 4,
   "denominator": 9,
   "chart": {
@@ -36,7 +36,7 @@
       "spec_field": "fhir_endpoint_url",
       "stu1_home": "mapped",
       "stu1_path": "Endpoint.address (core element)",
-      "present_in_ndh": 114071,
+      "present_in_ndh": 110973,
       "present_pct": 100.0
     },
     {
@@ -98,10 +98,11 @@
   ],
   "context_extensions": {
     "fhir_version_declared": 0,
-    "payload_type_present": 114071,
+    "payload_type_present": 110973,
     "secure_exchange_artifacts": 0,
     "trust_framework": 0,
-    "usage_restriction": 0
+    "usage_restriction": 0,
+    "verification_status": 110973
   },
-  "total_fhir_rest_endpoints": 114071
+  "total_fhir_rest_endpoints": 110973
 }

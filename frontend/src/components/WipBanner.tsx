@@ -2,6 +2,7 @@
 
 import { AlertTriangle, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { CURRENT_RELEASE } from '@/lib/release';
 
 const STORAGE_KEY = 'ainpi-wip-dismissed';
 
@@ -20,7 +21,7 @@ export default function WipBanner() {
         <AlertTriangle className="w-3.5 h-3.5 text-gray-500 flex-shrink-0" />
         <p className="text-xs text-gray-600 flex-1">
           <strong>Work in progress.</strong> AINPI is an experimental exploration of the CMS National Provider Directory
-          (2026-05-08 release). Data may be incomplete, stale, or incorrect: numbers should be independently verified
+          ({CURRENT_RELEASE} release). Data may be incomplete, stale, or incorrect: numbers should be independently verified
           before any business or clinical decision.{' '}
           <a href="/insights" className="underline font-medium text-gray-800 hover:text-primary-600">See provenance analysis →</a>
         </p>

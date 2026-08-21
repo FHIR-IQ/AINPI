@@ -5,13 +5,13 @@
     "H18"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T09:42:36+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:22:22+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": "0.0% of NPD resources carry a meta.lastUpdated value on the release day (2026-05-08). Distinct meta.lastUpdated values range from 1 to 5 across the 6 resource types \u2014 meta.lastUpdated on the NPD bulk public-use files is a bulk-export stamp, not a per-resource freshness signal.",
+  "headline": "0.0% of NPD resources carry a meta.lastUpdated value on the release day (2026-08-20). Distinct meta.lastUpdated values range from 1 to 8 across the 6 resource types \u2014 meta.lastUpdated on the NPD bulk public-use files is a bulk-export stamp, not a per-resource freshness signal.",
   "numerator": 0,
-  "denominator": 21693735,
+  "denominator": 32468871,
   "chart": {
     "type": "bar",
     "unit": "count",
@@ -22,7 +22,7 @@
       },
       {
         "label": "organization",
-        "value": 5
+        "value": 8
       },
       {
         "label": "location",
@@ -34,13 +34,13 @@
       },
       {
         "label": "practitioner_role",
-        "value": 1
+        "value": 2
       },
       {
         "label": "organization_affiliation",
-        "value": 1
+        "value": 2
       }
     ]
   },
-  "notes": "Per-resource distinct meta.lastUpdated values on release day 2026-05-08: practitioner \u2192 1 distinct, 100.00% at modal; organization \u2192 5 distinct, 58.55% at modal; location \u2192 1 distinct, 100.00% at modal; endpoint \u2192 1 distinct, 100.00% at modal; practitioner_role \u2192 1 distinct, 100.00% at modal; organization_affiliation \u2192 1 distinct, 100.00% at modal. Regulatory compliance with the 30-day CMS-9115-F or 90-day REAL Health Providers Act / No Surprises Act update cadence CANNOT be measured from meta.lastUpdated on the bulk files \u2014 a per-record freshness signal from upstream NPPES (enumeration_date / last_updated) or PECOS would be required."
+  "notes": "Per-resource distinct meta.lastUpdated values on release day 2026-08-20: practitioner \u2192 1 distinct, 100.00% at modal; organization \u2192 8 distinct, 50.02% at modal; location \u2192 1 distinct, 100.00% at modal; endpoint \u2192 1 distinct, 100.00% at modal; practitioner_role \u2192 2 distinct, 97.61% at modal; organization_affiliation \u2192 2 distinct, 96.38% at modal. Regulatory compliance with the 30-day CMS-9115-F or 90-day REAL Health Providers Act / No Surprises Act update cadence CANNOT be measured from meta.lastUpdated on the bulk files \u2014 a per-record freshness signal from upstream NPPES (enumeration_date / last_updated) or PECOS would be required."
 }

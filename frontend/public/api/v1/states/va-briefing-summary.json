@@ -3,250 +3,223 @@
   "state_name": "Virginia",
   "medicaid_program": "Cardinal Care",
   "agency": "Department of Medical Assistance Services (DMAS)",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-14T22:26:21+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:33:12+00:00",
   "methodology_version": "0.2.0",
   "denominators": {
-    "practitioner": 130127,
-    "organization": 67291,
-    "location": 34157
+    "practitioner": 128246,
+    "organization": 74192,
+    "location": 61478
   },
   "findings": {
     "npi-taxonomy-correctness": {
-      "headline": "129,470 of 130,127 VA practitioner NPIs (99.4951%) match NPPES; 4,090 are flagged deactivated in NPPES while still active in the federal NDH.",
-      "state_pct": 99.4951,
-      "state_numerator": 129470,
-      "state_denominator": 130127
+      "headline": "124,688 of 128,246 VA practitioner NPIs (97.2256%) match NPPES; 273 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_pct": 97.2256,
+      "state_numerator": 124688,
+      "state_denominator": 128246
     },
     "duplicate-detection": {
-      "headline": "VA has 67,291 Organization resources covering 39,833 unique NPIs \u2014 27,458 excess resources (40.8049%) appear duplicated.",
-      "state_pct": 40.8049,
-      "state_numerator": 27458,
-      "state_denominator": 67291
+      "headline": "VA has 74,192 Organization resources covering 36,290 unique NPIs \u2014 37,902 excess resources (51.0864%) appear duplicated.",
+      "state_pct": 51.0864,
+      "state_numerator": 37902,
+      "state_denominator": 74192
     },
     "temporal-staleness": {
-      "headline": "0 of 231,575 VA-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "headline": "0 of 263,916 VA-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "state_pct": 0.0,
       "state_numerator": 0,
-      "state_denominator": 231575
+      "state_denominator": 263916
     }
   },
   "federally_excluded_cohort": {
-    "total_critical": 125,
+    "total_critical": 106,
     "reason_breakdown": [
       {
         "reasons": [
           "oig_excluded",
           "sam_excluded"
         ],
-        "count": 59,
-        "pct_of_critical": 47.2
+        "count": 56,
+        "pct_of_critical": 52.83
       },
       {
         "reasons": [
           "oig_excluded"
         ],
         "count": 49,
-        "pct_of_critical": 39.2
-      },
-      {
-        "reasons": [
-          "nppes_deactivated",
-          "oig_excluded",
-          "sam_excluded"
-        ],
-        "count": 14,
-        "pct_of_critical": 11.2
-      },
-      {
-        "reasons": [
-          "nppes_deactivated",
-          "oig_excluded"
-        ],
-        "count": 1,
-        "pct_of_critical": 0.8
-      },
-      {
-        "reasons": [
-          "nppes_deactivated",
-          "sam_excluded"
-        ],
-        "count": 1,
-        "pct_of_critical": 0.8
+        "pct_of_critical": 46.23
       },
       {
         "reasons": [
           "sam_excluded"
         ],
         "count": 1,
-        "pct_of_critical": 0.8
+        "pct_of_critical": 0.94
       }
     ],
     "top_samples": [
       {
-        "npi": "1013125830",
-        "name": "ARONSOHN, MICHAEL",
-        "score": 3.8,
+        "npi": "1003926940",
+        "name": "SHELBURNE, ROY",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1013125830"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003926940"
       },
       {
-        "npi": "1013136605",
-        "name": "VELURI, RAVI",
-        "score": 3.8,
+        "npi": "1023003266",
+        "name": "SYKES, MATTHEW",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1013136605"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1023003266"
       },
       {
-        "npi": "1083627376",
-        "name": "COWLING, LAWRENCE",
-        "score": 3.8,
+        "npi": "1023441318",
+        "name": "AVERY, SHARONDA",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083627376"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1023441318"
       },
       {
-        "npi": "1184683120",
-        "name": "MADDEN, WILLIS",
-        "score": 3.8,
+        "npi": "1033277322",
+        "name": "ZAREI, MARYAM",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1184683120"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033277322"
       },
       {
-        "npi": "1265531388",
-        "name": "PUJOL, JACKIE",
-        "score": 3.8,
+        "npi": "1053360966",
+        "name": "FUENTES, EDWIN",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1265531388"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053360966"
       },
       {
-        "npi": "1487766077",
-        "name": "PARKES, ALVIN",
-        "score": 3.8,
+        "npi": "1073557047",
+        "name": "YATES, JONATHAN",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1487766077"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1073557047"
       },
       {
-        "npi": "1548272495",
-        "name": "FASANO, ANTHONY",
-        "score": 3.8,
+        "npi": "1093969412",
+        "name": "NIAZI, SAIFULLAH",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1548272495"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093969412"
       },
       {
-        "npi": "1558315341",
-        "name": "ELLISON, WALDO",
-        "score": 3.8,
+        "npi": "1104801117",
+        "name": "VU, TUAN",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558315341"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104801117"
       },
       {
-        "npi": "1558356907",
-        "name": "RODRIGUEZ CAYRO, N",
-        "score": 3.8,
+        "npi": "1104870302",
+        "name": "GARNES, CHARLOTTE",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1558356907"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104870302"
       },
       {
-        "npi": "1619056124",
-        "name": "MORGAN, DAVID",
-        "score": 3.8,
+        "npi": "1124089016",
+        "name": "GORDINHO, JOSE",
+        "score": 3.0,
         "reason_codes": [
           "oig_excluded",
-          "sam_excluded",
-          "nppes_deactivated"
+          "sam_excluded"
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619056124"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124089016"
       }
     ],
     "all_npis_csv": "/api/v1/states/va-cohort-critical.csv"
   },
   "h26_payer_directory_exposure": {
-    "headline": "2 of 131 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 2, UnitedHealthcare 0, Molina 0.",
-    "numerator": 2,
-    "denominator": 131,
+    "headline": "3 of 128 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 3, UnitedHealthcare 0, Molina 0.",
+    "numerator": 3,
+    "denominator": 128,
     "per_payer": [
       {
         "name": "Humana",
         "matched": 0,
-        "queried": 131,
+        "queried": 128,
         "errors": 0
       },
       {
         "name": "Cigna",
-        "matched": 2,
-        "queried": 131,
+        "matched": 3,
+        "queried": 128,
         "errors": 0
       },
       {
         "name": "UnitedHealthcare",
         "matched": 0,
-        "queried": 131,
+        "queried": 128,
         "errors": 0
       },
       {
         "name": "Molina",
         "matched": 0,
-        "queried": 131,
+        "queried": 128,
         "errors": 0
       }
     ],
     "matched_npis": [
+      {
+        "npi": "1639208705",
+        "name": "CHASE, BRIDGETTE",
+        "matched_in": [
+          "Cigna"
+        ],
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1639208705"
+      },
       {
         "npi": "1710496161",
         "name": "BURKHEAD, JASON",

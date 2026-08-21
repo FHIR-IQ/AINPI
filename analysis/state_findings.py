@@ -50,7 +50,29 @@ from google.cloud import bigquery
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 NPPES_DATASET = "bigquery-public-data.nppes"
-RELEASE_DATE = "2026-05-08"
+
+# Set on first use by nppes_asof(). The public NPPES snapshot is static and
+# currently stops well before the NDH release, which turns "absent from NPPES"
+# into a statement about our reference copy rather than about the directory.
+NPPES_ASOF_LABEL = "unknown"
+_NPPES_ASOF: str | None = None
+
+
+def nppes_asof(client: bigquery.Client) -> str:
+    """Newest enumeration date in the NPPES reference copy, cached per run."""
+    global _NPPES_ASOF, NPPES_ASOF_LABEL
+    if _NPPES_ASOF is None:
+        row = next(iter(client.query(
+            f"SELECT MAX(provider_enumeration_date) AS d FROM `{NPPES_DATASET}.npi_raw`",
+            job_config=bq_job_config()).result()))
+        _NPPES_ASOF = str(row.d) if row.d else ""
+        NPPES_ASOF_LABEL = _NPPES_ASOF or "unknown"
+    return _NPPES_ASOF
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.2.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -77,6 +99,21 @@ STATE_NAMES = {
     # script will accept. Keep state-page narrative copy + Medicaid-program
     # context only for the state slices we actively brief on.
 }
+
+
+
+def capped(params=None):
+    """QueryJobConfig carrying the project byte cap, plus optional params.
+
+    `_state` is not a cluster key on any table here, so each of these queries
+    scans the referenced columns of the whole table. Fifty-one states times
+    six queries is the most expensive thing this repo runs, and it ran
+    uncapped until 2026-08-21.
+    """
+    cfg = bq_job_config()
+    if params:
+        cfg.query_parameters = params
+    return cfg
 
 
 def get_commit_sha() -> str:
@@ -127,8 +164,7 @@ def query_denominators(client: bigquery.Client, state: str) -> dict:
         """
         job = client.query(
             sql,
-            job_config=bigquery.QueryJobConfig(
-                query_parameters=[bigquery.ScalarQueryParameter("state", "STRING", state)]
+            job_config=capped([bigquery.ScalarQueryParameter("state", "STRING", state)]
             ),
         )
         row = next(iter(job.result()))
@@ -158,8 +194,7 @@ def query_h10_match(client: bigquery.Client, state: str) -> dict:
     """
     job = client.query(
         sql,
-        job_config=bigquery.QueryJobConfig(
-            query_parameters=[bigquery.ScalarQueryParameter("state", "STRING", state)]
+        job_config=capped([bigquery.ScalarQueryParameter("state", "STRING", state)]
         ),
     )
     row = next(iter(job.result()))
@@ -190,8 +225,7 @@ def query_h14_org_dups(client: bigquery.Client, state: str) -> dict:
     """
     job = client.query(
         sql,
-        job_config=bigquery.QueryJobConfig(
-            query_parameters=[bigquery.ScalarQueryParameter("state", "STRING", state)]
+        job_config=capped([bigquery.ScalarQueryParameter("state", "STRING", state)]
         ),
     )
     row = next(iter(job.result()))
@@ -225,8 +259,8 @@ def query_h18_state(client: bigquery.Client, state: str) -> dict:
         rows = list(
             client.query(
                 sql,
-                job_config=bigquery.QueryJobConfig(
-                    query_parameters=[bigquery.ScalarQueryParameter("state", "STRING", state)]
+                job_config=capped(
+                    [bigquery.ScalarQueryParameter("state", "STRING", state)]
                 ),
             ).result()
         )
@@ -243,45 +277,81 @@ def query_h18_state(client: bigquery.Client, state: str) -> dict:
     return out
 
 
-def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) -> list[dict]:
-    """Pull a small sample of state-resident practitioners flagged by H10
-    (no NPPES match). These are the strongest trust signals — concrete NPIs
-    a state PI analyst can verify against nppes.cms.hhs.gov directly.
+def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5,
+                         nppes_stale: bool = False) -> list[dict]:
+    """A few concrete NPIs a state analyst can check for themselves.
+
+    These were drawn from practitioners "not present in NPPES" until
+    2026-08-21. That is only a defect if the NPPES reference copy is at least
+    as current as the release, and it is not: the public snapshot stops at
+    2026-02-07 against a 2026-08-20 release. Every NPI sampled from that set
+    resolved to a real, active provider enumerated in between.
+
+    The deactivated-in-NPPES set fails the same way in the other direction.
+    Three sampled from it were all active in the live registry, having been
+    reactivated after the snapshot was taken. So while the reference copy is
+    behind, no NPPES-derived signal can carry a verification sample at all.
+
+    The sample therefore comes from the OIG LEIE exclusion file, which this
+    project ingests fresh and which is the check 42 CFR 455.436 actually
+    requires. An excluded provider still listed as active is a disagreement
+    between two current federal sources, and it is the row a state program
+    integrity analyst wants anyway.
+
+    A verification sample whose every row checks out fine is worse than no
+    sample: it spends an analyst's afternoon and teaches them the list is
+    noise.
     """
     sql = f"""
     SELECT
       sp._npi,
       sp._family_name,
-      sp._given_name
+      sp._given_name,
+      l.EXCLDATE AS excl_date,
+      l.EXCLTYPE AS excl_type
     FROM `{PROJECT}.{DATASET}.practitioner` sp
-    LEFT JOIN `{NPPES_DATASET}.npi_raw` nppes
-      ON sp._npi = CAST(nppes.npi AS STRING)
+    JOIN (
+      -- One row per excluded NPI. A provider carrying two exclusion records
+      -- is still one person for an analyst to check; the earliest exclusion
+      -- is the one worth showing.
+      SELECT NPI, MIN(EXCLDATE) AS EXCLDATE, ANY_VALUE(EXCLTYPE) AS EXCLTYPE
+      FROM `{PROJECT}.{DATASET}.oig_leie`
+      WHERE NPI IS NOT NULL AND NPI != ''
+        AND (REINDATE IS NULL OR REINDATE = '' OR REINDATE = '00000000')
+      GROUP BY NPI
+    ) l ON l.NPI = sp._npi
     WHERE sp._state = @state
       AND sp._npi IS NOT NULL
-      AND nppes.npi IS NULL
+    ORDER BY l.EXCLDATE
     LIMIT @lim
     """
     job = client.query(
         sql,
-        job_config=bigquery.QueryJobConfig(
-            query_parameters=[
-                bigquery.ScalarQueryParameter("state", "STRING", state),
-                bigquery.ScalarQueryParameter("lim", "INT64", limit),
-            ]
-        ),
+        job_config=capped([
+            bigquery.ScalarQueryParameter("state", "STRING", state),
+            bigquery.ScalarQueryParameter("lim", "INT64", limit),
+        ]),
     )
     out = []
     for r in job.result():
         family = (r._family_name or "").strip()
         given = (r._given_name or "").strip()
         display = f"{family}, {given}".strip(", ")
+        raw = (r.excl_date or "").strip()
+        pretty = f"{raw[:4]}-{raw[4:6]}-{raw[6:8]}" if len(raw) == 8 else raw
         out.append(
             {
                 "npi": r._npi,
                 "display_name": display or "(name not in NDH record)",
-                "flagged_by": "npi-taxonomy-correctness",
-                "flag_reason": "Not present in NPPES npi_raw",
+                "flagged_by": "oig-leie-exclusions",
+                "flag_reason": (
+                    f"Listed as an active practitioner in the NDH while excluded "
+                    f"from federal health care programs by OIG"
+                    + (f" since {pretty}" if pretty else "")
+                    + f" (exclusion type {r.excl_type})" if r.excl_type else ""
+                ),
                 "nppes_lookup_url": f"https://npiregistry.cms.hhs.gov/provider-view/{r._npi}",
+                "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
             }
         )
     return out
@@ -319,8 +389,10 @@ def run_for_state(state_code: str) -> None:
     h18 = query_h18_state(client, state)
     print(f"  on_release_day={h18['on_release_day']:,} / {h18['total']:,}")
 
-    print("Pulling H10 verify samples (5 NPIs not in NPPES)...")
-    samples = query_verify_samples(client, state, limit=5)
+    print("Pulling verify samples (LEIE-excluded, still listed active)...")
+    asof = nppes_asof(client)
+    stale = bool(asof) and asof < RELEASE_DATE
+    samples = query_verify_samples(client, state, limit=5, nppes_stale=stale)
     print(f"  {len(samples)} samples")
 
     # Read national context from already-published findings.

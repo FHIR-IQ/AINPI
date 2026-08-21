@@ -1,126 +1,126 @@
 {
   "samples": [
     {
-      "npi": "1306970793",
-      "display_name": "LINCOLN, MARY",
+      "npi": "1770614695",
+      "display_name": "WATSON, ROSEMARY",
       "ndh_state": "",
-      "sam_state": "IN",
+      "sam_state": "OH",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2009-11-19",
+      "active_date": "2015-02-19",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306970793"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770614695"
     },
     {
-      "npi": "1306883558",
-      "display_name": "ROTHCHILD, SUZANNE",
-      "ndh_state": "MA",
-      "sam_state": "MA",
+      "npi": "1770616278",
+      "display_name": "MUNDY, VIVIAN",
+      "ndh_state": "",
+      "sam_state": "KS",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2014-05-20",
+      "active_date": "2010-12-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306883558"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770616278"
     },
     {
-      "npi": "1316107360",
-      "display_name": "HOULIHAN, LORI",
-      "ndh_state": "MA",
-      "sam_state": "MA",
+      "npi": "1770807067",
+      "display_name": "CROSBY, CHRISTY",
+      "ndh_state": "",
+      "sam_state": "OH",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2011-04-20",
+      "active_date": "2012-08-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316107360"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770807067"
     },
     {
-      "npi": "1316075161",
-      "display_name": "FERRELL, SONJA",
-      "ndh_state": "WV",
-      "sam_state": "WV",
+      "npi": "1770841397",
+      "display_name": "WILLIAMS, MELISSA",
+      "ndh_state": "DC",
+      "sam_state": "MD",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2017-12-20",
+      "active_date": "2016-10-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316075161"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770841397"
     },
     {
-      "npi": "1316070030",
-      "display_name": "KADER, NASREEN",
-      "ndh_state": "AL",
-      "sam_state": "NY",
+      "npi": "1770609257",
+      "display_name": "PINSLEY, SHERRI",
+      "ndh_state": "FL",
+      "sam_state": "FL",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2017-11-20",
+      "active_date": "2013-11-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316070030"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770609257"
     },
     {
-      "npi": "1316028319",
-      "display_name": "FRANCIS, JO",
-      "ndh_state": "MS",
-      "sam_state": "MS",
+      "npi": "1770606576",
+      "display_name": "EMERT, MICHAEL",
+      "ndh_state": "",
+      "sam_state": "MO",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2012-10-18",
+      "active_date": "2015-08-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316028319"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770606576"
     },
     {
-      "npi": "1316066970",
-      "display_name": "HAYES, CLELLA",
-      "ndh_state": "KY",
-      "sam_state": "KY",
+      "npi": "1770570194",
+      "display_name": "DEL AMO MOJICA, F",
+      "ndh_state": "PR",
+      "sam_state": "PR",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2018-02-20",
+      "active_date": "2012-09-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316066970"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770570194"
     },
     {
-      "npi": "1306915368",
-      "display_name": "LIPSCOMB, LINDA",
-      "ndh_state": "IN",
-      "sam_state": "IN",
+      "npi": "1770542151",
+      "display_name": "FIGUEROA, JORGE",
+      "ndh_state": "NJ",
+      "sam_state": "PA",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2018-04-19",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770542151"
+    },
+    {
+      "npi": "1770575821",
+      "display_name": "LALLEMAND JR, ROGER",
+      "ndh_state": "NY",
+      "sam_state": "FL",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
       "active_date": "2014-11-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306915368"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770575821"
     },
     {
-      "npi": "1306875604",
-      "display_name": "OTTINGER, WANDA",
-      "ndh_state": "MI",
-      "sam_state": "MI",
+      "npi": "1770667677",
+      "display_name": "STEIN, JEFFREY",
+      "ndh_state": "NY",
+      "sam_state": "NY",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2013-12-13",
+      "active_date": "2018-01-18",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306875604"
-    },
-    {
-      "npi": "1306973581",
-      "display_name": "MAZUREK, BRIDGETTE",
-      "ndh_state": "MT",
-      "sam_state": "MT",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2009-12-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306973581"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1770667677"
     }
   ],
   "agency_breakdown": [
     {
       "agency": "HHS",
-      "matches": 4422,
-      "ndh_active": 3693
+      "matches": 3643,
+      "ndh_active": 3643
     },
     {
       "agency": "OPM",
-      "matches": 2213,
-      "ndh_active": 1720
+      "matches": 1697,
+      "ndh_active": 1697
     },
     {
       "agency": "(unattributed)",
@@ -131,43 +131,43 @@
   "state_breakdown": [
     {
       "state": "UNKNOWN",
-      "n": 602
+      "n": 632
     },
     {
       "state": "CA",
-      "n": 602
+      "n": 495
     },
     {
       "state": "NY",
-      "n": 370
+      "n": 294
     },
     {
       "state": "FL",
-      "n": 323
+      "n": 242
     },
     {
       "state": "TX",
-      "n": 197
+      "n": 167
     },
     {
       "state": "MI",
-      "n": 176
+      "n": 147
     },
     {
       "state": "PA",
-      "n": 169
+      "n": 129
     },
     {
       "state": "IL",
-      "n": 154
+      "n": 129
     },
     {
       "state": "OH",
-      "n": 138
+      "n": 108
     },
     {
-      "state": "TN",
-      "n": 97
+      "state": "NJ",
+      "n": 79
     }
   ]
 }

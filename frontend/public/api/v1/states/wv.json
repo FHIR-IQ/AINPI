@@ -2,14 +2,14 @@
   "state": "WV",
   "state_name": "West Virginia",
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-09T00:18:50+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:30:08+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "bebebde",
+  "commit_sha": "51bf5d5",
   "denominators": {
-    "practitioner": 59739,
-    "organization": 14415,
-    "location": 8163
+    "practitioner": 55868,
+    "organization": 15514,
+    "location": 12018
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 59136,
-      "state_denominator": 59739,
-      "state_pct": 98.9906,
-      "national_pct": null,
-      "state_headline": "59,136 of 59,739 WV practitioner NPIs (98.9906%) match NPPES; 1,738 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 52883,
+      "state_denominator": 55868,
+      "state_pct": 94.657,
+      "national_pct": 99.9985,
+      "state_headline": "52,883 of 55,868 WV practitioner NPIs (94.657%) match NPPES; 98 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 5018,
-      "state_denominator": 14415,
-      "state_pct": 34.811,
-      "national_pct": 13.5464,
-      "state_headline": "WV has 14,415 Organization resources covering 9,397 unique NPIs \u2014 5,018 excess resources (34.811%) appear duplicated.",
+      "state_numerator": 7284,
+      "state_denominator": 15514,
+      "state_pct": 46.9511,
+      "national_pct": 11.3992,
+      "state_headline": "WV has 15,514 Organization resources covering 8,230 unique NPIs \u2014 7,284 excess resources (46.9511%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -53,10 +53,10 @@
       "title": "Temporal staleness",
       "state_computable": true,
       "state_numerator": 0,
-      "state_denominator": 82317,
+      "state_denominator": 83400,
       "state_pct": 0.0,
       "national_pct": 0.0,
-      "state_headline": "0 of 82,317 WV-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "0 of 83,400 WV-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0,
+      "national_pct": 0.0022,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,40 +110,45 @@
   ],
   "verify_samples": [
     {
-      "npi": "1811842628",
-      "display_name": "DIAZ, ALFRED",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1811842628"
+      "npi": "1891769063",
+      "display_name": "BOLYARD, TIMOTHY",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-07-20 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1891769063",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1609724418",
-      "display_name": "SCRUGGS, DONNETTA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1609724418"
+      "npi": "1144376732",
+      "display_name": "BRAGG, BILLY",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-08-19 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144376732",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1487506630",
-      "display_name": "CRITES, CIARA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1487506630"
+      "npi": "1275630097",
+      "display_name": "MASIH, RAJAN",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2011-11-20 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275630097",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1386590206",
-      "display_name": "CLARK, CARSON",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1386590206"
+      "npi": "1477673218",
+      "display_name": "SHAFER, DIANE",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2013-04-18 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1477673218",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1215884945",
-      "display_name": "APGAR, GABRIELLA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1215884945"
+      "npi": "1689653925",
+      "display_name": "RADTKE, JOSEPH",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2014-07-20 (exclusion type 1128b14)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1689653925",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WV-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WV-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

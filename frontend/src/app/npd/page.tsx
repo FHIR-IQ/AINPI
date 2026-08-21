@@ -227,7 +227,7 @@ export default function NpdSearchPage() {
             Check any NPI against the NPD.
           </h1>
           <p className="text-gray-300 mb-4 max-w-xl mx-auto">
-            21.7M FHIR R4 records from the 2026-05-08 bulk public-use release.
+            32.5M FHIR R4 records from the 2026-08-20 bulk public-use release.
             Six pre-registered findings, reproducible from open source.
           </p>
           <p className="text-sm text-gray-400 mb-8 max-w-xl mx-auto">
@@ -298,10 +298,10 @@ export default function NpdSearchPage() {
 
         {/* RELEASE-UPDATE TILE */}
         <a
-          href="/reports/2026-05-08-update"
+          href="/reports/2026-08-21-update"
           className="block mb-10 rounded-xl overflow-hidden relative group"
           style={{ background: '#06080d' }}
-          aria-label="Read the 2026-05-08 release update"
+          aria-label="Read the 2026-08-21 release update"
         >
           <div
             aria-hidden
@@ -339,7 +339,7 @@ export default function NpdSearchPage() {
                   letterSpacing: '0.18em',
                 }}
               >
-                NEW · 2026-05-08 release update
+                NEW · 2026-08-21 release update
               </div>
               <h2
                 className="text-2xl sm:text-4xl font-bold leading-none mb-4"
@@ -356,26 +356,26 @@ export default function NpdSearchPage() {
                 }}
               >
                 <span>
-                  <span className="opacity-60">Endpoint</span>{' '}
-                  <span style={{ color: '#ff5d6c' }} className="font-semibold">
-                    −73%
+                  <span className="opacity-60">PractitionerRole</span>{' '}
+                  <span style={{ color: '#4ade80' }} className="font-semibold">
+                    +135%
                   </span>
                 </span>
                 <span>
                   <span className="opacity-60">Location</span>{' '}
-                  <span style={{ color: '#ff5d6c' }} className="font-semibold">
-                    −61%
+                  <span style={{ color: '#4ade80' }} className="font-semibold">
+                    +86%
                   </span>
                 </span>
                 <span>
-                  <span className="opacity-60">OrgAffil</span>{' '}
-                  <span style={{ color: '#4ade80' }} className="font-semibold">
-                    +147%
+                  <span className="opacity-60">Endpoint</span>{' '}
+                  <span style={{ color: '#ff5d6c' }} className="font-semibold">
+                    −17%
                   </span>
                 </span>
                 <span>
                   <span className="opacity-60">SSN exposures</span>{' '}
-                  <span className="font-semibold">46 → 41</span>
+                  <span className="font-semibold">41 → 0</span>
                 </span>
               </div>
             </div>

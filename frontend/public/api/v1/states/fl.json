@@ -2,14 +2,14 @@
   "state": "FL",
   "state_name": "Florida",
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-09T00:18:26+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:22:35+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "bebebde",
+  "commit_sha": "51bf5d5",
   "denominators": {
-    "practitioner": 380455,
-    "organization": 254696,
-    "location": 104284
+    "practitioner": 374388,
+    "organization": 293793,
+    "location": 192265
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 378049,
-      "state_denominator": 380455,
-      "state_pct": 99.3676,
-      "national_pct": null,
-      "state_headline": "378,049 of 380,455 FL practitioner NPIs (99.3676%) match NPPES; 13,208 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 363520,
+      "state_denominator": 374388,
+      "state_pct": 97.0971,
+      "national_pct": 99.9985,
+      "state_headline": "363,520 of 374,388 FL practitioner NPIs (97.0971%) match NPPES; 957 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 106748,
-      "state_denominator": 254696,
-      "state_pct": 41.9119,
-      "national_pct": 13.5464,
-      "state_headline": "FL has 254,696 Organization resources covering 147,948 unique NPIs \u2014 106,748 excess resources (41.9119%) appear duplicated.",
+      "state_numerator": 153947,
+      "state_denominator": 293793,
+      "state_pct": 52.3998,
+      "national_pct": 11.3992,
+      "state_headline": "FL has 293,793 Organization resources covering 139,846 unique NPIs \u2014 153,947 excess resources (52.3998%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -53,10 +53,10 @@
       "title": "Temporal staleness",
       "state_computable": true,
       "state_numerator": 0,
-      "state_denominator": 739435,
+      "state_denominator": 860446,
       "state_pct": 0.0,
       "national_pct": 0.0,
-      "state_headline": "0 of 739,435 FL-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "0 of 860,446 FL-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0,
+      "national_pct": 0.0022,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,40 +110,45 @@
   ],
   "verify_samples": [
     {
-      "npi": "1093663353",
-      "display_name": "CHIESA, JILLIAN",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093663353"
+      "npi": "1841365657",
+      "display_name": "BARROSO, CARLOS",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 1999-09-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841365657",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1790636314",
-      "display_name": "LAVENDER, JORDAN",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1790636314"
+      "npi": "1225072028",
+      "display_name": "HASPEL, ARTHUR",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2003-07-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1225072028",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1518811223",
-      "display_name": "CRUZ-ANDRES, LLUVIA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1518811223"
+      "npi": "1083617260",
+      "display_name": "BLATSTEIN, MARC",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2006-12-20 (exclusion type 1128a3)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083617260",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1003768359",
-      "display_name": "DELGADO RIVERO, CELIA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003768359"
+      "npi": "1871692285",
+      "display_name": "BECKETT, DONALD",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2007-11-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1871692285",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1013869213",
-      "display_name": "LESPERANCE DUPONT PAURICE, SETH",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1013869213"
+      "npi": "1396796033",
+      "display_name": "BARRERA VALDIVIA, C",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2008-01-20 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396796033",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five FL-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five FL-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

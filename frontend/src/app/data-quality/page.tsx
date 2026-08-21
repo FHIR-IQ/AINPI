@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import Navbar from '@/components/Navbar';
 import { ChartSelect, ChartHeader } from '@/components/charts/ChartControls';
 import { FilterProvider, useFilters } from '@/contexts/FilterContext';
+import { CURRENT_RELEASE } from '@/lib/release';
 
 const USChoroplethMap = dynamic(() => import('@/components/charts/USChoroplethMap'), { ssr: false });
 const QualityGauge = dynamic(() => import('@/components/charts/QualityGauge'), { ssr: false });
@@ -152,7 +153,7 @@ function DashboardContent() {
       <div className="max-w-[1400px] mx-auto px-4 py-8">
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900">CMS National Provider Directory</h1>
-          <p className="text-gray-500 mt-1">Cross-filtered, drill-down data quality intelligence: Release 2026-05-08</p>
+          <p className="text-gray-500 mt-1">Cross-filtered, drill-down data quality intelligence: Release {CURRENT_RELEASE}</p>
         </div>
 
         <FilterBreadcrumb />
@@ -404,7 +405,7 @@ function DashboardContent() {
             </div>
 
             <p className="text-xs text-gray-400 text-center">
-              CMS National Provider Directory (directory.cms.gov): Release 2026-05-08: Powered by Google BigQuery
+              CMS National Provider Directory (directory.cms.gov): Release {CURRENT_RELEASE}: Powered by Google BigQuery
             </p>
           </div>
         )}

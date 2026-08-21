@@ -6,13 +6,13 @@
     "H15"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T09:50:41+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:30:28+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": "Practitioner dedup is clean \u2014 0 excess rows across 7,441,211 NPIs (H14). But Organizations multiply: 70.6% of the 1,999,118 unique Org NPIs map to more than one Organization resource (1,413,126 excess rows; max 6 resources per one NPI). By normalized (name, state, city), 85.3% of keys repeat. Downstream consumers assuming one Organization resource = one real-world entity will be wrong roughly two out of three times.",
-  "numerator": 1198250,
-  "denominator": 8845498,
+  "headline": "Practitioner dedup is clean: 0 excess rows across 7,373,232 NPIs (H14). Organization multiplicity looks far worse than it is. 67.0% of the 2,202,028 unique Org NPIs map to more than one Organization resource, but 72.6% of that excess is one provider record paired with one `ein` tax record under the same NPI, which is how CMS models the file rather than a duplication defect. Strip those and 13 of 2,202,028 Org NPIs are genuinely repeated. Any count of organizations in this directory has to say which record type it counted.",
+  "numerator": 1016232,
+  "denominator": 8914976,
   "chart": {
     "type": "bar",
     "unit": "percent",
@@ -23,13 +23,17 @@
       },
       {
         "label": "H15 Org by name+state+city",
-        "value": 85.328
+        "value": 65.9144
       },
       {
-        "label": "H15b Org by NPI",
-        "value": 70.5688
+        "label": "H15b Org by NPI (raw)",
+        "value": 67.0032
+      },
+      {
+        "label": "H15b Org by NPI (ein excluded)",
+        "value": 0.0006
       }
     ]
   },
-  "notes": "BigQuery dataset has primary-key dedup applied at ingest (-4.6M Practitioner, -383K Organization at _id). These are residual entity-level duplicates. H14 key = _npi on practitioner. Max copies observed: 1 for a single Practitioner NPI. H15 key = (LOWER(name) stripped of LLC/INC/PC/PA/PLLC/CORP/LLP/LTD/CO/COMPANY/THE and non-alphanumerics, UPPER(state), UPPER(TRIM(city))); orgs with missing name or state or city are excluded. Max copies for one key: 2662. H15-bonus keys by _npi; max copies for one Org NPI: 6. Caveat \u2014 some portion of the Organization multiplicity may reflect CMS modeling one FHIR Organization resource per service location rather than true duplication. Either interpretation breaks the common downstream assumption that COUNT(Organization) equals the number of unique organizations. Fuzzy matching (Jaro-Winkler, suite-unit tolerance) is a v2 enhancement."
+  "notes": "BigQuery dataset has primary-key dedup applied at ingest (-4.6M Practitioner, -383K Organization at _id). These are residual entity-level duplicates. H14 key = _npi on practitioner. Max copies observed: 1 for a single Practitioner NPI. H15 key = (LOWER(name) stripped of LLC/INC/PC/PA/PLLC/CORP/LLP/LTD/CO/COMPANY/THE and non-alphanumerics, UPPER(state), UPPER(TRIM(city))); orgs with missing name or state or city are excluded. Max copies for one key: 7400. H15-bonus keys by _npi; max copies for one Org NPI: 10. Earlier releases of this finding carried a caveat that some of the Organization multiplicity might reflect CMS modelling rather than duplication. That is now measured rather than speculated: 1,475,417 of the 2,032,396 excess rows (72.6%) are one provider record and one `ein` tax record sharing an NPI, and 930,601 NPIs are exactly that pair and nothing else. 13 NPIs are duplicated with no ein row involved, which is the residual worth treating as a defect. The raw rate is still the right number for anyone doing COUNT(Organization), because the rows are really there; it is the wrong number for judging directory hygiene. Fuzzy matching (Jaro-Winkler, suite-unit tolerance) is a v2 enhancement."
 }

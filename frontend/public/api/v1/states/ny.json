@@ -2,14 +2,14 @@
   "state": "NY",
   "state_name": "New York",
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-09T00:22:52+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:27:32+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "bebebde",
+  "commit_sha": "51bf5d5",
   "denominators": {
-    "practitioner": 439685,
-    "organization": 152833,
-    "location": 78379
+    "practitioner": 425031,
+    "organization": 177714,
+    "location": 148092
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 437926,
-      "state_denominator": 439685,
-      "state_pct": 99.5999,
-      "national_pct": null,
-      "state_headline": "437,926 of 439,685 NY practitioner NPIs (99.5999%) match NPPES; 16,816 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 414297,
+      "state_denominator": 425031,
+      "state_pct": 97.4745,
+      "national_pct": 99.9985,
+      "state_headline": "414,297 of 425,031 NY practitioner NPIs (97.4745%) match NPPES; 1,453 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 65062,
-      "state_denominator": 152833,
-      "state_pct": 42.5706,
-      "national_pct": 13.5464,
-      "state_headline": "NY has 152,833 Organization resources covering 87,771 unique NPIs \u2014 65,062 excess resources (42.5706%) appear duplicated.",
+      "state_numerator": 96060,
+      "state_denominator": 177714,
+      "state_pct": 54.0531,
+      "national_pct": 11.3992,
+      "state_headline": "NY has 177,714 Organization resources covering 81,652 unique NPIs \u2014 96,060 excess resources (54.0531%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -53,10 +53,10 @@
       "title": "Temporal staleness",
       "state_computable": true,
       "state_numerator": 0,
-      "state_denominator": 670897,
+      "state_denominator": 750835,
       "state_pct": 0.0,
       "national_pct": 0.0,
-      "state_headline": "0 of 670,897 NY-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "0 of 750,835 NY-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0,
+      "national_pct": 0.0022,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,40 +110,45 @@
   ],
   "verify_samples": [
     {
-      "npi": "1740136563",
-      "display_name": "VAZQUEZ, DAISHA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1740136563"
+      "npi": "1669542338",
+      "display_name": "BHATT, HARSHAD",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 1995-02-13 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669542338",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1447101035",
-      "display_name": "BARASHI, SARAH",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1447101035"
+      "npi": "1043310956",
+      "display_name": "AKPAN, ADELIA",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2000-05-18 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1043310956",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1326993098",
-      "display_name": "OURTI, AICHA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326993098"
+      "npi": "1669508149",
+      "display_name": "AULOVA, ZINAIDA",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2003-09-19 (exclusion type 1128b5)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669508149",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1669320578",
-      "display_name": "DESVARIEUX, DANGELA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669320578"
+      "npi": "1609874742",
+      "display_name": "ABRAHAM, AKIVA",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2005-12-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1609874742",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1699620583",
-      "display_name": "GAILLARD, FAITH",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1699620583"
+      "npi": "1134270903",
+      "display_name": "POET, ALBERT",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2008-05-20 (exclusion type 1128a3)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1134270903",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NY-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NY-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

@@ -54,7 +54,11 @@ DATASET = "cms_npd"
 NPPES_DATASET = "bigquery-public-data.nppes"
 LEIE_TABLE = f"{PROJECT}.{DATASET}.oig_leie"
 SAM_TABLE = f"{PROJECT}.{DATASET}.sam_exclusions"
-RELEASE_DATE = "2026-05-08"
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.4.0"
 CRITICAL_RISK_THRESHOLD = 1.5
 HIGH_RISK_THRESHOLD = 1.0
@@ -173,7 +177,35 @@ def run() -> None:
     # Score each NPI in Python (Luhn check is Python-side; remaining signals
     # come from the BQ row).
     cohort = []
-    bucket_counts = {"critical": 0, "high": 0, "medium": 0, "clean": 0}
+    # How current is the NPPES reference copy?
+    #
+    # `not_in_nppes` is only a risk signal if NPPES is at least as current as
+    # the NDH release. bigquery-public-data.nppes.npi_raw is a static snapshot
+    # whose newest enumeration is 2026-02-07, six months before the 2026-08-20
+    # release, so every provider enumerated in between reads as a ghost.
+    #
+    # This is not hypothetical. Scoring it as risk put 245,374 NPIs in the
+    # high bucket; eight sampled at random were all real, active providers in
+    # the live NPPES registry, enumerated between February and June 2026. The
+    # signal was measuring our own reference data, not the directory.
+    #
+    # An NPI-range test suggested the opposite (the missing NPIs had the same
+    # median as the present ones) and was wrong, because CMS does not issue
+    # NPIs in one ascending sequence. Only the primary-source check settled it.
+    nppes_asof = next(iter(client.query(
+        "SELECT MAX(provider_enumeration_date) AS d "
+        "FROM `bigquery-public-data.nppes.npi_raw`",
+        job_config=bq_job_config()).result())).d
+    nppes_asof = str(nppes_asof) if nppes_asof else ""
+    nppes_is_stale = bool(nppes_asof) and nppes_asof < RELEASE_DATE
+    print(f"  NPPES reference snapshot newest enumeration: {nppes_asof or 'unknown'}")
+    if nppes_is_stale:
+        print(f"  NPPES predates the {RELEASE_DATE} release: not_in_nppes is recorded "
+              f"but scored 0, and rows carrying only that signal are bucketed "
+              f"needs-review rather than high.")
+
+    bucket_counts = {"critical": 0, "high": 0, "medium": 0,
+                     "needs-review": 0, "clean": 0}
     reason_counts = {
         "oig_excluded": 0,
         "sam_excluded": 0,
@@ -203,7 +235,10 @@ def run() -> None:
             reason_counts["luhn_fail"] += 1
 
         if not r.in_nppes:
-            score += 1.0
+            # Recorded either way; weighted only when NPPES can actually
+            # answer the question for this release.
+            if not nppes_is_stale:
+                score += 1.0
             reasons.append("not_in_nppes")
             reason_counts["not_in_nppes"] += 1
         elif r.nppes_deactivated:
@@ -223,7 +258,13 @@ def run() -> None:
             bucket = "high"
         elif score >= MEDIUM_RISK_THRESHOLD:
             bucket = "medium"
-        bucket_counts[bucket] += 1
+        elif nppes_is_stale and reasons == ["not_in_nppes"]:
+            # Not clean, because the NDH really does list an NPI our reference
+            # copy has never seen. Not risk either, because the most likely
+            # explanation is that the provider was enumerated after the
+            # snapshot. Named honestly and kept out of the risk counts.
+            bucket = "needs-review"
+        bucket_counts[bucket] = bucket_counts.get(bucket, 0) + 1
 
         if bucket != "clean":
             family = (r._family_name or "").strip()
@@ -254,6 +295,7 @@ def run() -> None:
     print(f"  critical (score >= {CRITICAL_RISK_THRESHOLD}): {crit_n:>10,}  ({100*crit_n/total:.4f}%)")
     print(f"  high     (score >= {HIGH_RISK_THRESHOLD}):     {high_n:>10,}  ({100*high_n/total:.4f}%)")
     print(f"  medium   (score >= {MEDIUM_RISK_THRESHOLD}):   {med_n:>10,}  ({100*med_n/total:.4f}%)")
+    print(f"  needs-review (stale NPPES only):        {bucket_counts['needs-review']:>10,}")
     print(f"  clean:                                  {bucket_counts['clean']:>10,}")
     print(f"\nReason-code prevalence:")
     for k, v in reason_counts.items():
@@ -286,6 +328,17 @@ def run() -> None:
     print(f"\nWrote {csv_path} ({min(len(cohort), EXPORT_TOP_N):,} rows)")
 
     flagged_n = crit_n + high_n
+    stale_note = ""
+    if nppes_is_stale:
+        stale_note = (
+            f" not_in_nppes is reported but scored zero this release. The NPPES "
+            f"reference copy stops at {nppes_asof}, {RELEASE_DATE[:7]} is the "
+            f"release, and a sample of the {reason_counts['not_in_nppes']:,} "
+            f"flagged NPIs were all real, active providers enumerated after the "
+            f"snapshot. They are bucketed needs-review, not high; treating them "
+            f"as risk would have put a quarter of a million working clinicians "
+            f"on a list that exists to be acted on."
+        )
     headline = (
         f"{flagged_n:,} of {total:,} ({100*flagged_n/total:.2f}%) NDH practitioner NPIs "
         f"score at or above the {HIGH_RISK_THRESHOLD} composite threshold, including "
@@ -295,7 +348,7 @@ def run() -> None:
         f"sam_excluded ({reason_counts['sam_excluded']:,}), "
         f"not_in_nppes ({reason_counts['not_in_nppes']:,}), "
         f"nppes_deactivated ({reason_counts['nppes_deactivated']:,}), "
-        f"luhn_fail ({reason_counts['luhn_fail']:,})."
+        f"luhn_fail ({reason_counts['luhn_fail']:,})." + stale_note
     )
 
     payload = {

@@ -1,34 +1,34 @@
 {
   "slug": "practitioner-phone-reachability",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T10:15:58+00:00",
-  "commit_sha": "bda819c",
-  "denominator": 7196385,
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:37:51+00:00",
+  "commit_sha": "51bf5d5",
+  "denominator": 7373232,
   "per_path": {
-    "practitioner_telecom_phone": 7195270,
-    "practitioner_role_telecom_phone": 1788763,
-    "location_telecom_phone_via_role": 0
+    "practitioner_telecom_phone": 7371292,
+    "practitioner_role_telecom_phone": 2103410,
+    "location_telecom_phone_via_role": 2015393
   },
   "venn_seven_region": {
-    "P_only": 5406507,
+    "P_only": 5250254,
     "R_only": 0,
-    "L_only": 0,
-    "P_and_R": 1788763,
-    "P_and_L": 0,
+    "L_only": 28,
+    "P_and_R": 105673,
+    "P_and_L": 17628,
     "R_and_L": 0,
-    "P_and_R_and_L": 0,
-    "none": 1115
+    "P_and_R_and_L": 1997737,
+    "none": 1912
   },
   "raw_path_totals": {
-    "role_phone_raw": 1790830,
-    "location_phone_raw_via_role": 0
+    "role_phone_raw": 2103410,
+    "location_phone_raw_via_role": 2015393
   },
   "on_record_telecom_systems": {
-    "phone": 7195270,
-    "fax": 2871690,
+    "phone": 7371292,
+    "fax": 2960152,
     "email": 0,
     "url": 0,
-    "any_telecom": 7195397
+    "any_telecom": 7371452
   },
   "notes": "Seven-region Venn sums match the headline. Each cell is the count of active Practitioner records whose phone is reachable via the labeled subset of {Practitioner.telecom, PractitionerRole.telecom, traversed Location.telecom} and no others. Sidecar contract may evolve; the parent /findings/<slug>.json is the stable v1 surface."
 }

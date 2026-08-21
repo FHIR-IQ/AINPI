@@ -2,14 +2,14 @@
   "state": "NV",
   "state_name": "Nevada",
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-09T00:22:08+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:27:21+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "bebebde",
+  "commit_sha": "51bf5d5",
   "denominators": {
-    "practitioner": 81533,
-    "organization": 30621,
-    "location": 13267
+    "practitioner": 80722,
+    "organization": 35307,
+    "location": 25358
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 80748,
-      "state_denominator": 81533,
-      "state_pct": 99.0372,
-      "national_pct": null,
-      "state_headline": "80,748 of 81,533 NV practitioner NPIs (99.0372%) match NPPES; 2,267 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 77381,
+      "state_denominator": 80722,
+      "state_pct": 95.8611,
+      "national_pct": 99.9985,
+      "state_headline": "77,381 of 80,722 NV practitioner NPIs (95.8611%) match NPPES; 128 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 12820,
-      "state_denominator": 30621,
-      "state_pct": 41.8667,
-      "national_pct": 13.5464,
-      "state_headline": "NV has 30,621 Organization resources covering 17,801 unique NPIs \u2014 12,820 excess resources (41.8667%) appear duplicated.",
+      "state_numerator": 18458,
+      "state_denominator": 35307,
+      "state_pct": 52.2786,
+      "national_pct": 11.3992,
+      "state_headline": "NV has 35,307 Organization resources covering 16,849 unique NPIs \u2014 18,458 excess resources (52.2786%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -53,10 +53,10 @@
       "title": "Temporal staleness",
       "state_computable": true,
       "state_numerator": 0,
-      "state_denominator": 125421,
+      "state_denominator": 141387,
       "state_pct": 0.0,
       "national_pct": 0.0,
-      "state_headline": "0 of 125,421 NV-resident resources carry a meta.lastUpdated on the 2026-05-08 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "0 of 141,387 NV-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0,
+      "national_pct": 0.0022,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,40 +110,45 @@
   ],
   "verify_samples": [
     {
-      "npi": "1447106976",
-      "display_name": "LOVAAS, BENNETT",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1447106976"
+      "npi": "1649478033",
+      "display_name": "OVERLAND, JAMES",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2008-10-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649478033",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1083569685",
-      "display_name": "JANISCH, SHELLEY",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083569685"
+      "npi": "1093910291",
+      "display_name": "COATE, LINDA",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-10-20 (exclusion type 1128b14)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093910291",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1669326179",
-      "display_name": "WALTER, EMILY",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1669326179"
+      "npi": "1861572802",
+      "display_name": "HEINSS, KARL",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-11-18 (exclusion type 1128a3)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861572802",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1245188473",
-      "display_name": "BADHESHA, JAGSEER",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245188473"
+      "npi": "1780645648",
+      "display_name": "BEECHAM, JAMES",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2011-10-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780645648",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1568316313",
-      "display_name": "KIM, MALIA",
-      "flagged_by": "npi-taxonomy-correctness",
-      "flag_reason": "Not present in NPPES npi_raw",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568316313"
+      "npi": "1376668988",
+      "display_name": "FALLS, DENNIS",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2012-06-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1376668988",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-05-08 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NV-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NV-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

@@ -2,8 +2,8 @@
   "title": "Provider directory scoreboard",
   "note": "Six metrics with a current baseline, each reproducible from public data. Stated so progress is arguable rather than felt. Recompute them against the next release with analysis/primer_scoreboard.py.",
   "release_date": "2026-05-08",
-  "generated_at": "2026-08-21T10:40:04+00:00",
-  "commit_sha": "95feac2746c0a287ddfd87efa52914e382f97d4d",
+  "generated_at": "2026-08-21T12:33:53+00:00",
+  "commit_sha": "51bf5d5e7481565ed938ea4bef7674246e752862",
   "metrics": [
     {
       "key": "endpoint-attribution",

@@ -28,7 +28,7 @@ import urllib.request
 from datetime import datetime, timezone
 from typing import Iterable, Literal
 
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.5.0"
 USER_AGENT = (
     "AINPI-DirectoryQualityBot/1.0 "

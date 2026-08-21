@@ -1,15 +1,18 @@
 {
-  "release_date": "2026-05-08",
-  "generated_at": "2026-05-08T17:05:00Z",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "bda819c",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:38:24+00:00",
+  "methodology_version": "0.7.3-draft",
+  "commit_sha": "51bf5d5",
   "counters": {
-    "resources_processed": 21693735,
-    "npis_checked": 10853455,
-    "npis_flagged": 8115,
+    "resources_processed": 32468908,
+    "npis_checked": 11607656,
+    "npis_flagged": 4,
     "endpoints_live_pct": 85.37,
-    "findings_published": 12,
-    "findings_in_progress": 0,
-    "findings_pre_registered": 0
+    "findings_published": 24,
+    "findings_in_progress": 1,
+    "findings_pre_registered": 14
+  },
+  "counters_as_of": {
+    "endpoints_live_pct": "2026-04-09"
   }
 }

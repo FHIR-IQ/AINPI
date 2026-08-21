@@ -5,30 +5,30 @@
     "H43"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T10:15:58+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:37:51+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "bda819c",
-  "headline": "Of 7,196,385 active Practitioner resources in the 2026-05-08 NDH release, 7,195,270 (99.985%) can be associated with at least one phone number through FHIR. Where does that phone live? 7,195,270 (99.985%) carry a phone directly on the Practitioner record; 1,788,763 (24.9%) have one on PractitionerRole; 0 (0.0%) reach one via a traversed Location. 0 of the 7,195,270 are reachable ONLY by traversing role or location (i.e. the Practitioner record itself does not carry a phone). 1,115 (0.015%) have no phone on any of the three resources.",
-  "numerator": 7195270,
-  "denominator": 7196385,
+  "commit_sha": "51bf5d5",
+  "headline": "Of 7,373,232 active Practitioner resources in the 2026-08-20 NDH release, 7,371,320 (99.974%) can be associated with at least one phone number through FHIR. Where does that phone live? 7,371,292 (99.974%) carry a phone directly on the Practitioner record; 2,103,410 (28.5%) have one on PractitionerRole; 2,015,393 (27.3%) reach one via a traversed Location. 28 of the 7,371,320 are reachable ONLY by traversing role or location (i.e. the Practitioner record itself does not carry a phone). 1,912 (0.026%) have no phone on any of the three resources.",
+  "numerator": 7371320,
+  "denominator": 7373232,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
         "label": "Phone on Practitioner record",
-        "value": 7195270
+        "value": 7371292
       },
       {
         "label": "Phone only via role / location",
-        "value": 0
+        "value": 28
       },
       {
         "label": "No phone on any path",
-        "value": 1115
+        "value": 1912
       }
     ]
   },
-  "notes": "Three resolution paths, evaluated independently then unioned: (1) Practitioner.telecom (system='phone'); (2) PractitionerRole.telecom on any active role whose practitioner reference resolves to this NPI; (3) Location.telecom on any Location referenced by such a role (PractitionerRole.location -> Location). The union is intersected with the active Practitioner set, so the numerator never exceeds the denominator and dangling references drop out. Per-path reachability at the practitioner level: 7,195,270 via Practitioner, 1,788,763 via PractitionerRole, 0 via traversed Location. Seven-region overlap across {P, R, L}: P-only 5,406,507, R-only 0, L-only 0, P\u2229R 1,788,763, P\u2229L 0, R\u2229L 0, P\u2229R\u2229L 0, none 1,115. On-record contact points break down as: phone 7,195,270, fax 2,871,690, email 0, url 0; 7,195,397 active practitioners carry any telecom entry at all on the Practitioner resource. Before de-duplication against the active set, 1,790,830 practitioner references are reachable via a role-level phone and 0 via a location-level phone. Caveat \u2014 the May 2026-05-08 release deduped Location resources sharply (-61% vs April), which mechanically lowers path-3 reachability relative to the April release; compare across releases with that in mind. Upstream context: NPPES (the source of ~90% of these fields) keeps practice phone on the practice location, not the individual, so a sparse Practitioner.telecom is expected and is not itself a data quality defect \u2014 the operational takeaway is that a 'call this provider' feature must read PractitionerRole/Location, not Practitioner.telecom alone. Full Venn breakdown with raw counts at /api/v1/findings/practitioner-phone-reachability-detail.json."
+  "notes": "Three resolution paths, evaluated independently then unioned: (1) Practitioner.telecom (system='phone'); (2) PractitionerRole.telecom on any active role whose practitioner reference resolves to this NPI; (3) Location.telecom on any Location referenced by such a role (PractitionerRole.location -> Location). The union is intersected with the active Practitioner set, so the numerator never exceeds the denominator and dangling references drop out. Per-path reachability at the practitioner level: 7,371,292 via Practitioner, 2,103,410 via PractitionerRole, 2,015,393 via traversed Location. Seven-region overlap across {P, R, L}: P-only 5,250,254, R-only 0, L-only 28, P\u2229R 105,673, P\u2229L 17,628, R\u2229L 0, P\u2229R\u2229L 1,997,737, none 1,912. On-record contact points break down as: phone 7,371,292, fax 2,960,152, email 0, url 0; 7,371,452 active practitioners carry any telecom entry at all on the Practitioner resource. Before de-duplication against the active set, 2,103,410 practitioner references are reachable via a role-level phone and 2,015,393 via a location-level phone. Caveat \u2014 the May 2026-05-08 release deduped Location resources sharply (-61% vs April), which mechanically lowers path-3 reachability relative to the April release; compare across releases with that in mind. Upstream context: NPPES (the source of ~90% of these fields) keeps practice phone on the practice location, not the individual, so a sparse Practitioner.telecom is expected and is not itself a data quality defect \u2014 the operational takeaway is that a 'call this provider' feature must read PractitionerRole/Location, not Practitioner.telecom alone. Full Venn breakdown with raw counts at /api/v1/findings/practitioner-phone-reachability-detail.json."
 }

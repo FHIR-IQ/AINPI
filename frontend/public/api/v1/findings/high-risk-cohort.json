@@ -5,32 +5,32 @@
     "H23"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T10:03:21+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:16:07+00:00",
   "methodology_version": "0.4.0",
-  "commit_sha": "bda819c",
-  "headline": "64,359 of 7,441,211 (0.86%) NDH practitioner NPIs score at or above the 1.0 composite threshold, including 8,205 at the critical 1.5 threshold (LEIE- or SAM-excluded). Anchored in 42 CFR \u00a7 455.436 federal database checks. Reason codes: oig_excluded (8,076), sam_excluded (4,517), not_in_nppes (56,156), nppes_deactivated (260,534), luhn_fail (2).",
-  "numerator": 64359,
-  "denominator": 7441211,
+  "commit_sha": "51bf5d5",
+  "headline": "7,244 of 7,373,232 (0.10%) NDH practitioner NPIs score at or above the 1.0 composite threshold, including 7,244 at the critical 1.5 threshold (LEIE- or SAM-excluded). Anchored in 42 CFR \u00a7 455.436 federal database checks. Reason codes: oig_excluded (7,165), sam_excluded (3,715), not_in_nppes (245,374), nppes_deactivated (15,717), luhn_fail (0). not_in_nppes is reported but scored zero this release. The NPPES reference copy stops at 2026-02-07, 2026-08 is the release, and a sample of the 245,374 flagged NPIs were all real, active providers enumerated after the snapshot. They are bucketed needs-review, not high; treating them as risk would have put a quarter of a million working clinicians on a list that exists to be acted on.",
+  "numerator": 7244,
+  "denominator": 7373232,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
         "label": "critical",
-        "value": 8205
+        "value": 7244
       },
       {
         "label": "high",
-        "value": 56154
+        "value": 0
       },
       {
         "label": "medium",
-        "value": 259602
+        "value": 15684
       },
       {
         "label": "clean",
-        "value": 7117250
+        "value": 7104930
       }
     ]
   },

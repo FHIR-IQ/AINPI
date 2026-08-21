@@ -43,7 +43,7 @@ from claims_sources._cohorts import bq_job_config
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 LEIE_TABLE = f"{PROJECT}.{DATASET}.oig_leie"
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.3.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent

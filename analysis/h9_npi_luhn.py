@@ -26,7 +26,7 @@ from claims_sources._cohorts import bq_job_config
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 
 NPI_PREFIX = "80840"
 NPI_RE = re.compile(r"^[12]\d{9}$")
@@ -143,9 +143,32 @@ def run() -> None:
         ),
     }
 
-    out = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "public" / "api" / "v1" / "findings" / "npi-taxonomy-correctness.json"
+    findings_dir = (pathlib.Path(__file__).resolve().parent.parent
+                    / "frontend" / "public" / "api" / "v1" / "findings")
+    out = findings_dir / "npi-taxonomy-correctness.json"
     out.write_text(json.dumps(payload, indent=2) + "\n")
     print(f"\nWrote {out}")
+
+    # Sidecar, because h10_h13_with_crosswalk.py writes the same slug straight
+    # afterwards and replaces numerator/denominator with H13's pair counts.
+    # Anything downstream wanting "how many NPIs were validated and how many
+    # failed" reads them off that file and silently gets the wrong pair:
+    # stats.json reported 5,275,554 flagged NPIs, which is the count of
+    # Practitioner-to-Role specialty agreements.
+    summary = findings_dir / "npi-validity-summary.json"
+    summary.write_text(json.dumps({
+        "slug": "npi-validity-summary",
+        "of": "npi-taxonomy-correctness",
+        "hypotheses": ["H9"],
+        "release_date": RELEASE_DATE,
+        "generated_at": payload["generated_at"],
+        "npis_checked": checked,
+        "npis_flagged": flagged,
+        "invalid_structure": struct,
+        "luhn_fail": luhn_fail,
+        "missing_npi": missing,
+    }, indent=2) + "\n")
+    print(f"Wrote {summary}")
 
 
 if __name__ == "__main__":

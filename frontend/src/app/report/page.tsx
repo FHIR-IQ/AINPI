@@ -3,13 +3,14 @@ import { FINDINGS } from '@/data/findings';
 import { loadFinding, loadStats } from '@/lib/load-api-v1';
 import FindingChart from '@/components/FindingChart';
 import PrintButton from '@/components/PrintButton';
+import { CURRENT_RELEASE } from '@/lib/release';
 
 export const dynamic = 'force-static';
 
 export const metadata: Metadata = {
   title: 'The State of the National Provider Directory: AINPI v1.0',
   description:
-    'Full AINPI v1.0 report: all six pre-registered findings against the CMS NPD 2026-05-08 release in one printable document.',
+    'Full AINPI v1.0 report: all six pre-registered findings against the CMS NPD 2026-08-20 release in one printable document.',
   robots: { index: true, follow: true },
 };
 
@@ -74,12 +75,12 @@ export default function ReportPage() {
             The State of the National Provider Directory
           </h1>
           <p className="text-lg text-gray-700 mb-6">
-            Six pre-registered findings against the CMS NPD {stats?.release_date || '2026-05-08'} release.
+            Six pre-registered findings against the CMS NPD {stats?.release_date || CURRENT_RELEASE} release.
           </p>
           <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
             <div>
               <dt className="text-xs text-gray-500">NPD release</dt>
-              <dd className="font-semibold">{stats?.release_date || '2026-05-08'}</dd>
+              <dd className="font-semibold">{stats?.release_date || CURRENT_RELEASE}</dd>
             </div>
             <div>
               <dt className="text-xs text-gray-500">Methodology</dt>

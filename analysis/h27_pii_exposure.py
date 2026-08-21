@@ -50,7 +50,11 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-05-08"
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.6.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -102,7 +106,22 @@ def run() -> None:
       likely_intl_phone_fp
     FROM classified
     """
-    pract_rows = list(client.query(pract_sql).result())
+    pract_rows = list(client.query(pract_sql, job_config=bq_job_config()).result())
+
+    # Positive control. A scan that returns nothing is indistinguishable from a
+    # scan pointed at the wrong field, and this project has already been bitten
+    # once by a field moving underneath a matcher. Confirm the population and
+    # the container element are both still there before reporting a zero.
+    control_row = next(iter(client.query(f"""
+    SELECT
+      COUNT(*) AS total_practitioners,
+      COUNTIF(JSON_EXTRACT_ARRAY(resource, '$.qualification') IS NOT NULL) AS qual_present
+    FROM `{PROJECT}.{DATASET}.practitioner`
+    """, job_config=bq_job_config()).result()))
+    total_practitioners = int(control_row.total_practitioners)
+    qual_present = int(control_row.qual_present)
+    print(f"  control: {total_practitioners:,} practitioners, "
+          f"{qual_present:,} carry a qualification array")
 
     # Bucket and tally.
     real_in_qualification = []  # SSN in qualification.identifier.value
@@ -132,7 +151,7 @@ def run() -> None:
     WHERE REGEXP_CONTAINS(TO_JSON_STRING(resource), r'\\b\\d{{3}}-\\d{{2}}-\\d{{4}}\\b')
       AND NOT REGEXP_CONTAINS(TO_JSON_STRING(resource), r'\\d{{2}}-\\d{{3}}-\\d{{2}}-\\d{{4}}')
     """
-    org_rows = list(client.query(org_sql).result())
+    org_rows = list(client.query(org_sql, job_config=bq_job_config()).result())
 
     # Per-state confirmed counts.
     state_counter: dict[str, int] = {}
@@ -163,18 +182,39 @@ def run() -> None:
             "nppes_lookup_url": f"https://npiregistry.cms.hhs.gov/provider-view/{r._npi}",
         })
 
-    headline = (
-        f"{len(confirmed)} of {len(pract_rows):,} flagged Practitioner resources "
-        f"in the {RELEASE_DATE} NDH bulk export contain a Social Security Number, "
-        f"independently verifying the 2026-04-30 Washington Post finding. "
-        f"Of those, {len(real_in_qualification)} appear in the "
-        f"qualification[].identifier[].value slot (state-license credential), "
-        f"{len(real_in_given_name)} are embedded in the name[].given[] slot "
-        f"(literally as a name token), and {len(real_in_family_name)} in name[].family. "
-        f"{len(false_positive_phones)} additional matches are international phone-format "
-        f"false positives (e.g. Italy 39-XXX-XX-XXXX), filtered out. "
-        f"{len(org_rows)} Organization resources also carry SSN-pattern strings."
-    )
+    # Two headlines, because zero is a different finding from a count.
+    #
+    # A template written for hits renders "0 of 0 flagged resources contain a
+    # Social Security Number, independently verifying the Washington Post
+    # finding", which reads as a broken script and states the opposite of what
+    # happened. When the scan comes back empty the finding is the remediation,
+    # and the control that proves the scan still works belongs in the headline
+    # rather than buried in the notes.
+    if not confirmed and not org_rows:
+        headline = (
+            f"No Social Security Numbers remain in the {RELEASE_DATE} NDH bulk "
+            f"export. The dashed-SSN pattern matches zero of "
+            f"{total_practitioners:,} Practitioner and zero Organization "
+            f"resources, against 46 confirmed exposures in 2026-04-09 and 41 in "
+            f"2026-05-08. CMS has now removed them rather than partially "
+            f"scrubbing them. The scan is unchanged and still reads the same "
+            f"fields: {qual_present:,} of those Practitioner resources still "
+            f"carry the qualification array the exposures were found in, so the "
+            f"zero is an empty result and not an empty query."
+        )
+    else:
+        headline = (
+            f"{len(confirmed)} of {len(pract_rows):,} flagged Practitioner resources "
+            f"in the {RELEASE_DATE} NDH bulk export contain a Social Security Number, "
+            f"independently verifying the 2026-04-30 Washington Post finding. "
+            f"Of those, {len(real_in_qualification)} appear in the "
+            f"qualification[].identifier[].value slot (state-license credential), "
+            f"{len(real_in_given_name)} are embedded in the name[].given[] slot "
+            f"(literally as a name token), and {len(real_in_family_name)} in name[].family. "
+            f"{len(false_positive_phones)} additional matches are international phone-format "
+            f"false positives (e.g. Italy 39-XXX-XX-XXXX), filtered out. "
+            f"{len(org_rows)} Organization resources also carry SSN-pattern strings."
+        )
 
     public_payload = {
         "slug": "pii-exposure-ndh",
@@ -187,7 +227,7 @@ def run() -> None:
         "commit_sha": get_commit_sha(),
         "headline": headline,
         "numerator": len(confirmed),
-        "denominator": 7_441_211,  # total NDH Practitioner resources
+        "denominator": total_practitioners,  # live Practitioner row count
         "chart": {
             "type": "bar",
             "unit": "count",

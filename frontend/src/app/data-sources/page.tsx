@@ -88,7 +88,7 @@ const AUDIT_SOURCES: SourceRow[] = [
   {
     name: 'CMS National Provider Directory (NPD)',
     url: 'https://directory.cms.gov/',
-    description: 'FHIR R4 NDJSON bulk export of the federal provider directory: 6 resource types, 21.7M resources at the 2026-05-08 release (down from 27.2M in April).',
+    description: 'FHIR R4 NDJSON bulk export of the federal provider directory: 8 resource types, 32.5M resources at the 2026-08-20 release (up from 21.7M in May; HealthcareService and InsurancePlan are new).',
     license: 'Public domain (US federal government work)',
     cadence: 'Periodic: most recent release pinned per audit',
     ainpiStatus: 'ingested',
@@ -103,7 +103,7 @@ const AUDIT_SOURCES: SourceRow[] = [
     cadence: 'Quarterly',
     ainpiStatus: 'ingested',
     mappedTo: 'H12: taxonomy validity. Companion to H13.',
-    notes: 'Source: bigquery-public-data.nppes.healthcare_provider_taxonomy_code_set_170. Pinned to v17.0 for the 2026-05-08 audit.',
+    notes: 'Source: bigquery-public-data.nppes.healthcare_provider_taxonomy_code_set_170. Pinned to v17.0 for the 2026-08-20 audit.',
   },
   {
     name: 'CMS Medicare Provider and Supplier Taxonomy Crosswalk',

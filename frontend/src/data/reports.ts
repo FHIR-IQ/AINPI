@@ -180,21 +180,21 @@ export const REPORTS: ReportOption[] = [
     version: 'va-briefing-2026-05-08',
     title: 'Virginia case study (worked example)',
     description:
-      'Worked example using public federal data. 42 CFR § 455.436 framework + Virginia-specific data quality (130K practitioners, 99.50% NPPES match, 4,090 deactivated-still-listed, 40.8% organization NPI duplicate rate) + the 131-NPI Virginia federally-excluded cohort + H26 4-payer cross-reference + Stage B roadmap.',
+      'Worked example using public federal data. 42 CFR § 455.436 framework + Virginia-specific data quality (130K practitioners, 99.50% NPPES match, 4,090 deactivated-still-listed, 40.8% organization NPI duplicate rate) + the 131-NPI Virginia federally-excluded cohort + H26 4-payer cross-reference + Stage B roadmap. Measured against the 2026-05-08 release; the cohort is 106 NPIs at 2026-08-20.',
     format: 'web',
     url: '/briefings/va',
     length: '~10 min read',
   },
   {
     id: 'va-cohort-csv',
-    version: 'va-cohort-critical-2026-05-08',
+    version: 'va-cohort-critical-2026-08-20',
     title: 'Virginia federally-excluded cohort (CSV)',
     description:
-      'The 131 VA-resident NPIs in the H23 critical bucket (LEIE or SAM excluded, score ≥ 1.5) with per-NPI verification URLs (LEIE / SAM / NPPES). Public file derived from public federal sources.',
+      'The 106 VA-resident NPIs in the H23 critical bucket (LEIE or SAM excluded, score ≥ 1.5) with per-NPI verification URLs (LEIE / SAM / NPPES). Public file derived from public federal sources. Was 131 at the 2026-05-08 release.',
     format: 'csv',
     url: '/api/v1/states/va-cohort-critical.csv',
     badge: 'UPDATED',
-    length: '131 rows',
+    length: '106 rows',
   },
 ];
 

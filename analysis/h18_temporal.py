@@ -16,7 +16,11 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-05-08"
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 RESOURCE_TYPES = ["practitioner", "organization", "location", "endpoint",
                   "practitioner_role", "organization_affiliation"]
 
@@ -37,7 +41,7 @@ def run() -> None:
         GROUP BY ts
         ORDER BY n DESC
         """
-        rows = list(client.query(sql).result())
+        rows = list(client.query(sql, job_config=bq_job_config()).result())
         distinct_count = len(rows)
         type_total = sum(r.n for r in rows if r.ts is not None)
         on_release_day = sum(r.n for r in rows if r.ts and r.ts.startswith(RELEASE_DATE))

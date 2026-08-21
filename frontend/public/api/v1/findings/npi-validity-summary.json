@@ -1,0 +1,14 @@
+{
+  "slug": "npi-validity-summary",
+  "of": "npi-taxonomy-correctness",
+  "hypotheses": [
+    "H9"
+  ],
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:28:45+00:00",
+  "npis_checked": 11607656,
+  "npis_flagged": 4,
+  "invalid_structure": 4,
+  "luhn_fail": 0,
+  "missing_npi": 168247
+}

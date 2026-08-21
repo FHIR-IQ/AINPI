@@ -5,12 +5,12 @@
     "H24"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-17T09:51:33+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T11:40:18+00:00",
   "methodology_version": "0.3.0",
-  "commit_sha": "bda819c",
-  "headline": "8,660 of 8,841 actively-excluded LEIE NPIs (97.95%) appear in the 2026-05-08 NDH bulk export \u2014 8,252 as Practitioner resources, 1,090 as Organization resources (9,342 total NDH appearances; some excluded individuals are listed as both a Practitioner and an Organization). Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
-  "numerator": 9342,
+  "commit_sha": "51bf5d5",
+  "headline": "7,855 of 8,841 actively-excluded LEIE NPIs (88.85%) appear in the 2026-08-20 NDH bulk export \u2014 7,326 as Practitioner resources, 2,709 as Organization resources (10,035 total NDH appearances; some excluded individuals are listed as both a Practitioner and an Organization). Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
+  "numerator": 10035,
   "denominator": 8841,
   "chart": {
     "type": "bar",
@@ -18,43 +18,43 @@
     "data": [
       {
         "label": "UNKNOWN",
-        "value": 1191
+        "value": 1263
       },
       {
         "label": "CA",
-        "value": 953
+        "value": 832
       },
       {
         "label": "FL",
-        "value": 639
+        "value": 537
       },
       {
         "label": "NY",
-        "value": 594
+        "value": 508
       },
       {
         "label": "TX",
-        "value": 417
+        "value": 377
       },
       {
         "label": "MI",
-        "value": 337
+        "value": 291
       },
       {
         "label": "PA",
-        "value": 336
+        "value": 286
       },
       {
         "label": "OH",
-        "value": 315
+        "value": 283
       },
       {
         "label": "IL",
-        "value": 215
+        "value": 203
       },
       {
         "label": "TN",
-        "value": 178
+        "value": 152
       }
     ]
   },

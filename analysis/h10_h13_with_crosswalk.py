@@ -43,9 +43,36 @@ NDH_DATASET = "cms_npd"
 NPPES_DATASET = "bigquery-public-data.nppes"
 NUCC_TABLE = f"{NPPES_DATASET}.healthcare_provider_taxonomy_code_set_170"
 CROSSWALK_TABLE = f"{NDH_PROJECT}.{NDH_DATASET}.medicare_taxonomy_crosswalk"
+
+# The provider-taxonomy code system URL is not stable across NDH releases, and
+# when it moves, a parser matching one literal returns zero rows and does not
+# error. Two have shipped:
+#
+#   http://nucc.org/provider-taxonomy                                  to 2026-05-08
+#   http://hl7.org/fhir/us/ndh/ValueSet/HealthcareIndividualTaxonomyVS 2026-08-20 on
+#
+# The second is a ValueSet canonical used where FHIR requires a CodeSystem
+# canonical, so it is also a conformance defect worth reporting upstream. The
+# codes carried under it are ordinary NUCC codes and 99.86% of them validate
+# against the NUCC set, so the only thing broken is the label.
+#
+# Matching on the literal cost this finding a whole release: the first Aug run
+# reported 0 practitioners with a taxonomy code and 0% specialty validity, both
+# of which are artifacts of the match, not measurements. Any new code reading
+# these codings must use this predicate.
+TAXONOMY_SYSTEMS = (
+    "http://nucc.org/provider-taxonomy",
+    "http://hl7.org/fhir/us/ndh/ValueSet/HealthcareIndividualTaxonomyVS",
+)
+
+
+def tax_sys(col: str) -> str:
+    """SQL predicate: `col` holds a recognized provider-taxonomy system URL."""
+    joined = ", ".join(f"'{u}'" for u in TAXONOMY_SYSTEMS)
+    return f"{col} IN ({joined})"
 CROSSWALK_CSV = "/tmp/crosswalk.csv"
 CROSSWALK_RELEASE = "2025-10"
-RELEASE_DATE = "2026-05-08"
+from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 
 
 def load_crosswalk(client: bigquery.Client) -> int:
@@ -177,17 +204,24 @@ def main() -> None:
     )
     SELECT
       COUNT(*) AS total_practitioners,
-      COUNTIF(sys = 'http://nucc.org/provider-taxonomy' AND code IS NOT NULL) AS with_nucc_code,
-      COUNTIF(sys = 'http://nucc.org/provider-taxonomy'
+      COUNTIF({tax_sys('sys')} AND code IS NOT NULL) AS with_nucc_code,
+      COUNTIF({tax_sys('sys')}
               AND code IN (SELECT code FROM `{NUCC_TABLE}`)) AS valid_in_nucc_v17,
-      COUNTIF(sys = 'http://nucc.org/provider-taxonomy'
-              AND code IN (SELECT nucc_taxonomy_code FROM `{CROSSWALK_TABLE}`)) AS valid_in_crosswalk
+      COUNTIF({tax_sys('sys')}
+              AND code IN (SELECT nucc_taxonomy_code FROM `{CROSSWALK_TABLE}`)) AS valid_in_crosswalk,
+      COUNTIF(sys = 'http://nucc.org/provider-taxonomy') AS sys_nucc_codesystem,
+      COUNTIF(sys = 'http://hl7.org/fhir/us/ndh/ValueSet/HealthcareIndividualTaxonomyVS')
+        AS sys_ndh_valueset
     FROM quals
     """)
     print(f"  {h12_nucc}")
 
     # NDH PractitionerRole._specialty_code: strip '14-' prefix if present, then match crosswalk
     print("\nH12b — Medicare Specialty codes on PractitionerRole.specialty")
+    # PractitionerRole.specialty carried CMS Medicare specialty codes ('14-50')
+    # through the 2026-05-08 release and NUCC taxonomy codes ('207R00000X')
+    # from 2026-08-20. Both code sets are checked so the switch is visible as a
+    # number rather than as a silent collapse to zero.
     h12_cms = scalar(c, f"""
     WITH roles AS (
       SELECT
@@ -199,6 +233,7 @@ def main() -> None:
     )
     SELECT
       COUNT(*) AS total_role_specialties,
+      COUNTIF(raw_code IN (SELECT code FROM `{NUCC_TABLE}`)) AS valid_in_nucc,
       COUNTIF(stripped IN (SELECT medicare_specialty_code FROM `{CROSSWALK_TABLE}`)) AS valid_in_crosswalk,
       COUNT(DISTINCT raw_code) AS distinct_raw_codes,
       COUNT(DISTINCT stripped) AS distinct_stripped_codes
@@ -216,45 +251,59 @@ def main() -> None:
     )
     SELECT raw_code, COUNT(*) AS n
     FROM roles
-    WHERE stripped NOT IN (SELECT medicare_specialty_code FROM `{CROSSWALK_TABLE}`)
+    WHERE raw_code NOT IN (SELECT code FROM `{NUCC_TABLE}`)
+      AND stripped NOT IN (SELECT medicare_specialty_code FROM `{CROSSWALK_TABLE}`)
     GROUP BY raw_code ORDER BY n DESC LIMIT 10
     """)
     if invalid_top:
         print(f"  Top invalid raw codes: {[(r.raw_code, r.n) for r in invalid_top]}")
 
     # ---------------- H13 — internal + external NDH consistency via crosswalk ----------------
-    print("\nH13 — internal NDH consistency: Role CMS code → crosswalk NUCC set ∩ Practitioner.qualification NUCC")
+    # H13 internal consistency.
+    #
+    # Through 2026-05-08 the two sides spoke different code systems, so the
+    # only way to compare them was through the CMS crosswalk: role carried a
+    # Medicare specialty code, qualification carried NUCC. From 2026-08-20
+    # both carry NUCC, so they can be compared directly, and the crosswalk
+    # path now returns zero by construction rather than by disagreement.
+    # Both are computed: `direct_match` is the live number, and
+    # `crosswalk_consistent` is kept so a re-run against an archived release
+    # still produces the figure this finding published before.
+    print("\nH13 — internal NDH consistency: PractitionerRole.specialty vs Practitioner.qualification")
     h13_internal = scalar(c, f"""
-    WITH prac_with_npi AS (
-      SELECT _id, _npi,
-        JSON_EXTRACT_SCALAR(resource, '$.qualification[0].code.coding[0].system') AS ndh_qual_sys,
-        JSON_EXTRACT_SCALAR(resource, '$.qualification[0].code.coding[0].code')   AS ndh_qual_code
-      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner`
-      WHERE _npi IS NOT NULL
+    WITH quals AS (
+      SELECT
+        p._id,
+        ARRAY_AGG(DISTINCT JSON_EXTRACT_SCALAR(qq, '$.code.coding[0].code')
+                  IGNORE NULLS) AS qual_codes
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner` p,
+           UNNEST(JSON_EXTRACT_ARRAY(p.resource, '$.qualification')) qq
+      WHERE p._npi IS NOT NULL
+        AND {tax_sys("JSON_EXTRACT_SCALAR(qq, '$.code.coding[0].system')")}
+      GROUP BY p._id
     ),
     roles AS (
       SELECT pr._practitioner_id,
+             pr._specialty_code AS role_code,
              REGEXP_REPLACE(pr._specialty_code, r'^\\d+-', '') AS medicare_code
       FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner_role` pr
       WHERE pr._specialty_code IS NOT NULL
     ),
     joined AS (
       SELECT
-        p._id,
-        p.ndh_qual_code,
-        r.medicare_code,
+        q._id,
+        r.role_code IN UNNEST(q.qual_codes) AS direct_match,
         EXISTS (
           SELECT 1 FROM `{CROSSWALK_TABLE}` cw
           WHERE cw.medicare_specialty_code = r.medicare_code
-            AND cw.nucc_taxonomy_code = p.ndh_qual_code
+            AND cw.nucc_taxonomy_code IN UNNEST(q.qual_codes)
         ) AS internal_crosswalk_match
-      FROM prac_with_npi p
-      JOIN roles r ON r._practitioner_id = CONCAT('Practitioner/', p._id)
-      WHERE p.ndh_qual_sys = 'http://nucc.org/provider-taxonomy'
-        AND p.ndh_qual_code IS NOT NULL
+      FROM quals q
+      JOIN roles r ON r._practitioner_id = CONCAT('Practitioner/', q._id)
     )
     SELECT
       COUNT(*) AS total_pairs,
+      COUNTIF(direct_match) AS direct_match,
       COUNTIF(internal_crosswalk_match) AS crosswalk_consistent,
       COUNT(DISTINCT _id) AS distinct_practitioners
     FROM joined
@@ -275,7 +324,7 @@ def main() -> None:
         JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].code') AS ndh_code
       FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner` p
       WHERE p._npi IS NOT NULL
-        AND JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].system') = 'http://nucc.org/provider-taxonomy'
+        AND {tax_sys("JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].system')")}
         AND JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].code') IS NOT NULL
     ),
     joined AS (
@@ -382,7 +431,8 @@ def main() -> None:
         UPPER(TRIM(o._name)) AS raw_ndh,
         UPPER(TRIM(n.provider_organization_name_legal_business_name)) AS raw_nppes,
         norm_org(o._name) AS norm_ndh,
-        norm_org(n.provider_organization_name_legal_business_name) AS norm_nppes
+        norm_org(n.provider_organization_name_legal_business_name) AS norm_nppes,
+        COALESCE(NULLIF(JSON_VALUE(o.resource, '$.type[0].text'), ''), '(none)') AS ty
       FROM `{NDH_PROJECT}.{NDH_DATASET}.organization` o
       JOIN `{NPPES_DATASET}.npi_raw` n ON n.npi = o._npi AND n.entity_type_code = 2
       WHERE o._npi IS NOT NULL AND o._name IS NOT NULL
@@ -393,7 +443,14 @@ def main() -> None:
       COUNTIF(norm_ndh = norm_nppes) AS normalized_match,
       COUNTIF(jw(norm_ndh, norm_nppes) >= 0.95) AS jw_95,
       COUNTIF(jw(norm_ndh, norm_nppes) >= 0.85) AS jw_85,
-      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.80) AS jw_80
+      COUNTIF(jw(norm_ndh, norm_nppes) >= 0.80) AS jw_80,
+      -- Half the Organization file is `ein` tax records. Splitting the match
+      -- rate by record type answers whether a drop is real or compositional,
+      -- rather than leaving it to be guessed at.
+      COUNTIF(ty = 'ein') AS ein_total,
+      COUNTIF(ty = 'ein' AND raw_ndh = raw_nppes) AS ein_exact,
+      COUNTIF(ty != 'ein') AS prov_total,
+      COUNTIF(ty != 'ein' AND raw_ndh = raw_nppes) AS prov_exact
     FROM pairs
     """)
     print(f"  {h11_org_refined}")
@@ -469,9 +526,6 @@ def main() -> None:
         print(f"    {r.medicare_code} ({(r.role_desc or '?')[:40]:40}) → {r.ndh_qual_code} ({(r.nucc_desc or '?')[:40]:40}) n={r.n:,}")
 
     # ---------------- Compose finding ----------------
-    h9_total = 10856109
-    h9_failures = 3
-
     h10_pct_ok     = pct(h10["ok"], h10["total"])
     h10_deact_pct  = pct(h10["deactivated"], h10["total"])
     h10_ghost_pct  = pct(h10["not_enumerated"], h10["total"])
@@ -483,7 +537,7 @@ def main() -> None:
     h11o_jw85_pct      = pct(h11_org_refined["jw_85"], h11_org_refined["total"])
     h12_nucc_valid     = pct(h12_nucc["valid_in_nucc_v17"], h12_nucc["with_nucc_code"])
     h12_cms_valid      = pct(h12_cms["valid_in_crosswalk"], h12_cms["total_role_specialties"])
-    h13_int_pct            = pct(h13_internal["crosswalk_consistent"], h13_internal["total_pairs"])
+    h13_int_pct            = pct(h13_internal["direct_match"], h13_internal["total_pairs"])
     h13_ext_slot1_pct      = pct(h13_external["agree_slot_1"], h13_external["total"])
     h13_ext_any_pct        = pct(h13_external["agree_any_slot"], h13_external["total"])
     h13_ext_true_prim_pct  = pct(h13_external["agree_true_primary"], h13_external["total"])
@@ -492,19 +546,20 @@ def main() -> None:
     slot1_not_primary_pct  = pct(h13_external["slot_1_not_true_primary"], h13_external["total"])
     no_primary_flag_pct    = pct(h13_external["nppes_no_primary_flag"], h13_external["total"])
 
+    h12_role_nucc_valid = pct(h12_cms["valid_in_nucc"], h12_cms["total_role_specialties"])
     headline = (
         f"{h10_pct_ok:.2f}% of {n(h10['total'])/1_000_000:.1f}M NDH NPIs clear NPPES "
-        f"(0.79% ghost, 3.49% deactivated). "
+        f"({h10_ghost_pct:.2f}% not enumerated, {h10_deact_pct:.2f}% deactivated). "
         f"Practitioner name agreement: {h11p_pct:.1f}% exact → {h11p_norm_pct:.1f}% normalized → "
         f"{h11p_jw85_pct:.1f}% Jaro-Winkler ≥0.85. "
         f"Organization name: {h11o_pct:.1f}% exact → {h11o_norm_pct:.1f}% normalized → "
-        f"{h11o_jw85_pct:.1f}% Jaro-Winkler ≥0.85 (closes the 44-point exact-match gap to "
-        f"{100 - h11o_jw85_pct:.0f}pp). "
-        f"NDH carries NUCC on Practitioner.qualification (99.83% valid) AND "
-        f"Medicare Specialty codes on PractitionerRole.specialty ({h12_cms_valid:.2f}% valid "
-        f"against the CMS-published crosswalk). "
-        f"Internal cross-system consistency: {h13_int_pct:.1f}% of "
-        f"{n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs agree via the crosswalk. "
+        f"{h11o_jw85_pct:.1f}% Jaro-Winkler ≥0.85. "
+        f"Both taxonomy fields now speak NUCC: Practitioner.qualification is "
+        f"{h12_nucc_valid:.2f}% valid against NUCC v17.0, and PractitionerRole.specialty, "
+        f"which carried CMS Medicare specialty codes through 2026-05-08, is "
+        f"{h12_role_nucc_valid:.2f}% valid NUCC and {h12_cms_valid:.2f}% valid Medicare. "
+        f"They agree with each other on {h13_int_pct:.1f}% of "
+        f"{n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs. "
         f"External NUCC agreement NDH↔NPPES: {h13_ext_true_prim_pct:.1f}% match NPPES's "
         f"switch='Y' TRUE primary, {h13_ext_any_pct:.1f}% match any of the 15 slots, "
         f"{h13_ext_sec_only_pct:.1f}% match only a secondary. Slot_1 is NOT always the "
@@ -567,8 +622,36 @@ def main() -> None:
         f"{n(h12_cms['total_role_specialties']):,} valid in the crosswalk). "
         f"NDH PractitionerRole._specialty_code carries a leading 'NN-' prefix "
         f"(e.g. '14-50'); stripping recovers the canonical Medicare code. "
+        f"H10's not-enumerated count is bounded by the reference data, not by "
+        f"the directory. bigquery-public-data.nppes.npi_raw is a static "
+        f"snapshot whose newest enumeration is 2026-02-07, so every provider "
+        f"the NDH lists who was enumerated after that date is counted as "
+        f"missing from NPPES. Eight sampled at random resolved to real, active "
+        f"providers in the live NPPES registry with enumeration dates between "
+        f"February and June 2026. Read the figure as an upper bound on ghost "
+        f"NPIs, and see the high-risk-cohort finding, which scores this signal "
+        f"at zero for the same reason. "
+        f"Organization name agreement is reported over the whole Organization "
+        f"file, half of which is now `ein` tax records rather than provider "
+        f"organizations. Split by record type, exact match is "
+        f"{pct(h11_org_refined['prov_exact'], h11_org_refined['prov_total']):.1f}% on "
+        f"provider records and "
+        f"{pct(h11_org_refined['ein_exact'], h11_org_refined['ein_total']):.1f}% on ein "
+        f"records, so the fall from the 2026-05-08 figure is not explained by the "
+        f"ein rows being dragged in. "
+        f"Source-side schema change at 2026-08-20: the provider-taxonomy coding "
+        f"system moved from 'http://nucc.org/provider-taxonomy' to "
+        f"'http://hl7.org/fhir/us/ndh/ValueSet/HealthcareIndividualTaxonomyVS' "
+        f"({n(h12_nucc['sys_ndh_valueset']):,} qualification codings under the new URL, "
+        f"{n(h12_nucc['sys_nucc_codesystem']):,} under the old one), and "
+        f"PractitionerRole.specialty moved from CMS Medicare specialty codes to NUCC "
+        f"taxonomy codes. The new URL is a ValueSet canonical in a field FHIR defines "
+        f"as a CodeSystem canonical. A parser matching the old literal returns zero "
+        f"rows and does not error, which is how the first run of this script against "
+        f"the August release reported 0% specialty validity. "
         f"H13 internal: {n(h13_internal['total_pairs']):,} Practitioner↔Role pairs, "
-        f"{n(h13_internal['crosswalk_consistent']):,} agree via crosswalk. "
+        f"{n(h13_internal['direct_match']):,} where the role specialty code is also one "
+        f"of the practitioner's qualification codes. "
         f"H13 confusion matrix — top 10 inconsistent (Medicare → qualification-NUCC) pairs: "
         f"{confusion_block}. "
         f"H13 external (v3 — switch-aware): NPPES stores 15 (taxonomy_code, "
@@ -610,7 +693,7 @@ def main() -> None:
         "methodology_version": "0.6.0-draft",
         "commit_sha": "pending",
         "headline": headline,
-        "numerator": n(h13_internal["crosswalk_consistent"]),
+        "numerator": n(h13_internal["direct_match"]),
         "denominator": n(h13_internal["total_pairs"]),
         "chart": {"type": "bar", "unit": "percent", "data": chart_data},
         "notes": notes,

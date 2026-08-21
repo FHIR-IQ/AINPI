@@ -19,6 +19,10 @@ from google.cloud import bigquery
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 METHODOLOGY_VERSION = "0.6.0-draft"
 
@@ -50,7 +54,7 @@ def main() -> None:
       COUNTIF(_connection_type = 'hl7-fhir-rest' AND _status = 'active') AS active_fhir_rest
     FROM `{PROJECT}.{DATASET}.endpoint`
     """
-    rows = list(client.query(sql).result())
+    rows = list(client.query(sql, job_config=bq_job_config()).result())
     r = rows[0]
     total = int(r.total)
     fhir_rest = int(r.fhir_rest_total)

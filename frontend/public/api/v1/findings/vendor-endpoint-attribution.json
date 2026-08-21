@@ -5,109 +5,104 @@
     "H51"
   ],
   "status": "published",
-  "release_date": "2026-05-08",
-  "generated_at": "2026-08-16T15:47:55+00:00",
+  "release_date": "2026-08-20",
+  "generated_at": "2026-08-21T12:37:43+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "23f370c",
-  "headline": "Vendors already publish the organization behind 71,857 of the 94,737 NDH FHIR endpoints that carry no owner (76%). 30,366 of those resolve to an NPI directly. Ingesting files that are public today would move endpoint attribution from 16.9% to 79.9%.",
-  "numerator": 71857,
-  "denominator": 94737,
+  "commit_sha": "51bf5d5",
+  "headline": "Vendors already publish the organization behind 61,432 of the 94,711 NDH FHIR endpoints that carry no owner (65%). 29,745 of those resolve to an NPI directly. Ingesting files that are public today would move endpoint attribution from 14.7% to 70.0%.",
+  "numerator": 61432,
+  "denominator": 94711,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
         "label": "athenahealth",
-        "value": 25977
+        "value": 25699
       },
       {
         "label": "eClinicalWorks",
-        "value": 16801
+        "value": 16611
       },
       {
         "label": "Office Ally",
-        "value": 13090
+        "value": 12886
       },
       {
         "label": "Practice Fusion",
-        "value": 5902
-      },
-      {
-        "label": "PointClickCare",
-        "value": 4015
-      },
-      {
-        "label": "Veradigm",
-        "value": 3901
+        "value": 5432
       },
       {
         "label": "Oracle Health",
-        "value": 1709
+        "value": 377
+      },
+      {
+        "label": "Veradigm",
+        "value": 308
       },
       {
         "label": "Epic (User-access Brands)",
-        "value": 462
+        "value": 119
       }
     ]
   },
   "notes": "The gap measured in H50 is not absent data. It is data published by the EHR vendors and not carried into the directory. PointClickCare publishes 4,015 endpoints and the NDH holds exactly 4,015 of them at zero attribution, so the name was available at ingest time.\n\nTwo publication styles. Most vendors ship a flat HTI-1 service base URL list, one endpoint per practice. Epic ships a SMART User-access Brands bundle, where care sites hang off a parent brand and the endpoint sits on the brand. The hierarchy is the more useful shape: naming one endpoint names every care site beneath it.\n\nReference resolution decides whether this works at all. Epic references bundle entries by urn:uuid rather than Type/id and links care sites by partOf. A naive resolver returns zero matches, which is the same failure that produced a wrong published claim about Epic in H47. Both reference styles and both link directions are handled, and the hierarchy rollup is asserted against the organization count so a double-count cannot pass silently.\n\nEvery figure is a floor. These are the largest publishers; ONC's Lantern catalogues over 200 sources. Matching is exact on a normalized URL, so a vendor that spells a path differently from the NDH is counted as a miss.\n\nThe vendor files carry visible test data. Practice Fusion publishes an organization named 'Practice Fusion Test Test account' and an address line reading 'Helloooo This is important'. Anything built on these needs a junk filter, or it republishes that as fact.",
   "detail": {
-    "ndh_fhir_rest_endpoints": 114071,
-    "attributed_today": 19334,
-    "attribution_rate_today_pct": 16.9,
-    "attribution_rate_after_fill_pct": 79.9,
-    "unattributed": 94737,
-    "fillable_from_vendor_files": 71857,
-    "fillable_with_npi": 30366,
-    "published_url_org_pairs": 68207,
+    "ndh_fhir_rest_endpoints": 110973,
+    "attributed_today": 16262,
+    "attribution_rate_today_pct": 14.7,
+    "attribution_rate_after_fill_pct": 70.0,
+    "unattributed": 94711,
+    "fillable_from_vendor_files": 61432,
+    "fillable_with_npi": 29745,
+    "published_url_org_pairs": 68888,
     "by_vendor": {
-      "eClinicalWorks": 16801,
-      "Oracle Health": 1709,
-      "athenahealth": 25977,
-      "Veradigm": 3901,
-      "Practice Fusion": 5902,
-      "Office Ally": 13090,
-      "PointClickCare": 4015,
-      "Epic (User-access Brands)": 462
+      "athenahealth": 25699,
+      "Oracle Health": 377,
+      "Veradigm": 308,
+      "Epic (User-access Brands)": 119,
+      "Office Ally": 12886,
+      "eClinicalWorks": 16611,
+      "Practice Fusion": 5432
     },
     "vendors": [
       {
         "vendor": "Epic (User-access Brands)",
         "url_org_pairs": 764,
-        "with_npi": 384,
-        "organizations": 96190,
-        "orgs_reachable_via_hierarchy": 96190,
+        "with_npi": 385,
+        "organizations": 96365,
+        "orgs_reachable_via_hierarchy": 96365,
         "publishes_brand_hierarchy": true
       },
       {
         "vendor": "athenahealth",
-        "url_org_pairs": 23087,
-        "with_npi": 23083,
-        "organizations": 124547,
+        "url_org_pairs": 23115,
+        "with_npi": 23111,
+        "organizations": 124792,
         "orgs_reachable_via_hierarchy": 0,
         "publishes_brand_hierarchy": false
       },
       {
         "vendor": "eClinicalWorks",
-        "url_org_pairs": 17238,
+        "url_org_pairs": 17266,
         "with_npi": 0,
-        "organizations": 17238,
+        "organizations": 17266,
         "orgs_reachable_via_hierarchy": 0,
         "publishes_brand_hierarchy": false
       },
       {
         "vendor": "Office Ally",
-        "url_org_pairs": 13257,
+        "url_org_pairs": 13873,
         "with_npi": 0,
-        "organizations": 13257,
+        "organizations": 13873,
         "orgs_reachable_via_hierarchy": 0,
         "publishes_brand_hierarchy": false
       },
       {
         "vendor": "Practice Fusion",
-        "url_org_pairs": 6810,
-        "with_npi": 4704,
-        "organizations": 3405,
+        "url_org_pairs": 6822,
+        "with_npi": 4730,
+        "organizations": 3411,
         "orgs_reachable_via_hierarchy": 0,
         "publishes_brand_hierarchy": false
       },
@@ -121,17 +116,17 @@
       },
       {
         "vendor": "Veradigm",
-        "url_org_pairs": 1713,
+        "url_org_pairs": 1714,
         "with_npi": 4,
-        "organizations": 1713,
+        "organizations": 1714,
         "orgs_reachable_via_hierarchy": 0,
         "publishes_brand_hierarchy": false
       },
       {
         "vendor": "Oracle Health",
-        "url_org_pairs": 1323,
-        "with_npi": 29,
-        "organizations": 1323,
+        "url_org_pairs": 1319,
+        "with_npi": 653,
+        "organizations": 1319,
         "orgs_reachable_via_hierarchy": 0,
         "publishes_brand_hierarchy": false
       }

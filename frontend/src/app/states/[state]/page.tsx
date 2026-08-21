@@ -10,6 +10,7 @@ import {
   loadFindingDetail,
   loadStateConnectivity,
 } from '@/lib/load-api-v1';
+import { CURRENT_RELEASE } from '@/lib/release';
 
 export const dynamic = 'force-static';
 
@@ -172,7 +173,7 @@ export default function StatePage({ params }: { params: { state: string } }) {
           State-scoped view of the AINPI audit of the CMS National Provider Directory.
         </p>
         <p className="text-sm text-gray-500 mb-6 font-mono">
-          NPD release {data?.release_date ?? '2026-05-08'}
+          NPD release {data?.release_date ?? CURRENT_RELEASE}
           {' · '}methodology v{data?.methodology_version ?? '0.1.0-draft'}
           {data?.commit_sha && data.commit_sha !== 'pending' && (
             <>
@@ -510,7 +511,7 @@ export default function StatePage({ params }: { params: { state: string } }) {
                 >
                   CMS National Provider Directory
                 </a>
-                , release {data?.release_date ?? '2026-05-08'}
+                , release {data?.release_date ?? CURRENT_RELEASE}
               </dd>
             </div>
             <div>
@@ -564,7 +565,7 @@ export default function StatePage({ params }: { params: { state: string } }) {
             </li>
             <li>
               <strong>Real-time attestation logs.</strong> NPD bulk files are
-              periodic exports (current pinned release: {data?.release_date ?? '2026-05-08'}).
+              periodic exports (current pinned release: {data?.release_date ?? CURRENT_RELEASE}).
             </li>
             <li>
               <strong>Managed care plan internal directories.</strong> AINPI
