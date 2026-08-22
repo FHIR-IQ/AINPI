@@ -274,14 +274,19 @@ export async function GET(req: NextRequest) {
     const limit = await enforceRateLimit(req, { shape });
     if (!limit.ok) return limit.response!;
 
+    // `type` defaults to 'all', so a bare ?npi= lands here rather than in the
+    // search path below. This is the branch the MCP lookup_npi tool uses and
+    // the one an agent will hit hardest, so it needs the headers too: without
+    // them a client has no way to see its remaining budget before a 429.
     if (params.npi && params.type === 'all') {
       const profile = await getProviderProfile(params.npi);
-      return NextResponse.json({
+      const profileRes = NextResponse.json({
         type: 'provider_profile',
         data: profile,
         source: 'cms_npd',
         release_date: CURRENT_RELEASE,
       });
+      return withRateLimitHeaders(profileRes, limit);
     }
 
     const results: Record<string, unknown[]> = {};

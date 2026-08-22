@@ -441,6 +441,91 @@ export default function DeveloperPage() {
           </p>
         </section>
 
+        {/* Rate limits */}
+        <section className="mb-14" id="rate-limits">
+          <h2 className="text-xl font-semibold text-gray-900 mb-3">Rate limits</h2>
+          <p className="text-sm text-gray-700 max-w-3xl mb-4">
+            Everything under <code className="font-mono text-xs">/api/v1/</code> is
+            static JSON on a CDN. It is free, needs no key, and is not rate
+            limited, because serving it costs us nothing. The limits below apply
+            only to the live query routes, which run a BigQuery scan per call.
+          </p>
+          <p className="text-sm text-gray-700 max-w-3xl mb-4">
+            Quota is counted in <strong>cost units</strong> rather than requests,
+            because the calls are not the same size. Looking up an NPI hits a
+            clustered column and scans about 0.04&nbsp;GB. Searching a state and
+            city scans about 9.7&nbsp;GB. Charging both as &ldquo;one
+            request&rdquo; would price a bulk extraction like a lookup.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="text-sm w-full max-w-3xl border-collapse mb-4">
+              <thead>
+                <tr className="border-b-2 border-gray-300 text-left">
+                  <th className="py-2 pr-4 font-medium text-gray-600">Tier</th>
+                  <th className="py-2 pr-4 font-medium text-gray-600 text-right">Units/min</th>
+                  <th className="py-2 pr-4 font-medium text-gray-600 text-right">Units/day</th>
+                  <th className="py-2 font-medium text-gray-600">How to get it</th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                <tr className="border-b border-gray-200">
+                  <td className="py-2 pr-4">Anonymous</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">120</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">2,000</td>
+                  <td className="py-2">No key needed.</td>
+                </tr>
+                <tr className="border-b border-gray-200">
+                  <td className="py-2 pr-4">Free key</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">600</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">20,000</td>
+                  <td className="py-2">
+                    Email{' '}
+                    <a href="mailto:gene@fhiriq.com" className="text-primary-600 hover:underline">
+                      gene@fhiriq.com
+                    </a>{' '}
+                    with what you are building.
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-200">
+                  <td className="py-2 pr-4">Partner</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">3,000</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">100,000</td>
+                  <td className="py-2">Named integrations. Ask.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="text-sm text-gray-700 max-w-3xl mb-4">
+            Cost per call, measured rather than estimated:{' '}
+            <strong>NPI lookup 2 units</strong>, <strong>name search 25</strong>,{' '}
+            <strong>state or city search 27</strong>. Pass{' '}
+            <code className="font-mono text-xs">?scope=primary</code> on a
+            geography search to match only the provider&rsquo;s first listed
+            address for 25 units instead of 27. Be aware of what that costs you:
+            1,095,257 practitioners (14.85%) list addresses in more than one
+            state, and the cheap path will not find them outside their first one.
+          </p>
+          <p className="text-sm text-gray-700 max-w-3xl mb-4">
+            Send a key as{' '}
+            <code className="font-mono text-xs">Authorization: Bearer &lt;key&gt;</code> or{' '}
+            <code className="font-mono text-xs">X-API-Key: &lt;key&gt;</code>. Every
+            response carries{' '}
+            <code className="font-mono text-xs">x-ratelimit-tier</code>,{' '}
+            <code className="font-mono text-xs">x-ratelimit-cost-units</code> and{' '}
+            <code className="font-mono text-xs">x-ratelimit-limit-day</code>. Over
+            the limit returns <code className="font-mono text-xs">429</code> with a{' '}
+            <code className="font-mono text-xs">Retry-After</code> header.
+          </p>
+          <p className="text-sm text-gray-700 max-w-3xl">
+            There is also a daily ceiling across all callers. If it trips,
+            anonymous requests to the live query routes get{' '}
+            <code className="font-mono text-xs">503</code> while keyed partners
+            keep working, so one stranger&rsquo;s scraper cannot take out someone
+            else&rsquo;s integration. The static contract under{' '}
+            <code className="font-mono text-xs">/api/v1/</code> is never affected.
+          </p>
+        </section>
+
         {/* Use rights */}
         <section className="mb-14">
           <h2 className="text-xl font-semibold text-gray-900 mb-3">License + use rights</h2>
