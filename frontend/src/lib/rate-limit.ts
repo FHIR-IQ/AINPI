@@ -69,6 +69,8 @@ export const ROUTE_COST: Record<string, number> = {
   'npd/search:name': 25, //      $0.0025  full column scan
   'npd/search:geo': 27, //       $0.0027  flattened state/city
   'npd/search:org': 25,
+  // 0.26 GB measured; the box prefilter is the query, not an optimisation.
+  'npd/geo-search': 17,
   'npd/state-detail': 40,
   'npd/relationships': 40,
   'npd/org-analysis': 40,
