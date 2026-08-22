@@ -1,0 +1,309 @@
+{
+ "state": "VI",
+ "release_date": "2026-08-20",
+ "generated_at": "2026-08-22T15:06:12+00:00",
+ "methodology_version": "0.7.3-draft",
+ "totals": {
+  "practitioners": 499,
+  "with_role": 172,
+  "orgs_provider": 329,
+  "orgs_ein": 438,
+  "orgs_other": 1,
+  "locations": 486,
+  "with_coords": 473
+ },
+ "zips_with_out_of_state_county": 0,
+ "by_category": [
+  {
+   "category": "behavioral-health",
+   "practitioners": 124,
+   "with_role": 30,
+   "role_pct": 24.2
+  },
+  {
+   "category": "rehab-therapy",
+   "practitioners": 108,
+   "with_role": 37,
+   "role_pct": 34.3
+  },
+  {
+   "category": "physician",
+   "practitioners": 78,
+   "with_role": 41,
+   "role_pct": 52.6
+  },
+  {
+   "category": "advanced-practice",
+   "practitioners": 48,
+   "with_role": 26,
+   "role_pct": 54.2
+  },
+  {
+   "category": "nursing",
+   "practitioners": 25,
+   "with_role": 4,
+   "role_pct": 16.0
+  },
+  {
+   "category": "dental",
+   "practitioners": 22,
+   "with_role": 7,
+   "role_pct": 31.8
+  },
+  {
+   "category": "other-clinical",
+   "practitioners": 20,
+   "with_role": 5,
+   "role_pct": 25.0
+  },
+  {
+   "category": "pharmacy",
+   "practitioners": 17,
+   "with_role": 5,
+   "role_pct": 29.4
+  },
+  {
+   "category": "chiropractic",
+   "practitioners": 17,
+   "with_role": 6,
+   "role_pct": 35.3
+  },
+  {
+   "category": "dietary",
+   "practitioners": 14,
+   "with_role": 4,
+   "role_pct": 28.6
+  },
+  {
+   "category": "eye-vision",
+   "practitioners": 6,
+   "with_role": 2,
+   "role_pct": 33.3
+  },
+  {
+   "category": "student",
+   "practitioners": 6,
+   "with_role": 0,
+   "role_pct": 0.0
+  },
+  {
+   "category": "group",
+   "practitioners": 5,
+   "with_role": 3,
+   "role_pct": 60.0
+  },
+  {
+   "category": "facility",
+   "practitioners": 4,
+   "with_role": 1,
+   "role_pct": 25.0
+  },
+  {
+   "category": "support",
+   "practitioners": 2,
+   "with_role": 0,
+   "role_pct": 0.0
+  },
+  {
+   "category": "podiatry",
+   "practitioners": 2,
+   "with_role": 1,
+   "role_pct": 50.0
+  },
+  {
+   "category": "supplier",
+   "practitioners": 1,
+   "with_role": 0,
+   "role_pct": 0.0
+  }
+ ],
+ "counties": [
+  {
+   "county_fips": null,
+   "county": "(county unknown)",
+   "zip_count": 8,
+   "practitioners": 499,
+   "with_role": 172,
+   "role_pct": 34.5,
+   "orgs_provider": 329,
+   "orgs_ein": 438,
+   "by_category": {
+    "behavioral-health": 124,
+    "rehab-therapy": 108,
+    "physician": 78,
+    "advanced-practice": 48,
+    "nursing": 25,
+    "dental": 22,
+    "other-clinical": 20,
+    "pharmacy": 17
+   }
+  }
+ ],
+ "zips": [
+  {
+   "zip": "00802",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 225,
+   "with_role": 75,
+   "orgs_provider": 170,
+   "orgs_ein": 229,
+   "locations": 276,
+   "lat": 18.33916,
+   "lng": -64.89003,
+   "by_category": {
+    "rehab-therapy": 57,
+    "physician": 45,
+    "behavioral-health": 34,
+    "advanced-practice": 15,
+    "dental": 13,
+    "nursing": 12,
+    "dietary": 10,
+    "other-clinical": 9,
+    "pharmacy": 8,
+    "chiropractic": 8,
+    "eye-vision": 5,
+    "facility": 4,
+    "group": 2,
+    "support": 1,
+    "podiatry": 1,
+    "supplier": 1
+   }
+  },
+  {
+   "zip": "00803",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": null,
+   "lng": null,
+   "by_category": {
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "00820",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 221,
+   "with_role": 74,
+   "orgs_provider": 132,
+   "orgs_ein": 176,
+   "locations": 176,
+   "lat": 17.73421,
+   "lng": -64.73469,
+   "by_category": {
+    "behavioral-health": 85,
+    "rehab-therapy": 44,
+    "physician": 28,
+    "advanced-practice": 25,
+    "nursing": 10,
+    "other-clinical": 8,
+    "chiropractic": 5,
+    "pharmacy": 4,
+    "dietary": 3,
+    "dental": 3,
+    "group": 2,
+    "support": 1,
+    "eye-vision": 1,
+    "student": 1,
+    "podiatry": 1
+   }
+  },
+  {
+   "zip": "00821",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": null,
+   "lng": null,
+   "by_category": {}
+  },
+  {
+   "zip": "00830",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 7,
+   "with_role": 2,
+   "orgs_provider": 4,
+   "orgs_ein": 5,
+   "locations": 4,
+   "lat": 18.33136,
+   "lng": -64.79431,
+   "by_category": {
+    "rehab-therapy": 2,
+    "chiropractic": 2,
+    "other-clinical": 1,
+    "nursing": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "00840",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 40,
+   "with_role": 18,
+   "orgs_provider": 17,
+   "orgs_ein": 19,
+   "locations": 21,
+   "lat": 17.70913,
+   "lng": -64.87986,
+   "by_category": {
+    "advanced-practice": 7,
+    "dental": 6,
+    "student": 5,
+    "behavioral-health": 5,
+    "rehab-therapy": 4,
+    "physician": 4,
+    "pharmacy": 3,
+    "chiropractic": 2,
+    "nursing": 2,
+    "group": 1,
+    "dietary": 1
+   }
+  },
+  {
+   "zip": "00850",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 4,
+   "with_role": 3,
+   "orgs_provider": 5,
+   "orgs_ein": 8,
+   "locations": 6,
+   "lat": 17.7335,
+   "lng": -64.77495,
+   "by_category": {
+    "advanced-practice": 1,
+    "other-clinical": 1,
+    "physician": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "00851",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": null,
+   "lng": null,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  }
+ ],
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+}

@@ -57,6 +57,15 @@ const nextConfig = {
       '*': [
         'public/api/v1/findings/**',
         'public/api/v1/states/**',
+        // The explorer payload is 51 state files of county and ZIP detail.
+        // A new directory under public/api/v1/ is NOT covered by the two
+        // entries above, and the tracer would bundle the whole thing into
+        // every serverless function. Safe to exclude for the same reason as
+        // the others: the loaders read these at build time for static pages,
+        // and at runtime Vercel's CDN serves the JSON without touching a
+        // lambda. If a route ever needs one of these at request time, this
+        // needs rethinking rather than deleting.
+        'public/api/v1/explorer/**',
       ],
     },
   },

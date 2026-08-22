@@ -12,6 +12,7 @@ import type { ApiV1Stats, ApiV1Finding, ApiV1StateFindings } from './api-v1-type
 import type { LandscapePayload } from './landscape-types';
 import type { PaRuralPayload } from '@/lib/pa-rural-types';
 import type { ConnectivityPayload } from '@/lib/connectivity-types';
+import type { ExplorerIndex, ExplorerStatePayload } from '@/lib/explorer-types';
 
 const PUBLIC_API_ROOT = path.join(process.cwd(), 'public', 'api', 'v1');
 
@@ -344,4 +345,44 @@ export function allConnectivityStates(): string[] {
   } catch {
     return [];
   }
+}
+
+/**
+ * Value explorer payloads. Build-time filesystem reads only.
+ *
+ * `public/api/v1/explorer/**` is excluded from lambda bundles in
+ * next.config.js, so these MUST NOT be called from a route that runs at
+ * request time: the file will not be there. Every explorer route is
+ * force-static with dynamicParams=false for that reason and for the /npi cost
+ * reason, which is that a crawlable drill-down over live BigQuery is an
+ * unbounded bill.
+ */
+export function loadExplorerIndex(): ExplorerIndex | null {
+  try {
+    const raw = fs.readFileSync(
+      path.join(PUBLIC_API_ROOT, 'explorer', 'index.json'),
+      'utf8',
+    );
+    return JSON.parse(raw) as ExplorerIndex;
+  } catch {
+    return null;
+  }
+}
+
+export function loadExplorerState(state: string): ExplorerStatePayload | null {
+  try {
+    const raw = fs.readFileSync(
+      path.join(PUBLIC_API_ROOT, 'explorer', `${state.toLowerCase()}.json`),
+      'utf8',
+    );
+    return JSON.parse(raw) as ExplorerStatePayload;
+  } catch {
+    return null;
+  }
+}
+
+/** State codes with a published explorer slice. Drives generateStaticParams. */
+export function allExplorerStates(): string[] {
+  const idx = loadExplorerIndex();
+  return idx ? idx.states.map((s) => s.state.toLowerCase()) : [];
 }

@@ -1,0 +1,3538 @@
+{
+ "state": "ND",
+ "release_date": "2026-08-20",
+ "generated_at": "2026-08-22T15:06:12+00:00",
+ "methodology_version": "0.7.3-draft",
+ "totals": {
+  "practitioners": 18668,
+  "with_role": 6980,
+  "orgs_provider": 3524,
+  "orgs_ein": 3659,
+  "orgs_other": 0,
+  "locations": 5064,
+  "with_coords": 4970
+ },
+ "zips_with_out_of_state_county": 0,
+ "by_category": [
+  {
+   "category": "behavioral-health",
+   "practitioners": 3743,
+   "with_role": 916,
+   "role_pct": 24.5
+  },
+  {
+   "category": "rehab-therapy",
+   "practitioners": 3237,
+   "with_role": 845,
+   "role_pct": 26.1
+  },
+  {
+   "category": "physician",
+   "practitioners": 3190,
+   "with_role": 2317,
+   "role_pct": 72.6
+  },
+  {
+   "category": "advanced-practice",
+   "practitioners": 2250,
+   "with_role": 1831,
+   "role_pct": 81.4
+  },
+  {
+   "category": "other-clinical",
+   "practitioners": 1817,
+   "with_role": 100,
+   "role_pct": 5.5
+  },
+  {
+   "category": "nursing",
+   "practitioners": 1406,
+   "with_role": 155,
+   "role_pct": 11.0
+  },
+  {
+   "category": "pharmacy",
+   "practitioners": 834,
+   "with_role": 49,
+   "role_pct": 5.9
+  },
+  {
+   "category": "dental",
+   "practitioners": 539,
+   "with_role": 87,
+   "role_pct": 16.1
+  },
+  {
+   "category": "chiropractic",
+   "practitioners": 467,
+   "with_role": 308,
+   "role_pct": 66.0
+  },
+  {
+   "category": "dietary",
+   "practitioners": 322,
+   "with_role": 89,
+   "role_pct": 27.6
+  },
+  {
+   "category": "support",
+   "practitioners": 260,
+   "with_role": 4,
+   "role_pct": 1.5
+  },
+  {
+   "category": "eye-vision",
+   "practitioners": 235,
+   "with_role": 165,
+   "role_pct": 70.2
+  },
+  {
+   "category": "student",
+   "practitioners": 171,
+   "with_role": 12,
+   "role_pct": 7.0
+  },
+  {
+   "category": "group",
+   "practitioners": 94,
+   "with_role": 61,
+   "role_pct": 64.9
+  },
+  {
+   "category": "podiatry",
+   "practitioners": 44,
+   "with_role": 33,
+   "role_pct": 75.0
+  },
+  {
+   "category": "no-taxonomy",
+   "practitioners": 19,
+   "with_role": 1,
+   "role_pct": 5.3
+  },
+  {
+   "category": "facility",
+   "practitioners": 13,
+   "with_role": 3,
+   "role_pct": 23.1
+  },
+  {
+   "category": "agency",
+   "practitioners": 13,
+   "with_role": 2,
+   "role_pct": 15.4
+  },
+  {
+   "category": "transport",
+   "practitioners": 8,
+   "with_role": 2,
+   "role_pct": 25.0
+  },
+  {
+   "category": "emergency-medical",
+   "practitioners": 5,
+   "with_role": 0,
+   "role_pct": 0.0
+  },
+  {
+   "category": "supplier",
+   "practitioners": 1,
+   "with_role": 0,
+   "role_pct": 0.0
+  }
+ ],
+ "counties": [
+  {
+   "county_fips": "38017",
+   "county": "Cass County",
+   "zip_count": 11,
+   "practitioners": 7159,
+   "with_role": 2654,
+   "role_pct": 37.1,
+   "orgs_provider": 1042,
+   "orgs_ein": 1101,
+   "by_category": {
+    "behavioral-health": 1572,
+    "physician": 1183,
+    "rehab-therapy": 1119,
+    "advanced-practice": 825,
+    "nursing": 710,
+    "other-clinical": 639,
+    "pharmacy": 305,
+    "dietary": 170
+   }
+  },
+  {
+   "county_fips": "38015",
+   "county": "Burleigh County",
+   "zip_count": 4,
+   "practitioners": 2765,
+   "with_role": 892,
+   "role_pct": 32.3,
+   "orgs_provider": 578,
+   "orgs_ein": 649,
+   "by_category": {
+    "behavioral-health": 615,
+    "rehab-therapy": 520,
+    "physician": 317,
+    "advanced-practice": 311,
+    "other-clinical": 291,
+    "nursing": 162,
+    "pharmacy": 150,
+    "chiropractic": 110
+   }
+  },
+  {
+   "county_fips": "38101",
+   "county": "Ward County",
+   "zip_count": 9,
+   "practitioners": 2449,
+   "with_role": 1183,
+   "role_pct": 48.3,
+   "orgs_provider": 331,
+   "orgs_ein": 343,
+   "by_category": {
+    "physician": 730,
+    "behavioral-health": 467,
+    "advanced-practice": 363,
+    "rehab-therapy": 312,
+    "other-clinical": 231,
+    "nursing": 81,
+    "pharmacy": 60,
+    "dental": 59
+   }
+  },
+  {
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "zip_count": 7,
+   "practitioners": 2164,
+   "with_role": 820,
+   "role_pct": 37.9,
+   "orgs_provider": 342,
+   "orgs_ein": 368,
+   "by_category": {
+    "physician": 487,
+    "rehab-therapy": 444,
+    "behavioral-health": 436,
+    "advanced-practice": 243,
+    "other-clinical": 161,
+    "pharmacy": 87,
+    "nursing": 75,
+    "dental": 62
+   }
+  },
+  {
+   "county_fips": "38089",
+   "county": "Stark County",
+   "zip_count": 2,
+   "practitioners": 616,
+   "with_role": 179,
+   "role_pct": 29.1,
+   "orgs_provider": 143,
+   "orgs_ein": 166,
+   "by_category": {
+    "rehab-therapy": 139,
+    "behavioral-health": 126,
+    "other-clinical": 106,
+    "advanced-practice": 56,
+    "physician": 39,
+    "pharmacy": 34,
+    "chiropractic": 34,
+    "nursing": 29
+   }
+  },
+  {
+   "county_fips": "38071",
+   "county": "Ramsey County",
+   "zip_count": 1,
+   "practitioners": 608,
+   "with_role": 272,
+   "role_pct": 44.7,
+   "orgs_provider": 92,
+   "orgs_ein": 89,
+   "by_category": {
+    "physician": 122,
+    "rehab-therapy": 121,
+    "other-clinical": 112,
+    "behavioral-health": 95,
+    "advanced-practice": 87,
+    "nursing": 15,
+    "pharmacy": 13,
+    "dietary": 11
+   }
+  },
+  {
+   "county_fips": "38105",
+   "county": "Williams County",
+   "zip_count": 2,
+   "practitioners": 523,
+   "with_role": 172,
+   "role_pct": 32.9,
+   "orgs_provider": 151,
+   "orgs_ein": 142,
+   "by_category": {
+    "rehab-therapy": 99,
+    "behavioral-health": 98,
+    "physician": 79,
+    "other-clinical": 70,
+    "advanced-practice": 62,
+    "nursing": 31,
+    "pharmacy": 26,
+    "dental": 22
+   }
+  },
+  {
+   "county_fips": "38059",
+   "county": "Morton County",
+   "zip_count": 4,
+   "practitioners": 507,
+   "with_role": 130,
+   "role_pct": 25.6,
+   "orgs_provider": 101,
+   "orgs_ein": 102,
+   "by_category": {
+    "nursing": 204,
+    "rehab-therapy": 153,
+    "behavioral-health": 28,
+    "other-clinical": 27,
+    "advanced-practice": 18,
+    "pharmacy": 17,
+    "eye-vision": 17,
+    "physician": 15
+   }
+  },
+  {
+   "county_fips": "38093",
+   "county": "Stutsman County",
+   "zip_count": 5,
+   "practitioners": 488,
+   "with_role": 94,
+   "role_pct": 19.3,
+   "orgs_provider": 98,
+   "orgs_ein": 87,
+   "by_category": {
+    "behavioral-health": 126,
+    "rehab-therapy": 111,
+    "other-clinical": 95,
+    "nursing": 30,
+    "advanced-practice": 24,
+    "pharmacy": 22,
+    "support": 18,
+    "dental": 17
+   }
+  },
+  {
+   "county_fips": "38079",
+   "county": "Rolette County",
+   "zip_count": 2,
+   "practitioners": 177,
+   "with_role": 81,
+   "role_pct": 45.8,
+   "orgs_provider": 22,
+   "orgs_ein": 15,
+   "by_category": {
+    "physician": 55,
+    "pharmacy": 25,
+    "advanced-practice": 20,
+    "behavioral-health": 19,
+    "nursing": 19,
+    "dental": 11,
+    "other-clinical": 7,
+    "rehab-therapy": 5
+   }
+  },
+  {
+   "county_fips": "38099",
+   "county": "Walsh County",
+   "zip_count": 4,
+   "practitioners": 116,
+   "with_role": 35,
+   "role_pct": 30.2,
+   "orgs_provider": 32,
+   "orgs_ein": 30,
+   "by_category": {
+    "rehab-therapy": 35,
+    "advanced-practice": 16,
+    "pharmacy": 14,
+    "physician": 13,
+    "behavioral-health": 13,
+    "dental": 7,
+    "dietary": 5,
+    "other-clinical": 5
+   }
+  },
+  {
+   "county_fips": "38001",
+   "county": "Adams County",
+   "zip_count": 2,
+   "practitioners": 112,
+   "with_role": 78,
+   "role_pct": 69.6,
+   "orgs_provider": 28,
+   "orgs_ein": 19,
+   "by_category": {
+    "advanced-practice": 43,
+    "physician": 41,
+    "rehab-therapy": 12,
+    "behavioral-health": 6,
+    "nursing": 4,
+    "dental": 1,
+    "chiropractic": 1,
+    "dietary": 1
+   }
+  },
+  {
+   "county_fips": "38061",
+   "county": "Mountrail County",
+   "zip_count": 2,
+   "practitioners": 108,
+   "with_role": 44,
+   "role_pct": 40.7,
+   "orgs_provider": 35,
+   "orgs_ein": 22,
+   "by_category": {
+    "nursing": 32,
+    "advanced-practice": 17,
+    "physician": 15,
+    "behavioral-health": 9,
+    "other-clinical": 7,
+    "dental": 7,
+    "dietary": 4,
+    "eye-vision": 4
+   }
+  },
+  {
+   "county_fips": "38003",
+   "county": "Barnes County",
+   "zip_count": 2,
+   "practitioners": 102,
+   "with_role": 28,
+   "role_pct": 27.5,
+   "orgs_provider": 59,
+   "orgs_ein": 52,
+   "by_category": {
+    "rehab-therapy": 22,
+    "behavioral-health": 20,
+    "pharmacy": 12,
+    "physician": 9,
+    "eye-vision": 7,
+    "advanced-practice": 7,
+    "dental": 6,
+    "other-clinical": 6
+   }
+  },
+  {
+   "county_fips": "38077",
+   "county": "Richland County",
+   "zip_count": 3,
+   "practitioners": 91,
+   "with_role": 23,
+   "role_pct": 25.3,
+   "orgs_provider": 50,
+   "orgs_ein": 45,
+   "by_category": {
+    "rehab-therapy": 18,
+    "other-clinical": 16,
+    "dental": 13,
+    "behavioral-health": 11,
+    "chiropractic": 10,
+    "advanced-practice": 7,
+    "pharmacy": 6,
+    "nursing": 4
+   }
+  },
+  {
+   "county_fips": "38057",
+   "county": "Mercer County",
+   "zip_count": 2,
+   "practitioners": 82,
+   "with_role": 45,
+   "role_pct": 54.9,
+   "orgs_provider": 30,
+   "orgs_ein": 36,
+   "by_category": {
+    "advanced-practice": 23,
+    "rehab-therapy": 14,
+    "physician": 10,
+    "behavioral-health": 9,
+    "chiropractic": 5,
+    "eye-vision": 5,
+    "pharmacy": 5,
+    "other-clinical": 3
+   }
+  },
+  {
+   "county_fips": "38083",
+   "county": "Sheridan County",
+   "zip_count": 2,
+   "practitioners": 60,
+   "with_role": 47,
+   "role_pct": 78.3,
+   "orgs_provider": 8,
+   "orgs_ein": 6,
+   "by_category": {
+    "advanced-practice": 36,
+    "physician": 9,
+    "behavioral-health": 8,
+    "dental": 3,
+    "chiropractic": 2,
+    "group": 1,
+    "nursing": 1
+   }
+  },
+  {
+   "county_fips": "38069",
+   "county": "Pierce County",
+   "zip_count": 1,
+   "practitioners": 57,
+   "with_role": 22,
+   "role_pct": 38.6,
+   "orgs_provider": 30,
+   "orgs_ein": 26,
+   "by_category": {
+    "rehab-therapy": 18,
+    "advanced-practice": 13,
+    "pharmacy": 8,
+    "physician": 6,
+    "dental": 5,
+    "chiropractic": 3,
+    "dietary": 1,
+    "eye-vision": 1
+   }
+  },
+  {
+   "county_fips": "38055",
+   "county": "McLean County",
+   "zip_count": 5,
+   "practitioners": 55,
+   "with_role": 35,
+   "role_pct": 63.6,
+   "orgs_provider": 26,
+   "orgs_ein": 19,
+   "by_category": {
+    "advanced-practice": 21,
+    "physician": 8,
+    "rehab-therapy": 7,
+    "other-clinical": 7,
+    "eye-vision": 3,
+    "chiropractic": 3,
+    "behavioral-health": 3,
+    "dental": 2
+   }
+  },
+  {
+   "county_fips": "38021",
+   "county": "Dickey County",
+   "zip_count": 2,
+   "practitioners": 54,
+   "with_role": 39,
+   "role_pct": 72.2,
+   "orgs_provider": 27,
+   "orgs_ein": 25,
+   "by_category": {
+    "physician": 23,
+    "advanced-practice": 18,
+    "pharmacy": 5,
+    "rehab-therapy": 2,
+    "chiropractic": 2,
+    "eye-vision": 1,
+    "dental": 1,
+    "dietary": 1
+   }
+  },
+  {
+   "county_fips": "38009",
+   "county": "Bottineau County",
+   "zip_count": 2,
+   "practitioners": 35,
+   "with_role": 9,
+   "role_pct": 25.7,
+   "orgs_provider": 33,
+   "orgs_ein": 37,
+   "by_category": {
+    "behavioral-health": 8,
+    "rehab-therapy": 7,
+    "other-clinical": 5,
+    "advanced-practice": 4,
+    "pharmacy": 2,
+    "physician": 2,
+    "support": 2,
+    "chiropractic": 1
+   }
+  },
+  {
+   "county_fips": "38053",
+   "county": "McKenzie County",
+   "zip_count": 1,
+   "practitioners": 34,
+   "with_role": 11,
+   "role_pct": 32.4,
+   "orgs_provider": 20,
+   "orgs_ein": 18,
+   "by_category": {
+    "other-clinical": 9,
+    "behavioral-health": 7,
+    "chiropractic": 6,
+    "advanced-practice": 4,
+    "rehab-therapy": 4,
+    "eye-vision": 2,
+    "dental": 1,
+    "physician": 1
+   }
+  },
+  {
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "zip_count": 6,
+   "practitioners": 32,
+   "with_role": 13,
+   "role_pct": 40.6,
+   "orgs_provider": 28,
+   "orgs_ein": 28,
+   "by_category": {
+    "advanced-practice": 6,
+    "pharmacy": 6,
+    "physician": 4,
+    "chiropractic": 3,
+    "eye-vision": 3,
+    "behavioral-health": 3,
+    "other-clinical": 3,
+    "rehab-therapy": 2
+   }
+  },
+  {
+   "county_fips": "38039",
+   "county": "Griggs County",
+   "zip_count": 1,
+   "practitioners": 31,
+   "with_role": 22,
+   "role_pct": 71.0,
+   "orgs_provider": 14,
+   "orgs_ein": 14,
+   "by_category": {
+    "advanced-practice": 19,
+    "physician": 4,
+    "pharmacy": 3,
+    "dietary": 2,
+    "behavioral-health": 1,
+    "chiropractic": 1,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "county_fips": "38103",
+   "county": "Wells County",
+   "zip_count": 3,
+   "practitioners": 29,
+   "with_role": 9,
+   "role_pct": 31.0,
+   "orgs_provider": 29,
+   "orgs_ein": 38,
+   "by_category": {
+    "rehab-therapy": 8,
+    "physician": 4,
+    "dental": 3,
+    "pharmacy": 3,
+    "behavioral-health": 3,
+    "advanced-practice": 2,
+    "chiropractic": 2,
+    "other-clinical": 2
+   }
+  },
+  {
+   "county_fips": "38031",
+   "county": "Foster County",
+   "zip_count": 1,
+   "practitioners": 27,
+   "with_role": 7,
+   "role_pct": 25.9,
+   "orgs_provider": 23,
+   "orgs_ein": 29,
+   "by_category": {
+    "rehab-therapy": 8,
+    "pharmacy": 5,
+    "dental": 5,
+    "behavioral-health": 2,
+    "eye-vision": 2,
+    "support": 1,
+    "emergency-medical": 1,
+    "other-clinical": 1
+   }
+  },
+  {
+   "county_fips": "38081",
+   "county": "Sargent County",
+   "zip_count": 2,
+   "practitioners": 25,
+   "with_role": 10,
+   "role_pct": 40.0,
+   "orgs_provider": 7,
+   "orgs_ein": 8,
+   "by_category": {
+    "rehab-therapy": 23,
+    "behavioral-health": 1,
+    "chiropractic": 1
+   }
+  },
+  {
+   "county_fips": "38033",
+   "county": "Golden Valley County",
+   "zip_count": 1,
+   "practitioners": 22,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "by_category": {
+    "behavioral-health": 19,
+    "other-clinical": 3
+   }
+  },
+  {
+   "county_fips": "38037",
+   "county": "Grant County",
+   "zip_count": 2,
+   "practitioners": 20,
+   "with_role": 1,
+   "role_pct": 5.0,
+   "orgs_provider": 6,
+   "orgs_ein": 5,
+   "by_category": {
+    "behavioral-health": 20
+   }
+  },
+  {
+   "county_fips": "38097",
+   "county": "Traill County",
+   "zip_count": 4,
+   "practitioners": 19,
+   "with_role": 1,
+   "role_pct": 5.3,
+   "orgs_provider": 12,
+   "orgs_ein": 13,
+   "by_category": {
+    "rehab-therapy": 12,
+    "pharmacy": 3,
+    "chiropractic": 1,
+    "dental": 1,
+    "behavioral-health": 1,
+    "other-clinical": 1
+   }
+  },
+  {
+   "county_fips": "38027",
+   "county": "Eddy County",
+   "zip_count": 1,
+   "practitioners": 17,
+   "with_role": 6,
+   "role_pct": 35.3,
+   "orgs_provider": 18,
+   "orgs_ein": 15,
+   "by_category": {
+    "rehab-therapy": 5,
+    "dental": 3,
+    "chiropractic": 3,
+    "pharmacy": 2,
+    "other-clinical": 2,
+    "behavioral-health": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "county_fips": "38019",
+   "county": "Cavalier County",
+   "zip_count": 3,
+   "practitioners": 13,
+   "with_role": 4,
+   "role_pct": 30.8,
+   "orgs_provider": 16,
+   "orgs_ein": 17,
+   "by_category": {
+    "pharmacy": 3,
+    "chiropractic": 2,
+    "dietary": 2,
+    "rehab-therapy": 2,
+    "behavioral-health": 1,
+    "advanced-practice": 1,
+    "other-clinical": 1,
+    "eye-vision": 1
+   }
+  },
+  {
+   "county_fips": null,
+   "county": "(county unknown)",
+   "zip_count": 7,
+   "practitioners": 8,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 3,
+   "orgs_ein": 3,
+   "by_category": {
+    "pharmacy": 7,
+    "physician": 1
+   }
+  },
+  {
+   "county_fips": "38047",
+   "county": "Logan County",
+   "zip_count": 1,
+   "practitioners": 8,
+   "with_role": 2,
+   "role_pct": 25.0,
+   "orgs_provider": 7,
+   "orgs_ein": 8,
+   "by_category": {
+    "rehab-therapy": 3,
+    "other-clinical": 2,
+    "behavioral-health": 1,
+    "chiropractic": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "county_fips": "38011",
+   "county": "Bowman County",
+   "zip_count": 1,
+   "practitioners": 8,
+   "with_role": 2,
+   "role_pct": 25.0,
+   "orgs_provider": 10,
+   "orgs_ein": 6,
+   "by_category": {
+    "dental": 2,
+    "advanced-practice": 2,
+    "behavioral-health": 1,
+    "dietary": 1,
+    "pharmacy": 1,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "county_fips": "38041",
+   "county": "Hettinger County",
+   "zip_count": 2,
+   "practitioners": 6,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 7,
+   "orgs_ein": 7,
+   "by_category": {
+    "behavioral-health": 5,
+    "support": 1
+   }
+  },
+  {
+   "county_fips": "38063",
+   "county": "Nelson County",
+   "zip_count": 2,
+   "practitioners": 5,
+   "with_role": 1,
+   "role_pct": 20.0,
+   "orgs_provider": 9,
+   "orgs_ein": 8,
+   "by_category": {
+    "behavioral-health": 2,
+    "physician": 1,
+    "other-clinical": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "county_fips": "38095",
+   "county": "Towner County",
+   "zip_count": 1,
+   "practitioners": 5,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "by_category": {
+    "behavioral-health": 4,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "county_fips": "38049",
+   "county": "McHenry County",
+   "zip_count": 3,
+   "practitioners": 5,
+   "with_role": 1,
+   "role_pct": 20.0,
+   "orgs_provider": 6,
+   "orgs_ein": 9,
+   "by_category": {
+    "rehab-therapy": 3,
+    "other-clinical": 1,
+    "group": 1
+   }
+  },
+  {
+   "county_fips": "38045",
+   "county": "LaMoure County",
+   "zip_count": 2,
+   "practitioners": 4,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 13,
+   "orgs_ein": 9,
+   "by_category": {
+    "rehab-therapy": 2,
+    "pharmacy": 1,
+    "chiropractic": 1
+   }
+  },
+  {
+   "county_fips": "38029",
+   "county": "Emmons County",
+   "zip_count": 2,
+   "practitioners": 4,
+   "with_role": 3,
+   "role_pct": 75.0,
+   "orgs_provider": 4,
+   "orgs_ein": 6,
+   "by_category": {
+    "eye-vision": 2,
+    "facility": 1,
+    "support": 1
+   }
+  },
+  {
+   "county_fips": "38073",
+   "county": "Ransom County",
+   "zip_count": 2,
+   "practitioners": 3,
+   "with_role": 1,
+   "role_pct": 33.3,
+   "orgs_provider": 9,
+   "orgs_ein": 7,
+   "by_category": {
+    "pharmacy": 2,
+    "chiropractic": 1
+   }
+  },
+  {
+   "county_fips": "38025",
+   "county": "Dunn County",
+   "zip_count": 3,
+   "practitioners": 3,
+   "with_role": 1,
+   "role_pct": 33.3,
+   "orgs_provider": 2,
+   "orgs_ein": 3,
+   "by_category": {
+    "nursing": 1,
+    "group": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "county_fips": "38023",
+   "county": "Divide County",
+   "zip_count": 1,
+   "practitioners": 3,
+   "with_role": 1,
+   "role_pct": 33.3,
+   "orgs_provider": 3,
+   "orgs_ein": 3,
+   "by_category": {
+    "behavioral-health": 2,
+    "dietary": 1
+   }
+  },
+  {
+   "county_fips": "38075",
+   "county": "Renville County",
+   "zip_count": 2,
+   "practitioners": 3,
+   "with_role": 1,
+   "role_pct": 33.3,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "by_category": {
+    "chiropractic": 2,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "county_fips": "38091",
+   "county": "Steele County",
+   "zip_count": 1,
+   "practitioners": 2,
+   "with_role": 1,
+   "role_pct": 50.0,
+   "orgs_provider": 5,
+   "orgs_ein": 6,
+   "by_category": {
+    "dietary": 1,
+    "physician": 1
+   }
+  },
+  {
+   "county_fips": "38051",
+   "county": "McIntosh County",
+   "zip_count": 3,
+   "practitioners": 1,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 5,
+   "orgs_ein": 6,
+   "by_category": {
+    "other-clinical": 1
+   }
+  },
+  {
+   "county_fips": "38043",
+   "county": "Kidder County",
+   "zip_count": 1,
+   "practitioners": 1,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 5,
+   "orgs_ein": 7,
+   "by_category": {
+    "chiropractic": 1
+   }
+  },
+  {
+   "county_fips": "38085",
+   "county": "Sioux County",
+   "zip_count": 2,
+   "practitioners": 1,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "county_fips": "38007",
+   "county": "Billings County",
+   "zip_count": 1,
+   "practitioners": 1,
+   "with_role": 0,
+   "role_pct": 0.0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "by_category": {
+    "group": 1
+   }
+  },
+  {
+   "county_fips": "38005",
+   "county": "Benson County",
+   "zip_count": 1,
+   "practitioners": 0,
+   "with_role": 0,
+   "role_pct": null,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "by_category": {}
+  },
+  {
+   "county_fips": "38013",
+   "county": "Burke County",
+   "zip_count": 1,
+   "practitioners": 0,
+   "with_role": 0,
+   "role_pct": null,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "by_category": {}
+  }
+ ],
+ "zips": [
+  {
+   "zip": "58006",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 5,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 47.1117,
+   "lng": -97.21272,
+   "by_category": {
+    "rehab-therapy": 4,
+    "eye-vision": 1
+   }
+  },
+  {
+   "zip": "58012",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 2,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 2,
+   "lat": 46.90301,
+   "lng": -97.21097,
+   "by_category": {
+    "rehab-therapy": 2
+   }
+  },
+  {
+   "zip": "58027",
+   "county_fips": "38073",
+   "county": "Ransom County",
+   "practitioners": 1,
+   "with_role": 1,
+   "orgs_provider": 8,
+   "orgs_ein": 5,
+   "locations": 8,
+   "lat": 46.62479,
+   "lng": -97.60281,
+   "by_category": {
+    "chiropractic": 1
+   }
+  },
+  {
+   "zip": "58032",
+   "county_fips": "38081",
+   "county": "Sargent County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 5,
+   "locations": 5,
+   "lat": 46.10316,
+   "lng": -97.63707,
+   "by_category": {
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58040",
+   "county_fips": "38081",
+   "county": "Sargent County",
+   "practitioners": 24,
+   "with_role": 10,
+   "orgs_provider": 4,
+   "orgs_ein": 3,
+   "locations": 5,
+   "lat": 46.22573,
+   "lng": -97.66297,
+   "by_category": {
+    "rehab-therapy": 23,
+    "chiropractic": 1
+   }
+  },
+  {
+   "zip": "58041",
+   "county_fips": "38077",
+   "county": "Richland County",
+   "practitioners": 4,
+   "with_role": 3,
+   "orgs_provider": 6,
+   "orgs_ein": 7,
+   "locations": 5,
+   "lat": 46.06956,
+   "lng": -96.90397,
+   "by_category": {
+    "chiropractic": 3,
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "58042",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 46.97671,
+   "lng": -96.88049,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58045",
+   "county_fips": "38097",
+   "county": "Traill County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 3,
+   "lat": 47.40204,
+   "lng": -97.06019,
+   "by_category": {
+    "chiropractic": 1
+   }
+  },
+  {
+   "zip": "58047",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 4,
+   "with_role": 1,
+   "orgs_provider": 6,
+   "orgs_ein": 9,
+   "locations": 8,
+   "lat": 46.75415,
+   "lng": -96.89615,
+   "by_category": {
+    "dental": 2,
+    "behavioral-health": 1,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58048",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 2,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 2,
+   "lat": 47.17076,
+   "lng": -97.16417,
+   "by_category": {
+    "rehab-therapy": 2
+   }
+  },
+  {
+   "zip": "58051",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 3,
+   "locations": 3,
+   "lat": 46.6503,
+   "lng": -97.0123,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58054",
+   "county_fips": "38073",
+   "county": "Ransom County",
+   "practitioners": 2,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 6,
+   "lat": 46.4354,
+   "lng": -97.67886,
+   "by_category": {
+    "pharmacy": 2
+   }
+  },
+  {
+   "zip": "58072",
+   "county_fips": "38003",
+   "county": "Barnes County",
+   "practitioners": 101,
+   "with_role": 28,
+   "orgs_provider": 59,
+   "orgs_ein": 52,
+   "locations": 74,
+   "lat": 46.92422,
+   "lng": -98.00671,
+   "by_category": {
+    "rehab-therapy": 21,
+    "behavioral-health": 20,
+    "pharmacy": 12,
+    "physician": 9,
+    "eye-vision": 7,
+    "advanced-practice": 7,
+    "dental": 6,
+    "other-clinical": 6,
+    "chiropractic": 6,
+    "student": 5,
+    "emergency-medical": 1,
+    "dietary": 1
+   }
+  },
+  {
+   "zip": "58075",
+   "county_fips": "38077",
+   "county": "Richland County",
+   "practitioners": 83,
+   "with_role": 20,
+   "orgs_provider": 43,
+   "orgs_ein": 37,
+   "locations": 58,
+   "lat": 46.26943,
+   "lng": -96.61458,
+   "by_category": {
+    "rehab-therapy": 17,
+    "other-clinical": 15,
+    "behavioral-health": 11,
+    "dental": 11,
+    "advanced-practice": 7,
+    "chiropractic": 7,
+    "pharmacy": 5,
+    "nursing": 4,
+    "eye-vision": 2,
+    "support": 2,
+    "group": 1,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58076",
+   "county_fips": "38077",
+   "county": "Richland County",
+   "practitioners": 4,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 46.27183,
+   "lng": -96.60989,
+   "by_category": {
+    "dental": 2,
+    "rehab-therapy": 1,
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "58078",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 2066,
+   "with_role": 1480,
+   "orgs_provider": 85,
+   "orgs_ein": 84,
+   "locations": 158,
+   "lat": 46.85695,
+   "lng": -96.89439,
+   "by_category": {
+    "physician": 814,
+    "advanced-practice": 521,
+    "behavioral-health": 316,
+    "rehab-therapy": 160,
+    "dietary": 85,
+    "nursing": 48,
+    "other-clinical": 39,
+    "pharmacy": 21,
+    "group": 15,
+    "chiropractic": 15,
+    "dental": 13,
+    "eye-vision": 11,
+    "podiatry": 4,
+    "student": 3,
+    "support": 1
+   }
+  },
+  {
+   "zip": "58102",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 1425,
+   "with_role": 124,
+   "orgs_provider": 120,
+   "orgs_ein": 104,
+   "locations": 271,
+   "lat": 46.89056,
+   "lng": -96.79429,
+   "by_category": {
+    "nursing": 472,
+    "rehab-therapy": 180,
+    "behavioral-health": 164,
+    "pharmacy": 156,
+    "other-clinical": 107,
+    "support": 80,
+    "physician": 72,
+    "advanced-practice": 61,
+    "student": 40,
+    "dental": 32,
+    "dietary": 26,
+    "eye-vision": 12,
+    "chiropractic": 12,
+    "group": 8,
+    "no-taxonomy": 1,
+    "facility": 1,
+    "podiatry": 1
+   }
+  },
+  {
+   "zip": "58103",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 2694,
+   "with_role": 784,
+   "orgs_provider": 554,
+   "orgs_ein": 575,
+   "locations": 732,
+   "lat": 46.85747,
+   "lng": -96.82032,
+   "by_category": {
+    "behavioral-health": 803,
+    "other-clinical": 451,
+    "rehab-therapy": 400,
+    "physician": 239,
+    "advanced-practice": 215,
+    "nursing": 167,
+    "pharmacy": 111,
+    "dental": 91,
+    "chiropractic": 61,
+    "dietary": 54,
+    "eye-vision": 42,
+    "support": 22,
+    "student": 13,
+    "group": 8,
+    "agency": 5,
+    "podiatry": 4,
+    "transport": 3,
+    "no-taxonomy": 3,
+    "facility": 2
+   }
+  },
+  {
+   "zip": "58104",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 945,
+   "with_role": 265,
+   "orgs_provider": 272,
+   "orgs_ein": 324,
+   "locations": 385,
+   "lat": 46.82467,
+   "lng": -96.84924,
+   "by_category": {
+    "rehab-therapy": 359,
+    "behavioral-health": 288,
+    "physician": 57,
+    "chiropractic": 48,
+    "other-clinical": 42,
+    "student": 40,
+    "dental": 29,
+    "advanced-practice": 28,
+    "nursing": 23,
+    "pharmacy": 13,
+    "group": 8,
+    "dietary": 5,
+    "no-taxonomy": 3,
+    "support": 1,
+    "eye-vision": 1
+   }
+  },
+  {
+   "zip": "58105",
+   "county_fips": "38017",
+   "county": "Cass County",
+   "practitioners": 14,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 7,
+   "lat": 46.89765,
+   "lng": -96.7995,
+   "by_category": {
+    "rehab-therapy": 9,
+    "pharmacy": 4,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58106",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 46.85878,
+   "lng": -96.83031,
+   "by_category": {}
+  },
+  {
+   "zip": "58121",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 3,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 2,
+   "lat": 46.86171,
+   "lng": -96.86401,
+   "by_category": {
+    "pharmacy": 2,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58122",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 5,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 27,
+   "lat": 46.88431,
+   "lng": -96.78484,
+   "by_category": {
+    "pharmacy": 5
+   }
+  },
+  {
+   "zip": "58125",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 46.85484,
+   "lng": -96.85648,
+   "by_category": {}
+  },
+  {
+   "zip": "58201",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 1882,
+   "with_role": 775,
+   "orgs_provider": 296,
+   "orgs_ein": 324,
+   "locations": 444,
+   "lat": 47.90078,
+   "lng": -97.05495,
+   "by_category": {
+    "behavioral-health": 418,
+    "physician": 405,
+    "rehab-therapy": 393,
+    "advanced-practice": 227,
+    "other-clinical": 138,
+    "pharmacy": 82,
+    "nursing": 72,
+    "dental": 56,
+    "eye-vision": 25,
+    "chiropractic": 23,
+    "dietary": 14,
+    "support": 12,
+    "student": 7,
+    "group": 4,
+    "podiatry": 3,
+    "emergency-medical": 2,
+    "supplier": 1
+   }
+  },
+  {
+   "zip": "58202",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 128,
+   "with_role": 20,
+   "orgs_provider": 15,
+   "orgs_ein": 13,
+   "locations": 42,
+   "lat": 47.92305,
+   "lng": -97.07384,
+   "by_category": {
+    "physician": 51,
+    "rehab-therapy": 27,
+    "student": 23,
+    "advanced-practice": 10,
+    "behavioral-health": 6,
+    "group": 4,
+    "support": 2,
+    "dietary": 2,
+    "nursing": 1,
+    "pharmacy": 1,
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "58203",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 137,
+   "with_role": 18,
+   "orgs_provider": 27,
+   "orgs_ein": 28,
+   "locations": 67,
+   "lat": 47.92786,
+   "lng": -97.06532,
+   "by_category": {
+    "student": 23,
+    "physician": 22,
+    "rehab-therapy": 22,
+    "other-clinical": 22,
+    "support": 13,
+    "behavioral-health": 12,
+    "dental": 6,
+    "chiropractic": 5,
+    "pharmacy": 4,
+    "no-taxonomy": 4,
+    "nursing": 2,
+    "dietary": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58206",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.89208,
+   "lng": -97.06436,
+   "by_category": {}
+  },
+  {
+   "zip": "58208",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 2,
+   "lat": 47.89208,
+   "lng": -97.06436,
+   "by_category": {}
+  },
+  {
+   "zip": "58220",
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "practitioners": 24,
+   "with_role": 7,
+   "orgs_provider": 13,
+   "orgs_ein": 13,
+   "locations": 16,
+   "lat": 48.7925,
+   "lng": -97.62266,
+   "by_category": {
+    "pharmacy": 6,
+    "behavioral-health": 3,
+    "other-clinical": 3,
+    "advanced-practice": 3,
+    "eye-vision": 2,
+    "rehab-therapy": 2,
+    "physician": 2,
+    "chiropractic": 1,
+    "student": 1,
+    "dietary": 1
+   }
+  },
+  {
+   "zip": "58225",
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "practitioners": 5,
+   "with_role": 4,
+   "orgs_provider": 4,
+   "orgs_ein": 2,
+   "locations": 5,
+   "lat": 48.56912,
+   "lng": -97.17873,
+   "by_category": {
+    "chiropractic": 2,
+    "eye-vision": 1,
+    "advanced-practice": 1,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58228",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.91601,
+   "lng": -97.37163,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58230",
+   "county_fips": "38091",
+   "county": "Steele County",
+   "practitioners": 2,
+   "with_role": 1,
+   "orgs_provider": 5,
+   "orgs_ein": 6,
+   "locations": 3,
+   "lat": 47.51225,
+   "lng": -97.83568,
+   "by_category": {
+    "dietary": 1,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58233",
+   "county_fips": "38099",
+   "county": "Walsh County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 48.15133,
+   "lng": -97.5147,
+   "by_category": {}
+  },
+  {
+   "zip": "58237",
+   "county_fips": "38099",
+   "county": "Walsh County",
+   "practitioners": 107,
+   "with_role": 35,
+   "orgs_provider": 30,
+   "orgs_ein": 26,
+   "locations": 43,
+   "lat": 48.41616,
+   "lng": -97.41368,
+   "by_category": {
+    "rehab-therapy": 35,
+    "advanced-practice": 16,
+    "physician": 13,
+    "behavioral-health": 13,
+    "pharmacy": 9,
+    "dietary": 5,
+    "other-clinical": 5,
+    "dental": 4,
+    "nursing": 3,
+    "eye-vision": 2,
+    "student": 1,
+    "facility": 1
+   }
+  },
+  {
+   "zip": "58240",
+   "county_fips": "38097",
+   "county": "Traill County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 2,
+   "lat": 47.63269,
+   "lng": -97.41548,
+   "by_category": {}
+  },
+  {
+   "zip": "58249",
+   "county_fips": "38019",
+   "county": "Cavalier County",
+   "practitioners": 13,
+   "with_role": 4,
+   "orgs_provider": 11,
+   "orgs_ein": 14,
+   "locations": 21,
+   "lat": 48.76103,
+   "lng": -98.36978,
+   "by_category": {
+    "pharmacy": 3,
+    "chiropractic": 2,
+    "dietary": 2,
+    "rehab-therapy": 2,
+    "behavioral-health": 1,
+    "advanced-practice": 1,
+    "other-clinical": 1,
+    "eye-vision": 1
+   }
+  },
+  {
+   "zip": "58251",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 2,
+   "with_role": 1,
+   "orgs_provider": 2,
+   "orgs_ein": 2,
+   "locations": 3,
+   "lat": 47.90779,
+   "lng": -97.62175,
+   "by_category": {
+    "rehab-therapy": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58254",
+   "county_fips": "38063",
+   "county": "Nelson County",
+   "practitioners": 1,
+   "with_role": 1,
+   "orgs_provider": 3,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 47.76871,
+   "lng": -98.17619,
+   "by_category": {
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58256",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 48.0718,
+   "lng": -97.17656,
+   "by_category": {}
+  },
+  {
+   "zip": "58257",
+   "county_fips": "38097",
+   "county": "Traill County",
+   "practitioners": 7,
+   "with_role": 1,
+   "orgs_provider": 9,
+   "orgs_ein": 9,
+   "locations": 18,
+   "lat": 47.50071,
+   "lng": -97.32412,
+   "by_category": {
+    "pharmacy": 3,
+    "rehab-therapy": 3,
+    "dental": 1
+   }
+  },
+  {
+   "zip": "58261",
+   "county_fips": "38099",
+   "county": "Walsh County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 48.28592,
+   "lng": -97.36962,
+   "by_category": {
+    "support": 1
+   }
+  },
+  {
+   "zip": "58262",
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 48.68146,
+   "lng": -97.8641,
+   "by_category": {}
+  },
+  {
+   "zip": "58265",
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 48.97991,
+   "lng": -97.54801,
+   "by_category": {}
+  },
+  {
+   "zip": "58267",
+   "county_fips": "38035",
+   "county": "Grand Forks County",
+   "practitioners": 14,
+   "with_role": 6,
+   "orgs_provider": 2,
+   "orgs_ein": 1,
+   "locations": 2,
+   "lat": 47.74164,
+   "lng": -97.57147,
+   "by_category": {
+    "physician": 9,
+    "advanced-practice": 4,
+    "dietary": 1
+   }
+  },
+  {
+   "zip": "58269",
+   "county_fips": "38019",
+   "county": "Cavalier County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 4,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 48.67018,
+   "lng": -98.14457,
+   "by_category": {}
+  },
+  {
+   "zip": "58270",
+   "county_fips": "38099",
+   "county": "Walsh County",
+   "practitioners": 8,
+   "with_role": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 4,
+   "locations": 3,
+   "lat": 48.39788,
+   "lng": -97.74902,
+   "by_category": {
+    "pharmacy": 5,
+    "dental": 3
+   }
+  },
+  {
+   "zip": "58271",
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 5,
+   "lat": 48.96786,
+   "lng": -97.24391,
+   "by_category": {
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58274",
+   "county_fips": "38097",
+   "county": "Traill County",
+   "practitioners": 11,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 47.50018,
+   "lng": -97.37112,
+   "by_category": {
+    "rehab-therapy": 9,
+    "behavioral-health": 1,
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "58282",
+   "county_fips": "38067",
+   "county": "Pembina County",
+   "practitioners": 2,
+   "with_role": 2,
+   "orgs_provider": 8,
+   "orgs_ein": 9,
+   "locations": 3,
+   "lat": 48.92136,
+   "lng": -97.91884,
+   "by_category": {
+    "advanced-practice": 1,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58301",
+   "county_fips": "38071",
+   "county": "Ramsey County",
+   "practitioners": 608,
+   "with_role": 272,
+   "orgs_provider": 92,
+   "orgs_ein": 89,
+   "locations": 113,
+   "lat": 48.11017,
+   "lng": -98.85971,
+   "by_category": {
+    "physician": 122,
+    "rehab-therapy": 121,
+    "other-clinical": 112,
+    "behavioral-health": 95,
+    "advanced-practice": 87,
+    "nursing": 15,
+    "pharmacy": 13,
+    "dietary": 11,
+    "dental": 10,
+    "chiropractic": 6,
+    "podiatry": 6,
+    "group": 4,
+    "eye-vision": 3,
+    "support": 3
+   }
+  },
+  {
+   "zip": "58316",
+   "county_fips": "38079",
+   "county": "Rolette County",
+   "practitioners": 167,
+   "with_role": 79,
+   "orgs_provider": 19,
+   "orgs_ein": 9,
+   "locations": 13,
+   "lat": 48.83002,
+   "lng": -99.78646,
+   "by_category": {
+    "physician": 55,
+    "pharmacy": 25,
+    "advanced-practice": 20,
+    "nursing": 19,
+    "behavioral-health": 15,
+    "dental": 11,
+    "rehab-therapy": 5,
+    "eye-vision": 5,
+    "other-clinical": 3,
+    "support": 3,
+    "dietary": 3,
+    "podiatry": 1,
+    "group": 1,
+    "emergency-medical": 1
+   }
+  },
+  {
+   "zip": "58318",
+   "county_fips": "38009",
+   "county": "Bottineau County",
+   "practitioners": 33,
+   "with_role": 9,
+   "orgs_provider": 31,
+   "orgs_ein": 33,
+   "locations": 35,
+   "lat": 48.83077,
+   "lng": -100.44189,
+   "by_category": {
+    "behavioral-health": 8,
+    "rehab-therapy": 7,
+    "other-clinical": 5,
+    "advanced-practice": 4,
+    "pharmacy": 2,
+    "physician": 2,
+    "chiropractic": 1,
+    "eye-vision": 1,
+    "dietary": 1,
+    "dental": 1,
+    "nursing": 1
+   }
+  },
+  {
+   "zip": "58324",
+   "county_fips": "38095",
+   "county": "Towner County",
+   "practitioners": 5,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 2,
+   "lat": 48.48954,
+   "lng": -99.19432,
+   "by_category": {
+    "behavioral-health": 4,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58341",
+   "county_fips": "38103",
+   "county": "Wells County",
+   "practitioners": 24,
+   "with_role": 9,
+   "orgs_provider": 24,
+   "orgs_ein": 31,
+   "locations": 24,
+   "lat": 47.77004,
+   "lng": -99.93617,
+   "by_category": {
+    "rehab-therapy": 8,
+    "physician": 4,
+    "dental": 3,
+    "pharmacy": 3,
+    "advanced-practice": 2,
+    "chiropractic": 2,
+    "eye-vision": 1,
+    "dietary": 1
+   }
+  },
+  {
+   "zip": "58344",
+   "county_fips": "38063",
+   "county": "Nelson County",
+   "practitioners": 4,
+   "with_role": 0,
+   "orgs_provider": 6,
+   "orgs_ein": 6,
+   "locations": 5,
+   "lat": 48.04024,
+   "lng": -98.34623,
+   "by_category": {
+    "behavioral-health": 2,
+    "other-clinical": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "58348",
+   "county_fips": "38005",
+   "county": "Benson County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.96011,
+   "lng": -99.52452,
+   "by_category": {}
+  },
+  {
+   "zip": "58352",
+   "county_fips": "38019",
+   "county": "Cavalier County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 48.66953,
+   "lng": -98.8348,
+   "by_category": {}
+  },
+  {
+   "zip": "58356",
+   "county_fips": "38027",
+   "county": "Eddy County",
+   "practitioners": 17,
+   "with_role": 6,
+   "orgs_provider": 18,
+   "orgs_ein": 15,
+   "locations": 18,
+   "lat": 47.68033,
+   "lng": -99.13519,
+   "by_category": {
+    "rehab-therapy": 5,
+    "dental": 3,
+    "chiropractic": 3,
+    "pharmacy": 2,
+    "other-clinical": 2,
+    "behavioral-health": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58367",
+   "county_fips": "38079",
+   "county": "Rolette County",
+   "practitioners": 10,
+   "with_role": 2,
+   "orgs_provider": 3,
+   "orgs_ein": 6,
+   "locations": 4,
+   "lat": 48.85411,
+   "lng": -99.62876,
+   "by_category": {
+    "behavioral-health": 4,
+    "other-clinical": 4,
+    "chiropractic": 1,
+    "support": 1
+   }
+  },
+  {
+   "zip": "58368",
+   "county_fips": "38069",
+   "county": "Pierce County",
+   "practitioners": 57,
+   "with_role": 22,
+   "orgs_provider": 30,
+   "orgs_ein": 26,
+   "locations": 30,
+   "lat": 48.36504,
+   "lng": -99.99564,
+   "by_category": {
+    "rehab-therapy": 18,
+    "advanced-practice": 13,
+    "pharmacy": 8,
+    "physician": 6,
+    "dental": 5,
+    "chiropractic": 3,
+    "dietary": 1,
+    "eye-vision": 1,
+    "other-clinical": 1,
+    "nursing": 1
+   }
+  },
+  {
+   "zip": "58401",
+   "county_fips": "38093",
+   "county": "Stutsman County",
+   "practitioners": 482,
+   "with_role": 93,
+   "orgs_provider": 97,
+   "orgs_ein": 86,
+   "locations": 128,
+   "lat": 46.9057,
+   "lng": -98.70499,
+   "by_category": {
+    "behavioral-health": 123,
+    "rehab-therapy": 108,
+    "other-clinical": 95,
+    "nursing": 30,
+    "advanced-practice": 24,
+    "pharmacy": 22,
+    "support": 18,
+    "dental": 17,
+    "chiropractic": 17,
+    "physician": 9,
+    "dietary": 6,
+    "eye-vision": 6,
+    "podiatry": 5,
+    "group": 2
+   }
+  },
+  {
+   "zip": "58402",
+   "county_fips": "38093",
+   "county": "Stutsman County",
+   "practitioners": 1,
+   "with_role": 1,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 46.9788,
+   "lng": -98.96,
+   "by_category": {
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58405",
+   "county_fips": "38093",
+   "county": "Stutsman County",
+   "practitioners": 5,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 6,
+   "lat": 46.9158,
+   "lng": -98.70171,
+   "by_category": {
+    "rehab-therapy": 3,
+    "behavioral-health": 2
+   }
+  },
+  {
+   "zip": "58413",
+   "county_fips": "38051",
+   "county": "McIntosh County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 3,
+   "locations": 3,
+   "lat": 46.03535,
+   "lng": -99.37475,
+   "by_category": {
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "58418",
+   "county_fips": "38103",
+   "county": "Wells County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 4,
+   "locations": 1,
+   "lat": 47.46988,
+   "lng": -99.70829,
+   "by_category": {}
+  },
+  {
+   "zip": "58421",
+   "county_fips": "38031",
+   "county": "Foster County",
+   "practitioners": 27,
+   "with_role": 7,
+   "orgs_provider": 23,
+   "orgs_ein": 29,
+   "locations": 29,
+   "lat": 47.45057,
+   "lng": -99.1202,
+   "by_category": {
+    "rehab-therapy": 8,
+    "pharmacy": 5,
+    "dental": 5,
+    "behavioral-health": 2,
+    "eye-vision": 2,
+    "support": 1,
+    "emergency-medical": 1,
+    "other-clinical": 1,
+    "chiropractic": 1,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58425",
+   "county_fips": "38039",
+   "county": "Griggs County",
+   "practitioners": 31,
+   "with_role": 22,
+   "orgs_provider": 14,
+   "orgs_ein": 14,
+   "locations": 13,
+   "lat": 47.44486,
+   "lng": -98.12415,
+   "by_category": {
+    "advanced-practice": 19,
+    "physician": 4,
+    "pharmacy": 3,
+    "dietary": 2,
+    "behavioral-health": 1,
+    "chiropractic": 1,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58433",
+   "county_fips": "38045",
+   "county": "LaMoure County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 4,
+   "locations": 7,
+   "lat": 46.35993,
+   "lng": -98.71143,
+   "by_category": {
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "58436",
+   "county_fips": "38021",
+   "county": "Dickey County",
+   "practitioners": 2,
+   "with_role": 1,
+   "orgs_provider": 4,
+   "orgs_ein": 3,
+   "locations": 5,
+   "lat": 46.00935,
+   "lng": -98.52612,
+   "by_category": {
+    "physician": 1,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58438",
+   "county_fips": "38103",
+   "county": "Wells County",
+   "practitioners": 5,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 3,
+   "locations": 3,
+   "lat": 47.65,
+   "lng": -99.62784,
+   "by_category": {
+    "behavioral-health": 3,
+    "other-clinical": 2
+   }
+  },
+  {
+   "zip": "58455",
+   "county_fips": "38093",
+   "county": "Stutsman County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.30459,
+   "lng": -98.73441,
+   "by_category": {}
+  },
+  {
+   "zip": "58458",
+   "county_fips": "38045",
+   "county": "LaMoure County",
+   "practitioners": 3,
+   "with_role": 0,
+   "orgs_provider": 10,
+   "orgs_ein": 5,
+   "locations": 6,
+   "lat": 46.35725,
+   "lng": -98.29436,
+   "by_category": {
+    "rehab-therapy": 2,
+    "chiropractic": 1
+   }
+  },
+  {
+   "zip": "58463",
+   "county_fips": "38083",
+   "county": "Sheridan County",
+   "practitioners": 60,
+   "with_role": 47,
+   "orgs_provider": 8,
+   "orgs_ein": 6,
+   "locations": 7,
+   "lat": 47.48278,
+   "lng": -100.44162,
+   "by_category": {
+    "advanced-practice": 36,
+    "physician": 9,
+    "behavioral-health": 8,
+    "dental": 3,
+    "chiropractic": 2,
+    "group": 1,
+    "nursing": 1
+   }
+  },
+  {
+   "zip": "58474",
+   "county_fips": "38021",
+   "county": "Dickey County",
+   "practitioners": 52,
+   "with_role": 38,
+   "orgs_provider": 23,
+   "orgs_ein": 22,
+   "locations": 23,
+   "lat": 46.13834,
+   "lng": -98.09246,
+   "by_category": {
+    "physician": 22,
+    "advanced-practice": 18,
+    "pharmacy": 5,
+    "chiropractic": 2,
+    "eye-vision": 1,
+    "dental": 1,
+    "rehab-therapy": 1,
+    "dietary": 1,
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "58476",
+   "county_fips": "38093",
+   "county": "Stutsman County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.16702,
+   "lng": -98.91165,
+   "by_category": {}
+  },
+  {
+   "zip": "58482",
+   "county_fips": "38043",
+   "county": "Kidder County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 5,
+   "orgs_ein": 7,
+   "locations": 8,
+   "lat": 46.85936,
+   "lng": -99.91841,
+   "by_category": {
+    "chiropractic": 1
+   }
+  },
+  {
+   "zip": "58492",
+   "county_fips": "38003",
+   "county": "Barnes County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.10842,
+   "lng": -98.36171,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58495",
+   "county_fips": "38051",
+   "county": "McIntosh County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 46.25898,
+   "lng": -99.56029,
+   "by_category": {}
+  },
+  {
+   "zip": "58501",
+   "county_fips": "38015",
+   "county": "Burleigh County",
+   "practitioners": 1701,
+   "with_role": 501,
+   "orgs_provider": 291,
+   "orgs_ein": 304,
+   "locations": 410,
+   "lat": 46.81328,
+   "lng": -100.78127,
+   "by_category": {
+    "behavioral-health": 451,
+    "rehab-therapy": 314,
+    "physician": 215,
+    "other-clinical": 213,
+    "advanced-practice": 191,
+    "pharmacy": 94,
+    "nursing": 45,
+    "chiropractic": 44,
+    "dietary": 44,
+    "dental": 37,
+    "support": 16,
+    "group": 8,
+    "podiatry": 7,
+    "eye-vision": 7,
+    "no-taxonomy": 7,
+    "facility": 3,
+    "student": 3,
+    "agency": 2
+   }
+  },
+  {
+   "zip": "58502",
+   "county_fips": null,
+   "county": null,
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 46.80868,
+   "lng": -100.78882,
+   "by_category": {}
+  },
+  {
+   "zip": "58503",
+   "county_fips": "38015",
+   "county": "Burleigh County",
+   "practitioners": 704,
+   "with_role": 286,
+   "orgs_provider": 182,
+   "orgs_ein": 236,
+   "locations": 279,
+   "lat": 46.84468,
+   "lng": -100.78372,
+   "by_category": {
+    "rehab-therapy": 132,
+    "nursing": 111,
+    "behavioral-health": 100,
+    "advanced-practice": 86,
+    "physician": 84,
+    "other-clinical": 48,
+    "chiropractic": 46,
+    "pharmacy": 37,
+    "dental": 34,
+    "eye-vision": 8,
+    "group": 5,
+    "dietary": 4,
+    "support": 3,
+    "student": 3,
+    "facility": 2,
+    "no-taxonomy": 1
+   }
+  },
+  {
+   "zip": "58504",
+   "county_fips": "38015",
+   "county": "Burleigh County",
+   "practitioners": 318,
+   "with_role": 105,
+   "orgs_provider": 102,
+   "orgs_ein": 108,
+   "locations": 181,
+   "lat": 46.79257,
+   "lng": -100.77578,
+   "by_category": {
+    "rehab-therapy": 74,
+    "behavioral-health": 63,
+    "advanced-practice": 34,
+    "other-clinical": 30,
+    "dental": 29,
+    "chiropractic": 20,
+    "pharmacy": 19,
+    "physician": 18,
+    "eye-vision": 9,
+    "student": 7,
+    "nursing": 6,
+    "dietary": 6,
+    "group": 2,
+    "support": 1
+   }
+  },
+  {
+   "zip": "58505",
+   "county_fips": "38015",
+   "county": "Burleigh County",
+   "practitioners": 42,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 1,
+   "locations": 2,
+   "lat": 46.81683,
+   "lng": -100.78138,
+   "by_category": {
+    "support": 37,
+    "dental": 4,
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58520",
+   "county_fips": "38059",
+   "county": "Morton County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 46.72747,
+   "lng": -101.50602,
+   "by_category": {}
+  },
+  {
+   "zip": "58523",
+   "county_fips": "38057",
+   "county": "Mercer County",
+   "practitioners": 63,
+   "with_role": 38,
+   "orgs_provider": 17,
+   "orgs_ein": 19,
+   "locations": 14,
+   "lat": 47.27898,
+   "lng": -101.78504,
+   "by_category": {
+    "advanced-practice": 22,
+    "physician": 9,
+    "rehab-therapy": 7,
+    "behavioral-health": 7,
+    "pharmacy": 5,
+    "chiropractic": 3,
+    "nursing": 3,
+    "other-clinical": 2,
+    "eye-vision": 2,
+    "dietary": 2,
+    "group": 1
+   }
+  },
+  {
+   "zip": "58528",
+   "county_fips": "38085",
+   "county": "Sioux County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 46.35375,
+   "lng": -100.58528,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58529",
+   "county_fips": "38037",
+   "county": "Grant County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 46.41947,
+   "lng": -101.56441,
+   "by_category": {}
+  },
+  {
+   "zip": "58535",
+   "county_fips": "38059",
+   "county": "Morton County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 46.45489,
+   "lng": -101.23194,
+   "by_category": {}
+  },
+  {
+   "zip": "58538",
+   "county_fips": "38085",
+   "county": "Sioux County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 2,
+   "lat": 46.11698,
+   "lng": -100.65687,
+   "by_category": {}
+  },
+  {
+   "zip": "58540",
+   "county_fips": "38055",
+   "county": "McLean County",
+   "practitioners": 15,
+   "with_role": 9,
+   "orgs_provider": 13,
+   "orgs_ein": 9,
+   "locations": 21,
+   "lat": 47.65188,
+   "lng": -101.41524,
+   "by_category": {
+    "rehab-therapy": 5,
+    "physician": 3,
+    "eye-vision": 3,
+    "chiropractic": 2,
+    "advanced-practice": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "58545",
+   "county_fips": "38057",
+   "county": "Mercer County",
+   "practitioners": 19,
+   "with_role": 7,
+   "orgs_provider": 13,
+   "orgs_ein": 17,
+   "locations": 15,
+   "lat": 47.29745,
+   "lng": -101.62174,
+   "by_category": {
+    "rehab-therapy": 7,
+    "eye-vision": 3,
+    "dental": 2,
+    "chiropractic": 2,
+    "behavioral-health": 2,
+    "other-clinical": 1,
+    "physician": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58552",
+   "county_fips": "38029",
+   "county": "Emmons County",
+   "practitioners": 4,
+   "with_role": 3,
+   "orgs_provider": 3,
+   "orgs_ein": 4,
+   "locations": 6,
+   "lat": 46.25995,
+   "lng": -100.23143,
+   "by_category": {
+    "eye-vision": 2,
+    "facility": 1,
+    "support": 1
+   }
+  },
+  {
+   "zip": "58554",
+   "county_fips": "38059",
+   "county": "Morton County",
+   "practitioners": 452,
+   "with_role": 102,
+   "orgs_provider": 95,
+   "orgs_ein": 89,
+   "locations": 118,
+   "lat": 46.82825,
+   "lng": -100.88812,
+   "by_category": {
+    "nursing": 204,
+    "rehab-therapy": 102,
+    "behavioral-health": 28,
+    "other-clinical": 26,
+    "advanced-practice": 17,
+    "pharmacy": 17,
+    "eye-vision": 17,
+    "chiropractic": 14,
+    "physician": 13,
+    "dental": 9,
+    "agency": 2,
+    "support": 1,
+    "facility": 1,
+    "group": 1
+   }
+  },
+  {
+   "zip": "58561",
+   "county_fips": "38047",
+   "county": "Logan County",
+   "practitioners": 8,
+   "with_role": 2,
+   "orgs_provider": 7,
+   "orgs_ein": 8,
+   "locations": 5,
+   "lat": 46.50268,
+   "lng": -99.76527,
+   "by_category": {
+    "rehab-therapy": 3,
+    "other-clinical": 2,
+    "behavioral-health": 1,
+    "chiropractic": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58563",
+   "county_fips": "38059",
+   "county": "Morton County",
+   "practitioners": 55,
+   "with_role": 28,
+   "orgs_provider": 5,
+   "orgs_ein": 11,
+   "locations": 7,
+   "lat": 46.84683,
+   "lng": -101.41047,
+   "by_category": {
+    "rehab-therapy": 51,
+    "physician": 2,
+    "other-clinical": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58564",
+   "county_fips": "38037",
+   "county": "Grant County",
+   "practitioners": 20,
+   "with_role": 1,
+   "orgs_provider": 5,
+   "orgs_ein": 3,
+   "locations": 1,
+   "lat": 46.28497,
+   "lng": -101.33142,
+   "by_category": {
+    "behavioral-health": 20
+   }
+  },
+  {
+   "zip": "58573",
+   "county_fips": "38029",
+   "county": "Emmons County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 46.13107,
+   "lng": -100.16431,
+   "by_category": {}
+  },
+  {
+   "zip": "58575",
+   "county_fips": "38055",
+   "county": "McLean County",
+   "practitioners": 3,
+   "with_role": 0,
+   "orgs_provider": 4,
+   "orgs_ein": 1,
+   "locations": 6,
+   "lat": 47.52233,
+   "lng": -100.89598,
+   "by_category": {
+    "dental": 2,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "zip": "58577",
+   "county_fips": "38055",
+   "county": "McLean County",
+   "practitioners": 37,
+   "with_role": 26,
+   "orgs_provider": 9,
+   "orgs_ein": 9,
+   "locations": 7,
+   "lat": 47.29419,
+   "lng": -101.02878,
+   "by_category": {
+    "advanced-practice": 19,
+    "other-clinical": 7,
+    "physician": 5,
+    "behavioral-health": 3,
+    "rehab-therapy": 2,
+    "chiropractic": 1
+   }
+  },
+  {
+   "zip": "58579",
+   "county_fips": "38055",
+   "county": "McLean County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.1602,
+   "lng": -100.79203,
+   "by_category": {}
+  },
+  {
+   "zip": "58581",
+   "county_fips": "38051",
+   "county": "McIntosh County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 3,
+   "locations": 2,
+   "lat": 45.97162,
+   "lng": -99.8305,
+   "by_category": {}
+  },
+  {
+   "zip": "58601",
+   "county_fips": "38089",
+   "county": "Stark County",
+   "practitioners": 609,
+   "with_role": 175,
+   "orgs_provider": 139,
+   "orgs_ein": 162,
+   "locations": 233,
+   "lat": 46.88799,
+   "lng": -102.79025,
+   "by_category": {
+    "rehab-therapy": 139,
+    "behavioral-health": 126,
+    "other-clinical": 106,
+    "advanced-practice": 53,
+    "physician": 38,
+    "pharmacy": 34,
+    "chiropractic": 33,
+    "nursing": 27,
+    "dental": 15,
+    "support": 14,
+    "eye-vision": 11,
+    "dietary": 8,
+    "student": 2,
+    "podiatry": 1,
+    "group": 1,
+    "agency": 1
+   }
+  },
+  {
+   "zip": "58623",
+   "county_fips": "38011",
+   "county": "Bowman County",
+   "practitioners": 8,
+   "with_role": 2,
+   "orgs_provider": 10,
+   "orgs_ein": 6,
+   "locations": 7,
+   "lat": 46.18159,
+   "lng": -103.40266,
+   "by_category": {
+    "dental": 2,
+    "advanced-practice": 2,
+    "behavioral-health": 1,
+    "dietary": 1,
+    "pharmacy": 1,
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58627",
+   "county_fips": "38007",
+   "county": "Billings County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.2328,
+   "lng": -103.23196,
+   "by_category": {
+    "group": 1
+   }
+  },
+  {
+   "zip": "58636",
+   "county_fips": "38025",
+   "county": "Dunn County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 2,
+   "lat": 47.51824,
+   "lng": -102.24825,
+   "by_category": {
+    "nursing": 1
+   }
+  },
+  {
+   "zip": "58639",
+   "county_fips": "38001",
+   "county": "Adams County",
+   "practitioners": 111,
+   "with_role": 78,
+   "orgs_provider": 27,
+   "orgs_ein": 18,
+   "locations": 18,
+   "lat": 46.00366,
+   "lng": -102.63103,
+   "by_category": {
+    "advanced-practice": 43,
+    "physician": 41,
+    "rehab-therapy": 12,
+    "behavioral-health": 5,
+    "nursing": 4,
+    "dental": 1,
+    "chiropractic": 1,
+    "dietary": 1,
+    "eye-vision": 1,
+    "group": 1,
+    "podiatry": 1
+   }
+  },
+  {
+   "zip": "58640",
+   "county_fips": "38025",
+   "county": "Dunn County",
+   "practitioners": 2,
+   "with_role": 1,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 3,
+   "lat": 47.36866,
+   "lng": -102.75814,
+   "by_category": {
+    "group": 1,
+    "pharmacy": 1
+   }
+  },
+  {
+   "zip": "58642",
+   "county_fips": "38025",
+   "county": "Dunn County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.23108,
+   "lng": -102.77025,
+   "by_category": {}
+  },
+  {
+   "zip": "58646",
+   "county_fips": "38041",
+   "county": "Hettinger County",
+   "practitioners": 4,
+   "with_role": 0,
+   "orgs_provider": 4,
+   "orgs_ein": 4,
+   "locations": 6,
+   "lat": 46.37482,
+   "lng": -102.32014,
+   "by_category": {
+    "behavioral-health": 4
+   }
+  },
+  {
+   "zip": "58647",
+   "county_fips": "38041",
+   "county": "Hettinger County",
+   "practitioners": 2,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 3,
+   "locations": 2,
+   "lat": 46.5389,
+   "lng": -102.86644,
+   "by_category": {
+    "support": 1,
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58649",
+   "county_fips": "38001",
+   "county": "Adams County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 46.11,
+   "lng": -102.94216,
+   "by_category": {
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58652",
+   "county_fips": "38089",
+   "county": "Stark County",
+   "practitioners": 7,
+   "with_role": 4,
+   "orgs_provider": 4,
+   "orgs_ein": 4,
+   "locations": 3,
+   "lat": 46.88909,
+   "lng": -102.32555,
+   "by_category": {
+    "advanced-practice": 3,
+    "nursing": 2,
+    "chiropractic": 1,
+    "physician": 1
+   }
+  },
+  {
+   "zip": "58654",
+   "county_fips": "38033",
+   "county": "Golden Valley County",
+   "practitioners": 22,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 2,
+   "lat": 46.93498,
+   "lng": -103.90948,
+   "by_category": {
+    "behavioral-health": 19,
+    "other-clinical": 3
+   }
+  },
+  {
+   "zip": "58701",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 2259,
+   "with_role": 1143,
+   "orgs_provider": 254,
+   "orgs_ein": 254,
+   "locations": 398,
+   "lat": 48.2219,
+   "lng": -101.29927,
+   "by_category": {
+    "physician": 728,
+    "behavioral-health": 392,
+    "advanced-practice": 358,
+    "rehab-therapy": 261,
+    "other-clinical": 210,
+    "nursing": 71,
+    "dental": 55,
+    "pharmacy": 55,
+    "chiropractic": 39,
+    "eye-vision": 28,
+    "dietary": 20,
+    "support": 19,
+    "group": 12,
+    "podiatry": 9,
+    "facility": 1,
+    "agency": 1
+   }
+  },
+  {
+   "zip": "58702",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 2,
+   "lat": 48.23156,
+   "lng": -101.2957,
+   "by_category": {
+    "support": 1
+   }
+  },
+  {
+   "zip": "58703",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 164,
+   "with_role": 39,
+   "orgs_provider": 70,
+   "orgs_ein": 81,
+   "locations": 84,
+   "lat": 48.25255,
+   "lng": -101.30797,
+   "by_category": {
+    "behavioral-health": 74,
+    "rehab-therapy": 27,
+    "other-clinical": 21,
+    "nursing": 10,
+    "chiropractic": 10,
+    "pharmacy": 5,
+    "advanced-practice": 5,
+    "dental": 4,
+    "eye-vision": 3,
+    "physician": 2,
+    "dietary": 1,
+    "support": 1,
+    "transport": 1
+   }
+  },
+  {
+   "zip": "58704",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 2,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 3,
+   "lat": 48.42603,
+   "lng": -101.31117,
+   "by_category": {
+    "rehab-therapy": 2
+   }
+  },
+  {
+   "zip": "58705",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 1,
+   "with_role": 1,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 48.42149,
+   "lng": -101.32313,
+   "by_category": {
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58707",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 22,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 2,
+   "locations": 7,
+   "lat": 48.24658,
+   "lng": -101.29669,
+   "by_category": {
+    "rehab-therapy": 22
+   }
+  },
+  {
+   "zip": "58718",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 2,
+   "lat": 48.3322,
+   "lng": -101.69982,
+   "by_category": {}
+  },
+  {
+   "zip": "58721",
+   "county_fips": "38013",
+   "county": "Burke County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
+   "locations": 1,
+   "lat": 48.80448,
+   "lng": -102.24268,
+   "by_category": {}
+  },
+  {
+   "zip": "58730",
+   "county_fips": "38023",
+   "county": "Divide County",
+   "practitioners": 3,
+   "with_role": 1,
+   "orgs_provider": 3,
+   "orgs_ein": 3,
+   "locations": 2,
+   "lat": 48.91009,
+   "lng": -103.29245,
+   "by_category": {
+    "behavioral-health": 2,
+    "dietary": 1
+   }
+  },
+  {
+   "zip": "58734",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 48.61706,
+   "lng": -101.77625,
+   "by_category": {}
+  },
+  {
+   "zip": "58740",
+   "county_fips": "38075",
+   "county": "Renville County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 48.51519,
+   "lng": -101.22323,
+   "by_category": {
+    "rehab-therapy": 1
+   }
+  },
+  {
+   "zip": "58746",
+   "county_fips": "38101",
+   "county": "Ward County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 3,
+   "locations": 2,
+   "lat": 48.67357,
+   "lng": -102.08253,
+   "by_category": {}
+  },
+  {
+   "zip": "58758",
+   "county_fips": "38083",
+   "county": "Sheridan County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.82724,
+   "lng": -100.1145,
+   "by_category": {}
+  },
+  {
+   "zip": "58761",
+   "county_fips": "38075",
+   "county": "Renville County",
+   "practitioners": 2,
+   "with_role": 1,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 7,
+   "lat": 48.76351,
+   "lng": -101.5055,
+   "by_category": {
+    "chiropractic": 2
+   }
+  },
+  {
+   "zip": "58763",
+   "county_fips": "38061",
+   "county": "Mountrail County",
+   "practitioners": 101,
+   "with_role": 42,
+   "orgs_provider": 26,
+   "orgs_ein": 17,
+   "locations": 11,
+   "lat": 47.9847,
+   "lng": -102.50473,
+   "by_category": {
+    "nursing": 32,
+    "advanced-practice": 17,
+    "physician": 15,
+    "behavioral-health": 8,
+    "other-clinical": 7,
+    "dental": 7,
+    "dietary": 4,
+    "pharmacy": 4,
+    "rehab-therapy": 2,
+    "eye-vision": 2,
+    "podiatry": 1,
+    "group": 1,
+    "agency": 1
+   }
+  },
+  {
+   "zip": "58775",
+   "county_fips": "38055",
+   "county": "McLean County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 0,
+   "orgs_ein": 0,
+   "locations": 1,
+   "lat": 47.66277,
+   "lng": -101.84595,
+   "by_category": {}
+  },
+  {
+   "zip": "58784",
+   "county_fips": "38061",
+   "county": "Mountrail County",
+   "practitioners": 7,
+   "with_role": 2,
+   "orgs_provider": 9,
+   "orgs_ein": 5,
+   "locations": 9,
+   "lat": 48.31663,
+   "lng": -102.39055,
+   "by_category": {
+    "chiropractic": 4,
+    "eye-vision": 2,
+    "behavioral-health": 1
+   }
+  },
+  {
+   "zip": "58788",
+   "county_fips": "38049",
+   "county": "McHenry County",
+   "practitioners": 1,
+   "with_role": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 5,
+   "locations": 3,
+   "lat": 48.34677,
+   "lng": -100.40522,
+   "by_category": {
+    "other-clinical": 1
+   }
+  },
+  {
+   "zip": "58789",
+   "county_fips": "38049",
+   "county": "McHenry County",
+   "practitioners": 0,
+   "with_role": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 48.58035,
+   "lng": -100.72803,
+   "by_category": {}
+  },
+  {
+   "zip": "58790",
+   "county_fips": "38049",
+   "county": "McHenry County",
+   "practitioners": 4,
+   "with_role": 1,
+   "orgs_provider": 2,
+   "orgs_ein": 2,
+   "locations": 3,
+   "lat": 48.05513,
+   "lng": -100.92848,
+   "by_category": {
+    "rehab-therapy": 3,
+    "group": 1
+   }
+  },
+  {
+   "zip": "58793",
+   "county_fips": "38009",
+   "county": "Bottineau County",
+   "practitioners": 2,
+   "with_role": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 4,
+   "locations": 2,
+   "lat": 48.9099,
+   "lng": -101.0194,
+   "by_category": {
+    "support": 2
+   }
+  },
+  {
+   "zip": "58801",
+   "county_fips": "38105",
+   "county": "Williams County",
+   "practitioners": 513,
+   "with_role": 167,
+   "orgs_provider": 142,
+   "orgs_ein": 140,
+   "locations": 186,
+   "lat": 48.15671,
+   "lng": -103.6316,
+   "by_category": {
+    "behavioral-health": 98,
+    "rehab-therapy": 94,
+    "physician": 79,
+    "other-clinical": 70,
+    "advanced-practice": 58,
+    "nursing": 30,
+    "pharmacy": 26,
+    "dental": 22,
+    "chiropractic": 9,
+    "eye-vision": 8,
+    "dietary": 6,
+    "transport": 4,
+    "group": 3,
+    "support": 3,
+    "podiatry": 1,
+    "facility": 1,
+    "agency": 1
+   }
+  },
+  {
+   "zip": "58852",
+   "county_fips": "38105",
+   "county": "Williams County",
+   "practitioners": 10,
+   "with_role": 5,
+   "orgs_provider": 9,
+   "orgs_ein": 2,
+   "locations": 1,
+   "lat": 48.40181,
+   "lng": -102.93453,
+   "by_category": {
+    "rehab-therapy": 5,
+    "advanced-practice": 4,
+    "nursing": 1
+   }
+  },
+  {
+   "zip": "58854",
+   "county_fips": "38053",
+   "county": "McKenzie County",
+   "practitioners": 34,
+   "with_role": 11,
+   "orgs_provider": 20,
+   "orgs_ein": 18,
+   "locations": 28,
+   "lat": 47.79373,
+   "lng": -103.27808,
+   "by_category": {
+    "other-clinical": 9,
+    "behavioral-health": 7,
+    "chiropractic": 6,
+    "advanced-practice": 4,
+    "rehab-therapy": 4,
+    "eye-vision": 2,
+    "dental": 1,
+    "physician": 1
+   }
+  }
+ ],
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+}
