@@ -171,6 +171,33 @@ function buildBody(): { text: string; html: string } {
     'None of the three raised an error. Each returned a zero that read like a',
     'finding. The full update walks through all of them.',
     '',
+    'WHAT WE STILL DO NOT KNOW',
+    '',
+    'Five open gaps, so you are not left thinking this is tidier than it is.',
+    '',
+    '- Why endpoint attribution went backwards. 16.9% to 14.7%. Some of it is',
+    '  addresses being deleted rather than names being lost, but we cannot',
+    '  separate the two and we are not going to pretend otherwise.',
+    '',
+    '- We told you something wrong in June. We reported that the directory',
+    '  holds no phone numbers on its location records. It now holds one for',
+    '  79% of them. That June report is still up and still says the old thing.',
+    '',
+    '- Whether the addresses actually answer. Publishing a web address and',
+    '  running a working service are different claims. Our last check of that',
+    '  was April, and we have not redone it. Everything we say about',
+    '  reachability in this update is about whether an address is written',
+    '  down.',
+    '',
+    '- Insurers are named but not reachable. 27 of them arrived. Not one',
+    '  publishes an address software can call. Naming is the easier half.',
+    '',
+    '- More workplaces did not mean more reach. In Pennsylvania the share of',
+    '  clinicians with a workplace went from 38.1% to 43.7%, and the share',
+    '  reachable through a working address went from 19.3% down to 18.7%. The',
+    '  new workplaces were mostly organizations that publish no address. Good',
+    '  news and no news at the same time.',
+    '',
     'CHECK OUR WORK',
     '',
     `  Full update:  ${REPORT_URL}`,
@@ -239,6 +266,16 @@ function buildBody(): { text: string; html: string } {
   <p style="${p}">One of our checks compares the directory against the federal registry of providers. This time it said 245,374 people were in the directory but not in the registry.</p>
   <p style="${p}">That was our mistake. The public copy of the registry we compare against stops in February, and this release is from August, so everyone who registered in between looked like a ghost. We picked eight at random and looked them up. All eight were real, active providers. We have changed the check so it scores nothing while our reference data is behind. We are telling you because you would have had no way to know.</p>
   <p style="${p}">While we were at it we found the same shape of problem in two other places: a code change that made every specialty look invalid, and a failed download that made it look like software vendors publish nothing. None of the three raised an error. Each returned a zero that read like a finding. <a href="${REPORT_URL}" style="${a}">The full update</a> walks through all of them.</p>
+
+  <h2 style="${h2}">What we still do not know</h2>
+  <p style="${p}">Five open gaps, so you are not left thinking this is tidier than it is.</p>
+  <ul style="margin:0 0 14px;padding-left:20px;font-size:15px;line-height:1.6;color:#374151;">
+    <li style="margin-bottom:8px;"><strong>Why endpoint attribution went backwards.</strong> 16.9% to 14.7%. Some of it is addresses being deleted rather than names being lost, but we cannot separate the two and we are not going to pretend otherwise.</li>
+    <li style="margin-bottom:8px;"><strong>We told you something wrong in June.</strong> We reported that the directory holds no phone numbers on its location records. It now holds one for 79% of them. That June report is still up and still says the old thing.</li>
+    <li style="margin-bottom:8px;"><strong>Whether the addresses actually answer.</strong> Publishing a web address and running a working service are different claims. Our last check of that was April and we have not redone it, so everything here about reachability is about whether an address is written down.</li>
+    <li style="margin-bottom:8px;"><strong>Insurers are named but not reachable.</strong> 27 of them arrived. Not one publishes an address software can call. Naming is the easier half.</li>
+    <li><strong>More workplaces did not mean more reach.</strong> In Pennsylvania the share of clinicians with a workplace went from 38.1% to 43.7%, and the share reachable through a working address went from 19.3% down to 18.7%. The new workplaces were mostly organizations that publish no address. Good news and no news at the same time.</li>
+  </ul>
 
   <h2 style="${h2}">Check our work</h2>
   <ul style="margin:0 0 14px;padding-left:20px;font-size:15px;line-height:1.6;color:#374151;">
