@@ -706,7 +706,7 @@ export const FINDINGS: Finding[] = [
     heroStats: [
       { label: 'Advanced practice with a role', value: '77.9%' },
       { label: 'Pharmacy with a role', value: '526 of 12,465' },
-      { label: 'PA practitioners measured', value: '227,727' },
+      { label: 'PA practitioners measured', value: '230,837' },
     ],
     summary:
       'Every coverage percentage this project publishes divides by the NDH’s active Practitioner set, and nobody had checked what is in it. Measured across every active Pennsylvania practitioner against their NPPES taxonomy: role coverage does not vary a little between professions, it varies by orders of magnitude, and it tracks who bills Medicare rather than who practises. At 2026-08-20, 82.0% of advanced-practice clinicians and 74.3% of physicians carry a PractitionerRole, against 24.6% of therapists, 22.9% of behavioral-health providers, 13.3% of dentists, 4.8% of nurses and 4.2% of pharmacy providers. The 2026-08-20 release narrowed every one of those gaps: at 2026-05-08 the same figures were 77.9%, 69.8%, 19.6%, 14.8%, 4.7%, 2.7% and 1 of 12,995. The consequence is that an endpoint-coverage number is really a statement about Medicare-billing specialties, and the directory publishes no field that says so.',

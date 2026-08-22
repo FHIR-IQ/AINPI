@@ -26,32 +26,36 @@ export const metadata: Metadata = {
 };
 
 export default function August2026Update0821Page() {
-  const doc = loadMarkdown(DOC_PATH, 'AINPI 2026-08-17 update');
+  const doc = loadMarkdown(DOC_PATH, 'AINPI 2026-08-21 update');
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <ReleaseTeaser
-        eyebrow="Release update · 2026-08-17"
-        headlineA="Nearly 8 in 10 doctors."
-        headlineB="1 in 12,995 pharmacists."
-        caption="The national directory is supposed to say where each health worker works. We checked all 227,727 it lists as active in Pennsylvania and asked which ones it actually says that for. It is not spread evenly across the professions. It tracks who bills Medicare, not who provides care, and nothing in the directory tells you that."
+        eyebrow="Release update · 2026-08-21"
+        headlineA="Ten million new records."
+        headlineB="Five points of coverage."
+        caption="CMS published the largest change to the national provider directory since we started measuring. We reloaded all 45 GB and re-ran every measurement against the previous release. The records saying where a clinician works more than doubled, and the share of clinicians the directory can place moved only five points, because most of the new records went to people it already described."
         stats={[
           {
-            label: 'Nurse practitioners and PAs with a workplace',
-            delta: '77.9%',
+            label: 'Where-they-work records',
+            delta: '+135%',
             tone: 'gain',
           },
-          { label: 'Dentists with a workplace', delta: '4.7%', tone: 'loss' },
           {
-            label: 'Pharmacy workers with a workplace',
-            delta: '1 of 12,995',
+            label: 'Clinicians with a workplace (PA)',
+            delta: '38.1% → 43.7%',
+            tone: 'gain',
+          },
+          {
+            label: 'Web addresses naming their owner',
+            delta: '16.9% → 14.7%',
             tone: 'loss',
           },
         ]}
         reportSlug="2026-08-21-update"
-        releaseDate="2026-08-17"
-        methodologyVersion="0.7.2-draft"
+        releaseDate="2026-08-20"
+        methodologyVersion="0.7.3-draft"
       />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <article className="prose prose-slate max-w-none prose-headings:font-semibold prose-a:text-primary-600 prose-code:font-mono prose-code:text-sm prose-pre:bg-gray-900 prose-pre:text-gray-100 prose-table:text-sm">
