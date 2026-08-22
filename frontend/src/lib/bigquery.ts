@@ -1,7 +1,12 @@
 import { BigQuery } from '@google-cloud/bigquery';
 
-const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
-const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
+import { env, envOptional } from '@/lib/env';
+
+// Trimmed. Both of these carry a trailing newline in production, which is
+// invisible everywhere except inside a backtick-quoted BigQuery identifier,
+// where it produces "Unclosed identifier literal". See lib/env.ts.
+const PROJECT_ID = env('GCP_PROJECT_ID', 'thematic-fort-453901-t7');
+const DATASET_ID = env('BQ_DATASET_ID', 'cms_npd');
 
 /**
  * Per-query maximum bytes billed cap. 100 GB ≈ $0.50 per query at on-demand
@@ -43,7 +48,7 @@ export function getBigQueryClient(): BigQuery {
     const options: Record<string, unknown> = { projectId: PROJECT_ID };
 
     // In production (Vercel), use service account key from env var
-    const keyJson = process.env.GCP_SERVICE_ACCOUNT_KEY;
+    const keyJson = envOptional('GCP_SERVICE_ACCOUNT_KEY');
     if (keyJson) {
       const credentials = JSON.parse(keyJson);
       options.credentials = credentials;

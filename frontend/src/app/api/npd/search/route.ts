@@ -3,12 +3,15 @@ import { getBigQueryClient } from '@/lib/bigquery';
 import { parseNameQuery, groupRolesBySpecialty, type RoleRow } from '@/lib/npd-search-utils';
 import { enforceRateLimit, withRateLimitHeaders } from '@/lib/rate-limit';
 import { CURRENT_RELEASE } from '@/lib/release';
+import { env } from '@/lib/env';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
-const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
+// Trimmed via lib/env: both carry a trailing newline in production. This
+// route survived it only because it builds table names without backticks.
+const PROJECT_ID = env('GCP_PROJECT_ID', 'thematic-fort-453901-t7');
+const DATASET_ID = env('BQ_DATASET_ID', 'cms_npd');
 const MAX_RESULTS = 50;
 
 function tbl(name: string): string {

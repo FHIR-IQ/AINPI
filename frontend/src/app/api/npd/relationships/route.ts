@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
 import { enforceRateLimit } from '@/lib/rate-limit';
+import { env } from '@/lib/env';
 
-const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
-const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
+// Trimmed via lib/env: both carry a trailing newline in production, which is
+// invisible until the value lands inside a quoted BigQuery identifier.
+const PROJECT_ID = env('GCP_PROJECT_ID', 'thematic-fort-453901-t7');
+const DATASET_ID = env('BQ_DATASET_ID', 'cms_npd');
 
 function tbl(name: string): string {
   return PROJECT_ID + '.' + DATASET_ID + '.' + name;
