@@ -535,6 +535,47 @@ def main() -> None:
     print("vendors:", s["ehr_vendors"])
     print(f"\nwrote {out_dir/'pa-rural-health.json'}")
 
+    # Also publish under findings/<slug>.json, for the same reason as H48:
+    # /states/pa/rural-health reads the payload above, but /findings/<slug>
+    # reads findings/<slug>.json and was showing the pre-registration
+    # placeholder for a finding that had been published for weeks.
+    su = payload["summary"]
+    finding = {
+        "slug": "pa-rural-hospital-connectivity",
+        "title": "Pennsylvania rural hospital connectivity",
+        "hypotheses": ["H47"],
+        "status": "published",
+        # Not an NDH release: CMS Hospital General Information joined to USDA
+        # ERS continuum codes and the CEHRT endpoint bundles.
+        "release_date": "CMS Hospital General Information + USDA ERS 2023",
+        "generated_at": payload["generated_at"],
+        "methodology_version": payload["methodology_version"],
+        "commit_sha": payload.get("commit_sha", "pending"),
+        "headline": (
+            f"{su['endpoint_resolvable']:,} of {su['hospitals']:,} Pennsylvania "
+            f"hospitals resolve to a published FHIR endpoint "
+            f"({100*su['endpoint_resolvable']/su['hospitals']:.1f}%). "
+            f"{su['hospitals_in_rural_counties']:,} sit in nonmetro counties and "
+            f"{su['critical_access_hospitals']:,} are Critical Access. "
+            f"{su['match_none']:,} could not be matched to any vendor bundle."
+        ),
+        "numerator": su["endpoint_resolvable"],
+        "denominator": su["hospitals"],
+        "chart": {
+            "type": "bar",
+            "unit": "count",
+            "data": [
+                {"label": v, "value": n}
+                for v, n in list(su.get("ehr_vendors", {}).items())[:10]
+            ],
+        },
+        "notes": payload.get("connectivity_note") or "",
+    }
+    fp = out_dir.parent / "findings" / "pa-rural-hospital-connectivity.json"
+    fp.parent.mkdir(parents=True, exist_ok=True)
+    fp.write_text(json.dumps(finding, indent=2) + "\n")
+    print(f"wrote {fp}")
+
 
 if __name__ == "__main__":
     main()

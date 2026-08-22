@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ainpi.dev/api/v1/schemas/manifest.schema.json",
+  "title": "AINPI discovery manifest",
+  "description": "Index of every published URL. The entry point for an agent.",
+  "type": "object",
+  "properties": {
+    "release_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodology_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "service": {
+      "type": "string"
+    },
+    "site": {
+      "type": "string",
+      "format": "uri"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "slug",
+          "url"
+        ]
+      }
+    },
+    "states": {
+      "type": "array"
+    },
+    "downloads_csv": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "service",
+    "site",
+    "release_date",
+    "findings"
+  ]
+}

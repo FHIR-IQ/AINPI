@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ainpi.dev/api/v1/schemas/finding.schema.json",
+  "title": "AINPI finding",
+  "description": "One pre-registered finding. Published at /api/v1/findings/<slug>.json. A finding whose numbers have not landed yet still serves this shape with null numerator and denominator.",
+  "type": "object",
+  "properties": {
+    "release_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodology_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "hypotheses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^H[0-9]+[a-z]?$"
+      }
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "published",
+        "in-progress",
+        "pre-registered",
+        null
+      ]
+    },
+    "headline": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "numerator": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "denominator": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "chart": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "bar",
+            "line",
+            "stacked-bar",
+            "scatter"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "percent",
+            "count",
+            "usd",
+            "days"
+          ]
+        },
+        "data": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": [
+                  "string",
+                  "number"
+                ]
+              },
+              "value": {
+                "type": [
+                  "number",
+                  "string",
+                  "null"
+                ]
+              }
+            },
+            "required": [
+              "label"
+            ]
+          }
+        }
+      },
+      "required": [
+        "data"
+      ]
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "slug",
+    "release_date",
+    "generated_at"
+  ]
+}

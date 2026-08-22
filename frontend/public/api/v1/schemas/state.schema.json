@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ainpi.dev/api/v1/schemas/state.schema.json",
+  "title": "AINPI state slice",
+  "type": "object",
+  "properties": {
+    "release_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodology_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "state": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2}$"
+    },
+    "state_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "denominators": {
+      "type": "object",
+      "properties": {
+        "practitioner": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "organization": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "location": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "verify_samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "npi": {
+            "type": "string",
+            "pattern": "^[0-9]{10}$"
+          },
+          "flagged_by": {
+            "type": "string"
+          },
+          "flag_reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "npi"
+        ]
+      }
+    }
+  },
+  "required": [
+    "state",
+    "release_date",
+    "generated_at"
+  ]
+}

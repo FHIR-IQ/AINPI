@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ainpi.dev/api/v1/schemas/stats.schema.json",
+  "title": "AINPI top-line stats",
+  "type": "object",
+  "properties": {
+    "release_date": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "methodology_version": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "commit_sha": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "counters": {
+      "type": "object",
+      "properties": {
+        "resources_processed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "npis_checked": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "npis_flagged": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "endpoints_live_pct": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 100
+        },
+        "findings_published": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "findings_in_progress": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "findings_pre_registered": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "resources_processed",
+        "findings_published"
+      ]
+    },
+    "counters_as_of": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "release_date",
+    "generated_at",
+    "counters"
+  ]
+}

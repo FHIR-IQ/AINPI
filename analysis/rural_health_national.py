@@ -170,6 +170,52 @@ def main() -> None:
     for s in rows[:6]:
         print(f"  {s['state']}  {s['rural']:>3}/{s['hospitals']:<4} {s['rural_share']:>5}%  CAH {s['critical_access']}")
     print(f"\nwrote {OUT}")
+    # Also publish under findings/<slug>.json.
+    #
+    # This finding writes its full payload to /api/v1/rural-health.json, which
+    # the /rural-health page reads. But /findings/<slug> reads
+    # findings/<slug>.json, so the finding page rendered the pre-registration
+    # placeholder while the numbers had been published for two weeks. The
+    # contract validator caught it; a reader arriving from the findings hub
+    # would have concluded the work was not done.
+    nat = payload["summary"]
+    finding = {
+        "slug": "rural-hospital-baseline",
+        "title": "Rural hospital baseline",
+        "hypotheses": ["H48"],
+        "status": "published",
+        # Not an NDH release: this finding derives from the CMS Hospital
+        # General Information file joined to USDA ERS continuum codes.
+        "release_date": "CMS Hospital General Information + USDA ERS 2023",
+        "generated_at": payload["generated_at"],
+        "methodology_version": payload["methodology_version"],
+        "commit_sha": payload.get("commit_sha", "pending"),
+        "headline": (
+            f"{nat['rural_hospitals']:,} of {nat['hospitals']:,} US hospitals "
+            f"({nat['rural_share']}%) sit in nonmetro counties, which hold "
+            f"{nat['rural_pop_share']}% of the population. "
+            f"{nat['critical_access']:,} are Critical Access. "
+            f"{nat['unmatched_county']:,} hospitals could not be matched to a "
+            f"county continuum code and are reported per state rather than "
+            f"assigned to either group."
+        ),
+        "numerator": nat["rural_hospitals"],
+        "denominator": nat["hospitals"],
+        "chart": {
+            "type": "bar",
+            "unit": "percent",
+            "data": [
+                {"label": "Hospitals in nonmetro counties", "value": nat["rural_share"]},
+                {"label": "Population in nonmetro counties", "value": nat["rural_pop_share"]},
+            ],
+        },
+        "notes": payload["notes"],
+    }
+    fp = OUT.parent / "findings" / "rural-hospital-baseline.json"
+    fp.parent.mkdir(parents=True, exist_ok=True)
+    fp.write_text(json.dumps(finding, indent=2) + "\n")
+    print(f"wrote {fp}")
+
 
 
 if __name__ == "__main__":

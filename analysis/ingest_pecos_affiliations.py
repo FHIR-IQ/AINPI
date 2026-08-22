@@ -55,6 +55,7 @@ import collections
 import csv
 import json
 import pathlib
+from datetime import datetime, timezone
 import subprocess
 import sys
 
@@ -73,6 +74,8 @@ DAC_ID = "mj5m-pzi6"
 FACILITY_ID = "27ea-46a8"
 REASSIGNMENT_TITLE = "Revalidation Reassignment List"
 PPEF_TITLE = "Medicare Fee-For-Service  Public Provider Enrollment"
+
+METHODOLOGY_VERSION = "0.7.3-draft"
 
 SOURCES = {
     "dac": ("dac_national.csv", "provider-data", DAC_ID),
@@ -352,8 +355,19 @@ def main():
     out_dir = pathlib.Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    # `generated: None` was the only provenance this payload carried, so a
+    # consumer could not tell what it described or when it was measured, and
+    # the contract validator could not check it at all.
     summary = {
-        "generated": None,
+        "slug": "pecos-affiliation-coverage",
+        "title": "CMS enrollment as a practitioner-to-organization source",
+        "hypotheses": [],
+        "status": "published",
+        # Not an NDH release: these are CMS enrollment files with their own
+        # refresh cadence, recorded per source under `sources` below.
+        "release_date": "CMS enrollment files (see sources)",
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "methodology_version": METHODOLOGY_VERSION,
         "sources": {k: {"file": SOURCES[k][0], "modified": modified.get(k)}
                     for k in SOURCES},
         "states": {},

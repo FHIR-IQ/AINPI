@@ -163,6 +163,16 @@ jobs:
         if: always()
         run: python analysis/build_manifest.py
 
+      - name: Validate the published contract
+        # This workflow pushes straight to main with no human in the loop, so
+        # this is the only gate between a broken generator and the public
+        # contract. Runs after every generator and after the manifest, and
+        # fails the job before the commit step rather than after.
+        run: |
+          pip install jsonschema >/dev/null
+          python analysis/validate_contract.py --write-schemas
+          python analysis/validate_contract.py
+
       - name: Detect changes
         id: diff
         run: |

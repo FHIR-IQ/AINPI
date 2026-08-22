@@ -1,0 +1,62 @@
+{
+  "slug": "pa-rural-hospital-connectivity",
+  "title": "Pennsylvania rural hospital connectivity",
+  "hypotheses": [
+    "H47"
+  ],
+  "status": "published",
+  "release_date": "CMS Hospital General Information + USDA ERS 2023",
+  "generated_at": "2026-08-04T22:26:55+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "pending",
+  "headline": "137 of 187 Pennsylvania hospitals resolve to a published FHIR endpoint (73.3%). 43 sit in nonmetro counties and 17 are Critical Access. 50 could not be matched to any vendor bundle.",
+  "numerator": 137,
+  "denominator": 187,
+  "chart": {
+    "type": "bar",
+    "unit": "count",
+    "data": [
+      {
+        "label": "Epic",
+        "value": 86
+      },
+      {
+        "label": "athenahealth",
+        "value": 24
+      },
+      {
+        "label": "MEDITECH",
+        "value": 8
+      },
+      {
+        "label": "TruBridge",
+        "value": 7
+      },
+      {
+        "label": "Oracle Health (Cerner)",
+        "value": 5
+      },
+      {
+        "label": "AdvancedMD",
+        "value": 2
+      },
+      {
+        "label": "Practice Fusion",
+        "value": 1
+      },
+      {
+        "label": "Carepaths Inc",
+        "value": 1
+      },
+      {
+        "label": "Darena Health",
+        "value": 1
+      },
+      {
+        "label": "NextGen",
+        "value": 1
+      }
+    ]
+  },
+  "notes": "Pennsylvania has five certified Health Information Organizations connected to the P3N hub, and QHIN designation under TEFCA continues on a rolling basis. Neither the HIO participant lists nor the QHIN participant rosters are published in machine-readable form, and the PA eHealth Partnership states that the P3N and its HIOs are not sub-participants in any QHIN. This dashboard therefore reports FHIR endpoint publication and EHR vendor, which are measurable, and does not assign HIO or TEFCA participation per hospital."
+}

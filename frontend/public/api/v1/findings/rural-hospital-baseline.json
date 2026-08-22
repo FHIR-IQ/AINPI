@@ -1,0 +1,30 @@
+{
+  "slug": "rural-hospital-baseline",
+  "title": "Rural hospital baseline",
+  "hypotheses": [
+    "H48"
+  ],
+  "status": "published",
+  "release_date": "CMS Hospital General Information + USDA ERS 2023",
+  "generated_at": "2026-08-22T13:25:39+00:00",
+  "methodology_version": "0.7.2-draft",
+  "commit_sha": "pending",
+  "headline": "1,847 of 5,366 US hospitals (34.4%) sit in nonmetro counties, which hold 13.8% of the population. 1,338 are Critical Access. 239 hospitals could not be matched to a county continuum code and are reported per state rather than assigned to either group.",
+  "numerator": 1847,
+  "denominator": 5366,
+  "chart": {
+    "type": "bar",
+    "unit": "percent",
+    "data": [
+      {
+        "label": "Hospitals in nonmetro counties",
+        "value": 34.4
+      },
+      {
+        "label": "Population in nonmetro counties",
+        "value": 13.8
+      }
+    ]
+  },
+  "notes": "Rural means the hospital's county carries USDA ERS Rural-Urban Continuum Code 4 to 9 (nonmetro) for 2023. Critical Access is the CMS facility-level designation. 239 hospitals could not be matched to a county code and are counted in each state's unmatched field rather than assigned to either group. Territories are excluded because ERS publishes no continuum code for them."
+}

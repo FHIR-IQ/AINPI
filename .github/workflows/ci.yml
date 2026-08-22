@@ -37,3 +37,36 @@ jobs:
 
       - name: Unit tests
         run: npm run test
+
+  contract:
+    name: Public contract validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install validator dependencies
+        run: pip install jsonschema
+
+      # Schema conformance plus the invariants a schema cannot express:
+      # provenance matching the pinned release, numerator <= denominator in the
+      # same unit, findings.ts agreeing with the published JSON, every manifest
+      # URL resolving, and cross-finding agreements. Every defect this repo
+      # shipped in August was well-formed JSON.
+      - name: Validate /api/v1 contract
+        run: python analysis/validate_contract.py
+
+      # The published schemas must match the ones the validator enforces, or
+      # an external consumer validates against a stale contract.
+      - name: Schemas are up to date
+        run: |
+          python analysis/validate_contract.py --write-schemas
+          if ! git diff --quiet frontend/public/api/v1/schemas/; then
+            echo "::error::Published schemas differ from contract_schemas.py."
+            echo "Run: python analysis/validate_contract.py --write-schemas"
+            git --no-pager diff --stat frontend/public/api/v1/schemas/
+            exit 1
+          fi

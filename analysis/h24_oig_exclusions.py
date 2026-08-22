@@ -177,8 +177,14 @@ def run() -> None:
         "methodology_version": METHODOLOGY_VERSION,
         "commit_sha": get_commit_sha(),
         "headline": headline,
-        "numerator": total_matches,
+        # Distinct NPIs, not appearances. `total_matches` sums the
+        # practitioner and organization hits, and an excluded individual can be
+        # both, so publishing it against a denominator of distinct NPIs gave
+        # consumers 10,035/8,841 = 113%. The headline already used the union;
+        # only the machine-readable pair was wrong.
+        "numerator": distinct_leie_npis_in_ndh,
         "denominator": leie_active_with_npi,
+        "appearances_in_ndh": total_matches,
         "chart": {
             "type": "bar",
             "unit": "count",
