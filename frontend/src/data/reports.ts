@@ -50,7 +50,7 @@ export const REPORTS: ReportOption[] = [
     title:
       '2026-08-17 update: the directory knows doctors, and barely knows nurses, dentists and pharmacists',
     description:
-      'We checked all 227,727 health workers the national directory lists as active in Pennsylvania, and asked which ones it says have a workplace. It is not evenly spread. 77.9% of nurse practitioners and physician assistants have one, and 1 of 12,995 pharmacy workers does. The split tracks who bills Medicare, not who provides care. Includes a new county map you can zoom, and an honest account of the guess we got wrong.',
+      'We checked all 227,727 health workers the national directory lists as active in Pennsylvania, and asked which ones it says have a workplace. It is not evenly spread. 77.9% of nurse practitioners and physician assistants have one, and 1 of 12,995 pharmacy workers does. The split tracks who bills Medicare, not who provides care. Includes a county map you can zoom. Measured against the 2026-05-08 release; every profession improved at 2026-08-20 and pharmacy went from 1 to 526.',
     format: 'web',
     url: '/reports/2026-08-17-update',
     length: '~4 min read',
@@ -60,7 +60,7 @@ export const REPORTS: ReportOption[] = [
     version: '2026-08-16-update',
     title: "2026-08-16 update: most addresses in the national doctor directory don't say who they belong to",
     description:
-      'We checked 114,071 web addresses in the national directory of doctors. Only 19,334 say who owns them, about one in six. Nothing is broken, the names were simply never filled in. Includes a free list of the ones that work, why sixteen software companies have never filled the name in once, why health insurers are not in the directory yet, and what we think the community should push for next.',
+      'We checked 114,071 web addresses in the national directory of doctors. Only 19,334 say who owns them, about one in six. Nothing is broken, the names were simply never filled in. Includes a free list of the ones that work and why sixteen software companies have never filled the name in once. Measured against the 2026-05-08 release; at 2026-08-20 it is 16,262 of 110,973, and health insurers have since arrived.',
     format: 'web',
     url: '/reports/2026-08-16-update',
     length: '~4 min read',
@@ -120,7 +120,7 @@ export const REPORTS: ReportOption[] = [
     version: '2026-06-09-update',
     title: '2026-06-09 update: 99.98% of practitioners carry a phone on the record (H43)',
     description:
-      'H43 (practitioner phone-number reachability) published. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 release carry a phone directly on the Practitioner record; the role/location traversal adds nothing; 1,115 have no phone on any resource. The pre-registered prior (phone on the location, NPPES-style) was rejected by the data.',
+      'H43 (practitioner phone-number reachability) published. 7,195,270 of 7,196,385 active practitioners (99.98%) in the 2026-05-08 release carry a phone directly on the Practitioner record; the role/location traversal adds nothing. The pre-registered prior (phone on the location, NPPES-style) was rejected by the data. The on-record finding still holds at 2026-08-20, but location records now carry a phone for 79% of themselves, where they carried none in May.',
     format: 'web',
     url: '/reports/2026-06-09-update',
     length: '~4 min read',
