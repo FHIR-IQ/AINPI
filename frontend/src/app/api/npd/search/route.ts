@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
 import { parseNameQuery, groupRolesBySpecialty, type RoleRow } from '@/lib/npd-search-utils';
+import { enforceRateLimit, withRateLimitHeaders } from '@/lib/rate-limit';
+import { CURRENT_RELEASE } from '@/lib/release';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -30,6 +32,8 @@ interface SearchParams {
   org?: string;
   type?: string;
   limit?: number;
+  /** 'primary' restricts geography to address[0]; anything else searches all. */
+  scope?: string;
 }
 
 function parseSearchParams(req: NextRequest): SearchParams {
@@ -41,6 +45,7 @@ function parseSearchParams(req: NextRequest): SearchParams {
     city: url.searchParams.get('city') || undefined,
     specialty: url.searchParams.get('specialty') || undefined,
     org: url.searchParams.get('org') || undefined,
+    scope: url.searchParams.get('scope') || undefined,
     type: url.searchParams.get('type') || 'all',
     limit: Math.min(parseInt(url.searchParams.get('limit') || '20', 10), MAX_RESULTS),
   };
@@ -70,22 +75,38 @@ async function searchPractitioners(params: SearchParams) {
     }
   }
 
-  // State search matches the extracted _state (address[0]) OR any address in the array.
-  // This catches providers whose primary practice address is 2nd/3rd in the list.
+  // Geography can be matched two ways and they differ 23x in cost.
+  //
+  //   deep (default)  every address in address[], via the resource JSON.
+  //                   9.74 GB per call. Measured 2026-08-22.
+  //   primary         the flattened _state / _city, which is address[0].
+  //                   0.43 GB per call.
+  //
+  // Deep stays the default because the recall is real, not theoretical:
+  // 1,095,257 practitioners (14.85%) list addresses in more than one state,
+  // and a patient searching their own state wants the clinician whose second
+  // office is there. `scope=primary` is offered for integrators doing bulk
+  // work who can accept address[0] only, and is priced accordingly.
+  const deepGeo = params.scope !== 'primary';
+
   if (params.state) {
     where.push(
-      '(_state = @state OR EXISTS(' +
-      'SELECT 1 FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
-      'WHERE JSON_EXTRACT_SCALAR(a, "$.state") = @state))'
+      deepGeo
+        ? '(_state = @state OR EXISTS(' +
+          'SELECT 1 FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
+          'WHERE JSON_EXTRACT_SCALAR(a, "$.state") = @state))'
+        : '_state = @state'
     );
     qp.state = params.state;
   }
 
   if (params.city) {
     where.push(
-      '(LOWER(_city) LIKE LOWER(@city) OR EXISTS(' +
-      'SELECT 1 FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
-      'WHERE LOWER(JSON_EXTRACT_SCALAR(a, "$.city")) LIKE LOWER(@city)))'
+      deepGeo
+        ? '(LOWER(_city) LIKE LOWER(@city) OR EXISTS(' +
+          'SELECT 1 FROM UNNEST(JSON_EXTRACT_ARRAY(resource, "$.address")) a ' +
+          'WHERE LOWER(JSON_EXTRACT_SCALAR(a, "$.city")) LIKE LOWER(@city)))'
+        : 'LOWER(_city) LIKE LOWER(@city)'
     );
     qp.city = '%' + params.city + '%';
   }
@@ -237,13 +258,29 @@ export async function GET(req: NextRequest) {
       );
     }
 
+    // Quota is charged by query shape, because these are not the same
+    // purchase: an NPI hits the cluster key and scans ~0.04 GB, a name or
+    // geography search scans ~0.4 GB. Charging per request would price a
+    // bulk extraction the same as a lookup.
+    const shape = params.npi
+      ? 'npd/search:npi'
+      : params.org
+        ? 'npd/search:org'
+        : params.name
+          ? 'npd/search:name'
+          : params.scope === 'primary'
+            ? 'npd/search:name' // primary-only geo costs about what a name scan does
+            : 'npd/search:geo';
+    const limit = await enforceRateLimit(req, { shape });
+    if (!limit.ok) return limit.response!;
+
     if (params.npi && params.type === 'all') {
       const profile = await getProviderProfile(params.npi);
       return NextResponse.json({
         type: 'provider_profile',
         data: profile,
         source: 'cms_npd',
-        release_date: '2026-05-08',
+        release_date: CURRENT_RELEASE,
       });
     }
 
@@ -255,20 +292,21 @@ export async function GET(req: NextRequest) {
 
     const totalResults = Object.values(results).reduce((sum, arr) => sum + arr.length, 0);
 
-    return NextResponse.json({
+    const res = NextResponse.json({
       type: 'search',
       query: params,
       total_results: totalResults,
       data: results,
       source: 'cms_npd',
-      release_date: '2026-05-08',
+      release_date: CURRENT_RELEASE,
       // Hint for the UI about how we expanded the search
       search_scope_notes: [
         params.name ? 'Name matches use fuzzy multi-token + credential-suffix stripping.' : null,
         params.state ? 'State matches any address in the practitioner\'s address[] array, not just the primary one.' : null,
-        params.org ? 'Org matches both _name and Organization.alias[]. Note: alias is 0% populated in 2026-05-08 release.' : null,
+        params.org ? `Org matches both _name and Organization.alias[]. Note: alias was 0% populated as of ${CURRENT_RELEASE}.` : null,
       ].filter(Boolean),
     });
+    return withRateLimitHeaders(res, limit);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('NPD search error:', message);

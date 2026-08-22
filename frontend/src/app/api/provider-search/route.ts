@@ -25,6 +25,7 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -508,6 +509,11 @@ interface NormalizedQuery {
 }
 
 export async function POST(req: NextRequest) {
+  // Charged above a plain NPI lookup: this route runs a BigQuery query and
+  // then fans out to four payer FHIR directories over the network.
+  const rl = await enforceRateLimit(req, { shape: 'provider-search' });
+  if (!rl.ok) return rl.response!;
+
   let body: any;
   try {
     body = await req.json();

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getUserIdFromToken } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import OpenAI from 'openai';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 // Determine which AI provider to use (defaults to Perplexity)
 const AI_PROVIDER = process.env.AI_PROVIDER || 'perplexity'; // 'perplexity' or 'openai'
@@ -116,6 +117,13 @@ export async function POST(request: NextRequest) {
     if (!userId) {
       return NextResponse.json({ detail: 'Unauthorized' }, { status: 401 });
     }
+
+    // Authentication is not a spend control. Registration is open, so a login
+    // costs an attacker one email address, and each call here fans out to a
+    // paid LLM provider. Priced at 500 units, so the anonymous-tier daily
+    // budget buys four calls and a free key buys forty.
+    const rl = await enforceRateLimit(request, { shape: 'magic-scanner' });
+    if (!rl.ok) return rl.response!;
 
     // Check if AI provider API key is configured (optional - will skip AI discovery if not available)
     const hasAIProviderKey = (AI_PROVIDER === 'perplexity' && process.env.PERPLEXITY_API_KEY) ||

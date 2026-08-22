@@ -173,6 +173,29 @@ for f in $(filter_files '\.(md|ts|tsx|js|mjs|py|html)$'); do
 done
 
 # ---------------------------------------------------------------------------
+# RULE 7 — A billable API route with no rate limit
+#
+# Every BigQuery-backed route shipped with a 100 GB per-query cap and no
+# volume control at all. A per-query cap bounds one bad query; it does not
+# bound ten thousand ordinary ones. Measured 2026-08-22, a state+city search
+# scans 9.74 GB, which is about $0.06 a call: a scraper at 10 req/s costs
+# roughly $2,200 an hour, and GCP billing lags by hours so the budget alert
+# cannot stop it.
+#
+# Any route that touches BigQuery, a paid AI provider, or the MCP surface must
+# call enforceRateLimit() from @/lib/rate-limit.
+# ---------------------------------------------------------------------------
+echo "→ Rule 7: billable API routes must enforce a rate limit"
+for f in $(filter_files '^frontend/src/app/api/.*route\.ts$'); do
+  [ -f "$f" ] || continue
+  if grep -qE "getBigQueryClient|queryBigQuery|ANTHROPIC_API_KEY|OPENAI_API_KEY|PERPLEXITY_API_KEY|createMcpHandler" "$f"; then
+    if ! grep -q "enforceRateLimit" "$f"; then
+      record "$f: billable route with no enforceRateLimit()  [Rule 7: import { enforceRateLimit } from '@/lib/rate-limit' and call it before any billable work]"
+    fi
+  fi
+done
+
+# ---------------------------------------------------------------------------
 # Report
 # ---------------------------------------------------------------------------
 if [ ${#ERRORS[@]} -gt 0 ]; then

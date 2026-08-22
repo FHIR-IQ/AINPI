@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 const PROJECT_ID = process.env.GCP_PROJECT_ID || 'thematic-fort-453901-t7';
 const DATASET_ID = process.env.BQ_DATASET_ID || 'cms_npd';
@@ -125,6 +126,8 @@ async function getRelationshipStats() {
 
 export async function GET(req: NextRequest) {
   try {
+    const rl = await enforceRateLimit(req, { shape: 'npd/relationships' });
+    if (!rl.ok) return rl.response!;
     const url = new URL(req.url);
     const view = url.searchParams.get('view') || 'overview';
     const org = url.searchParams.get('org');

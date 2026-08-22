@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -21,6 +22,8 @@ async function runQuery(sql: string, params?: Record<string, unknown>) {
 
 export async function GET(req: NextRequest) {
   try {
+    const limit = await enforceRateLimit(req, { shape: 'npd/org-analysis' });
+    if (!limit.ok) return limit.response!;
     const url = new URL(req.url);
     const org = url.searchParams.get('org');
     if (!org) return NextResponse.json({ error: 'org parameter required' }, { status: 400 });

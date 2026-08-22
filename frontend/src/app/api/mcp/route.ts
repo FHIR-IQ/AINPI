@@ -17,7 +17,9 @@
  * Connect (Claude Code):
  *   claude mcp add --transport http ainpi https://ainpi.dev/api/mcp
  */
+import type { NextRequest } from 'next/server';
 import { createMcpHandler } from 'mcp-handler';
+import { enforceRateLimit } from '@/lib/rate-limit';
 import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
@@ -212,4 +214,35 @@ const handler = createMcpHandler(
   },
 );
 
-export { handler as GET, handler as POST, handler as DELETE };
+/**
+ * Rate limiting for the MCP surface.
+ *
+ * The `mcp-handler` package owns the request lifecycle, so the limiter runs as
+ * a wrapper around the handler rather than inside each tool. That means one
+ * charge per MCP request rather than per tool call, which is the right
+ * granularity: a request is what an agent retries.
+ *
+ * Agents retry aggressively and without backoff when a call fails, so an
+ * unprotected MCP endpoint is a worse exposure than a browser-facing route: no
+ * human notices it looping. Every tool here reads CDN-served static JSON
+ * except `lookup_npi`, which wraps the capped /api/npd/search route, so the
+ * charge reflects the worst case rather than the average.
+ */
+async function guarded(
+  req: NextRequest,
+  run: (r: NextRequest) => Promise<Response> | Response,
+): Promise<Response> {
+  const rl = await enforceRateLimit(req, { shape: 'mcp:lookup' });
+  if (!rl.ok) return rl.response!;
+  return run(req);
+}
+
+export async function GET(req: NextRequest) {
+  return guarded(req, handler as unknown as (r: NextRequest) => Promise<Response>);
+}
+export async function POST(req: NextRequest) {
+  return guarded(req, handler as unknown as (r: NextRequest) => Promise<Response>);
+}
+export async function DELETE(req: NextRequest) {
+  return guarded(req, handler as unknown as (r: NextRequest) => Promise<Response>);
+}

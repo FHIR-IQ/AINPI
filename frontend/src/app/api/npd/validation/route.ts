@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -26,8 +27,10 @@ const SOURCE_COUNTS: Record<string, number> = {
   organization_affiliation: 1_086_694,
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    const limit = await enforceRateLimit(req, { shape: 'npd/validation' });
+    if (!limit.ok) return limit.response!;
     // Get actual counts from BigQuery
     const countQueries = Object.keys(SOURCE_COUNTS).map((t) =>
       'SELECT "' + t + '" AS resource, COUNT(*) AS total FROM ' + tbl(t)

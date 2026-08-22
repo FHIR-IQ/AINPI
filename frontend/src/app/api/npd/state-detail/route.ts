@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -21,6 +22,8 @@ async function runQuery(sql: string, params?: Record<string, unknown>) {
 
 export async function GET(req: NextRequest) {
   try {
+    const limit = await enforceRateLimit(req, { shape: 'npd/state-detail' });
+    if (!limit.ok) return limit.response!;
     const url = new URL(req.url);
     const state = url.searchParams.get('state')?.toUpperCase();
     const city = url.searchParams.get('city');

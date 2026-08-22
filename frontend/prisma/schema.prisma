@@ -6,24 +6,24 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Practitioner {
-  id       String   @id @default(uuid())
-  fhirId   String   @unique @map("fhir_id")
+  id     String @id @default(uuid())
+  fhirId String @unique @map("fhir_id")
 
   // Core identifiers
-  npi       String?  @unique
-  deaNumber String?  @map("dea_number")
-  taxId     String?  @map("tax_id")
+  npi       String? @unique
+  deaNumber String? @map("dea_number")
+  taxId     String? @map("tax_id")
 
   // Personal info
-  firstName  String   @map("first_name")
-  middleName String?  @map("middle_name")
-  lastName   String   @map("last_name")
+  firstName  String  @map("first_name")
+  middleName String? @map("middle_name")
+  lastName   String  @map("last_name")
   suffix     String?
   gender     String?
 
@@ -41,7 +41,7 @@ model Practitioner {
   country      String? @default("US")
 
   // FHIR representation (stored as JSON)
-  fhirResource Json?   @map("fhir_resource")
+  fhirResource Json? @map("fhir_resource")
 
   // Extended provider data (JSON)
   specialties       Json? // Array of {code, display, isPrimary}
@@ -60,9 +60,9 @@ model Practitioner {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
-  roles     PractitionerRole[]
-  syncLogs  SyncLog[]
-  consents  Consent[]
+  roles    PractitionerRole[]
+  syncLogs SyncLog[]
+  consents Consent[]
 
   @@index([email])
   @@index([npi])
@@ -71,24 +71,24 @@ model Practitioner {
 }
 
 model PractitionerRole {
-  id             String   @id @default(uuid())
-  fhirId         String   @unique @map("fhir_id")
-  practitionerId String   @map("practitioner_id")
+  id             String @id @default(uuid())
+  fhirId         String @unique @map("fhir_id")
+  practitionerId String @map("practitioner_id")
 
   // Role details
   specialtyCode    String? @map("specialty_code")
   specialtyDisplay String? @map("specialty_display")
 
   // Practice location
-  practiceName        String? @map("practice_name")
+  practiceName         String? @map("practice_name")
   practiceAddressLine1 String? @map("practice_address_line1")
   practiceAddressLine2 String? @map("practice_address_line2")
-  practiceCity        String? @map("practice_city")
-  practiceState       String? @map("practice_state")
-  practicePostalCode  String? @map("practice_postal_code")
+  practiceCity         String? @map("practice_city")
+  practiceState        String? @map("practice_state")
+  practicePostalCode   String? @map("practice_postal_code")
 
   // Accepted insurances (JSON array)
-  acceptedInsurances Json?   @map("accepted_insurances")
+  acceptedInsurances Json? @map("accepted_insurances")
 
   // License
   licenseState      String?   @map("license_state")
@@ -96,7 +96,7 @@ model PractitionerRole {
   licenseExpiration DateTime? @map("license_expiration")
 
   // FHIR representation
-  fhirResource Json    @map("fhir_resource")
+  fhirResource Json @map("fhir_resource")
 
   // Status
   active Boolean @default(true)
@@ -112,8 +112,8 @@ model PractitionerRole {
 }
 
 model SyncLog {
-  id             String   @id @default(uuid())
-  practitionerId String   @map("practitioner_id")
+  id             String @id @default(uuid())
+  practitionerId String @map("practitioner_id")
 
   // Sync details
   targetSystem String  @map("target_system")
@@ -144,8 +144,8 @@ model SyncLog {
 }
 
 model Consent {
-  id             String   @id @default(uuid())
-  practitionerId String   @map("practitioner_id")
+  id             String @id @default(uuid())
+  practitionerId String @map("practitioner_id")
 
   // Recipient organization details
   recipientName       String  @map("recipient_name")
@@ -155,7 +155,7 @@ model Consent {
 
   // Authorization details
   status String @default("active")
-  scope  Json?  // Array of scopes
+  scope  Json? // Array of scopes
 
   // Purpose
   purpose String? @db.Text
@@ -175,7 +175,7 @@ model Consent {
 }
 
 model ProviderDirectoryAPI {
-  id       String   @id @default(uuid())
+  id String @id @default(uuid())
 
   // Organization details
   organizationName String  @map("organization_name")
@@ -183,35 +183,35 @@ model ProviderDirectoryAPI {
   state            String? // State if specific to one state
 
   // API details
-  apiEndpoint      String  @map("api_endpoint")
-  apiType          String  @map("api_type") // 'rest' | 'fhir' | 'soap' | 'web_scrape'
-  apiDocUrl        String? @map("api_doc_url")
+  apiEndpoint String  @map("api_endpoint")
+  apiType     String  @map("api_type") // 'rest' | 'fhir' | 'soap' | 'web_scrape'
+  apiDocUrl   String? @map("api_doc_url")
 
   // Authentication
-  requiresAuth     Boolean @default(false) @map("requires_auth")
-  authType         String? @map("auth_type") // 'api_key' | 'oauth' | 'basic' | 'none'
+  requiresAuth Boolean @default(false) @map("requires_auth")
+  authType     String? @map("auth_type") // 'api_key' | 'oauth' | 'basic' | 'none'
 
   // API capabilities
-  supportsNpiSearch   Boolean @default(false) @map("supports_npi_search")
-  supportsNameSearch  Boolean @default(false) @map("supports_name_search")
-  searchParamFormat   Json?   @map("search_param_format") // How to format search params
+  supportsNpiSearch  Boolean @default(false) @map("supports_npi_search")
+  supportsNameSearch Boolean @default(false) @map("supports_name_search")
+  searchParamFormat  Json?   @map("search_param_format") // How to format search params
 
   // Connection status
-  status              String  @default("discovered") // 'discovered' | 'tested' | 'active' | 'inactive' | 'error'
+  status              String    @default("discovered") // 'discovered' | 'tested' | 'active' | 'inactive' | 'error'
   lastTestedAt        DateTime? @map("last_tested_at")
   lastSuccessAt       DateTime? @map("last_success_at")
-  consecutiveFailures Int     @default(0) @map("consecutive_failures")
+  consecutiveFailures Int       @default(0) @map("consecutive_failures")
 
   // Performance metrics
-  avgResponseTimeMs   Int?    @map("avg_response_time_ms")
-  successRate         Float?  @map("success_rate")
+  avgResponseTimeMs Int?   @map("avg_response_time_ms")
+  successRate       Float? @map("success_rate")
 
   // Discovery info
-  discoveredBy        String  @map("discovered_by") // 'manual' | 'ai_scanner' | 'import'
-  discoverySource     String? @map("discovery_source")
+  discoveredBy    String  @map("discovered_by") // 'manual' | 'ai_scanner' | 'import'
+  discoverySource String? @map("discovery_source")
 
   // Metadata
-  notes               String? @db.Text
+  notes String? @db.Text
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -227,35 +227,35 @@ model ProviderDirectoryAPI {
 }
 
 model MagicScanResult {
-  id             String   @id @default(uuid())
-  practitionerId String?  @map("practitioner_id")
+  id             String  @id @default(uuid())
+  practitionerId String? @map("practitioner_id")
 
   // Search criteria
-  npi            String
-  lastName       String   @map("last_name")
-  state          String?
+  npi      String
+  lastName String  @map("last_name")
+  state    String?
 
   // Results summary
-  totalSourcesChecked   Int     @map("total_sources_checked")
-  totalSourcesFound     Int     @map("total_sources_found")
-  totalDiscrepancies    Int     @map("total_discrepancies")
+  totalSourcesChecked Int @map("total_sources_checked")
+  totalSourcesFound   Int @map("total_sources_found")
+  totalDiscrepancies  Int @map("total_discrepancies")
 
   // NPPES staleness
-  nppesIsStale          Boolean? @map("nppes_is_stale")
-  nppesDaysSinceUpdate  Int?     @map("nppes_days_since_update")
-  nppesNeedsSync        Boolean? @map("nppes_needs_sync")
+  nppesIsStale         Boolean? @map("nppes_is_stale")
+  nppesDaysSinceUpdate Int?     @map("nppes_days_since_update")
+  nppesNeedsSync       Boolean? @map("nppes_needs_sync")
 
   // Full results (JSON)
-  scanResults           Json     @map("scan_results")
-  aiSummary             String?  @map("ai_summary") @db.Text
-  citations             Json?    // Array of URLs
+  scanResults Json    @map("scan_results")
+  aiSummary   String? @map("ai_summary") @db.Text
+  citations   Json? // Array of URLs
 
   // API connections attempted
-  apiConnectionResults  Json?    @map("api_connection_results") // Array of connection test results
+  apiConnectionResults Json? @map("api_connection_results") // Array of connection test results
 
   // Relations
-  apiId                 String?  @map("api_id")
-  api                   ProviderDirectoryAPI? @relation(fields: [apiId], references: [id])
+  apiId String?               @map("api_id")
+  api   ProviderDirectoryAPI? @relation(fields: [apiId], references: [id])
 
   // Timestamps
   scannedAt DateTime @default(now()) @map("scanned_at")
@@ -272,35 +272,35 @@ model MagicScanResult {
 // ============================================================
 
 model NpdDataQualitySummary {
-  id                   String   @id @default(uuid())
-  releaseDate          String   @map("release_date") // "2026-04-09"
-  resourceType         String   @map("resource_type") // practitioner, organization, location, endpoint
-  totalRecords         Int      @map("total_records")
-  withPrimaryId        Int      @map("with_primary_id")
-  withName             Int      @map("with_name")
-  withAddress          Int      @map("with_address")
-  activeRecords        Int      @map("active_records")
-  idCompletenessPct    Float    @map("id_completeness_pct")
-  nameCompletenessPct  Float    @map("name_completeness_pct")
-  addressCompletenessPct Float  @map("address_completeness_pct")
-  updatedAt            DateTime @default(now()) @map("updated_at")
+  id                     String   @id @default(uuid())
+  releaseDate            String   @map("release_date") // "2026-04-09"
+  resourceType           String   @map("resource_type") // practitioner, organization, location, endpoint
+  totalRecords           Int      @map("total_records")
+  withPrimaryId          Int      @map("with_primary_id")
+  withName               Int      @map("with_name")
+  withAddress            Int      @map("with_address")
+  activeRecords          Int      @map("active_records")
+  idCompletenessPct      Float    @map("id_completeness_pct")
+  nameCompletenessPct    Float    @map("name_completeness_pct")
+  addressCompletenessPct Float    @map("address_completeness_pct")
+  updatedAt              DateTime @default(now()) @map("updated_at")
 
   @@unique([releaseDate, resourceType])
   @@map("npd_data_quality_summary")
 }
 
 model NpdStateMetrics {
-  id                String   @id @default(uuid())
-  releaseDate       String   @map("release_date")
-  state             String   // 2-letter state code
-  providerCount     Int      @map("provider_count")
-  orgCount          Int      @map("org_count")
-  locationCount     Int      @map("location_count")
-  endpointCount     Int      @map("endpoint_count")
-  activeProviders   Int      @map("active_providers")
-  npiCompleteness   Float    @map("npi_completeness") // pct
-  addressCompleteness Float  @map("address_completeness") // pct
-  updatedAt         DateTime @default(now()) @map("updated_at")
+  id                  String   @id @default(uuid())
+  releaseDate         String   @map("release_date")
+  state               String // 2-letter state code
+  providerCount       Int      @map("provider_count")
+  orgCount            Int      @map("org_count")
+  locationCount       Int      @map("location_count")
+  endpointCount       Int      @map("endpoint_count")
+  activeProviders     Int      @map("active_providers")
+  npiCompleteness     Float    @map("npi_completeness") // pct
+  addressCompleteness Float    @map("address_completeness") // pct
+  updatedAt           DateTime @default(now()) @map("updated_at")
 
   @@unique([releaseDate, state])
   @@index([state])
@@ -323,29 +323,29 @@ model NpdSpecialtyMetrics {
 }
 
 model NpdEndpointMetrics {
-  id               String   @id @default(uuid())
-  releaseDate      String   @map("release_date")
-  connectionType   String   @map("connection_type")
-  status           String
-  endpointCount    Int      @map("endpoint_count")
-  uniqueOrgs       Int      @map("unique_orgs")
-  updatedAt        DateTime @default(now()) @map("updated_at")
+  id             String   @id @default(uuid())
+  releaseDate    String   @map("release_date")
+  connectionType String   @map("connection_type")
+  status         String
+  endpointCount  Int      @map("endpoint_count")
+  uniqueOrgs     Int      @map("unique_orgs")
+  updatedAt      DateTime @default(now()) @map("updated_at")
 
   @@unique([releaseDate, connectionType, status])
   @@map("npd_endpoint_metrics")
 }
 
 model NpdIngestionLog {
-  id            String   @id @default(uuid())
-  releaseDate   String   @map("release_date")
-  resourceType  String   @map("resource_type")
-  status        String   @default("pending") // pending, running, completed, failed
-  recordCount   Int?     @map("record_count")
-  errorCount    Int?     @map("error_count")
-  durationMs    Int?     @map("duration_ms")
-  errorMessage  String?  @map("error_message") @db.Text
-  startedAt     DateTime @default(now()) @map("started_at")
-  completedAt   DateTime? @map("completed_at")
+  id           String    @id @default(uuid())
+  releaseDate  String    @map("release_date")
+  resourceType String    @map("resource_type")
+  status       String    @default("pending") // pending, running, completed, failed
+  recordCount  Int?      @map("record_count")
+  errorCount   Int?      @map("error_count")
+  durationMs   Int?      @map("duration_ms")
+  errorMessage String?   @map("error_message") @db.Text
+  startedAt    DateTime  @default(now()) @map("started_at")
+  completedAt  DateTime? @map("completed_at")
 
   @@index([releaseDate])
   @@map("npd_ingestion_logs")
@@ -354,10 +354,10 @@ model NpdIngestionLog {
 // Email capture — anyone who subscribes for updates via /subscribe.
 // Minimal fields on purpose; transactional-email service integration is TBD.
 model Subscriber {
-  id          String   @id @default(uuid())
-  email       String   @unique
-  source      String?  // 'subscribe_page', 'hero', 'footer', 'download_gate'
-  createdAt   DateTime @default(now()) @map("created_at")
+  id          String    @id @default(uuid())
+  email       String    @unique
+  source      String? // 'subscribe_page', 'hero', 'footer', 'download_gate'
+  createdAt   DateTime  @default(now()) @map("created_at")
   confirmedAt DateTime? @map("confirmed_at")
 
   @@index([createdAt])
@@ -371,18 +371,18 @@ model Subscriber {
 // results page (per-response identity stays internal).
 model HealthcareServiceSurveyResponse {
   id                String   @id @default(uuid())
-  email             String?  // optional — anonymous responses allowed
+  email             String? // optional — anonymous responses allowed
   name              String?
   organization      String?
   roleType          String?  @map("role_type")
   // JSON arrays so multi-select scales without schema churn.
-  categoriesUsed    Json?    @map("categories_used")     // string[] of HealthcareServiceCategoryVS codes
-  categoriesPain    Json?    @map("categories_pain")     // string[] of codes that cause the most rework
+  categoriesUsed    Json?    @map("categories_used") // string[] of HealthcareServiceCategoryVS codes
+  categoriesPain    Json?    @map("categories_pain") // string[] of codes that cause the most rework
   mustSupportFields Json?    @map("must_support_fields") // string[] of NDH must-support field names populated today
-  fhirProfile       String?  @map("fhir_profile")        // 'ndh' | 'davinci-plan-net' | 'us-core' | 'custom' | 'none'
-  identifierSystem  String?  @map("identifier_system")   // free text — what URL/OID is used for HealthcareService.identifier
-  publishCadence    String?  @map("publish_cadence")     // 'daily' | 'weekly' | 'monthly' | 'release' | 'unknown'
-  consumerOf        Json?    @map("consumer_of")         // string[] of upstream sources they ingest
+  fhirProfile       String?  @map("fhir_profile") // 'ndh' | 'davinci-plan-net' | 'us-core' | 'custom' | 'none'
+  identifierSystem  String?  @map("identifier_system") // free text — what URL/OID is used for HealthcareService.identifier
+  publishCadence    String?  @map("publish_cadence") // 'daily' | 'weekly' | 'monthly' | 'release' | 'unknown'
+  consumerOf        Json?    @map("consumer_of") // string[] of upstream sources they ingest
   painPoints        String?  @map("pain_points") @db.Text
   recommendations   String?  @db.Text
   wantsFollowUp     Boolean  @default(false) @map("wants_followup")
@@ -398,17 +398,95 @@ model HealthcareServiceSurveyResponse {
 // Email capture gating the downloadable white paper at /download.
 // Captures role/org context so we understand who's using the research.
 model ReportDownload {
-  id          String   @id @default(uuid())
-  email       String
-  name        String?
-  organization String?
-  useCase     String?  @map("use_case") @db.Text
-  reportVersion String @map("report_version")  // e.g. 'v1.0.0'
-  ipAddress   String?  @map("ip_address")      // first-party log only; see privacy policy
-  userAgent   String?  @map("user_agent") @db.Text
-  createdAt   DateTime @default(now()) @map("created_at")
+  id            String   @id @default(uuid())
+  email         String
+  name          String?
+  organization  String?
+  useCase       String?  @map("use_case") @db.Text
+  reportVersion String   @map("report_version") // e.g. 'v1.0.0'
+  ipAddress     String?  @map("ip_address") // first-party log only; see privacy policy
+  userAgent     String?  @map("user_agent") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
 
   @@index([email])
   @@index([createdAt])
   @@map("report_downloads")
+}
+
+// ---------------------------------------------------------------------------
+// Rate limiting, tiering and spend control.
+//
+// Every BigQuery-backed route carried a 100 GB per-query cap and nothing else.
+// That bounds one catastrophic query and says nothing about volume, which is
+// the shape a real bill takes. Measured against the 2026-08-20 warehouse:
+//
+//   NPI lookup (cluster key)          $0.0002/call     $0.24 / 1k
+//   name search                       $0.0025/call     $2.48 / 1k
+//   state+city search                 $0.0027/call     $2.69 / 1k
+//
+// A scraper at 10 req/s for one hour is 36,000 calls. GCP billing data lags
+// by hours, so the $10 budget alert and the kill-billing function are a
+// backstop that fires after the fact, not a control. These tables are the
+// control that fires first.
+// ---------------------------------------------------------------------------
+
+/// An issued API key. Anonymous callers have no row here and get the
+/// anonymous tier's quota, which is deliberately small.
+model ApiKey {
+  id           String    @id @default(uuid())
+  /// SHA-256 of the key. The plaintext is shown once at issue and never stored,
+  /// so a database leak does not hand over working credentials.
+  keyHash      String    @unique @map("key_hash")
+  /// Short non-secret prefix (e.g. "ainpi_live_7f2c") for support and logs.
+  keyPrefix    String    @map("key_prefix")
+  label        String
+  organization String?
+  contactEmail String?   @map("contact_email")
+  /// anonymous | free | partner | enterprise. Resolved to quotas in
+  /// frontend/src/lib/rate-limit.ts, not stored here, so limits can be tuned
+  /// without a migration.
+  tier         String    @default("free")
+  active       Boolean   @default(true)
+  /// Hard ceiling in cost units per UTC day. Null means the tier default.
+  dailyUnitCap Int?      @map("daily_unit_cap")
+  notes        String?   @db.Text
+  createdAt    DateTime  @default(now()) @map("created_at")
+  lastUsedAt   DateTime? @map("last_used_at")
+  revokedAt    DateTime? @map("revoked_at")
+
+  @@index([tier])
+  @@index([active])
+  @@map("api_keys")
+}
+
+/// One row per (subject, window). Incremented atomically; the returned value
+/// is the decision. Rows older than a day are disposable.
+model RateLimitBucket {
+  /// "<subject>:<window>", e.g. "ip:203.0.113.7:m:29380192" or
+  /// "key:9f2c...:d:20360". Composite so one upsert serves every scope.
+  id        String   @id
+  /// Cost units consumed in this window, not raw request count: an NPI lookup
+  /// and a state-wide search are not the same purchase.
+  units     Int      @default(0)
+  expiresAt DateTime @map("expires_at")
+
+  @@index([expiresAt])
+  @@map("rate_limit_buckets")
+}
+
+/// Daily estimated spend, the circuit breaker. Independent of GCP billing,
+/// which lags by hours and therefore cannot stop anything in progress.
+model UsageLedger {
+  /// UTC date, YYYY-MM-DD.
+  day            String   @id
+  /// Cost units across every caller.
+  units          Int      @default(0)
+  /// Estimated USD, derived from measured bytes-per-query-shape.
+  estimatedUsd   Decimal  @default(0) @map("estimated_usd") @db.Decimal(10, 4)
+  requests       Int      @default(0)
+  /// Set when the ceiling trips, so the outage is explicable after the fact.
+  breakerTripped Boolean  @default(false) @map("breaker_tripped")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("usage_ledger")
 }

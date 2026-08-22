@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
 import { refToId } from '@/lib/npd-search-utils';
+import { enforceRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -32,6 +33,8 @@ async function runQuery(sql: string, params?: Record<string, string>) {
  */
 export async function GET(req: NextRequest) {
   try {
+    const limit = await enforceRateLimit(req, { shape: 'npd/org' });
+    if (!limit.ok) return limit.response!;
     const url = new URL(req.url);
     const id = url.searchParams.get('id');
     const npi = url.searchParams.get('npi');
