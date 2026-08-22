@@ -30,8 +30,8 @@ PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT_PATH = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "landscape.json"
-METHODOLOGY_VERSION = "0.7.1-draft"
-RELEASE = "2026-05-08"
+METHODOLOGY_VERSION = "0.7.3-draft"
+from release import CURRENT_RELEASE as RELEASE  # noqa: E402
 
 # NUCC top-category prefixes (first 3 chars of the 10-char taxonomy code map
 # 1:1 to a NUCC top-category). Aggregating at this granularity keeps the
@@ -204,11 +204,26 @@ agg AS (
     state,
     spec_top,
     COUNT(DISTINCT _npi) AS practitioners,
-    -- Completeness: § 6220 required fields actually present on the record
+    -- Completeness: the § 6220 required fields that the directory is capable
+    -- of carrying, which is name + address + NPI + telecom.
+    --
+    -- `communication` (the languages a clinician speaks, also a § 6220
+    -- element) used to be ANDed in here. It is populated for 0 of 7,373,232
+    -- practitioners at 2026-08-20 and the string "communication" does not
+    -- appear anywhere in any practitioner resource, so ANDing it drove every
+    -- cell in the treemap to exactly 0.0 and turned the completeness layer
+    -- into a flat field that looked like a rendering bug.
+    --
+    -- Zero is the correct measurement and it is worth publishing, so it is
+    -- reported on its own below rather than silently collapsing a composite.
     SAFE_DIVIDE(
-      COUNTIF(field_complete_required AND has_communication),
+      COUNTIF(field_complete_required),
       COUNT(*)
     ) AS completeness,
+    SAFE_DIVIDE(
+      COUNTIF(has_communication),
+      COUNT(*)
+    ) AS language_coverage,
     -- Currency: median days since last update (UNIX_SECONDS to keep distinct
     -- percentile aggregation cheap)
     APPROX_QUANTILES(
@@ -222,7 +237,7 @@ agg AS (
       COUNT(*)
     ) AS specialty_validity,
     -- Sample NPIs for the side panel — 5 per cell, hashed so consistent across runs
-    ARRAY_AGG(_npi ORDER BY FARM_FINGERPRINT(_npi) LIMIT 5) AS sample_npis
+    ARRAY_AGG(DISTINCT _npi ORDER BY _npi LIMIT 5) AS sample_npis
   FROM joined
   WHERE _npi IS NOT NULL
   GROUP BY state, spec_top
@@ -342,6 +357,7 @@ def build_landscape(dry_run: bool = False) -> dict:
                 "reachability": round(float(reach_idx.get(key, 0) or 0), 4),
                 "integrity": INTEGRITY_DEFAULT,
                 "specialty_validity": round(float(r["specialty_validity"] or 0), 4),
+                "language_coverage": round(float(r["language_coverage"] or 0), 4),
             },
             "sample_npis": list(r["sample_npis"] or []),
         })
@@ -366,6 +382,7 @@ def build_landscape(dry_run: bool = False) -> dict:
             "reachability": w("reachability"),
             "integrity": INTEGRITY_DEFAULT,
             "specialty_validity": w("specialty_validity"),
+            "language_coverage": w("language_coverage"),
         },
     }
 

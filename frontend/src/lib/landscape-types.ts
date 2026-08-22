@@ -16,7 +16,8 @@ export type LandscapeMetricKey =
   | 'currency_days_median'
   | 'reachability'
   | 'integrity'
-  | 'specialty_validity';
+  | 'specialty_validity'
+  | 'language_coverage';
 
 export interface LandscapeCell {
   state: string;
@@ -31,6 +32,8 @@ export interface LandscapeCell {
     reachability: number;
     integrity: number;
     specialty_validity: number;
+    /** Share of practitioners with any spoken language recorded. */
+    language_coverage: number;
   };
   sample_npis: string[];
 }
@@ -57,7 +60,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'completeness',
     label: 'Completeness',
     description:
-      'Share of provider records with every § 6220-required field populated (name, specialty, contact, address, new-patient acceptance, ADA, language, telehealth).',
+      'Share of provider records carrying name, NPI, address and a contact method. These are the § 6220 fields the NDH schema can actually hold. New-patient acceptance, ADA accessibility and telehealth have no home in the published profile; language has one and is empty, so it is measured separately.',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },
@@ -98,6 +101,14 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     label: 'Specialty validity',
     description:
       'Share of practitioner_role.specialty codes that resolve cleanly against the NUCC ↔ CMS Medicare crosswalk (H10-H13).',
+    invert: false,
+    format: (v) => `${(v * 100).toFixed(1)}%`,
+  },
+  {
+    key: 'language_coverage',
+    label: 'Language recorded',
+    description:
+      'Share of practitioners with any spoken language on the record. § 6220 requires it. The 2026-08-20 release carries it for none of the 7,373,232 practitioners, and the word "communication" does not appear in any practitioner resource. A flat zero layer is the finding, not a rendering fault.',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },

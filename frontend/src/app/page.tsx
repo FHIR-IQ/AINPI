@@ -112,15 +112,15 @@ export default function HomePage() {
             </h2>
             <dl className="mb-3 flex flex-wrap gap-x-6 gap-y-2">
               <div>
-                <dd className="stat text-2xl text-ink">227,727</dd>
+                <dd className="stat text-2xl text-ink">230,837</dd>
                 <dt className="text-xs text-gray-600">PA practitioners traced</dt>
               </div>
               <div>
-                <dd className="stat text-2xl text-ink">38.1%</dd>
+                <dd className="stat text-2xl text-ink">43.7%</dd>
                 <dt className="text-xs text-gray-600">have an organization</dt>
               </div>
               <div>
-                <dd className="stat text-2xl text-ink">19.3%</dd>
+                <dd className="stat text-2xl text-ink">18.7%</dd>
                 <dt className="text-xs text-gray-600">reach an endpoint</dt>
               </div>
             </dl>

@@ -79,7 +79,7 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'Zero NPIs currently active on OIG LEIE or SAM.gov appear as Billing NPI or Servicing NPI in the HHS Medicaid Provider Spending dataset (2018-2024).',
     denominator:
-      'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Virginia subset comes from the existing 131-NPI cohort at `/api/v1/states/va-cohort-critical.csv`.',
+      'Active LEIE rows with a populated NPI (~8,551) ∪ active SAM rows with a real NPI (~4,517), joined against every (Billing NPI, Servicing NPI) appearing in the HHS Medicaid Provider Spending dataset. State attribution via the source file\'s T-MSIS state code. Virginia subset comes from the existing 106-NPI cohort at `/api/v1/states/va-cohort-critical.csv`.',
     dataSource:
       'OIG LEIE + SAM.gov Public Extract V2 (already ingested as `cms_npd.oig_leie` and `cms_npd.sam_exclusions`) × HHS Medicaid Provider Spending dataset (2026-02-09 release, opendata.hhs.gov/datasets/medicaid-provider-spending: 238M rows, 7 columns: billing/servicing NPI, HCPCS, claim month, patients, claim lines, paid amount; no state-of-payment column). State-scoped CSV at `/api/v1/states/<state>/h29-excluded-paid.csv` carries one row per matched NPI with the AINPI directory-side priors (exclusion source, top HCPCS codes, billing/servicing axis, first/last paid month) anchoring the paid-amount headline. See `/smd-revalidation/cross-audit-roadmap` §10b for the per-row schema and `analysis/claims_sources/medicaid_provider_spending.py` for the pyarrow filter implementation.',
     status: 'published',
@@ -111,11 +111,11 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'Zero currently-LEIE/SAM-excluded VA-resident NPIs appear as billing providers in the CMS Medicare Physician & Other Practitioners by Provider file for CY 2023.',
     denominator:
-      'VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part B by-Provider file.',
+      'VA federally-excluded cohort (106 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part B by-Provider file.',
     dataSource:
       'CMS Medicare Physician & Other Practitioners, by Provider (MUP_PHY_R25_P05_V20_D23_Prov.csv, ~270 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partb.py`.',
     status: 'published',
-    ogTagline: '8 of 125 federally-excluded VA NPIs are still billing Medicare Part B.',
+    ogTagline: '8 of the federally-excluded VA cohort are still billing Medicare Part B.',
   },
   {
     slug: 'excluded-prescribing-medicare-partd',
@@ -126,7 +126,7 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'Zero currently-LEIE/SAM-excluded VA-resident NPIs appear as prescribers in the CMS Medicare Part D Prescribers by Provider file for CY 2023.',
     denominator:
-      'VA federally-excluded cohort (125 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part D by-Provider file.',
+      'VA federally-excluded cohort (106 NPIs, active LEIE or SAM, score >= 1.5; VA-resident per NPPES practice state) joined against every NPI in the Medicare Part D by-Provider file.',
     dataSource:
       'CMS Medicare Part D Prescribers, by Provider (MUP_DPR_RY25_P04_V10_DY23_NPI.csv, ~130 MB, NPI-aggregated CY 2023). See `analysis/claims_sources/medicare_partd.py`.',
     status: 'published',
@@ -226,7 +226,7 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H28'],
     title: 'Endpoint URL validity + machine-readable share',
     summary:
-      'Of the 1.36M Endpoint resources in the NDH bulk export, only 8.4% are FHIR REST URLs an integrator can GET. The other 91.6% are Direct Trust HISP messaging addresses, which solve a different problem entirely. The right denominator for any "find FHIR endpoint by NPI" feature is the FHIR REST subset, not the full Endpoint resource count.',
+      'Of the 1,128,169 Endpoint resources in the NDH bulk export, only 9.8% are FHIR REST URLs an integrator can GET. The other 90.2% are Direct Trust HISP messaging addresses, which solve a different problem entirely. The right denominator for any "find FHIR endpoint by NPI" feature is the FHIR REST subset, not the full Endpoint resource count.',
     nullHypothesis:
       '100% of NDH `Endpoint.address` values are well-formed for their declared `connectionType`. There is no surprising shape mismatch between connection-type-by-count and machine-readable share.',
     denominator:
@@ -239,12 +239,12 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'When sizing a "find this provider\'s FHIR endpoint" product, the right population is 114K hl7-fhir-rest endpoints, not 1.36M total. Direct Trust HISP addresses (provider@hisp.example.com) are clinical-messaging routes, not API URLs; treating them as substitutable will fail at integration time.',
+          'When sizing a "find this provider\'s FHIR endpoint" product, the right population is 110,973 hl7-fhir-rest endpoints, not 1,128,169 total. Direct Trust HISP addresses (provider@hisp.example.com) are clinical-messaging routes, not API URLs; treating them as substitutable will fail at integration time.',
       },
       {
         audience: 'Payer ops teams',
         takeaway:
-          'CMS-9115-F adequacy reads against the FHIR REST subset only. The 8.4% machine-readable share is your effective denominator for compliance reporting, not the headline 1.36M total Endpoint count.',
+          'CMS-9115-F adequacy reads against the FHIR REST subset only. The 9.8% machine-readable share is your effective denominator for compliance reporting, not the headline 1,128,169 total Endpoint count.',
       },
       {
         audience: 'CMS publishing the data',
@@ -305,7 +305,7 @@ export const FINDINGS: Finding[] = [
     nullHypothesis:
       'Every field the HTE submission spec collects already has a home in the NDH STU1 Endpoint profile, and the FHIR-REST Endpoint records populate those fields at a high rate.',
     denominator:
-      'FHIR-REST Endpoint records in the pinned NDH bulk export (`connectionType.code = \'hl7-fhir-rest\'`, 114,071 at 2026-05-08 per H28). Direct Trust HISP addresses (the other 91.6% of the Endpoint table) are excluded: they are clinical-messaging addresses, not queryable FHIR APIs.',
+      'FHIR-REST Endpoint records in the pinned NDH bulk export (`connectionType.code = \'hl7-fhir-rest\'`, 110,973 at 2026-08-20 per H28). Direct Trust HISP addresses (the other 90.2% of the Endpoint table) are excluded: they are clinical-messaging addresses, not queryable FHIR APIs.',
     dataSource:
       'Structural layer: the published NDH STU1 Endpoint profile (hl7.org/fhir/us/ndh/STU1). Empirical layer: one capped BigQuery scan of `cms_npd.endpoint`, presence-scanning the serialized resource for each NDH extension\'s canonical URL. Compute script: `analysis/h44_endpoint_metadata.py` (capped via `bq_job_config()`). Cross-references H1-H5 (SMART `.well-known` discoverability) and H28 (FHIR-REST vs HISP split).',
     status: 'pre-registered',
@@ -482,17 +482,17 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H49'],
     title: 'NDH payer endpoint and organization coverage',
     summary:
-      'The NDH is discussed in the CMS provider-directory community as the place where payer API endpoints and organization identifiers will live, so a consumer could discover a payer’s public Provider Directory API from one federal index instead of hunting developer portals payer by payer. H49 measures how far the shipped release is from that. Result: of 114,071 FHIR REST endpoints, 1 self-labels as a payer provider directory, and no payer organization type exists at all — Organization.type carries exactly three codings across 1,999,818 typed resources (prov, team, govt). The endpoint table is overwhelmingly an EHR-vendor patient-data index: athenahealth, eClinicalWorks and Office Ally alone account for 65,338 of the endpoints, and 58 of 2,962 distinct hosts are payer-operated. The 92 payer-host endpoints that are carried are largely unusable as an index anyway: only 7 have a managingOrganization, and 30 are marked status=error. A control directory verified live, public and unauthenticated under CMS-9115-F is absent from the index entirely.',
+      'The NDH is discussed in the CMS provider-directory community as the place where payer API endpoints and organization identifiers will live, so a consumer could discover a payer’s public Provider Directory API from one federal index instead of hunting developer portals payer by payer. H49 measures how far the shipped release is from that. Result at 2026-08-20, and half of it changed: CMS added payer organizations. 27 now carry a "pay" type coding and own 233 health plans, where the 2026-05-08 release had no payer type at all across 1,999,818 typed resources. Payer endpoints did not follow. 0 of those 27 organizations carry an endpoint, and 1 of 110,973 FHIR REST endpoints self-labels as a payer provider directory. The endpoint table is overwhelmingly an EHR-vendor patient-data index: athenahealth, eClinicalWorks and Office Ally alone account for 65,338 of the endpoints, and 58 of 2,962 distinct hosts are payer-operated. The 92 payer-host endpoints that are carried are largely unusable as an index anyway: only 7 have a managingOrganization, and 30 are marked status=error. A control directory verified live, public and unauthenticated under CMS-9115-F is absent from the index entirely.',
     nullHypothesis:
-      'The NDH carries payer organizations and their public Provider Directory API endpoints, so it can serve as a discovery index for payer directories. Rejected on both halves: there is no payer Organization.type coding, and payer directory endpoints are effectively absent (1 of 114,071).',
+      'The NDH carries payer organizations and their public Provider Directory API endpoints, so it can serve as a discovery index for payer directories. Rejected on both halves at 2026-05-08. At 2026-08-20 the first half holds: 27 payer organizations arrived owning 233 health plans. The second half still fails: 0 of the 27 carry an endpoint and 1 of 110,973 FHIR REST endpoints is a payer directory. Identity arrived, reachability did not.',
     denominator:
-      'The 114,071 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-05-08 NDH release (the Direct Trust HISP addresses, 1,246,514 of them, are messaging endpoints and are excluded per H28). The organization-type denominator is the 1,999,818 Organization resources that carry any type coding; a further 1.4M organizations carry no type at all and are not counted either way.',
+      'The 110,973 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-08-20 NDH release (the Direct Trust HISP addresses, 1,017,196 of them, are messaging endpoints and are excluded per H28). The organization-type denominator is the Organization resources that carry any type coding; roughly half the Organization file carries no type coding at all and is not counted either way.',
     dataSource:
       'Three capped BigQuery scans of cms_npd.endpoint plus one of cms_npd.organization (reading the resource JSON column to enumerate every type coding rather than the flattened _org_type, so a payer type could not be hidden by the extractor). Plus one control probe by curl of a payer Provider Directory API verified live and unauthenticated. Compute script: analysis/h49_ndh_payer_endpoints.py. About $0.03 per run.',
     status: 'published',
     updated: '2026-08-11',
     ogTagline:
-      '1 of 114,071 NDH FHIR endpoints is a payer provider directory, and no payer organization type exists.',
+      '27 payer organizations arrived. None of them publishes an endpoint.',
     implications: [
       {
         audience: 'CMS publishing the data',
@@ -521,11 +521,11 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H50'],
     title: 'Endpoint-to-organization linkage',
     summary:
-      'An endpoint is only actionable if you can say whose it is. "There is a FHIR server at this URL" answers nothing on its own; "this URL belongs to the organization with NPI 1234567890" is what an integrator or a payer doing network validation needs. H50 measures how often Endpoint.managingOrganization is present and resolvable, and publishes the crosswalk it produces. Result: 19,334 of 114,071 FHIR REST endpoints (16.9%) resolve to a managing organization, leaving 94,737 URLs with no owner in the directory. The gap is absence rather than breakage — zero references dangle. Every endpoint that does resolve reaches an organization carrying an NPI, so the link yields a usable base-URL-to-NPI crosswalk covering 18,884 organizations, published as a CSV alongside this finding.',
+      'An endpoint is only actionable if you can say whose it is. "There is a FHIR server at this URL" answers nothing on its own; "this URL belongs to the organization with NPI 1234567890" is what an integrator or a payer doing network validation needs. H50 measures how often Endpoint.managingOrganization is present and resolvable, and publishes the crosswalk it produces. Result at 2026-08-20: 16,262 of 110,973 FHIR REST endpoints (14.7%) resolve to a managing organization, leaving 94,711 URLs with no owner in the directory. It was 19,334 of 114,071 (16.9%) at 2026-05-08, so attribution moved backwards; the endpoint count fell too, meaning some of the change is removal rather than lost names. 88 references are present but point at an organization the file does not contain. The crosswalk this yields is published as a CSV alongside this finding.',
     nullHypothesis:
       'Endpoints in the NDH carry a resolvable managingOrganization, so a FHIR base URL can be attributed to an organization. Rejected: 83.1% of FHIR REST endpoints have no organization link.',
     denominator:
-      'The 114,071 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-05-08 release. Direct Trust addresses (1,246,514) are reported separately at 8.9% linkage and excluded from the crosswalk, because they are messaging addresses rather than callable base URLs per H28.',
+      'The 110,973 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-08-20 release. Direct Trust addresses (1,017,196) are reported separately and excluded from the crosswalk, because they are messaging addresses rather than callable base URLs per H28.',
     dataSource:
       'Three capped joins of cms_npd.endpoint against cms_npd.organization, reconstructing the FHIR reference as CONCAT("Organization/", o._id). Presence and resolvability are counted separately so a dangling reference could not be scored as a success. Compute script: analysis/h50_endpoint_org_linkage.py. Under a cent per run.',
     status: 'published',
@@ -536,7 +536,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'The published crosswalk at /api/v1/findings/endpoint-org-crosswalk.csv resolves 19,334 FHIR base URLs to an organization and its NPI. Use it rather than re-deriving the join. For the other 83%, the NDH cannot tell you whose endpoint it is, so plan a fallback rather than assuming attribution is available.',
+          'The published crosswalk at /api/v1/findings/endpoint-org-crosswalk.csv resolves FHIR base URLs to an organization and its NPI. Use it rather than re-deriving the join. For the other 85%, the NDH cannot tell you whose endpoint it is, so plan a fallback rather than assuming attribution is available. H51 shows vendor files close most of that gap.',
       },
       {
         audience: 'FHIR implementers',
@@ -705,11 +705,11 @@ export const FINDINGS: Finding[] = [
       'Directory coverage is not evenly spread across the professions it appears to describe. It tracks who bills Medicare.',
     heroStats: [
       { label: 'Advanced practice with a role', value: '77.9%' },
-      { label: 'Pharmacy with a role', value: '1 of 12,995' },
+      { label: 'Pharmacy with a role', value: '526 of 12,465' },
       { label: 'PA practitioners measured', value: '227,727' },
     ],
     summary:
-      'Every coverage percentage this project publishes divides by the NDH’s active Practitioner set, and nobody had checked what is in it. Measured across all 227,727 active Pennsylvania practitioners against their NPPES taxonomy: role coverage does not vary a little between professions, it varies by two orders of magnitude, and it tracks who bills Medicare rather than who practises. 77.9% of advanced-practice clinicians and 69.8% of physicians carry a PractitionerRole, against 19.6% of therapists, 14.8% of behavioral-health providers, 4.7% of dentists, 2.7% of nurses and 1 of 12,995 pharmacy providers. The consequence is that an endpoint-coverage number is really a statement about Medicare-billing specialties, and the directory publishes no field that says so.',
+      'Every coverage percentage this project publishes divides by the NDH’s active Practitioner set, and nobody had checked what is in it. Measured across every active Pennsylvania practitioner against their NPPES taxonomy: role coverage does not vary a little between professions, it varies by orders of magnitude, and it tracks who bills Medicare rather than who practises. At 2026-08-20, 82.0% of advanced-practice clinicians and 74.3% of physicians carry a PractitionerRole, against 24.6% of therapists, 22.9% of behavioral-health providers, 13.3% of dentists, 4.8% of nurses and 4.2% of pharmacy providers. The 2026-08-20 release narrowed every one of those gaps: at 2026-05-08 the same figures were 77.9%, 69.8%, 19.6%, 14.8%, 4.7%, 2.7% and 1 of 12,995. The consequence is that an endpoint-coverage number is really a statement about Medicare-billing specialties, and the directory publishes no field that says so.',
     nullHypothesis:
       'Role coverage is independent of provider taxonomy, so the share of practitioners carrying a PractitionerRole is statistically indistinguishable across NUCC groupings.',
     denominator:

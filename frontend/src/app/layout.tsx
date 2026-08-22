@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     template: '%s | AINPI',
   },
   description:
-    'An open, reproducible audit of the CMS National Provider Directory. 21.7M FHIR records, 31 pre-registered findings, every number traceable to a public federal source.',
+    'An open, reproducible audit of the CMS National Provider Directory. 32.5M FHIR records, 39 pre-registered findings, every number traceable to a public federal source.',
   applicationName: 'AINPI',
   keywords: [
     'CMS National Provider Directory',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     url: 'https://ainpi.dev',
     title: 'AINPI: an open audit of the federal provider directory',
     description:
-      '21.7M FHIR records, 31 pre-registered findings, every number traceable to a public federal source.',
+      '32.5M FHIR records, 39 pre-registered findings, every number traceable to a public federal source.',
   },
   twitter: {
     // The site previously emitted the small summary card. Large cards are the

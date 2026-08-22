@@ -38,15 +38,17 @@ const STATIC_API: Endpoint[] = [
     tier: 'static',
     exampleCurl: 'curl -s https://ainpi.dev/api/v1/stats.json | jq',
     exampleResponse: `{
-  "release_date": "2026-05-08",
-  "methodology_version": "0.6.0-draft",
-  "commit_sha": "f09c02d",
+  "release_date": "2026-08-20",
+  "methodology_version": "0.7.3-draft",
+  "commit_sha": "30ce442",
   "counters": {
-    "resources_processed": 21693735,
-    "npis_checked": 10853455,
-    "npis_flagged": 8115,
-    "findings_published": 12
-  }
+    "resources_processed": 32468908,
+    "npis_checked": 11607656,
+    "npis_flagged": 4,
+    "endpoints_live_pct": 85.37,
+    "findings_published": 24
+  },
+  "counters_as_of": { "endpoints_live_pct": "2026-04-09" }
 }`,
     schemaRef: 'frontend/src/lib/api-v1-types.ts:ApiV1Stats',
   },
@@ -61,7 +63,7 @@ const STATIC_API: Endpoint[] = [
   "title": "Social Security Numbers exposed in the NDH bulk export",
   "hypotheses": ["H27"],
   "status": "published",
-  "release_date": "2026-05-08",
+  "release_date": "2026-08-20",
   "headline": "41 of 50 flagged Practitioner resources …",
   "numerator": 41,
   "denominator": 7441211,
@@ -88,7 +90,7 @@ const STATIC_API: Endpoint[] = [
     method: 'GET',
     path: '/api/v1/findings/endpoint-org-crosswalk.csv',
     summary:
-      'Resolved FHIR base URL → organization, for the 19,334 NDH endpoints that carry a managing organization. Columns: endpoint_id, base_url, host, status, org_id, org_npi, org_name, org_state. Every row resolves to an org with an NPI, so this doubles as a base-URL-to-NPI lookup across 18,884 organizations. Covers 16.9% of FHIR REST endpoints; the rest have no owner in the directory (H50). Direct Trust addresses are excluded, being messaging addresses rather than callable base URLs.',
+      'Resolved FHIR base URL → organization, for the NDH endpoints that carry a resolvable managing organization. Columns: endpoint_id, base_url, host, status, org_id, org_npi, org_name, org_state. Every row resolves to an org with an NPI, so this doubles as a base-URL-to-NPI lookup. Covers 14.7% of FHIR REST endpoints at the 2026-08-20 release, down from 16.9% at 2026-05-08; the rest have no owner in the directory (H50), and H51 shows public vendor files can name most of them. Direct Trust addresses are excluded, being messaging addresses rather than callable base URLs.',
     tier: 'static',
     exampleCurl:
       'curl -s https://ainpi.dev/api/v1/findings/endpoint-org-crosswalk.csv | head -5',
@@ -113,7 +115,7 @@ const LIVE_API: Endpoint[] = [
   "type": "provider_profile",
   "data": { "practitioner": { "npi": "1306378096", "family_name": "...", "given_name": "...", "qualifications": [...] } },
   "source": "cms_npd",
-  "release_date": "2026-05-08"
+  "release_date": "2026-08-20"
 }`,
   },
   {

@@ -68,7 +68,7 @@ export default function StatesIndex() {
             of the organizations nothing public reaches.
           </p>
           <p className="mb-4 text-sm text-gray-700">
-            227,727 practitioners. 38.1% have an organization at all. 19.3%
+            230,837 practitioners. 43.7% have an organization at all. 18.7%
             reach an address software can use.
           </p>
           <Link

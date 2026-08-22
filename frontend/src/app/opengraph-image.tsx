@@ -9,8 +9,8 @@ export default async function Image() {
     eyebrow: 'Open audit · CMS National Provider Directory',
     title: 'Where the federal provider directory is accurate, and where it is not',
     stats: [
-      { value: '21.7M', label: 'FHIR records audited' },
-      { value: '31', label: 'Pre-registered findings' },
+      { value: '32.5M', label: 'FHIR records audited' },
+      { value: '39', label: 'Pre-registered findings' },
       { value: 'Free', label: 'Public and reproducible' },
     ],
   });
