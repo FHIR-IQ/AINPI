@@ -85,8 +85,10 @@ const SOURCE_DESCRIPTIONS: Record<string, string> = {
     'CMS Provider Data Catalog file listing Medicare-enrolled clinicians with their group practice affiliations, specialties and practice addresses.',
   'https://data.cms.gov/provider-data/dataset/xubh-q36u':
     'CMS Provider Data Catalog file listing every Medicare-certified hospital in the United States with its address, ownership and county.',
+  // Two AINPI sources share this URL: the Revalidation Reassignment List and
+  // the Public Provider Enrollment File. The description covers both.
   'https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment':
-    'CMS Medicare enrollment file linking individual providers to the group practices they reassign their billing rights to.',
+    'CMS Medicare provider and supplier enrollment files, covering the reassignment of billing rights from individual providers to group practices and the enrolled provider type of each NPI.',
   'https://github.com/Enterprise-CMCS/SMA-Endpoint-Directory':
     'CMS-maintained index of state Medicaid agency provider-directory API endpoints, one row per jurisdiction.',
   'https://providerdirectory-api.capbluecross.com/r4':
