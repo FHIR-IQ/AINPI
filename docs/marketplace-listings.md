@@ -12,10 +12,25 @@ same channel.
 
 ## Provider profile
 
-The listings hang off this, and it is the one step with no API: `GET
-/api/2.1/marketplace-provider/providers` works and `POST` to the same path
-returns "No API found". Create it in the provider console, then run
-`analysis/marketplace_publish.py --publish`.
+Created 2026-08-23, id `1391b933-c642-420e-86a6-98c1283a4b57`. It was the one
+step with no API: `GET /api/2.1/marketplace-provider/providers` works and `POST`
+to the same path returns "No API found", so it was filled in by hand in the
+provider console.
+
+### The account cannot publish publicly yet
+
+`provider-listings create` with `visibility: PUBLIC` returns **"Marketplace
+private exchange provider cannot perform this operation"**. The same request
+with `PRIVATE` succeeds, so this is an account tier and not a malformed request.
+Public Marketplace listings need Databricks to approve the provider application.
+
+Until that lands, `--publish --private` puts the listing in a private exchange.
+The flag is explicit on purpose: a public publish that quietly degrades to a
+private one would report success for a listing nobody can find.
+
+Current state: listing `6cf064b7-1fca-4a8f-addf-03ffd8bfdfd6`, PRIVATE, attached
+to the `ainpi-ndh-archive` share, in no exchange, so it reaches nobody yet. When
+approval lands, `--publish` flips it to PUBLIC in one update.
 
 | Field | Value |
 | --- | --- |
@@ -47,17 +62,28 @@ The underlying federal files are US government works and carry no copyright. The
 **Type:** Tables, from the `ainpi-ndh-archive` share
 **Access:** Instantly available. Do not use Request Access. Friction on a free
 public-good dataset costs exactly the reach that makes publishing it worthwhile.
-**Categories:** Healthcare and Life Sciences; Public Sector
+**Categories:** `HEALTH`, `PUBLIC_SECTOR`
 **Update frequency:** Per NDH release, roughly quarterly
+
+The category values are enum members, enumerated from the 2,076 live consumer
+listings rather than guessed. `HEALTH_AND_LIFE_SCIENCES` is not one of them, and
+the API drops an unknown category **without an error**: the create returns 200
+and the listing comes back carrying only `PUBLIC_SECTOR`. Losing the healthcare
+category on a healthcare dataset is the quietest possible way to be invisible to
+the audience the listing exists for. The publish script now reads every listing
+back and compares it to the spec for exactly this reason.
 
 ### Name
 
 CMS National Provider Directory: Release Archive
 
-### Short description (under 160 characters)
+### Subtitle (113 of 120 characters)
 
-Every published version of the federal provider directory, including the ones
-CMS no longer serves. Partitioned by release so you can diff them.
+The cap is 120, measured. A 144-character first draft was rejected outright,
+which is the good failure; the category drop above is the bad one.
+
+Every release of the federal provider directory, including the ones CMS no
+longer serves. Diff them in one query.
 
 ### Long description
 
@@ -130,16 +156,16 @@ a real question rather than print a schema.
 
 **Type:** MCP Server (Public Preview)
 **Access:** Instantly available
-**Categories:** Healthcare and Life Sciences; Public Sector
+**Categories:** `HEALTH`, `PUBLIC_SECTOR`
 
 ### Name
 
 AINPI Provider Directory Audit (MCP)
 
-### Short description (under 160 characters)
+### Subtitle (must fit 120 characters)
 
 Ask an agent what the federal provider directory says, and how wrong it is.
-Five tools over the AINPI audit. No credentials, no scraping.
+No credentials, no scraping.
 
 ### Long description
 

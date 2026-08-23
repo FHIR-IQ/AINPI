@@ -35,9 +35,11 @@ SHARE = "ainpi-ndh-archive"
 # Copy is duplicated from docs/marketplace-listings.md on purpose: that file is
 # the human-readable source of truth and this is the machine-applied form. A
 # test asserts the headline sentences match so they cannot drift apart.
+# Measured, not assumed: the API rejects a subtitle over 120 characters. The
+# first draft was 144 and the create failed on it.
 ARCHIVE_SUBTITLE = (
-    "Every published version of the federal provider directory, including the "
-    "ones CMS no longer serves. Partitioned by release so you can diff them."
+    "Every release of the federal provider directory, including the ones CMS "
+    "no longer serves. Diff them in one query."
 )
 
 ARCHIVE_DESCRIPTION = """CMS publishes the National Provider Directory as a bulk FHIR export and serves only the current version. When a new release lands, the previous one is gone from the source. This archive keeps them. That is the entire product, and it is free.
@@ -62,12 +64,16 @@ LISTINGS = [
         "name": "CMS National Provider Directory: Release Archive",
         "subtitle": ARCHIVE_SUBTITLE,
         "description": ARCHIVE_DESCRIPTION,
-        "categories": ["HEALTH_AND_LIFE_SCIENCES", "PUBLIC_SECTOR"],
+        # Enumerated from the 2,076 live consumer listings, not guessed. The
+        # healthcare value is HEALTH. HEALTH_AND_LIFE_SCIENCES is not a member
+        # of the enum and the API drops it silently: the create returns 200 and
+        # the listing comes back carrying only PUBLIC_SECTOR. For a healthcare
+        # dataset that is the one category worth losing least.
+        "categories": ["HEALTH", "PUBLIC_SECTOR"],
         "share": SHARE,
         "visibility": "PUBLIC",
         "terms_of_service": "https://ainpi.dev/terms",
         "privacy_policy_link": "https://ainpi.dev/privacy",
-        "contact_email": "gene@fhiriq.com",
         "notebook": "analysis/notebooks/ainpi_archive_quickstart.py",
     },
 ]
@@ -117,20 +123,22 @@ def do_check() -> bool:
         if not nb.exists():
             ok = False
 
-    import urllib.request
+    # curl, not urllib. Python's TLS stack fails against local interception and
+    # WAF-fronted hosts, and it fails as URLError, which reads exactly like the
+    # page being down. It reported all three of these unreachable while curl got
+    # 200. Same lesson as H26, H46 and the vendor downloads in H51.
     for url in ("https://ainpi.dev/terms", "https://ainpi.dev/privacy",
                 "https://ainpi.dev/data-license"):
-        try:
-            code = urllib.request.urlopen(url, timeout=20).status
-        except Exception as e:  # noqa: BLE001
-            code = type(e).__name__
+        rc, out = sh(["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
+                      "-L", "--max-time", "20", url])
+        code = out.strip() if rc == 0 else f"curl exit {rc}"
         print(f"  {url}: {code}")
-        if code != 200:
+        if code != "200":
             ok = False
     return ok
 
 
-def do_publish() -> None:
+def do_publish(private: bool = False) -> bool:
     pid = provider_id()
     if not pid:
         raise SystemExit("no provider profile; run --check for what to do in the console")
@@ -143,6 +151,7 @@ def do_publish() -> None:
         except json.JSONDecodeError:
             pass
 
+    ok = True
     for spec in LISTINGS:
         body = {"listing": {
             "summary": {
@@ -151,14 +160,13 @@ def do_publish() -> None:
                 "provider_id": pid,
                 "categories": spec["categories"],
                 "listingType": "STANDARD",
-                "setting": {"visibility": spec["visibility"]},
+                "setting": {"visibility": "PRIVATE" if private else spec["visibility"]},
                 "share": {"name": spec["share"], "type": "FULL"},
             },
             "detail": {
                 "description": spec["description"],
                 "terms_of_service": spec["terms_of_service"],
                 "privacy_policy_link": spec["privacy_policy_link"],
-                "contact_email": spec["contact_email"],
             },
         }}
         lid = existing.get(spec["name"])
@@ -170,6 +178,47 @@ def do_publish() -> None:
             rc, out = sh(["databricks", "provider-listings", "create",
                           "--json", json.dumps(body)])
             print(f"  {spec['name']}: {'created' if rc == 0 else 'CREATE FAILED ' + out[:200]}")
+        if rc != 0:
+            if "private exchange provider" in out:
+                print("    The account is a private-exchange provider. Public")
+                print("    Marketplace listings need Databricks to approve the")
+                print("    provider application first. Re-run with --private to")
+                print("    publish into a private exchange in the meantime.")
+            ok = False
+            continue
+        if not verify_listing(lid or json.loads(out).get("listing_id"), spec):
+            ok = False
+    # Exit non-zero when any listing failed. Printing FAILED and exiting 0 is
+    # how a broken publish gets read as a done one.
+    return ok
+
+
+def verify_listing(lid: str, spec: dict) -> bool:
+    """Read the listing back and compare it to what was sent.
+
+    The API accepts an unknown category and drops it without an error, so a
+    create that returns 200 is not evidence the listing says what the spec
+    says. Whatever the server stored is the only thing a consumer will read.
+    """
+    rc, out = sh(["databricks", "provider-listings", "get", lid])
+    if rc != 0:
+        print(f"    VERIFY FAILED: cannot read back {lid}")
+        return False
+    got = json.loads(out).get("listing", {})
+    summary, detail = got.get("summary", {}), got.get("detail", {})
+    ok = True
+    for label, sent, stored in (
+        ("categories", sorted(spec["categories"]), sorted(summary.get("categories") or [])),
+        ("subtitle", spec["subtitle"], summary.get("subtitle")),
+        ("terms", spec["terms_of_service"], detail.get("terms_of_service")),
+        ("privacy", spec["privacy_policy_link"], detail.get("privacy_policy_link")),
+    ):
+        if sent != stored:
+            print(f"    MISMATCH {label}: sent {sent!r}, stored {stored!r}")
+            ok = False
+    if ok:
+        print(f"    verified: {lid}")
+    return ok
 
 
 def do_status() -> None:
@@ -188,13 +237,18 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     for f in ("check", "publish", "status"):
         ap.add_argument(f"--{f}", action="store_true")
+    ap.add_argument("--private", action="store_true",
+                    help="publish into a private exchange instead of the public "
+                         "Marketplace; never applied automatically, because a "
+                         "listing nobody can see is not the thing that was asked for")
     a = ap.parse_args()
     if not any(vars(a).values()):
         ap.print_help(); return
     if a.check:
         sys.exit(0 if do_check() else 1)
     if a.publish:
-        do_publish()
+        if not do_publish(private=a.private):
+            sys.exit(1)
     if a.status:
         do_status()
 
