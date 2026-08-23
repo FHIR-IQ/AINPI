@@ -287,8 +287,16 @@ def load_one_release(release: str) -> bool:
     return ok
 
 
-def do_load() -> None:
-    releases = available_releases()
+def do_load(only: list[str] | None = None) -> None:
+    """Rebuild the tables from parquet.
+
+    `only` restricts and orders the releases. Without it every release found on
+    disk is included, which is wrong once a release has been retired from the
+    archive but its derived parquet is still sitting in the export directory.
+    """
+    releases = [r for r in available_releases() if not only or r in only]
+    if only:
+        releases = [r for r in only if r in releases]
     for table in TABLES:
         present = [r for r in releases if (PARQUET_DIR / r / f"{table}.parquet").exists()]
         if not present:
@@ -381,7 +389,7 @@ def do_status() -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--upload", action="store_true")
-    ap.add_argument("--release", help="limit --upload/--load to one release")
+    ap.add_argument("--release", help="limit --upload/--load to one release, or a comma-separated list for --load")
     ap.add_argument("--load", action="store_true")
     ap.add_argument("--share", action="store_true")
     ap.add_argument("--status", action="store_true")
@@ -392,7 +400,10 @@ def main() -> None:
     if a.upload:
         do_upload(a.release)
     if a.load:
-        if a.release:
+        wanted = [x.strip() for x in a.release.split(",")] if a.release else None
+        if wanted and len(wanted) > 1:
+            do_load(wanted)
+        elif a.release:
             # Exit non-zero on a partial load. The previous version printed
             # FAILED for four of six tables and still exited 0, which is
             # indistinguishable from success to anything reading the code.
