@@ -111,7 +111,7 @@ const BETTER_ROWS: [string, string, string][] = [
 
 /** Quality measures that regressed. */
 const WORSE_ROWS: [string, string, string][] = [
-  ['Web addresses naming their owner', '16.9%', '14.7%'],
+  ['Machine-readable addresses naming their owner', '16.9%', '14.7%'],
   ['Usable machine-readable addresses', '114,071', '110,973'],
   ['Organizations with a phone number', '99.9%', '95.6%'],
   ['Organization-to-organization links', '1,086,694', '483,992'],
@@ -138,7 +138,7 @@ function buildBody(): { text: string; html: string } {
   const text = [
     'CMS published a new version of the national provider directory on',
     '20 August. It is the largest change since we started measuring. We',
-    'reloaded all 45 GB and re-ran every measurement against the previous',
+    'reloaded all 45 GB and re-ran our measurements against the previous',
     'version.',
     '',
     'This is the breakdown. Every number below is on the site as data you can',
@@ -150,7 +150,7 @@ function buildBody(): { text: string; html: string } {
     '',
     'The directory grew by half, from 21.7 million records to 32.5 million.',
     'Almost all of that growth is in one place: the records saying where a',
-    'clinician works. Ten million new ones.',
+    'clinician works. Nearly ten million new ones.',
     '',
     '2. WHO THE DIRECTORY CAN DESCRIBE',
     '',
@@ -224,12 +224,15 @@ function buildBody(): { text: string; html: string } {
     '',
     '  230,837 clinicians listed',
     '   43.7% have a workplace                       100,918',
-    '   42.5% of those reach an address               43,060',
+    '   42.7% of those reach an address               43,060',
     '   18.7% of all clinicians reach an address',
     '',
-    'That last number is the honest one. Four in five clinicians in the state',
-    'cannot be reached through this directory by software, and the reason is',
-    'not one broken link but a chain where each link loses some.',
+    'That last number is the honest one, and it is not this directory on its',
+    'own. Reaching 43,060 takes the directory plus vendor endpoint files plus',
+    'Medicare enrollment records. The directory by itself reaches 2,461.',
+    'Four in five clinicians in the state cannot be reached by software at',
+    'all, and the reason is not one broken link but a chain where each link',
+    'loses some.',
     '',
     'EXPLORE IT',
     '',
@@ -244,11 +247,40 @@ function buildBody(): { text: string; html: string } {
     `  Every number as data:             ${CSV_URL}`,
     `  Plain-language guide:             ${PRIMER_URL}`,
     '',
+    'COMING SHORTLY: THE RELEASE ARCHIVE, AS OPEN TABLES',
+    '',
+    'CMS publishes only the current version of the directory. When a new one',
+    'lands, the previous one is gone from the source. We have kept them, and',
+    'we are publishing that archive on the Databricks Marketplace shortly. It',
+    'will be free: six tables, one per record type, split by version, so',
+    'comparing two releases is a filter rather than a download. It is served',
+    'over open Delta Sharing, so reading it needs a Python package and no',
+    'Databricks account.',
+    '',
+    'Here is the kind of question that answers. It is a different pair of',
+    'releases from section 4, and it does not explain the fall reported there.',
+    'Between the April and May releases the count of web addresses fell 73%,',
+    'from 5,043,524 to 1,360,585, which reads as mass deletion. It was not.',
+    'April listed each address 3.9 times over on',
+    'average; May listed it 1.05 times. Of 1,300,241 distinct addresses in',
+    'April, 1,299,999 were still there in May. CMS removed duplicate rows, not',
+    'addresses, and anyone who read the April figure as a count of addresses',
+    'was counting nearly four times over. You can only see that if someone',
+    'kept April. Nobody has to keep it twice.',
+    '',
+    'WE ARE LOOKING FOR INTEGRATION PARTNERS',
+    '',
+    'If you are at a provider or payer organization working with directory',
+    'data, and your team would rather query a maintained copy than ingest and',
+    'reconcile this themselves, reply to this email. We want to hear what you',
+    'need out of it before we finish building it.',
+    '',
     'TWO CORRECTIONS',
     '',
-    'We told you the parent-organization field was broken. It works now, so',
-    'if you built around it being useless, rebuild. And in June we reported',
-    'that places carry no phone numbers; that is no longer true, as above.',
+    'We said publicly that the parent-organization field was broken. It works',
+    'now, so if you built around it being useless, rebuild. And in June we',
+    'reported that the location path added no phone numbers; that is no longer',
+    'true, as above.',
     '',
     'All of it is public data and the scripts are open, so you can check any',
     'of it.',
@@ -293,12 +325,12 @@ function buildBody(): { text: string; html: string } {
 
   const html = `
 <div style="padding:28px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-  <p style="${p}">CMS published a new version of the national provider directory on 20 August. It is the largest change since we started measuring. We reloaded all 45 GB and re-ran every measurement against the previous version.</p>
+  <p style="${p}">CMS published a new version of the national provider directory on 20 August. It is the largest change since we started measuring. We reloaded all 45 GB and re-ran our measurements against the previous version.</p>
   <p style="${p}">This is the breakdown. Every number below is on the site as data you can download and recompute.</p>
 
   <h2 style="${h2}">1. The file itself</h2>
   ${htmlTable(['Record type', 'May', 'August', 'Change'], FILE_ROWS.map((r) => [...r]))}
-  <p style="${p}">The directory grew by half, from 21.7 million records to 32.5 million. Almost all of that growth is in one place: the records saying where a clinician works. Ten million new ones.</p>
+  <p style="${p}">The directory grew by half, from 21.7 million records to 32.5 million. Almost all of that growth is in one place: the records saying where a clinician works. Nearly ten million new ones.</p>
 
   <h2 style="${h2}">2. Who the directory can describe</h2>
   <p style="${p}">Ten million records did not translate into ten million newly described clinicians. In Pennsylvania, where we track this closely, the share with a workplace listed went from 38.1% to 43.7%. Nationally, 27% to 31%.</p>
@@ -327,11 +359,11 @@ function buildBody(): { text: string; html: string } {
     <tbody>
       <tr><td style="${td}">Clinicians listed</td><td style="${tdN}">230,837</td></tr>
       <tr><td style="${td}">Have a workplace <span style="color:#6b7280;">(43.7%)</span></td><td style="${tdN}">100,918</td></tr>
-      <tr><td style="${td}">Reach an address <span style="color:#6b7280;">(42.5% of those)</span></td><td style="${tdN}">43,060</td></tr>
+      <tr><td style="${td}">Reach an address <span style="color:#6b7280;">(42.7% of those)</span></td><td style="${tdN}">43,060</td></tr>
       <tr><td style="${td}"><strong>Reachable end to end</strong></td><td style="${tdN}color:#a8321c;font-weight:600;">18.7%</td></tr>
     </tbody>
   </table>
-  <p style="${p}">That last number is the honest one. Four in five clinicians in the state cannot be reached through this directory by software, and the reason is not one broken link but a chain where each link loses some.</p>
+  <p style="${p}">That last number is the honest one, and it is not this directory on its own. Reaching 43,060 takes the directory plus vendor endpoint files plus Medicare enrollment records. The directory by itself reaches 2,461. Four in five clinicians in the state cannot be reached by software at all, and the reason is not one broken link but a chain where each link loses some.</p>
 
   <h2 style="${h2}">Explore it</h2>
   <p style="${p}">The numbers above are summaries. The site is built for pulling them apart by state, profession and organization.</p>
@@ -345,8 +377,15 @@ function buildBody(): { text: string; html: string } {
     <li><a href="${PRIMER_URL}" style="${a}">Plain-language guide to all of it</a></li>
   </ul>
 
+  <h2 style="${h2}">Coming shortly: the release archive, as open tables</h2>
+  <p style="${p}">CMS publishes only the current version of the directory. When a new one lands, the previous one is gone from the source. We have kept them, and we are publishing that archive on the Databricks Marketplace shortly. It will be free: six tables, one per record type, split by version, so comparing two releases is a filter rather than a download. It is served over open Delta Sharing, so reading it needs a Python package and no Databricks account.</p>
+  <p style="${p}">Here is the kind of question that answers. It is a different pair of releases from section 4, and it does not explain the fall reported there. Between the April and May releases the count of web addresses fell 73%, from 5,043,524 to 1,360,585, which reads as mass deletion. It was not. April listed each address 3.9 times over on average; May listed it 1.05 times. Of 1,300,241 distinct addresses in April, 1,299,999 were still there in May. CMS removed duplicate rows, not addresses, and anyone who read the April figure as a count of addresses was counting nearly four times over. You can only see that if someone kept April. Nobody has to keep it twice.</p>
+
+  <h2 style="${h2}">We are looking for integration partners</h2>
+  <p style="${p}">If you are at a provider or payer organization working with directory data, and your team would rather query a maintained copy than ingest and reconcile this themselves, reply to this email. We want to hear what you need out of it before we finish building it.</p>
+
   <h2 style="${h2}">Two corrections</h2>
-  <p style="${p}">We told you the parent-organization field was broken. It works now, so if you built around it being useless, rebuild. And in June we reported that places carry no phone numbers; that is no longer true, as above.</p>
+  <p style="${p}">We said publicly that the parent-organization field was broken. It works now, so if you built around it being useless, rebuild. And in June we reported that the location path added no phone numbers; that is no longer true, as above.</p>
 
   <p style="${p}">All of it is public data and the scripts are open, so you can check any of it.</p>
   <p style="${p}">Eugene Vestel, FHIR IQ</p>

@@ -22,6 +22,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config  # noqa: E402
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
+from ndh_manifest import ALL_NDH_RESOURCES, _matching_keys, fetch_manifest
 
 
 def scalar(client: bigquery.Client, sql: str) -> dict:
@@ -99,10 +100,47 @@ def run() -> None:
     print(f"  with managingOrg ref: {h7e['ep_with_ref']:,}")
     print(f"  dangling: {h7e['dangling']:,} ({h7e_pct:.4f}%)")
 
-    # H8 — the structural gap
+    # H8 — measure which resources CMS actually ships, do not assert it.
+    #
+    # This block used to hardcode "the NPD bulk export does not ship
+    # HealthcareService (NDH IG defines 10 resources; NPD ships 6)". That was
+    # true through 2026-05-08 and false from 2026-08-20, when CMS added
+    # HealthcareService and InsurancePlan. Because it was an assertion rather
+    # than a measurement, nothing failed: the finding kept publishing a claim
+    # the release contradicted, under the new release's own date.
+    #
+    # The manifest is the authoritative answer to "what does NPD ship", so ask
+    # it. If it cannot be reached, say so rather than guessing either way.
     print("\nH8 — Organization-to-HealthcareService coverage")
-    print("  The NPD public-use bulk export does not include HealthcareService.")
-    print("  NDH IG defines 10 resources; NPD ships 6. H8 coverage = 0 by absence.")
+    try:
+        _manifest = fetch_manifest()
+        _shipped = sorted(
+            r for r in ALL_NDH_RESOURCES if _matching_keys(_manifest.get("files", {}), r)
+        )
+        _hs_shipped = "HealthcareService" in _shipped
+        h8_status = "shipped" if _hs_shipped else "absent"
+    except Exception as exc:  # noqa: BLE001 — an unreachable manifest is not a finding
+        print(f"  manifest unreachable ({exc}); H8 reported as unknown")
+        _shipped, _hs_shipped, h8_status = [], False, "unknown"
+
+    if h8_status == "shipped":
+        h8_sentence = (
+            f"H8: the NPD bulk export now ships HealthcareService. CMS added it "
+            f"in the 2026-08-20 release, alongside InsurancePlan, taking the "
+            f"export from 6 resources to {len(_shipped)}."
+        )
+        print(f"  NPD ships {len(_shipped)} resources including HealthcareService.")
+    elif h8_status == "absent":
+        h8_sentence = (
+            f"H8: the NPD bulk export does not ship HealthcareService "
+            f"(it ships {len(_shipped)} of the NDH IG's resources)."
+        )
+        print(f"  NPD ships {len(_shipped)} resources; HealthcareService absent.")
+    else:
+        h8_sentence = (
+            "H8: not evaluated in this run because the NDH manifest could not be "
+            "read, so whether the export ships HealthcareService is unknown."
+        )
 
     # Parts that are NULL ints → turn into plain int
     def n(x): return int(x) if x is not None else 0
@@ -127,8 +165,7 @@ def run() -> None:
         f"({n(h7e['ep_with_ref']):,} of {n(h7e['total_endpoints']):,}) and "
         f"only {h7_coverage:.1f}% of Locations do "
         f"({n(h7['loc_with_ref']):,} of {n(h7['total_locations']):,}). "
-        f"H8: the NPD bulk export does not ship HealthcareService "
-        f"(NDH IG defines 10 resources; NPD ships 6)."
+        f"{h8_sentence}"
     )
 
     # Two charts: one for integrity (all near zero), one for coverage
@@ -154,10 +191,12 @@ def run() -> None:
         f"The Endpoint→Organization gap pairs with H5 (98.69% of Orgs have "
         f"no Endpoint referencing them) — the Endpoint↔Organization link is "
         f"sparse in both directions. "
-        f"H8 requires HealthcareService, which is one of four NDH IG "
-        f"resources (HealthcareService, InsurancePlan, Network, Verification) "
-        f"absent from the 2026-04-09 NPD bulk export. Any HealthcareService-"
-        f"based check cannot be performed from NPD alone."
+        f"H8 requires HealthcareService. Which NDH IG resources the export "
+        f"carries is read from the published manifest on every run rather than "
+        f"hardcoded, because it changed: HealthcareService and InsurancePlan "
+        f"were absent through 2026-05-08 and present from 2026-08-20. "
+        f"Resources shipped in this release: "
+        f"{', '.join(_shipped) if _shipped else 'unknown (manifest unreachable)'}."
     )
 
     payload = {
