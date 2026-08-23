@@ -111,6 +111,33 @@ def fetch_manifest(timeout: float = 30.0) -> dict[str, Any]:
         ) from e
 
 
+# Match the resource as a whole filename stem, allowing an optional ordering
+# prefix and an optional dated suffix. Three forms have shipped:
+#
+#   Practitioner_2026-05-07_2128.ndjson   through 2026-05-08
+#   06-Practitioner.ndjson                2026-08-20 onward
+#   Practitioner.ndjson                   undated form
+#
+# The 2026-08-20 release renumbered every key and broke the previous
+# `startswith(f"{resource}_")` test, which resolved nothing at all.
+#
+# The boundary after the resource name is load-bearing: without it
+# "Organization" also matches "08-OrganizationAffiliation.ndjson" and the
+# affiliation file gets loaded into the organization table. The old underscore
+# test got that right by accident; this gets it right on purpose.
+#
+# This lives in ONE place because it already drifted once. `resolve_file_url`
+# was fixed for the new key format and `expected_compressed_size` was not, so
+# the size lookup returned None for every file in the 2026-08-20 release and
+# the partial-download integrity check silently stopped checking anything.
+def _matching_keys(files: dict[str, Any], resource: str) -> list[str]:
+    """Manifest keys naming `resource`, sorted so the latest sorts last."""
+    pattern = re.compile(
+        rf"^(?:\d+-)?{re.escape(resource)}(?:_[^/]*)?\.ndjson(?:\.zst)?$"
+    )
+    return sorted(k for k in files if isinstance(k, str) and pattern.match(k))
+
+
 def resolve_file_url(manifest: dict[str, Any], resource: str) -> tuple[str, str]:
     """Return (download_url, basename_with_extension) for an NDH resource.
 
@@ -148,10 +175,7 @@ def resolve_file_url(manifest: dict[str, Any], resource: str) -> tuple[str, str]
     # affiliation file gets loaded into the organization table. The old
     # underscore test got that right by accident; this gets it right on
     # purpose.
-    pattern = re.compile(
-        rf"^(?:\d+-)?{re.escape(resource)}(?:_[^/]*)?\.ndjson(?:\.zst)?$"
-    )
-    candidates = [k for k in files if isinstance(k, str) and pattern.match(k)]
+    candidates = _matching_keys(files, resource)
 
     if not candidates:
         # Forward-compat: maybe Fred's fix puts the URL on a top-level
@@ -229,10 +253,13 @@ def expected_compressed_size(manifest: dict[str, Any], resource: str) -> int | N
     what the manifest promised — cheap defense against partial downloads.
     """
     files = manifest.get("files", {})
-    for key, entry in files.items():
-        if isinstance(key, str) and key.startswith(f"{resource}_") and isinstance(entry, dict):
+    if not isinstance(files, dict):
+        return None
+    for key in reversed(_matching_keys(files, resource)):
+        entry = files.get(key)
+        if isinstance(entry, dict):
             n = entry.get("compressed_bytes")
-            if isinstance(n, int):
+            if isinstance(n, int) and n > 0:
                 return n
     return None
 
@@ -246,7 +273,7 @@ if __name__ == "__main__":
     for resource in NDH_RESOURCES:
         try:
             url, basename = resolve_file_url(manifest, resource)
-            date = parse_release_date(basename) or "?"
+            date = parse_release_date(manifest) or parse_release_date(basename) or "?"
             sz = expected_compressed_size(manifest, resource)
             sz_str = f"{sz / 1e6:>8.1f} MB" if sz else "      ? MB"
             print(f"  {resource:25s} release={date}  {sz_str}  {basename}")

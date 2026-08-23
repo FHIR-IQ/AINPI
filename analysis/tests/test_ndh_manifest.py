@@ -219,3 +219,70 @@ class TestManifestKeyFormats:
         assert "HealthcareService" in NDH_NEW_RESOURCES
         assert "InsurancePlan" not in NDH_RESOURCES
         assert set(ALL_NDH_RESOURCES) == set(NDH_RESOURCES) | set(NDH_NEW_RESOURCES)
+
+
+# Captured shape of manifest.json as of 2026-08-20, sizes included. The
+# earlier numbered-key fixtures carry empty dicts as values, which is exactly
+# why the size regression below went unnoticed: they exercised URL resolution
+# and never asked the manifest how big anything was.
+AUGUST_MANIFEST = {
+    "compression_algorithm": "zstd",
+    "generated_at": "2026-08-20",
+    "files": {
+        "01-Organization.ndjson": {"compressed_bytes": 691252617},
+        "02-Location.ndjson": {"compressed_bytes": 207143532},
+        "03-Endpoint.ndjson": {"compressed_bytes": 48688162},
+        "04-HealthcareService.ndjson": {"compressed_bytes": 1178275},
+        "05-InsurancePlan.ndjson": {"compressed_bytes": 10714},
+        "06-Practitioner.ndjson": {"compressed_bytes": 915281059},
+        "07-PractitionerRole.ndjson": {"compressed_bytes": 1348118031},
+        "08-OrganizationAffiliation.ndjson": {"compressed_bytes": 18800000},
+    },
+    "totals": {"compressed_bytes": 3230465033},
+}
+
+
+class TestSizeLookupAcrossKeyFormats:
+    """`expected_compressed_size` kept the old `startswith(f"{resource}_")`
+    matcher when `resolve_file_url` was fixed for the 2026-08-20 key format.
+    It therefore returned None for every file in that release, and the
+    partial-download integrity check that consumes it silently stopped
+    checking anything. Both functions now share one matcher."""
+
+    def test_reads_size_from_numbered_keys(self):
+        assert expected_compressed_size(AUGUST_MANIFEST, "Practitioner") == 915281059
+        assert expected_compressed_size(AUGUST_MANIFEST, "PractitionerRole") == 1348118031
+
+    def test_size_lookup_respects_the_affiliation_boundary(self):
+        # Organization must not pick up OrganizationAffiliation's size.
+        assert expected_compressed_size(AUGUST_MANIFEST, "Organization") == 691252617
+        assert (
+            expected_compressed_size(AUGUST_MANIFEST, "OrganizationAffiliation")
+            == 18800000
+        )
+
+    def test_still_reads_the_dated_key_format(self):
+        assert expected_compressed_size(SAMPLE_MANIFEST, "Practitioner") == 1023813987
+
+    def test_every_resource_resolves_a_size_in_both_formats(self):
+        # A size that comes back None is the failure mode this guards: it does
+        # not raise, it just turns the integrity check into a no-op.
+        for resource in NDH_RESOURCES:
+            assert expected_compressed_size(AUGUST_MANIFEST, resource) is not None
+            assert expected_compressed_size(SAMPLE_MANIFEST, resource) is not None
+
+
+class TestReleaseDateFromManifest:
+    """Since 2026-08-20 the filenames carry no date, so callers that ask the
+    filename get "unknown" and write the release into cms-npd-unknown. The
+    manifest's top-level generated_at is the authoritative date."""
+
+    def test_reads_generated_at(self):
+        assert parse_release_date(AUGUST_MANIFEST) == "2026-08-20"
+
+    def test_falls_back_to_dated_filenames_in_manifest(self):
+        assert parse_release_date(SAMPLE_MANIFEST) == "2026-05-07"
+
+    def test_returns_empty_rather_than_raising_on_junk(self):
+        assert parse_release_date({}) == ""
+        assert parse_release_date({"files": {"06-Practitioner.ndjson": {}}}) == ""

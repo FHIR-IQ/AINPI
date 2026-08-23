@@ -398,7 +398,14 @@ def main():
 
     # Derive release date + data dir from the manifest unless explicitly overridden.
     _, first_basename = resolve_file_url(manifest, targets[0][0])
-    release_date = parse_release_date(first_basename) or "unknown"
+    # Manifest first: since 2026-08-20 the filenames carry no date at all, so
+    # asking the filename yields "unknown" and the release lands in
+    # frontend/data/cms-npd-unknown. The manifest's top-level `generated_at`
+    # is one authoritative date for the whole release; the filename is the
+    # fallback for the older dated-filename format.
+    release_date = (
+        parse_release_date(manifest) or parse_release_date(first_basename) or "unknown"
+    )
     data_dir = args.data_dir or pathlib.Path(f"frontend/data/cms-npd-{release_date}")
     print(f"  release: {release_date}")
     print(f"  data dir: {data_dir}")
