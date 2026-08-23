@@ -10,6 +10,38 @@ same channel.
 
 ---
 
+## Provider profile
+
+The listings hang off this, and it is the one step with no API: `GET
+/api/2.1/marketplace-provider/providers` works and `POST` to the same path
+returns "No API found". Create it in the provider console, then run
+`analysis/marketplace_publish.py --publish`.
+
+| Field | Value |
+| --- | --- |
+| Provider name | FHIR IQ |
+| Organization website | https://fhiriq.com |
+| Business email | gene@fhiriq.com |
+| Support email | gene@fhiriq.com |
+| Terms of service | https://ainpi.dev/terms |
+| Privacy policy | https://ainpi.dev/privacy |
+
+Both emails are `gene@fhiriq.com` because that is the address all four published
+policy pages already name. A support address that appears nowhere in the terms
+it sits beside is a mismatch a reader can see.
+
+### Description (921 of 1000 characters)
+
+FHIR IQ works on healthcare interoperability: HL7 FHIR implementation, provider directory data quality, and federal health data standards.
+
+It maintains AINPI (ainpi.dev), a public-interest audit of the CMS National Provider Directory. AINPI registers each measurement before computing the numbers, publishes the compute scripts, and issues a correction when a source changes underneath a claim.
+
+Listings from this provider are healthcare directory data and the tools to read it. The first is an archive of every published release of the federal provider directory, including the releases CMS no longer serves. It ships as Delta tables partitioned by release, so one query can compare two versions. Later listings cover crosswalks derived from it and an MCP server that answers audit questions for an agent.
+
+The underlying federal files are US government works and carry no copyright. The extraction code is Apache-2.0.
+
+---
+
 ## Listing 1: the release archive
 
 **Type:** Tables, from the `ainpi-ndh-archive` share
