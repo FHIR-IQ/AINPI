@@ -59,6 +59,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/privacy', priority: 0.2 },
     { path: '/terms', priority: 0.2 },
     { path: '/data-license', priority: 0.3 },
+    { path: '/archive', priority: 0.7 },
     { path: '/security', priority: 0.2 },
   ];
 
