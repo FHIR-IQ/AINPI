@@ -122,6 +122,24 @@ def check_databricks(r: Result) -> None:
           f"state={w.get('state')}" + ("" if w.get("state") in ("STOPPED", "STOPPING")
                                        else " — running warehouses bill while idle until auto-stop"))
 
+    # The only surface here with no hard spend ceiling. Warehouse config bounds
+    # idle burn; it does not cap total spend. The budget lives at account level,
+    # and account APIs need auth against accounts.cloud.databricks.com rather
+    # than the workspace host, so a workspace token reports "?" not "FAIL".
+    rc, out = run(["databricks", "account", "budgets", "list"])
+    if rc != 0:
+        r.add("Databricks", "account budget", None,
+              "account API unreachable from a workspace token. Set a budget in "
+              "the account console; this check verifies it once auth exists.")
+    else:
+        try:
+            budgets = json.loads(out or "[]")
+        except json.JSONDecodeError:
+            budgets = []
+        r.add("Databricks", "account budget", bool(budgets),
+              f"{len(budgets)} budget(s)" if budgets
+              else "NO BUDGET. Warehouse config bounds idle burn, not total spend.")
+
     # Recipient tokens expire. A silently expired token looks like a broken
     # share; a never-expiring one is a standing credential.
     rc, out = run(["databricks", "recipients", "list"])
