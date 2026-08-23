@@ -333,6 +333,7 @@ def do_load(only: list[str] | None = None) -> None:
 
 
 def do_share() -> None:
+    shared_now = shared_object_names()
     for table in TABLES:
         fq = f"{CATALOG}.{SCHEMA}.{table}"
         # Re-apply the comment every run. CREATE TABLE set it once; editing the
@@ -347,28 +348,74 @@ def do_share() -> None:
         rc = sql(f"COMMENT ON TABLE {fq} IS '{c}'")
         if rc.get("status", {}).get("state") != "SUCCEEDED":
             print(f"  {fq}: COMMENT FAILED {json.dumps(rc.get('status'))[:200]}")
-        payload = json.dumps({
-            "updates": [{
-                "action": "ADD",
-                "data_object": {
-                    "name": fq,
-                    "data_object_type": "TABLE",
-                    "comment": TABLE_COMMENTS.get(table, ""),
-                },
-            }]
-        })
+        # The share object carries its OWN copy of the comment, snapshotted when
+        # the table was added, and COMMENT ON TABLE does not propagate to it.
+        # A recipient reads the share's copy, so an ADD-only loop leaves every
+        # consumer reading whatever the text said the day the table was first
+        # shared. That is how a correction to the Location join guidance sat in
+        # this file for a week while the published share still told consumers to
+        # join on name plus address.
+        #
+        # UPDATE refreshes it, but it re-validates the whole object, so
+        # history_data_sharing_status has to be restated or the call fails with
+        # DS_UNSUPPORTED_DELTA_TABLE_FEATURES on deletion vectors.
+        action = "UPDATE" if fq in shared_now else "ADD"
+        data_object = {
+            "name": fq,
+            "data_object_type": "TABLE",
+            "comment": TABLE_COMMENTS.get(table, ""),
+        }
+        if action == "UPDATE":
+            data_object["shared_as"] = f"{SCHEMA}.{table}"
+            data_object["history_data_sharing_status"] = "ENABLED"
+        payload = json.dumps({"updates": [{"action": action, "data_object": data_object}]})
         r = subprocess.run(
             ["databricks", "shares", "update", SHARE, "--json", payload],
             capture_output=True, text=True,
         )
         ok = r.returncode == 0
-        # Re-adding a table already in the share is not an error worth stopping
-        # for; anything else is.
-        already = "already exists" in (r.stderr or "").lower()
-        print(f"  {fq}: {'added' if ok else ('already shared' if already else 'FAILED')}")
-        if not ok and not already:
+        print(f"  {fq}: {action.lower()}d" if ok else f"  {fq}: {action} FAILED")
+        if not ok:
             print(f"    {r.stderr.strip()[:240]}")
+    verify_share_comments()
     print("share updated")
+
+
+def shared_object_names() -> set[str]:
+    r = subprocess.run(["databricks", "shares", "get", SHARE, "--include-shared-data",
+                        "-o", "json"], capture_output=True, text=True)
+    if r.returncode != 0:
+        return set()
+    try:
+        return {o["name"] for o in json.loads(r.stdout or "{}").get("objects", [])}
+    except (json.JSONDecodeError, KeyError):
+        return set()
+
+
+def verify_share_comments() -> bool:
+    """Read the share back and confirm each object carries the current comment.
+
+    Writing the comment and checking the table is not enough: the share keeps a
+    separate copy and that is the one a recipient sees.
+    """
+    r = subprocess.run(["databricks", "shares", "get", SHARE, "--include-shared-data",
+                        "-o", "json"], capture_output=True, text=True)
+    if r.returncode != 0:
+        print("  VERIFY FAILED: cannot read the share back")
+        return False
+    live = {o["name"]: o.get("comment", "")
+            for o in json.loads(r.stdout or "{}").get("objects", [])}
+    ok = True
+    for table in TABLES:
+        fq = f"{CATALOG}.{SCHEMA}.{table}"
+        want = TABLE_COMMENTS.get(table, "")
+        if live.get(fq) != want:
+            print(f"  STALE share comment on {fq}: recipients are reading old text")
+            ok = False
+    if ok:
+        print("  share comments match TABLE_COMMENTS on all "
+              f"{len(TABLES)} objects")
+    return ok
 
 
 def do_status() -> None:
