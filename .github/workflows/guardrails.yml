@@ -1,0 +1,53 @@
+name: Spend guardrails
+
+# Cost controls decay silently. A budget gets deleted, an API gets re-enabled
+# by a tutorial or an assistant, a cap gets dropped in a refactor. Nothing
+# fails and the first signal is a bill.
+#
+# On 2026-08-23 this project had six billable Google Maps Platform APIs enabled
+# against a written policy that the whole family stays off, and nothing had
+# noticed for months. Hence this.
+#
+# The audit reports "?" rather than failing for checks it cannot run without
+# credentials, so the repo-side controls (BigQuery byte caps, the rate limiter,
+# the /npi no-live-fallback contract) are enforced on every PR even though the
+# cloud-side ones need auth.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Monday 08:30 UTC, half an hour before the weekly refresh, so a missing
+    # cap is known before the job that would spend against it runs.
+    - cron: '30 8 * * 1'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Optional: lets the GCP half of the audit run. Without it those checks
+      # report "?" and the job still validates everything in the repo.
+      - name: Authenticate to Google Cloud
+        if: ${{ env.HAS_GCP == 'true' }}
+        env:
+          HAS_GCP: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY != '' }}
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      - name: Audit spend guardrails
+        run: python analysis/guardrails_audit.py
+
+      - name: Report
+        if: failure()
+        run: |
+          echo "::error::A spend guardrail is missing. See the audit output above."
+          echo "Guardrails are documented in CLAUDE.md under GCP cost controls."

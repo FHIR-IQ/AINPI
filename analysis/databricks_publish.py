@@ -169,8 +169,36 @@ def available_releases() -> list[str]:
     ]
 
 
-def do_upload() -> None:
+def _remote_size(path: str) -> int | None:
+    """Size of a file already in the volume, or None if it is not there."""
+    out = subprocess.run(
+        ["databricks", "fs", "ls", path, "--output", "json"],
+        capture_output=True, text=True,
+    )
+    if out.returncode != 0:
+        return None
+    try:
+        entries = json.loads(out.stdout or "[]")
+    except json.JSONDecodeError:
+        return None
+    for e in entries if isinstance(entries, list) else []:
+        n = e.get("file_size")
+        if isinstance(n, int):
+            return n
+    return None
+
+
+def do_upload(only_release: str | None = None) -> None:
+    """Upload parquet to the staging volume, skipping what is already there.
+
+    Byte-for-byte size match is the skip test. Re-uploading a release that has
+    not changed costs nothing but time, and this loop used to re-push every
+    release on disk every run: adding the third release meant re-sending the
+    first two, 8.7 GB of them.
+    """
     for release in available_releases():
+        if only_release and release != only_release:
+            continue
         dest_dir = f"dbfs:/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}"
         sh(["databricks", "fs", "mkdir", dest_dir], check=False)
         for table in TABLES:
@@ -178,9 +206,13 @@ def do_upload() -> None:
             if not src.exists():
                 print(f"  {release}/{table}: no parquet, skipped")
                 continue
-            mb = src.stat().st_size / 1e6
-            print(f"  {release}/{table}: {mb:,.0f} MB …", flush=True)
-            sh(["databricks", "fs", "cp", str(src), f"{dest_dir}/{table}.parquet"])
+            dest = f"{dest_dir}/{table}.parquet"
+            local = src.stat().st_size
+            if _remote_size(dest) == local:
+                print(f"  {release}/{table}: already uploaded ({local/1e6:,.0f} MB)")
+                continue
+            print(f"  {release}/{table}: {local/1e6:,.0f} MB …", flush=True)
+            sh(["databricks", "fs", "cp", "--overwrite", str(src), dest])
     print("upload complete")
 
 
@@ -278,6 +310,7 @@ def do_status() -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--upload", action="store_true")
+    ap.add_argument("--release", help="limit --upload/--load to one release")
     ap.add_argument("--load", action="store_true")
     ap.add_argument("--share", action="store_true")
     ap.add_argument("--status", action="store_true")
@@ -286,7 +319,7 @@ def main() -> None:
         ap.print_help()
         return
     if a.upload:
-        do_upload()
+        do_upload(a.release)
     if a.load:
         do_load()
     if a.share:
