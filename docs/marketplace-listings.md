@@ -150,6 +150,23 @@ finding, demonstrates the id-stability trap, and links back to the findings.
 Consumers evaluate a listing by running its notebook, so this one has to answer
 a real question rather than print a schema.
 
+The description above tells the reader a notebook is included, so `verify_listing`
+now fails the publish unless exactly one is attached. `attach_notebook` handles
+it, and three of its details were found by probing rather than by reading a doc:
+
+- Marketplace wants an HTML **export**, not the source. `text/html` is the only
+  mime type `EMBEDDED_NOTEBOOK` accepts; `application/x-ipynb+json`,
+  `text/x-python`, `application/json` and `application/octet-stream` are each
+  rejected by name.
+- The presigned PUT is signed over `host;x-amz-server-side-encryption`, so the
+  upload must send `x-amz-server-side-encryption: AES256` and must **not** add a
+  `Content-Type`. Either mistake is a bare 403.
+- The upload URL expires in 900 seconds, so create and upload without pausing.
+
+The new file is uploaded before the old one is deleted, so a failed run leaves
+the previous notebook in place rather than leaving the listing with none.
+Re-running is idempotent: still exactly one file attached.
+
 ---
 
 ## Listing 2: the MCP server

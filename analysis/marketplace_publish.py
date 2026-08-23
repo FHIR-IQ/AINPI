@@ -28,6 +28,7 @@ import json
 import pathlib
 import subprocess
 import sys
+import tempfile
 
 REPO = pathlib.Path(__file__).resolve().parent.parent
 SHARE = "ainpi-ndh-archive"
@@ -75,6 +76,7 @@ LISTINGS = [
         "terms_of_service": "https://ainpi.dev/terms",
         "privacy_policy_link": "https://ainpi.dev/privacy",
         "notebook": "analysis/notebooks/ainpi_archive_quickstart.py",
+        "notebook_display_name": "Release archive quickstart",
     },
 ]
 
@@ -138,6 +140,83 @@ def do_check() -> bool:
     return ok
 
 
+NOTEBOOK_WS_DIR = "/Users/gene@fhiriq.com"
+
+
+def listing_files(lid: str) -> list[dict]:
+    rc, out = sh(["databricks", "api", "get",
+                  f"/api/2.1/marketplace-provider/files"
+                  f"?file_parent.parent_id={lid}&file_parent.file_parent_type=LISTING"])
+    if rc != 0:
+        return []
+    try:
+        return json.loads(out or "{}").get("file_infos", []) or []
+    except json.JSONDecodeError:
+        return []
+
+
+def attach_notebook(lid: str, spec: dict) -> bool:
+    """Export the notebook to HTML and attach it to the listing.
+
+    The listing description says the notebook is included, so it has to be. A
+    description that promises a worked example the listing does not carry is
+    the one kind of defect this project cannot ship.
+
+    Three things here were found by probing, not by reading:
+
+    - Marketplace wants an HTML *export*, not the source. `text/html` is the
+      only mime type EMBEDDED_NOTEBOOK accepts; x-ipynb, text/x-python,
+      application/json and octet-stream are each rejected by name.
+    - The presigned PUT is signed over `host;x-amz-server-side-encryption`, so
+      the upload must send `x-amz-server-side-encryption: AES256` and must not
+      add a Content-Type. Either mistake is a 403 with no explanation.
+    - The URL expires in 900 seconds, so create and upload without pausing.
+
+    The new file is uploaded before the old one is deleted. The other order
+    leaves the listing with no notebook if the upload fails.
+    """
+    src = REPO / spec["notebook"]
+    ws = f"{NOTEBOOK_WS_DIR}/{src.stem}"
+    html = pathlib.Path(tempfile.gettempdir()) / f"{src.stem}.html"
+
+    rc, out = sh(["databricks", "workspace", "import", ws, "--file", str(src),
+                  "--language", "PYTHON", "--format", "SOURCE", "--overwrite"])
+    if rc != 0:
+        print(f"    NOTEBOOK import failed: {out[:200]}")
+        return False
+    html.unlink(missing_ok=True)
+    rc, out = sh(["databricks", "workspace", "export", ws, "--format", "HTML",
+                  "--file", str(html)])
+    if rc != 0 or not html.exists() or html.stat().st_size == 0:
+        print(f"    NOTEBOOK export failed: {out[:200]}")
+        return False
+
+    before = [f["id"] for f in listing_files(lid)
+              if f.get("marketplace_file_type") == "EMBEDDED_NOTEBOOK"]
+    rc, out = sh(["databricks", "provider-files", "create", "--json", json.dumps({
+        "file_parent": {"parent_id": lid, "file_parent_type": "LISTING"},
+        "marketplace_file_type": "EMBEDDED_NOTEBOOK",
+        "mime_type": "text/html",
+        "display_name": spec["notebook_display_name"],
+    })])
+    if rc != 0:
+        print(f"    NOTEBOOK create failed: {out[:200]}")
+        return False
+    created = json.loads(out)
+    rc, code = sh(["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
+                   "-X", "PUT", "-H", "x-amz-server-side-encryption: AES256",
+                   "--data-binary", f"@{html}", created["upload_url"]])
+    if code.strip() != "200":
+        print(f"    NOTEBOOK upload failed: HTTP {code.strip()}")
+        sh(["databricks", "provider-files", "delete", created["file_info"]["id"]])
+        return False
+    for old in before:
+        sh(["databricks", "provider-files", "delete", old])
+    print(f"    notebook attached: {created['file_info']['id']} "
+          f"({html.stat().st_size:,} bytes)")
+    return True
+
+
 def do_publish(private: bool = False) -> bool:
     pid = provider_id()
     if not pid:
@@ -186,7 +265,10 @@ def do_publish(private: bool = False) -> bool:
                 print("    publish into a private exchange in the meantime.")
             ok = False
             continue
-        if not verify_listing(lid or json.loads(out).get("listing_id"), spec):
+        lid = lid or json.loads(out).get("listing_id")
+        if not attach_notebook(lid, spec):
+            ok = False
+        if not verify_listing(lid, spec):
             ok = False
     # Exit non-zero when any listing failed. Printing FAILED and exiting 0 is
     # how a broken publish gets read as a done one.
@@ -216,6 +298,12 @@ def verify_listing(lid: str, spec: dict) -> bool:
         if sent != stored:
             print(f"    MISMATCH {label}: sent {sent!r}, stored {stored!r}")
             ok = False
+    notebooks = [f for f in listing_files(lid)
+                 if f.get("marketplace_file_type") == "EMBEDDED_NOTEBOOK"]
+    if len(notebooks) != 1:
+        print(f"    MISMATCH notebook: expected 1 attached, found {len(notebooks)}."
+              " The description tells the reader one is included.")
+        ok = False
     if ok:
         print(f"    verified: {lid}")
     return ok
