@@ -83,19 +83,36 @@ ID_NOTE_STABLE = (
     " Resource ids are Type-<NPI> and are stable across releases, so joining "
     "on _id across release_date is valid."
 )
-ID_NOTE_UNSTABLE = (
+# Two different warnings, because the replacement key works for one of these
+# resources and only partly for the other. Measured, not assumed: an earlier
+# draft of this comment told consumers to join location on "name plus address"
+# without anyone having run that join. It recovers 9.7% of May rows raw.
+_UNSTABLE_ID = (
     " WARNING: resource ids are Type-<random UUID> and are REGENERATED on every "
     "release. Zero ids survive from one release to the next, so joining on _id "
-    "across release_date yields 100% false churn. Join on _address (endpoint) "
-    "or name plus address (location) instead."
+    "across release_date yields 100% false churn."
+)
+ID_NOTE_ENDPOINT = _UNSTABLE_ID + (
+    " Join on _address instead: it matches 100.0% of distinct addresses between "
+    "2026-04-09 and 2026-05-08. Note the April file repeats each address 3.9 "
+    "times on average and the May file 1.05 times, so the 73% fall in row count "
+    "between them is de-duplication, not removal: 1,299,999 of 1,300,241 "
+    "distinct April addresses are still present in May."
+)
+ID_NOTE_LOCATION = _UNSTABLE_ID + (
+    " There is no reliable cross-release key for Location in these columns. "
+    "_name + _city + _state + _postal_code matches only 9.7% of May rows as "
+    "stored, rising to 73.5% after upper-casing and stripping non-alphanumerics, "
+    "because CMS re-cased and re-punctuated these fields between releases. Treat "
+    "any Location cross-release join as lossy and state the match rate."
 )
 
 TABLE_COMMENTS = {
     "practitioner": "NDH Practitioner resources. Full FHIR resource JSON plus flattened _* columns." + ID_NOTE_STABLE,
     "practitioner_role": "NDH PractitionerRole. The practitioner-to-organization link, and the field whose absence is the directory's binding constraint.",
     "organization": "NDH Organization. Contains both provider organizations and `ein` tax records; check type[0].text before counting." + ID_NOTE_STABLE,
-    "location": "NDH Location. Carries the only geography in the directory, as position.latitude/longitude." + ID_NOTE_UNSTABLE,
-    "endpoint": "NDH Endpoint. Mostly Direct Trust messaging addresses; filter connectionType.code = 'hl7-fhir-rest' for callable APIs." + ID_NOTE_UNSTABLE,
+    "location": "NDH Location. Carries the only geography in the directory, as position.latitude/longitude." + ID_NOTE_LOCATION,
+    "endpoint": "NDH Endpoint. Mostly Direct Trust messaging addresses; filter connectionType.code = 'hl7-fhir-rest' for callable APIs." + ID_NOTE_ENDPOINT,
     "organization_affiliation": "NDH OrganizationAffiliation. Carries no relationship code, so an edge does not say what it means.",
 }
 
@@ -212,7 +229,13 @@ def do_share() -> None:
         # comment is the only place a Delta Sharing consumer sees the id-
         # stability warning.
         c = TABLE_COMMENTS.get(table, "").replace("'", "\\'")
-        sql(f"COMMENT ON TABLE {fq} IS '{c}'")
+        # Check the state. An unchecked COMMENT is a silent no-op if the text
+        # ever breaks the quoting (several comments contain apostrophes), and
+        # the comment is the only place a Delta Sharing consumer sees the
+        # id-stability warning.
+        rc = sql(f"COMMENT ON TABLE {fq} IS '{c}'")
+        if rc.get("status", {}).get("state") != "SUCCEEDED":
+            print(f"  {fq}: COMMENT FAILED {json.dumps(rc.get('status'))[:200]}")
         payload = json.dumps({
             "updates": [{
                 "action": "ADD",

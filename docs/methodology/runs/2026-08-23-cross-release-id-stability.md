@@ -34,9 +34,25 @@ The zero is not near zero. It is exactly zero, and the reason is the id format:
 
 **A cross-release diff of endpoint or location joined on `_id` therefore reports
 100% churn every time.** That is an artifact of id minting, not a measurement.
-Join endpoint on `_address` and location on name plus address instead. The Delta table comments
-carry this warning, so a consumer meets it before writing the join rather than
-after.
+The Delta table comments carry this warning, so a consumer meets it before
+writing the join rather than after.
+
+## The replacement key works for endpoint and only partly for location
+
+Telling a consumer to join on something else is worth nothing until someone has
+run that join, so both were measured.
+
+**Endpoint joins cleanly on `_address`:** 1,299,999 shared values, which is
+100.0% of the 1,300,082 distinct May addresses and 100.0% of the 1,300,241
+distinct April ones. 83 May addresses are new and 242 April ones are gone.
+
+**Location has no reliable key in the exported columns.** `_name` + `_city` +
+`_state` + `_postal_code` matches 74,627 keys, only 9.7% of May rows, as
+stored. Upper-casing and stripping non-alphanumerics raises that to 564,285,
+or 73.5%, because CMS re-cased and re-punctuated these fields between the two
+releases. Any Location cross-release join is lossy and should state its match
+rate. (The April and May parquet predate the `_address_line` column, so a
+street-level key was not available to test.)
 
 ## The id set being stable does not mean the records are
 
@@ -66,12 +82,27 @@ address case (`ORANGE` to `Orange`), split suite numbers onto their own
 `address.line` entry, dropped a duplicated address object, and changed the
 order of the telecom and qualification arrays.
 
-## Volume changes
+## The 73% fall in endpoint count is de-duplication, not removal
 
-`endpoint` fell from 5,043,524 to 1,360,585 (-73%) and `location` from
-3,494,239 to 1,362,869 (-61%) between April and May. This run reports both as counts
-only. Because CMS re-minted the ids, this run cannot say how much of that is
-deletion and how much is reissue, and makes no claim either way.
+`endpoint` fell from 5,043,524 rows to 1,360,585 (-73%) between April and May,
+which reads as mass deletion. It is not. The distinct-address counts barely
+move:
+
+| | rows | distinct `_address` | rows per address |
+| --- | ---: | ---: | ---: |
+| 2026-04-09 | 5,043,524 | 1,300,241 | 3.88 |
+| 2026-05-08 | 1,360,585 | 1,300,082 | 1.05 |
+
+April repeated each endpoint address 3.9 times on average; May repeats it 1.05
+times. 1,299,999 of the 1,300,241 distinct April addresses are still present in
+May. **CMS removed duplicate rows, not endpoints.** Anyone who read the April
+figure as a count of endpoints was overcounting by nearly four to one.
+
+`location` fell from 3,494,239 to 1,362,869 (-61%), and its duplication factor
+barely changed (1.81 to 1.77), so de-duplication does not explain it. Distinct
+composite keys fell from 1,928,602 to 769,715. Because that key is itself
+unreliable across these releases, this run does not attribute the fall to
+deletion rather than renaming, and makes no claim either way.
 
 ## Reproducing
 
