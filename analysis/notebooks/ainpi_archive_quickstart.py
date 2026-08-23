@@ -128,24 +128,40 @@ SELECT 'practitioner (NPI ids)',
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 3. What the flattened columns are for
+# MAGIC ## 3. Most of what the directory calls an endpoint is not an API
 # MAGIC
 # MAGIC Every table carries the untouched FHIR resource in `resource`, so nothing is
 # MAGIC lost, plus flattened `_*` columns so ordinary questions do not require JSON
 # MAGIC parsing. Both releases are extracted by the same code, so a cross-release
 # MAGIC comparison is not comparing two parsers.
+# MAGIC
+# MAGIC Here is one such question, and the answer is the denominator most people
+# MAGIC get wrong.
 
 # COMMAND ----------
 
-display(spark.sql(f"""
-SELECT _state,
-       COUNT(*)                                   AS practitioners,
-       ROUND(100.0 * AVG(CASE WHEN _phone IS NOT NULL THEN 1 ELSE 0 END), 1) AS pct_with_phone
-FROM practitioner
-WHERE release_date = '{AUG}' AND _active = true AND _state IS NOT NULL
-GROUP BY _state HAVING COUNT(*) > 20000
-ORDER BY practitioners DESC LIMIT 15
+display(spark.sql("""
+SELECT release_date,
+       _connection_type,
+       COUNT(*) AS endpoints,
+       ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (PARTITION BY release_date), 1)
+         AS pct_of_release
+FROM endpoint
+GROUP BY release_date, _connection_type
+ORDER BY release_date, endpoints DESC
 """))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC The Endpoint table holds over a million rows and about nine in ten are
+# MAGIC Direct Trust messaging addresses, which a person can send a secure message
+# MAGIC to and software cannot call. The subset an integrator can actually GET is
+# MAGIC `hl7-fhir-rest`: 114,071 at 2026-05-08 and 110,973 at 2026-08-20.
+# MAGIC
+# MAGIC If you are building anything that resolves a provider to a callable API,
+# MAGIC that smaller number is your denominator. Using the row count overstates
+# MAGIC reachability by roughly ten times.
 
 # COMMAND ----------
 

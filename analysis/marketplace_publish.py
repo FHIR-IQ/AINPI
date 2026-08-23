@@ -1,0 +1,203 @@
+"""Create or update the AINPI Databricks Marketplace listings from a spec.
+
+WHY A SCRIPT
+
+Listing copy that lives only in a web form cannot be reviewed, diffed or
+re-applied. The wording here is the same wording in docs/marketplace-listings.md,
+so a change goes through the same review as code.
+
+THE ONE STEP THIS CANNOT DO
+
+A listing hangs off a provider profile, and the provider profile has no create
+API. GET /api/2.1/marketplace-provider/providers works and POST to the same path
+returns "No API found", so the profile is console-only: Marketplace provider
+console, Profiles, then fill in name, icon, description, website, business and
+support email, and the terms and privacy links. It also requires an icon file,
+which this repo does not have.
+
+Once the profile exists this script does the rest:
+
+    python analysis/marketplace_publish.py --check     # what is missing
+    python analysis/marketplace_publish.py --publish   # create or update
+    python analysis/marketplace_publish.py --status
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import subprocess
+import sys
+
+REPO = pathlib.Path(__file__).resolve().parent.parent
+SHARE = "ainpi-ndh-archive"
+
+# Copy is duplicated from docs/marketplace-listings.md on purpose: that file is
+# the human-readable source of truth and this is the machine-applied form. A
+# test asserts the headline sentences match so they cannot drift apart.
+ARCHIVE_SUBTITLE = (
+    "Every published version of the federal provider directory, including the "
+    "ones CMS no longer serves. Partitioned by release so you can diff them."
+)
+
+ARCHIVE_DESCRIPTION = """CMS publishes the National Provider Directory as a bulk FHIR export and serves only the current version. When a new release lands, the previous one is gone from the source. This archive keeps them. That is the entire product, and it is free.
+
+WHAT IS IN IT. Two releases so far, 2026-05-08 and 2026-08-20, 54,162,643 rows across six tables: Practitioner, PractitionerRole, Organization, OrganizationAffiliation, Location and Endpoint. Every row carries the untouched FHIR resource JSON, plus flattened columns so ordinary questions do not require JSON parsing. Both releases are extracted by the same code, so comparing them is not comparing two parsers. Each table is partitioned by release_date, which makes a cross-release comparison a WHERE clause rather than a download.
+
+WHAT IT IS FOR. Questions that need two releases at once. One worked example, included as a notebook: between these two releases CMS added about seven million PractitionerRole records, a 173% rise. The share of clinicians who have one moved 4.5 points, from 26.9% to 31.4%. The rest went to people the directory already described, taking the average covered clinician from two role records to nearly five. That is a real improvement and a different improvement from covering more people, and a headline record count cannot tell them apart.
+
+BEFORE YOU WRITE A DIFF. Practitioner and Organization ids embed the NPI and are stable across releases. Endpoint and Location ids are random UUIDs that CMS regenerates on every export, so joining those two on _id across releases reports 100 percent churn that did not happen. Join Endpoint on _address instead. The table comments carry the same warning and the notebook demonstrates it.
+
+WHERE IT COMES FROM. Maintained by AINPI (ainpi.dev), a public-interest audit of federal provider directory data. Every measurement it publishes is pre-registered before the numbers are computed, the compute scripts are open, and corrections are published when a source changes underneath a claim.
+
+LICENCE. The underlying federal files are US government works and are not subject to copyright. AINPI claims no rights over them and grants none, because it has none to grant. The compilation and the extraction code are Apache-2.0. Attribution is requested rather than required, for a practical reason: a figure quoted without its release date cannot be checked against the release it came from.
+
+NOT A SOURCE OF TRUTH ABOUT ANY INDIVIDUAL. This is a measurement of a federal file. Do not make an enrolment, credentialing, payment or network decision about a named provider from a record here without checking the primary sources: the NPPES registry, the OIG exclusions list, and SAM.gov.
+
+CORRECTIONS WELCOME. If a number here disagrees with something you can verify, we would rather hear it: https://github.com/FHIR-IQ/AINPI/issues"""
+
+LISTINGS = [
+    {
+        "key": "archive",
+        "name": "CMS National Provider Directory: Release Archive",
+        "subtitle": ARCHIVE_SUBTITLE,
+        "description": ARCHIVE_DESCRIPTION,
+        "categories": ["HEALTH_AND_LIFE_SCIENCES", "PUBLIC_SECTOR"],
+        "share": SHARE,
+        "visibility": "PUBLIC",
+        "terms_of_service": "https://ainpi.dev/terms",
+        "privacy_policy_link": "https://ainpi.dev/privacy",
+        "contact_email": "gene@fhiriq.com",
+        "notebook": "analysis/notebooks/ainpi_archive_quickstart.py",
+    },
+]
+
+
+def sh(args: list[str]) -> tuple[int, str]:
+    p = subprocess.run(args, capture_output=True, text=True)
+    return p.returncode, (p.stdout or p.stderr)
+
+
+def provider_id() -> str | None:
+    rc, out = sh(["databricks", "api", "get", "/api/2.1/marketplace-provider/providers"])
+    if rc != 0:
+        return None
+    try:
+        data = json.loads(out or "{}")
+    except json.JSONDecodeError:
+        return None
+    providers = data.get("providers") or []
+    return providers[0].get("id") if providers else None
+
+
+def do_check() -> bool:
+    ok = True
+    pid = provider_id()
+    if pid:
+        print(f"  provider profile: {pid}")
+    else:
+        ok = False
+        print("  provider profile: MISSING. This is the one step with no API.")
+        print("    Marketplace provider console > Profiles. Needs an icon file,")
+        print("    description, website, business and support email, and the")
+        print("    terms and privacy links (both already live on ainpi.dev).")
+
+    # --include-shared-data is required. Without it the response carries only
+    # the share's metadata and no objects at all, so a healthy six-table share
+    # reads as empty and the preflight blocks a publish that should proceed.
+    rc, out = sh(["databricks", "shares", "get", SHARE, "--include-shared-data"])
+    shared = len(json.loads(out).get("objects", [])) if rc == 0 else 0
+    print(f"  share {SHARE}: {shared} table(s)" if rc == 0 else f"  share {SHARE}: NOT FOUND")
+    if rc != 0 or shared != 6:
+        ok = False
+
+    for spec in LISTINGS:
+        nb = REPO / spec["notebook"]
+        print(f"  notebook {spec['notebook']}: {'present' if nb.exists() else 'MISSING'}")
+        if not nb.exists():
+            ok = False
+
+    import urllib.request
+    for url in ("https://ainpi.dev/terms", "https://ainpi.dev/privacy",
+                "https://ainpi.dev/data-license"):
+        try:
+            code = urllib.request.urlopen(url, timeout=20).status
+        except Exception as e:  # noqa: BLE001
+            code = type(e).__name__
+        print(f"  {url}: {code}")
+        if code != 200:
+            ok = False
+    return ok
+
+
+def do_publish() -> None:
+    pid = provider_id()
+    if not pid:
+        raise SystemExit("no provider profile; run --check for what to do in the console")
+    rc, out = sh(["databricks", "provider-listings", "list"])
+    existing = {}
+    if rc == 0:
+        try:
+            for l in json.loads(out or "[]"):
+                existing[(l.get("summary") or {}).get("name")] = l.get("id")
+        except json.JSONDecodeError:
+            pass
+
+    for spec in LISTINGS:
+        body = {"listing": {
+            "summary": {
+                "name": spec["name"],
+                "subtitle": spec["subtitle"],
+                "provider_id": pid,
+                "categories": spec["categories"],
+                "listingType": "STANDARD",
+                "setting": {"visibility": spec["visibility"]},
+                "share": {"name": spec["share"], "type": "FULL"},
+            },
+            "detail": {
+                "description": spec["description"],
+                "terms_of_service": spec["terms_of_service"],
+                "privacy_policy_link": spec["privacy_policy_link"],
+                "contact_email": spec["contact_email"],
+            },
+        }}
+        lid = existing.get(spec["name"])
+        if lid:
+            rc, out = sh(["databricks", "provider-listings", "update", lid,
+                          "--json", json.dumps(body)])
+            print(f"  {spec['name']}: {'updated' if rc == 0 else 'UPDATE FAILED ' + out[:200]}")
+        else:
+            rc, out = sh(["databricks", "provider-listings", "create",
+                          "--json", json.dumps(body)])
+            print(f"  {spec['name']}: {'created' if rc == 0 else 'CREATE FAILED ' + out[:200]}")
+
+
+def do_status() -> None:
+    rc, out = sh(["databricks", "provider-listings", "list"])
+    if rc != 0:
+        print("  could not list listings:", out[:200]); return
+    listings = json.loads(out or "[]")
+    print(f"  {len(listings)} listing(s)")
+    for l in listings:
+        s = l.get("summary") or {}
+        print(f"    {s.get('name')}  visibility={(s.get('setting') or {}).get('visibility')}"
+              f"  share={(s.get('share') or {}).get('name')}")
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    for f in ("check", "publish", "status"):
+        ap.add_argument(f"--{f}", action="store_true")
+    a = ap.parse_args()
+    if not any(vars(a).values()):
+        ap.print_help(); return
+    if a.check:
+        sys.exit(0 if do_check() else 1)
+    if a.publish:
+        do_publish()
+    if a.status:
+        do_status()
+
+
+if __name__ == "__main__":
+    main()
