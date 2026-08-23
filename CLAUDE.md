@@ -314,6 +314,28 @@ The NDH bulk export at `https://directory.cms.gov/downloads/` publishes a stable
 
 `analysis/ndh_manifest.py` fetches the manifest, resolves each NDH resource to its current dated download URL, and exposes the manifest-declared `compressed_bytes` so downstream consumers can integrity-check partial downloads. `analysis/fast_ingest_ndh.py` uses it; pass `--print-manifest-only` to dump the resolved URLs without running the full ingest. The legacy `frontend/scripts/ingest-cms-npd.ts` still works but is deprecated (hardcodes undated filenames, ~5-10x slower via streaming inserts).
 
+**One matcher, used twice, drifted once (fixed 2026-08-23).** `resolve_file_url()` was updated for the 2026-08-20 key rename and `expected_compressed_size()` was not, so the size lookup kept testing `key.startswith(f"{resource}_")`, returned `None` for every August file, and the partial-download integrity check that consumes it silently stopped checking anything. Both now share `_matching_keys()`. Separately, `parse_release_date()` was being handed a *filename* by both callers, and August filenames carry no date, so the release resolved to `unknown` and the ingest would have written to `frontend/data/cms-npd-unknown`. Pass the manifest, not a filename: `generated_at` is the authoritative date. `analysis/tests/test_ndh_manifest.py` pins both, with a fixture that carries real sizes (the older numbered-key fixtures used empty dicts as values, which is precisely why the size regression went unseen).
+
+### The release archive on Databricks (`analysis/databricks_publish.py`)
+
+CMS serves only the latest NDH export; every prior release disappears when a new one lands. The archive is published as Delta tables in `workspace.ainpi`, one table per resource **partitioned by `release_date`** (not a table per release, so comparing releases is a `WHERE` clause rather than a `UNION`), and shared over **open Delta Sharing**. Open sharing is the deliberate choice: Databricks Free Edition cannot create or manage sharing recipients, so a free-edition user cannot receive a Databricks-to-Databricks share at all. Open sharing needs only a credential file and the `delta-sharing` Python package, with no Databricks account. Verified end to end from an external consumer.
+
+Two things cost money and neither is storage: converting parquet to Delta runs on a SQL warehouse (serverless Small, 10-minute auto-stop), and **a recipient pulling the archive is S3 egress at roughly $0.09/GB with no rate limiter in front of it**, unlike `/api/npd/*`. Partitioning by release is what lets a consumer read one release instead of all of them.
+
+`sql()` polls to completion. The statement API caps `wait_timeout` at 50s and then returns a `statement_id` with state `PENDING`; a 1.1 GB parquet conversion takes longer than that, so reading the first response as the outcome reports a healthy load as a failure.
+
+**Cross-release id stability, measured not assumed** (full run: `docs/methodology/runs/2026-08-23-cross-release-id-stability.md`):
+
+| Resource | id format | Apr→May overlap |
+| --- | --- | --- |
+| `practitioner` | `Practitioner-<NPI>`, 100% | 100% |
+| `organization` | mixed NPI + UUID | 94.7% |
+| `endpoint`, `location` | `Type-<random UUID>` | **exactly 0** |
+
+Endpoint and Location ids are **regenerated on every export**, so a cross-release diff joined on `_id` reports 100% churn every time as an artifact of id minting. Join endpoint on `_address`, location on name plus address. The Delta table comments carry this warning, and `do_share()` re-applies the comments on every run so an edit to `TABLE_COMMENTS` actually reaches the published table.
+
+The converse error is just as easy: practitioner ids overlapping 100% does **not** mean CMS republished the same data. Of 20,000 practitioners in both releases, zero are identical even after normalising key order, array order, case and `meta.lastUpdated`. CMS replaced the whole universal practitioner extension vocabulary between the two releases with no overlap (`base-ext-cms-ial2-verified` → `base-ext-cms-identity-verified`, `base-ext-cms-enrollment-in-good-standing` → `base-ext-cms_medicare_enrollment`, and two more; note kebab-case and snake_case now coexist). Matching an April extension name against any later release returns zero and does not error.
+
 ### Materialized helper tables (substrate pattern)
 
 When the same dimension of the raw FHIR resources is interrogated by multiple findings, pre-extract it once into a small clustered helper table partitioned by release, then run each finding as a cheap join against the helper instead of re-doing the heavy resource scan. Pays for itself the second time the question is asked; the storage cost is negligible compared to repeated re-extraction.
