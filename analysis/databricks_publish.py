@@ -216,23 +216,64 @@ def do_upload(only_release: str | None = None) -> None:
     print("upload complete")
 
 
-def load_one_release(release: str) -> None:
+def _table_columns(fq: str) -> list[str] | None:
+    r = sql(f"SELECT * FROM {fq} LIMIT 0")
+    if r.get("status", {}).get("state") != "SUCCEEDED":
+        return None
+    schema = r.get("manifest", {}).get("schema", {}).get("columns") or []
+    return [c["name"] for c in schema]
+
+
+def _parquet_columns(path: pathlib.Path) -> list[str]:
+    import pyarrow.parquet as pq  # local: only the load path needs pyarrow
+    return list(pq.ParquetFile(path).schema_arrow.names)
+
+
+def load_one_release(release: str) -> bool:
     """Add or replace a single release without disturbing the others.
 
     DELETE the matching partition then INSERT, which is idempotent: re-running
-    cannot double-count, and the other releases stay readable throughout. The
-    full CREATE OR REPLACE path below rebuilds every release from parquet,
-    which is correct but drops the table briefly and reprocesses everything.
+    cannot double-count, and the other releases stay readable throughout.
+
+    The schema is checked BEFORE the DELETE. That ordering is load-bearing.
+    An earlier version deleted first and then discovered the INSERT could not
+    run, which is harmless the first time (nothing to delete) and destroys the
+    partition on any re-run. The parquet schema does drift between releases:
+    the flattened columns _address_line, _phone, _telecom and the location
+    coordinates were added to the extractors after the April and May exports
+    were written, so those files carry fewer columns than the tables now have.
+
+    Returns True only if every table with parquet on disk loaded.
     """
+    ok = True
     for table in TABLES:
         src = PARQUET_DIR / release / f"{table}.parquet"
         if not src.exists():
             print(f"  {release}/{table}: no parquet, skipped")
             continue
         fq = f"{CATALOG}.{SCHEMA}.{table}"
+
+        target = _table_columns(fq)
+        if target is None:
+            print(f"  {fq}: could not read target schema, skipped")
+            ok = False
+            continue
+        source = _parquet_columns(src) + ["release_date"]
+        if source != target:
+            missing = [c for c in target if c not in source]
+            extra = [c for c in source if c not in target]
+            print(f"  {fq}: SCHEMA MISMATCH, nothing deleted or written")
+            if extra:
+                print(f"      parquet has, table lacks: {extra}")
+            if missing:
+                print(f"      table has, parquet lacks: {missing}")
+            ok = False
+            continue
+
         r = sql(f"DELETE FROM {fq} WHERE release_date = '{release}'")
         if r.get("status", {}).get("state") != "SUCCEEDED":
             print(f"  {fq}: DELETE failed {json.dumps(r.get('status'))[:200]}")
+            ok = False
             continue
         print(f"  {fq} += {release}", flush=True)
         r = sql(
@@ -241,7 +282,9 @@ def load_one_release(release: str) -> None:
         )
         if r.get("status", {}).get("state") != "SUCCEEDED":
             print(f"    FAILED {json.dumps(r.get('status'))[:300]}")
-    print(f"{release} loaded")
+            ok = False
+    print(f"{release}: {'loaded' if ok else 'INCOMPLETE'}")
+    return ok
 
 
 def do_load() -> None:
@@ -349,7 +392,14 @@ def main() -> None:
     if a.upload:
         do_upload(a.release)
     if a.load:
-        load_one_release(a.release) if a.release else do_load()
+        if a.release:
+            # Exit non-zero on a partial load. The previous version printed
+            # FAILED for four of six tables and still exited 0, which is
+            # indistinguishable from success to anything reading the code.
+            if not load_one_release(a.release):
+                sys.exit(1)
+        else:
+            do_load()
     if a.share:
         do_share()
     if a.status:
