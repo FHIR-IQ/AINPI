@@ -216,6 +216,34 @@ def do_upload(only_release: str | None = None) -> None:
     print("upload complete")
 
 
+def load_one_release(release: str) -> None:
+    """Add or replace a single release without disturbing the others.
+
+    DELETE the matching partition then INSERT, which is idempotent: re-running
+    cannot double-count, and the other releases stay readable throughout. The
+    full CREATE OR REPLACE path below rebuilds every release from parquet,
+    which is correct but drops the table briefly and reprocesses everything.
+    """
+    for table in TABLES:
+        src = PARQUET_DIR / release / f"{table}.parquet"
+        if not src.exists():
+            print(f"  {release}/{table}: no parquet, skipped")
+            continue
+        fq = f"{CATALOG}.{SCHEMA}.{table}"
+        r = sql(f"DELETE FROM {fq} WHERE release_date = '{release}'")
+        if r.get("status", {}).get("state") != "SUCCEEDED":
+            print(f"  {fq}: DELETE failed {json.dumps(r.get('status'))[:200]}")
+            continue
+        print(f"  {fq} += {release}", flush=True)
+        r = sql(
+            f"INSERT INTO {fq} SELECT *, '{release}' AS release_date "
+            f"FROM parquet.`{volume_path(release, table)}`"
+        )
+        if r.get("status", {}).get("state") != "SUCCEEDED":
+            print(f"    FAILED {json.dumps(r.get('status'))[:300]}")
+    print(f"{release} loaded")
+
+
 def do_load() -> None:
     releases = available_releases()
     for table in TABLES:
@@ -321,7 +349,7 @@ def main() -> None:
     if a.upload:
         do_upload(a.release)
     if a.load:
-        do_load()
+        load_one_release(a.release) if a.release else do_load()
     if a.share:
         do_share()
     if a.status:

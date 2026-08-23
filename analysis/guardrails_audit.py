@@ -65,6 +65,30 @@ def run(args: list[str], timeout: int = 90) -> tuple[int, str]:
         return 1, str(e)
 
 
+ACCOUNT_ID = "14397f14-e2b8-4071-a233-25d0f2ad85c1"
+
+
+def _account_profile() -> str | None:
+    """Name of a configured profile pointed at the account console, if any.
+
+    Account APIs authenticate against accounts.cloud.databricks.com, not the
+    workspace host, so the default profile cannot read a budget. Discovered
+    rather than hardcoded because the profile name is whatever was typed at the
+    login prompt.
+    """
+    rc, out = run(["databricks", "auth", "profiles", "-o", "json"])
+    if rc != 0:
+        return None
+    try:
+        profiles = json.loads(out or "{}").get("profiles") or []
+    except json.JSONDecodeError:
+        return None
+    for p in profiles:
+        if "accounts." in (p.get("host") or "") and p.get("valid"):
+            return p.get("name")
+    return None
+
+
 def check_gcp(r: Result) -> None:
     rc, out = run(["gcloud", "billing", "budgets", "list",
                    "--billing-account", _billing_account(), "--format", "json"])
@@ -118,27 +142,43 @@ def check_databricks(r: Result) -> None:
     mx = w.get("max_num_clusters")
     r.add("Databricks", "no scale-out blowout", isinstance(mx, int) and mx <= MAX_CLUSTERS,
           f"max_num_clusters={mx}")
-    r.add("Databricks", "warehouse idle now", w.get("state") in ("STOPPED", "STOPPING"),
-          f"state={w.get('state')}" + ("" if w.get("state") in ("STOPPED", "STOPPING")
-                                       else " — running warehouses bill while idle until auto-stop"))
+    # Informational, never a failure. A warehouse running during real work is
+    # normal, and failing CI for it would train people to ignore this report.
+    # The guardrail is that auto-stop exists, which is checked above.
+    state = w.get("state")
+    r.add("Databricks", "warehouse state", None,
+          f"{state}" + (" (bills until auto-stop; fine if you are working)"
+                        if state == "RUNNING" else ""))
 
     # The only surface here with no hard spend ceiling. Warehouse config bounds
     # idle burn; it does not cap total spend. The budget lives at account level,
     # and account APIs need auth against accounts.cloud.databricks.com rather
     # than the workspace host, so a workspace token reports "?" not "FAIL".
-    rc, out = run(["databricks", "account", "budgets", "list"])
+    prof = _account_profile()
+    rc, out = run(["databricks", "account", "budgets", "list"]
+                  + (["-p", prof] if prof else []))
     if rc != 0:
         r.add("Databricks", "account budget", None,
-              "account API unreachable from a workspace token. Set a budget in "
-              "the account console; this check verifies it once auth exists.")
+              "no account-level profile configured, so the budget cannot be read. "
+              "Run: databricks auth login --host https://accounts.cloud.databricks.com "
+              f"--account-id {ACCOUNT_ID}")
     else:
         try:
             budgets = json.loads(out or "[]")
         except json.JSONDecodeError:
             budgets = []
-        r.add("Databricks", "account budget", bool(budgets),
-              f"{len(budgets)} budget(s)" if budgets
-              else "NO BUDGET. Warehouse config bounds idle burn, not total spend.")
+        # A budget scoped to a product tag looks like coverage and is not. The
+        # first one created here filtered to databricks-product IN (genie),
+        # which excluded the SQL warehouse, i.e. everything this project runs.
+        unfiltered = [b for b in budgets if not (b.get("filter") or {}).get("tags")]
+        names = ", ".join(b.get("display_name", "?") for b in unfiltered)
+        r.add("Databricks", "account budget", bool(unfiltered),
+              f"{len(unfiltered)} covering all spend ({names})"
+              + (f"; {len(budgets) - len(unfiltered)} filtered to a product tag"
+                 if len(budgets) > len(unfiltered) else "")
+              if unfiltered
+              else f"{len(budgets)} budget(s) but every one is filtered to a "
+                   f"product tag, so total spend is uncapped.")
 
     # Recipient tokens expire. A silently expired token looks like a broken
     # share; a never-expiring one is a standing credential.
