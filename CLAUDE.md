@@ -324,6 +324,10 @@ Two things cost money and neither is storage: converting parquet to Delta runs o
 
 `sql()` polls to completion. The statement API caps `wait_timeout` at 50s and then returns a `statement_id` with state `PENDING`; a 1.1 GB parquet conversion takes longer than that, so reading the first response as the outcome reports a healthy load as a failure.
 
+**Naming: Databricks announced OpenSharing on 2026-06-10.** Delta Sharing was donated to the Linux Foundation as an independent project and widened from tables and files to AI models, unstructured data and **agents and skills**. Delta Sharing is not deprecated and existing shares keep working, so nothing here breaks, but the Databricks surface a reader lands on now says OpenSharing. Write "OpenSharing (formerly Delta Sharing)" on first mention in anything outward-facing. Note the vendor's own 3rd-edition ebook still says Delta Sharing 86 times and OpenSharing zero, so it is not a source for current naming.
+
+**Egress has a zero-cost path and we are not on it.** The archive sits on S3 at roughly $0.09/GB out, with no rate limiter in front of sharing. Databricks supports **Cloudflare R2, which charges no egress**, plus Cloudflare's Bandwidth Alliance. The free public tier is the one with no revenue to offset egress, so it is the one that should sit on zero-egress storage. Price this before any public listing. Related: the client-side filter that makes partition pruning work is a **hint**, not a guarantee, so partitioning by `release_date` lets a careful consumer read one release and does not stop a careless one reading all three.
+
 **Cross-release id stability, measured not assumed** (full run: `docs/methodology/runs/2026-08-23-cross-release-id-stability.md`):
 
 | Resource | id format | Apr→May overlap |
