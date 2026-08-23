@@ -7,7 +7,7 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'AINPI for developers: API, schemas, examples',
   description:
-    'Public AINPI APIs for building on top: stable /api/v1 JSON contract, NPI lookup, cross-source provider search across NDH + NPPES + 4 payer FHIR directories. Apache-2.0, no auth, no rate limit today.',
+    'Public AINPI APIs for building on top: stable /api/v1 JSON contract, NPI lookup, cross-source provider search across NDH + NPPES + 4 payer FHIR directories. Apache-2.0, no auth on the static contract, rate limited on the metered routes.',
   openGraph: {
     title: 'AINPI for developers',
     description:
@@ -277,7 +277,7 @@ export default function DeveloperPage() {
             AINPI for developers
           </h1>
           <p className="text-lg text-gray-700 max-w-3xl">
-            Every number on this site is reachable as JSON. Apache-2.0, no auth, no rate limit today.
+            Every number on this site is reachable as JSON. Apache-2.0, no auth on the static files, rate limits on the metered routes.
             The static <code className="font-mono text-sm">/api/v1/*</code> tier is the stable
             contract: breaking changes bump to <code className="font-mono text-sm">/api/v2/</code>{' '}
             and never change shape in place. Live <code className="font-mono text-sm">/api/npd/*</code>{' '}

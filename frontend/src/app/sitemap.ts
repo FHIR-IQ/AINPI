@@ -57,6 +57,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/subscribe', priority: 0.5 },
     { path: '/faq', priority: 0.3 },
     { path: '/privacy', priority: 0.2 },
+    { path: '/terms', priority: 0.2 },
+    { path: '/data-license', priority: 0.3 },
     { path: '/security', priority: 0.2 },
   ];
 

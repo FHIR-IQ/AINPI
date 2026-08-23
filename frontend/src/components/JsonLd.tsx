@@ -61,6 +61,54 @@ export function WebSiteJsonLd() {
 
 const REPO = 'https://github.com/FHIR-IQ/AINPI';
 
+/**
+ * One-line descriptions for the upstream datasets named in `isBasedOn`.
+ *
+ * WHY THIS EXISTS
+ *
+ * Search Console reported "Missing field description" against this site's
+ * Dataset markup. The top-level Dataset always carried one. The nested nodes
+ * did not: `isBasedOn` emitted `{'@type': 'Dataset', name, url}`, and Google
+ * validates every node typed Dataset, not only the root. Four nested nodes on
+ * a findings page meant four errors.
+ *
+ * Keyed by URL rather than name because the URL is the stable identifier and
+ * the display name has been reworded more than once. The fallback below means
+ * a source added later cannot silently reintroduce the error.
+ */
+const SOURCE_DESCRIPTIONS: Record<string, string> = {
+  'https://directory.cms.gov/':
+    'The CMS National Provider Directory bulk FHIR R4 export, covering Practitioner, PractitionerRole, Organization, Location, Endpoint and related resources.',
+  'https://download.cms.gov/nppes/NPI_Files.html':
+    'The federal National Plan and Provider Enumeration System registry of every issued National Provider Identifier and its self-attested taxonomy and address.',
+  'https://data.cms.gov/provider-data/dataset/mj5m-pzi6':
+    'CMS Provider Data Catalog file listing Medicare-enrolled clinicians with their group practice affiliations, specialties and practice addresses.',
+  'https://data.cms.gov/provider-data/dataset/xubh-q36u':
+    'CMS Provider Data Catalog file listing every Medicare-certified hospital in the United States with its address, ownership and county.',
+  'https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment':
+    'CMS Medicare enrollment file linking individual providers to the group practices they reassign their billing rights to.',
+  'https://github.com/Enterprise-CMCS/SMA-Endpoint-Directory':
+    'CMS-maintained index of state Medicaid agency provider-directory API endpoints, one row per jurisdiction.',
+  'https://providerdirectory-api.capbluecross.com/r4':
+    'A payer provider-directory FHIR R4 API published under the CMS Interoperability and Patient Access rule (CMS-9115-F).',
+  'https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40':
+    'The National Uniform Claim Committee code set classifying provider type, specialty and subspecialty for every National Provider Identifier.',
+  'https://www.census.gov/programs-surveys/popest.html':
+    'US Census Bureau county population estimates and the ZCTA-to-county relationship file, used to attach geography to provider records.',
+  'https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/':
+    'USDA Economic Research Service codes classifying each US county on a continuum from metropolitan to completely rural.',
+};
+
+/** Every node typed Dataset needs a description, including nested ones. */
+function sourceDescription(s: { name: string; url: string; description?: string }): string {
+  return (
+    s.description ??
+    SOURCE_DESCRIPTIONS[s.url] ??
+    `Upstream public dataset used as a source for this AINPI finding: ${s.name}.`
+  );
+}
+
+
 export function DatasetJsonLd({
   name,
   description,
@@ -100,7 +148,9 @@ export function DatasetJsonLd({
    * one: H52 joins a payer FHIR directory to the NDH, and naming only one of
    * them misattributes provenance.
    */
-  basedOn?: { name: string; url: string } | { name: string; url: string }[];
+  basedOn?:
+    | { name: string; url: string; description?: string }
+    | { name: string; url: string; description?: string }[];
 }) {
   const abs = (u: string) => (u.startsWith('http') ? u : `${SITE}${u}`);
   const sources = Array.isArray(basedOn) ? basedOn : [basedOn];
@@ -145,7 +195,11 @@ export function DatasetJsonLd({
           encodingFormat: d.format,
           contentUrl: abs(d.url),
         })),
-        isBasedOn: sources.map((s) => ({ '@type': 'Dataset', ...s })),
+        isBasedOn: sources.map((s) => ({
+          '@type': 'Dataset',
+          ...s,
+          description: sourceDescription(s),
+        })),
       }}
     />
   );

@@ -20,6 +20,8 @@ export default function Footer() {
             <li><a href="https://github.com/FHIR-IQ/AINPI" target="_blank" rel="noopener noreferrer" className="hover:text-white">GitHub</a></li>
             <li><Link href="/faq" className="hover:text-white">FAQ</Link></li>
             <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
+            <li><Link href="/terms" className="hover:text-white">Terms of use</Link></li>
+            <li><Link href="/data-license" className="hover:text-white">Data licence</Link></li>
             <li><Link href="/security" className="hover:text-white">Security</Link></li>
           </ul>
         </div>
