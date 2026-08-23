@@ -39,16 +39,49 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 # Reuse the exact extraction logic the BQ ingest uses.
-from fast_ingest_ndh import RESOURCES  # (name, table, extractor)
+from fast_ingest_ndh import RESOURCES, download_if_missing  # (name, table, extractor)
+from ndh_manifest import expected_compressed_size, fetch_manifest, parse_release_date, resolve_file_url
+from release import KNOWN_RELEASES
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT_ROOT = REPO_ROOT / "frontend" / "data" / "parquet-export"
 
-# Local release dirs. The April dir predates the dated-naming convention.
+# Local release dirs. Only the exceptions are listed: the April dir predates
+# the dated-naming convention, so it cannot be derived. Everything else follows
+# `cms-npd-<release>`, which is what fast_ingest_ndh.py writes.
+#
+# This used to be an exhaustive map, and `--release` took its choices from it,
+# so a new release was rejected by the argument parser until someone remembered
+# to add a line. Deriving by convention means the next release needs no edit.
 RELEASE_DIRS = {
     "2026-04-09": REPO_ROOT / "frontend" / "data" / "cms-npd",
-    "2026-05-08": REPO_ROOT / "frontend" / "data" / "cms-npd-2026-05-08",
 }
+
+
+def release_dir(release: str) -> pathlib.Path:
+    """Local source directory holding the .ndjson.zst files for a release."""
+    return RELEASE_DIRS.get(release, REPO_ROOT / "frontend" / "data" / f"cms-npd-{release}")
+
+
+def download_release(release: str, src_dir: pathlib.Path, targets) -> None:
+    """Fetch any missing .ndjson.zst for `release`, size-checked against the manifest.
+
+    Only works for the release CMS is currently serving. directory.cms.gov
+    publishes the latest export and nothing else, so asking it for an older
+    release would silently download the current one under the wrong name. The
+    manifest's own date is checked against the request rather than trusted.
+    """
+    manifest = fetch_manifest()
+    served = parse_release_date(manifest)
+    if served != release:
+        raise SystemExit(
+            f"CMS is currently serving release {served!r}, not {release!r}. "
+            f"Only the current release can be downloaded; earlier ones exist "
+            f"only in this archive."
+        )
+    for name, _table, _extractor in targets:
+        url, basename = resolve_file_url(manifest, name)
+        download_if_missing(url, basename, src_dir, expected_compressed_size(manifest, name))
 
 BATCH_ROWS = 100_000
 
@@ -141,7 +174,12 @@ def export_cohort() -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--release", choices=sorted(RELEASE_DIRS), help="NDH release to export")
+    parser.add_argument("--release", choices=sorted(KNOWN_RELEASES), help="NDH release to export")
+    parser.add_argument(
+        "--download",
+        action="store_true",
+        help="fetch any missing source files first (current CMS release only)",
+    )
     parser.add_argument("--resource", help="single resource name (e.g. Practitioner); default all six")
     parser.add_argument("--cohort", action="store_true", help="export the exclusions cohort parquet only")
     args = parser.parse_args()
@@ -152,12 +190,20 @@ def main() -> None:
     if not args.release:
         parser.error("--release is required unless --cohort")
 
-    src_dir = RELEASE_DIRS[args.release]
+    src_dir = release_dir(args.release)
     out_dir = OUT_ROOT / args.release
     targets = [r for r in RESOURCES if not args.resource or r[0].lower() == args.resource.lower()]
     if not targets:
         print(f"unknown resource: {args.resource}", file=sys.stderr)
         sys.exit(2)
+
+    if args.download:
+        download_release(args.release, src_dir, targets)
+    if not src_dir.exists():
+        raise SystemExit(
+            f"{src_dir} does not exist. Pass --download to fetch it, which works "
+            f"only while CMS is still serving {args.release}."
+        )
 
     print(f"Exporting {args.release} from {src_dir} -> {out_dir}")
     total = 0
