@@ -31,6 +31,7 @@ import argparse
 import csv
 import json
 import pathlib
+import re
 import subprocess
 import sys
 import time
@@ -100,10 +101,33 @@ def schema_for(extractor) -> pa.Schema:
     return pa.schema(fields)
 
 
+def find_source_file(src_dir: pathlib.Path, name: str) -> pathlib.Path | None:
+    """Locate the .ndjson.zst for a resource, whatever CMS called it this time.
+
+    Three filename forms have shipped and the exporter has to read all of them:
+
+        Practitioner.ndjson.zst                 2026-04-09 and 2026-05-08
+        Practitioner_2026-05-07_2128.ndjson.zst dated form
+        06-Practitioner.ndjson.zst              2026-08-20 onward
+
+    This used to be `src_dir / f"{name}.ndjson.zst"`. Against the August
+    release that matched nothing, every resource was skipped, and the run
+    printed SKIP six times and exited 0 with an empty output directory.
+
+    The boundary after the resource name is load-bearing for the same reason
+    it is in ndh_manifest: without it "Organization" also matches
+    "08-OrganizationAffiliation.ndjson.zst" and the affiliation file is
+    exported as the organization table.
+    """
+    pattern = re.compile(rf"^(?:\d+-)?{re.escape(name)}(?:_[^/]*)?\.ndjson\.zst$")
+    matches = sorted(f for f in src_dir.glob("*.ndjson.zst") if pattern.match(f.name))
+    return matches[-1] if matches else None
+
+
 def export_resource(name: str, table: str, extractor, src_dir: pathlib.Path, out_dir: pathlib.Path) -> int:
-    zst = src_dir / f"{name}.ndjson.zst"
-    if not zst.exists():
-        print(f"  {name}: SKIP (no {zst.name} in {src_dir})")
+    zst = find_source_file(src_dir, name)
+    if zst is None:
+        print(f"  {name}: SKIP (no {name}*.ndjson.zst in {src_dir})")
         return 0
     out_dir.mkdir(parents=True, exist_ok=True)
     out_path = out_dir / f"{table}.parquet"
@@ -211,6 +235,16 @@ def main() -> None:
     for name, table, extractor in targets:
         total += export_resource(name, table, extractor, src_dir, out_dir)
     print(f"Done: {total:,} rows in {time.time() - t0:,.0f}s")
+
+    # Refuse to call an empty export a success. The previous version printed
+    # SKIP for every resource and exited 0, which is indistinguishable from a
+    # good run to anything reading the exit code.
+    if total == 0:
+        raise SystemExit(
+            f"exported 0 rows from {src_dir}. Nothing matched "
+            f"{[t[0] for t in targets]}; found "
+            f"{sorted(f.name for f in src_dir.glob('*.ndjson.zst')) or 'no .ndjson.zst files at all'}."
+        )
 
 
 if __name__ == "__main__":
