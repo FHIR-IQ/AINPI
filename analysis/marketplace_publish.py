@@ -77,6 +77,21 @@ LISTINGS = [
         "privacy_policy_link": "https://ainpi.dev/privacy",
         "notebook": "analysis/notebooks/ainpi_archive_quickstart.py",
         "notebook_display_name": "Release archive quickstart",
+        # These drive Marketplace faceted search. Ours were all empty, which is
+        # not neutral: a consumer filtering to free healthcare data with a
+        # notebook does not see a listing that declares none of those things.
+        # Measured across the 2,076 live consumer listings, 1,129 leave `cost`
+        # unset, so filling it is cheap differentiation rather than table stakes.
+        "cost": "FREE",
+        "listing_type": "STANDARD",
+        "assets": ["ASSET_TYPE_DATA_TABLE", "ASSET_TYPE_NOTEBOOK"],
+        "data_source": "CMS National Provider Directory bulk FHIR export (directory.cms.gov)",
+        "documentation_link": "https://ainpi.dev/archive",
+        "license": "https://ainpi.dev/data-license",
+        "geographical_coverage": '["United States"]',
+        # CMS has published roughly quarterly. Stated as observed cadence, not
+        # as a commitment we control.
+        "update_frequency": {"interval": 3, "unit": "MONTHLY"},
     },
 ]
 
@@ -238,7 +253,7 @@ def do_publish(private: bool = False) -> bool:
                 "subtitle": spec["subtitle"],
                 "provider_id": pid,
                 "categories": spec["categories"],
-                "listingType": "STANDARD",
+                "listingType": spec.get("listing_type", "STANDARD"),
                 "setting": {"visibility": "PRIVATE" if private else spec["visibility"]},
                 "share": {"name": spec["share"], "type": "FULL"},
             },
@@ -246,6 +261,10 @@ def do_publish(private: bool = False) -> bool:
                 "description": spec["description"],
                 "terms_of_service": spec["terms_of_service"],
                 "privacy_policy_link": spec["privacy_policy_link"],
+                **{k: spec[k] for k in (
+                    "cost", "assets", "data_source", "documentation_link",
+                    "license", "geographical_coverage", "update_frequency",
+                ) if k in spec},
             },
         }}
         lid = existing.get(spec["name"])
@@ -294,7 +313,13 @@ def verify_listing(lid: str, spec: dict) -> bool:
         ("subtitle", spec["subtitle"], summary.get("subtitle")),
         ("terms", spec["terms_of_service"], detail.get("terms_of_service")),
         ("privacy", spec["privacy_policy_link"], detail.get("privacy_policy_link")),
+        ("cost", spec.get("cost"), detail.get("cost")),
+        ("assets", sorted(spec.get("assets") or []), sorted(detail.get("assets") or [])),
+        ("docs", spec.get("documentation_link"), detail.get("documentation_link")),
+        ("listingType", spec.get("listing_type", "STANDARD"), summary.get("listingType")),
     ):
+        if sent is None:
+            continue
         if sent != stored:
             print(f"    MISMATCH {label}: sent {sent!r}, stored {stored!r}")
             ok = False

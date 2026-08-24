@@ -169,6 +169,86 @@ Re-running is idempotent: still exactly one file attached.
 
 ---
 
+## How a paid listing works, measured
+
+Marketplace has **no payment rails**. "Paid" is a gate plus a conversation, not a
+checkout. Two fields do the work:
+
+- `detail.cost` = `PAID` or `FREE`
+- `summary.listingType` = `PERSONALIZED` (Request Access) or `STANDARD`
+  (instantly available)
+
+A `PERSONALIZED` listing turns the Request Access button into a personalization
+request, which lands in `databricks provider-personalization-requests`. You reply,
+contract off-platform, then grant a share. Nothing is charged by Databricks.
+
+Counts across the 2,076 live consumer listings, so this is the convention rather
+than an opinion:
+
+| | STANDARD | PERSONALIZED |
+| --- | --- | --- |
+| `cost: PAID` | 53 | **471** |
+| `cost: FREE` | 370 | 53 |
+| `cost` unset | 783 | 346 |
+
+Nine in ten paid listings are `PAID` + `PERSONALIZED`. Note also that 1,129 of
+2,076 leave `cost` unset entirely, so filling in the facet fields is cheap
+differentiation, not table stakes.
+
+Asset types in use: `DATA_TABLE` 1,605, `MEDIA` 187, `GIT_REPO` 125, `MODEL` 97,
+`MCP` 73, `NOTEBOOK` 42, `APP` 31. A notebook is a declarable asset type and is
+separate from the embedded preview notebook that `attach_notebook` uploads.
+
+### What Datavant does, and what not to copy
+
+Datavant runs ten listings and splits them cleanly. The broad datasets
+(Social Determinants of Health, HealthIQ, FinanceIQ, AutoIQ) are `STANDARD`,
+instantly available. The curated clinical datasets (Cardiometabolic, RSV, HCM,
+IBD) and the platform products (Datavant Connect, Datavant App) are
+`PERSONALIZED`. Free-and-open is the front door; the priced work is behind a
+conversation. That is the same shape as this project: the archive is free, the
+reconciliation work is not.
+
+**Copy the structure, not the voice.** The Cardiometabolic description reads
+"Navigating through the complexities of data acquisition for your research
+shouldn't be a challenge" and "valuable data without the hassle", with bolded
+phrases throughout. That is exactly the register `slop_lint.py` exists to catch,
+and it is the opposite of what makes an audit credible. A listing that says a
+number and its denominator beats one that says it is research-ready.
+
+Their listings also leave `license` and `documentation_link` empty. We have
+`/methodology`, `/data-license` and open compute scripts, so filling those is a
+real differentiator that costs nothing.
+
+---
+
+## Listing 3: reconciliation, paid (drafted, not published)
+
+**Type:** `cost: PAID`, `listingType: PERSONALIZED`
+**Blocked by:** the same public-provider approval as the others, plus a scope
+decision that is not mine to make.
+
+The demand signal is real and specific. A health plan on the subscriber list
+asked to compare an internal roster of 500,000 providers and 2,000,000 address
+records against the directory to measure accuracy. They can already do the
+download for free. What they cannot do for free is decide what counts as a
+disagreement.
+
+So the priced unit is **judgment, not bytes**: matching methodology, what a
+roster-versus-directory difference means, and which differences are the
+directory being wrong rather than the roster.
+
+**The listing must state that the data is free.** A public-interest audit that
+appears to paywall its own measurements loses the thing that makes it worth
+citing. The free archive listing and this one should reference each other.
+
+Do not write this listing until there is a delivered engagement to describe.
+Listing a service that has not been performed is the same defect as a
+description promising a notebook that was not attached, and it is harder to
+detect from outside.
+
+---
+
 ## Listing 2: the MCP server
 
 **Type:** MCP Server (Public Preview)
