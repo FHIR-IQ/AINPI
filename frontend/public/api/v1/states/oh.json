@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:27:45+00:00",
+  "generated_at": "2026-08-24T09:59:36+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "2e09d5d",
   "denominators": {
     "practitioner": 263937,
     "organization": 107569,

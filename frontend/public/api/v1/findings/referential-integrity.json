@@ -8,7 +8,7 @@
   ],
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-23T14:15:40+00:00",
+  "generated_at": "2026-08-24T09:58:41+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
   "headline": "Referential integrity is clean but coverage is sparse. 0.002% of 33.4M declared cross-resource references actually dangle (target missing). But only 9.6% of Endpoints carry a managingOrganization (108,584 of 1,128,169) and only 61.8% of Locations do (1,567,973 of 2,535,686). H8: the NPD bulk export now ships HealthcareService. CMS added it in the 2026-08-20 release, alongside InsurancePlan, taking the export from 6 resources to 8.",

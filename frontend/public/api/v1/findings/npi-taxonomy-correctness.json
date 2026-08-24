@@ -10,7 +10,7 @@
   ],
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:29:16+00:00",
+  "generated_at": "2026-08-24T09:58:34+00:00",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
   "headline": "94.54% of 11.6M NDH NPIs clear NPPES (3.04% not enumerated, 0.29% deactivated). Practitioner name agreement: 89.6% exact \u2192 90.1% normalized \u2192 96.5% Jaro-Winkler \u22650.85. Organization name: 43.4% exact \u2192 69.7% normalized \u2192 77.6% Jaro-Winkler \u22650.85. Both taxonomy fields now speak NUCC: Practitioner.qualification is 99.86% valid against NUCC v17.0, and PractitionerRole.specialty, which carried CMS Medicare specialty codes through 2026-05-08, is 99.98% valid NUCC and 0.00% valid Medicare. They agree with each other on 100.0% of 5.3M Practitioner\u2194Role pairs. External NUCC agreement NDH\u2194NPPES: 88.7% match NPPES's switch='Y' TRUE primary, 95.7% match any of the 15 slots, 7.0% match only a secondary. Slot_1 is NOT always the true primary (14.97% of rows).",
