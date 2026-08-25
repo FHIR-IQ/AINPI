@@ -330,6 +330,25 @@ Two things cost money and neither is storage: converting parquet to Delta runs o
 
 `sql()` polls to completion. The statement API caps `wait_timeout` at 50s and then returns a `statement_id` with state `PENDING`; a 1.1 GB parquet conversion takes longer than that, so reading the first response as the outcome reports a healthy load as a failure.
 
+### AWS (`analysis/aws_guardrails.py`)
+
+**Nothing in AINPI bills to AWS directly.** No SDK, no boto3, no credentials in the repo. Vercel, Supabase and Databricks all run on AWS and each bills through its own vendor, and the Databricks archive sits in Databricks-managed storage under their credential, so there is no AWS line item for it. `guardrails_audit.py` has no AWS section for that reason. If an AWS account starts holding something real, add one.
+
+`aws_guardrails.py --check` reports the controls and exits non-zero if one is missing; `--apply --email <addr>` creates what it can and then re-reads to verify. Neither can create credentials or enable Cost Explorer, which are console-only.
+
+**A filtered budget is not a budget.** `--check` refuses to count any budget carrying a `CostFilters` block. That is not hypothetical: the Databricks account had a budget named "AINPI" scoped to the `genie` product tag, showing green while every dollar that mattered went unwatched.
+
+**The strongest control is chosen at signup and cannot be added later.** Since 2025-07-15 a new AWS account picks a Free plan or a Paid plan. On the Free plan, paid services stop when the credits or the six months run out and you are not billed. On the Paid plan, on-demand billing begins the moment credits are exhausted. Upgrading is one click; downgrading is not. Accounts created before 2025-07-15 are on the legacy 12-month free tier, which has no hard stop.
+
+Console steps, in order, none of which the CLI can do:
+
+1. Confirm the account plan. Free plan unless something needed is excluded.
+2. Root user MFA, then confirm root holds **no access keys**. Root keys cannot be scoped and cannot be partially revoked.
+3. Create an IAM Identity Center user for day-to-day use and stop using root. `aws configure sso` wires the CLI to it without a long-lived key on disk.
+4. Enable Cost Explorer. It backfills for up to 24 hours, so the anomaly checks report `?` rather than a failure until it is ready. Those are different states and the script keeps them apart.
+
+Note `~/.aws/sso/cache/kiro-auth-token.json` is a leftover Kiro (AWS Builder ID) token, expired 2026-07-12, scoped to Kiro rather than the AWS APIs. It is not usable for any of this.
+
 ### Marketplace listings (`analysis/marketplace_publish.py`)
 
 Listing copy lives in `docs/marketplace-listings.md` and is applied by script, so wording goes through review rather than living only in a web form. `--check` preflights, `--publish` creates or updates, `--status` reports.
