@@ -35,11 +35,23 @@ slots.
 Every one of those NPIs has exactly one slot flagged primary. Not zero, not two.
 The primary switch is internally consistent across the whole file, so whatever
 goes wrong downstream is not NPPES contradicting itself. It is consumers
-reading the file. One way of reading it is worth naming. Slot 1 is not the
-primary slot in 14.97% of rows, so anyone treating the first taxonomy as primary
-is wrong for about one provider in seven. That figure is from the
-published [NPI and taxonomy correctness](https://ainpi.dev/findings/npi-taxonomy-correctness)
+reading the file, and one way of reading it is worth naming: slot 1 is not the
+primary slot in 14.97% of rows. Anyone treating the first taxonomy as primary is
+wrong for about one provider in seven.
+
+The NDH has the same property, which I only established by re-running this
+against the whole array rather than the first entry. The directory carries the
+NPPES taxonomy set rather than a choice from it: 100.0% of practitioners hold a
+qualification matching the NPPES true primary somewhere in the array. Read
+`qualification[0]` alone and that falls to 88.7%. So the NDH is not disagreeing
+with NPPES about primacy. It is declining to encode primacy at all, because
+position does not mean anything in either file. Both figures are in the
+[NPI and taxonomy correctness](https://ainpi.dev/findings/npi-taxonomy-correctness)
 finding.
+
+That is worth sitting with, because it is the whole difficulty of expressing
+this data in a flat one-taxonomy-per-provider format. The set is there. Which
+member of it is primary is not.
 
 ## The NDH does use the context-scoped field, for a minority
 
@@ -95,8 +107,8 @@ Three notes on the numbers above. They are read from the stored FHIR records
 rather than from the flattened `_specialty_code` column this project also keeps,
 which holds the first specialty per record only. An earlier pass through that
 column returned 52,898 for the varies-by-organization count instead of 89,061,
-and the same shortcut sits behind two figures in the taxonomy finding, so those
-are first-entry measurements until a re-run. Roles with no organization
+and the same shortcut sat behind three figures in the taxonomy finding, which
+have now been recomputed across the full arrays and republished. Roles with no organization
 reference are excluded from the variation counts, because whether a specialty
 varies by organization is undefined without one. And the NPPES multiplicity figures come
 from the BigQuery public snapshot, whose newest enumeration is 2026-02-07, so

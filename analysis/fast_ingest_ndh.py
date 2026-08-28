@@ -155,10 +155,54 @@ def extract_practitioner(r):
     }
 
 
+def _specialty_pairs(specialties):
+    """Return (first_code, first_display, "code|code|...").
+
+    `PractitionerRole.specialty` is 0..*, and reading only the first entry
+    loses real data: 421,613 role records in the 2026-08-20 release carry two
+    or more, up to 17. Measuring context variation through the first-entry
+    column undercounted it by 40.6%, so both forms are published. The
+    first-entry columns stay because external consumers and the schema docs
+    already reference them.
+    """
+    if not isinstance(specialties, list):
+        return None, None, None
+    def coding_of(sp):
+        if not isinstance(sp, dict):
+            return {}
+        coding = sp.get("coding")
+        if not isinstance(coding, list) or not coding:
+            return {}
+        return coding[0] if isinstance(coding[0], dict) else {}
+
+    codes = []
+    for sp in specialties:
+        code = coding_of(sp).get("code")
+        if isinstance(code, str) and code:
+            codes.append(code)
+
+    # Codes only, deliberately. A parallel displays column would need padding
+    # to stay positionally aligned when one entry has no display, and an
+    # unpadded one silently pairs a code with another specialty's name. The
+    # display for a code is a NUCC lookup; see analysis/nucc_taxonomy.py.
+
+    # The singular columns stay strictly first-entry, which is what they have
+    # always held. Widening them to "first entry that has a code" would be
+    # more useful and would also rewrite existing values during the backfill,
+    # so the new behaviour lives only in the new columns.
+    head = coding_of(specialties[0]) if specialties else {}
+    first_code = head.get("code")
+    first_display = head.get("display")
+    return (
+        first_code if isinstance(first_code, str) and first_code else None,
+        first_display if isinstance(first_display, str) and first_display else None,
+        "|".join(codes) or None,
+    )
+
+
 def extract_practitioner_role(r):
-    specialties = r.get("specialty") or []
     locations = r.get("location") or []
-    coding = (specialties[0].get("coding", [{}])[0] if specialties else {}) or {}
+    code, display, codes = _specialty_pairs(r.get("specialty"))
     location_ids = "|".join(
         l.get("reference", "") for l in locations if isinstance(l, dict) and l.get("reference")
     ) or None
@@ -167,8 +211,9 @@ def extract_practitioner_role(r):
         "_id": r.get("id"),
         "_practitioner_id": ref_id(r.get("practitioner")),
         "_org_id": ref_id(r.get("organization")),
-        "_specialty_code": coding.get("code") or None,
-        "_specialty_display": coding.get("display") or None,
+        "_specialty_code": code,
+        "_specialty_display": display,
+        "_specialty_codes": codes,
         "_location_ids": location_ids,
         "_phone": phone,
         "_telecom": telecom,

@@ -4,9 +4,9 @@
   "status": "exploratory",
   "not_preregistered": "The question came from the CMS NDH community Slack and this analysis followed it. AINPI findings register a hypothesis before the numbers exist; this did not, so it is published as exploratory rather than as a finding.",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-28T18:59:28.471697+00:00",
+  "generated_at": "2026-08-28T19:23:47.422515+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "6622a507d50eb736bcbcb989cb394b4dea206d0c",
+  "commit_sha": "51e3bb1f05ab4a426552f3ac6a0b623e4e84004c",
   "headline": "82,977 practitioners carry a different specialty at differently-named organizations, out of 445,527 the directory places at two or more (18.6%). Counting organization records instead of names, which the directory duplicates, it is 89,061. The field that carries any of this is empty on 11,269,522 of 16,545,158 role records (68.1%).",
   "source": {
     "ndh": "cms_npd.practitioner_role and cms_npd.practitioner, release 2026-08-20",
@@ -77,5 +77,5 @@
       }
     ]
   },
-  "notes": "Read from the stored resource JSON rather than the flattened _specialty_code column, which keeps the first specialty entry only. Through that column the varies-by-organization count reads 52,898 instead of 89,061. Two figures in npi-taxonomy-correctness.json were computed the same way (H13 internal through _specialty_code, H13b external through qualification[0]) and are first-entry measurements until re-run. Roles with no organization reference are excluded from the funnel, because whether a specialty varies BY organization is undefined without one. NPPES multiplicity is measured on entity type 1 only; organizations carry taxonomies too and are a different question."
+  "notes": "Read from the stored resource JSON rather than the flattened _specialty_code column, which keeps the first specialty entry only. Through that column the varies-by-organization count reads 52,898 instead of 89,061. Two figures in npi-taxonomy-correctness.json were computed the same way and were recomputed across the full arrays on 2026-08-28; the flattened column now has a pipe-joined _specialty_codes companion. Roles with no organization reference are excluded from the funnel, because whether a specialty varies BY organization is undefined without one. NPPES multiplicity is measured on entity type 1 only; organizations carry taxonomies too and are a different question."
 }

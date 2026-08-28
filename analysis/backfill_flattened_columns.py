@@ -15,6 +15,9 @@ The SQL deliberately mirrors `fast_ingest_ndh.py` field for field:
   _telecom      every entry as 'system:value', pipe-joined, source order
   _address_line address.line entries pipe-joined, source order
   _position_*   Location.position latitude/longitude as FLOAT64
+  _specialty_codes
+                every PractitionerRole.specialty coding[0].code, pipe-joined,
+                source order. The singular _specialty_code stays first-entry.
 
 Source order is pinned with WITH OFFSET ... ORDER BY offset. Without it
 BigQuery does not guarantee UNNEST ordering, and _phone could pick a different
@@ -44,6 +47,22 @@ from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
+
+
+def specialty_codes_sql() -> str:
+    """Pipe-joined PractitionerRole.specialty coding[0].code, in source order.
+
+    Mirrors `_specialty_pairs` in fast_ingest_ndh.py. Source order is pinned
+    with WITH OFFSET ... ORDER BY offset: without it BigQuery does not
+    guarantee UNNEST ordering, and the column would disagree with the Python
+    flattener on the same record.
+    """
+    return """NULLIF(ARRAY_TO_STRING(ARRAY(
+        SELECT JSON_VALUE(sp, '$.coding[0].code')
+        FROM UNNEST(JSON_QUERY_ARRAY(resource, '$.specialty')) sp WITH OFFSET off
+        WHERE JSON_VALUE(sp, '$.coding[0].code') IS NOT NULL
+        ORDER BY off
+    ), '|'), '')"""
 
 
 def telecom_sql(path: str = "$.telecom") -> tuple[str, str]:
@@ -86,7 +105,8 @@ def statements() -> dict[str, str]:
               _phone = {phone}, _telecom = {telecom}
             WHERE TRUE""",
         "practitioner_role": f"""UPDATE {t}.practitioner_role SET
-              _phone = {phone}, _telecom = {telecom}
+              _phone = {phone}, _telecom = {telecom},
+              _specialty_codes = {specialty_codes_sql()}
             WHERE TRUE""",
         # Location.address is 0..1, so no array index here.
         "location": f"""UPDATE {t}.location SET

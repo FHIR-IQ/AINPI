@@ -56,6 +56,15 @@ MALFORMED = [
     {"id": "X", "type": "nope"},
     {"id": "X", "position": {"latitude": "abc", "longitude": None}},
     {"id": "X", "identifier": "nope"},
+    {"id": "X", "specialty": "nope"},
+    {"id": "X", "specialty": []},
+    {"id": "X", "specialty": ["a string, not a CodeableConcept"]},
+    {"id": "X", "specialty": [None]},
+    {"id": "X", "specialty": [{"coding": "nope"}]},
+    {"id": "X", "specialty": [{"coding": []}]},
+    {"id": "X", "specialty": [{"coding": [None]}]},
+    {"id": "X", "specialty": [{"coding": [{"display": "no code"}]}]},
+    {"id": "X", "specialty": [{"coding": [{"code": 12345}]}]},
 ]
 
 
@@ -131,6 +140,68 @@ class TestPosition:
         """Only Location carries geo in the NDH; others must not invent it."""
         assert "_position_lat" not in extract_practitioner({"id": "P"})
         assert "_position_lat" not in extract_organization({"id": "O"})
+
+
+class TestSpecialty:
+    """PractitionerRole.specialty is 0..*, and the first entry is not the whole
+    story: 421,613 role records in the 2026-08-20 release carry two or more, up
+    to 17. Measuring through the first-entry column undercounted providers
+    whose specialty differs by organization by 40.6%."""
+
+    def test_every_specialty_is_pipe_joined(self):
+        out = extract_practitioner_role({
+            "id": "R",
+            "specialty": [
+                {"coding": [{"code": "207R00000X", "display": "INTERNAL MEDICINE"}]},
+                {"coding": [{"code": "208M00000X", "display": "HOSPITALIST"}]},
+            ],
+        })
+        assert out["_specialty_codes"] == "207R00000X|208M00000X"
+
+    def test_singular_column_keeps_first_entry_semantics(self):
+        """It has always held the first entry. Widening it during a backfill
+        would rewrite values external consumers already read."""
+        out = extract_practitioner_role({
+            "id": "R",
+            "specialty": [
+                {"coding": [{"display": "no code here"}]},
+                {"coding": [{"code": "208M00000X"}]},
+            ],
+        })
+        assert out["_specialty_code"] is None
+        assert out["_specialty_codes"] == "208M00000X"
+
+    def test_single_specialty_has_no_separator(self):
+        out = extract_practitioner_role(
+            {"id": "R", "specialty": [{"coding": [{"code": "207R00000X"}]}]})
+        assert out["_specialty_codes"] == "207R00000X"
+        assert out["_specialty_code"] == "207R00000X"
+
+    def test_absent_specialty_is_none_not_empty_string(self):
+        out = extract_practitioner_role({"id": "R"})
+        assert out["_specialty_codes"] is None
+
+    def test_a_non_dict_entry_does_not_lose_the_rest(self):
+        """The previous extractor raised AttributeError here, which would abort
+        a 16M-row load rather than dropping one bad entry."""
+        out = extract_practitioner_role({
+            "id": "R",
+            "specialty": ["not a CodeableConcept", {"coding": [{"code": "207R00000X"}]}],
+        })
+        assert out["_specialty_codes"] == "207R00000X"
+
+    def test_no_parallel_displays_column(self):
+        """Codes only. A displays column would misalign whenever one entry has
+        no display, silently pairing a code with another specialty's name."""
+        out = extract_practitioner_role({
+            "id": "R",
+            "specialty": [
+                {"coding": [{"code": "A"}]},
+                {"coding": [{"code": "B", "display": "Beta"}]},
+            ],
+        })
+        assert out["_specialty_codes"] == "A|B"
+        assert "_specialty_displays" not in out
 
 
 @pytest.mark.parametrize("extractor", ALL_EXTRACTORS, ids=lambda f: f.__name__)

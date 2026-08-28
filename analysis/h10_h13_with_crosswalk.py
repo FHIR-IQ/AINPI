@@ -223,20 +223,28 @@ def main() -> None:
     # from 2026-08-20. Both code sets are checked so the switch is visible as a
     # number rather than as a silent collapse to zero.
     h12_cms = scalar(c, f"""
+    -- Every specialty entry, not the first of each role. _specialty_code
+    -- holds the first only, which understated the denominator by the extra
+    -- entries on 421,613 records.
     WITH roles AS (
       SELECT
-        _specialty_code AS raw_code,
+        spec AS raw_code,
         -- Strip any leading 'NN-' prefix to isolate the Medicare 2-char code
-        REGEXP_REPLACE(_specialty_code, r'^\\d+-', '') AS stripped
-      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner_role`
-      WHERE _specialty_code IS NOT NULL
+        REGEXP_REPLACE(spec, r'^\\d+-', '') AS stripped,
+        off = 0 AS first_only
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner_role`,
+           UNNEST(SPLIT(_specialty_codes, '|')) spec WITH OFFSET off
+      WHERE _specialty_codes IS NOT NULL
     )
     SELECT
       COUNT(*) AS total_role_specialties,
       COUNTIF(raw_code IN (SELECT code FROM `{NUCC_TABLE}`)) AS valid_in_nucc,
       COUNTIF(stripped IN (SELECT medicare_specialty_code FROM `{CROSSWALK_TABLE}`)) AS valid_in_crosswalk,
       COUNT(DISTINCT raw_code) AS distinct_raw_codes,
-      COUNT(DISTINCT stripped) AS distinct_stripped_codes
+      COUNT(DISTINCT stripped) AS distinct_stripped_codes,
+      COUNTIF(first_only) AS total_role_specialties_first_only,
+      COUNTIF(first_only AND raw_code IN (SELECT code FROM `{NUCC_TABLE}`))
+        AS valid_in_nucc_first_only
     FROM roles
     """)
     print(f"  {h12_cms}")
@@ -282,16 +290,25 @@ def main() -> None:
         AND {tax_sys("JSON_EXTRACT_SCALAR(qq, '$.code.coding[0].system')")}
       GROUP BY p._id
     ),
+    -- PractitionerRole.specialty is 0..*, and this read the first entry only
+    -- until 2026-08-28, which dropped the additional specialties on 421,613
+    -- role records. It now reads the pipe-joined _specialty_codes column,
+    -- populated from the same resource JSON. `first_only` marks the rows the
+    -- previous method saw, so the figure this finding published before stays
+    -- computable from the same query rather than being overwritten.
     roles AS (
       SELECT pr._practitioner_id,
-             pr._specialty_code AS role_code,
-             REGEXP_REPLACE(pr._specialty_code, r'^\\d+-', '') AS medicare_code
-      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner_role` pr
-      WHERE pr._specialty_code IS NOT NULL
+             spec AS role_code,
+             REGEXP_REPLACE(spec, r'^\\d+-', '') AS medicare_code,
+             off = 0 AS first_only
+      FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner_role` pr,
+           UNNEST(SPLIT(pr._specialty_codes, '|')) spec WITH OFFSET off
+      WHERE pr._specialty_codes IS NOT NULL
     ),
     joined AS (
       SELECT
         q._id,
+        r.first_only,
         r.role_code IN UNNEST(q.qual_codes) AS direct_match,
         EXISTS (
           SELECT 1 FROM `{CROSSWALK_TABLE}` cw
@@ -305,7 +322,9 @@ def main() -> None:
       COUNT(*) AS total_pairs,
       COUNTIF(direct_match) AS direct_match,
       COUNTIF(internal_crosswalk_match) AS crosswalk_consistent,
-      COUNT(DISTINCT _id) AS distinct_practitioners
+      COUNT(DISTINCT _id) AS distinct_practitioners,
+      COUNTIF(first_only) AS total_pairs_first_only,
+      COUNTIF(first_only AND direct_match) AS direct_match_first_only
     FROM joined
     """)
     print(f"  {h13_internal}")
@@ -319,9 +338,22 @@ def main() -> None:
     #   3. Does NDH match only a switch='N' slot (genuine secondary)?
     #   4. Does slot_1 hold the TRUE primary (slot ordering sanity check)?
     h13_external = scalar(c, f"""
+    -- Practitioner.qualification is 0..*, and this compared NPPES against
+    -- qualification[0] alone until 2026-08-28. It now collects every entry
+    -- whose coding system is a taxonomy system. The per-entry tax_sys filter
+    -- is load-bearing: qualification also carries degrees and licences, and
+    -- dropping the filter would match those against NPPES taxonomy slots.
+    -- ndh_code stays the first entry so the previously published figures are
+    -- still computable; ndh_codes is every entry.
     WITH ndh AS (
       SELECT p._npi,
-        JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].code') AS ndh_code
+        JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].code') AS ndh_code,
+        ARRAY(
+          SELECT JSON_EXTRACT_SCALAR(qq, '$.code.coding[0].code')
+          FROM UNNEST(JSON_EXTRACT_ARRAY(p.resource, '$.qualification')) qq
+          WHERE {tax_sys("JSON_EXTRACT_SCALAR(qq, '$.code.coding[0].system')")}
+            AND JSON_EXTRACT_SCALAR(qq, '$.code.coding[0].code') IS NOT NULL
+        ) AS ndh_codes
       FROM `{NDH_PROJECT}.{NDH_DATASET}.practitioner` p
       WHERE p._npi IS NOT NULL
         AND {tax_sys("JSON_EXTRACT_SCALAR(p.resource, '$.qualification[0].code.coding[0].system')")}
@@ -330,6 +362,7 @@ def main() -> None:
     joined AS (
       SELECT
         ndh.ndh_code,
+        ndh.ndh_codes,
         n.healthcare_provider_taxonomy_code_1 AS slot_1,
         n.healthcare_provider_primary_taxonomy_switch_1 AS slot_1_switch,
         [
@@ -361,7 +394,19 @@ def main() -> None:
               AND NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code AND x.s = 'Y')) AS agree_secondary_only,
       COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c = ndh_code)) AS disagree_entirely,
       COUNTIF(slot_1_switch != 'Y' AND EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.s = 'Y')) AS slot_1_not_true_primary,
-      COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.s = 'Y')) AS nppes_no_primary_flag
+      COUNTIF(NOT EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.s = 'Y')) AS nppes_no_primary_flag,
+      -- Same questions asked of every taxonomy qualification the NDH carries,
+      -- not only the first. These can only rise relative to the figures above.
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(slots) x
+                     WHERE x.c IN UNNEST(ndh_codes))) AS agree_any_slot_all_quals,
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(slots) x
+                     WHERE x.c IN UNNEST(ndh_codes) AND x.s = 'Y'))
+        AS agree_true_primary_all_quals,
+      COUNTIF(EXISTS(SELECT 1 FROM UNNEST(slots) x WHERE x.c IN UNNEST(ndh_codes))
+              AND NOT EXISTS(SELECT 1 FROM UNNEST(slots) x
+                             WHERE x.c IN UNNEST(ndh_codes) AND x.s = 'Y'))
+        AS agree_secondary_only_all_quals,
+      COUNTIF(ARRAY_LENGTH(ndh_codes) > 1) AS ndh_multi_qualification
     FROM joined
     """)
     print(f"  {h13_external}")
@@ -545,6 +590,12 @@ def main() -> None:
     h13_ext_disagree_pct   = pct(h13_external["disagree_entirely"], h13_external["total"])
     slot1_not_primary_pct  = pct(h13_external["slot_1_not_true_primary"], h13_external["total"])
     no_primary_flag_pct    = pct(h13_external["nppes_no_primary_flag"], h13_external["total"])
+    # Corrected method: every taxonomy qualification, not qualification[0].
+    h13_ext_any_all_pct    = pct(h13_external["agree_any_slot_all_quals"], h13_external["total"])
+    h13_ext_prim_all_pct   = pct(h13_external["agree_true_primary_all_quals"], h13_external["total"])
+    h13_ext_sec_all_pct    = pct(h13_external["agree_secondary_only_all_quals"], h13_external["total"])
+    h13_int_first_pct      = pct(h13_internal["direct_match_first_only"],
+                                 h13_internal["total_pairs_first_only"])
 
     h12_role_nucc_valid = pct(h12_cms["valid_in_nucc"], h12_cms["total_role_specialties"])
     headline = (
@@ -560,10 +611,14 @@ def main() -> None:
         f"{h12_role_nucc_valid:.2f}% valid NUCC and {h12_cms_valid:.2f}% valid Medicare. "
         f"They agree with each other on {h13_int_pct:.1f}% of "
         f"{n(h13_internal['total_pairs'])/1_000_000:.1f}M Practitioner↔Role pairs. "
-        f"External NUCC agreement NDH↔NPPES: {h13_ext_true_prim_pct:.1f}% match NPPES's "
-        f"switch='Y' TRUE primary, {h13_ext_any_pct:.1f}% match any of the 15 slots, "
-        f"{h13_ext_sec_only_pct:.1f}% match only a secondary. Slot_1 is NOT always the "
-        f"true primary ({slot1_not_primary_pct:.2f}% of rows)."
+        f"The NDH carries the NPPES taxonomy set, not a choice from it: "
+        f"{h13_ext_prim_all_pct:.1f}% of practitioners hold a qualification matching "
+        f"NPPES's switch='Y' TRUE primary somewhere in the array. Position does not "
+        f"encode primacy, though. Reading qualification[0] alone, the earlier method "
+        f"here, matches the true primary for only {h13_ext_true_prim_pct:.1f}% and any "
+        f"slot for {h13_ext_any_pct:.1f}%. On the NPPES side the same trap: slot_1 is "
+        f"not the true primary in {slot1_not_primary_pct:.2f}% of rows. Neither file "
+        f"says which taxonomy is primary by where it sits."
     )
 
     chart_data = [
@@ -595,6 +650,22 @@ def main() -> None:
     confusion_block = "; ".join(confusion_lines) if confusion_lines else "n/a"
 
     notes = (
+        "METHOD CHANGE 2026-08-28. Three figures here read only the first entry "
+        "of a repeating FHIR element and now read every entry. "
+        "PractitionerRole.specialty is 0..* and 421,613 role records carry more "
+        "than one, up to 17; Practitioner.qualification is 0..* as well. H12 "
+        f"role-specialty validity now covers {n(h12_cms['total_role_specialties'])} "
+        f"entries against {n(h12_cms['total_role_specialties_first_only'])} under "
+        f"the old method. H13 internal agreement is {h13_int_pct:.1f}% of "
+        f"{n(h13_internal['total_pairs'])} pairs, against {h13_int_first_pct:.1f}% "
+        f"of {n(h13_internal['total_pairs_first_only'])} pairs first-entry-only. "
+        "H13b external agreement is reported across every taxonomy "
+        f"qualification; the qualification[0]-only figures were "
+        f"{h13_ext_true_prim_pct:.1f}% true primary, {h13_ext_any_pct:.1f}% any "
+        f"slot and {h13_ext_sec_only_pct:.1f}% secondary only, and "
+        f"{n(h13_external['ndh_multi_qualification'])} practitioners carry more "
+        "than one taxonomy qualification. Both forms are computed so the "
+        "previously published numbers stay reproducible. "
         f"Source: bigquery-public-data.nppes.npi_raw (updated 2026-02-09, "
         f"9.37M NPIs) + .healthcare_provider_taxonomy_code_set_170 + CMS "
         f"Medicare Provider and Supplier Taxonomy Crosswalk ({CROSSWALK_RELEASE}, "
