@@ -386,3 +386,46 @@ export function allExplorerStates(): string[] {
   const idx = loadExplorerIndex();
   return idx ? idx.states.map((s) => s.state.toLowerCase()) : [];
 }
+
+/**
+ * Exploratory payloads under /api/v1/exploratory/.
+ *
+ * Separate from `loadFinding` on purpose. A finding registered its hypothesis
+ * before the numbers existed; an exploratory payload answered a question that
+ * was already on the table. Loading them through the same function would make
+ * the two look interchangeable in the code, which is the first step to them
+ * looking interchangeable on the page.
+ */
+export interface SpecialtyByOrgCase {
+  npi: string;
+  name: string;
+  state: string | null;
+  orgs: { org: string; org_npi: string | null; specialties: string[] }[];
+}
+
+export interface SpecialtyByOrgPayload {
+  slug: string;
+  status: string;
+  release_date: string;
+  generated_at: string;
+  population: number;
+  population_distinct_org_name: number;
+  only_across_same_named_records: number;
+  role_specialty_blank_pct: number;
+  sample_size: number;
+  sampling: string;
+  pinned: string[];
+  cases: SpecialtyByOrgCase[];
+}
+
+export function loadSpecialtyByOrg(): SpecialtyByOrgPayload | null {
+  try {
+    const raw = fs.readFileSync(
+      path.join(PUBLIC_API_ROOT, 'exploratory', 'specialty-by-organization.json'),
+      'utf8',
+    );
+    return JSON.parse(raw) as SpecialtyByOrgPayload;
+  } catch {
+    return null;
+  }
+}

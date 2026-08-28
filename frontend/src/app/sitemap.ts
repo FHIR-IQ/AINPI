@@ -45,6 +45,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/pecos', priority: 0.7 },
     { path: '/states', priority: 0.7 },
     { path: '/partners', priority: 0.6 },
+    // Worked examples behind the specialty-context write-up. Listed
+    // because the article links to it and it is the surface people are
+    // sent to, not a byproduct.
+    { path: '/exploratory/specialty-by-organization', priority: 0.6 },
     { path: '/data-sources', priority: 0.6 },
     { path: '/data-quality', priority: 0.6 },
     { path: '/npd', priority: 0.6 },

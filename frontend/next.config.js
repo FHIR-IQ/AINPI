@@ -66,6 +66,10 @@ const nextConfig = {
         // lambda. If a route ever needs one of these at request time, this
         // needs rethinking rather than deleting.
         'public/api/v1/explorer/**',
+        // Same reasoning for the exploratory payloads. The worked-example
+        // file behind /exploratory/specialty-by-organization is read at
+        // build time only.
+        'public/api/v1/exploratory/**',
       ],
     },
   },
