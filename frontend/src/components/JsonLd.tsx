@@ -62,54 +62,173 @@ export function WebSiteJsonLd() {
 const REPO = 'https://github.com/FHIR-IQ/AINPI';
 
 /**
- * One-line descriptions for the upstream datasets named in `isBasedOn`.
+ * The upstream datasets named in `isBasedOn`, with the fields Google checks.
  *
  * WHY THIS EXISTS
  *
- * Search Console reported "Missing field description" against this site's
- * Dataset markup. The top-level Dataset always carried one. The nested nodes
- * did not: `isBasedOn` emitted `{'@type': 'Dataset', name, url}`, and Google
- * validates every node typed Dataset, not only the root. Four nested nodes on
- * a findings page meant four errors.
+ * Google validates every node typed Dataset, not only the root, and Search
+ * Console has now said so twice. First "Missing field description": the root
+ * always carried one and the nested nodes did not. Then "Missing field
+ * creator" and "Missing field license", for the same reason. A findings page
+ * naming four sources produces four of each.
  *
  * Keyed by URL rather than name because the URL is the stable identifier and
- * the display name has been reworded more than once. The fallback below means
- * a source added later cannot silently reintroduce the error.
+ * the display name has been reworded more than once.
+ *
+ * A source this catalogue cannot licence is emitted as a CreativeWork instead
+ * of a Dataset. `isBasedOn` accepts either, Google does not validate
+ * CreativeWork, and the alternative is inventing a licence for a publisher
+ * that never stated one.
  */
-const SOURCE_DESCRIPTIONS: Record<string, string> = {
-  'https://directory.cms.gov/':
-    'The CMS National Provider Directory bulk FHIR R4 export, covering Practitioner, PractitionerRole, Organization, Location, Endpoint and related resources.',
-  'https://download.cms.gov/nppes/NPI_Files.html':
-    'The federal National Plan and Provider Enumeration System registry of every issued National Provider Identifier and its self-attested taxonomy and address.',
-  'https://data.cms.gov/provider-data/dataset/mj5m-pzi6':
-    'CMS Provider Data Catalog file listing Medicare-enrolled clinicians with their group practice affiliations, specialties and practice addresses.',
-  'https://data.cms.gov/provider-data/dataset/xubh-q36u':
-    'CMS Provider Data Catalog file listing every Medicare-certified hospital in the United States with its address, ownership and county.',
-  // Two AINPI sources share this URL: the Revalidation Reassignment List and
-  // the Public Provider Enrollment File. The description covers both.
-  'https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment':
-    'CMS Medicare provider and supplier enrollment files, covering the reassignment of billing rights from individual providers to group practices and the enrolled provider type of each NPI.',
-  'https://github.com/Enterprise-CMCS/SMA-Endpoint-Directory':
-    'CMS-maintained index of state Medicaid agency provider-directory API endpoints, one row per jurisdiction.',
-  'https://providerdirectory-api.capbluecross.com/r4':
-    'A payer provider-directory FHIR R4 API published under the CMS Interoperability and Patient Access rule (CMS-9115-F).',
-  'https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40':
-    'The National Uniform Claim Committee code set classifying provider type, specialty and subspecialty for every National Provider Identifier.',
-  'https://www.census.gov/programs-surveys/popest.html':
-    'US Census Bureau county population estimates and the ZCTA-to-county relationship file, used to attach geography to provider records.',
-  'https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/':
-    'USDA Economic Research Service codes classifying each US county on a continuum from metropolitan to completely rural.',
+type SourceEntry = {
+  description: string;
+  creator: { '@type': 'Organization'; name: string; url: string };
+  /**
+   * A licence URL, or a CreativeWork where the terms need a sentence. Omitted
+   * when the publisher states no terms at all, which downgrades the node.
+   */
+  license?: string | { '@type': 'CreativeWork'; name: string; url: string };
 };
 
-/** Every node typed Dataset needs a description, including nested ones. */
-function sourceDescription(s: { name: string; url: string; description?: string }): string {
-  return (
-    s.description ??
-    SOURCE_DESCRIPTIONS[s.url] ??
-    `Upstream public dataset used as a source for this AINPI finding: ${s.name}.`
-  );
-}
+/**
+ * Works of the US government carry no copyright under 17 USC 105. This is the
+ * label data.gov's own records use for exactly that, so it is the one a
+ * consumer reading our markup already recognises.
+ *
+ * The CMS provider-data metastore returns `license: null` for its own
+ * datasets. That is not evidence against this: federal works are public domain
+ * by statute rather than by declaration.
+ */
+const US_PUBLIC_DOMAIN = 'https://www.usa.gov/publicdomain/label/1.0/';
 
+const CMS = {
+  '@type': 'Organization' as const,
+  name: 'Centers for Medicare & Medicaid Services',
+  url: 'https://www.cms.gov/',
+};
+
+const SOURCE_CATALOG: Record<string, SourceEntry> = {
+  'https://directory.cms.gov/': {
+    description:
+      'The CMS National Provider Directory bulk FHIR R4 export, covering Practitioner, PractitionerRole, Organization, Location, Endpoint and related resources.',
+    creator: CMS,
+    license: US_PUBLIC_DOMAIN,
+  },
+  'https://download.cms.gov/nppes/NPI_Files.html': {
+    description:
+      'The federal National Plan and Provider Enumeration System registry of every issued National Provider Identifier and its self-attested taxonomy and address.',
+    creator: CMS,
+    license: US_PUBLIC_DOMAIN,
+  },
+  'https://data.cms.gov/provider-data/dataset/mj5m-pzi6': {
+    description:
+      'CMS Provider Data Catalog file listing Medicare-enrolled clinicians with their group practice affiliations, specialties and practice addresses.',
+    creator: CMS,
+    license: US_PUBLIC_DOMAIN,
+  },
+  'https://data.cms.gov/provider-data/dataset/xubh-q36u': {
+    description:
+      'CMS Provider Data Catalog file listing every Medicare-certified hospital in the United States with its address, ownership and county.',
+    creator: CMS,
+    license: US_PUBLIC_DOMAIN,
+  },
+  // Two AINPI sources share this URL: the Revalidation Reassignment List and
+  // the Public Provider Enrollment File. The description covers both.
+  'https://data.cms.gov/provider-characteristics/medicare-provider-supplier-enrollment': {
+    description:
+      'CMS Medicare provider and supplier enrollment files, covering the reassignment of billing rights from individual providers to group practices and the enrolled provider type of each NPI.',
+    creator: CMS,
+    license: US_PUBLIC_DOMAIN,
+  },
+  'https://github.com/Enterprise-CMCS/SMA-Endpoint-Directory': {
+    description:
+      'CMS-maintained index of state Medicaid agency provider-directory API endpoints, one row per jurisdiction.',
+    creator: CMS,
+    // The repository carries no LICENSE file, which GitHub reports as no
+    // licence. It is a CMS work product either way.
+    license: US_PUBLIC_DOMAIN,
+  },
+  'https://providerdirectory-api.capbluecross.com/r4': {
+    description:
+      'A payer provider-directory FHIR R4 API published under the CMS Interoperability and Patient Access rule (CMS-9115-F).',
+    creator: {
+      '@type': 'Organization',
+      name: 'Capital BlueCross',
+      url: 'https://www.capbluecross.com/',
+    },
+    // No licence, deliberately. The rule obliges the payer to serve this
+    // without authentication and says nothing about reuse terms, so there is
+    // nothing here to cite. This node is emitted as a CreativeWork.
+  },
+  'https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40': {
+    description:
+      'The National Uniform Claim Committee code set classifying provider type, specialty and subspecialty for every National Provider Identifier.',
+    creator: {
+      '@type': 'Organization',
+      name: 'National Uniform Claim Committee',
+      url: 'https://www.nucc.org/',
+    },
+    // Not a public-domain federal work, and the terms are narrower than any
+    // licence URL would say. Same wording as /data-sources, which is where a
+    // reader is sent to check it.
+    license: {
+      '@type': 'CreativeWork',
+      name: 'Public; permission required for redistribution',
+      url: 'https://www.nucc.org/index.php/code-sets-mainmenu-41/provider-taxonomy-mainmenu-40',
+    },
+  },
+  'https://www.census.gov/programs-surveys/popest.html': {
+    description:
+      'US Census Bureau county population estimates and the ZCTA-to-county relationship file, used to attach geography to provider records.',
+    creator: {
+      '@type': 'Organization',
+      name: 'US Census Bureau',
+      url: 'https://www.census.gov/',
+    },
+    license: US_PUBLIC_DOMAIN,
+  },
+  'https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/': {
+    description:
+      'USDA Economic Research Service codes classifying each US county on a continuum from metropolitan to completely rural.',
+    creator: {
+      '@type': 'Organization',
+      name: 'USDA Economic Research Service',
+      url: 'https://www.ers.usda.gov/',
+    },
+    license: US_PUBLIC_DOMAIN,
+  },
+};
+
+/**
+ * One `isBasedOn` entry, typed Dataset when the catalogue can fill every field
+ * Google validates and CreativeWork when it cannot.
+ */
+function sourceNode(s: { name: string; url: string; description?: string }) {
+  const entry = SOURCE_CATALOG[s.url];
+  const description =
+    s.description ??
+    entry?.description ??
+    `Upstream public dataset used as a source for this AINPI finding: ${s.name}.`;
+
+  if (!entry?.license) {
+    return {
+      '@type': 'CreativeWork',
+      name: s.name,
+      url: s.url,
+      description,
+      ...(entry ? { creator: entry.creator } : {}),
+    };
+  }
+
+  return {
+    '@type': 'Dataset',
+    name: s.name,
+    url: s.url,
+    description,
+    creator: entry.creator,
+    license: entry.license,
+  };
+}
 
 export function DatasetJsonLd({
   name,
@@ -197,11 +316,7 @@ export function DatasetJsonLd({
           encodingFormat: d.format,
           contentUrl: abs(d.url),
         })),
-        isBasedOn: sources.map((s) => ({
-          '@type': 'Dataset',
-          ...s,
-          description: sourceDescription(s),
-        })),
+        isBasedOn: sources.map(sourceNode),
       }}
     />
   );
