@@ -253,7 +253,10 @@ detect from outside.
 
 **Type:** MCP Server (Public Preview)
 **Access:** Instantly available
-**Categories:** `HEALTH`, `PUBLIC_SECTOR`
+**Product category:** `AI`. Databricks lists MCP servers under AI, not under the
+data categories the archive listing uses. Read the listing back after publishing:
+an unknown category is dropped silently, which has cost this project once.
+**Subject categories:** `HEALTH`, `PUBLIC_SECTOR`
 
 ### Name
 
@@ -262,12 +265,14 @@ AINPI Provider Directory Audit (MCP)
 ### Subtitle (must fit 120 characters)
 
 Ask an agent what the federal provider directory says, and how wrong it is.
-No credentials, no scraping.
+No signup to start, no scraping.
 
 ### Long description
 
-A credential-free MCP server that lets an agent query the AINPI audit of the
-federal provider directory directly, instead of scraping a website.
+An MCP server that lets an agent query the AINPI audit of the federal provider
+directory directly, instead of scraping a website. Anonymous by default, so it
+works with no signup; a bearer token raises the limits when an integration
+needs more.
 
 **Tools.** `list_findings` enumerates every published finding.
 `get_finding` returns one finding's measured numbers, denominator and chart
