@@ -19,7 +19,7 @@
  */
 import type { NextRequest } from 'next/server';
 import { createMcpHandler } from 'mcp-handler';
-import { enforceRateLimit } from '@/lib/rate-limit';
+import { enforceRateLimit, type LimitResult } from '@/lib/rate-limit';
 import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
@@ -234,7 +234,47 @@ async function guarded(
 ): Promise<Response> {
   const rl = await enforceRateLimit(req, { shape: 'mcp:lookup' });
   if (!rl.ok) return rl.response!;
-  return run(req);
+  return annotate(await run(req), rl);
+}
+
+/**
+ * Put the tier and remaining budget on successful MCP responses.
+ *
+ * `withRateLimitHeaders` in the limiter takes a NextResponse, and mcp-handler
+ * returns a plain streaming Response, so this is the same three headers
+ * applied to what this route actually produces. /api/npd/search and
+ * /api/npd/geo-search already advertise them; without this the MCP surface was
+ * the only rate-limited route that told a caller nothing.
+ *
+ * That matters most for a bearer token. A caller who presents a key has no
+ * other way to find out whether the server recognised it: the tool result for
+ * a keyed request and an anonymous one is byte-identical, so a key that is
+ * revoked, mistyped or sent under the wrong header looks exactly like one that
+ * works, right up until the anonymous ceiling stops them.
+ *
+ * The body is passed through as a stream rather than buffered, because the
+ * transport is server-sent events and reading it here would break streaming.
+ */
+function annotate(res: Response, rl: LimitResult): Response {
+  const values: [string, string][] = [
+    ['x-ratelimit-tier', rl.caller.tier.name],
+    ['x-ratelimit-cost-units', String(rl.units)],
+    ['x-ratelimit-limit-day', String(rl.caller.dailyUnitCap)],
+  ];
+  try {
+    for (const [k, v] of values) res.headers.set(k, v);
+    return res;
+  } catch {
+    // Some Response objects arrive with immutable headers. Rebuild around the
+    // same body stream rather than giving up on the headers.
+    const headers = new Headers(res.headers);
+    for (const [k, v] of values) headers.set(k, v);
+    return new Response(res.body, {
+      status: res.status,
+      statusText: res.statusText,
+      headers,
+    });
+  }
 }
 
 export async function GET(req: NextRequest) {
