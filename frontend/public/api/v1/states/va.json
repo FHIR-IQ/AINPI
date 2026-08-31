@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-24T09:59:13+00:00",
+  "generated_at": "2026-08-31T16:57:27+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "2e09d5d",
+  "commit_sha": "960969e",
   "denominators": {
     "practitioner": 128246,
     "organization": 74192,
@@ -26,7 +26,7 @@
       "state_numerator": 124688,
       "state_denominator": 128246,
       "state_pct": 97.2256,
-      "national_pct": 99.9985,
+      "national_pct": 99.9984,
       "state_headline": "124,688 of 128,246 VA practitioner NPIs (97.2256%) match NPPES; 273 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
@@ -118,19 +118,19 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1003926940",
-      "display_name": "SHELBURNE, ROY",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a1)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003926940",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
       "npi": "1477617819",
       "display_name": "FORBES, BRAD",
       "flagged_by": "oig-leie-exclusions",
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a3)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1477617819",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
+      "npi": "1003926940",
+      "display_name": "SHELBURNE, ROY",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003926940",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {

@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-24T09:59:24+00:00",
+  "generated_at": "2026-08-31T16:57:42+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "2e09d5d",
+  "commit_sha": "960969e",
   "denominators": {
     "practitioner": 230837,
     "organization": 115583,
@@ -26,7 +26,7 @@
       "state_numerator": 225184,
       "state_denominator": 230837,
       "state_pct": 97.5511,
-      "national_pct": 99.9985,
+      "national_pct": 99.9984,
       "state_headline": "225,184 of 230,837 PA practitioner NPIs (97.5511%) match NPPES; 493 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
@@ -142,11 +142,11 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1447277215",
-      "display_name": "DEW, GREGORY",
+      "npi": "1003011644",
+      "display_name": "RICE, CHRISTAL",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128a2)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1447277215",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003011644",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],

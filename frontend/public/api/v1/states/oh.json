@@ -3,9 +3,9 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-24T09:59:36+00:00",
+  "generated_at": "2026-08-31T16:57:56+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "2e09d5d",
+  "commit_sha": "960969e",
   "denominators": {
     "practitioner": 263937,
     "organization": 107569,
@@ -26,7 +26,7 @@
       "state_numerator": 255278,
       "state_denominator": 263937,
       "state_pct": 96.7193,
-      "national_pct": 99.9985,
+      "national_pct": 99.9984,
       "state_headline": "255,278 of 263,937 OH practitioner NPIs (96.7193%) match NPPES; 499 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
