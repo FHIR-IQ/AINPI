@@ -260,7 +260,7 @@ df = delta_sharing.load_as_pandas(url, limit=1000)`}
           </p>
         </section>
 
-        <section className="mt-12">
+        <section id="roadmap" className="scroll-mt-20 mt-12">
           <h2 className="text-2xl mb-2">Roadmap</h2>
           <dl className="space-y-4 measure text-ink/80">
             <div>
