@@ -360,7 +360,7 @@ Listing copy lives in `docs/marketplace-listings.md` and is applied by script, s
 **Three limits here were learned by hitting them, and only one of the three announced itself.**
 
 - **The provider profile has no create API.** `GET /api/2.1/marketplace-provider/providers` works; `POST` to the same path returns "No API found". It is console-only and needs a light-mode icon file. Created 2026-08-23 as `1391b933-c642-420e-86a6-98c1283a4b57`.
-- **The account cannot publish publicly yet.** `visibility: PUBLIC` returns "Marketplace private exchange provider cannot perform this operation"; `PRIVATE` succeeds, so it is an account tier, not a bad request. Public listings need Databricks to approve the provider application. `--publish --private` is an explicit flag and never an automatic fallback, because a public publish that quietly degrades to a private one reports success for a listing nobody can find.
+- **The account cannot publish publicly yet.** `visibility: PUBLIC` returns "Marketplace private exchange provider cannot perform this operation"; `PRIVATE` succeeds, so it is an account tier, not a bad request. Public listings need Databricks to approve the provider application. `--publish --private` is an explicit flag and never an automatic fallback, because a public publish that quietly degrades to a private one reports success for a listing nobody can find. **This is lifting.** Databricks Partner Engineering passed technical validation on 2026-08-31 and sent the account to be allow-listed as a public provider, so retest `PUBLIC` rather than assuming the refusal still stands. Going public is a decision, not a formality: a press release carries at least 10 business days of Databricks review, so it has to start before the listing lands.
 - **An unknown category is dropped silently.** `HEALTH_AND_LIFE_SCIENCES` is not in the enum; the create returned 200 and the listing came back carrying only `PUBLIC_SECTOR`. The correct value is `HEALTH`, enumerated from the 2,076 live consumer listings rather than guessed. A 144-character subtitle, by contrast, was rejected outright against the real 120 cap. **So the script now reads every listing back and compares it to the spec** — an accepted write is not evidence the listing says what you sent.
 
 **The attached notebook is part of the contract, not a nicety.** The listing description tells the reader a worked example is included, so `verify_listing` fails the publish unless exactly one `EMBEDDED_NOTEBOOK` file is attached. Marketplace wants an HTML export, not the source: `text/html` is the only mime type it accepts and four other candidates are rejected by name. The presigned PUT is signed over `host;x-amz-server-side-encryption`, so the upload must send `x-amz-server-side-encryption: AES256` and must not add a Content-Type; either mistake is a bare 403. The URL expires in 900 seconds. Upload the new file before deleting the old one.
@@ -368,6 +368,23 @@ Listing copy lives in `docs/marketplace-listings.md` and is applied by script, s
 Probe listing URLs with `curl`, not `urllib`: the preflight reported all three policy pages unreachable under local TLS interception while curl got 200 on each. Same failure as H26, H46 and the H51 vendor downloads.
 
 **Naming: Databricks announced OpenSharing on 2026-06-10.** Delta Sharing was donated to the Linux Foundation as an independent project and widened from tables and files to AI models, unstructured data and **agents and skills**. Delta Sharing is not deprecated and existing shares keep working, so nothing here breaks, but the Databricks surface a reader lands on now says OpenSharing. Write "OpenSharing (formerly Delta Sharing)" on first mention in anything outward-facing. Note the vendor's own 3rd-edition ebook still says Delta Sharing 86 times and OpenSharing zero, so it is not a source for current naming.
+
+**What Databricks actually costs, measured (2026-08-31).** `system.billing.usage`
+is enabled on this metastore, so spend is readable from the workspace with no
+account-level auth: join it to `system.billing.list_prices` on cloud, sku and the
+price validity window. Earliest usage row is 2026-08-23. Total since then is
+**$23.99**, of which serverless SQL compute is $23.43 (97.7%), jobs serverless
+$0.26, storage $0.24 and **all internet egress $0.06, on one day**. Genie is
+billed at zero. The shape is one-off rebuilds, not a running rate: 2026-08-23 was
+$17.97 and 2026-08-24 $4.07 (the Delta reload and the cross-release comparison),
+against a ~$0.03/day floor when nothing runs. **Egress has not begun, so the R2
+decision below still stands unchanged.**
+
+**A budget-alert email is not evidence of a working budget.** The account budget
+`7d50f1b1-500e-4517-9adf-b6a1936a04be` sends notifications, but its filters can
+only be read with account-level auth, and `guardrails_audit.py` refuses to count
+a budget carrying a `CostFilters` block for exactly this reason. Before treating
+an alert as meaningful, confirm the budget is unfiltered.
 
 **Egress: there is a zero-cost path, and the case for taking it now is weaker than it first looked.** Databricks supports **Cloudflare R2, which charges no egress**. But the archive does not sit in a customer-owned bucket: `workspace` is a `MANAGED_CATALOG` rooted at `s3://dbstorage-prod-*` under `__databricks_managed_storage_credential`, the metastore has no `storage_root`, and there is no customer storage credential in the account. **So there is no AWS S3 line item for this and never was**; AWS list prices describe what Databricks incurs, not what we are billed. Combined with zero published consumers and Databricks' own note that in-region sharing is already egress-free, the risk is real but not yet load-bearing. `analysis/databricks_r2_migrate.py` is written, tested against the live tables and ready, which is the actual insurance: migrating later is about twenty minutes. **Revisit when a Databricks bill shows sharing egress, not before.** Adding a seventh vendor and a credential to rotate ahead of that is complexity bought against a hypothetical. Related: the client-side filter that makes partition pruning work is a **hint**, not a guarantee, so partitioning by `release_date` lets a careful consumer read one release and does not stop a careless one reading all three.
 
