@@ -45,6 +45,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/pecos', priority: 0.7 },
     { path: '/states', priority: 0.7 },
     { path: '/partners', priority: 0.6 },
+    // Databricks integration page. Carries the reference architecture
+    // and the joint landing page the ISV partner profile requires, so
+    // it is a destination rather than a byproduct.
+    { path: '/databricks', priority: 0.6 },
     // Worked examples behind the specialty-context write-up. Listed
     // because the article links to it and it is the surface people are
     // sent to, not a byproduct.
