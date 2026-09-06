@@ -369,16 +369,29 @@ Probe listing URLs with `curl`, not `urllib`: the preflight reported all three p
 
 **Naming: Databricks announced OpenSharing on 2026-06-10.** Delta Sharing was donated to the Linux Foundation as an independent project and widened from tables and files to AI models, unstructured data and **agents and skills**. Delta Sharing is not deprecated and existing shares keep working, so nothing here breaks, but the Databricks surface a reader lands on now says OpenSharing. Write "OpenSharing (formerly Delta Sharing)" on first mention in anything outward-facing. Note the vendor's own 3rd-edition ebook still says Delta Sharing 86 times and OpenSharing zero, so it is not a source for current naming.
 
-**What Databricks actually costs, measured (2026-08-31).** `system.billing.usage`
-is enabled on this metastore, so spend is readable from the workspace with no
-account-level auth: join it to `system.billing.list_prices` on cloud, sku and the
-price validity window. Earliest usage row is 2026-08-23. Total since then is
-**$23.99**, of which serverless SQL compute is $23.43 (97.7%), jobs serverless
-$0.26, storage $0.24 and **all internet egress $0.06, on one day**. Genie is
-billed at zero. The shape is one-off rebuilds, not a running rate: 2026-08-23 was
-$17.97 and 2026-08-24 $4.07 (the Delta reload and the cross-release comparison),
-against a ~$0.03/day floor when nothing runs. **Egress has not begun, so the R2
-decision below still stands unchanged.**
+**What Databricks actually costs, measured (updated 2026-09-06).**
+`system.billing.usage` is enabled on this metastore, so spend is readable from
+the workspace with no account-level auth: join it to
+`system.billing.list_prices` on cloud, sku and the price validity window.
+Earliest usage row is 2026-08-23, the day the metastore was created. Total over
+the first 15 days is **$28.76**, overwhelmingly serverless SQL compute, with
+**all internet egress $0.06, on one day**. Genie is billed at zero. The shape is
+one-off rebuilds, not a running rate: 2026-08-23 was $17.97 and 2026-08-24
+$4.07 (the Delta reload and the cross-release comparison), 2026-08-31 $4.70
+(validation share plus marketplace preflight), against a **$0.03/day floor**
+when nothing runs. **Egress has not begun, so the R2 decision below still stands
+unchanged.**
+
+**The trial credit expired on the calendar, not on consumption (2026-09-06).**
+The $400 credit is "$400 or 14 days, whichever comes first", and the metastore
+was created 2026-08-23 12:46 UTC, so day 14 was 2026-09-06. $28.76 of the $400
+was used and about $371 expired unused. **Spend now bills to AWS Marketplace,
+the default payment method**, so from here every rebuild is real money rather
+than credit. The steady state is trivial at $0.03/day; the exposure is a
+rebuild, a reload, or a consumer pulling the archive.
+
+That makes the filtered-budget problem below load-bearing rather than
+theoretical, because until today nothing could actually be charged.
 
 **A budget-alert email is not evidence of a working budget.** The account budget
 `7d50f1b1-500e-4517-9adf-b6a1936a04be` sends notifications, but its filters can
