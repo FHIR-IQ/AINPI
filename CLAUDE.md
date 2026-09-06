@@ -390,14 +390,23 @@ the default payment method**, so from here every rebuild is real money rather
 than credit. The steady state is trivial at $0.03/day; the exposure is a
 rebuild, a reload, or a consumer pulling the archive.
 
-That makes the filtered-budget problem below load-bearing rather than
-theoretical, because until today nothing could actually be charged.
+**There are two account budgets and only one of them is real, which was read
+rather than assumed once account auth existed (2026-09-06).**
+`7d50f1b1-500e-4517-9adf-b6a1936a04be`, "AINPI all spend", carries **no filter**
+and alerts at $25/month to `gene@fhiriq.com`. That is the budget behind the
+alert email, and it fired correctly because August crossed $25.
+`fe3d6c15-7027-47dc-9f52-bb4f35732d7d`, "AINPI", is the genie-filtered one
+described below; Genie bills at zero so it reports green forever. It is dead
+weight rather than a hazard now that the unfiltered budget exists, and deleting
+it would remove a green light that means nothing.
 
-**A budget-alert email is not evidence of a working budget.** The account budget
-`7d50f1b1-500e-4517-9adf-b6a1936a04be` sends notifications, but its filters can
-only be read with account-level auth, and `guardrails_audit.py` refuses to count
-a budget carrying a `CostFilters` block for exactly this reason. Before treating
-an alert as meaningful, confirm the budget is unfiltered.
+The correction worth keeping: the alert email was **not** evidence of a broken
+control, and reading it that way was wrong. But the reason for suspicion still
+holds, which is that a budget's filters cannot be read from a workspace token at
+all, so an alert alone tells you nothing about coverage. Confirm with
+`databricks account budgets list -p <account-profile>` before trusting or
+distrusting one. `guardrails_audit.py` now passes this check rather than
+reporting `?`, because the `ainpi` account profile exists.
 
 **Egress: there is a zero-cost path, and the case for taking it now is weaker than it first looked.** Databricks supports **Cloudflare R2, which charges no egress**. But the archive does not sit in a customer-owned bucket: `workspace` is a `MANAGED_CATALOG` rooted at `s3://dbstorage-prod-*` under `__databricks_managed_storage_credential`, the metastore has no `storage_root`, and there is no customer storage credential in the account. **So there is no AWS S3 line item for this and never was**; AWS list prices describe what Databricks incurs, not what we are billed. Combined with zero published consumers and Databricks' own note that in-region sharing is already egress-free, the risk is real but not yet load-bearing. `analysis/databricks_r2_migrate.py` is written, tested against the live tables and ready, which is the actual insurance: migrating later is about twenty minutes. **Revisit when a Databricks bill shows sharing egress, not before.** Adding a seventh vendor and a credential to rotate ahead of that is complexity bought against a hypothetical. Related: the client-side filter that makes partition pruning work is a **hint**, not a guarantee, so partitioning by `release_date` lets a careful consumer read one release and does not stop a careless one reading all three.
 

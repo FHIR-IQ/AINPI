@@ -140,3 +140,10 @@ consulting/
 *-brief.pdf
 *-Brief.pdf
 *brief*.html
+
+# Databricks partner templates and decks. This repo is public. The FCD template
+# carries slides marked "Databricks Internal Only" and "For internal reference
+# only. Not publicly referenceable", so committing one republishes a partner's
+# internal material. Work on these under .private/ instead.
+*.pptx
+docs/FY27_Databricks_Tech_Partner_FCD_Template.pptx
