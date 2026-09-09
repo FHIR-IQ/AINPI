@@ -90,10 +90,19 @@ def _account_profile() -> str | None:
 
 
 def check_gcp(r: Result) -> None:
+    # --billing-project is load-bearing. Without it gcloud attributes the call
+    # to whatever `gcloud config get project` happens to hold, which on a
+    # machine that works across several projects is routinely not this one. It
+    # then fails with "API not enabled on project <unrelated>", the audit
+    # reported "could not query budgets (auth?)", and the budget looked
+    # unverifiable while being perfectly intact. Caught 2026-09-09 when the
+    # active project was an unrelated one.
     rc, out = run(["gcloud", "billing", "budgets", "list",
-                   "--billing-account", _billing_account(), "--format", "json"])
+                   "--billing-account", _billing_account(),
+                   "--billing-project", GCP_PROJECT, "--format", "json"])
     if rc != 0:
-        r.add("GCP", "budget exists", None, "could not query budgets (auth?)")
+        r.add("GCP", "budget exists", None,
+              f"could not query budgets: {out.strip()[:160]}")
     else:
         try:
             budgets = json.loads(out or "[]")
