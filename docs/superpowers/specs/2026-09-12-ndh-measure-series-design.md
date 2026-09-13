@@ -68,6 +68,34 @@ Its movement is the directory genuinely improving and belongs on a line. The
 agreement measure moved further and must not be drawn as one. Nothing in the two
 sets of numbers distinguishes those cases. Only the definition record does.
 
+### How a break is detected
+
+The spec above says "a detected break" and that word is doing more work than it
+looks. Nothing in a pipeline notices that 0.091 rising to 0.99998 is an artifact.
+It looks like improvement. In the real case a human noticed that a query
+returned zero rows for a URL that no longer existed.
+
+Detection therefore has three mechanisms. None is a person remembering.
+
+**`definition_version` is derived, never declared.** It is a hash of the
+measure's SQL text. Change the query, the hash changes, the version bumps and a
+break is recorded automatically. A hand-maintained version number is a field
+somebody forgets, which is the same reasoning that gave `stats.json` a generator
+and pinned `CURRENT_RELEASE` in two places tested against each other.
+
+**Positive-control failure forces the code change that bumps the hash.** A
+source change breaks a query, the control fails, and the run stops. The query is
+fixed, the hash moves, the break is recorded. That closes the loop for every
+source change that breaks something.
+
+**A plausibility guard catches the source changes that break nothing.** This is
+the case the first two miss and this project has already lived it. Endpoint rows fell 73% between April and May with no query failing and no
+control tripping. The cause was de-duplication rather than removal, and only
+comparing distinct addresses revealed it. Under unattended publication a 73% collapse
+would ship as a real trend. So any consecutive-point move beyond a per-measure threshold marks the pair
+`unreviewed` and renders it disconnected. No break record is required. `comparable_across_break` therefore has three states, not two:
+`true`, `false`, and `unreviewed`.
+
 Three consequences, each load-bearing.
 
 **A measure is never finished, so it never goes stale.** A new point arrives
@@ -87,6 +115,14 @@ thing here, because a break is visible only to someone holding every release.
 are. A finding stops being the artifact and becomes the essay explaining one
 measure's history. The pre-registration record is the credibility asset and
 nothing in this design touches it.
+
+**The first measures are chosen for break resistance, not for interest.** One breaking source change per release is a rate per *release*, not per
+*measure*. Role coverage passed through the August vocabulary change untouched.
+Measures built on counts and reference resolution are structurally robust.
+Measures keyed to a coded vocabulary are structurally fragile. Version one
+favours the robust ones, so the series draws lines rather than accumulating
+disconnected points while the machinery is still earning trust.
+The fragile measures join later, once the break model has been exercised.
 
 The work is mostly reframing rather than new analysis. Roughly 15 to 20 measures
 already exist inside `analysis/h*.py` as one-off numbers. The task is extracting
@@ -123,12 +159,29 @@ release does.** Partition pruning holds only for a query that filters on
 the tables have only ever held one release. The moment a second partition exists
 every unfiltered query blends May and August into a published finding. That is
 the silent-zero failure inverted: the result is not empty, it is plausible and
-wrong. Three things ship before the second partition loads. Every existing query
-gains an explicit `WHERE release_date = CURRENT_RELEASE`.
-`.github/scripts/scan-anti-patterns.sh` gains a rule failing any query against
-the six resource tables that carries no release predicate. And
-`fast_ingest_ndh.py` moves from `--replace` on the table to a partition-scoped
-replace, so reloading one release cannot destroy another.
+wrong.
+
+The fix is a view layer rather than a predicate in every query. Each resource
+table gains a companion view, `cms_npd.practitioner_current` and so on, defined
+as the base table filtered to `CURRENT_RELEASE`. Existing scripts repoint at the
+views and are otherwise untouched. Only the measure pass reads base tables,
+because only the measure pass is entitled to see more than one release.
+
+Pruning survives the view, measured rather than assumed. On a two-partition test
+table, a column scan cost 20,080,000 bytes unfiltered, 10,200,000 bytes through
+the view, and 10,200,000 bytes with the predicate written inline. Wrapping the
+view in a subquery changed nothing.
+
+The view layer also makes the guardrail cheap. The anti-pattern rule becomes
+"no base resource-table name outside `analysis/measures/`", which is a grep,
+rather than a regex trying to pair a `FROM` with a `release_date` predicate
+across f-strings and CTEs.
+
+Two things ship alongside it. `fast_ingest_ndh.py` moves from `--replace` on the
+table to a partition-scoped replace, so reloading one release cannot destroy
+another. And the repoint is verified for free: while only one release is loaded
+the view is a no-op, so every published artifact must be byte-identical before
+and after. Any diff is a bug caught at zero cost.
 
 **The series starts at 2026-05-08 and runs forward.** The 2026-04-09 export
 stays an archive artifact rather than a published point, which makes the
@@ -143,7 +196,10 @@ map work keeps `null` and `0.0` apart for.
 **Recomputation will produce restatements, and they get published.** Recomputing
 May with today's definitions will differ from what May published. Publish both,
 as-published and as-recomputed, with the reason for each difference. That is a
-restatement record. Almost nobody in this space publishes one.
+restatement record. Almost nobody in this space publishes one. It cuts both ways. A visible history of
+correcting yourself builds standing with a research audience and can unsettle a
+commercial one. It is still worth doing, because the corrections happen whether
+or not they are published, and only one of those worlds is honest.
 
 ### Preservation, which blocks everything else
 
@@ -175,13 +231,17 @@ a series to ask about rather than a snapshot to look up.
 
 **Citation is a mechanism, not a hope.** Being cited requires a stable
 identifier, a pinned version, and a form that pastes into a document. Each
-measure page carries a copy-paste citation pinned to a release, and each
-release's complete measure set is deposited to Zenodo, which mints a DOI, is
-free, is operated by CERN, and exposes an API the release workflow can call
-unattended. Regulators, standards bodies and health-services researchers cite
-DOIs by default and cite URLs reluctantly. A URL is not evidence that the source
-said what the citation claims. A DOI per release also means the record survives
-ainpi.dev, which is the April preservation argument again.
+measure page carries a copy-paste citation pinned to a release, and the measure set is deposited to
+Zenodo, which is free, is operated by CERN, and exposes an API the release
+workflow can call unattended. Deposits are versioned: a concept DOI identifies
+the series and a version DOI identifies one pipeline run. That distinction is
+required rather than tidy, because a restatement changes an old release's
+recomputed value, so deposits do not map one-to-one onto CMS releases. Researchers, standards bodies and regulatory commenters cite DOIs by default,
+because a URL is not evidence that the source said what the citation claims.
+This is a narrower audience than "everyone who might cite us"; a vendor white
+paper will cite a URL whatever we do. The deposit is worth it anyway for
+permanence, since it means the record survives ainpi.dev. That is the April
+preservation argument again.
 
 Dataset structured data extends to measures through the existing
 `SOURCE_CATALOG` path in `frontend/src/components/JsonLd.tsx`, so Google Dataset
@@ -223,14 +283,18 @@ CodeSystem canonical. The base rate is one per release. The pipeline should
 expect to fail on a new export and treat a clean run as the surprise.
 
 Running cost: one to two dollars a month of BigQuery storage, a few dollars per
-release for the measure pass, no Databricks compute on this path.
+release for the measure pass, no Databricks compute on this path. The one-time
+backfill is larger and mostly not billed: re-exporting 2026-05-08 with the
+current extractor is hours of local compute over a 2.1 GB compressed release,
+followed by an ordinary load.
 
 ## Order of work
 
 1. Reload the 2026-04-09 partition into the Delta archive. Preservation blocks
    the rest.
-2. Add the release predicate to every existing query, plus the anti-pattern rule
-   that enforces it, before any second partition exists.
+2. Build the `_current` views, repoint every existing script at them, verify
+   byte-identical outputs, and add the anti-pattern rule. All of this lands
+   before a second partition exists.
 3. Partition the BigQuery tables by `release_date`, move `fast_ingest_ndh.py` to
    a partition-scoped replace, then re-export and backfill 2026-05-08 with the
    current extractor.
@@ -256,7 +320,14 @@ release for the measure pass, no Databricks compute on this path.
   definitions and the most external interest are role coverage, endpoint
   attribution, FHIR REST endpoint count, organization `partOf` resolvability,
   practitioner phone reachability, and federal-exclusion overlap.
-- Whether the 2026-04-09 export is eventually promoted from archive artifact to
-  published point once the pipeline is proven.
+- **A measure needs a declared time axis and version one ducks the question.**
+  NDH-derived quantities move per release. Exclusion-derived ones do not: the
+  OIG LEIE file is monthly, SAM changes continuously, and the H26 payer probe
+  hits live endpoints. Those belong on a date axis and cannot share a chart with a release axis.
+  Version one excludes them rather than inventing a dual-axis rendering.
+- Whether the 2026-04-09 export is promoted from archive artifact to published
+  point. The re-export cost is identical to May's and it turns two points into three
+  on day one. The complication is the April endpoint duplication, which is
+  exactly the kind of artifact the break model exists to handle.
 - Whether measures and findings share one URL namespace long-term or stay
   separate as designed here.
