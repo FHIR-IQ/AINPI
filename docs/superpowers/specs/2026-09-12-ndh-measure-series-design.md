@@ -38,20 +38,42 @@ release.
 
 ```
 measure:
+  slug                practitioner-role-specialty-agreement
+  question            Do Practitioner.qualification and PractitionerRole.specialty agree?
+  numerator           Practitioner-to-Role pairs whose specialty codes match
+  denominator         Practitioner-to-Role pairs where both carry a specialty
+  source              NDH bulk export
+  definition_version  2
+  series:
+    - release 2026-05-08  value 0.091    definition_version 1  commit <sha>
+    - release 2026-08-20  value 0.99998  definition_version 2  commit <sha>
+  breaks:
+    - at 2026-08-20, definition_version 1 -> 2
+      reason: PractitionerRole.specialty moved from CMS Medicare codes to NUCC,
+              so v1 was measuring a lossy crosswalk, not disagreement
+      comparable_across_break: false
+```
+
+Contrast a measure whose movement over the same two releases is real:
+
+```
+measure:
   slug                role-coverage-national
   question            What share of active practitioners carry a PractitionerRole?
   numerator           active practitioners with >= 1 active PractitionerRole
   denominator         active Practitioner resources
   source              NDH bulk export
-  definition_version  2
+  definition_version  1
   series:
     - release 2026-05-08  value 0.270  definition_version 1  commit <sha>
-    - release 2026-08-20  value 0.314  definition_version 2  commit <sha>
-  breaks:
-    - at 2026-08-20, definition_version 1 -> 2
-      reason: PractitionerRole.specialty moved from CMS Medicare codes to NUCC
-      comparable_across_break: false
+    - release 2026-08-20  value 0.314  definition_version 1  commit <sha>
+  breaks: []
 ```
+
+Role coverage reads no specialty code, so the vocabulary change cannot touch it.
+Its movement is the directory genuinely improving and belongs on a line. The
+agreement measure moved further and must not be drawn as one. Nothing in the two
+sets of numbers distinguishes those cases. Only the definition record does.
 
 Three consequences, each load-bearing.
 
@@ -62,11 +84,10 @@ answer to the binding constraint on this project, which is that there are no
 hours to spend on it.
 
 **`definition_version` and `breaks` are the product, not bookkeeping.** This
-repository has already shipped a wrong trend for exactly this reason. The 9.1%
-Practitioner-to-Role agreement figure published for months was measuring a lossy
-Medicare-to-NUCC crosswalk rather than real disagreement; once both fields spoke
-NUCC the true figure was 99.998%. Plotted naively that is a spectacular
-improvement and it is entirely an artifact of the source changing vocabulary. A
+repository has already shipped the wrong reading of the example above. The 9.1%
+figure published for months was measuring a lossy Medicare-to-NUCC crosswalk
+rather than real disagreement, and the jump that followed is an artifact of the
+source changing vocabulary rather than a directory that fixed itself. A
 series that does not model definition breaks will manufacture findings that are
 not real, automatically and at scale. Modelling them is also the most citable
 thing here, because a break is visible only to someone holding every release.
@@ -104,6 +125,19 @@ multiple releases is on the order of one to two dollars a month.
 A simplification falls out: once loading a new export no longer destroys the
 previous one, `analysis/release_snapshot.py` becomes redundant. Its entire
 purpose is rescuing a few numbers ahead of an irreversible `--replace`.
+
+**Partitioning introduces a silent-blend hazard, and it lands before the second
+release does.** Partition pruning holds only for a query that filters on
+`release_date`. None of the twenty-odd `h*.py` scripts filters on it, because
+the tables have only ever held one release. The moment a second partition exists
+every unfiltered query blends May and August into a published finding. That is
+the silent-zero failure inverted: the result is not empty, it is plausible and
+wrong. Three things ship before the second partition loads. Every existing query
+gains an explicit `WHERE release_date = CURRENT_RELEASE`.
+`.github/scripts/scan-anti-patterns.sh` gains a rule failing any query against
+the six resource tables that carries no release predicate. And
+`fast_ingest_ndh.py` moves from `--replace` on the table to a partition-scoped
+replace, so reloading one release cannot destroy another.
 
 **The series starts at 2026-05-08 and runs forward.** The 2026-04-09 export
 stays an archive artifact rather than a published point, which makes the
@@ -228,15 +262,18 @@ different description once there is something behind it.
 
 1. Reload the 2026-04-09 partition into the Delta archive. Preservation blocks
    the rest.
-2. Partition the BigQuery tables by `release_date`; re-export and backfill
-   2026-05-08 with the current extractor.
-3. Build the measure pass and the first six to eight measures, each with a
+2. Add the release predicate to every existing query, plus the anti-pattern rule
+   that enforces it, before any second partition exists.
+3. Partition the BigQuery tables by `release_date`, move `fast_ingest_ndh.py` to
+   a partition-scoped replace, then re-export and backfill 2026-05-08 with the
+   current extractor.
+4. Build the measure pass and the first six to eight measures, each with a
    positive control and a pinned definition.
-4. Ship `/measures`, the JSON and CSV contract, the citation block and the
+5. Ship `/measures`, the JSON and CSV contract, the citation block and the
    Zenodo deposit.
-5. Re-cut the Databricks, HuggingFace and MCP registry listings against the
+6. Re-cut the Databricks, HuggingFace and MCP registry listings against the
    series.
-6. Add the entity dimension for the organization scoreboard.
+7. Add the entity dimension for the organization scoreboard.
 
 ## Non-goals
 
