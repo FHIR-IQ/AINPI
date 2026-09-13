@@ -92,9 +92,25 @@ source change that breaks something.
 the case the first two miss and this project has already lived it. Endpoint rows fell 73% between April and May with no query failing and no
 control tripping. The cause was de-duplication rather than removal, and only
 comparing distinct addresses revealed it. Under unattended publication a 73% collapse
-would ship as a real trend. So any consecutive-point move beyond a per-measure threshold marks the pair
-`unreviewed` and renders it disconnected. No break record is required. `comparable_across_break` therefore has three states, not two:
-`true`, `false`, and `unreviewed`.
+would ship as a real trend. So a move the measure did not expect marks the pair `unreviewed` and renders it
+disconnected. No break record is required. `comparable_across_break` therefore
+has three states, not two: `true`, `false`, and `unreviewed`.
+
+**The threshold is declared, not derived, and that is not a shortcut.** A guard
+computed from a measure's own history cannot work on a series holding two
+points. Worse, a derived threshold fires hardest on the findings most worth
+publishing. `Organization.partOf` went from 0% to 100% resolvable between May
+and August. Any statistical guard rejects that as implausible and it is entirely
+real. So each measure declares, at registration, the movement per release it
+would consider ordinary. That is the discipline this project already applies to
+findings, where a null hypothesis and an expected direction are registered
+before the numbers drop, and it works at two points because the prior is stated
+rather than inferred.
+
+A measure whose prior is wrong flags once, gets reviewed, and the prior is
+updated. `partOf` flagging on the release where a known-broken field was fixed
+is the guard working, not failing. Publication of the point stays unattended.
+Only the line waits.
 
 Three consequences, each load-bearing.
 
@@ -213,10 +229,18 @@ work in this design begins.
 ## Public surface
 
 **A page per measure at a stable URL, `/measures/<slug>`.** It carries the
-question in one sentence, numerator and denominator in plain words, and the
-series as a small table and small chart. Breaks appear inline rather than
-footnoted. So does the restatement record, wherever a recomputed value differs
-from the published one. An index at `/measures` lists every measure with its
+question in one sentence, numerator and denominator in plain words, the declared
+prior, and the series as a table. **It also carries the SQL for every
+`definition_version`, verbatim.** That is not a developer convenience. The
+`definition_version` hash is computed from that text, so publishing it is what
+makes a break checkable by someone who is not us: a reader holding the archive
+can run the query and get the number back. Reproducibility is the authority
+claim, and a measure whose definition is only prose is not reproducible.
+
+A chart appears once a measure has four points. Two points plotted is a line
+drawn through a delta, which overstates what is known. Breaks and `unreviewed` gaps appear inline rather
+than footnoted, and so does the restatement record wherever a recomputed value
+differs from the published one. An index at `/measures` lists every measure with its
 latest value and direction.
 Findings link to the measures they narrate and measures link back.
 
@@ -231,7 +255,10 @@ a series to ask about rather than a snapshot to look up.
 
 **Citation is a mechanism, not a hope.** Being cited requires a stable
 identifier, a pinned version, and a form that pastes into a document. Each
-measure page carries a copy-paste citation pinned to a release, and the measure set is deposited to
+measure page carries a copy-paste citation pinned to a **deposit version, not a
+release**. A restatement changes an old release's recomputed value, so a
+citation naming only the release would quietly stop meaning what it meant. The
+measure set is deposited to
 Zenodo, which is free, is operated by CERN, and exposes an API the release
 workflow can call unattended. Deposits are versioned: a concept DOI identifies
 the series and a version DOI identifies one pipeline run. That distinction is
@@ -243,9 +270,23 @@ paper will cite a URL whatever we do. The deposit is worth it anyway for
 permanence, since it means the record survives ainpi.dev. That is the April
 preservation argument again.
 
-Dataset structured data extends to measures through the existing
-`SOURCE_CATALOG` path in `frontend/src/components/JsonLd.tsx`, so Google Dataset
-Search picks them up the way it already picks up findings. The rules there are unchanged and easy to get wrong. Descriptions run over 50
+**Dataset markup moves to measures rather than staying on findings.** Two pages
+carrying `Dataset` markup for the same quantity compete in search and in Dataset
+Search, and the finding is the worse of the two to promote because it describes
+one release. So a measure page becomes the `Dataset`, the finding narrating it
+becomes an `Article` pointing at it, and the canonical is explicit.
+`sitemap-findings.xml` exists so the Dataset-bearing subset reports separately
+from the ten thousand per-NPI URLs, so it covers measures once measures are the
+Dataset pages.
+
+The cost contract governing every other static route governs these.
+`/measures` and `/measures/<slug>` are `force-static` with
+`generateStaticParams` and no runtime BigQuery, and their `.nft.json` must not
+reference `public/api/v1/findings/**` or `public/api/v1/states/**`, or the
+lambda bundle takes the 345 MB tree with it.
+
+The rest of the structured data extends through the existing `SOURCE_CATALOG`
+path in `frontend/src/components/JsonLd.tsx`. The rules there are unchanged and easy to get wrong. Descriptions run over 50
 characters. `citation` points at `/methodology` and never holds the denominator.
 `isBasedOn` is overridden for any non-NDH source. Every nested `Dataset` node
 carries description, creator and license.
@@ -316,10 +357,15 @@ followed by an ordinary load.
 
 ## Open questions
 
-- Which six to eight measures ship first. The candidates with the cleanest
-  definitions and the most external interest are role coverage, endpoint
-  attribution, FHIR REST endpoint count, organization `partOf` resolvability,
-  practitioner phone reachability, and federal-exclusion overlap.
+- Which six measures ship first. The proposed set, chosen for break resistance
+  and for being computable against both archived releases: role coverage,
+  endpoint-to-organization attribution, FHIR REST endpoint count, organization
+  `partOf` resolvability, practitioner phone reachability, and SSN exposure
+  remediation. The last already carries a positive control, and its history runs
+  46 exposures in April to 41 in May to 0 in August. That is the clearest worked
+  example of something the archive can show and a single release cannot.
+  Federal-exclusion overlap is deliberately absent: it moves on the monthly OIG
+  file rather than on a release, per the axis question below.
 - **A measure needs a declared time axis and version one ducks the question.**
   NDH-derived quantities move per release. Exclusion-derived ones do not: the
   OIG LEIE file is monthly, SAM changes continuously, and the H26 payer probe
