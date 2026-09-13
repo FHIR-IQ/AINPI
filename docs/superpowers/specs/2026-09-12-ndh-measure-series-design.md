@@ -7,28 +7,21 @@
 
 ## Why this exists
 
-Measured on 2026-09-12. Search Console shows 99 clicks and 9,339 impressions
-over 28 days, arriving almost entirely on person-name NPI lookups. The site has
-22 email subscribers, none added in the last 30 days. It has 12 report
-downloads, none since 2026-06-02. Its one API key is deactivated, and its owner
-made the last call. External API and MCP traffic is zero.
+Every number this project publishes describes one CMS export. A finding is
+pre-registered, H-numbered, computed against a single release, and finished the
+day it ships. That shape cannot answer the question most consumers of directory
+data actually have, which is not "how good is the directory" but "is it getting
+better, and where".
 
-So the site is indexed, it is read, and nothing downstream of reading happens.
+It also cannot be answered by anyone else. **CMS serves only the current NDH
+export and deletes the previous one.** This repository holds 2026-04-09,
+2026-05-08 and 2026-08-20. Outside CMS, that archive is the only basis on which
+the question can be asked at all, and nothing in the current publication model
+uses it. `release-deltas.json` and `role-gap-delta.json` are the whole of it
+today, and neither has a page.
 
-The diagnosis is not distribution. It is that the unit of publication is a
-finding: pre-registered, H-numbered, computed against one CMS export, and
-finished the day it ships. A finding is a conclusion about a moment. It decays
-quietly, it gives no one a reason to return, and it is reproducible by anyone
-who downloads the same export.
-
-There is one thing about this project that is not reproducible by anyone.
-**CMS serves only the current NDH export and deletes the previous one.** This
-repository holds 2026-04-09, 2026-05-08 and 2026-08-20. Nobody outside CMS can
-answer whether the national provider directory is getting better or worse
-without this archive. That is an irreproducible primary source, and it is
-currently the least visible thing on the site.
-
-This design reorganises publication around that asset.
+This design reorganises publication around the archive: from a snapshot audit to
+a longitudinal record.
 
 ## What this is
 
@@ -79,9 +72,7 @@ Three consequences, each load-bearing.
 
 **A measure is never finished, so it never goes stale.** A new point arrives
 with each CMS release and requires no editorial work. The content engine is the
-CMS release calendar rather than anybody's availability. This is the entire
-answer to the binding constraint on this project, which is that there are no
-hours to spend on it.
+CMS release calendar rather than an editorial calendar.
 
 **`definition_version` and `breaks` are the product, not bookkeeping.** This
 repository has already shipped the wrong reading of the example above. The 9.1%
@@ -215,7 +206,7 @@ is comparable, rather than a gate deciding that it may exist. An unreviewed brea
 the correct failure direction, and it removes the last part of this design that
 needed anyone's attention.
 
-Three failure modes, all of which this project has already lived through in
+Two failure modes, both of which this project has already lived through in
 another form.
 
 **Silent zero.** A source changes, the query matches nothing, and the empty
@@ -231,32 +222,8 @@ The taxonomy system URL became a ValueSet canonical in a field FHIR defines as a
 CodeSystem canonical. The base rate is one per release. The pipeline should
 expect to fail on a new export and treat a clean run as the surprise.
 
-**Positioning drift.** A quarterly series of what did and did not improve is
-structurally a scorecard on a CMS product, and the working relationship with the
-NDH team and the community call is an asset worth more than any single finding.
-The discipline is to measure and let the number talk, never to editorialise
-about whether CMS is doing well. That posture is also what makes the series
-usable by CMS rather than defensive against it.
-
 Running cost: one to two dollars a month of BigQuery storage, a few dollars per
 release for the measure pass, no Databricks compute on this path.
-
-## What the existing surfaces become
-
-**The organization scoreboard is a measure with an entity dimension**, not a
-separate product. `endpoint-reach` computed per EHR vendor, per health system
-and per payer over the same release axis. An organization cites a score, or argues with it, because the score moved
-rather than because it exists. A vendor that improved between releases has a
-reason to point at the source. A one-off ranking gives it none. Entity-dimensioned measures cover organizations
-only, never individuals, which keeps the existing boundary intact.
-
-**The catalogue listings stop being a shelf.** The Databricks Marketplace listing currently offers a copy of a file CMS gives
-away. That is most of why it has no pull, independent of the visibility
-problem. The same listing offering
-the only multi-release archive with a versioned quality series over it is a
-different proposition, and it is what the listing copy should say. Same for
-HuggingFace and the MCP registries. That work is republishing against a
-different description once there is something behind it.
 
 ## Order of work
 
@@ -271,9 +238,8 @@ different description once there is something behind it.
    positive control and a pinned definition.
 5. Ship `/measures`, the JSON and CSV contract, the citation block and the
    Zenodo deposit.
-6. Re-cut the Databricks, HuggingFace and MCP registry listings against the
-   series.
-7. Add the entity dimension for the organization scoreboard.
+6. Add an optional entity dimension so a measure can be computed per
+   organization as well as nationally.
 
 ## Non-goals
 
@@ -281,9 +247,8 @@ different description once there is something behind it.
 - No new charting framework or dashboard.
 - No individual-level scoring beyond what `/npi/` already publishes. The four
   preconditions governing that surface are unchanged by this design.
-- No advisory offer, outreach sequence or anything else that consumes hours.
-  A design that needs meetings fails the constraint that produced it.
-- No editorial claim about CMS performance.
+- No editorial claim about whether CMS is performing well. Measures state what
+  moved; they do not grade the publisher.
 
 ## Open questions
 
