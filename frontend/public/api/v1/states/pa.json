@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-09-07T14:59:51+00:00",
+  "generated_at": "2026-09-14T15:53:30+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "d544b31",
+  "commit_sha": "c0d4592",
   "denominators": {
     "practitioner": 230837,
     "organization": 115583,
@@ -142,11 +142,11 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1003011644",
-      "display_name": "RICE, CHRISTAL",
+      "npi": "1447277215",
+      "display_name": "DEW, GREGORY",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003011644",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128a2)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1447277215",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
