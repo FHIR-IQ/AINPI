@@ -109,9 +109,10 @@ directory already described, taking the average covered clinician from two role
 records to nearly five. That is a real improvement and a different improvement
 from covering more people, and a headline record count cannot tell them apart.
 
-**One thing to know before you write a diff.** Practitioner and Organization ids
-embed the NPI and are stable across releases. Endpoint and Location ids are
-random UUIDs that CMS regenerates on every export, so joining those two on `_id`
+**One thing to know before you write a diff.** Practitioner ids embed the NPI and
+are stable across releases. Organization ids are stable for provider records,
+which are NPI-keyed; the tax-record half of that table carries a random UUID.
+Endpoint and Location ids are random UUIDs that CMS regenerates on every export, so joining those two on `_id`
 across releases reports 100% churn that did not happen. Join Endpoint on
 `_address` instead. The table comments carry the same warning, and the notebook
 demonstrates it.
