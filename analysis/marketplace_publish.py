@@ -256,6 +256,13 @@ def do_publish(private: bool = False) -> bool:
                 "listingType": spec.get("listing_type", "STANDARD"),
                 "setting": {"visibility": "PRIVATE" if private else spec["visibility"]},
                 "share": {"name": spec["share"], "type": "FULL"},
+                # Visibility is a setting on a draft. Publishing is a separate
+                # state, and the API defaults it to DRAFT while omitting the
+                # field from every response (proto zero value), so a listing
+                # created here with visibility=PUBLIC reads as public on the
+                # provider side and does not exist on the consumer side. That
+                # is what happened between 2026-09-06 and 2026-09-15.
+                "status": "PUBLISHED",
             },
             "detail": {
                 "description": spec["description"],
@@ -317,6 +324,7 @@ def verify_listing(lid: str, spec: dict) -> bool:
         ("assets", sorted(spec.get("assets") or []), sorted(detail.get("assets") or [])),
         ("docs", spec.get("documentation_link"), detail.get("documentation_link")),
         ("listingType", spec.get("listing_type", "STANDARD"), summary.get("listingType")),
+        ("status", "PUBLISHED", summary.get("status")),
     ):
         if sent is None:
             continue
@@ -329,8 +337,31 @@ def verify_listing(lid: str, spec: dict) -> bool:
         print(f"    MISMATCH notebook: expected 1 attached, found {len(notebooks)}."
               " The description tells the reader one is included.")
         ok = False
+    if ok and not consumer_can_see(lid, summary.get("provider_id")):
+        ok = False
     if ok:
         print(f"    verified: {lid}")
+    return ok
+
+
+def consumer_can_see(lid: str, pid: str | None) -> bool:
+    """The provider side reported this listing as PUBLIC for nine days while
+    no consumer could find it. The provider API answers "what did I set"; only
+    the consumer API answers "does it exist". Check the second."""
+    ok = True
+    if pid:
+        rc, out = sh(["databricks", "api", "get",
+                      f"/api/2.1/marketplace-consumer/providers/{pid}"])
+        if rc != 0 or "not found" in out.lower():
+            print(f"    CONSUMER: provider {pid} is not in the public directory")
+            ok = False
+    rc, out = sh(["databricks", "api", "get",
+                  f"/api/2.1/marketplace-consumer/listings/{lid}"])
+    if rc != 0 or "removed by the provider" in out.lower():
+        print(f"    CONSUMER: listing {lid} is not visible ({out.strip()[:120]})")
+        ok = False
+    if ok:
+        print(f"    consumer-visible: {lid}")
     return ok
 
 
@@ -342,8 +373,11 @@ def do_status() -> None:
     print(f"  {len(listings)} listing(s)")
     for l in listings:
         s = l.get("summary") or {}
-        print(f"    {s.get('name')}  visibility={(s.get('setting') or {}).get('visibility')}"
+        # An absent status is DRAFT: the API omits the enum at its zero value.
+        print(f"    {s.get('name')}  status={s.get('status') or 'DRAFT (absent)'}"
+              f"  visibility={(s.get('setting') or {}).get('visibility')}"
               f"  share={(s.get('share') or {}).get('name')}")
+        consumer_can_see(l.get("id"), s.get("provider_id"))
 
 
 def main() -> None:
