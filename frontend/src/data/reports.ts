@@ -33,6 +33,18 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'sep-2026-09-17-update',
+    version: '2026-09-17-update',
+    title:
+      '2026-09-17 update: every release of the directory since May, kept, free, on Databricks Marketplace',
+    description:
+      'CMS keeps only the newest copy of the national provider directory. We kept both releases so far, 54,162,643 rows across six tables, and put the archive on Databricks Marketplace for free, readable with or without a Databricks account. Plus what is new on the site: explore by state, county and ZIP; find listed care near you; a primer; related work; and a tool endpoint for AI agents.',
+    format: 'web',
+    url: '/reports/2026-09-17-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'aug-2026-08-21-update',
     version: '2026-08-21-update',
     title:
@@ -41,7 +53,6 @@ export const REPORTS: ReportOption[] = [
       'We reloaded all 45 GB of the 2026-08-20 release and re-ran every measurement. Where-they-work records went from 7.0M to 16.5M, and coverage moved only five points because most landed on clinicians who already had one. Every profession improved, most at the bottom of the table. A hierarchy field that resolved to nothing in May now resolves completely. 233 health plans and 27 insurers appeared. Endpoint attribution went backwards, 16.9% to 14.7%.',
     format: 'web',
     url: '/reports/2026-08-21-update',
-    badge: 'NEW',
     length: '~5 min read',
   },
   {
