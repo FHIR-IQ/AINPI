@@ -1,21 +1,29 @@
 # Welcome note for archive consumers
 
-Sent by hand to everyone who installs the Marketplace listing or asks for an
-open-sharing credential. One note per person, from gene@fhiriq.com, as a
-reply where there is a thread and a fresh message where there is not.
+**Marketplace installs are welcomed automatically (from 2026-09-19).**
+Databricks emails the provider contact on every install; a Gmail filter
+forwards that notice to `installs@ainpi.dev`, a Resend inbox in forwarding
+mode; Resend posts `email.received` to `/api/v1/marketplace-install`; the
+route verifies the signature, parses the notice, records the install once
+per address in `marketplace_installs`, and sends the short welcome from
+`reports@ainpi.dev` with reply-to gene@fhiriq.com. The copy lives in
+`frontend/src/lib/marketplace-install.ts` (`buildInstallWelcome`) and is
+pinned by `frontend/tests/lib/marketplace-install.test.ts`, which also
+asserts it never names another consumer or mentions pricing. Edit it there.
 
-It exists so every consumer gets the same explanation of what the archive is
-and why it exists, the two warnings that stop a first query going wrong, and
-the same set of links. It is not a sales message and must not become one:
-no tiers, no pricing, no offers, no follow-up cadence.
+The automated note is shorter than the one below: why they got it, what the
+archive is in two sentences, the two mistakes a first query makes, three
+links, and an opt-in subscribe line. It is sent once and says so. Nobody is
+added to the subscriber list by installing.
 
-Rules: numbers only from `frontend/public/api/v1/`; lint with
-`slop_lint.py` after any edit; never name another consumer; the recipient's
-company does not go into any public copy.
+The Gmail filter is the one manual piece: from the Databricks Marketplace
+notifier, subject contains "has installed", forward to the Resend
+forwarding address for the inbox (Gmail verifies a new forwarding address
+with a code, which lands in that inbox). Test by forwarding an old notice.
 
-Two variants. The first is for a Marketplace install, where the tables are
-already in the consumer's catalog. The second is for an open-sharing request,
-where a credential link goes with it.
+What follows is the longer hand-sent version, still used for open-sharing
+credential requests (Variant B), which carry a one-time activation link and
+cannot be automated.
 
 ---
 

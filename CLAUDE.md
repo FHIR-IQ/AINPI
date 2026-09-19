@@ -165,6 +165,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 /api/v1/subscribe            POST — Email signup. Fires sendSubscriptionAlert() to ADMIN_EMAIL.
 /api/v1/download-report      POST — Report-download capture + redirect. Fires sendDownloadAlert().
 /api/v1/subscribers/count    GET  — Public subscriber count for the Footer / hero ticker
+/api/v1/marketplace-install  POST — Resend `email.received` webhook for installs@ainpi.dev. Parses a forwarded Databricks Marketplace install notice, records it once per address, sends the welcome. Svix-signed; RESEND_WEBHOOK_SECRET.
 /api/v1/admin/weekly-report  GET  — Cron-only digest. Authorization: Bearer ${CRON_SECRET}. Fetches Vercel Analytics 7-day traffic + subscriber/download stats.
 
 /api/auth/login              POST — JWT login
@@ -611,6 +612,7 @@ AI_PROVIDER                  anthropic | openai | perplexity
 # Email + admin notifications (Resend)
 RESEND_API_KEY               sk_xxx — required for subscribe welcome, download thanks, admin alerts, weekly digest
 RESEND_FROM_ADDRESS          'AINPI <reports@ainpi.dev>' (ainpi.dev domain verified on Resend; ainpi.com is NOT)
+RESEND_WEBHOOK_SECRET        whsec_… from the Resend webhook for /api/v1/marketplace-install; verified with an HMAC in src/lib/resend-webhook.ts, no svix dependency
 ADMIN_EMAIL                  gene@fhiriq.com — where admin alerts + weekly digest land
 CRON_SECRET                  Shared secret Vercel Cron injects as Bearer auth for /api/v1/admin/weekly-report
 

@@ -397,6 +397,28 @@ model HealthcareServiceSurveyResponse {
 
 // Email capture gating the downloadable white paper at /download.
 // Captures role/org context so we understand who's using the research.
+// One row per Databricks Marketplace install of the release archive, keyed
+// on the installer's email so the welcome goes out once. Populated by
+// /api/v1/marketplace-install from the notification Databricks sends the
+// provider contact; there is no installations API on this account. Names and
+// organizations here are for our own follow-up only (privacy policy) and
+// never appear in public copy.
+model MarketplaceInstall {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  installedBy       String    @map("installed_by")
+  company           String?
+  listing           String
+  sharingIdentifier String?   @map("sharing_identifier")
+  installedOn       String?   @map("installed_on")
+  receivedEmailId   String?   @map("received_email_id")
+  welcomedAt        DateTime? @map("welcomed_at")
+  createdAt         DateTime  @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@map("marketplace_installs")
+}
+
 model ReportDownload {
   id            String   @id @default(uuid())
   email         String

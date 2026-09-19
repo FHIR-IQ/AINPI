@@ -292,3 +292,38 @@ export async function sendDownloadAlert(
 
   await sendOnce({ subject, text, html, tag: 'download' });
 }
+
+export interface InstallAlertArgs {
+  email: string;
+  installedBy: string;
+  company: string | null;
+  sharingIdentifier: string | null;
+  welcomed: boolean;
+  /** Set when the notice could not be parsed; the raw subject for triage. */
+  parseFailureSubject?: string;
+}
+
+/** Fires from /api/v1/marketplace-install on every install notice. */
+export async function sendInstallAlert(args: InstallAlertArgs): Promise<void> {
+  if (args.parseFailureSubject) {
+    const subject = `[AINPI] Marketplace install notice could not be parsed`;
+    const text = `A message reached installs@ainpi.dev that looked like an install notice but did not parse.\nSubject: ${args.parseFailureSubject}\nNo welcome was sent. Check the Resend inbox.`;
+    await sendOnce({ subject, text, html: `<p>${esc(text).replace(/\n/g, '<br>')}</p>`, tag: 'install-parse' });
+    return;
+  }
+  const subject = `[AINPI] Marketplace install: ${args.installedBy}${args.company ? ` (${args.company})` : ''}`;
+  const lines = [
+    `Installed by: ${args.installedBy}`,
+    `Email:        ${args.email}`,
+    `Company:      ${args.company ?? 'not specified'}`,
+    `Sharing id:   ${args.sharingIdentifier ?? 'unknown'}`,
+    `Welcome:      ${args.welcomed ? 'sent' : 'not sent (already welcomed)'}`,
+  ];
+  await sendOnce({
+    subject,
+    text: lines.join('\n'),
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;">${esc(lines.join('\n'))}</pre>`,
+    tag: 'install',
+  });
+}
+
