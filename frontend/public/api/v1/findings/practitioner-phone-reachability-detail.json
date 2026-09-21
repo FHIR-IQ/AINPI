@@ -1,8 +1,8 @@
 {
   "slug": "practitioner-phone-reachability",
   "release_date": "2026-08-20",
-  "generated_at": "2026-09-14T16:15:50+00:00",
-  "commit_sha": "c0d4592",
+  "generated_at": "2026-09-21T16:12:10+00:00",
+  "commit_sha": "7fa80d8",
   "denominator": 7373232,
   "per_path": {
     "practitioner_telecom_phone": 7371292,

@@ -1,34 +1,74 @@
 {
   "samples": [
     {
-      "npi": "1417259003",
-      "display_name": "ARMWOOD, KATERA",
-      "ndh_state": "",
-      "leie_state": "FL",
+      "npi": "1821139635",
+      "display_name": "PLAZA, YVETTE",
+      "ndh_state": "MO",
+      "leie_state": "MO",
       "exclusion_type": "1128a1",
-      "exclusion_date": "20220720",
+      "exclusion_date": "20250120",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417259003"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1821139635"
     },
     {
-      "npi": "1689742397",
-      "display_name": "DE LA CRUZ, FANNY",
+      "npi": "1578130340",
+      "display_name": "LOWE, ABDOULIE",
+      "ndh_state": "",
+      "leie_state": "AK",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20250720",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1578130340"
+    },
+    {
+      "npi": "1700311297",
+      "display_name": "IBRAHIM, ANAB",
+      "ndh_state": "",
+      "leie_state": "MN",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20230119",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700311297"
+    },
+    {
+      "npi": "1700227238",
+      "display_name": "BLACK, REGINA",
       "ndh_state": "MI",
       "leie_state": "WV",
       "exclusion_type": "1128a1",
-      "exclusion_date": "20170420",
+      "exclusion_date": "20221120",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1689742397"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700227238"
     },
     {
-      "npi": "1659572212",
-      "display_name": "JACKSON, PAULETTE",
-      "ndh_state": "NC",
-      "leie_state": "KY",
-      "exclusion_type": "1128a1",
-      "exclusion_date": "20201119",
+      "npi": "1982913216",
+      "display_name": "POULIN, DONNA",
+      "ndh_state": "",
+      "leie_state": "ME",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20141020",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1659572212"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982913216"
+    },
+    {
+      "npi": "1992019913",
+      "display_name": "OLDHAM, BARBARA",
+      "ndh_state": "",
+      "leie_state": "NE",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20251020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992019913"
+    },
+    {
+      "npi": "1982981338",
+      "display_name": "SELCOVA, OLGA",
+      "ndh_state": "PA",
+      "leie_state": "PA",
+      "exclusion_type": "1128a3",
+      "exclusion_date": "20230518",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1982981338"
     },
     {
       "npi": "1366592701",
@@ -51,54 +91,14 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1366468050"
     },
     {
-      "npi": "1710968235",
-      "display_name": "MELAMED, HOOTAN",
+      "npi": "1114517752",
+      "display_name": "CRUSE, PRECIOUS",
       "ndh_state": "",
-      "leie_state": "CA",
-      "exclusion_type": "1128a3",
-      "exclusion_date": "20220519",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710968235"
-    },
-    {
-      "npi": "1710925656",
-      "display_name": "VERA-MENDEZ, NOEL",
-      "ndh_state": "",
-      "leie_state": "PR",
+      "leie_state": "TX",
       "exclusion_type": "1128a1",
-      "exclusion_date": "20121018",
+      "exclusion_date": "20260618",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710925656"
-    },
-    {
-      "npi": "1710961081",
-      "display_name": "IBARRA PEROCIE, P",
-      "ndh_state": "PR",
-      "leie_state": "AR",
-      "exclusion_type": "1128a2",
-      "exclusion_date": "20220420",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710961081"
-    },
-    {
-      "npi": "1710928239",
-      "display_name": "WAGERS, DAVID",
-      "ndh_state": "PA",
-      "leie_state": "PA",
-      "exclusion_type": "1128a4",
-      "exclusion_date": "20150920",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710928239"
-    },
-    {
-      "npi": "1710926480",
-      "display_name": "HARVEY, GREGORY",
-      "ndh_state": "PA",
-      "leie_state": "PA",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20251020",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710926480"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114517752"
     }
   ],
   "state_breakdown": [
