@@ -34,6 +34,10 @@ Run:
     python analysis/databricks_publish.py --share       # add tables to share
     python analysis/databricks_publish.py --status
 
+    # One table only. --table scopes --upload, --load and --share; with --load
+    # and no --release it runs CREATE OR REPLACE on that table alone.
+    python analysis/databricks_publish.py --upload --load --share --table org_endpoint
+
 Requires the `databricks` CLI authenticated (`databricks auth login`).
 """
 from __future__ import annotations
@@ -67,6 +71,19 @@ TABLES = [
     "location",
     "endpoint",
 ]
+
+# Curated tables derived from published findings rather than exported from the
+# NDH. Built by analysis/org_endpoint_table.py into analysis/data/org-endpoint/
+# <release>/, not into PARQUET_DIR. Their parquet already carries release_date,
+# so the loaders below do not append it a second time.
+#
+# The per-organization summary is a second small table, not a view. A view
+# cannot go through the parquet upload/load path, and a view shared to an open
+# recipient is computed on this workspace's compute each time it is read, so
+# every consumer query would bill here. A table costs one load per release.
+DERIVED_DIR = ROOT / "analysis" / "data" / "org-endpoint"
+DERIVED_TABLES = ["org_endpoint", "org_endpoint_summary"]
+ALL_TABLES = TABLES + DERIVED_TABLES
 
 # Cross-release ID stability, measured across 2026-04-09 and 2026-05-08 rather
 # than assumed. This is the first thing a consumer of a multi-release archive
@@ -114,6 +131,34 @@ TABLE_COMMENTS = {
     "location": "NDH Location. Carries the only geography in the directory, as position.latitude/longitude." + ID_NOTE_LOCATION,
     "endpoint": "NDH Endpoint. Mostly Direct Trust messaging addresses; filter connectionType.code = 'hl7-fhir-rest' for callable APIs." + ID_NOTE_ENDPOINT,
     "organization_affiliation": "NDH OrganizationAffiliation. Carries no relationship code, so an edge does not say what it means.",
+    # No apostrophes in these two except the SQL string literals in the sample
+    # queries, which the COMMENT statement escapes like the others.
+    "org_endpoint": (
+        "Curated by AINPI, not a CMS file. Which FHIR endpoint belongs to which "
+        "organization NPI, and which EHR vendor serves it. One row per base_url, "
+        "org_npi and source. Two sources: source = ndh is the managingOrganization "
+        "the NDH Endpoint itself carries, resolved to an Organization NPI. "
+        "source = vendor_file is attribution taken from endpoint files that EHR "
+        "vendors publish; it is not CMS data and CMS has not confirmed it. A URL "
+        "both sources name appears once per source, so a disagreement stays "
+        "visible. base_url is normalized: scheme and host lower-cased, trailing "
+        "slash removed, path case kept. org_npi is NULL where the vendor file "
+        "names an organization without an NPI, and some vendor-file NPIs fail the "
+        "NPI check digit; they are kept as published and counted by the builder. "
+        "org_state is NDH only. ndh_has_owner is NULL where the URL is not in the "
+        "NDH. Sample: SELECT base_url, vendor, source FROM org_endpoint WHERE "
+        "org_npi = '1234567893' AND release_date = '2026-08-20'. "
+        "Built by analysis/org_endpoint_table.py."
+    ),
+    "org_endpoint_summary": (
+        "Curated by AINPI, not a CMS file. One row per org_npi from org_endpoint: "
+        "org_name (the NDH name where the NDH has one), n_endpoints (distinct "
+        "base_url across both sources), vendors and sources as sorted arrays. "
+        "Rows of org_endpoint with no NPI are not in this table. Sample: SELECT * "
+        "FROM org_endpoint_summary WHERE array_contains(sources, 'vendor_file') "
+        "AND NOT array_contains(sources, 'ndh') AND release_date = '2026-08-20' "
+        "lists organizations only the vendor files name."
+    ),
 }
 
 
@@ -156,17 +201,37 @@ def sql(statement: str, poll_seconds: int = 1800) -> dict:
     return r
 
 
+def local_parquet(release: str, table: str) -> pathlib.Path:
+    """Where the parquet for one table and release sits on disk."""
+    if table in DERIVED_TABLES:
+        return DERIVED_DIR / release / f"{table}.parquet"
+    return PARQUET_DIR / release / f"{table}.parquet"
+
+
+def select_from_parquet(release: str, table: str) -> str:
+    """SELECT for one release, adding release_date only if the file lacks it.
+
+    The six NDH exports carry no release column and get it from the literal.
+    The derived tables carry it already, and appending a second one fails with
+    DELTA_DUPLICATE_COLUMNS_FOUND.
+    """
+    src = f"parquet.`{volume_path(release, table)}`"
+    if "release_date" in _parquet_columns(local_parquet(release, table)):
+        return f"SELECT * FROM {src}"
+    return f"SELECT *, '{release}' AS release_date FROM {src}"
+
+
 def volume_path(release: str, table: str) -> str:
     return f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}/{table}.parquet"
 
 
 def available_releases() -> list[str]:
-    if not PARQUET_DIR.exists():
-        return []
-    return [
-        d.name for d in sorted(PARQUET_DIR.iterdir())
-        if d.is_dir() and d.name in KNOWN_RELEASES
-    ]
+    found: set[str] = set()
+    for base in (PARQUET_DIR, DERIVED_DIR):
+        if base.exists():
+            found |= {d.name for d in base.iterdir()
+                      if d.is_dir() and d.name in KNOWN_RELEASES}
+    return sorted(found)
 
 
 def _remote_size(path: str) -> int | None:
@@ -188,7 +253,7 @@ def _remote_size(path: str) -> int | None:
     return None
 
 
-def do_upload(only_release: str | None = None) -> None:
+def do_upload(only_release: str | None = None, tables: list[str] | None = None) -> None:
     """Upload parquet to the staging volume, skipping what is already there.
 
     Byte-for-byte size match is the skip test. Re-uploading a release that has
@@ -201,8 +266,8 @@ def do_upload(only_release: str | None = None) -> None:
             continue
         dest_dir = f"dbfs:/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}"
         sh(["databricks", "fs", "mkdir", dest_dir], check=False)
-        for table in TABLES:
-            src = PARQUET_DIR / release / f"{table}.parquet"
+        for table in tables or ALL_TABLES:
+            src = local_parquet(release, table)
             if not src.exists():
                 print(f"  {release}/{table}: no parquet, skipped")
                 continue
@@ -229,7 +294,7 @@ def _parquet_columns(path: pathlib.Path) -> list[str]:
     return list(pq.ParquetFile(path).schema_arrow.names)
 
 
-def load_one_release(release: str) -> bool:
+def load_one_release(release: str, tables: list[str] | None = None) -> bool:
     """Add or replace a single release without disturbing the others.
 
     DELETE the matching partition then INSERT, which is idempotent: re-running
@@ -246,8 +311,8 @@ def load_one_release(release: str) -> bool:
     Returns True only if every table with parquet on disk loaded.
     """
     ok = True
-    for table in TABLES:
-        src = PARQUET_DIR / release / f"{table}.parquet"
+    for table in tables or ALL_TABLES:
+        src = local_parquet(release, table)
         if not src.exists():
             print(f"  {release}/{table}: no parquet, skipped")
             continue
@@ -258,7 +323,9 @@ def load_one_release(release: str) -> bool:
             print(f"  {fq}: could not read target schema, skipped")
             ok = False
             continue
-        source = _parquet_columns(src) + ["release_date"]
+        source = _parquet_columns(src)
+        if "release_date" not in source:
+            source = source + ["release_date"]
         if source != target:
             missing = [c for c in target if c not in source]
             extra = [c for c in source if c not in target]
@@ -276,10 +343,7 @@ def load_one_release(release: str) -> bool:
             ok = False
             continue
         print(f"  {fq} += {release}", flush=True)
-        r = sql(
-            f"INSERT INTO {fq} SELECT *, '{release}' AS release_date "
-            f"FROM parquet.`{volume_path(release, table)}`"
-        )
+        r = sql(f"INSERT INTO {fq} {select_from_parquet(release, table)}")
         if r.get("status", {}).get("state") != "SUCCEEDED":
             print(f"    FAILED {json.dumps(r.get('status'))[:300]}")
             ok = False
@@ -287,7 +351,7 @@ def load_one_release(release: str) -> bool:
     return ok
 
 
-def do_load(only: list[str] | None = None) -> None:
+def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> None:
     """Rebuild the tables from parquet.
 
     `only` restricts and orders the releases. Without it every release found on
@@ -297,8 +361,8 @@ def do_load(only: list[str] | None = None) -> None:
     releases = [r for r in available_releases() if not only or r in only]
     if only:
         releases = [r for r in only if r in releases]
-    for table in TABLES:
-        present = [r for r in releases if (PARQUET_DIR / r / f"{table}.parquet").exists()]
+    for table in tables or ALL_TABLES:
+        present = [r for r in releases if local_parquet(r, table).exists()]
         if not present:
             continue
         fq = f"{CATALOG}.{SCHEMA}.{table}"
@@ -312,8 +376,7 @@ def do_load(only: list[str] | None = None) -> None:
         r = sql(
             f"CREATE OR REPLACE TABLE {fq} USING DELTA PARTITIONED BY (release_date) "
             f"COMMENT '{comment} Partitioned by NDH release; CMS serves only the latest.' "
-            f"AS SELECT *, '{first}' AS release_date "
-            f"FROM parquet.`{volume_path(first, table)}`"
+            f"AS {select_from_parquet(first, table)}"
         )
         state = r.get("status", {}).get("state")
         if state != "SUCCEEDED":
@@ -322,19 +385,16 @@ def do_load(only: list[str] | None = None) -> None:
 
         for rel in rest:
             print(f"  {fq} += {rel}", flush=True)
-            r = sql(
-                f"INSERT INTO {fq} "
-                f"SELECT *, '{rel}' AS release_date "
-                f"FROM parquet.`{volume_path(rel, table)}`"
-            )
+            r = sql(f"INSERT INTO {fq} {select_from_parquet(rel, table)}")
             if r.get("status", {}).get("state") != "SUCCEEDED":
                 print(f"    FAILED: {json.dumps(r.get('status'))[:300]}")
     print("load complete")
 
 
-def do_share() -> None:
+def do_share(tables: list[str] | None = None) -> None:
+    tables = tables or ALL_TABLES
     shared_now = shared_object_names()
-    for table in TABLES:
+    for table in tables:
         fq = f"{CATALOG}.{SCHEMA}.{table}"
         # Re-apply the comment every run. CREATE TABLE set it once; editing the
         # dict above would otherwise never reach the published table, and the
@@ -377,7 +437,7 @@ def do_share() -> None:
         print(f"  {fq}: {action.lower()}d" if ok else f"  {fq}: {action} FAILED")
         if not ok:
             print(f"    {r.stderr.strip()[:240]}")
-    verify_share_comments()
+    verify_share_comments(tables)
     print("share updated")
 
 
@@ -392,7 +452,7 @@ def shared_object_names() -> set[str]:
         return set()
 
 
-def verify_share_comments() -> bool:
+def verify_share_comments(tables: list[str] | None = None) -> bool:
     """Read the share back and confirm each object carries the current comment.
 
     Writing the comment and checking the table is not enough: the share keeps a
@@ -405,8 +465,9 @@ def verify_share_comments() -> bool:
         return False
     live = {o["name"]: o.get("comment", "")
             for o in json.loads(r.stdout or "{}").get("objects", [])}
+    tables = tables or ALL_TABLES
     ok = True
-    for table in TABLES:
+    for table in tables:
         fq = f"{CATALOG}.{SCHEMA}.{table}"
         want = TABLE_COMMENTS.get(table, "")
         if live.get(fq) != want:
@@ -414,7 +475,7 @@ def verify_share_comments() -> bool:
             ok = False
     if ok:
         print("  share comments match TABLE_COMMENTS on all "
-              f"{len(TABLES)} objects")
+              f"{len(tables)} objects")
     return ok
 
 
@@ -440,26 +501,31 @@ def main() -> None:
     ap.add_argument("--load", action="store_true")
     ap.add_argument("--share", action="store_true")
     ap.add_argument("--status", action="store_true")
+    ap.add_argument("--table", choices=ALL_TABLES,
+                    help="limit --upload/--load/--share to one table. Without it "
+                         "every table is touched, and --load with no --release "
+                         "runs CREATE OR REPLACE on all of them.")
     a = ap.parse_args()
-    if not any(vars(a).values()):
+    if not (a.upload or a.load or a.share or a.status):
         ap.print_help()
         return
+    tables = [a.table] if a.table else None
     if a.upload:
-        do_upload(a.release)
+        do_upload(a.release, tables)
     if a.load:
         wanted = [x.strip() for x in a.release.split(",")] if a.release else None
         if wanted and len(wanted) > 1:
-            do_load(wanted)
+            do_load(wanted, tables)
         elif a.release:
             # Exit non-zero on a partial load. The previous version printed
             # FAILED for four of six tables and still exited 0, which is
             # indistinguishable from success to anything reading the code.
-            if not load_one_release(a.release):
+            if not load_one_release(a.release, tables):
                 sys.exit(1)
         else:
-            do_load()
+            do_load(tables=tables)
     if a.share:
-        do_share()
+        do_share(tables)
     if a.status:
         do_status()
 

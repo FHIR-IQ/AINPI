@@ -101,6 +101,12 @@ JSON parsing. Both releases are extracted by the same code, so comparing them is
 not comparing two parsers. Each table is partitioned by `release_date`, which
 makes a cross-release comparison a `WHERE` clause rather than a download.
 
+**Organization to endpoint.** Two further tables, org_endpoint and
+org_endpoint_summary, answer which FHIR endpoint belongs to which
+organization NPI and which EHR vendor serves it. Each row is tagged with its
+source: the directory itself, or the endpoint files EHR vendors publish, which
+are not CMS data.
+
 **What it is for.** Questions that need two releases at once. One worked
 example, included as a notebook: between these two releases CMS added about
 seven million PractitionerRole records, a 173% rise. The share of clinicians who
