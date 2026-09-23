@@ -13,26 +13,26 @@ const AZURE = `---------- Forwarded message ---------
 From: Databricks Marketplace <no-reply@databricks.com>
 Subject: New installation of your listing
 
-Vivek Neshti (US) has installed CMS National Provider Directory: Release Archive in Azure Databricks
+Alex Rivera (US) has installed CMS National Provider Directory: Release Archive in Azure Databricks
 Here are the installation details:
 
 Listing:\tCMS National Provider Directory: Release Archive
-Installed by:\tVivek Neshti (US)
+Installed by:\tAlex Rivera (US)
 Installed on:\tSeptember 17, 2026
 Company:\tNot specified
-Email:\tvivek.neshti@pwc.com
+Email:\talex.rivera@example.com
 Sharing identifier:\tazure:westus:a5b321b7-b747-4f5f-8eb7-75ad4a4c7d17
 `;
 
-const AWS_ADMIN = `Ronnie Miller has installed "CMS National Provider Directory: Release Archive".
+const AWS_ADMIN = `Sam Lee has installed "CMS National Provider Directory: Release Archive".
 Installation details:
 
 Listing\tCMS National Provider Directory: Release Archive
 Provider\tFHIR IQ
-Installed by\tRonnie Miller
+Installed by\tSam Lee
 Installed on\tSeptember 17, 2026
 Company\tNot specified
-Email\tdatabricks-admin@medscout.io
+Email\tdatabricks-admin@example.net
 Sharing identifier\taws
 `;
 
@@ -49,18 +49,18 @@ describe('parseInstallNotice', () => {
     const n = parseInstallNotice(AZURE, null);
     expect(n).toEqual({
       listing: 'CMS National Provider Directory: Release Archive',
-      installedBy: 'Vivek Neshti (US)',
+      installedBy: 'Alex Rivera (US)',
       installedOn: 'September 17, 2026',
       company: null,
-      email: 'vivek.neshti@pwc.com',
+      email: 'alex.rivera@example.com',
       sharingIdentifier: 'azure:westus:a5b321b7-b747-4f5f-8eb7-75ad4a4c7d17',
     });
   });
 
   it('parses the tab-only format and ignores the Provider line', () => {
     const n = parseInstallNotice(AWS_ADMIN, null);
-    expect(n?.installedBy).toBe('Ronnie Miller');
-    expect(n?.email).toBe('databricks-admin@medscout.io');
+    expect(n?.installedBy).toBe('Sam Lee');
+    expect(n?.email).toBe('databricks-admin@example.net');
     expect(n?.sharingIdentifier).toBe('aws');
     expect(n?.company).toBeNull();
   });
@@ -73,8 +73,8 @@ describe('parseInstallNotice', () => {
   });
 
   it('lower-cases the email and treats "Not specified" as null', () => {
-    const n = parseInstallNotice(AZURE.replace('vivek.neshti@pwc.com', 'Vivek.Neshti@PwC.com'), null);
-    expect(n?.email).toBe('vivek.neshti@pwc.com');
+    const n = parseInstallNotice(AZURE.replace('alex.rivera@example.com', 'Alex.Rivera@Example.com'), null);
+    expect(n?.email).toBe('alex.rivera@example.com');
     expect(n?.company).toBeNull();
   });
 
@@ -89,8 +89,8 @@ describe('parseInstallNotice', () => {
 
 describe('firstName', () => {
   it('drops parentheticals and takes the first token', () => {
-    expect(firstName('Vivek Neshti (US)')).toBe('Vivek');
-    expect(firstName('Ronnie Miller')).toBe('Ronnie');
+    expect(firstName('Alex Rivera (US)')).toBe('Alex');
+    expect(firstName('Sam Lee')).toBe('Sam');
     expect(firstName('Jane Q. Analyst')).toBe('Jane');
   });
   it('falls back to "there" when there is nothing usable', () => {
@@ -103,9 +103,9 @@ describe('buildInstallWelcome', () => {
   const n = parseInstallNotice(AZURE, null)!;
   it('addresses the reader by first name and says why they got it', () => {
     const { text, html, subject } = buildInstallWelcome(n);
-    expect(text.startsWith('Hi Vivek,')).toBe(true);
+    expect(text.startsWith('Hi Alex,')).toBe(true);
     expect(text).toContain('You installed');
-    expect(html).toContain('Hi Vivek,');
+    expect(html).toContain('Hi Alex,');
     expect(subject.length).toBeLessThan(80);
   });
   it('carries the two warnings, the three links and an opt-in subscribe', () => {
@@ -119,7 +119,7 @@ describe('buildInstallWelcome', () => {
   });
   it('never mentions another consumer or pricing', () => {
     const { text, html } = buildInstallWelcome(n);
-    for (const bad of ['Datavant', 'PwC', 'MedScout', 'pricing', 'tier', '$']) {
+    for (const bad of ['Acme Health', 'ExampleCo', 'pricing', 'tier', '$']) {
       expect(text).not.toContain(bad);
       expect(html).not.toContain(bad);
     }
