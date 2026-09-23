@@ -14,6 +14,10 @@
  * Marketplace events and never appear in the table. Their welcome stays
  * manual. See src/lib/marketplace-install-poll.ts for the rest.
  *
+ * Concurrency: the welcome is claimed before it is sent, with one
+ * conditional write on welcomedAt shared with the webhook
+ * (src/lib/marketplace-install-claim.ts), so overlapping runs cannot both send.
+ *
  * Behaviour:
  *   - Auth: `Authorization: Bearer ${CRON_SECRET}`, as weekly-report.
  *   - Databricks env missing: 200 {skipped:"not configured"}, nothing sent.
@@ -32,6 +36,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 import { buildInstallWelcome } from '@/lib/marketplace-install';
+import { prismaWelcomeClaim } from '@/lib/marketplace-install-claim';
 import { sendInstallAlert, sendInstallPollAlert } from '@/lib/admin-email';
 import {
   DEFAULT_SEND_CAP,
@@ -65,6 +70,7 @@ export async function GET(req: NextRequest) {
   if (!apiKey) return NextResponse.json({ ok: true, skipped: 'RESEND_API_KEY unset' });
   const resend = new Resend(apiKey);
 
+  const welcomeClaim = prismaWelcomeClaim(prisma);
   const result = await pollMarketplaceInstalls({
     cap: DEFAULT_SEND_CAP,
     fetchRows: () => runStatement(cfg, buildInstallQuery(cfg.lookbackDays)),
@@ -87,12 +93,8 @@ export async function GET(req: NextRequest) {
         },
       });
     },
-    markWelcomed: async (email) => {
-      await prisma.marketplaceInstall.update({
-        where: { email },
-        data: { welcomedAt: new Date() },
-      });
-    },
+    claim: welcomeClaim.claim,
+    release: welcomeClaim.release,
     sendWelcome: async (n) => {
       const w = buildInstallWelcome(n);
       try {

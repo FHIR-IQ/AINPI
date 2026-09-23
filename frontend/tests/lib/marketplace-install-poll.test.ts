@@ -91,6 +91,14 @@ describe('buildInstallQuery', () => {
     expect(q.statement).toContain(':lookback_days');
     expect(q.parameters).toEqual([{ name: 'lookback_days', value: '30', type: 'INT' }]);
   });
+
+  it('aggregates to one row per address so repeat events cannot crowd out new installers', () => {
+    const q = buildInstallQuery(30).statement;
+    expect(q).toMatch(/GROUP BY\s+lower\(trim\(consumer_email\)\)/i);
+    expect(q).toMatch(/MIN\(event_time\)\s+AS\s+first_seen/i);
+    expect(q).toMatch(/ORDER BY\s+first_seen/i);
+    expect(q).toMatch(/min_by\(consumer_name,\s*event_time\)/i);
+  });
 });
 
 describe('parseStatementRows', () => {
@@ -125,6 +133,22 @@ describe('toInstallEvents', () => {
     expect(out).toHaveLength(1);
     expect(out[0].email).toBe('ada@example.com');
     expect(out[0].name).toBe('Ada Example');
+  });
+
+  it('reads first_seen from the aggregated query as the event time', () => {
+    const agg = {
+      schema: {
+        columns: [
+          { name: 'consumer_email', position: 0 },
+          { name: 'event_type', position: 1 },
+          { name: 'first_seen', position: 2 },
+        ],
+      },
+    };
+    const out = toInstallEvents(
+      parseStatementRows(agg, [['ada@example.com', 'GET_DATA', '2026-09-18T00:00:00.000Z']]),
+    );
+    expect(out[0].eventTime).toBe('2026-09-18T00:00:00.000Z');
   });
 });
 
@@ -294,6 +318,8 @@ describe('runStatement', () => {
 
 // --- Orchestration ---------------------------------------------------------
 
+const CLAIMED_AT = new Date('2026-09-23T14:17:00.000Z');
+
 function makeDeps(over: Partial<PollDeps> = {}) {
   const existing = new Map<string, { welcomedAt: Date | null; company: string | null }>();
   const deps = {
@@ -308,7 +334,8 @@ function makeDeps(over: Partial<PollDeps> = {}) {
       emails.filter((e) => existing.has(e)).map((e) => ({ email: e, ...existing.get(e)! })),
     ),
     upsertInstall: vi.fn(async () => {}),
-    markWelcomed: vi.fn(async () => {}),
+    claim: vi.fn(async (_email: string): Promise<Date | null> => CLAIMED_AT),
+    release: vi.fn(async (_email: string, _at: Date) => {}),
     sendWelcome: vi.fn(async () => ({ ok: true as const })),
     alertInstall: vi.fn(async () => {}),
     alertFailure: vi.fn(async () => {}),
@@ -324,7 +351,8 @@ describe('pollMarketplaceInstalls', () => {
     const r = await pollMarketplaceInstalls(deps);
     expect(r).toMatchObject({ ok: true, welcomed: ['ada@example.com', 'bob@example.com'] });
     expect(deps.sendWelcome).toHaveBeenCalledTimes(2);
-    expect(deps.markWelcomed).toHaveBeenCalledWith('ada@example.com');
+    expect(deps.claim).toHaveBeenCalledWith('ada@example.com');
+    expect(deps.release).not.toHaveBeenCalled();
     expect(deps.alertInstall).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'ada@example.com', welcomed: true }),
     );
@@ -361,7 +389,34 @@ describe('pollMarketplaceInstalls', () => {
     expect(deps.sendWelcome).not.toHaveBeenCalled();
   });
 
-  it('does not mark welcomed when the send fails, and continues with the rest', async () => {
+  it('upserts the row before claiming it, and claims before sending', async () => {
+    const order: string[] = [];
+    const { deps } = makeDeps({
+      upsertInstall: vi.fn(async (n) => void order.push(`upsert:${n.email}`)),
+      claim: vi.fn(async (e: string) => (order.push(`claim:${e}`), CLAIMED_AT)),
+      sendWelcome: vi.fn(async (n) => (order.push(`send:${n.email}`), { ok: true as const })),
+    });
+    await pollMarketplaceInstalls(deps);
+    expect(order.slice(0, 3)).toEqual([
+      'upsert:ada@example.com',
+      'claim:ada@example.com',
+      'send:ada@example.com',
+    ]);
+  });
+
+  it('sends nothing when another run claimed the address first', async () => {
+    const { deps } = makeDeps({
+      claim: vi.fn(async (e: string) => (e === 'ada@example.com' ? null : CLAIMED_AT)),
+    });
+    const r = await pollMarketplaceInstalls(deps);
+    expect(r).toMatchObject({ ok: true, welcomed: ['bob@example.com'], alreadyWelcomed: 1 });
+    expect(deps.sendWelcome).toHaveBeenCalledTimes(1);
+    expect(deps.alertInstall).not.toHaveBeenCalledWith(
+      expect.objectContaining({ email: 'ada@example.com' }),
+    );
+  });
+
+  it('releases the claim it set when the send fails, and continues with the rest', async () => {
     const { deps } = makeDeps({
       sendWelcome: vi
         .fn()
@@ -370,8 +425,9 @@ describe('pollMarketplaceInstalls', () => {
     });
     const r = await pollMarketplaceInstalls(deps);
     expect(r).toMatchObject({ ok: true, welcomed: ['bob@example.com'], failed: ['ada@example.com'] });
-    expect(deps.markWelcomed).toHaveBeenCalledTimes(1);
-    expect(deps.markWelcomed).toHaveBeenCalledWith('bob@example.com');
+    expect(deps.release).toHaveBeenCalledTimes(1);
+    expect(deps.release).toHaveBeenCalledWith('ada@example.com', CLAIMED_AT);
+    expect(deps.alertFailure).toHaveBeenCalledWith(expect.stringContaining('resend 500'));
   });
 
   it('alerts admin when the per-run cap is hit', async () => {

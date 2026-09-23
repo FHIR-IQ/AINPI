@@ -7,7 +7,10 @@
  * install once per address, and sends the welcome from reports@ainpi.dev.
  *
  * Idempotent on email: a second notice for the same address records nothing
- * new and sends nothing. A notice that does not parse sends nothing and
+ * new and sends nothing. The welcome is claimed before it is sent, with one
+ * conditional write on welcomedAt shared with the daily poll
+ * (src/lib/marketplace-install-claim.ts), so the webhook and the cron cannot
+ * both send to the same address. A notice that does not parse sends nothing and
  * alerts the admin, because a welcome to "Hi undefined" is worse than none.
  * Any non-install mail reaching the inbox is acknowledged and ignored.
  *
@@ -18,6 +21,7 @@ import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 import { verifyResendWebhook } from '@/lib/resend-webhook';
 import { buildInstallWelcome, parseInstallNotice } from '@/lib/marketplace-install';
+import { prismaWelcomeClaim, welcomeOnce } from '@/lib/marketplace-install-claim';
 import { sendInstallAlert } from '@/lib/admin-email';
 
 export const dynamic = 'force-dynamic';
@@ -74,15 +78,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, ignored: 'unparseable install notice' });
   }
 
-  const existing = await prisma.marketplaceInstall.findUnique({
-    where: { email: notice.email },
-    select: { welcomedAt: true },
-  });
-  if (existing?.welcomedAt) {
-    void sendInstallAlert({ ...notice, welcomed: false });
-    return NextResponse.json({ ok: true, ignored: 'already welcomed' });
-  }
-
+  // Row first (without welcomedAt) so the claim below has something to claim.
   await prisma.marketplaceInstall.upsert({
     where: { email: notice.email },
     update: { receivedEmailId: evt.data.email_id },
@@ -98,24 +94,31 @@ export async function POST(req: NextRequest) {
   });
 
   const welcome = buildInstallWelcome(notice);
-  const sent = await resend.emails.send({
-    from: FROM_ADDRESS,
-    to: notice.email,
-    replyTo: REPLY_TO,
-    subject: welcome.subject,
-    text: welcome.text,
-    html: welcome.html,
+  const outcome = await welcomeOnce(notice.email, {
+    ...prismaWelcomeClaim(prisma),
+    send: async () => {
+      const sent = await resend.emails.send({
+        from: FROM_ADDRESS,
+        to: notice.email,
+        replyTo: REPLY_TO,
+        subject: welcome.subject,
+        text: welcome.text,
+        html: welcome.html,
+      });
+      return sent.error ? { ok: false, error: sent.error.message } : { ok: true };
+    },
   });
-  if (sent.error) {
-    console.error('[marketplace-install] welcome failed:', sent.error.message);
+
+  if (outcome.status === 'already') {
+    void sendInstallAlert({ ...notice, welcomed: false });
+    return NextResponse.json({ ok: true, ignored: 'already welcomed' });
+  }
+  if (outcome.status === 'failed') {
+    console.error('[marketplace-install] welcome failed:', outcome.error);
     void sendInstallAlert({ ...notice, welcomed: false });
     return NextResponse.json({ error: 'welcome failed' }, { status: 502 });
   }
 
-  await prisma.marketplaceInstall.update({
-    where: { email: notice.email },
-    data: { welcomedAt: new Date() },
-  });
   void sendInstallAlert({ ...notice, welcomed: true });
   return NextResponse.json({ ok: true, welcomed: notice.email });
 }

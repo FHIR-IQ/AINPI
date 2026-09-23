@@ -18,18 +18,22 @@
  * *through the Marketplace listing* do appear, with
  * consumer_delta_sharing_recipient_type = OPEN and no cloud or region.
  *
- * Idempotency is `MarketplaceInstall.welcomedAt`, not the lookback window.
- * The window only bounds the scan, so a missed day is retried the next day.
+ * Idempotency is `MarketplaceInstall.welcomedAt`, claimed atomically before
+ * the send through the guard in marketplace-install-claim.ts, which the
+ * webhook route shares. The lookback window only bounds the scan, so a missed
+ * day is retried the next day.
  *
  * Everything here takes its I/O as injected functions so the route stays a
  * thin wiring layer and the logic is testable without module mocks.
  */
 import type { InstallNotice } from '@/lib/marketplace-install';
+import { welcomeOnce, type SendResult } from '@/lib/marketplace-install-claim';
 
 export const DEFAULT_LOOKBACK_DAYS = 30;
 export const MAX_LOOKBACK_DAYS = 90;
 export const DEFAULT_SEND_CAP = 20;
-const ROW_LIMIT = 500;
+/** Rows are one per distinct address after aggregation, so this is a cap on installers, not events. */
+const ROW_LIMIT = 5000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // ---------------------------------------------------------------------------
@@ -71,15 +75,25 @@ export interface StatementQuery {
 }
 
 export function buildInstallQuery(lookbackDays: number): StatementQuery {
+  // One row per address, aggregated in SQL, so an installer who re-mounts
+  // the share many times cannot push first-time installers past the LIMIT.
+  // min_by takes each attribute from that address's earliest event.
   const statement = `
-SELECT consumer_email, consumer_name, consumer_company, consumer_cloud,
-       consumer_region, consumer_delta_sharing_recipient_type, listing_name,
-       event_type, event_time
+SELECT lower(trim(consumer_email))                             AS consumer_email,
+       MIN(event_time)                                         AS first_seen,
+       min_by(consumer_name, event_time)                       AS consumer_name,
+       min_by(consumer_company, event_time)                    AS consumer_company,
+       min_by(consumer_cloud, event_time)                      AS consumer_cloud,
+       min_by(consumer_region, event_time)                     AS consumer_region,
+       min_by(consumer_delta_sharing_recipient_type, event_time) AS consumer_delta_sharing_recipient_type,
+       min_by(listing_name, event_time)                        AS listing_name,
+       'GET_DATA'                                              AS event_type
 FROM system.marketplace.listing_access_events
 WHERE event_type = 'GET_DATA'
   AND consumer_email IS NOT NULL
   AND event_date >= date_sub(current_date(), :lookback_days)
-ORDER BY event_time
+GROUP BY lower(trim(consumer_email))
+ORDER BY first_seen
 LIMIT ${ROW_LIMIT}`.trim();
   return {
     statement,
@@ -141,7 +155,7 @@ export function toInstallEvents(records: RowRecord[]): InstallEvent[] {
       region: clean(r.consumer_region),
       recipientType: clean(r.consumer_delta_sharing_recipient_type),
       listingName: clean(r.listing_name),
-      eventTime: clean(r.event_time),
+      eventTime: clean(r.first_seen) ?? clean(r.event_time),
     });
   }
   return out;
@@ -324,9 +338,12 @@ export interface ExistingInstall {
 export interface PollDeps {
   fetchRows: () => Promise<RowsResult>;
   findExisting: (emails: string[]) => Promise<ExistingInstall[]>;
+  /** Create or update the row WITHOUT touching welcomedAt; the claim needs a row to exist. */
   upsertInstall: (n: InstallNotice) => Promise<void>;
-  markWelcomed: (email: string) => Promise<void>;
-  sendWelcome: (n: InstallNotice) => Promise<{ ok: true } | { ok: false; error: string }>;
+  /** Atomic claim on welcomedAt (see marketplace-install-claim.ts). */
+  claim: (email: string) => Promise<Date | null>;
+  release: (email: string, at: Date) => Promise<void>;
+  sendWelcome: (n: InstallNotice) => Promise<SendResult>;
   alertInstall: (n: InstallNotice & { welcomed: boolean }) => Promise<void>;
   alertFailure: (message: string) => Promise<void>;
   cap: number;
@@ -366,20 +383,28 @@ export async function pollMarketplaceInstalls(deps: PollDeps): Promise<PollResul
 
   const welcomed: string[] = [];
   const failed: string[] = [];
+  let lostRace = 0;
   for (const e of toWelcome) {
     const base = eventToNotice(e);
     const stored = existing.get(e.email);
     const notice: InstallNotice = { ...base, company: stored?.company ?? base.company };
     await deps.upsertInstall(notice);
-    const sent = await deps.sendWelcome(notice);
-    if (!sent.ok) {
+    const outcome = await welcomeOnce(e.email, {
+      claim: deps.claim,
+      release: deps.release,
+      send: () => deps.sendWelcome(notice),
+    });
+    if (outcome.status === 'already') {
+      lostRace++;
+      continue;
+    }
+    if (outcome.status === 'failed') {
       failed.push(e.email);
       await deps.alertFailure(
-        `Marketplace install poll: welcome to ${e.email} failed (${sent.error}). Not marked welcomed; the next run retries it.`,
+        `Marketplace install poll: welcome to ${e.email} failed (${outcome.error}). Claim released; the next run retries it.`,
       );
       continue;
     }
-    await deps.markWelcomed(e.email);
     welcomed.push(e.email);
     await deps.alertInstall({ ...notice, welcomed: true });
   }
@@ -390,5 +415,12 @@ export async function pollMarketplaceInstalls(deps: PollDeps): Promise<PollResul
     );
   }
 
-  return { ok: true, events: events.length, welcomed, failed, alreadyWelcomed, overCap };
+  return {
+    ok: true,
+    events: events.length,
+    welcomed,
+    failed,
+    alreadyWelcomed: alreadyWelcomed + lostRace,
+    overCap,
+  };
 }
