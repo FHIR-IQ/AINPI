@@ -8,6 +8,10 @@
     {
       "path": "/api/v1/admin/weekly-report",
       "schedule": "42 13 * * 4"
+    },
+    {
+      "path": "/api/v1/admin/marketplace-installs-poll",
+      "schedule": "17 14 * * *"
     }
   ]
 }
