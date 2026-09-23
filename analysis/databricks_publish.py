@@ -134,8 +134,8 @@ TABLE_COMMENTS = {
     # No apostrophes in these two except the SQL string literals in the sample
     # queries, which the COMMENT statement escapes like the others.
     "org_endpoint": (
-        "Curated by AINPI, not a CMS file. Which FHIR endpoint belongs to which "
-        "organization NPI, and which EHR vendor serves it. One row per base_url, "
+        "Curated by AINPI, not a CMS file. Maps FHIR endpoint URLs to "
+        "organization NPIs and EHR vendors. One row per base_url, "
         "org_npi and source. Two sources: source = ndh is the managingOrganization "
         "the NDH Endpoint itself carries, resolved to an Organization NPI. "
         "source = vendor_file is attribution taken from endpoint files that EHR "
@@ -143,11 +143,11 @@ TABLE_COMMENTS = {
         "both sources name appears once per source, so a disagreement stays "
         "visible. base_url is normalized: scheme and host lower-cased, trailing "
         "slash removed, path case kept. org_npi is NULL where the vendor file "
-        "names an organization without an NPI, and some vendor-file NPIs fail the "
-        "NPI check digit; they are kept as published and counted by the builder. "
+        "names an organization without an NPI. Some vendor-file NPIs fail the "
+        "check digit. They are kept as published, and the builder counts them. "
         "org_state is NDH only. ndh_has_owner is NULL where the URL is not in the "
         "NDH. Sample: SELECT base_url, vendor, source FROM org_endpoint WHERE "
-        "org_npi = '1234567893' AND release_date = '2026-08-20'. "
+        "org_npi = '1285703405' AND release_date = '2026-08-20'. "
         "Built by analysis/org_endpoint_table.py."
     ),
     "org_endpoint_summary": (
