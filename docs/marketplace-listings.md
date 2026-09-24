@@ -101,6 +101,14 @@ JSON parsing. Both releases are extracted by the same code, so comparing them is
 not comparing two parsers. Each table is partitioned by `release_date`, which
 makes a cross-release comparison a `WHERE` clause rather than a download.
 
+**Organization to endpoint.** Two further tables, org_endpoint and
+org_endpoint_summary, map FHIR endpoint URLs to organization NPIs and to the EHR vendor behind them, where either
+source says so. A source column says where each row came from: the directory's
+own managingOrganization, or the public endpoint files of eight EHR vendors.
+The vendor rows are each vendor's own claim; CMS has not checked them. Where
+the two sources name different organizations for one URL, both rows are kept.
+40,005 of the 68,888 vendor rows name an organization without an NPI.
+
 **What it is for.** Questions that need two releases at once. One worked
 example, included as a notebook: between these two releases CMS added about
 seven million PractitionerRole records, a 173% rise. The share of clinicians who
