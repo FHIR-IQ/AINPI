@@ -1,0 +1,70 @@
+name: automerge
+
+# Lean merge gate. A PR squash-merges itself when all three hold:
+#   1. it carries the `qa-approved` label (applied after the QA agent and
+#      product review pass; the label is the approval),
+#   2. it comes from a branch in this repo, not a fork,
+#   3. the required checks passed on its head commit: Lint + unit tests,
+#      gitleaks, scan changed files.
+# Spend guardrails is deliberately not required: it audits live cloud state,
+# not the PR, and fails on main whenever a control is missing there.
+# Runs when the label is added and again whenever one of the checked
+# workflows finishes, so label order and CI order do not matter.
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_run:
+    workflows: [CI, Secret scan, anti-patterns]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
+
+concurrency:
+  group: automerge-${{ github.event.pull_request.number || github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    if: >-
+      (github.event_name == 'pull_request' && github.event.label.name == 'qa-approved') ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request' &&
+       github.event.workflow_run.conclusion == 'success')
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      REQUIRED: "Lint + unit tests|gitleaks|scan changed files"
+    steps:
+      - name: Find the PR
+        id: pr
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            n=${{ github.event.pull_request.number }}
+          else
+            n=$(gh pr list -R "$REPO" --state open --head "${{ github.event.workflow_run.head_branch }}" \
+                  --json number --jq '.[0].number // empty')
+          fi
+          [ -n "$n" ] || { echo "no open PR"; exit 0; }
+          echo "number=$n" >> "$GITHUB_OUTPUT"
+
+      - name: Check label, origin and required checks, then merge
+        if: steps.pr.outputs.number != ''
+        run: |
+          n=${{ steps.pr.outputs.number }}
+          pr=$(gh pr view "$n" -R "$REPO" --json labels,isCrossRepository,headRefOid,state)
+          echo "$pr" | jq -e '.state == "OPEN"' >/dev/null || { echo "not open"; exit 0; }
+          echo "$pr" | jq -e '[.labels[].name] | index("qa-approved")' >/dev/null || { echo "no qa-approved label"; exit 0; }
+          echo "$pr" | jq -e '.isCrossRepository | not' >/dev/null || { echo "fork PR, refusing"; exit 0; }
+          sha=$(echo "$pr" | jq -r .headRefOid)
+          runs=$(gh api "repos/$REPO/commits/$sha/check-runs?per_page=100" --jq '.check_runs')
+          IFS='|' read -ra names <<< "$REQUIRED"
+          for c in "${names[@]}"; do
+            got=$(echo "$runs" | jq -r --arg c "$c" '[.[] | select(.name == $c)] | sort_by(.completed_at) | last | .conclusion // "missing"')
+            echo "$c: $got"
+            [ "$got" = "success" ] || { echo "waiting on $c"; exit 0; }
+          done
+          gh pr merge "$n" -R "$REPO" --squash --delete-branch --match-head-commit "$sha"
