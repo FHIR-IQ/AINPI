@@ -167,6 +167,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 /api/v1/subscribers/count    GET  — Public subscriber count for the Footer / hero ticker
 /api/v1/marketplace-install  POST — Resend `email.received` webhook for installs@ainpi.dev. Parses a forwarded Databricks Marketplace install notice, records it once per address, sends the welcome. Svix-signed; RESEND_WEBHOOK_SECRET.
 /api/v1/admin/weekly-report  GET  — Cron-only digest. Authorization: Bearer ${CRON_SECRET}. Fetches Vercel Analytics 7-day traffic + subscriber/download stats.
+/api/v1/admin/marketplace-installs-poll  GET  — Daily cron (14:17 UTC). Bearer ${CRON_SECRET}. Reads GET_DATA events from Databricks `system.marketplace.listing_access_events` via the SQL Statement API and sends the one-time install welcome to each address not yet welcomed (one row per address, aggregated in SQL; shares the MarketplaceInstall table with the webhook above; max 20 sends per run). Both paths claim `welcomedAt` with one conditional `updateMany` before sending and release it only if the send fails (`src/lib/marketplace-install-claim.ts`), so overlapping runs cannot double-send. Returns {skipped:"not configured"} without the DATABRICKS_* vars; a Databricks failure alerts admin and sends nothing. Recipients created by hand on the open share are not Marketplace events and never appear, so their welcome stays manual. Before first enabling it, seed hand-welcomed installers with `scripts/seed-welcomed-installs.ts`. Cost: each run wakes the serverless SQL warehouse, which bills about its 10-minute auto-stop minimum, so keep it daily.
 
 /api/auth/login              POST — JWT login
 /api/auth/register           POST — User registration
@@ -614,7 +615,13 @@ RESEND_API_KEY               sk_xxx — required for subscribe welcome, download
 RESEND_FROM_ADDRESS          'AINPI <reports@ainpi.dev>' (ainpi.dev domain verified on Resend; ainpi.com is NOT)
 RESEND_WEBHOOK_SECRET        whsec_… from the Resend webhook for /api/v1/marketplace-install; verified with an HMAC in src/lib/resend-webhook.ts, no svix dependency
 ADMIN_EMAIL                  gene@fhiriq.com — where admin alerts + weekly digest land
-CRON_SECRET                  Shared secret Vercel Cron injects as Bearer auth for /api/v1/admin/weekly-report
+CRON_SECRET                  Shared secret Vercel Cron injects as Bearer auth for /api/v1/admin/weekly-report and /api/v1/admin/marketplace-installs-poll
+
+# Databricks (for /api/v1/admin/marketplace-installs-poll; all three unset = the poll is a no-op)
+DATABRICKS_HOST              Workspace URL, with or without https://
+DATABRICKS_TOKEN             Token able to run statements on the warehouse and SELECT system.marketplace.listing_access_events
+DATABRICKS_WAREHOUSE_ID      SQL warehouse id (same one as WAREHOUSE_ID in analysis/databricks_publish.py)
+DATABRICKS_POLL_LOOKBACK_DAYS  Optional, default 30, max 90. Only bounds the scan; welcomedAt is the idempotency key
 
 # Vercel Analytics (for the weekly admin digest's project list + deep-links)
 VERCEL_API_TOKEN             User-generated at https://vercel.com/account/tokens. Used to list every project the user has access to (/v9/projects). Does NOT enable live pageview/visitor numbers — Vercel has no public Web Analytics REST API.

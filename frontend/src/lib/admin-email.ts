@@ -327,3 +327,16 @@ export async function sendInstallAlert(args: InstallAlertArgs): Promise<void> {
   });
 }
 
+/**
+ * Operational alert from the /api/v1/admin/marketplace-installs-poll cron:
+ * a Databricks failure, a failed welcome send, or the per-run cap being hit.
+ */
+export async function sendInstallPollAlert(message: string): Promise<void> {
+  await sendOnce({
+    subject: '[AINPI] Marketplace install poll needs a look',
+    text: message,
+    html: `<p>${esc(message).replace(/\n/g, '<br>')}</p>`,
+    tag: 'install-poll',
+  });
+}
+
