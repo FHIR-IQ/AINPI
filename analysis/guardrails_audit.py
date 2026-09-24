@@ -114,12 +114,19 @@ def check_gcp(r: Result) -> None:
               else "NO BUDGET. A project with no budget has no ceiling.")
 
     rc, out = run(["gcloud", "functions", "list", "--project", GCP_PROJECT, "--format", "json"])
-    fns = json.loads(out or "[]") if rc == 0 else []
-    killer = [f for f in fns if "disable-billing" in (f.get("name") or "")]
-    active = killer and killer[0].get("state") == "ACTIVE"
-    r.add("GCP", "kill-billing function", bool(active),
-          "disable-billing-on-budget ACTIVE" if active
-          else "the auto-disable function is missing or not ACTIVE")
+    if rc != 0:
+        # An unreadable list is not an absent function. The CI service
+        # account cannot list functions, and reporting that as "missing"
+        # failed every run while the function was ACTIVE.
+        r.add("GCP", "kill-billing function", None,
+              f"could not list functions: {out.strip()[:160]}")
+    else:
+        fns = json.loads(out or "[]")
+        killer = [f for f in fns if "disable-billing" in (f.get("name") or "")]
+        active = killer and killer[0].get("state") == "ACTIVE"
+        r.add("GCP", "kill-billing function", bool(active),
+              "disable-billing-on-budget ACTIVE" if active
+              else "the auto-disable function is missing or not ACTIVE")
 
     rc, out = run(["gcloud", "services", "list", "--enabled",
                    "--project", GCP_PROJECT, "--format", "value(config.name)"])
