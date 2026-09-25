@@ -40,6 +40,16 @@ Run order:
 Writes:
   frontend/public/api/v1/findings/pii-exposure-ndh.json
   frontend/public/api/v1/findings/pii-exposure-ndh-detail.json
+
+Release watch, Practitioner.birthDate (added 2026-09-25): the HL7 NDH STU2
+draft adds a warning-severity invariant that Practitioner.birthDate carry only
+the year (Jira FHIR-57885). The published STU1 has no such rule. The positive
+control query below already aggregates over practitioner.resource, so it also
+counts birthDate present, year-only (length 4) and more precise (length > 4),
+with gender present as the control in the same scan. No second scan. The
+counts and a note go into both JSON files as `birthdate_watch`; a date more
+precise than the year is called out as a disclosure beyond what the draft
+allows. Counts only; the dates are never published.
 """
 from __future__ import annotations
 import json
@@ -55,6 +65,11 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config  # noqa: E402
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
+from release_watch import (  # noqa: E402
+    BIRTHDATE_NOTE_MARKER,
+    birthdate_summary,
+    merge_note,
+)
 METHODOLOGY_VERSION = "0.6.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -106,22 +121,48 @@ def run() -> None:
       likely_intl_phone_fp
     FROM classified
     """
-    pract_rows = list(client.query(pract_sql, job_config=bq_job_config()).result())
+    billed: dict[str, int] = {}
+    pract_job = client.query(pract_sql, job_config=bq_job_config())
+    pract_rows = list(pract_job.result())
+    billed["practitioner_ssn_scan"] = int(pract_job.total_bytes_billed or 0)
 
     # Positive control. A scan that returns nothing is indistinguishable from a
     # scan pointed at the wrong field, and this project has already been bitten
     # once by a field moving underneath a matcher. Confirm the population and
     # the container element are both still there before reporting a zero.
-    control_row = next(iter(client.query(f"""
+    #
+    # The same aggregate carries the birthDate release watch (FHIR-57885), so
+    # it costs no extra scan. birthDate is read from the raw resource JSON,
+    # never a flattened column; gender is its positive control.
+    control_job = client.query(f"""
     SELECT
       COUNT(*) AS total_practitioners,
-      COUNTIF(JSON_EXTRACT_ARRAY(resource, '$.qualification') IS NOT NULL) AS qual_present
+      COUNTIF(JSON_EXTRACT_ARRAY(resource, '$.qualification') IS NOT NULL) AS qual_present,
+      COUNTIF(JSON_VALUE(resource, '$.gender') IS NOT NULL) AS gender_present,
+      COUNTIF(JSON_VALUE(resource, '$.birthDate') IS NOT NULL) AS birth_date_present,
+      COUNTIF(LENGTH(JSON_VALUE(resource, '$.birthDate')) = 4) AS birth_date_year_only,
+      COUNTIF(LENGTH(JSON_VALUE(resource, '$.birthDate')) > 4) AS birth_date_full
     FROM `{PROJECT}.{DATASET}.practitioner`
-    """, job_config=bq_job_config()).result()))
+    """, job_config=bq_job_config())
+    control_row = next(iter(control_job.result()))
+    billed["practitioner_control_and_birthdate"] = int(control_job.total_bytes_billed or 0)
     total_practitioners = int(control_row.total_practitioners)
     qual_present = int(control_row.qual_present)
     print(f"  control: {total_practitioners:,} practitioners, "
           f"{qual_present:,} carry a qualification array")
+    birthdate_watch = birthdate_summary(
+        total=total_practitioners,
+        gender_present=int(control_row.gender_present),
+        birth_date_present=int(control_row.birth_date_present),
+        year_only=int(control_row.birth_date_year_only),
+        full_date=int(control_row.birth_date_full),
+    )
+    birthdate_watch["release_date"] = RELEASE_DATE
+    print(f"  birthDate watch: present={birthdate_watch['birth_date_present']} "
+          f"year_only={birthdate_watch['year_only']} "
+          f"full_date={birthdate_watch['full_date']} "
+          f"gender_control={birthdate_watch['gender_present']:,} "
+          f"(control_passed={birthdate_watch['control_passed']})")
 
     # Bucket and tally.
     real_in_qualification = []  # SSN in qualification.identifier.value
@@ -151,7 +192,11 @@ def run() -> None:
     WHERE REGEXP_CONTAINS(TO_JSON_STRING(resource), r'\\b\\d{{3}}-\\d{{2}}-\\d{{4}}\\b')
       AND NOT REGEXP_CONTAINS(TO_JSON_STRING(resource), r'\\d{{2}}-\\d{{3}}-\\d{{2}}-\\d{{4}}')
     """
-    org_rows = list(client.query(org_sql, job_config=bq_job_config()).result())
+    org_job = client.query(org_sql, job_config=bq_job_config())
+    org_rows = list(org_job.result())
+    billed["organization_ssn_scan"] = int(org_job.total_bytes_billed or 0)
+    for k, v in billed.items():
+        print(f"  bytes billed {k}: {v:,}")
 
     # Per-state confirmed counts.
     state_counter: dict[str, int] = {}
@@ -256,7 +301,10 @@ def run() -> None:
             f"want to validate or remediate should contact CMS NDH operations "
             f"directly."
         ),
+        "birthdate_watch": birthdate_watch,
     }
+    public_payload["notes"] = merge_note(
+        public_payload["notes"], BIRTHDATE_NOTE_MARKER, birthdate_watch["note"])
 
     detail_payload = {
         "queried_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -271,6 +319,7 @@ def run() -> None:
             "organization_pattern_matches": len(org_rows),
         },
         "state_breakdown": state_breakdown,
+        "birthdate_watch": birthdate_watch,
         "samples": samples,
         "limitations": [
             "Detection regex is the dashed SSN format \\d{3}-\\d{2}-\\d{4}. Undashed 9-digit SSNs are NOT detected here because they collide with too many other 9-digit identifiers (EINs, account numbers, claim IDs). True coverage is therefore a lower bound — actual SSN exposure may be higher.",
