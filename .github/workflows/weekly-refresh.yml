@@ -134,6 +134,17 @@ jobs:
         # Source: WaPo 2026-04-30 reporting.
         run: python analysis/h27_pii_exposure.py
 
+      - name: Release watch, payer PIN (H49, STU2 draft FHIR-57606)
+        # One capped scan of organization.resource (~4.5 GB). Counts payer-typed
+        # organizations carrying any identifier and a PAYERID identifier, and
+        # merges only detail.payer_pin_watch plus one notes paragraph into the
+        # published H49 finding. It refuses (exit 1) when the published finding
+        # is for a different release than CURRENT_RELEASE, which is expected
+        # right after a reload until h49_recheck_release.py --write re-measures
+        # the finding, so it must not cancel the rest of the chain.
+        continue-on-error: true
+        run: python analysis/h49_ndh_payer_endpoints.py --payer-pin-watch
+
       - name: Re-run H43 practitioner phone reachability
         # Resolves practitioner -> phone across three FHIR paths
         # (Practitioner.telecom, PractitionerRole.telecom, and the referenced

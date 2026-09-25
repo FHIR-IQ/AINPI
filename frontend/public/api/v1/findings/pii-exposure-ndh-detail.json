@@ -1,5 +1,5 @@
 {
-  "queried_at": "2026-09-21T16:11:54+00:00",
+  "queried_at": "2026-09-25T13:13:01+00:00",
   "denominator_practitioners": 7441211,
   "totals": {
     "flagged_pattern_match": 0,
@@ -11,6 +11,20 @@
     "organization_pattern_matches": 0
   },
   "state_breakdown": [],
+  "birthdate_watch": {
+    "control_passed": true,
+    "practitioners": 7373232,
+    "gender_present": 7373232,
+    "birth_date_present": 0,
+    "year_only": 0,
+    "full_date": 0,
+    "definitions": {
+      "year_only": "birthDate is exactly four characters (YYYY)",
+      "full_date": "birthDate is longer than four characters (YYYY-MM or YYYY-MM-DD)"
+    },
+    "note": "Release watch, Practitioner.birthDate: 0 of 7,373,232 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,373,232 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
+    "release_date": "2026-08-20"
+  },
   "samples": [],
   "limitations": [
     "Detection regex is the dashed SSN format \\d{3}-\\d{2}-\\d{4}. Undashed 9-digit SSNs are NOT detected here because they collide with too many other 9-digit identifiers (EINs, account numbers, claim IDs). True coverage is therefore a lower bound \u2014 actual SSN exposure may be higher.",
