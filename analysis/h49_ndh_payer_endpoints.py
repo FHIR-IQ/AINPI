@@ -32,12 +32,28 @@ Writes:
   - frontend/public/api/v1/findings/ndh-payer-endpoint-coverage-detail.csv
     (every payer-host FHIR endpoint the NDH does carry, for inspection)
 
-Cost: three capped scans of cms_npd.endpoint and one of cms_npd.organization
-(the organization query reads the resource JSON column, ~4 GB). All queries go
-through bq_job_config(). Roughly $0.03 per run.
+Cost: three capped scans of cms_npd.endpoint and two of cms_npd.organization
+(the organization queries read the resource JSON column). All queries go
+through bq_job_config(). Roughly $0.05 per run.
+
+Release watch, payer PIN (added 2026-09-25): the HL7 NDH STU2 draft adds an
+Organization identifier slice for the Payer Identification Number,
+identifier.type = v2-0203#PAYERID (Jira FHIR-57606). It is not in the
+published STU1. payer_pin_watch() counts the organizations typed `pay`, those
+carrying any identifier, and those carrying a PAYERID identifier. The counting
+logic lives in release_watch.py and is unit-tested there.
+
+    python analysis/h49_ndh_payer_endpoints.py --payer-pin-watch
+
+runs only that query and merges the result into the published finding as
+detail.payer_pin_watch plus one notes paragraph, leaving every other field as
+it is. The published JSON is currently written by h49_recheck_release.py, and a
+full run of this script would replace its headline, chart and notes, so the
+merge path is the one to use for a watch-only refresh.
 """
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import pathlib
@@ -50,10 +66,12 @@ from google.cloud import bigquery
 
 # analysis/ is sys.path[0] when run as `python analysis/h49_ndh_payer_endpoints.py`.
 from claims_sources._cohorts import bq_job_config
+from release import CURRENT_RELEASE
+from release_watch import PIN_NOTE_MARKER, merge_note, payer_pin_summary
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
-RELEASE_DATE = "2026-05-08"
+RELEASE_DATE = CURRENT_RELEASE
 METHODOLOGY_VERSION = "0.7.2-draft"
 
 OUT_DIR = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "public" / "api" / "v1" / "findings"
@@ -89,6 +107,65 @@ def q(client: bigquery.Client, sql: str) -> list[dict]:
     return [dict(r) for r in client.query(sql, job_config=bq_job_config()).result()]
 
 
+def payer_pin_watch(client: bigquery.Client) -> tuple[dict, int]:
+    """Payer organizations and their identifiers, from the raw resource JSON.
+
+    SQL only selects the organizations carrying a `pay` code anywhere in
+    type[].coding[]; the counting is done by the tested release_watch
+    functions, which re-check the type. Never reads a flattened `_*` column.
+    Returns the summary and the bytes billed.
+    """
+    org = f"`{PROJECT}.{DATASET}.organization`"
+    job = client.query(f"""
+        SELECT TO_JSON_STRING(resource) AS json
+        FROM {org}
+        WHERE EXISTS (
+          SELECT 1
+          FROM UNNEST(JSON_QUERY_ARRAY(resource, '$.type')) t,
+               UNNEST(JSON_QUERY_ARRAY(t, '$.coding')) c
+          WHERE JSON_VALUE(c, '$.code') = 'pay'
+        )
+    """, job_config=bq_job_config())
+    resources = [json.loads(r["json"]) for r in job.result()]
+    summary = payer_pin_summary(resources)
+    summary["release_date"] = RELEASE_DATE
+    return summary, int(job.total_bytes_billed or 0)
+
+
+def merge_payer_pin_watch(payload: dict, summary: dict) -> dict:
+    """Add the watch to a finding payload without touching its other fields."""
+    detail = payload.get("detail")
+    if not isinstance(detail, dict):
+        detail = {}
+    detail["payer_pin_watch"] = summary
+    payload["detail"] = detail
+    payload["notes"] = merge_note(payload.get("notes"), PIN_NOTE_MARKER, summary["note"])
+    return payload
+
+
+def run_payer_pin_watch_only() -> int:
+    out = OUT_DIR / f"{SLUG}.json"
+    pub = json.loads(out.read_text())
+    if pub.get("release_date") != RELEASE_DATE:
+        print(f"refusing: published finding is for {pub.get('release_date')}, "
+              f"warehouse is pinned to {RELEASE_DATE}. Re-measure the finding "
+              f"first so the watch and the finding describe the same release.")
+        return 1
+    client = bigquery.Client(project=PROJECT)
+    summary, billed = payer_pin_watch(client)
+    print(f"payer PIN watch: {summary['payer_orgs']} payer-typed orgs, "
+          f"{summary['payer_orgs_with_any_identifier']} with any identifier, "
+          f"{summary['payer_orgs_with_payerid']} with PAYERID "
+          f"(control_passed={summary['control_passed']}); "
+          f"bytes billed {billed:,}")
+    pub = merge_payer_pin_watch(pub, summary)
+    pub["generated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    pub["commit_sha"] = git_sha()
+    out.write_text(json.dumps(pub, indent=2) + "\n")
+    print(f"wrote {out}")
+    return 0
+
+
 def probe(url: str, timeout: int = 40) -> tuple[int, int]:
     """GET a URL with curl. curl, not urllib: Akamai-fronted payer endpoints
     WAF-block Python's TLS fingerprint (established in H26, reconfirmed H46)."""
@@ -116,6 +193,13 @@ def git_sha() -> str:
 
 
 def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--payer-pin-watch", action="store_true",
+                    help="run only the payer PIN watch and merge it into the published finding")
+    args = ap.parse_args()
+    if args.payer_pin_watch:
+        return run_payer_pin_watch_only()
+
     client = bigquery.Client(project=PROJECT)
     ep = f"`{PROJECT}.{DATASET}.endpoint`"
     org = f"`{PROJECT}.{DATASET}.organization`"
@@ -251,6 +335,10 @@ def main() -> int:
             "live_but_absent_from_ndh": len(live_absent),
         },
     }
+
+    pin, pin_billed = payer_pin_watch(client)
+    print(f"     payer PIN watch bytes billed {pin_billed:,}")
+    payload = merge_payer_pin_watch(payload, pin)
 
     out = OUT_DIR / f"{SLUG}.json"
     out.write_text(json.dumps(payload, indent=2) + "\n")

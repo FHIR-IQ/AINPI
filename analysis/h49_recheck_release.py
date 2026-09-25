@@ -41,8 +41,10 @@ from h49_ndh_payer_endpoints import (  # noqa: E402
     DIRECTORY_RE,
     PATIENT_ACCESS_RE,
     PAYER_HOST_RE,
+    merge_payer_pin_watch,
     probe,
 )
+from release_watch import is_payer_typed, payer_pin_summary  # noqa: E402
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 PUBLISHED = (REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
@@ -127,10 +129,13 @@ def main():
     type_codes = collections.Counter()
     type_texts = collections.Counter()
     payer_orgs_found = {}
+    payer_typed = []  # full resources; 27 in 2026-08-20, so holding them is cheap
     orgs = 0
     if org.exists():
         for r in stream(org):
             orgs += 1
+            if is_payer_typed(r):
+                payer_typed.append(r)
             for t in r.get("type") or []:
                 for c in t.get("coding") or []:
                     type_codes[c.get("code")] += 1
@@ -161,6 +166,15 @@ def main():
     print(f"   of those, carrying an endpoint: {len(with_ep)}")
     for oid, o in list(payer_orgs_found.items())[:10]:
         print(f"     {(o['name'] or '?')[:46]:48s} endpoints={o['endpoints']} type={o['type']}")
+
+    # Release watch: the STU2-draft PIN slice (FHIR-57606). Same tested
+    # function as the BigQuery path, so both routes publish the same keys.
+    pin = payer_pin_summary(payer_typed) if org.exists() else None
+    if pin is not None:
+        print(f"\nPayer PIN watch: {pin['payer_orgs']} payer-typed orgs, "
+              f"{pin['payer_orgs_with_any_identifier']} with any identifier, "
+              f"{pin['payer_orgs_with_payerid']} with PAYERID "
+              f"(control_passed={pin['control_passed']})")
 
     # ---- Control: is a live, mandated payer directory in the index? ----
     print("\nControl probe:")
@@ -228,6 +242,9 @@ def main():
                 "analysis/h49_recheck_release.py --dir <release dir>."
             ),
         })
+        if pin is not None:
+            pin["release_date"] = args.release
+            pub = merge_payer_pin_watch(pub, pin)
         PUBLISHED.write_text(json.dumps(pub, indent=2) + "\n")
         print(f"\nWrote {PUBLISHED}")
         print(f"   {headline}")

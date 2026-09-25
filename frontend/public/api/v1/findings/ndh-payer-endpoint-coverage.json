@@ -6,9 +6,9 @@
   ],
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-08-20T22:26:38+00:00",
+  "generated_at": "2026-09-25T13:12:53+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "5d36703",
+  "commit_sha": "95a0672",
   "headline": "CMS added payer organizations in the 2026-08-20 release: 27 carry a 'pay' type coding and own 233 Medicare Advantage plans, where the previous release had no payer type at all. Payer endpoints did not follow. 0 of the 27 payer organizations carry an endpoint, 1 of 110,973 FHIR REST endpoints is a payer provider directory, and a live CMS-9115-F directory is still absent from the index.",
   "numerator": 1,
   "denominator": 110973,
@@ -34,7 +34,7 @@
       }
     ]
   },
-  "notes": "Re-measured against the 2026-08-20 release by streaming the published NDJSON directly, not through BigQuery, so the check could run the day the release landed rather than after a 45 GB ingest. Classification constants are imported from analysis/h49_ndh_payer_endpoints.py rather than copied, so this cannot drift from the finding it updates. Half of the original result is resolved: a payer organization type now exists. The other half stands: no payer organization carries an endpoint, and the control directory (Capital BlueCross) answers 200 to an unauthenticated request while remaining absent from the index, which separates 'nothing to index' from 'not indexed yet'. Reproduce with analysis/h49_recheck_release.py --dir <release dir>.",
+  "notes": "Re-measured against the 2026-08-20 release by streaming the published NDJSON directly, not through BigQuery, so the check could run the day the release landed rather than after a 45 GB ingest. Classification constants are imported from analysis/h49_ndh_payer_endpoints.py rather than copied, so this cannot drift from the finding it updates. Half of the original result is resolved: a payer organization type now exists. The other half stands: no payer organization carries an endpoint, and the control directory (Capital BlueCross) answers 200 to an unauthenticated request while remaining absent from the index, which separates 'nothing to index' from 'not indexed yet'. Reproduce with analysis/h49_recheck_release.py --dir <release dir>.\n\nRelease watch, payer PIN: 0 of the 27 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 27 payer-typed organizations were found, so these counts come from a query that could see them.",
   "detail": {
     "organization_type_codings": [
       {
@@ -73,6 +73,14 @@
         "present_in_ndh": false
       }
     ],
-    "live_but_absent_from_ndh": 1
+    "live_but_absent_from_ndh": 1,
+    "payer_pin_watch": {
+      "control_passed": true,
+      "payer_orgs": 27,
+      "payer_orgs_with_any_identifier": 0,
+      "payer_orgs_with_payerid": 0,
+      "note": "Release watch, payer PIN: 0 of the 27 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 27 payer-typed organizations were found, so these counts come from a query that could see them.",
+      "release_date": "2026-08-20"
+    }
   }
 }
