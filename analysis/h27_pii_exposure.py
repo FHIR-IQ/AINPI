@@ -70,7 +70,10 @@ from release_watch import (  # noqa: E402
     birthdate_summary,
     merge_note,
 )
-METHODOLOGY_VERSION = "0.6.0"
+# Read from docs/methodology/index.md, like stats.json, rather than typed in:
+# the literal here sat at 0.6.0 after the methodology moved on.
+from build_stats import methodology_version  # noqa: E402
+METHODOLOGY_VERSION = methodology_version()
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 FINDINGS_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
@@ -87,6 +90,59 @@ def get_commit_sha() -> str:
     except (FileNotFoundError, subprocess.SubprocessError):
         pass
     return "pending"
+
+
+def build_notes(*, release: str, confirmed: int, states: int, in_given_name: int,
+                org_matches: int, qual_present: int, total: int) -> str:
+    """Finding notes. Two branches, like the headline, because zero is a
+    different finding: the hit template says most SSNs sit in the license slot
+    and remain in the bulk file, which is false for a release with none."""
+    if confirmed == 0 and org_matches == 0:
+        return (
+            f"Re-runs the scan that independently verified the 2026-04-30 "
+            f"Washington Post finding, against the {release} NDH bulk export "
+            f"(loaded into BigQuery as `cms_npd.practitioner`/"
+            f"`cms_npd.organization`), matching the dashed SSN format "
+            f"\\\\d{{3}}-\\\\d{{2}}-\\\\d{{4}} in the full resource JSON. It finds "
+            f"no confirmed exposures in either resource type. Earlier releases "
+            f"carried 46 (2026-04-09) and 41 (2026-05-08), most of them in "
+            f"qualification.identifier.value, the state-license slot. The zero "
+            f"is checked, not assumed: {qual_present:,} of {total:,} "
+            f"Practitioner resources still carry the qualification array those "
+            f"exposures were found in, so the scan is reading the right field. "
+            f"Privacy posture is unchanged: AINPI publishes counts, JSON "
+            f"locations, NPIs (professional IDs, not PII) and state breakdowns, "
+            f"never SSN values."
+        )
+    return (
+        f"Independently verifies the 2026-04-30 Washington Post finding by "
+        f"scanning the {release} NDH bulk export (already loaded into "
+        f"BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for "
+        f"the dashed SSN format \\\\d{{3}}-\\\\d{{2}}-\\\\d{{4}} in the full "
+        f"resource JSON. WaPo reported 'dozens'; the AINPI scan identifies "
+        f"{confirmed} confirmed exposures across {states} "
+        f"states. CMS attributed the leak to 'incorrect entries of provider "
+        f"or provider-representative-supplied information in the wrong "
+        f"places' — borne out by the JSON-location breakdown: most SSNs "
+        f"are in qualification.identifier.value (the state-license slot), "
+        f"with {in_given_name} cases of providers entering their "
+        f"SSN literally as a name token. Privacy posture: AINPI publishes "
+        f"counts, JSON locations, NPIs (professional IDs, not PII), and "
+        f"state breakdowns. The SSN values themselves are NOT republished "
+        f"in this finding's output, even though they remain in the public "
+        f"NDH bulk file CMS distributed. State Medicaid PI teams that "
+        f"want to validate or remediate should contact CMS NDH operations "
+        f"directly."
+    )
+
+
+def remediation_limitation(confirmed: int) -> str:
+    """The remediation caveat, with the count measured rather than typed in."""
+    who = (f"The {confirmed} affected providers" if confirmed
+           else "Any provider affected in an earlier release")
+    return (f"Remediation belongs to CMS NDH operations. AINPI is a verification "
+            f"surface, not a notification mechanism. {who} should be contacted "
+            f"by CMS or their state board, not by AINPI.")
 
 
 def run() -> None:
@@ -281,25 +337,14 @@ def run() -> None:
                 for s in state_breakdown[:15]
             ],
         },
-        "notes": (
-            f"Independently verifies the 2026-04-30 Washington Post finding by "
-            f"scanning the {RELEASE_DATE} NDH bulk export (already loaded into "
-            f"BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for "
-            f"the dashed SSN format \\\\d{{3}}-\\\\d{{2}}-\\\\d{{4}} in the full "
-            f"resource JSON. WaPo reported 'dozens'; the AINPI scan identifies "
-            f"{len(confirmed)} confirmed exposures across {len(state_breakdown)} "
-            f"states. CMS attributed the leak to 'incorrect entries of provider "
-            f"or provider-representative-supplied information in the wrong "
-            f"places' — borne out by the JSON-location breakdown: most SSNs "
-            f"are in qualification.identifier.value (the state-license slot), "
-            f"with {len(real_in_given_name)} cases of providers entering their "
-            f"SSN literally as a name token. Privacy posture: AINPI publishes "
-            f"counts, JSON locations, NPIs (professional IDs, not PII), and "
-            f"state breakdowns. The SSN values themselves are NOT republished "
-            f"in this finding's output, even though they remain in the public "
-            f"NDH bulk file CMS distributed. State Medicaid PI teams that "
-            f"want to validate or remediate should contact CMS NDH operations "
-            f"directly."
+        "notes": build_notes(
+            release=RELEASE_DATE,
+            confirmed=len(confirmed),
+            states=len(state_breakdown),
+            in_given_name=len(real_in_given_name),
+            org_matches=len(org_rows),
+            qual_present=qual_present,
+            total=total_practitioners,
         ),
         "birthdate_watch": birthdate_watch,
     }
@@ -308,7 +353,8 @@ def run() -> None:
 
     detail_payload = {
         "queried_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "denominator_practitioners": 7_441_211,
+        "release_date": RELEASE_DATE,
+        "denominator_practitioners": total_practitioners,  # measured, same control query
         "totals": {
             "flagged_pattern_match": len(pract_rows),
             "confirmed_ssn_exposures": len(confirmed),
@@ -326,7 +372,7 @@ def run() -> None:
             "False positive guard: international phone-number formats (Italy '39-XXX-XX-XXXX', etc.) match the same regex. We classify any record whose JSON also contains the prefix-extended pattern \\d{2}-\\d{3}-\\d{2}-\\d{4} as a phone false positive and exclude it from the confirmed total.",
             "Privacy: the SSN values themselves are not published in this finding output, despite being in the underlying NDH bulk file CMS distributed publicly. The finding reports counts, JSON locations, NPIs (which are professional credentials, not PII per HIPAA), and state breakdowns only.",
             "Source attribution: original reporting is by the Washington Post (2026-04-30, paywalled). AINPI's value-add is an independent, reproducible scan of the same public file, with a precise location-and-count breakdown the WaPo article did not publish.",
-            "Remediation belongs to CMS NDH operations. AINPI is a verification surface, not a notification mechanism. The 45 affected providers should be contacted by CMS or their state board, not by AINPI.",
+            remediation_limitation(len(confirmed)),
         ],
         "source_articles": [
             {

@@ -6,9 +6,9 @@
   ],
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-09-25T13:13:01+00:00",
-  "methodology_version": "0.6.0",
-  "commit_sha": "95a0672",
+  "generated_at": "2026-09-26T13:40:22+00:00",
+  "methodology_version": "0.7.3-draft",
+  "commit_sha": "e7ba1f3",
   "headline": "No Social Security Numbers remain in the 2026-08-20 NDH bulk export. The dashed-SSN pattern matches zero of 7,373,232 Practitioner and zero Organization resources, against 46 confirmed exposures in 2026-04-09 and 41 in 2026-05-08. CMS has now removed them rather than partially scrubbing them. The scan is unchanged and still reads the same fields: 7,371,126 of those Practitioner resources still carry the qualification array the exposures were found in, so the zero is an empty result and not an empty query.",
   "numerator": 0,
   "denominator": 7373232,
@@ -17,7 +17,7 @@
     "unit": "count",
     "data": []
   },
-  "notes": "Independently verifies the 2026-04-30 Washington Post finding by scanning the 2026-08-20 NDH bulk export (already loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`) for the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. WaPo reported 'dozens'; the AINPI scan identifies 0 confirmed exposures across 0 states. CMS attributed the leak to 'incorrect entries of provider or provider-representative-supplied information in the wrong places' \u2014 borne out by the JSON-location breakdown: most SSNs are in qualification.identifier.value (the state-license slot), with 0 cases of providers entering their SSN literally as a name token. Privacy posture: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII), and state breakdowns. The SSN values themselves are NOT republished in this finding's output, even though they remain in the public NDH bulk file CMS distributed. State Medicaid PI teams that want to validate or remediate should contact CMS NDH operations directly.\n\nRelease watch, Practitioner.birthDate: 0 of 7,373,232 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,373,232 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
+  "notes": "Re-runs the scan that independently verified the 2026-04-30 Washington Post finding, against the 2026-08-20 NDH bulk export (loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`), matching the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. It finds no confirmed exposures in either resource type. Earlier releases carried 46 (2026-04-09) and 41 (2026-05-08), most of them in qualification.identifier.value, the state-license slot. The zero is checked, not assumed: 7,371,126 of 7,373,232 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field. Privacy posture is unchanged: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII) and state breakdowns, never SSN values.\n\nRelease watch, Practitioner.birthDate: 0 of 7,373,232 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,373,232 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
   "birthdate_watch": {
     "control_passed": true,
     "practitioners": 7373232,
