@@ -20,8 +20,11 @@ Usage:
     python analysis/h49_recheck_release.py --dir /tmp/ndh0820
 
 Reads 01-Organization, 03-Endpoint and 05-InsurancePlan if present.
-Prints a comparison against the published May numbers. Writes nothing:
-promoting a number into the published finding is a separate, deliberate step.
+Prints a comparison against the published finding. Writes nothing unless
+--write is passed: promoting a number into the published finding is a
+separate, deliberate step. --write sets the headline, numerator, denominator,
+chart and notes only; `detail` is re-measured from BigQuery by
+`h49_ndh_payer_endpoints.py --refresh-detail`, which the weekly refresh runs.
 """
 from __future__ import annotations
 

@@ -1,6 +1,7 @@
 {
-  "queried_at": "2026-09-25T13:13:01+00:00",
-  "denominator_practitioners": 7441211,
+  "queried_at": "2026-09-26T13:40:22+00:00",
+  "release_date": "2026-08-20",
+  "denominator_practitioners": 7373232,
   "totals": {
     "flagged_pattern_match": 0,
     "confirmed_ssn_exposures": 0,
@@ -31,7 +32,7 @@
     "False positive guard: international phone-number formats (Italy '39-XXX-XX-XXXX', etc.) match the same regex. We classify any record whose JSON also contains the prefix-extended pattern \\d{2}-\\d{3}-\\d{2}-\\d{4} as a phone false positive and exclude it from the confirmed total.",
     "Privacy: the SSN values themselves are not published in this finding output, despite being in the underlying NDH bulk file CMS distributed publicly. The finding reports counts, JSON locations, NPIs (which are professional credentials, not PII per HIPAA), and state breakdowns only.",
     "Source attribution: original reporting is by the Washington Post (2026-04-30, paywalled). AINPI's value-add is an independent, reproducible scan of the same public file, with a precise location-and-count breakdown the WaPo article did not publish.",
-    "Remediation belongs to CMS NDH operations. AINPI is a verification surface, not a notification mechanism. The 45 affected providers should be contacted by CMS or their state board, not by AINPI."
+    "Remediation belongs to CMS NDH operations. AINPI is a verification surface, not a notification mechanism. Any provider affected in an earlier release should be contacted by CMS or their state board, not by AINPI."
   ],
   "source_articles": [
     {

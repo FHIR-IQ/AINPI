@@ -47,9 +47,24 @@ logic lives in release_watch.py and is unit-tested there.
 
 runs only that query and merges the result into the published finding as
 detail.payer_pin_watch plus one notes paragraph, leaving every other field as
-it is. The published JSON is currently written by h49_recheck_release.py, and a
-full run of this script would replace its headline, chart and notes, so the
-merge path is the one to use for a watch-only refresh.
+it is.
+
+Refreshing `detail` (added 2026-09-26): the headline, chart and notes are
+written by h49_recheck_release.py --write, which never touched `detail`, so
+every detail field (organization_type_codings, host counts, payer endpoint
+rows, the control probe) sat at the 2026-05-08 values under a 2026-08-20
+headline. A bare run of this script now re-measures only `detail` plus the PIN
+watch and merges them in, leaving headline, numerator, denominator, chart and
+notes as they are:
+
+    python analysis/h49_ndh_payer_endpoints.py            # same as --refresh-detail
+
+It refuses when the published finding is for another release, when the
+Organization.type walk finds no codings or no `prov`, or when it finds fewer
+`pay` codings than the PIN watch found payer-typed organizations. A control
+probe with no HTTP answer keeps the last answered probe instead of publishing
+a zero. Regenerating the whole finding from the template below needs
+--rewrite-headline, so the weekly refresh cannot do it by accident.
 """
 from __future__ import annotations
 
@@ -67,12 +82,20 @@ from google.cloud import bigquery
 # analysis/ is sys.path[0] when run as `python analysis/h49_ndh_payer_endpoints.py`.
 from claims_sources._cohorts import bq_job_config
 from release import CURRENT_RELEASE
-from release_watch import PIN_NOTE_MARKER, merge_note, payer_pin_summary
+from release_watch import PAYER_TYPE_CODE, PIN_NOTE_MARKER, merge_note, payer_pin_summary
+from finding_detail import (
+    RefreshRefused,
+    control_probe_usable,
+    merge_detail,
+    type_codings_control,
+)
 
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 RELEASE_DATE = CURRENT_RELEASE
-METHODOLOGY_VERSION = "0.7.2-draft"
+# Read from docs/methodology/index.md, as stats.json does, rather than typed in.
+from build_stats import methodology_version  # noqa: E402
+METHODOLOGY_VERSION = methodology_version()
 
 OUT_DIR = pathlib.Path(__file__).resolve().parent.parent / "frontend" / "public" / "api" / "v1" / "findings"
 SLUG = "ndh-payer-endpoint-coverage"
@@ -101,10 +124,6 @@ CONTROL_DIRECTORIES = [
         "probe": "/Practitioner?family=Smith&_count=1",
     },
 ]
-
-
-def q(client: bigquery.Client, sql: str) -> list[dict]:
-    return [dict(r) for r in client.query(sql, job_config=bq_job_config()).result()]
 
 
 def payer_pin_watch(client: bigquery.Client) -> tuple[dict, int]:
@@ -192,20 +211,28 @@ def git_sha() -> str:
         return "unknown"
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--payer-pin-watch", action="store_true",
-                    help="run only the payer PIN watch and merge it into the published finding")
-    args = ap.parse_args()
-    if args.payer_pin_watch:
-        return run_payer_pin_watch_only()
+def measure_detail(client: bigquery.Client, payer_orgs: int) -> tuple[dict, list[dict], list[dict], int]:
+    """Measure every `detail` field from BigQuery for the loaded release.
 
-    client = bigquery.Client(project=PROJECT)
+    Returns (detail, org_type_rows, payer_endpoint_rows, bytes_billed).
+    `payer_orgs` is the payer PIN watch's count of payer-typed organizations,
+    used as a cross-check on the Organization.type walk. Raises RefreshRefused
+    when a positive control fails, so a broken walk cannot publish an empty or
+    truncated table.
+    """
     ep = f"`{PROJECT}.{DATASET}.endpoint`"
     org = f"`{PROJECT}.{DATASET}.organization`"
+    billed = 0
 
-    print("1/4  Organization.type codings ...")
-    org_types = q(client, f"""
+    def run(sql: str) -> list[dict]:
+        nonlocal billed
+        job = client.query(sql, job_config=bq_job_config())
+        rows = [dict(r) for r in job.result()]
+        billed += int(job.total_bytes_billed or 0)
+        return rows
+
+    print("1/4  Organization.type codings (raw resource JSON) ...")
+    org_type_rows = run(f"""
         SELECT JSON_VALUE(c, '$.code') AS code,
                JSON_VALUE(c, '$.display') AS display,
                COUNT(*) AS n
@@ -214,10 +241,10 @@ def main() -> int:
              UNNEST(JSON_QUERY_ARRAY(t, '$.coding')) c
         GROUP BY 1, 2 ORDER BY n DESC
     """)
-    payer_type_rows = [r for r in org_types if r["code"] not in ("prov", "team", "govt")]
+    codings = type_codings_control(org_type_rows, payer_orgs=payer_orgs)
 
     print("2/4  Endpoint classification ...")
-    kinds = q(client, f"""
+    kinds = run(f"""
         SELECT CASE
                  WHEN REGEXP_CONTAINS(LOWER(_address), r'{DIRECTORY_RE}') THEN 'provider-directory'
                  WHEN REGEXP_CONTAINS(LOWER(_address), r'{PATIENT_ACCESS_RE}') THEN 'patient-access'
@@ -229,25 +256,26 @@ def main() -> int:
         GROUP BY 1 ORDER BY n DESC
     """)
     by_kind = {r["url_kind"]: r["n"] for r in kinds}
-    total_rest = sum(by_kind.values())
-    directories = by_kind.get("provider-directory", 0)
 
     print("3/4  Host concentration ...")
-    hosts = q(client, f"""
+    hosts = run(f"""
         SELECT COUNT(DISTINCT REGEXP_EXTRACT(LOWER(_address), r'https?://([^/]+)')) AS distinct_hosts,
                COUNT(DISTINCT IF(REGEXP_CONTAINS(LOWER(_address), r'{PAYER_HOST_RE}'),
                      REGEXP_EXTRACT(LOWER(_address), r'https?://([^/]+)'), NULL)) AS payer_hosts
         FROM {ep}
         WHERE _connection_type = 'hl7-fhir-rest'
     """)[0]
+    if not hosts["distinct_hosts"]:
+        raise RefreshRefused("no FHIR REST endpoint hosts found; the endpoint "
+                             "query read nothing")
 
-    payer_eps = q(client, f"""
+    payer_eps = run(f"""
         SELECT REGEXP_EXTRACT(LOWER(_address), r'https?://([^/]+)') AS host,
                _address, _status, _managing_org_id
         FROM {ep}
         WHERE _connection_type = 'hl7-fhir-rest'
           AND REGEXP_CONTAINS(LOWER(_address), r'{PAYER_HOST_RE}')
-        ORDER BY host
+        ORDER BY host, _address
     """)
 
     print("4/4  Control probe: is a verified-live payer directory in the index? ...")
@@ -258,7 +286,6 @@ def main() -> int:
         in_ndh = any(h and host in h for h in (r["host"] for r in payer_eps))
         controls.append({**c, "http_status": code, "bytes": size,
                          "live_public": code == 200 and size > 0, "present_in_ndh": in_ndh})
-
     live_absent = [c for c in controls if c["live_public"] and not c["present_in_ndh"]]
 
     # Even where a payer endpoint IS carried, it is only usable as an index if
@@ -269,12 +296,121 @@ def main() -> int:
         status_mix[r["_status"] or "unknown"] = status_mix.get(r["_status"] or "unknown", 0) + 1
     with_org = sum(1 for r in payer_eps if r["_managing_org_id"])
 
+    detail = {
+        "organization_type_codings": codings,
+        "distinct_endpoint_hosts": hosts["distinct_hosts"],
+        "payer_operated_hosts": hosts["payer_hosts"],
+        "payer_endpoint_rows": len(payer_eps),
+        "payer_endpoint_status": status_mix,
+        "payer_endpoints_with_managing_org": with_org,
+        "control_directories": controls,
+        "live_but_absent_from_ndh": len(live_absent),
+        # Added fields: which release the detail block was measured against,
+        # and the URL-kind split the numerator and denominator come from.
+        "endpoint_url_kinds": dict(sorted(by_kind.items(), key=lambda kv: -kv[1])),
+        "detail_release_date": RELEASE_DATE,
+    }
+    return detail, org_type_rows, payer_eps, billed
+
+
+def write_detail_csv(payer_eps: list[dict]) -> pathlib.Path:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    with (OUT_DIR / f"{SLUG}-detail.csv").open("w", newline="") as fh:
+    path = OUT_DIR / f"{SLUG}-detail.csv"
+    with path.open("w", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["host", "address", "status", "managing_org_id"])
         for r in payer_eps:
             w.writerow([r["host"], r["_address"], r["_status"], r["_managing_org_id"] or ""])
+    return path
+
+
+def run_refresh_detail() -> int:
+    """Re-measure `detail` (and the payer PIN watch) into the published finding.
+
+    Headline, numerator, denominator, chart and notes are left exactly as they
+    are. They are written by h49_recheck_release.py --write, and the full-run
+    template further down would replace them with its own wording. Only keys
+    under `detail` are replaced, plus the one PIN notes paragraph that
+    --payer-pin-watch already owns.
+    """
+    out = OUT_DIR / f"{SLUG}.json"
+    pub = json.loads(out.read_text())
+    if pub.get("release_date") != RELEASE_DATE:
+        print(f"refusing: published finding is for {pub.get('release_date')}, "
+              f"warehouse is pinned to {RELEASE_DATE}. Re-measure the finding "
+              f"with h49_recheck_release.py --write first.")
+        return 1
+    client = bigquery.Client(project=PROJECT)
+    pin, pin_billed = payer_pin_watch(client)
+    try:
+        detail, _, payer_eps, billed = measure_detail(client, pin["payer_orgs"])
+    except RefreshRefused as exc:
+        print(f"refusing: positive control failed: {exc}")
+        return 1
+
+    # A curl failure reads as (0, 0), which would publish "not live" as if it
+    # were measured. Keep the last answered probe instead.
+    if not control_probe_usable(detail["control_directories"]):
+        print("warning: control probe got no HTTP answer; keeping the published "
+              "control_directories and live_but_absent_from_ndh")
+        detail.pop("control_directories")
+        detail.pop("live_but_absent_from_ndh")
+
+    # The headline embeds the FHIR REST denominator measured from NDJSON. If
+    # BigQuery disagrees, the warehouse and the headline describe different
+    # files, and that needs looking at rather than papering over.
+    rest = sum(detail["endpoint_url_kinds"].values())
+    directories = detail["endpoint_url_kinds"].get("provider-directory", 0)
+    if (rest, directories) != (pub.get("denominator"), pub.get("numerator")):
+        print(f"warning: BigQuery measures {directories} of {rest:,} FHIR REST "
+              f"endpoints as provider directories; the published headline says "
+              f"{pub.get('numerator')} of {pub.get('denominator')}. Headline "
+              f"left unchanged.")
+
+    pub = merge_detail(pub, detail)
+    pub = merge_payer_pin_watch(pub, pin)
+    pub["generated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    pub["commit_sha"] = git_sha()
+    out.write_text(json.dumps(pub, indent=2) + "\n")
+    csv_path = write_detail_csv(payer_eps)
+    print("organization type codings: "
+          + ", ".join(f"{c['code']}={c['count']:,}" for c in pub["detail"]["organization_type_codings"]))
+    print(f"bytes billed: detail {billed:,}, payer PIN watch {pin_billed:,}, "
+          f"total {billed + pin_billed:,}")
+    print(f"wrote {out}")
+    print(f"wrote {csv_path}")
+    return 0
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--payer-pin-watch", action="store_true",
+                    help="run only the payer PIN watch and merge it into the published finding")
+    ap.add_argument("--refresh-detail", action="store_true",
+                    help="re-measure detail (and the PIN watch) into the published "
+                         "finding without touching headline, chart or notes. "
+                         "This is also what a bare run does.")
+    ap.add_argument("--rewrite-headline", action="store_true",
+                    help="regenerate the whole finding from the BigQuery template, "
+                         "replacing headline, chart and notes. Deliberate use only.")
+    args = ap.parse_args()
+    if args.payer_pin_watch:
+        return run_payer_pin_watch_only()
+    if not args.rewrite_headline:
+        return run_refresh_detail()
+
+    client = bigquery.Client(project=PROJECT)
+    pin, pin_billed = payer_pin_watch(client)
+    print(f"     payer PIN watch bytes billed {pin_billed:,}")
+    detail, org_types, payer_eps, billed = measure_detail(client, pin["payer_orgs"])
+    print(f"     detail bytes billed {billed:,}")
+    by_kind = detail["endpoint_url_kinds"]
+    total_rest = sum(by_kind.values())
+    directories = by_kind.get("provider-directory", 0)
+    payer_type_rows = [r for r in org_types if r["code"] == PAYER_TYPE_CODE]
+    status_mix = detail["payer_endpoint_status"]
+    with_org = detail["payer_endpoints_with_managing_org"]
+    write_detail_csv(payer_eps)
 
     pct = (directories / total_rest * 100) if total_rest else 0.0
     headline = (
@@ -285,12 +421,26 @@ def main() -> int:
         f"The NDH does not yet function as a payer-endpoint discovery index."
     )
 
+    # The type paragraph is built from the measured codings. It used to state
+    # "exactly three codings ... no payer type" as fixed text, which became
+    # false the release a `pay` coding arrived.
+    codes = ", ".join(f"{r['code']} ({r['n']:,})" for r in org_types)
+    if payer_type_rows:
+        type_para = (
+            f"Organization.type carries these codings in this release: {codes}. "
+            "A payer type is present, so payer organizations can be selected by "
+            "type rather than by name."
+        )
+    else:
+        type_para = (
+            f"Organization.type carries these codings in this release: {codes}. "
+            "There is no payer type, so payer organizations cannot be selected by type. "
+            "Name matching is not a substitute: every Pennsylvania organization matching payer-like name "
+            "patterns is in fact a provider (KEYSTONE RURAL HEALTH CENTER and similar), which is why this "
+            "check classifies by endpoint host rather than organization name."
+        )
     notes = (
-        "Organization.type carries exactly three codings in this release: prov (Healthcare Provider), "
-        "team, govt. There is no payer type, so payer organizations cannot be selected by type. "
-        "Name matching is not a substitute: every Pennsylvania organization matching payer-like name "
-        "patterns is in fact a provider (KEYSTONE RURAL HEALTH CENTER and similar), which is why this "
-        "check classifies by endpoint host rather than organization name.\n\n"
+        type_para + "\n\n"
         f"Where payer endpoints are carried, they are largely unusable as an index: of the "
         f"{len(payer_eps)} payer-host endpoints found, {with_org} carry a managingOrganization "
         f"reference, so the endpoint cannot be resolved to an organization for the rest. "
@@ -319,39 +469,17 @@ def main() -> int:
         "chart": {
             "type": "bar",
             "unit": "count",
-            "data": [{"label": k, "value": v} for k, v in sorted(by_kind.items(), key=lambda kv: -kv[1])],
+            "data": [{"label": k, "value": v} for k, v in by_kind.items()],
         },
         "notes": notes,
-        "detail": {
-            "organization_type_codings": [
-                {"code": r["code"], "display": r["display"], "count": r["n"]} for r in org_types
-            ],
-            "distinct_endpoint_hosts": hosts["distinct_hosts"],
-            "payer_operated_hosts": hosts["payer_hosts"],
-            "payer_endpoint_rows": len(payer_eps),
-            "payer_endpoint_status": status_mix,
-            "payer_endpoints_with_managing_org": with_org,
-            "control_directories": controls,
-            "live_but_absent_from_ndh": len(live_absent),
-        },
+        "detail": detail,
     }
-
-    pin, pin_billed = payer_pin_watch(client)
-    print(f"     payer PIN watch bytes billed {pin_billed:,}")
     payload = merge_payer_pin_watch(payload, pin)
 
     out = OUT_DIR / f"{SLUG}.json"
     out.write_text(json.dumps(payload, indent=2) + "\n")
-
     print("\n" + headline)
-    print(f"\n  distinct endpoint hosts : {hosts['distinct_hosts']:,}")
-    print(f"  payer-operated hosts    : {hosts['payer_hosts']:,}")
-    print(f"  payer endpoint rows     : {len(payer_eps):,}")
-    for c in controls:
-        print(f"  control {c['payer']}: live={c['live_public']} (HTTP {c['http_status']}) "
-              f"present_in_ndh={c['present_in_ndh']}")
     print(f"\nwrote {out}")
-    print(f"wrote {OUT_DIR / (SLUG + '-detail.csv')}")
     return 0
 
 
