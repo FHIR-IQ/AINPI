@@ -208,27 +208,6 @@ Asset types in use: `DATA_TABLE` 1,605, `MEDIA` 187, `GIT_REPO` 125, `MODEL` 97,
 `MCP` 73, `NOTEBOOK` 42, `APP` 31. A notebook is a declarable asset type and is
 separate from the embedded preview notebook that `attach_notebook` uploads.
 
-### What Datavant does, and what not to copy
-
-Datavant runs ten listings and splits them cleanly. The broad datasets
-(Social Determinants of Health, HealthIQ, FinanceIQ, AutoIQ) are `STANDARD`,
-instantly available. The curated clinical datasets (Cardiometabolic, RSV, HCM,
-IBD) and the platform products (Datavant Connect, Datavant App) are
-`PERSONALIZED`. Free-and-open is the front door; the priced work is behind a
-conversation. That is the same shape as this project: the archive is free, the
-reconciliation work is not.
-
-**Copy the structure, not the voice.** The Cardiometabolic description reads
-"Navigating through the complexities of data acquisition for your research
-shouldn't be a challenge" and "valuable data without the hassle", with bolded
-phrases throughout. That is exactly the register `slop_lint.py` exists to catch,
-and it is the opposite of what makes an audit credible. A listing that says a
-number and its denominator beats one that says it is research-ready.
-
-Their listings also leave `license` and `documentation_link` empty. We have
-`/methodology`, `/data-license` and open compute scripts, so filling those is a
-real differentiator that costs nothing.
-
 ---
 
 ## Listing 3: reconciliation, paid (drafted, not published)
