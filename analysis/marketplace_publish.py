@@ -367,19 +367,82 @@ def consumer_can_see(lid: str, pid: str | None) -> bool:
     return ok
 
 
-def do_status() -> None:
+def listing_row(listing: dict, spec_names: set[str]) -> dict:
+    """One provider listing flattened for the status report.
+
+    Pure, so it can be tested without the CLI. A listing created in the
+    console before it has a spec here (an MCP server, say) has no share and,
+    as a draft, no `status` key at all: the API omits the enum at its zero
+    value, so absent means DRAFT rather than unknown.
+    """
+    s = listing.get("summary") or {}
+    d = listing.get("detail") or {}
+    share = (s.get("share") or {}).get("name")
+    assets = d.get("assets") or []
+    if share:
+        kind = f"share={share}"
+    elif assets:
+        kind = "assets=" + ",".join(assets)
+    else:
+        kind = "kind=unknown"
+    status = s.get("status")
+    return {
+        "id": listing.get("id"),
+        "name": s.get("name"),
+        "provider_id": s.get("provider_id"),
+        "status": status or "DRAFT (absent)",
+        "published": status == "PUBLISHED",
+        "visibility": (s.get("setting") or {}).get("visibility"),
+        "kind": kind,
+        "in_spec": s.get("name") in spec_names,
+    }
+
+
+def format_row(row: dict) -> str:
+    line = (f"    {row['name']}  status={row['status']}"
+            f"  visibility={row['visibility']}  {row['kind']}")
+    if not row["in_spec"]:
+        line += "  (not managed by this script: no spec in LISTINGS)"
+    return line
+
+
+def owned_by(listings: list[dict], pid: str | None) -> list[dict]:
+    """Keep listings owned by our provider. A listing that does not name its
+    provider is kept rather than hidden: an unexplained row is better than a
+    silently missing one. With no provider id resolved, keep everything."""
+    if not pid:
+        return list(listings)
+    return [l for l in listings
+            if (l.get("summary") or {}).get("provider_id") in (pid, None)]
+
+
+def status_ok(results: list[tuple[dict, bool]]) -> bool:
+    """A draft failing the consumer check is expected. A PUBLISHED listing
+    that consumers cannot see is the nine-day failure this script exists to
+    catch, so that alone makes the status report fail."""
+    return all(visible or not row["published"] for row, visible in results)
+
+
+def do_status() -> bool:
     rc, out = sh(["databricks", "provider-listings", "list"])
     if rc != 0:
-        print("  could not list listings:", out[:200]); return
-    listings = json.loads(out or "[]")
+        print("  could not list listings:", out[:200])
+        return False
+    pid = provider_id()
+    listings = owned_by(json.loads(out or "[]"), pid)
+    spec_names = {spec["name"] for spec in LISTINGS}
     print(f"  {len(listings)} listing(s)")
+    results = []
     for l in listings:
-        s = l.get("summary") or {}
-        # An absent status is DRAFT: the API omits the enum at its zero value.
-        print(f"    {s.get('name')}  status={s.get('status') or 'DRAFT (absent)'}"
-              f"  visibility={(s.get('setting') or {}).get('visibility')}"
-              f"  share={(s.get('share') or {}).get('name')}")
-        consumer_can_see(l.get("id"), s.get("provider_id"))
+        row = listing_row(l, spec_names)
+        print(format_row(row))
+        results.append((row, consumer_can_see(row["id"], row["provider_id"] or pid)))
+    visible = sum(1 for _, v in results if v)
+    published = sum(1 for r, _ in results if r["published"])
+    unmanaged = sum(1 for r, _ in results if not r["in_spec"])
+    print(f"  summary: {len(results)} listing(s), {published} published, "
+          f"{visible} consumer-visible, {unmanaged} not in spec")
+    return status_ok(results)
 
 
 def main() -> None:
@@ -399,7 +462,9 @@ def main() -> None:
         if not do_publish(private=a.private):
             sys.exit(1)
     if a.status:
-        do_status()
+        # Non-zero only when a PUBLISHED listing is invisible to consumers.
+        if not do_status():
+            sys.exit(1)
 
 
 if __name__ == "__main__":

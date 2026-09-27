@@ -398,9 +398,20 @@ export default function DeveloperPage() {
               <code className="font-mono">get_finding</code>,{' '}
               <code className="font-mono">get_state_audit</code>,{' '}
               <code className="font-mono">check_npi_cohort</code>,{' '}
-              <code className="font-mono">lookup_npi</code>. No key, no auth. Every
+              <code className="font-mono">lookup_npi</code>. No key is required. Every
               response carries provenance (release date, methodology version) and the
               signals-not-findings disclaimer where flags are involved.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              The server is public. A client that must send credentials, such as a
+              Databricks Unity Catalog HTTP connection, which accepts only authenticated
+              servers, can use a free AINPI API key as{' '}
+              <code className="font-mono">Authorization: Bearer &lt;key&gt;</code>. See{' '}
+              <a href="#rate-limits" className="text-primary-600 hover:underline">
+                rate limits
+              </a>{' '}
+              for how to get one. An unrecognised or revoked key is refused with{' '}
+              <code className="font-mono">401</code> rather than served anonymously.
             </p>
           </div>
           <ul className="text-sm text-gray-700 space-y-2 mb-4">
@@ -435,9 +446,8 @@ export default function DeveloperPage() {
             </li>
           </ul>
           <p className="text-sm text-gray-700">
-            A reference MCP server wrapping all five tools is on the roadmap. Until it ships, the
-            REST endpoints above can be pasted directly into Claude tool definitions or OpenAI
-            function-call schemas.
+            Clients that do not speak MCP can paste the REST endpoints above directly into
+            Claude tool definitions or OpenAI function-call schemas.
           </p>
         </section>
 
