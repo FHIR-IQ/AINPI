@@ -161,6 +161,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 
 /api/provider-search         POST — Cross-source merged search across NDH + NPPES + 4 payer FHIR directories
 /api/magic-scanner           POST — AI-augmented provider discovery
+/api/mcp                     GET/POST/DELETE — Public MCP server (streamable HTTP, five tools over the /api/v1 contract + /api/npd/search). No auth required. An issued AINPI API key sent as `Authorization: Bearer <key>` (or `X-API-Key`) is optional and resolves to its tier through the shared rate limiter; an unknown or revoked key gets 401, never an anonymous downgrade. This is how clients that only accept authenticated servers (Databricks Unity Catalog HTTP connections, a Marketplace MCP listing) connect. Pinned by `frontend/tests/api/mcp-auth.test.ts`.
 
 /api/v1/subscribe            POST — Email signup. Fires sendSubscriptionAlert() to ADMIN_EMAIL.
 /api/v1/download-report      POST — Report-download capture + redirect. Fires sendDownloadAlert().
