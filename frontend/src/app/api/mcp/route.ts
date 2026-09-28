@@ -23,6 +23,7 @@ import { enforceRateLimit, type LimitResult } from '@/lib/rate-limit';
 import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
+import { createOrgIndexLoader, lookupOrganization } from '@/lib/org-lookup';
 
 const BASE = 'https://ainpi.dev';
 
@@ -75,6 +76,19 @@ async function loadCohort(): Promise<Map<string, Record<string, string>>> {
   }
   return cohortCache;
 }
+
+// Module-scope cache for lookup_organization: the H50 crosswalk (~3.3 MB) and
+// the H51 vendor attribution file (~7.9 MB), fetched from the CDN, parsed
+// once (~150 ms, ~33 MB heap) and held for six hours per warm instance.
+const loadOrgIndex = createOrgIndexLoader({
+  base: BASE,
+  ttlMs: 6 * 60 * 60 * 1000,
+  fetchText: async (url) => {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`${url} returned ${res.status}`);
+    return res.text();
+  },
+});
 
 const handler = createMcpHandler(
   (server) => {
@@ -203,6 +217,38 @@ const handler = createMcpHandler(
         return text(JSON.stringify(data, null, 1));
       },
     );
+
+    server.tool(
+      'lookup_organization',
+      'Find the FHIR endpoints attributed to an organization NPI, with the organization ' +
+        'name(s), state and EHR vendor. Two sources, labelled per endpoint: "ndh" is the ' +
+        'NDH Endpoint resource naming this organization as its managingOrganization (CMS ' +
+        'data); "vendor_file" is an EHR vendor\'s own published endpoint list naming it, ' +
+        'which is the vendor\'s claim and not CMS data. An NPI in neither source returns ' +
+        'an explicit not-found result. Reads two published CSVs; no live database query.',
+      { npi: z.string().regex(/^\d{10}$/).describe('10-digit organization NPI') },
+      async ({ npi }) => {
+        try {
+          const { index, stale } = await loadOrgIndex();
+          return text(JSON.stringify(lookupOrganization(index, npi, { stale }), null, 1));
+        } catch (err) {
+          // Never answer "not found" when the sources could not be read: an
+          // empty index would make every NPI look like it has no endpoint.
+          const msg = err instanceof Error ? err.message : String(err);
+          return {
+            isError: true,
+            content: [
+              {
+                type: 'text' as const,
+                text:
+                  `lookup_organization could not load its source files (${msg}). ` +
+                  'This is a temporary failure, not a "not found" result; retry later.',
+              },
+            ],
+          };
+        }
+      },
+    );
   },
   {
     serverInfo: { name: 'ainpi', version: '1.0.0' },
@@ -224,9 +270,11 @@ const handler = createMcpHandler(
  *
  * Agents retry aggressively and without backoff when a call fails, so an
  * unprotected MCP endpoint is a worse exposure than a browser-facing route: no
- * human notices it looping. Every tool here reads CDN-served static JSON
- * except `lookup_npi`, which wraps the capped /api/npd/search route, so the
- * charge reflects the worst case rather than the average.
+ * human notices it looping. Every tool here reads CDN-served static files
+ * (JSON, or CSVs cached in module scope, as `check_npi_cohort` and
+ * `lookup_organization` do) except `lookup_npi`, which wraps the capped
+ * /api/npd/search route, so the charge reflects the worst case rather than
+ * the average. `lookup_organization` therefore needs no shape of its own.
  */
 async function guarded(
   req: NextRequest,
