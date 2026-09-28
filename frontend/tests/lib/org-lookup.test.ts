@@ -150,6 +150,14 @@ describe('lookupOrganization', () => {
     expect(e.vendor_file).toBeNull();
   });
 
+  it('reports no single state when crosswalk rows disagree', () => {
+    const cw = CROSSWALK + `\nEndpoint-9,https://x.example.com/r4,x.example.com,active,Organization-${NPI_A},${NPI_A},EXAMPLE CLINIC INC,MO`;
+    const idx = buildOrgIndex({ crosswalkCsv: cw, vendorCsv: VENDOR, linkageJson: LINKAGE });
+    const r = lookupOrganization(idx, NPI_A);
+    expect(r.state).toBeNull();
+    expect(r.states).toEqual(['KS', 'MO']);
+  });
+
   it('names the vendor for an NDH endpoint the vendor file lists under no NPI', () => {
     const r = lookupOrganization(index(), NPI_B);
     expect(r.state).toBeNull();
@@ -247,6 +255,11 @@ describe('createOrgIndexLoader', () => {
     const second = await load();
     expect(second.stale).toBe(true);
     expect(second.index).toBe(first.index);
+    // Backs off: no refetch until another TTL has passed.
+    const calls = fetchText.mock.calls.length;
+    t = 5500;
+    await load();
+    expect(fetchText.mock.calls.length).toBe(calls);
     const r = lookupOrganization(second.index, NPI_A, { stale: true });
     expect(r.notes).toMatch(/stale/i);
   });

@@ -298,7 +298,10 @@ export interface OrgLookupResult {
   npi: string;
   found: boolean;
   names: { name: string; source: EndpointSource }[];
+  /** The NDH state when the organization's crosswalk rows agree on one; else null. */
   state: string | null;
+  /** Every distinct state on the organization's crosswalk rows. */
+  states: string[];
   endpoints: OrgEndpoint[];
   release_date: string;
   notes: string;
@@ -393,7 +396,10 @@ export function lookupOrganization(
   ndh.forEach((r) => addName(r.org_name, 'ndh'));
   ven.forEach((r) => addName(r.org_name, 'vendor_file'));
 
-  const state = ndh.map((r) => r.org_state.trim()).find((s) => s.length > 0) ?? null;
+  const states = Array.from(
+    new Set(ndh.map((r) => r.org_state.trim()).filter((s) => s.length > 0)),
+  );
+  const state = states.length === 1 ? states[0] : null;
   const endpoints = order.map((k) => byKey.get(k)!);
   const found = endpoints.length > 0;
 
@@ -428,6 +434,7 @@ export function lookupOrganization(
     found,
     names,
     state,
+    states,
     endpoints,
     release_date: CURRENT_RELEASE,
     notes: parts.join(' '),
@@ -484,7 +491,7 @@ export function createOrgIndexLoader(opts: {
   }
 
   return async function load(): Promise<LoadedIndex> {
-    if (cached && !cached.stale && now() - cached.loadedAt < ttl) return cached;
+    if (cached && now() - cached.loadedAt < ttl) return cached;
     if (!inflight) {
       inflight = refresh()
         .then((fresh) => {
@@ -493,9 +500,10 @@ export function createOrgIndexLoader(opts: {
         })
         .catch((err) => {
           if (cached) {
-            // Keep serving what we had. loadedAt is left alone so the next
-            // call past the TTL tries again.
-            return { ...cached, stale: true };
+            // Keep serving what we had, and back off one TTL before the next
+            // attempt so an outage does not turn every call into a refetch.
+            cached = { ...cached, stale: true, loadedAt: now() };
+            return cached;
           }
           throw err instanceof OrgLookupSourceError
             ? err
