@@ -394,13 +394,25 @@ export default function DeveloperPage() {
               <code>claude mcp add --transport http ainpi https://ainpi.dev/api/mcp</code>
             </pre>
             <p className="text-xs text-gray-600">
-              Five tools: <code className="font-mono">list_findings</code>,{' '}
+              Six tools: <code className="font-mono">list_findings</code>,{' '}
               <code className="font-mono">get_finding</code>,{' '}
               <code className="font-mono">get_state_audit</code>,{' '}
               <code className="font-mono">check_npi_cohort</code>,{' '}
-              <code className="font-mono">lookup_npi</code>. No key is required. Every
+              <code className="font-mono">lookup_npi</code>,{' '}
+              <code className="font-mono">lookup_organization</code>. No key is required. Every
               response carries provenance (release date, methodology version) and the
               signals-not-findings disclaimer where flags are involved.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              <code className="font-mono">lookup_organization</code> takes an organization NPI
+              and returns every FHIR endpoint attributed to it, with the EHR vendor where known.
+              Each endpoint says where the attribution comes from:{' '}
+              <code className="font-mono">ndh</code> when the directory&apos;s own Endpoint
+              record names the organization (CMS data), or{' '}
+              <code className="font-mono">vendor_file</code> when an EHR vendor&apos;s published
+              endpoint list names it, which is the vendor&apos;s claim and not CMS data. It reads{' '}
+              <code className="font-mono">/api/v1/findings/endpoint-org-crosswalk.csv</code> and{' '}
+              <code className="font-mono">/api/v1/findings/vendor-endpoint-attribution.csv</code>.
             </p>
             <p className="text-xs text-gray-600 mt-2">
               The server is public. A client that must send credentials, such as a
