@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-09-21T15:50:46+00:00",
+  "generated_at": "2026-09-28T17:35:37+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "7fa80d8",
+  "commit_sha": "050f42f",
   "denominators": {
     "practitioner": 128246,
     "organization": 74192,
@@ -118,19 +118,19 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1477617819",
-      "display_name": "FORBES, BRAD",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a3)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1477617819",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
       "npi": "1003926940",
       "display_name": "SHELBURNE, ROY",
       "flagged_by": "oig-leie-exclusions",
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a1)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1003926940",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
+      "npi": "1477617819",
+      "display_name": "FORBES, BRAD",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a3)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1477617819",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
