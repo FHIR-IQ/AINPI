@@ -117,7 +117,7 @@ describe('lookupOrganization', () => {
     ]);
     expect(r.endpoints).toHaveLength(3);
 
-    const shared = r.endpoints.find((e) => e.base_url.includes('Clinic/A'))!;
+    const shared = r.endpoints.find((e) => e.base_url === 'https://FHIR.Example.com/Clinic/A/r4/')!;
     // The NDH record wins the primary label and keeps its URL as published.
     expect(shared.source).toBe('ndh');
     expect(shared.sources).toEqual(['ndh', 'vendor_file']);
@@ -133,7 +133,7 @@ describe('lookupOrganization', () => {
 
   it('labels vendor-only endpoints as the vendor claim, not CMS data', () => {
     const r = lookupOrganization(index(), NPI_A);
-    const vOnly = r.endpoints.find((e) => e.base_url.includes('portal.example.com'))!;
+    const vOnly = r.endpoints.find((e) => e.base_url === 'https://portal.example.com/a/fhir')!;
     expect(vOnly.source).toBe('vendor_file');
     expect(vOnly.sources).toEqual(['vendor_file']);
     expect(vOnly.ndh).toBeNull();
@@ -144,7 +144,7 @@ describe('lookupOrganization', () => {
 
   it('returns a null vendor for an NDH endpoint no vendor file names', () => {
     const r = lookupOrganization(index(), NPI_A);
-    const e = r.endpoints.find((x) => x.base_url.includes('other.example.com'))!;
+    const e = r.endpoints.find((x) => x.base_url === 'https://other.example.com/fhir')!;
     expect(e.source).toBe('ndh');
     expect(e.vendor).toBeNull();
     expect(e.vendor_file).toBeNull();
