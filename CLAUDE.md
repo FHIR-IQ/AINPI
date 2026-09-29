@@ -563,7 +563,7 @@ Two-layer admin-visibility stack, all keyed off `ADMIN_EMAIL` (default `gene@fhi
 
 **Important: Vercel has no public Web Analytics REST API.** Confirmed against `openapi.vercel.sh` (zero analytics endpoints across 234 documented routes) and direct probing — every guess at `/v1/web-analytics/*`, `/v1/insights/*`, `/v1/analytics/*` returns 404. The dashboard fetches from internal `vercel.com/api/web/insights/*` routes with cookie auth, which are not stable or token-accessible. **Don't reinvent the broken fetch.** The cron renders dashboard deep-links instead; pageview/visitor numbers have to be read in-browser. If Vercel ships a public analytics API later, that's a new function in `vercel-analytics.ts` — not a fix to the old broken paths.
 
-When changing the cron cadence, edit `vercel.json#crons[0].schedule`. The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.dev/api/v1/admin/weekly-report`.
+When changing the cron cadence, edit `frontend/vercel.json#crons` (not the repo-root file, which Vercel ignores). The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.dev/api/v1/admin/weekly-report`.
 
 ### Subscriber newsletters (`frontend/scripts/send-YYYY-MM-DD-update.ts`)
 
@@ -648,7 +648,7 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 
 ## Deployment Notes
 
-- `vercel.json` at repo root points builds to `frontend/` (`buildCommand: "cd frontend && npm run build"`, `outputDirectory: "frontend/.next"`)
+- **The Vercel project's Root Directory is `frontend`, so `frontend/vercel.json` is the only Vercel config that is read.** The repo-root `vercel.json` is ignored in production. This cost two weeks of silence (found 2026-09-29): the crons lived in the root file, `vercel crons ls` showed both as "not deployed", the weekly digest stopped arriving and the Marketplace install poller never fired, while every deploy reported success. Crons and any other Vercel-side setting go in `frontend/vercel.json` (response headers still belong in `next.config.js`). Check with `vercel crons ls` (both should read deployed) after any change.
 - `.vercelignore` excludes `frontend/data/` (the downloaded NDJSON files, 2.8 GB compressed)
 - All Vercel env vars mirror the local `.env.local`, with `GCP_SERVICE_ACCOUNT_KEY` being critical for production BigQuery access
 - Dynamic routes: `npd/*` API routes export `dynamic = 'force-dynamic'` so stale edge-cached data doesn't poison live-data endpoints

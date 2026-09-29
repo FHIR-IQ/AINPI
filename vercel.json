@@ -3,15 +3,5 @@
   "devCommand": "cd frontend && npm run dev",
   "installCommand": "cd frontend && npm install",
   "framework": "nextjs",
-  "outputDirectory": "frontend/.next",
-  "crons": [
-    {
-      "path": "/api/v1/admin/weekly-report",
-      "schedule": "42 13 * * 4"
-    },
-    {
-      "path": "/api/v1/admin/marketplace-installs-poll",
-      "schedule": "17 14 * * *"
-    }
-  ]
+  "outputDirectory": "frontend/.next"
 }
