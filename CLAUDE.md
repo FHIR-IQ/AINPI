@@ -648,7 +648,7 @@ Run dev tests in CI: `npm run test && npm run test:e2e`.
 
 ## Deployment Notes
 
-- **The Vercel project's Root Directory is `frontend`, so `frontend/vercel.json` is the only Vercel config that is read.** The repo-root `vercel.json` is ignored in production. This cost two weeks of silence (found 2026-09-29): the crons lived in the root file, `vercel crons ls` showed both as "not deployed", the weekly digest stopped arriving and the Marketplace install poller never fired, while every deploy reported success. Crons, headers-free settings and anything else Vercel-side go in `frontend/vercel.json`. Check with `vercel crons ls` (both should read deployed) after any change.
+- **The Vercel project's Root Directory is `frontend`, so `frontend/vercel.json` is the only Vercel config that is read.** The repo-root `vercel.json` is ignored in production. This cost two weeks of silence (found 2026-09-29): the crons lived in the root file, `vercel crons ls` showed both as "not deployed", the weekly digest stopped arriving and the Marketplace install poller never fired, while every deploy reported success. Crons and any other Vercel-side setting go in `frontend/vercel.json` (response headers still belong in `next.config.js`). Check with `vercel crons ls` (both should read deployed) after any change.
 - `.vercelignore` excludes `frontend/data/` (the downloaded NDJSON files, 2.8 GB compressed)
 - All Vercel env vars mirror the local `.env.local`, with `GCP_SERVICE_ACCOUNT_KEY` being critical for production BigQuery access
 - Dynamic routes: `npd/*` API routes export `dynamic = 'force-dynamic'` so stale edge-cached data doesn't poison live-data endpoints
