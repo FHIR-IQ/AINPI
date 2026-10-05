@@ -1,104 +1,104 @@
 {
   "samples": [
     {
-      "npi": "1780759381",
-      "display_name": "O CONNOR, WILLIAM",
-      "ndh_state": "MA",
-      "leie_state": "MA",
+      "npi": "1033414982",
+      "display_name": "MANSFIELD, CYNTHIA",
+      "ndh_state": "",
+      "leie_state": "CA",
       "exclusion_type": "1128b4",
-      "exclusion_date": "20220818",
+      "exclusion_date": "20150520",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780759381"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033414982"
     },
     {
-      "npi": "1437795739",
-      "display_name": "HANSEN, ANDREWE",
-      "ndh_state": "OK",
-      "leie_state": "OK",
-      "exclusion_type": "1128a3",
-      "exclusion_date": "20240320",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1437795739"
-    },
-    {
-      "npi": "1881632487",
-      "display_name": "ARNETT, JAN",
-      "ndh_state": "NY",
-      "leie_state": "NY",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20090618",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1881632487"
-    },
-    {
-      "npi": "1881623411",
-      "display_name": "STOWELL, STEVEN",
-      "ndh_state": "OH",
-      "leie_state": "PA",
-      "exclusion_type": "1128a4",
-      "exclusion_date": "20090720",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1881623411"
-    },
-    {
-      "npi": "1881622090",
-      "display_name": "KAPLAN, MICHAEL",
-      "ndh_state": "NV",
-      "leie_state": "NV",
-      "exclusion_type": "1128a3",
-      "exclusion_date": "20170119",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1881622090"
-    },
-    {
-      "npi": "1831457233",
-      "display_name": "DONNELLY, KATIA",
-      "ndh_state": "NY",
-      "leie_state": "NY",
+      "npi": "1619325818",
+      "display_name": "SALDANA TRAVIESO, IDALMA",
+      "ndh_state": "FL",
+      "leie_state": "FL",
       "exclusion_type": "1128a1",
-      "exclusion_date": "20170620",
+      "exclusion_date": "20250720",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1831457233"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619325818"
     },
     {
-      "npi": "1316112725",
-      "display_name": "OBILEYE, HELEN",
-      "ndh_state": "CA",
-      "leie_state": "CT",
-      "exclusion_type": "1128a1",
-      "exclusion_date": "20110720",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1316112725"
-    },
-    {
-      "npi": "1306965793",
-      "display_name": "HANLEY, ROBERT",
-      "ndh_state": "MD",
-      "leie_state": "MD",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20220920",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306965793"
-    },
-    {
-      "npi": "1306963863",
-      "display_name": "SCHREINER, ROBERT",
-      "ndh_state": "WY",
-      "leie_state": "NY",
-      "exclusion_type": "1128a2",
-      "exclusion_date": "20160519",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306963863"
-    },
-    {
-      "npi": "1306956271",
-      "display_name": "MOHAMMAD, AKIKUR",
+      "npi": "1619197571",
+      "display_name": "BANKS, CARRIE",
       "ndh_state": "CA",
       "leie_state": "CA",
-      "exclusion_type": "1128a3",
-      "exclusion_date": "20231120",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20150319",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306956271"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619197571"
+    },
+    {
+      "npi": "1619343514",
+      "display_name": "LEWIS, CHARLES",
+      "ndh_state": "",
+      "leie_state": "MI",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20200720",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619343514"
+    },
+    {
+      "npi": "1689070054",
+      "display_name": "BARBUTO, TINA",
+      "ndh_state": "",
+      "leie_state": "FL",
+      "exclusion_type": "1128a3",
+      "exclusion_date": "20220420",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1689070054"
+    },
+    {
+      "npi": "1689049355",
+      "display_name": "WISEMAN, PATSY",
+      "ndh_state": "OK",
+      "leie_state": "OK",
+      "exclusion_type": "1128a4",
+      "exclusion_date": "20221020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1689049355"
+    },
+    {
+      "npi": "1396982674",
+      "display_name": "THOMAS, MICHELLE",
+      "ndh_state": "",
+      "leie_state": "RI",
+      "exclusion_type": "1128a3",
+      "exclusion_date": "20210617",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1396982674"
+    },
+    {
+      "npi": "1962029330",
+      "display_name": "STACKHOUSE, TAVONIA",
+      "ndh_state": "MD",
+      "leie_state": "MD",
+      "exclusion_type": "1128a3",
+      "exclusion_date": "20250619",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1962029330"
+    },
+    {
+      "npi": "1952915910",
+      "display_name": "WILLIAMS, LORI",
+      "ndh_state": "MO",
+      "leie_state": "MO",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20260120",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1952915910"
+    },
+    {
+      "npi": "1902975915",
+      "display_name": "CREIGHTON, LISA",
+      "ndh_state": "",
+      "leie_state": "WA",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20130820",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1902975915"
     }
   ],
   "state_breakdown": [
