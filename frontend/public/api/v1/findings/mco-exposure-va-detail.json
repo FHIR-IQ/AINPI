@@ -1,12 +1,12 @@
 {
-  "queried_at": "2026-10-05T18:25:15+00:00",
-  "cohort_source": "high-risk-cohort-export.csv@9162442",
+  "queried_at": "2026-10-12T19:00:36+00:00",
+  "cohort_source": "high-risk-cohort-export.csv@05fa715",
   "mcos": [
     {
       "name": "Humana",
       "endpoint": "https://fhir.humana.com/api",
       "search": "identifier",
-      "queried": 106,
+      "queried": 57,
       "matched": 0,
       "errors": 0
     },
@@ -14,15 +14,15 @@
       "name": "Cigna",
       "endpoint": "https://fhir.cigna.com/ProviderDirectory/v1",
       "search": "name",
-      "queried": 106,
-      "matched": 5,
+      "queried": 57,
+      "matched": 0,
       "errors": 0
     },
     {
       "name": "UnitedHealthcare",
       "endpoint": "https://flex.optum.com/fhirpublic/R4",
       "search": "identifier",
-      "queried": 106,
+      "queried": 57,
       "matched": 0,
       "errors": 0
     },
@@ -30,78 +30,12 @@
       "name": "Molina",
       "endpoint": "https://api.interop.molinahealthcare.com/providerdirectory",
       "search": "identifier",
-      "queried": 106,
+      "queried": 57,
       "matched": 0,
       "errors": 0
     }
   ],
-  "samples": [
-    {
-      "npi": "1629256540",
-      "name": "COLLINS, RACHEL",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1629256540"
-    },
-    {
-      "npi": "1639208705",
-      "name": "CHASE, BRIDGETTE",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1639208705"
-    },
-    {
-      "npi": "1710496161",
-      "name": "BURKHEAD, JASON",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710496161"
-    },
-    {
-      "npi": "1750462008",
-      "name": "JACOBSEN, DAN",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1750462008"
-    },
-    {
-      "npi": "1801070313",
-      "name": "BREWER, STEVEN",
-      "reason_codes": [
-        "oig_excluded"
-      ],
-      "matched_in": [
-        "Cigna"
-      ],
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801070313"
-    }
-  ],
+  "samples": [],
   "limitations": [
     "v1 of H26 is a methodology demonstration covering 2 publicly-queryable payer FHIR endpoints (Humana, Cigna). Neither is a primary VA Medicaid carrier; the actual VA Medicaid MCO products (Anthem HealthKeepers Plus, Aetna BH of VA, UHC Community Plan, Sentara Community Plan, Molina Complete Care, Virginia Premier) all require credentialed access and are deferred to Stage B follow-on.",
     "Anthem's TotalView FHIR endpoints (HealthKeepersInc, AnthemBlueCross via /resources/registered/...) return 403 on every Practitioner query without app registration. Aetna requires OAuth from developerportal.aetna.com. UnitedHealthcare's URL captured in our `ProviderDirectoryAPI` Supabase table is stale (DNS-fails); current public URL is unconfirmed.",

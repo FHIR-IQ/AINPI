@@ -6,11 +6,11 @@
   ],
   "status": "published",
   "release_date": "2026-08-20",
-  "generated_at": "2026-10-05T18:25:12+00:00",
+  "generated_at": "2026-10-12T19:00:33+00:00",
   "methodology_version": "0.4.0",
-  "commit_sha": "9162442",
-  "headline": "7,280 of 7,373,232 (0.10%) NDH practitioner NPIs score at or above the 1.0 composite threshold, including 7,280 at the critical 1.5 threshold (LEIE- or SAM-excluded). Anchored in 42 CFR \u00a7 455.436 federal database checks. Reason codes: oig_excluded (7,198), sam_excluded (3,715), not_in_nppes (245,374), nppes_deactivated (15,717), luhn_fail (0). not_in_nppes is reported but scored zero this release. The NPPES reference copy stops at 2026-02-07, 2026-08 is the release, and a sample of the 245,374 flagged NPIs were all real, active providers enumerated after the snapshot. They are bucketed needs-review, not high; treating them as risk would have put a quarter of a million working clinicians on a list that exists to be acted on.",
-  "numerator": 7280,
+  "commit_sha": "05fa715",
+  "headline": "3,715 of 7,373,232 (0.05%) NDH practitioner NPIs score at or above the 1.0 composite threshold, including 3,715 at the critical 1.5 threshold (LEIE- or SAM-excluded). Anchored in 42 CFR \u00a7 455.436 federal database checks. Reason codes: oig_excluded (0), sam_excluded (3,715), not_in_nppes (245,374), nppes_deactivated (15,717), luhn_fail (0). not_in_nppes is reported but scored zero this release. The NPPES reference copy stops at 2026-02-07, 2026-08 is the release, and a sample of the 245,374 flagged NPIs were all real, active providers enumerated after the snapshot. They are bucketed needs-review, not high; treating them as risk would have put a quarter of a million working clinicians on a list that exists to be acted on.",
+  "numerator": 3715,
   "denominator": 7373232,
   "chart": {
     "type": "bar",
@@ -18,7 +18,7 @@
     "data": [
       {
         "label": "critical",
-        "value": 7280
+        "value": 3715
       },
       {
         "label": "high",
@@ -26,11 +26,11 @@
       },
       {
         "label": "medium",
-        "value": 15684
+        "value": 15698
       },
       {
         "label": "clean",
-        "value": 7104894
+        "value": 7108445
       }
     ]
   },

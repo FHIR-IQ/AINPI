@@ -1,114 +1,114 @@
 {
   "samples": [
     {
-      "npi": "1417033721",
-      "display_name": "KUEHN, RHONDA",
-      "ndh_state": "",
-      "sam_state": "TX",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2015-03-19",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417033721"
-    },
-    {
-      "npi": "1417190398",
-      "display_name": "BERNABE, JOSEFINA",
-      "ndh_state": "NY",
-      "sam_state": "NY",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2011-08-18",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417190398"
-    },
-    {
-      "npi": "1417211020",
-      "display_name": "ACQUAH, CECELIA",
-      "ndh_state": "DC",
-      "sam_state": "MD",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2017-03-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417211020"
-    },
-    {
-      "npi": "1407863715",
-      "display_name": "KHAN, SABIHA",
+      "npi": "1275521924",
+      "display_name": "DELCUETO, CARMEN",
       "ndh_state": "FL",
       "sam_state": "FL",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2016-01-20",
+      "active_date": "2011-10-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1407863715"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275521924"
     },
     {
-      "npi": "1407851876",
-      "display_name": "WOOD, AMY",
-      "ndh_state": "OH",
-      "sam_state": "OH",
-      "excluding_agency": "HHS",
-      "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2020-10-20",
-      "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1407851876"
-    },
-    {
-      "npi": "1417139692",
-      "display_name": "ALT, NAN",
+      "npi": "1275588873",
+      "display_name": "WILLIAMSON, PAULA",
       "ndh_state": "MI",
       "sam_state": "MI",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2016-01-20",
+      "active_date": "2015-04-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417139692"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275588873"
     },
     {
-      "npi": "1407839012",
-      "display_name": "WISE, CHRISTINA",
+      "npi": "1275502932",
+      "display_name": "VYAS, JAYSHREE",
       "ndh_state": "CA",
       "sam_state": "CA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2016-01-20",
+      "active_date": "2017-10-19",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1407839012"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275502932"
     },
     {
-      "npi": "1417017955",
-      "display_name": "STAMBLER, LEONARD",
-      "ndh_state": "",
-      "sam_state": "PA",
+      "npi": "1275646192",
+      "display_name": "BREWSTER, MARY",
+      "ndh_state": "CA",
+      "sam_state": "CA",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2015-02-19",
+      "active_date": "2021-10-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1417017955"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275646192"
     },
     {
-      "npi": "1649401548",
-      "display_name": "JONES, NAEISHA",
+      "npi": "1275590499",
+      "display_name": "LOPEZ, JOSE",
       "ndh_state": "",
-      "sam_state": "GA",
+      "sam_state": "FL",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2017-03-20",
+      "active_date": "2014-03-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649401548"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275590499"
     },
     {
-      "npi": "1649590753",
-      "display_name": "HERRICK, JODI",
+      "npi": "1275523755",
+      "display_name": "TORRES BENEDICTO, C",
       "ndh_state": "",
-      "sam_state": "OH",
+      "sam_state": "PR",
       "excluding_agency": "HHS",
       "exclusion_type": "Prohibition/Restriction",
-      "active_date": "2015-05-20",
+      "active_date": "2012-09-20",
       "sam_lookup_url": "https://sam.gov/search/?index=ex",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1649590753"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275523755"
+    },
+    {
+      "npi": "1275534935",
+      "display_name": "KHAVASH, ALEXANDER",
+      "ndh_state": "NY",
+      "sam_state": "FL",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2016-12-16",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275534935"
+    },
+    {
+      "npi": "1275638520",
+      "display_name": "GARG, D",
+      "ndh_state": "NY",
+      "sam_state": "NY",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2015-07-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275638520"
+    },
+    {
+      "npi": "1275630097",
+      "display_name": "MASIH, RAJAN",
+      "ndh_state": "WV",
+      "sam_state": "WV",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2011-11-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275630097"
+    },
+    {
+      "npi": "1275587123",
+      "display_name": "AVILA, JOSE",
+      "ndh_state": "FL",
+      "sam_state": "FL",
+      "excluding_agency": "HHS",
+      "exclusion_type": "Prohibition/Restriction",
+      "active_date": "2017-09-20",
+      "sam_lookup_url": "https://sam.gov/search/?index=ex",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1275587123"
     }
   ],
   "agency_breakdown": [
@@ -154,11 +154,11 @@
       "n": 147
     },
     {
-      "state": "IL",
+      "state": "PA",
       "n": 129
     },
     {
-      "state": "PA",
+      "state": "IL",
       "n": 129
     },
     {
