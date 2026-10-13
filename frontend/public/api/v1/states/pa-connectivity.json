@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-08-20",
-  "generated_at": "2026-10-13T14:56:51+00:00",
+  "generated_at": "2026-10-13T15:00:41+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "77c8ad4",
+  "commit_sha": "17789fe",
   "summary": {
     "practitioners": 230837,
     "with_role": 100918,

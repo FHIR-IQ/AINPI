@@ -49,7 +49,7 @@ from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
 from analysis.org_systems import (  # noqa: E402
     build_systems,
     describe_affiliation_graph,
-    filter_system_endpoints,
+    rollup_system_endpoints,
 )
 from analysis.pa_rural_health import load_counties  # noqa: E402
 from analysis.zip_county import STATE_FIPS, load_zip_county  # noqa: E402
@@ -846,15 +846,16 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         # for individual surgery centres. Taking the first member with a hit
         # handed all 7,308 UPMC practitioners an ambulatory surgery centre's
         # athenahealth URL, which is not where their records live.
+        # Every (url, member) pair goes through the guard before any URL
+        # dedup: one vendor tenant URL is often attached to many NPIs, and
+        # deduping first would let an out-of-state copy shadow an in-state one.
         candidates = []
-        seen_urls = set()
         for oid in sysrow["member_org_ids"]:
             member = org_by_id.get(oid)
             if not member:
                 continue
             url, basis = resolve_org(member)
-            if basis in ("ndh", "vendor-npi") and url not in seen_urls:
-                seen_urls.add(url)
+            if basis in ("ndh", "vendor-npi"):
                 candidates.append({
                     "url": url,
                     "vendor": url_vendor.get(url),
@@ -864,9 +865,14 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         # A system must not reach an endpoint through a member in another
         # state unless that member is the system itself: a Pennsylvania
         # practitioner is not served by an out-of-state affiliate's tenant.
-        kept, dropped, unknown = filter_system_endpoints(
+        kept, dropped, unknown = rollup_system_endpoints(
             state, sysrow["label"], candidates)
         unknown_state_kept += unknown
+        found = {
+            c["url"]: {"url": c["url"], "vendor": c["vendor"],
+                       "via_member": c["via_member"]}
+            for c in kept
+        }
         for c in dropped:
             out_of_state_dropped.append({
                 "system": sysrow["label"],
@@ -875,13 +881,6 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 "url": c["url"],
                 "vendor": c["vendor"],
             })
-        found = {}
-        for c in kept:
-            found[c["url"]] = {
-                "url": c["url"],
-                "vendor": c["vendor"],
-                "via_member": c["via_member"],
-            }
         sysrow["endpoints"] = list(found.values())[:10]
         sysrow["endpoint_count"] = len(found)
         sysrow["vendors"] = sorted(

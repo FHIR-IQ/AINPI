@@ -344,6 +344,34 @@ def filter_system_endpoints(state, label, candidates):
     return kept, dropped, unknown
 
 
+def rollup_system_endpoints(state, label, candidates):
+    """Apply the in-state guard per (url, member) pair, then dedupe by URL.
+
+    The guard must run before the dedup. One vendor tenant URL is often
+    attached to many NPIs; deduping first lets an out-of-state member that
+    happens to come first shadow an in-state member carrying the same URL, and
+    the system loses an endpoint it reaches legitimately. A URL is reported as
+    dropped only when no in-state copy survived.
+
+    Returns (kept, dropped, unknown_state_count), each list one entry per URL
+    in first-seen order.
+    """
+    kept_all, dropped_all, unknown = filter_system_endpoints(
+        state, label, candidates)
+    kept, kept_urls = [], set()
+    for c in kept_all:
+        if c["url"] not in kept_urls:
+            kept_urls.add(c["url"])
+            kept.append(c)
+    dropped, dropped_urls = [], set()
+    for c in dropped_all:
+        if c["url"] in kept_urls or c["url"] in dropped_urls:
+            continue
+        dropped_urls.add(c["url"])
+        dropped.append(c)
+    return kept, dropped, unknown
+
+
 def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
                   min_practitioners=1, min_members=2, excluded=None):
     """Group organizations into health systems, best evidence first.

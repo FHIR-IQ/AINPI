@@ -9,6 +9,7 @@ from analysis.org_systems import (
     filter_system_endpoints,
     has_third_party_term,
     is_listed_third_party,
+    rollup_system_endpoints,
     system_label,
     third_party_reason,
 )
@@ -197,6 +198,28 @@ def test_guard_keeps_member_without_state_and_counts_it():
         cand("https://q/fhir", "PINNACLE HEALTH MEDICAL SERVICES", ""),
     ])
     assert len(kept) == 2 and dropped == [] and unknown == 2
+
+
+def test_rollup_in_state_copy_survives_out_of_state_twin():
+    # The out-of-state member comes first (more practitioners); the same
+    # tenant URL is also carried by an in-state member.
+    kept, dropped, _ = rollup_system_endpoints("PA", "LANCASTER", [
+        cand("https://athena/1", "LANCASTER OB GYN OF NJ", "NJ"),
+        cand("https://athena/1", "LANCASTER GENERAL MEDICAL GROUP", "PA"),
+    ])
+    assert [c["url"] for c in kept] == ["https://athena/1"]
+    assert kept[0]["via_member"] == "LANCASTER GENERAL MEDICAL GROUP"
+    assert dropped == []
+
+
+def test_rollup_dedupes_dropped_urls():
+    kept, dropped, _ = rollup_system_endpoints("PA", "DLP", [
+        cand("https://athena/9", "DLP WESTERN CAROLINA", "NC"),
+        cand("https://athena/9", "DLP WESTERN CAROLINA LLC", "NC"),
+        cand("https://athena/8", "DLP CONEMAUGH", "PA"),
+    ])
+    assert [c["url"] for c in kept] == ["https://athena/8"]
+    assert [c["url"] for c in dropped] == ["https://athena/9"]
 
 
 def test_guard_state_match_is_case_insensitive():
