@@ -167,7 +167,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 /api/v1/download-report      POST — Report-download capture + redirect. Fires sendDownloadAlert().
 /api/v1/subscribers/count    GET  — Public subscriber count for the Footer / hero ticker
 /api/v1/marketplace-install  POST — Resend `email.received` webhook for installs@ainpi.dev. Parses a forwarded Databricks Marketplace install notice, records it once per address, sends the welcome. Svix-signed; RESEND_WEBHOOK_SECRET.
-/api/v1/admin/weekly-report  GET  — Cron-only digest. Authorization: Bearer ${CRON_SECRET}. Fetches Vercel Analytics 7-day traffic + subscriber/download stats.
+/api/v1/admin/weekly-report  GET  — Cron-only digest. Authorization: Bearer ${CRON_SECRET}. Subscriber/download stats, Vercel project dashboard links, and a Databricks Marketplace funnel section: per-listing VIEW_LISTING (listing_funnel_events) / REQUEST_DATA / GET_DATA (listing_access_events) event counts, last 7 days vs prior 7, one SQL statement through the poller's runStatement (`src/lib/marketplace-funnel.ts`). Counts only, no consumer names or emails. Reads "not configured" without the DATABRICKS_* vars and "funnel unavailable: <reason>" on a Databricks error; the digest sends either way.
 /api/v1/admin/marketplace-installs-poll  GET  — Daily cron (14:17 UTC). Bearer ${CRON_SECRET}. Reads GET_DATA events from Databricks `system.marketplace.listing_access_events` via the SQL Statement API and sends the one-time install welcome to each address not yet welcomed (one row per address, aggregated in SQL; shares the MarketplaceInstall table with the webhook above; max 20 sends per run). Both paths claim `welcomedAt` with one conditional `updateMany` before sending and release it only if the send fails (`src/lib/marketplace-install-claim.ts`), so overlapping runs cannot double-send. Returns {skipped:"not configured"} without the DATABRICKS_* vars; a Databricks failure alerts admin and sends nothing. Recipients created by hand on the open share are not Marketplace events and never appear, so their welcome stays manual. Before first enabling it, seed hand-welcomed installers with `scripts/seed-welcomed-installs.ts`. Cost: each run wakes the serverless SQL warehouse, which bills about its auto-stop minimum (5 minutes since 2026-10-12; measured about $0.10/day), so keep it daily.
 
 /api/auth/login              POST — JWT login
@@ -559,7 +559,7 @@ Two-layer admin-visibility stack, all keyed off `ADMIN_EMAIL` (default `gene@fhi
    - `sendSubscriptionAlert()` fires from `/api/v1/subscribe` on every newly-created subscriber (re-subscribes don't re-alert). Also fires from `/api/v1/download-report` when `alsoSubscribe: true` produces a new subscriber row.
    - `sendDownloadAlert()` fires from `/api/v1/download-report` on every successful download capture.
    - Both are fire-and-forget (`void ...`) so the response doesn't block on SMTP. Errors are logged, never thrown. Skipped if `RESEND_API_KEY` is unset.
-2. **Weekly digest** at `/api/v1/admin/weekly-report` — Vercel Cron Thursday 13:42 UTC. Combines subscriber + download stats from Supabase with a **project listing** for every project the `VERCEL_API_TOKEN` can read. Each project gets a deep-link button to its Vercel Analytics dashboard. Wrapper in `frontend/src/lib/vercel-analytics.ts`.
+2. **Weekly digest** at `/api/v1/admin/weekly-report` — Vercel Cron Thursday 13:42 UTC. Combines subscriber + download stats from Supabase with a **project listing** for every project the `VERCEL_API_TOKEN` can read. Each project gets a deep-link button to its Vercel Analytics dashboard. Wrapper in `frontend/src/lib/vercel-analytics.ts`. Also carries the Marketplace funnel section (`frontend/src/lib/marketplace-funnel.ts`), which wakes the SQL warehouse once per digest.
 
 **Important: Vercel has no public Web Analytics REST API.** Confirmed against `openapi.vercel.sh` (zero analytics endpoints across 234 documented routes) and direct probing — every guess at `/v1/web-analytics/*`, `/v1/insights/*`, `/v1/analytics/*` returns 404. The dashboard fetches from internal `vercel.com/api/web/insights/*` routes with cookie auth, which are not stable or token-accessible. **Don't reinvent the broken fetch.** The cron renders dashboard deep-links instead; pageview/visitor numbers have to be read in-browser. If Vercel ships a public analytics API later, that's a new function in `vercel-analytics.ts` — not a fix to the old broken paths.
 
@@ -620,7 +620,7 @@ CRON_SECRET                  Shared secret Vercel Cron injects as Bearer auth fo
 
 # Databricks (for /api/v1/admin/marketplace-installs-poll; all three unset = the poll is a no-op)
 DATABRICKS_HOST              Workspace URL, with or without https://
-DATABRICKS_TOKEN             Token able to run statements on the warehouse and SELECT system.marketplace.listing_access_events
+DATABRICKS_TOKEN             Token able to run statements on the warehouse and SELECT system.marketplace.listing_access_events (and listing_funnel_events, for the weekly digest's funnel section)
 DATABRICKS_WAREHOUSE_ID      SQL warehouse id (same one as WAREHOUSE_ID in analysis/databricks_publish.py)
 DATABRICKS_POLL_LOOKBACK_DAYS  Optional, default 30, max 90. Only bounds the scan; welcomedAt is the idempotency key
 
