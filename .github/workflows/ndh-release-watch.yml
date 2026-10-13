@@ -1,0 +1,66 @@
+name: NDH release watch
+
+# Daily check for a new CMS NDH bulk export. CMS serves only the current
+# release and every prior one disappears when a new one lands, so the outgoing
+# release has to be snapshotted before anything is reloaded. This job notices.
+#
+# Outcomes (see analysis/ndh_release_check.py):
+#   current  manifest generated_at == CURRENT_RELEASE  -> job passes, nothing filed
+#   new      manifest generated_at >  CURRENT_RELEASE  -> issue opened (once)
+#   older / unreachable / malformed                    -> job FAILS, nothing filed
+#
+# A broken fetch must never read as "nothing new", so the check step's exit
+# code is the job result and the issue step only runs on status == new.
+#
+# Side effects: at most one GitHub issue per detected release. No commits, no
+# labels, no cloud writes. Uses only the built-in GITHUB_TOKEN; contents: read
+# is the minimum actions/checkout needs.
+
+on:
+  schedule:
+    - cron: "23 11 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: ndh-release-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    name: Compare NDH manifest to pinned release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # Standard library only; no pip install.
+      - name: Check manifest
+        id: check
+        run: python3 analysis/ndh_release_check.py --issue-body-file "$RUNNER_TEMP/ndh-release-issue.md"
+
+      - name: Open issue for new release
+        if: steps.check.outputs.new_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TITLE: ${{ steps.check.outputs.issue_title }}
+        run: |
+          set -euo pipefail
+          # Exact title match over open issues. Not --search: the search index
+          # is eventually consistent and matches substrings. If the listing
+          # itself fails, pipefail fails the job rather than filing a duplicate.
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 200 \
+            --json number,title | jq -r --arg t "$TITLE" '.[] | select(.title == $t) | .number')
+          if [ -n "$existing" ]; then
+            echo "Open issue #$existing already tracks: $TITLE"
+            exit 0
+          fi
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" \
+            --body-file "$RUNNER_TEMP/ndh-release-issue.md"
