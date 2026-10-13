@@ -46,6 +46,25 @@ ways that matter, and the guard against the worst of them is in `brand_key`:
 "UNIVERSITY OF PITTSBURGH PHYSICIANS" and "UNIVERSITY OF PENN-MEDICAL GROUP"
 must not collapse to a shared opener.
 
+**Third-party vendors are not systems.** On the 2026-08-20 release, 421
+organization NPIs holding Pennsylvania practitioners carry the name "COBIUS
+HEALTHCARE SOLUTIONS", spread over 161 cities in more than a dozen states. That
+is a billing and revenue-cycle vendor whose name sits on its clients' records,
+not an owner. Brand grouping made it the third-largest "system" in the state
+(15,427 practitioners) and handed those practitioners endpoints belonging to
+unrelated clients, including a Louisiana health system's Epic endpoint. Such
+organizations are excluded from grouping (`third_party_reason`) and stay in the
+ledger as standalone organizations.
+
+**Labels name the system, not a member.** Labelling a group by its largest
+member produced "AHN PRIMARY CARE MOBILE CLINIC" and "WELLSPAN DIGESTIVE
+HEALTH" as system names. The label is the attested owner or NPPES parent when
+there is one, otherwise the brand stem every member shares (`system_label`).
+
+**Endpoints stay in state.** A system's endpoint list must not pull in an
+endpoint carried by a member outside the state being processed, unless that
+member is the system's own entity (`filter_system_endpoints`).
+
 Cost: no BigQuery of its own. Operates on rows the caller already fetched.
 """
 from __future__ import annotations
@@ -67,6 +86,44 @@ GENERIC_OPENERS = frozenset({
 # Connectors carry no identity. Stopping on one produces keys like
 # "UNIVERSITY OF" that merge unrelated systems.
 CONNECTORS = frozenset({"OF", "AND", "FOR", "AT", "IN", "ON", "A", "THE"})
+
+# Third-party billing, revenue-cycle, management and staffing vendors whose
+# name appears on many unrelated providers' organization records. Matched on
+# `brand_key`, so a misspelling of the same name ("COBIUS HEALTCARE
+# SOLUTIONS", which is in the file) is caught too. Extend this only with
+# evidence: a named entry removes every organization carrying it from brand
+# grouping. Attested owner and parent tiers still apply to those NPIs.
+THIRD_PARTY_BRANDS = frozenset({
+    "COBIUS",
+})
+
+# Name terms typical of a vendor that sits beside providers rather than owning
+# them. Deliberately narrow: SERVICES and PARTNERS were measured and rejected,
+# because real systems use them ("PINNACLE HEALTH MEDICAL SERVICES", "ARIA
+# HEALTH PHYSICIAN SERVICES").
+THIRD_PARTY_TERMS = frozenset({
+    "BILLING", "REVENUE", "RCM", "SOLUTIONS", "STAFFING", "LOCUM", "LOCUMS",
+    "MANAGEMENT", "MSO",
+})
+
+# Clinical services whose names contain MANAGEMENT. Stripped before the term
+# test so a pain management practice is not mistaken for a management company.
+CLINICAL_MANAGEMENT = (
+    "PAIN MANAGEMENT", "CARE MANAGEMENT", "WEIGHT MANAGEMENT",
+    "DISEASE MANAGEMENT", "CASE MANAGEMENT", "UTILIZATION MANAGEMENT",
+    "MEDICATION MANAGEMENT", "WOUND MANAGEMENT", "DIABETES MANAGEMENT",
+)
+
+# Heuristic thresholds for a brand group that is a vendor, tuned on the PA
+# slice of the 2026-08-20 release. All four must hold: the dominant name
+# carries a vendor term, most members share that exact name, there are enough
+# members to be a pattern, and they are spread further than one operator's
+# footprint. "SENTARA ADVANCED IMAGING SOLUTIONS" (half of six members) and
+# "PT SOLUTIONS" (three of five) fail the name-share test and stay grouped.
+THIRD_PARTY_MIN_NAME_SHARE = 0.8
+THIRD_PARTY_MIN_MEMBERS = 5
+THIRD_PARTY_MIN_CITIES = 10
+THIRD_PARTY_MIN_STATES = 3
 
 _SUFFIXES = (
     " INC", " LLC", " LLP", " PC", " LTD", " CORP", " CORPORATION", " CO",
@@ -195,8 +252,100 @@ def describe_affiliation_graph(edges, name_by_id, top_n=10):
     }
 
 
+def has_third_party_term(name):
+    """True when a name carries a vendor term, ignoring clinical MANAGEMENT."""
+    text = f" {normalize(name)} "
+    for phrase in CLINICAL_MANAGEMENT:
+        text = text.replace(f" {phrase} ", " ")
+    return any(tok in THIRD_PARTY_TERMS for tok in text.split())
+
+
+def is_listed_third_party(name):
+    """True when an organization name belongs to a named third-party vendor."""
+    return brand_key(name) in THIRD_PARTY_BRANDS
+
+
+def third_party_reason(members):
+    """Why a brand group is a third-party vendor rather than a system, or None.
+
+    `members` are organization rows (`org_name`, `org_city`, `org_state`). The
+    explicit list wins. Otherwise the group is a vendor when its dominant name
+    carries a vendor term, most members share that exact name, and the members
+    are spread across many cities or states. A real system's subsidiaries
+    rarely share one name across 160 cities; a vendor's clients do, because the
+    vendor's name is the one written on their records.
+    """
+    if not members:
+        return None
+    if any(is_listed_third_party(o["org_name"]) for o in members):
+        return "listed third-party vendor"
+    if len(members) < THIRD_PARTY_MIN_MEMBERS:
+        return None
+    names = collections.Counter(normalize(o["org_name"]) for o in members)
+    top_name, top_n = names.most_common(1)[0]
+    if top_n / len(members) < THIRD_PARTY_MIN_NAME_SHARE:
+        return None
+    if not has_third_party_term(top_name):
+        return None
+    cities = {(o.get("org_state"), (o.get("org_city") or "").upper())
+              for o in members if o.get("org_city")}
+    states = {o.get("org_state") for o in members if o.get("org_state")}
+    if (len(cities) >= THIRD_PARTY_MIN_CITIES
+            or len(states) >= THIRD_PARTY_MIN_STATES):
+        return (f"vendor-type name shared by {top_n} of {len(members)} "
+                f"members across {len(cities)} cities in {len(states)} states")
+    return None
+
+
+def system_label(basis, key, members, parent_by_npi=None, owner_by_npi=None):
+    """The name a system is shown under.
+
+    Attested tiers use the owner or parent name as CMS or NPPES records it,
+    taking the most frequent raw spelling among members. The brand tier uses
+    the brand stem, which every member shares by construction. Never a
+    member's own name: labelling by the largest member is how "AHN PRIMARY
+    CARE MOBILE CLINIC" came to name Allegheny Health Network.
+    """
+    lookup = {"cms-ownership": owner_by_npi or {},
+              "nppes-parent": parent_by_npi or {}}.get(basis)
+    if lookup is not None:
+        raw = collections.Counter(
+            lookup[o["org_npi"]].strip() for o in members
+            if lookup.get(o.get("org_npi") or "")
+        )
+        if raw:
+            return raw.most_common(1)[0][0]
+    return key.split(":", 1)[1] if ":" in key else key
+
+
+def filter_system_endpoints(state, label, candidates):
+    """Keep a system's endpoints in state, and report what is dropped.
+
+    `candidates` are dicts carrying at least `url`, `via_member` (the member
+    organization's name) and `member_state`. An endpoint is dropped when its
+    member is in another state, unless that member is the system's own entity
+    (its normalized name equals the label's). A member with no recorded state
+    is kept, because it cannot be shown to be out of state, and is counted.
+
+    Returns (kept, dropped, unknown_state_count).
+    """
+    state = (state or "").upper()
+    own = normalize(label)
+    kept, dropped, unknown = [], [], 0
+    for c in candidates:
+        member_state = (c.get("member_state") or "").upper()
+        if not member_state:
+            unknown += 1
+            kept.append(c)
+        elif member_state == state or normalize(c.get("via_member")) == own:
+            kept.append(c)
+        else:
+            dropped.append(c)
+    return kept, dropped, unknown
+
+
 def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
-                  min_practitioners=1, min_members=2):
+                  min_practitioners=1, min_members=2, excluded=None):
     """Group organizations into health systems, best evidence first.
 
     Tier 1, attested ownership: CMS enrollment ownership data. It states
@@ -215,6 +364,16 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
     connected components of an untyped edge set produced a UPMC cluster
     containing Corry Memorial Hospital.
 
+    Third-party vendors are never grouped by name. An organization on the
+    explicit list is never brand-grouped, and a brand group matching the vendor
+    heuristic is dropped whole; either way those organizations stay in the
+    caller's rows as standalone organizations. The attested tiers still apply,
+    because they describe the NPI rather than the name written on it: 44 PA
+    organizations carrying the Cobius name have an NPPES parent such as
+    Lancaster General Hospital or St. Clair Hospital, and that parent is
+    evidence the vendor name is not. Pass a list as `excluded` to receive one
+    row per excluded group.
+
     A group needs at least two organizations. One organization is not a system,
     and emitting it as one inflates the count with noise.
     """
@@ -222,6 +381,7 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
     owner_by_npi = owner_by_npi or {}
     groups = collections.defaultdict(
         lambda: {"members": [], "practitioners": 0, "bases": set()})
+    listed = collections.defaultdict(list)
     for o in org_rows:
         npi = o["org_npi"] or ""
         owner = owner_by_npi.get(npi)
@@ -230,6 +390,9 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
             key, basis = f"owner:{normalize(owner)}", "cms-ownership"
         elif parent:
             key, basis = f"parent:{normalize(parent)}", "nppes-parent"
+        elif is_listed_third_party(o["org_name"]):
+            listed[brand_key(o["org_name"])].append(o)
+            continue
         else:
             bk = brand_key(o["org_name"])
             if not bk:
@@ -240,23 +403,46 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
         entry["practitioners"] += o["practitioners"]
         entry["bases"].add(basis)
 
+    exclusions = [
+        {"system_key": f"brand:{bk}", "label": bk,
+         "reason": "listed third-party vendor",
+         "organizations": len(members),
+         "practitioners": sum(o["practitioners"] for o in members)}
+        for bk, members in listed.items()
+    ]
+
     out = []
     for key, entry in groups.items():
+        basis = ("cms-ownership" if "cms-ownership" in entry["bases"]
+                 else "nppes-parent" if "nppes-parent" in entry["bases"]
+                 else "brand-name")
+        # Attested tiers state ownership, so the vendor heuristic is applied
+        # to inferred brand groups only.
+        if basis == "brand-name":
+            reason = third_party_reason(entry["members"])
+            if reason:
+                exclusions.append({
+                    "system_key": key,
+                    "label": system_label(basis, key, entry["members"]),
+                    "reason": reason,
+                    "organizations": len(entry["members"]),
+                    "practitioners": entry["practitioners"],
+                })
+                continue
         if (entry["practitioners"] < min_practitioners
                 or len(entry["members"]) < min_members):
             continue
-        # Label by the member holding the most practitioners: it is the
-        # recognisable one, and it avoids inventing a name nobody uses.
-        lead = max(entry["members"], key=lambda o: o["practitioners"])
         out.append({
             "system_key": key,
-            "label": lead["org_name"],
-            "basis": ("cms-ownership" if "cms-ownership" in entry["bases"]
-                      else "nppes-parent" if "nppes-parent" in entry["bases"]
-                      else "brand-name"),
+            "label": system_label(basis, key, entry["members"],
+                                  parent_by_npi, owner_by_npi),
+            "basis": basis,
             "organizations": len(entry["members"]),
             "practitioners": entry["practitioners"],
             "member_org_ids": [o["org_id"] for o in entry["members"]],
         })
     out.sort(key=lambda s: -s["practitioners"])
+    if excluded is not None:
+        exclusions.sort(key=lambda r: -r["practitioners"])
+        excluded.extend(exclusions)
     return out

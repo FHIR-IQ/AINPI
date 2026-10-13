@@ -49,6 +49,7 @@ from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
 from analysis.org_systems import (  # noqa: E402
     build_systems,
     describe_affiliation_graph,
+    filter_system_endpoints,
 )
 from analysis.pa_rural_health import load_counties  # noqa: E402
 from analysis.zip_county import STATE_FIPS, load_zip_county  # noqa: E402
@@ -822,8 +823,22 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     # endpoint, every practitioner in that system gets a system-level path,
     # which is weaker than a direct one and is reported as its own number.
     org_by_id = {o["org_id"]: o for o in org_rows}
-    systems = build_systems(org_rows, parent_by_npi, owner_by_npi)
+    excluded_vendors = []
+    systems = build_systems(org_rows, parent_by_npi, owner_by_npi,
+                            excluded=excluded_vendors)
+    # Positive control on the vendor exclusion: if a heuristic bug starts
+    # excluding real systems, the excluded share jumps and this line shows it.
+    grouped_prac = sum(s["practitioners"] for s in systems)
+    excluded_prac = sum(r["practitioners"] for r in excluded_vendors)
+    print(f"  systems: {len(systems):,} grouped holding {grouped_prac:,} "
+          f"practitioner-org links; {len(excluded_vendors):,} third-party "
+          f"groups excluded holding {excluded_prac:,}")
+    for r in excluded_vendors[:10]:
+        print(f"    excluded {r['label']}: {r['organizations']:,} orgs, "
+              f"{r['practitioners']:,} practitioners ({r['reason']})")
     affiliation = describe_affiliation_graph(edges, edge_names)
+    out_of_state_dropped = []
+    unknown_state_kept = 0
     for sysrow in systems:
         # Collect every endpoint anywhere in the system, not the first one
         # found. A health system does not have "an endpoint": UPMC publishes an
@@ -831,18 +846,42 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         # for individual surgery centres. Taking the first member with a hit
         # handed all 7,308 UPMC practitioners an ambulatory surgery centre's
         # athenahealth URL, which is not where their records live.
-        found = {}
+        candidates = []
+        seen_urls = set()
         for oid in sysrow["member_org_ids"]:
             member = org_by_id.get(oid)
             if not member:
                 continue
             url, basis = resolve_org(member)
-            if basis in ("ndh", "vendor-npi") and url not in found:
-                found[url] = {
+            if basis in ("ndh", "vendor-npi") and url not in seen_urls:
+                seen_urls.add(url)
+                candidates.append({
                     "url": url,
                     "vendor": url_vendor.get(url),
                     "via_member": member["org_name"],
-                }
+                    "member_state": member.get("org_state"),
+                })
+        # A system must not reach an endpoint through a member in another
+        # state unless that member is the system itself: a Pennsylvania
+        # practitioner is not served by an out-of-state affiliate's tenant.
+        kept, dropped, unknown = filter_system_endpoints(
+            state, sysrow["label"], candidates)
+        unknown_state_kept += unknown
+        for c in dropped:
+            out_of_state_dropped.append({
+                "system": sysrow["label"],
+                "via_member": c["via_member"],
+                "member_state": c["member_state"],
+                "url": c["url"],
+                "vendor": c["vendor"],
+            })
+        found = {}
+        for c in kept:
+            found[c["url"]] = {
+                "url": c["url"],
+                "vendor": c["vendor"],
+                "via_member": c["via_member"],
+            }
         sysrow["endpoints"] = list(found.values())[:10]
         sysrow["endpoint_count"] = len(found)
         sysrow["vendors"] = sorted(
@@ -850,6 +889,13 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         )
         # Trim the id list: useful in aggregate, noise in a published payload.
         sysrow["member_org_ids"] = sysrow["member_org_ids"][:25]
+
+    print(f"  systems: dropped {len(out_of_state_dropped):,} out-of-state "
+          f"member endpoints; kept {unknown_state_kept:,} from members with "
+          f"no recorded state")
+    for d in out_of_state_dropped[:20]:
+        print(f"    dropped {d['url']} via {d['via_member']} "
+              f"({d['member_state']}) from {d['system']}")
 
     systems_with_endpoint = [s for s in systems if s["endpoint_count"]]
     practitioners_gained = sum(
@@ -995,6 +1041,29 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 "with the member that carries it, and none of them is "
                 "presented as the one serving a given practitioner."
             ),
+            "excluded_third_party": {
+                "note": (
+                    "Billing, revenue-cycle, management and staffing vendors "
+                    "whose name appears on many unrelated providers' records. "
+                    "They are not grouped into systems and stay in the ledger "
+                    "as standalone organizations. Matched by an explicit list "
+                    "or by a vendor-type name shared across many cities or "
+                    "states."
+                ),
+                "rows": excluded_vendors[:25],
+            },
+            "out_of_state_endpoints_dropped": {
+                "note": (
+                    "Endpoints a system would have reached only through a "
+                    "member organization recorded in another state. Dropped "
+                    "from the system rollup unless that member is the system "
+                    "itself. Members with no recorded state are kept and "
+                    "counted, because they cannot be shown to be out of state."
+                ),
+                "count": len(out_of_state_dropped),
+                "kept_from_members_without_state": unknown_state_kept,
+                "rows": out_of_state_dropped[:50],
+            },
             "rows": systems[:60],
         },
         "graph": {

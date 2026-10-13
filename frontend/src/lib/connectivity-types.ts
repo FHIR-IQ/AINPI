@@ -294,6 +294,30 @@ export interface ConnectivityPayload {
     systems_reaching_an_endpoint: number;
     practitioners_in_a_system_that_reaches_an_endpoint: number;
     routing_caveat: string;
+    /** Billing/RCM/staffing vendors kept out of system grouping (FHI-18). */
+    excluded_third_party?: {
+      note: string;
+      rows: {
+        system_key: string;
+        label: string;
+        reason: string;
+        organizations: number;
+        practitioners: number;
+      }[];
+    };
+    /** Endpoints dropped because the member carrying them is out of state. */
+    out_of_state_endpoints_dropped?: {
+      note: string;
+      count: number;
+      kept_from_members_without_state: number;
+      rows: {
+        system: string;
+        via_member: string;
+        member_state: string | null;
+        url: string;
+        vendor: string | null;
+      }[];
+    };
     rows: ConnectivitySystem[];
   };
   organizations_unlinked: {
