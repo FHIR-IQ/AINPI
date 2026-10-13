@@ -13,7 +13,7 @@
   "crons": [
     {
       "path": "/api/v1/admin/weekly-report",
-      "schedule": "42 13 * * 4"
+      "schedule": "12 14 * * 4"
     },
     {
       "path": "/api/v1/admin/marketplace-installs-poll",
