@@ -167,6 +167,14 @@ jobs:
         # field is derived now; see the script header.
         run: python analysis/build_stats.py
 
+      - name: Rebuild the measure series
+        # Reads committed files only (release snapshots, vendored as-published
+        # findings, the findings just regenerated above). No BigQuery, no
+        # network. Leaves measures.json untouched when only the timestamp
+        # would change. Runs after the finding scripts so a refreshed finding
+        # reaches the series in the same commit.
+        run: python analysis/measures.py
+
       - name: Rebuild the discovery manifest
         # Must run after every finding script and after the stats.json stamp,
         # because it reads both. Nothing regenerated this before, so the
