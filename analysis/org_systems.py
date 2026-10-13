@@ -81,6 +81,37 @@ GENERIC_OPENERS = frozenset({
     "ASSOCIATES", "FAMILY", "CHILDRENS", "CHILDREN", "GOOD", "HOLY",
     "MOUNT", "MT", "LAKE", "VALLEY", "RIVER", "PARK", "GREATER", "UPPER",
     "LOWER", "TRI", "MID", "CARE", "HEALTH", "PREMIER", "PRIME", "UNITED",
+    # Added for FHI-39, each one measured as a false brand on the PA slice of
+    # the 2026-08-20 release: MAIN (45 orgs, mixing Main Line Health with
+    # unrelated "MAIN ..." practices), CENTER (150), CMS ("CMS HIH" and
+    # others). MAIN stays usable as part of a key: "MAIN LINE HEALTHCARE"
+    # still reduces to "MAIN LINE".
+    "MAIN", "CENTER", "CENTERS", "CMS",
+    # Organization-form words. They matter only once a specialty opener has
+    # been skipped: "EMERGENCY CARE SERVICES OF PENNSYLVANIA" must not key on
+    # "EMERGENCY CARE SERVICES", which every emergency group could share.
+    "SERVICES", "SERVICE", "PHYSICIANS", "PHYSICIAN", "PHY", "ASSOC",
+    "GROUP", "SPECIALISTS", "CONSULTANTS", "PARTNERS", "CLINIC", "CLINICS",
+    "MED",
+})
+
+# Clinical specialties and service lines. A practice named for what it does
+# ("CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA", "CLINICAL
+# RENAL ASSOCIATES") shares that word with every other practice doing the same
+# thing, so the word cannot name a system on its own. On the PA slice of the
+# 2026-08-20 release these openers formed groups of 67 (CLINICAL), 119
+# (EMERGENCY), 36 (INTERNAL), 27 (CARDIOLOGY), 40 (ORTHOPEDIC), 79
+# (ANESTHESIA) and 22 (FAMILY PRACTICE) unrelated organizations. Kept to
+# specialty words; extend with evidence, as for GENERIC_OPENERS.
+SPECIALTY_OPENERS = frozenset({
+    "CLINICAL", "EMERGENCY", "INTERNAL", "CARDIOLOGY", "CARDIOVASCULAR",
+    "ORTHOPEDIC", "ORTHOPEDICS", "ORTHOPAEDIC", "ORTHOPAEDICS",
+    "ANESTHESIA", "ANESTHESIOLOGY", "RADIOLOGY", "PATHOLOGY", "DERMATOLOGY",
+    "PEDIATRIC", "PEDIATRICS", "NEUROLOGY", "ONCOLOGY", "UROLOGY",
+    "GASTROENTEROLOGY", "PULMONARY", "SURGICAL", "SURGERY", "BREAST",
+    "RECONSTRUCTIVE", "PLASTIC", "PRIMARY", "URGENT", "MEDICINE", "PRACTICE",
+    "PHYSICAL", "BEHAVIORAL", "PSYCHIATRIC", "WOMENS", "DENTAL", "EYE",
+    "VISION", "HOSPITALIST", "HOSPITALISTS",
 })
 
 # Connectors carry no identity. Stopping on one produces keys like
@@ -157,6 +188,11 @@ def brand_key(name):
     and would hand one system's endpoint to the other's providers. Carrying on
     to "UNIVERSITY OF PITTSBURGH" and "UNIVERSITY OF PENN" keeps them apart.
 
+    Clinical specialty words count as generic too (`SPECIALTY_OPENERS`):
+    "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA" and "CLINICAL
+    RENAL ASSOCIATES" used to share the key "CLINICAL". The first now has no
+    key and the second keys on "CLINICAL RENAL".
+
     Returns None when no distinctive token appears in the first four, because
     no group is better than a wrong one.
     """
@@ -167,6 +203,7 @@ def brand_key(name):
     for token in tokens[:4]:
         key.append(token)
         if (token not in GENERIC_OPENERS
+                and token not in SPECIALTY_OPENERS
                 and token not in CONNECTORS
                 and len(token) >= 3):
             return " ".join(key)
@@ -474,3 +511,92 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
         exclusions.sort(key=lambda r: -r["practitioners"])
         excluded.extend(exclusions)
     return out
+
+
+# Known health systems per state, for the positive control in
+# `check_system_controls`. Each entry is the system's name and the label
+# prefixes it can surface under: a brand stem, an NPPES parent name or a CMS
+# owner name, whichever tier wins for that system on a given release. Every
+# prefix family was checked against the PA slice of the 2026-08-20 release.
+# A system on this list that is excluded as a vendor, or that stops being
+# grouped at all, fails the run: a rule that quietly dissolves UPMC is a
+# worse bug than a missed vendor.
+KNOWN_SYSTEMS = {
+    "PA": {
+        "UPMC": ("UPMC", "UNIVERSITY OF PITTSBURGH"),
+        "Allegheny Health Network": ("AHN", "ALLEGHENY"),
+        "Geisinger": ("GEISINGER",),
+        "Penn State Health": ("PENN STATE",),
+        "WellSpan": ("WELLSPAN",),
+        "St. Luke's": ("ST LUKE", "ST LUKES", "SAINT LUKE", "SAINT LUKES"),
+        "Lehigh Valley": ("LEHIGH",),
+        "Jefferson": ("JEFFERSON",),
+        "Main Line Health": ("MAIN LINE",),
+    },
+}
+
+
+def _label_matches(label, prefix):
+    """True when `label`'s normalized tokens start with `prefix`'s tokens.
+
+    Token-wise, not substring: "ST" must not match every saint, and "AHN" must
+    not match a label that merely contains those letters.
+    """
+    want = normalize(prefix).split()
+    have = normalize(label).split()
+    return bool(want) and have[:len(want)] == want
+
+
+def check_system_controls(state, org_rows, systems, excluded, known=None,
+                          parent_by_npi=None, owner_by_npi=None):
+    """Positive controls on the system rollup. Returns a list of problems.
+
+    An empty list means the run may publish. Three checks:
+
+    1. Every organization whose name is a listed third-party vendor (Cobius)
+       and which no attested tier claimed must sit in an excluded group.
+       Derived from `org_rows`, so a state with no Cobius records is not
+       failed for having none to exclude.
+    2. No known system for the state may appear among the exclusions.
+    3. Every known system for the state must appear among `systems`.
+       Without this, check 2 passes vacuously when a brand-key change stops
+       grouping a system at all, which is the "not looking" reading of an
+       empty result.
+
+    `systems` and `excluded` are the full lists from `build_systems`, not the
+    truncated payload rows. Organizations claimed by an attested tier are
+    grouped under their owner or parent rather than excluded, so pass the
+    same `parent_by_npi` and `owner_by_npi` used to build the systems.
+    `known` overrides `KNOWN_SYSTEMS[state]`.
+    """
+    state = (state or "").upper()
+    known = KNOWN_SYSTEMS.get(state, {}) if known is None else known
+    parent_by_npi = parent_by_npi or {}
+    owner_by_npi = owner_by_npi or {}
+    problems = []
+
+    excluded_keys = {r.get("system_key") for r in excluded}
+    vendor_keys = {
+        brand_key(o["org_name"]) for o in org_rows
+        if is_listed_third_party(o.get("org_name"))
+        and not owner_by_npi.get(o.get("org_npi") or "")
+        and not parent_by_npi.get(o.get("org_npi") or "")
+    }
+    for bk in sorted(k for k in vendor_keys if k):
+        if f"brand:{bk}" not in excluded_keys:
+            problems.append(
+                f"listed third-party vendor {bk} is present in {state} "
+                f"organizations but was not excluded from system grouping")
+
+    for name, prefixes in known.items():
+        for r in excluded:
+            if any(_label_matches(r.get("label") or "", p) for p in prefixes):
+                problems.append(
+                    f"known system {name} was excluded as third-party "
+                    f"({r.get('label')}: {r.get('reason')})")
+        if not any(_label_matches(s.get("label") or "", p)
+                   for s in systems for p in prefixes):
+            problems.append(
+                f"known system {name} is not among the grouped systems "
+                f"(looked for labels starting {', '.join(prefixes)})")
+    return problems
