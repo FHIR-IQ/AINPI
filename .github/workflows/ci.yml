@@ -38,6 +38,33 @@ jobs:
       - name: Unit tests
         run: npm run test
 
+  analysis-tests:
+    # Pure-function pytest suite under analysis/tests/. Every test reads
+    # fixtures or committed files; none queries BigQuery or touches the
+    # network, so nothing is deselected. Includes
+    # test_committed_measures_json_matches_the_generator, which fails when
+    # frontend/public/api/v1/measures.json is edited by hand or left stale
+    # after a source file it reads changes.
+    name: Analysis unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: analysis/requirements-test.txt
+
+      - name: Install test dependencies
+        run: pip install -r analysis/requirements-test.txt
+
+      # `python -m` puts the repo root on sys.path, which is what lets the
+      # tests `from analysis import ...`. A bare `pytest` does not.
+      - name: pytest analysis/tests
+        run: python -m pytest analysis/tests/ -q
+
   contract:
     name: Public contract validation
     runs-on: ubuntu-latest

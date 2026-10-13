@@ -202,16 +202,43 @@ def snapshot_coded_org_type(doc: dict) -> list:
                 "shape.organization_types[coded].n / tables.organization.rows")]
 
 
-def role_gap_delta_pa(doc: dict) -> list:
-    """Both releases of PA role coverage from role-gap-delta.json."""
+# role-gap-delta.json carries two releases, one per side: `overall.before` is
+# the `from` release and `overall.after` the `to` release.
+_RGD_SIDES = {"before": "from", "after": "to"}
+
+
+def _role_gap_delta_side(doc: dict, side: str) -> Raw:
     if doc.get("state") != "PA":
         raise SourceUnavailable(f"role-gap-delta state is {doc.get('state')!r}, not PA")
-    out = []
-    for side, rel_key in (("before", "from"), ("after", "to")):
-        o = _require(doc, "overall", side)
-        out.append(Raw(_require(doc, rel_key), o.get("with_role"), o.get("active"),
-                       f"overall.{side}.with_role / overall.{side}.active"))
-    return out
+    o = _require(doc, "overall", side)
+    return Raw(_require(doc, _RGD_SIDES[side]), o.get("with_role"), o.get("active"),
+               f"overall.{side}.with_role / overall.{side}.active")
+
+
+def role_gap_delta_pa(doc: dict) -> list:
+    """Both releases of PA role coverage from role-gap-delta.json."""
+    return [_role_gap_delta_side(doc, side) for side in _RGD_SIDES]
+
+
+def role_gap_delta_pa_side(side: str) -> Callable[[dict], list]:
+    """One side of role-gap-delta.json: "before" (the `from` release) or "after" (`to`).
+
+    The file is regenerated for each release pair, and the new pair's `from`
+    repeats the old pair's `to`. Once the outgoing file is vendored into
+    published/, both files carry that shared release, and registering both
+    with `role_gap_delta_pa` raises "two sources for one release". Register
+    the vendored copy with `role_gap_delta_pa_side("before")` so it supplies
+    only the release the regenerated file no longer carries, and the new
+    release adds a point instead of raising.
+    """
+    if side not in _RGD_SIDES:
+        raise ValueError(f"role-gap-delta side must be one of {sorted(_RGD_SIDES)}, not {side!r}")
+
+    def extract(doc: dict) -> list:
+        return [_role_gap_delta_side(doc, side)]
+
+    extract.__name__ = f"role_gap_delta_pa_side_{side}"
+    return extract
 
 
 def npi_validity_summary(doc: dict) -> list:
