@@ -38,7 +38,11 @@ In the same commit as `python3 analysis/release_snapshot.py --release <outgoing>
    `frontend/public/api/v1/findings/` into this directory as
    `<slug>@<short sha of HEAD>.json`, plus `role-gap-delta.json` the same way.
 2. Add each copy to the registry as a vendored `Source` for the outgoing
-   release, and add a row to the table above.
+   release, and add a row to the table above. `role-gap-delta.json` is the
+   exception to a plain copy: it carries two releases (`from` and `to`), and
+   the regenerated file's `from` repeats the outgoing release. Registering
+   both as-is makes the generator raise "two sources for one release", so
+   give one of them an extractor that reads only its own side.
 3. Run `python3 analysis/measures.py` and confirm the outgoing release is
    still a point, not an omission, for every measure.
 

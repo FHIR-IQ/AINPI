@@ -119,7 +119,9 @@ Each rule has a pytest case.
    count before they use them.
 9. The committed `measures.json` must equal the generator's output.
    `test_committed_measures_json_matches_the_generator` checks this, so a
-   correction made by hand in the JSON fails the test.
+   correction made by hand in the JSON fails the test. CI does not run
+   pytest today (only the Vitest contract test), so this check runs locally
+   until `analysis/tests/` is added to `ci.yml`.
 
 ### Verification
 
@@ -140,11 +142,17 @@ finding scripts. `measures.py` rewrites the file only when something other than
 `continue-on-error`, because the chain is fail-fast and a stale
 `measures.json` costs less than a stranded finding refresh.
 
-**Required step before every reload, from this PR on.** Nine of the ten
+**Required step before every reload, from this PR on.** Eight of the ten
 measures read their 2026-08-20 point from a file the next reload overwrites:
-the current finding JSONs and `role-gap-delta.json`. If nobody copies those
-files first, the generator omits 2026-08-20 on its next run, as its rules
-require, and the series drops back to one point. In the same commit as
+the current finding JSONs and `role-gap-delta.json`. The other two read the
+release snapshots, which are not overwritten. If nobody copies those files
+first, the generator omits 2026-08-20 on its next run, as its rules require,
+and the series drops back to one point. `role-gap-delta.json` carries both
+the May and August PA points, so regenerating it for the next release pair
+drops May as well, and its new `from` side repeats August: registering the
+vendored copy alongside the new file then raises "two sources for one
+release" rather than omitting a point, so one of the two must read only its
+own side (or be declared a restatement). In the same commit as
 `release_snapshot.py --release <outgoing>`, copy those files into
 `analysis/release-snapshots/published/` and register them as vendored sources.
 `published/README.md` lists the steps. Slice 4 automates this with a
