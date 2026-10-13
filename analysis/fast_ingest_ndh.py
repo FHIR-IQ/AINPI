@@ -23,6 +23,7 @@ Required:
 """
 from __future__ import annotations
 import argparse
+import gzip
 import json
 import pathlib
 import subprocess
@@ -341,21 +342,43 @@ def download_if_missing(
     return path
 
 
+# Rows per gzip chunk. BigQuery rejects gzip NDJSON files over 4 GB; at
+# compresslevel 3 a practitioner row is ~525 bytes compressed, so 2M rows is
+# ~1 GB, leaving wide headroom for the larger PractitionerRole records.
+CHUNK_ROWS = 2_000_000
+
+
 def transform_to_loadable(
     zst_path: pathlib.Path,
-    out_path: pathlib.Path,
+    out_dir: pathlib.Path,
+    table: str,
     extractor: Callable[[dict], dict],
     name: str,
-) -> int:
-    out_path.parent.mkdir(parents=True, exist_ok=True)
+    chunk_rows: int = CHUNK_ROWS,
+) -> list[pathlib.Path]:
+    """Stream the .zst through the extractor into gzip NDJSON chunks.
+
+    Gzip because a 2026-10-13 upload of the 18 GB uncompressed practitioner
+    file died at 88% on a flaky connection; chunks because one gzip file is
+    capped at 4 GB by BigQuery.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
     proc = subprocess.Popen(
         ["zstdcat", str(zst_path)],
         stdout=subprocess.PIPE,
     )
+    chunks: list[pathlib.Path] = []
+    out = None
     count = 0
     errors = 0
     t0 = time.time()
-    with open(out_path, "w", encoding="utf-8") as out:
+
+    def open_chunk():
+        path = out_dir / f"{table}.part{len(chunks):03d}.ndjson.gz"
+        chunks.append(path)
+        return gzip.open(path, "wt", encoding="utf-8", compresslevel=3)
+
+    try:
         for line_bytes in proc.stdout:  # type: ignore[union-attr]
             try:
                 line = line_bytes.decode("utf-8")
@@ -364,6 +387,10 @@ def transform_to_loadable(
                 resource = json.loads(line)
                 row = {"resource": resource}
                 row.update(extractor(resource))
+                if out is None or count % chunk_rows == 0:
+                    if out is not None:
+                        out.close()
+                    out = open_chunk()
                 out.write(json.dumps(row, separators=(",", ":")) + "\n")
                 count += 1
             except (json.JSONDecodeError, UnicodeDecodeError):
@@ -372,33 +399,61 @@ def transform_to_loadable(
                 elapsed = time.time() - t0
                 rate = count / elapsed if elapsed else 0
                 print(f"    {name}: transformed {count:,} rows ({rate:,.0f}/s)")
+    finally:
+        if out is not None:
+            out.close()
     proc.wait()
+    if proc.returncode != 0:
+        raise RuntimeError(f"zstdcat failed for {zst_path} (exit {proc.returncode})")
+    if count == 0:
+        raise RuntimeError(f"{name}: zero rows transformed from {zst_path}; refusing to load an empty table")
     elapsed = time.time() - t0
     rate = count / elapsed if elapsed else 0
-    print(f"    {name}: transform done — {count:,} rows in {elapsed:.1f}s ({rate:,.0f}/s, {errors} errors)")
-    return count
+    print(f"    {name}: transform done — {count:,} rows in {len(chunks)} chunk(s), {elapsed:.1f}s ({rate:,.0f}/s, {errors} errors)")
+    return chunks
 
 
-def bq_load(table: str, ndjson_path: pathlib.Path) -> None:
-    cmd = [
-        "bq", "load",
-        "--source_format=NEWLINE_DELIMITED_JSON",
-        "--replace",
-        "--ignore_unknown_values",
-        "--max_bad_records=100",
-        f"{PROJECT}:{DATASET}.{table}",
-        str(ndjson_path),
-    ]
-    print(f"    bq load: {' '.join(cmd)}")
-    t0 = time.time()
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    if result.stdout:
-        print(f"    bq stdout: {result.stdout}")
-    if result.stderr:
-        print(f"    bq stderr: {result.stderr}")
-    if result.returncode != 0:
-        raise RuntimeError(f"bq load failed for {table} (exit {result.returncode})")
-    print(f"    bq load done in {time.time() - t0:.1f}s")
+def _run(cmd: list[str], what: str, attempts: int = 3) -> None:
+    """Run a bq command, retrying. Load and copy jobs are atomic, so a retry
+    after a failure never doubles data."""
+    for attempt in range(1, attempts + 1):
+        t0 = time.time()
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode == 0:
+            print(f"    {what}: ok in {time.time() - t0:.1f}s (attempt {attempt})")
+            return
+        print(f"    {what}: attempt {attempt}/{attempts} failed (exit {result.returncode})")
+        if result.stderr:
+            print(f"    stderr: {result.stderr[-2000:]}")
+        if attempt < attempts:
+            time.sleep(30 * attempt)
+    raise RuntimeError(f"{what} failed after {attempts} attempts")
+
+
+def bq_load(table: str, chunks: list[pathlib.Path]) -> None:
+    """Load chunks into a staging copy of the table, then swap it in.
+
+    The staging table is created LIKE the live one so it keeps the live
+    table's clustering (every table here is clustered on purpose; see
+    CLAUDE.md). The live table changes only in the final copy job, so a
+    failure partway through the chunks leaves the previous release intact.
+    """
+    live = f"{PROJECT}:{DATASET}.{table}"
+    staging_id = f"{table}__staging"
+    staging = f"{PROJECT}:{DATASET}.{staging_id}"
+    _run(
+        ["bq", "query", "--nouse_legacy_sql",
+         f"CREATE OR REPLACE TABLE `{PROJECT}.{DATASET}.{staging_id}` LIKE `{PROJECT}.{DATASET}.{table}`"],
+        f"create {staging_id}",
+    )
+    for i, chunk in enumerate(chunks):
+        _run(
+            ["bq", "load", "--source_format=NEWLINE_DELIMITED_JSON", "--noreplace",
+             "--ignore_unknown_values", "--max_bad_records=100", staging, str(chunk)],
+            f"load {chunk.name} ({i + 1}/{len(chunks)})",
+        )
+    _run(["bq", "cp", "-f", staging, live], f"swap {staging_id} -> {table}")
+    _run(["bq", "rm", "-f", "-t", staging], f"drop {staging_id}")
 
 
 def main():
@@ -472,13 +527,14 @@ def main():
         url, basename = resolve_file_url(manifest, name)
         exp_bytes = expected_compressed_size(manifest, name)
         zst_path = download_if_missing(url, basename, data_dir, expected_bytes=exp_bytes)
-        load_path = LOAD_DIR / f"{table}.ndjson"
+        chunks: list[pathlib.Path] = []
         try:
-            transform_to_loadable(zst_path, load_path, extractor, name)
-            bq_load(table, load_path)
+            chunks = transform_to_loadable(zst_path, LOAD_DIR, table, extractor, name)
+            bq_load(table, chunks)
         finally:
-            if not args.keep_load_files and load_path.exists():
-                load_path.unlink()
+            if not args.keep_load_files:
+                for c in LOAD_DIR.glob(f"{table}.part*.ndjson.gz"):
+                    c.unlink()
 
     print(f"\nAll done in {time.time() - overall_t0:.1f}s")
 
