@@ -2,7 +2,7 @@
  * GET /api/v1/admin/weekly-report
  *
  * Admin-only weekly digest emailed to gene@fhiriq.com. Triggered by a
- * Vercel cron at Monday 09:00 UTC (configured in vercel.json).
+ * Vercel cron at Thursday 13:42 UTC (configured in frontend/vercel.json).
  *
  * What it sends:
  *   - Subscriber totals (count, last 7 days, last 30 days)
@@ -13,6 +13,11 @@
  *   - Deep link to Vercel Analytics dashboard for pageview metrics
  *     (pageview data isn't programmatically available without a Vercel
  *     Pro/Enterprise Insights API token; we surface the link instead)
+ *   - Databricks Marketplace funnel: per-listing views / data requests /
+ *     installs, last 7 days vs prior 7, counts only, from one SQL statement
+ *     (src/lib/marketplace-funnel.ts). Reads "not configured" without the
+ *     DATABRICKS_* env vars and "funnel unavailable: <reason>" on a
+ *     Databricks error; neither stops the digest from sending.
  *
  * Auth model:
  *   Vercel Cron sets the `Authorization: Bearer <CRON_SECRET>` header
@@ -25,6 +30,9 @@
  *   POSTGRES_PRISMA_URL: Supabase pooler URL
  *   ADMIN_EMAIL: optional override; defaults to gene@fhiriq.com
  *   VERCEL_DASHBOARD_URL: optional override for the analytics deep-link
+ *   DATABRICKS_HOST, DATABRICKS_TOKEN, DATABRICKS_WAREHOUSE_ID: optional,
+ *     for the Marketplace funnel section (the token needs SELECT on
+ *     system.marketplace.listing_funnel_events and listing_access_events)
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
@@ -33,8 +41,15 @@ import {
   fetchAllProjectsAnalytics,
   type AllProjectsAnalytics,
 } from '@/lib/vercel-analytics';
+import {
+  loadMarketplaceFunnel,
+  renderFunnelHtml,
+  renderFunnelText,
+  type FunnelSection,
+} from '@/lib/marketplace-funnel';
 
 export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'gene@fhiriq.com';
 const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS || 'AINPI <onboarding@resend.dev>';
@@ -117,6 +132,9 @@ export async function GET(req: NextRequest) {
   // expose a public REST API for Web Analytics data (zero endpoints in
   // the OpenAPI spec), so the email surfaces one-click links per project
   // instead of pretending to fetch counts. Never throws.
+  // The Marketplace funnel runs alongside so the Databricks wait does not
+  // stack on the Vercel listing. loadMarketplaceFunnel never throws.
+  const funnelPromise: Promise<FunnelSection> = loadMarketplaceFunnel(process.env);
   let analytics: AllProjectsAnalytics;
   try {
     analytics = await fetchAllProjectsAnalytics();
@@ -128,6 +146,10 @@ export async function GET(req: NextRequest) {
       projectsDiscovered: 0, projectsWithAnalytics: [], projectsWithoutAnalytics: [],
       note: msg,
     };
+  }
+  const funnel = await funnelPromise;
+  if (funnel.status === 'unavailable') {
+    console.error('[weekly-report] marketplace funnel unavailable:', funnel.reason);
   }
 
   const sourceCounts: Record<string, number> = {};
@@ -157,6 +179,8 @@ export async function GET(req: NextRequest) {
     `REPORT DOWNLOADS`,
     `  Total ever:        ${totalDownloads}`,
     `  Last 7 days:       ${recentDownloads.length}`,
+    ``,
+    renderFunnelText(funnel),
     ``,
     `RECENT DOWNLOADS (last 7 days, up to 50)`,
     ...recentDownloads.map(
@@ -260,6 +284,8 @@ export async function GET(req: NextRequest) {
             </table>`
           : ''
       }
+
+      ${renderFunnelHtml(funnel)}
 
       <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Subscriber list (${subscribers.length})</h2>
       <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px;">
@@ -370,6 +396,10 @@ export async function GET(req: NextRequest) {
       subscribers: subscribers.length,
       new_last_7: newLast7,
       downloads_last_7: recentDownloads.length,
+      funnel: {
+        status: funnel.status,
+        listings: funnel.status === 'ok' ? funnel.listings.length : 0,
+      },
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
