@@ -47,9 +47,9 @@ ways that matter, and the guard against the worst of them is in `brand_key`:
 must not collapse to a shared opener.
 
 **Third-party vendors are not systems.** On the 2026-08-20 release, 421
-organization NPIs holding Pennsylvania practitioners carry the name "COBIUS
-HEALTHCARE SOLUTIONS", spread over 161 cities in more than a dozen states. That
-is a billing and revenue-cycle vendor whose name sits on its clients' records,
+brand-tier organization NPIs holding Pennsylvania practitioners carry the name
+"COBIUS HEALTHCARE SOLUTIONS", spread over 163 cities in 35 states. That is a
+billing and revenue-cycle vendor whose name sits on its clients' records,
 not an owner. Brand grouping made it the third-largest "system" in the state
 (15,427 practitioners) and handed those practitioners endpoints belonging to
 unrelated clients, including a Louisiana health system's Epic endpoint. Such
