@@ -48,6 +48,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
 from analysis.org_systems import (  # noqa: E402
     build_systems,
+    check_system_controls,
     describe_affiliation_graph,
     rollup_system_endpoints,
 )
@@ -826,8 +827,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     excluded_vendors = []
     systems = build_systems(org_rows, parent_by_npi, owner_by_npi,
                             excluded=excluded_vendors)
-    # Positive control on the vendor exclusion: if a heuristic bug starts
-    # excluding real systems, the excluded share jumps and this line shows it.
+    # Totals printed for context; the positive control below is what fails.
     grouped_prac = sum(s["practitioners"] for s in systems)
     excluded_prac = sum(r["practitioners"] for r in excluded_vendors)
     print(f"  systems: {len(systems):,} grouped holding {grouped_prac:,} "
@@ -836,6 +836,18 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     for r in excluded_vendors[:10]:
         print(f"    excluded {r['label']}: {r['organizations']:,} orgs, "
               f"{r['practitioners']:,} practitioners ({r['reason']})")
+    # Positive control, enforced: a listed vendor present in the state must be
+    # excluded, and no known real system may be excluded or vanish from the
+    # grouping. A failure here means a grouping rule regressed, and publishing
+    # anyway would hand one system's endpoints to another's practitioners.
+    problems = check_system_controls(state, org_rows, systems,
+                                     excluded_vendors,
+                                     parent_by_npi=parent_by_npi,
+                                     owner_by_npi=owner_by_npi)
+    if problems:
+        raise RuntimeError(
+            f"{state}: system rollup failed its positive control:\n  "
+            + "\n  ".join(problems))
     affiliation = describe_affiliation_graph(edges, edge_names)
     out_of_state_dropped = []
     unknown_state_kept = 0

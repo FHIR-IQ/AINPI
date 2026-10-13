@@ -11,6 +11,7 @@ import {
 import { STATE_FIPS } from '@/lib/connectivity-types';
 import type { ConnectivityPayload } from '@/lib/connectivity-types';
 import ConnectivityChain from './connectivity-chain';
+import SystemsExclusionsNote from '@/components/connectivity/SystemsExclusionsNote';
 // Aliased: this file also exports `const dynamic = 'force-static'`, and the
 // bare import name collides with it.
 import nextDynamic from 'next/dynamic';
@@ -496,6 +497,10 @@ function Connectivity({
               </tbody>
             </table>
           </div>
+          <SystemsExclusionsNote
+            excluded={systems.excluded_third_party}
+            outOfState={systems.out_of_state_endpoints_dropped}
+          />
         </section>
 
         <section className="mb-14">
