@@ -522,9 +522,9 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
 # Line Health was the bare opener MAIN; it is expected from the specialty
 # opener change and is first exercised by the post-2026-10-07 regeneration.
 # Penn State Health matches only through its NPPES parent, because its brand
-# key is PENN, shared with Penn Medicine. A system on this list that is excluded as a vendor, or that stops being
-# grouped at all, fails the run: a rule that quietly dissolves UPMC is a
-# worse bug than a missed vendor.
+# key is PENN, shared with Penn Medicine. A system on this list that is
+# excluded as a vendor, or that stops being grouped at all, fails the run: a
+# rule that quietly dissolves UPMC is a worse bug than a missed vendor.
 KNOWN_SYSTEMS = {
     "PA": {
         "UPMC": ("UPMC", "UNIVERSITY OF PITTSBURGH"),
