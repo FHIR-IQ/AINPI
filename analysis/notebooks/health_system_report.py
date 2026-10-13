@@ -107,6 +107,12 @@ print(f"Member organizations matched by {'NPI list' if MATCH_MODE == 'npi' else 
 # MAGIC those (the FHIR `partOf` field), up to five levels down. That second route is
 # MAGIC an inference from names. Read the list it prints before trusting anything
 # MAGIC below it.
+# MAGIC
+# MAGIC The organization table also holds tax-ID (`ein`) records, about half of it
+# MAGIC in the 2026-08-20 release, and these can share a name or an NPI with a
+# MAGIC provider organization. Both routes can pick them up, so check `org_type` in
+# MAGIC the list. Section 4 counts member organizations by distinct NPI, so a
+# MAGIC provider record and a tax record with the same NPI count once.
 
 # COMMAND ----------
 
@@ -143,7 +149,8 @@ else:
     FROM org_slim WHERE name_match
     """)
     members.createOrReplaceTempView("member_frontier")
-    for depth in range(1, 6):
+    MAX_DEPTH = 5
+    for depth in range(1, MAX_DEPTH + 1):
         children = spark.sql("""
         SELECT c.release_date, c.org_id, c.org_npi, c.org_name, c.org_type, c.org_state,
                'part of a name match' AS matched_by
@@ -158,6 +165,11 @@ else:
             break
         members = members.unionByName(new)
         new.createOrReplaceTempView("member_frontier")
+    else:
+        # The loop ran out of depth while still finding members, so the list is
+        # cut short. Say so rather than let a truncated set pass as complete.
+        print(f"partOf hierarchy still had new members at depth {MAX_DEPTH}; "
+              "the member list may be incomplete.")
 
 members = members.dropDuplicates(["release_date", "org_id"]).cache()
 members.createOrReplaceTempView("member_orgs")
@@ -262,7 +274,9 @@ if NUCC_CSV:
         nucc_pdf = pd.read_csv(NUCC_CSV, dtype=str, encoding="latin-1")
         nucc_df = spark.createDataFrame(nucc_pdf.fillna(""))
     else:
-        nucc_df = spark.read.option("header", True).csv(NUCC_CSV)
+        # NUCC definitions contain quoted commas and line breaks.
+        nucc_df = (spark.read.option("header", True).option("multiLine", True)
+                   .option("escape", '"').csv(NUCC_CSV))
     if not {"Code", "Grouping", "Classification"} <= set(nucc_df.columns) or nucc_df.count() < 500:
         # Positive control: a wrong file would make every clinician "unknown".
         raise RuntimeError("nucc_csv does not look like the NUCC taxonomy CSV "
@@ -298,9 +312,15 @@ else:
     ORDER BY clinicians DESC
     """)
 
-total = spark.sql(f"""
-SELECT COUNT(DISTINCT practitioner_id) AS n FROM system_clinicians WHERE release_date = '{CUR}'
-""").first()[0]
+total, with_code = spark.sql(f"""
+SELECT COUNT(DISTINCT practitioner_id), COUNT(DISTINCT IF(code IS NOT NULL, practitioner_id, NULL))
+FROM clinician_codes WHERE release_date = '{CUR}'
+""").first()
+# Positive control: if the qualification schema above stops matching the
+# records, every clinician lands in "(no code on record)" and reads as a finding.
+if total > 0 and with_code == 0:
+    raise RuntimeError("No clinician has any qualification code; the qualification "
+                       "parse no longer matches the records.")
 print(f"{total:,} distinct clinicians linked to a member organization in {CUR}")
 display(by_profession)
 
@@ -505,14 +525,16 @@ ORDER BY source_and_confidence, org_name, base_url
 # MAGIC ## 4. What changed between the two releases
 # MAGIC
 # MAGIC Each comparison uses a key that means the same thing in both releases.
-# MAGIC Organizations are matched by NPI and clinicians by their record id, which
-# MAGIC embeds the NPI. Web addresses are matched by the address itself, never by the
+# MAGIC Organizations are matched by NPI, or by record id when the record carries
+# MAGIC no NPI, and clinicians by their record id, which embeds the NPI. Some
+# MAGIC organization record ids change between releases, so for a member without an
+# MAGIC NPI an "added" and "dropped" pair can be the same organization. Web addresses are matched by the address itself, never by the
 # MAGIC record id, because CMS assigns endpoint records new ids every release and an
 # MAGIC id match would report that every address changed.
 # MAGIC
-# MAGIC Vendor claims are left out of the address comparison unless the archive
-# MAGIC carries them for both releases, so a change in coverage of the vendor files
-# MAGIC does not show up as a change in the directory.
+# MAGIC Vendor claims are left out of this comparison entirely. The archive may
+# MAGIC carry them for one release only, and a change in what the vendor files cover
+# MAGIC should not show up as a change in the directory.
 
 # COMMAND ----------
 
