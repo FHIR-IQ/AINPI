@@ -19,6 +19,9 @@ Import the notebook: in the workspace, choose Import, then upload
 `health_system_report.py`. Databricks recognises the
 `# Databricks notebook source` header and splits the file into cells.
 
+The name route passes the name as a named SQL parameter, which needs
+Databricks Runtime 12.1 or later, or serverless compute.
+
 ## Parameters
 
 | Widget | Required | Meaning |

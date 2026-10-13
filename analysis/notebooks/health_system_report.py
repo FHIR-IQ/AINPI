@@ -81,6 +81,8 @@ ROSTER_NPIS = parse_npis(dbutils.widgets.get("roster_npis"), "roster_npis")
 if not ORG_NPIS and not PARENT_LBN:
     raise ValueError("Give member_org_npis, or parent_lbn if you have no NPI list.")
 MATCH_MODE = "npi" if ORG_NPIS else "name"
+# A % or _ in the name would act as a LIKE wildcard and widen the member set.
+LBN_LIKE = PARENT_LBN.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 spark.sql(f"USE {CATALOG}.{SCHEMA}")
 
@@ -129,12 +131,12 @@ else:
     SELECT o.release_date, o._id AS org_id, o._npi AS org_npi, o._name AS org_name,
            o._org_type AS org_type, o._state AS org_state,
            get_json_object(o.resource, '$.partOf.reference') AS partof_ref,
-           upper(o._name) LIKE concat('%', upper(:lbn), '%') AS name_match
+           upper(o._name) LIKE concat('%', upper(:lbn), '%') ESCAPE '\\\\' AS name_match
     FROM organization o
     WHERE o.release_date IN ('{CUR}', '{PRIOR}')
-      AND (upper(o._name) LIKE concat('%', upper(:lbn), '%')
+      AND (upper(o._name) LIKE concat('%', upper(:lbn), '%') ESCAPE '\\\\'
            OR get_json_object(o.resource, '$.partOf.reference') IS NOT NULL)
-    """, args={"lbn": PARENT_LBN}).cache().createOrReplaceTempView("org_slim")
+    """, args={"lbn": LBN_LIKE}).cache().createOrReplaceTempView("org_slim")
     members = spark.sql("""
     SELECT release_date, org_id, org_npi, org_name, org_type, org_state,
            'name match' AS matched_by
@@ -593,10 +595,9 @@ ORDER BY change, npi_from_record_id
 # MAGIC   names and miss members filed under a different legal name. The NPPES
 # MAGIC   snapshot this project uses elsewhere also lags the directory by months, so
 # MAGIC   providers enrolled recently can look absent from it.
-# MAGIC - **The `partOf` hierarchy.** It resolves fully in the 2026-08-20 release
-# MAGIC   and pointed at unpublished parents in 2026-05-08. A name-based member list
-# MAGIC   for the earlier release is therefore smaller for reasons that have nothing
-# MAGIC   to do with the system.
+# MAGIC - **The `partOf` hierarchy.** In releases before 2026-08-20 it pointed at
+# MAGIC   parent records CMS did not publish. A name-based member list for an
+# MAGIC   earlier release is therefore smaller for reasons unrelated to the system.
 # MAGIC - **Vendor claims.** Vendor-file attributions come from public files the EHR
 # MAGIC   vendors publish. CMS has not confirmed them, and the archive may carry them
 # MAGIC   for only one release.
