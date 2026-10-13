@@ -144,3 +144,103 @@ export interface ApiV1StateFindings {
   /** Free-form state-specific caveats. */
   notes: string | null;
 }
+
+// ---------------------------------------------------------------------------
+// /api/v1/measures.json: the measure series (generator: analysis/measures.py)
+// Design: docs/superpowers/specs/2026-09-12-ndh-measure-series-design.md
+// ---------------------------------------------------------------------------
+
+/**
+ * Whether a point may be joined to the one before it.
+ *   true          same definition, move within the declared prior (or reviewed)
+ *   false         a definition break the measure declares as not comparable
+ *   'unreviewed'  a move larger than the declared prior that nobody has reviewed
+ *   null          first point in the series; there is nothing before it
+ * Only `true` may be drawn as a line.
+ */
+export type ApiV1MeasureComparability = true | false | 'unreviewed' | null;
+
+export interface ApiV1MeasureSource {
+  /** Repo-relative file the value was read from. */
+  file: string;
+  /** Field path inside that file. */
+  field: string;
+  /** Commit the file was copied from (vendored) or the commit_sha it carries. */
+  commit: string | null;
+  /** True when the file is an as-published copy under analysis/release-snapshots/published/. */
+  vendored: boolean;
+}
+
+export interface ApiV1MeasureRestatement {
+  as_published_value: number;
+  as_published_numerator: number;
+  as_published_denominator: number;
+  source: ApiV1MeasureSource;
+  reason: string;
+}
+
+export interface ApiV1MeasurePoint {
+  /** NDH release date, ISO. */
+  release: string;
+  /** numerator / denominator for unit 'ratio'; the numerator for unit 'count'. */
+  value: number;
+  numerator: number;
+  /** Always positive. A release without one is omitted, never zero. */
+  denominator: number;
+  definition_version: number;
+  source: ApiV1MeasureSource;
+  comparable_to_previous: ApiV1MeasureComparability;
+  comparability_reason?: string;
+  /** Present on a zero numerator: the control proving the field was read. */
+  zero_control?: string;
+  restatements?: ApiV1MeasureRestatement[];
+}
+
+export interface ApiV1MeasureDefinition {
+  version: number;
+  numerator: string;
+  denominator: string;
+  note: string | null;
+  /** Hash of the declared definition text. Moves to the SQL text in the BigQuery measure pass. */
+  definition_hash: string;
+}
+
+export interface ApiV1MeasureBreak {
+  at: string;
+  from_version: number;
+  to_version: number;
+  reason: string;
+  comparable_across_break: boolean;
+}
+
+export interface ApiV1Measure {
+  slug: string;
+  question: string;
+  unit: 'ratio' | 'count';
+  source: string;
+  hypotheses: string[];
+  time_axis: 'ndh-release';
+  /** The current definition. */
+  definition_version: number;
+  definitions: ApiV1MeasureDefinition[];
+  /** The move per release the measure declares ordinary; larger moves are 'unreviewed'. */
+  ordinary_move: { kind: 'absolute' | 'relative'; max: number; why: string };
+  breaks: ApiV1MeasureBreak[];
+  /** Ascending by release. */
+  series: ApiV1MeasurePoint[];
+  /** Releases in the series window with no point, and why. */
+  omitted: { release: string; reason: string }[];
+  notes: string | null;
+}
+
+export interface ApiV1Measures {
+  generated_at: string;
+  generator: string;
+  time_axis: 'ndh-release';
+  releases: string[];
+  series_start: string;
+  series_start_reason: string;
+  note: string;
+  measures: ApiV1Measure[];
+  excluded_candidates: { slug: string; reason: string }[];
+}

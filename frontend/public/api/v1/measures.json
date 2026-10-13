@@ -1,0 +1,645 @@
+{
+  "generated_at": "2026-10-13T15:01:24+00:00",
+  "generator": "analysis/measures.py",
+  "time_axis": "ndh-release",
+  "releases": [
+    "2026-05-08",
+    "2026-08-20"
+  ],
+  "series_start": "2026-05-08",
+  "series_start_reason": "The 2026-04-09 export is held as an archive artifact rather than a published point, per the measure-series design.",
+  "note": "As-published values from committed files, not recomputed. A point's comparable_to_previous is true, false (a definition break) or \"unreviewed\" (a move larger than the measure's declared ordinary move, not yet reviewed). Only a true pair may be drawn as a line. The ordinary-move priors in this first slice were declared with both points already known, so they are not pre-registered; priors for measures added later are declared before their first point.",
+  "measures": [
+    {
+      "slug": "role-coverage-pa",
+      "question": "What share of active Pennsylvania practitioners carry a PractitionerRole?",
+      "unit": "ratio",
+      "source": "NDH bulk export joined to NPPES taxonomy (H54)",
+      "hypotheses": [
+        "H54"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "active PA practitioners with at least one PractitionerRole",
+          "denominator": "active Practitioner resources with a PA address",
+          "note": null,
+          "definition_hash": "2e906ab6bf8c"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.05,
+        "why": "Coverage had not moved more than a few points between releases before 2026-08-20."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.38122840067273533,
+          "numerator": 86816,
+          "denominator": 227727,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/role-gap-delta.json",
+            "field": "overall.before.with_role / overall.before.active",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.4371829472744837,
+          "numerator": 100918,
+          "denominator": 230837,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/role-gap-delta.json",
+            "field": "overall.after.with_role / overall.after.active",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": true,
+          "comparability_reason": "reviewed: PractitionerRole more than doubled in this release (3,952,445 to 10,806,327 active). Coverage reads no specialty code, so the vocabulary change cannot touch it; the rise is the directory adding roles, most of them to practitioners who already had one."
+        }
+      ],
+      "omitted": [],
+      "notes": "National role coverage is not yet a measure: no committed file carries its numerator for either release."
+    },
+    {
+      "slug": "fhir-rest-endpoint-share",
+      "question": "What share of Endpoint resources are FHIR REST endpoints software can query?",
+      "unit": "ratio",
+      "source": "NDH bulk export",
+      "hypotheses": [
+        "H28"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "Endpoint rows whose connectionType code is hl7-fhir-rest",
+          "denominator": "all Endpoint rows in the export",
+          "note": null,
+          "definition_hash": "73628e4fc863"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.03,
+        "why": "The FHIR REST subset is a small, slow-moving share of a large Direct-address population."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.08383967190583462,
+          "numerator": 114071,
+          "denominator": 1360585,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/2026-05-08.json",
+            "field": "shape.endpoint_connection_types[hl7-fhir-rest].n / tables.endpoint.rows",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.09836558175237929,
+          "numerator": 110973,
+          "denominator": 1128169,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/2026-08-20.json",
+            "field": "shape.endpoint_connection_types[hl7-fhir-rest].n / tables.endpoint.rows",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": true
+        }
+      ],
+      "omitted": [],
+      "notes": "The denominator is rows, not distinct endpoints. April repeated each endpoint about four times; May and August are close to one row per address."
+    },
+    {
+      "slug": "endpoint-org-linkage",
+      "question": "What share of FHIR REST endpoints resolve to a managing organization?",
+      "unit": "ratio",
+      "source": "NDH bulk export (H50)",
+      "hypotheses": [
+        "H50"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "FHIR REST endpoints whose managingOrganization reference resolves to an Organization in the export",
+          "denominator": "Endpoint resources with connectionType hl7-fhir-rest",
+          "note": null,
+          "definition_hash": "a828f804937d"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.05,
+        "why": "Attribution depends on CMS populating one reference; a move over five points would be a change in how the export is built."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.1694909310867793,
+          "numerator": 19334,
+          "denominator": 114071,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/endpoint-org-linkage@f8a18ab.json",
+            "field": "numerator / denominator",
+            "commit": "f8a18ab",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.1465401494057113,
+          "numerator": 16262,
+          "denominator": 110973,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/endpoint-org-linkage.json",
+            "field": "numerator / denominator",
+            "commit": "95feac2",
+            "vendored": false
+          },
+          "comparable_to_previous": true
+        }
+      ],
+      "omitted": [],
+      "notes": null
+    },
+    {
+      "slug": "vendor-filled-attribution",
+      "question": "Of the FHIR REST endpoints the NDH cannot attribute, what share do public EHR vendor files name?",
+      "unit": "ratio",
+      "source": "NDH bulk export plus eight public vendor endpoint files fetched at run time (H51)",
+      "hypotheses": [
+        "H51"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "unattributed FHIR REST endpoints whose base URL a vendor file maps to an organization",
+          "denominator": "FHIR REST endpoints with no resolvable managingOrganization",
+          "note": null,
+          "definition_hash": "dc789e78797b"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.05,
+        "why": "Both inputs change: the NDH by release and the vendor files whenever vendors republish."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.7584892914067366,
+          "numerator": 71857,
+          "denominator": 94737,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/vendor-endpoint-attribution@0f8f39d.json",
+            "field": "numerator / denominator",
+            "commit": "0f8f39d",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.6486258195985682,
+          "numerator": 61432,
+          "denominator": 94711,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/vendor-endpoint-attribution.json",
+            "field": "numerator / denominator",
+            "commit": "51bf5d5",
+            "vendored": false
+          },
+          "comparable_to_previous": "unreviewed",
+          "comparability_reason": "moved 0.1099 against a declared ordinary move of 0.05 (absolute); not yet reviewed"
+        }
+      ],
+      "omitted": [],
+      "notes": "This measure has two clocks. The vendor files are fetched when the script runs, not when CMS releases, so a move can come from either side."
+    },
+    {
+      "slug": "payer-directory-endpoints",
+      "question": "What share of FHIR REST endpoints are payer provider directories?",
+      "unit": "ratio",
+      "source": "NDH bulk export (H49)",
+      "hypotheses": [
+        "H49"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "FHIR REST endpoints identified as a payer provider directory",
+          "denominator": "Endpoint resources with connectionType hl7-fhir-rest",
+          "note": null,
+          "definition_hash": "de7e36a8f617"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.01,
+        "why": "Payer directories are a handful of endpoints in a population of about 110,000."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 8.766470005522876e-06,
+          "numerator": 1,
+          "denominator": 114071,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/ndh-payer-endpoint-coverage@c39b178.json",
+            "field": "numerator / denominator",
+            "commit": "c39b178",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 9.011200922746974e-06,
+          "numerator": 1,
+          "denominator": 110973,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/ndh-payer-endpoint-coverage.json",
+            "field": "numerator / denominator",
+            "commit": "05fa715",
+            "vendored": false
+          },
+          "comparable_to_previous": true
+        }
+      ],
+      "omitted": [],
+      "notes": "Payer organizations with an endpoint is not yet a measure: the 2026-05-08 release had no payer organization type, and the 2026-08-20 count of payer organizations carrying an endpoint is stated only in prose."
+    },
+    {
+      "slug": "ssn-exposures",
+      "question": "How many Practitioner resources expose a Social Security Number?",
+      "unit": "count",
+      "source": "NDH bulk export (H27)",
+      "hypotheses": [
+        "H27"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "Practitioner resources whose JSON matches the dashed SSN pattern after false-positive filtering",
+          "denominator": "Practitioner resources scanned",
+          "note": "Undashed nine-digit values are out of scope; they collide with EINs and account identifiers.",
+          "definition_hash": "00ffae3f3bb5"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "relative",
+        "max": 0.5,
+        "why": "A count this small moves in large proportions on any change."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 41,
+          "numerator": 41,
+          "denominator": 7441211,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/pii-exposure-ndh@c34fe94.json",
+            "field": "numerator / denominator",
+            "commit": "c34fe94",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0,
+          "numerator": 0,
+          "denominator": 7373232,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/pii-exposure-ndh.json",
+            "field": "numerator / denominator",
+            "commit": "05fa715",
+            "vendored": false
+          },
+          "zero_control": "asserted in source notes, not yet a structured field: The zero is checked, not assumed: 7,371,126 of 7,373,232 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field",
+          "comparable_to_previous": true,
+          "comparability_reason": "reviewed: Remediation, not an empty query: the source records that 7,371,126 of 7,373,232 Practitioner resources still carry the qualification array the exposures were found in."
+        }
+      ],
+      "omitted": [],
+      "notes": null
+    },
+    {
+      "slug": "npi-validation-failures",
+      "question": "What share of NPIs in the export fail structural or check-digit validation?",
+      "unit": "ratio",
+      "source": "NDH bulk export (H9)",
+      "hypotheses": [
+        "H9"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "NPIs that are not ten digits or fail the Luhn check digit",
+          "denominator": "NPIs carried on Practitioner and Organization resources",
+          "note": null,
+          "definition_hash": "59652255826e"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.001,
+        "why": "CMS validates NPIs at enumeration; failures are a few records in ten million."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 1.8427311855994244e-07,
+          "numerator": 2,
+          "denominator": 10853455,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/npi-taxonomy-correctness@3fe0500.json",
+            "field": "numerator / denominator",
+            "commit": "3fe0500",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 3.446001501078254e-07,
+          "numerator": 4,
+          "denominator": 11607656,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/npi-validity-summary.json",
+            "field": "npis_flagged / npis_checked",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": true
+        }
+      ],
+      "omitted": [],
+      "notes": "The 2026-05-08 point comes from an H9 run whose payload was still marked in-progress. It is the only H9 count for that release that survived: H10-H13 later overwrote the shared slug."
+    },
+    {
+      "slug": "role-specialty-agreement",
+      "question": "Do Practitioner.qualification and PractitionerRole.specialty agree?",
+      "unit": "ratio",
+      "source": "NDH bulk export (H13)",
+      "hypotheses": [
+        "H13"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 2,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "Practitioner-to-Role pairs whose Role specialty (CMS Medicare code) maps to the qualification NUCC code through the CMS Medicare-to-NUCC crosswalk",
+          "denominator": "Practitioner-to-Role pairs where both carry a specialty",
+          "note": null,
+          "definition_hash": "07d067d1f261"
+        },
+        {
+          "version": 2,
+          "numerator": "Practitioner-to-Role pairs where any Role specialty NUCC code equals any qualification NUCC code",
+          "denominator": "Practitioner-to-Role pairs where both carry a specialty",
+          "note": "Reads every entry of both repeating elements.",
+          "definition_hash": "d323f9ef4669"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.05,
+        "why": "Agreement between two fields of the same record should be stable."
+      },
+      "breaks": [
+        {
+          "at": "2026-08-20",
+          "from_version": 1,
+          "to_version": 2,
+          "reason": "PractitionerRole.specialty moved from CMS Medicare codes to NUCC taxonomy codes, so definition 1 measured a lossy Medicare-to-NUCC crosswalk rather than disagreement. Definition 2 compares NUCC to NUCC.",
+          "comparable_across_break": false
+        }
+      ],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.09099521599378457,
+          "numerator": 206603,
+          "denominator": 2270482,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/npi-taxonomy-correctness@c34fe94.json",
+            "field": "numerator / denominator",
+            "commit": "c34fe94",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.9999835045445847,
+          "numerator": 5759067,
+          "denominator": 5759162,
+          "definition_version": 2,
+          "source": {
+            "file": "frontend/public/api/v1/findings/npi-taxonomy-correctness.json",
+            "field": "numerator / denominator",
+            "commit": "pending",
+            "vendored": false
+          },
+          "restatements": [
+            {
+              "as_published_value": 0.9999846463980165,
+              "as_published_numerator": 5275554,
+              "as_published_denominator": 5275635,
+              "source": {
+                "file": "analysis/release-snapshots/published/npi-taxonomy-correctness@be51fe6.json",
+                "field": "numerator / denominator",
+                "commit": "be51fe6",
+                "vendored": true
+              },
+              "reason": "First published reading only the first entry of each repeating specialty element; restated on 2026-08-28 (e029518) to read every entry."
+            }
+          ],
+          "comparable_to_previous": false,
+          "comparability_reason": "definition break: PractitionerRole.specialty moved from CMS Medicare codes to NUCC taxonomy codes, so definition 1 measured a lossy Medicare-to-NUCC crosswalk rather than disagreement. Definition 2 compares NUCC to NUCC."
+        }
+      ],
+      "omitted": [],
+      "notes": null
+    },
+    {
+      "slug": "practitioner-phone-reachability",
+      "question": "What share of active practitioners can be associated with a phone number through FHIR?",
+      "unit": "ratio",
+      "source": "NDH bulk export (H43)",
+      "hypotheses": [
+        "H43"
+      ],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "active practitioners with a phone on Practitioner.telecom, PractitionerRole.telecom or a referenced Location.telecom",
+          "denominator": "active Practitioner resources",
+          "note": null,
+          "definition_hash": "1979d456a868"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.01,
+        "why": "Coverage sits near 100% on the Practitioner record alone."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.9998450610966478,
+          "numerator": 7195270,
+          "denominator": 7196385,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/published/practitioner-phone-reachability@c34fe94.json",
+            "field": "numerator / denominator",
+            "commit": "c34fe94",
+            "vendored": true
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.9997406835970982,
+          "numerator": 7371320,
+          "denominator": 7373232,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/practitioner-phone-reachability.json",
+            "field": "numerator / denominator",
+            "commit": "05fa715",
+            "vendored": false
+          },
+          "comparable_to_previous": true
+        }
+      ],
+      "omitted": [],
+      "notes": null
+    },
+    {
+      "slug": "organization-coded-type",
+      "question": "What share of Organization resources carry a coded type rather than free text or nothing?",
+      "unit": "ratio",
+      "source": "NDH bulk export",
+      "hypotheses": [],
+      "time_axis": "ndh-release",
+      "definition_version": 1,
+      "definitions": [
+        {
+          "version": 1,
+          "numerator": "Organization rows whose type carries a coding (prov, team, govt, pay and any later code)",
+          "denominator": "all Organization rows in the export",
+          "note": "Tax-entity (ein) and network (ntwk) records carry the type as text and count against the measure.",
+          "definition_hash": "f55a2e5afc96"
+        }
+      ],
+      "ordinary_move": {
+        "kind": "absolute",
+        "max": 0.05,
+        "why": "Organization typing is a property of how CMS builds the export and was not expected to move."
+      },
+      "breaks": [],
+      "series": [
+        {
+          "release": "2026-05-08",
+          "value": 0.5857054365733114,
+          "numerator": 1999818,
+          "denominator": 3414375,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/2026-05-08.json",
+            "field": "shape.organization_types[coded].n / tables.organization.rows",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": null
+        },
+        {
+          "release": "2026-08-20",
+          "value": 0.5003233264534188,
+          "numerator": 2202759,
+          "denominator": 4402671,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/2026-08-20.json",
+            "field": "shape.organization_types[coded].n / tables.organization.rows",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": "unreviewed",
+          "comparability_reason": "moved 0.08538 against a declared ordinary move of 0.05 (absolute); not yet reviewed"
+        }
+      ],
+      "omitted": [],
+      "notes": null
+    }
+  ],
+  "excluded_candidates": [
+    {
+      "slug": "role-coverage-national",
+      "reason": "No committed file carries the national count of practitioners with a role for either release; only rounded percentages appear, in prose. Needs the BigQuery measure pass."
+    },
+    {
+      "slug": "organization-partof-resolvability",
+      "reason": "2026-05-08 appears only in prose. 2026-08-20 appears in primer-scoreboard.json as a percentage plus a prose detail string, with no numerator or denominator field."
+    },
+    {
+      "slug": "payer-organizations-with-endpoint",
+      "reason": "The 2026-05-08 release had no payer organization type, so its denominator does not exist; the 2026-08-20 numerator is stated only in prose."
+    },
+    {
+      "slug": "location-phone-coverage",
+      "reason": "ndh-column-coverage.json carries a rounded percentage and a row count but no numerator, and covers 2026-08-20 only. A count back-computed from a rounded percentage would be invented."
+    }
+  ]
+}
