@@ -377,6 +377,8 @@ REGISTRY: tuple = (
                  Source(f"{FINDINGS}/npi-validity-summary.json", npi_validity_summary)),
         ordinary_move={"kind": "absolute", "max": 0.001,
                        "why": "CMS validates NPIs at enumeration; failures are a few records in ten million."},
+        notes="The 2026-05-08 point comes from an H9 run whose payload was still marked in-progress. It is the "
+              "only H9 count for that release that survived: H10-H13 later overwrote the shared slug.",
     ),
     Measure(
         slug="role-specialty-agreement",

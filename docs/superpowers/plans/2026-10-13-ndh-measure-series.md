@@ -136,7 +136,20 @@ cd frontend && npm run lint
 The PR merges without a deploy dependency, because `measures.json` is a static
 file nothing reads yet. The weekly refresh then runs `measures.py` after the
 finding scripts. `measures.py` rewrites the file only when something other than
-`generated_at` has changed, so the refresh adds no empty commits.
+`generated_at` has changed, so the refresh adds no empty commits. The step is
+`continue-on-error`, because the chain is fail-fast and a stale
+`measures.json` costs less than a stranded finding refresh.
+
+**Required step before every reload, from this PR on.** Nine of the ten
+measures read their 2026-08-20 point from a file the next reload overwrites:
+the current finding JSONs and `role-gap-delta.json`. If nobody copies those
+files first, the generator omits 2026-08-20 on its next run, as its rules
+require, and the series drops back to one point. In the same commit as
+`release_snapshot.py --release <outgoing>`, copy those files into
+`analysis/release-snapshots/published/` and register them as vendored sources.
+`published/README.md` lists the steps. Slice 4 automates this with a
+`measures.py --vendor-current` mode, or a hook in `release_snapshot.py`. Until
+that lands, the step is manual and the reload checklist has to include it.
 
 ## Follow-ups, in the design's order of work
 
@@ -146,6 +159,7 @@ here, not in slice 1, because it writes to Databricks, which this PR must not
 touch.
 
 **Slice 3: views, partitioning, and the BigQuery measure pass.**
+
 - Add `cms_npd.<resource>_current` views, repoint every `h*.py` at them, verify
   byte-identical outputs, and add the anti-pattern rule that bans base-table
   names outside `analysis/measures/`.
@@ -161,6 +175,11 @@ touch.
   phone coverage.
 
 **Slice 4: generator-side fixes found while building slice 1.**
+
+- `measures.py --vendor-current` (or a hook in `release_snapshot.py`) that
+  copies the outgoing release's source files into `published/` and registers
+  them, so a reload cannot drop a point. Today this step is manual (see
+  Rollout).
 - `h27_pii_exposure.py`: emit the qualification-array control as a structured
   field, so the series no longer checks for a sentence in the notes.
 - `primer_scoreboard.py`: emit numerator and denominator for every metric.
@@ -169,6 +188,7 @@ touch.
   of the shared slug survived.
 
 **Slice 5: public surface.**
+
 - `/measures` index and `/measures/<slug>` pages: `force-static`,
   `generateStaticParams`, no runtime BigQuery. Check that `.nft.json` does not
   reference `public/api/v1/findings/**` or `states/**`. Show the table first;

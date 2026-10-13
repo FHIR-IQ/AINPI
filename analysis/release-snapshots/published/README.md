@@ -24,6 +24,26 @@ recompute is a later step of the measure-series design
 | `npi-taxonomy-correctness@3fe0500.json` | 3fe05005b08d | 2026-05-08 | npi-validation-failures (H9, written before H10-H13 overwrote the shared slug) |
 | `npi-taxonomy-correctness@be51fe6.json` | be51fe6ee4bb | 2026-08-20 | role-specialty-agreement restatement (first-entry reading, superseded 2026-08-28) |
 
+## Required before every warehouse reload
+
+The current-release points in `measures.json` are read from files the next
+reload overwrites: every `frontend/public/api/v1/findings/*.json` the registry
+names, and `frontend/public/api/v1/role-gap-delta.json`. If nobody copies them
+here first, the generator correctly omits the outgoing release on its next
+run, and the series loses a point it had.
+
+In the same commit as `python3 analysis/release_snapshot.py --release <outgoing>`:
+
+1. Copy each finding payload the registry in `analysis/measures.py` reads from
+   `frontend/public/api/v1/findings/` into this directory as
+   `<slug>@<short sha of HEAD>.json`, plus `role-gap-delta.json` the same way.
+2. Add each copy to the registry as a vendored `Source` for the outgoing
+   release, and add a row to the table above.
+3. Run `python3 analysis/measures.py` and confirm the outgoing release is
+   still a point, not an omission, for every measure.
+
+Automating this as a `--vendor-current` mode is a follow-up in the plan.
+
 Do not edit these files. If a value here is wrong, the correction belongs in
 the generator that produced it and in a new point, with the difference
 recorded as a restatement.

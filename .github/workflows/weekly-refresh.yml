@@ -172,7 +172,10 @@ jobs:
         # findings, the findings just regenerated above). No BigQuery, no
         # network. Leaves measures.json untouched when only the timestamp
         # would change. Runs after the finding scripts so a refreshed finding
-        # reaches the series in the same commit.
+        # reaches the series in the same commit. continue-on-error because a
+        # failure here should leave measures.json stale, not strand every
+        # finding refresh behind it in this fail-fast chain.
+        continue-on-error: true
         run: python analysis/measures.py
 
       - name: Rebuild the discovery manifest
