@@ -2,7 +2,8 @@
  * GET /api/v1/admin/weekly-report
  *
  * Admin-only weekly digest emailed to gene@fhiriq.com. Triggered by a
- * Vercel cron at Thursday 13:42 UTC (configured in frontend/vercel.json).
+ * Vercel cron at Thursday 14:12 UTC (configured in frontend/vercel.json),
+ * five minutes ahead of the 14:17 install poll so both share one warehouse wake.
  *
  * What it sends:
  *   - Subscriber totals (count, last 7 days, last 30 days)
@@ -14,7 +15,9 @@
  *     (pageview data isn't programmatically available without a Vercel
  *     Pro/Enterprise Insights API token; we surface the link instead)
  *   - Databricks Marketplace funnel: per-listing views / data requests /
- *     installs, last 7 days vs prior 7, counts only, from one SQL statement
+ *     installs plus the get-data funnel (started / completed / abandoned /
+ *     failed), last 7 days vs prior 7, counts only, from one SQL statement
+ *     that also carries an all-time positive control
  *     (src/lib/marketplace-funnel.ts). Reads "not configured" without the
  *     DATABRICKS_* env vars and "funnel unavailable: <reason>" on a
  *     Databricks error; neither stops the digest from sending.
@@ -399,6 +402,7 @@ export async function GET(req: NextRequest) {
       funnel: {
         status: funnel.status,
         listings: funnel.status === 'ok' ? funnel.listings.length : 0,
+        all_time: funnel.status === 'ok' ? funnel.allTime : null,
       },
     });
   } catch (err) {

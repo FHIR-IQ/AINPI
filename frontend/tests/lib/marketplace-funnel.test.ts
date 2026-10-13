@@ -5,6 +5,7 @@ import {
   renderFunnelHtml,
   renderFunnelText,
   shortReason,
+  toAllTime,
   toFunnelListings,
 } from '@/lib/marketplace-funnel';
 
@@ -25,7 +26,31 @@ function manifestOf(columns: string[]) {
   return { schema: { columns: columns.map((name, position) => ({ name, position })) } };
 }
 
-const FUNNEL_COLS = ['listing_name', 'period', 'views', 'requests', 'installs'];
+const FUNNEL_COLS = [
+  'listing_name',
+  'period',
+  'views',
+  'requests',
+  'installs',
+  'started',
+  'completed',
+  'abandoned',
+  'failed',
+];
+
+/** The positive-control row every successful statement returns first. */
+function allTimeRow(views: number, installs: number): (string | null)[] {
+  return [null, 'all_time', String(views), '0', String(installs), '0', '0', '0', '0'];
+}
+
+function succeeded(data: (string | null)[][] | undefined) {
+  return jsonResponse({
+    statement_id: 's1',
+    status: { state: 'SUCCEEDED' },
+    manifest: manifestOf(FUNNEL_COLS),
+    result: data ? { data_array: data } : {},
+  });
+}
 
 const noSleep = { sleep: async () => {} };
 
@@ -36,10 +61,23 @@ describe('buildFunnelQuery', () => {
     expect(q).toContain('system.marketplace.listing_access_events');
     expect(q).toMatch(/event_type\s*=\s*'VIEW_LISTING'/);
     expect(q).toMatch(/event_type\s+IN\s+\('REQUEST_DATA',\s*'GET_DATA'\)/);
+    for (const t of ['VIEW_LISTING', 'START_GET_DATA', 'COMPLETE_GET_DATA', 'ABANDON_GET_DATA', 'FAIL_GET_DATA']) {
+      expect(q).toContain(`'${t}'`);
+    }
     expect(q).toMatch(/date_sub\(current_date\(\),\s*14\)/);
     expect(q).toMatch(/date_sub\(current_date\(\),\s*7\)/);
     expect(q).toMatch(/GROUP BY 1, 2/);
     expect(q).toMatch(/LIMIT\s+\d+/);
+  });
+
+  it('carries an all-time positive control row that the LIMIT cannot drop', () => {
+    const q = buildFunnelQuery().statement;
+    const control = q.slice(q.indexOf('all_time AS ('), q.indexOf('SELECT listing_name, period'));
+    expect(control).toContain("'all_time'");
+    // No date filter and no GROUP BY: one row, all of history, even over empty tables.
+    expect(control).not.toMatch(/event_date/);
+    expect(control).not.toMatch(/GROUP BY/);
+    expect(q).toMatch(/ORDER BY CASE WHEN period = 'all_time' THEN 0 ELSE 1 END/);
   });
 
   it('never selects a consumer column', () => {
@@ -54,11 +92,21 @@ describe('toFunnelListings', () => {
       { listing_name: 'B', period: 'current', views: '10', requests: '1', installs: '2' },
       { listing_name: 'B', period: 'prior', views: '4', requests: '0', installs: '1' },
       { listing_name: 'A', period: 'prior', views: '3', requests: null, installs: '0' },
+      { listing_name: null, period: 'all_time', views: '23', requests: '0', installs: '6' },
     ]);
     expect(out.map((l) => l.listingName)).toEqual(['A', 'B']);
-    expect(out[1].current).toEqual({ views: 10, requests: 1, installs: 2 });
-    expect(out[1].prior).toEqual({ views: 4, requests: 0, installs: 1 });
-    expect(out[0].current).toEqual({ views: 0, requests: 0, installs: 0 });
+    expect(out[1].current).toMatchObject({ views: 10, requests: 1, installs: 2 });
+    expect(out[1].prior).toMatchObject({ views: 4, requests: 0, installs: 1 });
+    expect(out[0].current).toMatchObject({ views: 0, requests: 0, installs: 0 });
+  });
+
+  it('skips the all_time control row, which toAllTime reads instead', () => {
+    const rows = [
+      { listing_name: null, period: 'all_time', views: '23', requests: '0', installs: '6' },
+    ];
+    expect(toFunnelListings(rows)).toEqual([]);
+    expect(toAllTime(rows)).toEqual({ views: 23, installs: 6 });
+    expect(toAllTime([])).toEqual({ views: 0, installs: 0 });
   });
 });
 
@@ -81,17 +129,11 @@ describe('loadMarketplaceFunnel', () => {
 
   it('runs one statement and renders per-listing counts when configured', async () => {
     const fetchImpl = vi.fn().mockResolvedValueOnce(
-      jsonResponse({
-        statement_id: 's1',
-        status: { state: 'SUCCEEDED' },
-        manifest: manifestOf(FUNNEL_COLS),
-        result: {
-          data_array: [
-            ['NPD Archive', 'current', '12', '0', '3'],
-            ['NPD Archive', 'prior', '5', '1', '1'],
-          ],
-        },
-      }),
+      succeeded([
+        allTimeRow(23, 6),
+        ['NPD Archive', 'current', '12', '0', '3', '4', '3', '1', '0'],
+        ['NPD Archive', 'prior', '5', '1', '1', '2', '1', '0', '1'],
+      ]),
     );
     const s = await loadMarketplaceFunnel(ENV, { fetchImpl, ...noSleep });
     expect(fetchImpl).toHaveBeenCalledTimes(1);
@@ -106,28 +148,61 @@ describe('loadMarketplaceFunnel', () => {
     expect(s.listings).toEqual([
       {
         listingName: 'NPD Archive',
-        current: { views: 12, requests: 0, installs: 3 },
-        prior: { views: 5, requests: 1, installs: 1 },
+        current: { views: 12, requests: 0, installs: 3, started: 4, completed: 3, abandoned: 1, failed: 0 },
+        prior: { views: 5, requests: 1, installs: 1, started: 2, completed: 1, abandoned: 0, failed: 1 },
       },
     ]);
+    expect(s.allTime).toEqual({ views: 23, installs: 6 });
     const html = renderFunnelHtml(s);
     expect(html).toContain('NPD Archive');
     expect(html).toContain('Marketplace funnel');
     expect(renderFunnelText(s)).toContain('installs 3 (prior 1)');
   });
 
-  it('distinguishes an empty successful result from an error', async () => {
+  it('renders the get-data funnel (started / completed / abandoned / failed) for the window', async () => {
     const fetchImpl = vi.fn().mockResolvedValueOnce(
-      jsonResponse({
-        statement_id: 's1',
-        status: { state: 'SUCCEEDED' },
-        manifest: manifestOf(FUNNEL_COLS),
-        result: {},
-      }),
+      succeeded([
+        allTimeRow(23, 6),
+        ['NPD Archive', 'current', '12', '0', '3', '4', '3', '1', '0'],
+        ['NPD Archive', 'prior', '5', '1', '1', '2', '1', '0', '1'],
+      ]),
     );
     const s = await loadMarketplaceFunnel(ENV, { fetchImpl, ...noSleep });
-    expect(s).toEqual({ status: 'ok', listings: [] });
-    expect(renderFunnelHtml(s)).toContain('no funnel events in the last 14 days');
+    const text = renderFunnelText(s);
+    expect(text).toContain(
+      'get-data funnel: started 4 (prior 2)  completed 3 (prior 1)  abandoned 1 (prior 0)  failed 0 (prior 1)',
+    );
+    const html = renderFunnelHtml(s);
+    for (const h of ['Started', 'Completed', 'Abandoned', 'Failed']) expect(html).toContain(`>${h}</th>`);
+    expect(html).toContain('All time: 23 views, 6 installs');
+  });
+
+  it('positive control: an empty window with history reads as a quiet fortnight, not a broken read', async () => {
+    const fetchImpl = vi.fn().mockResolvedValueOnce(succeeded([allTimeRow(23, 6)]));
+    const s = await loadMarketplaceFunnel(ENV, { fetchImpl, ...noSleep });
+    expect(s).toEqual({ status: 'ok', listings: [], allTime: { views: 23, installs: 6 } });
+    for (const out of [renderFunnelHtml(s), renderFunnelText(s)]) {
+      expect(out).toContain('no events in the last 14 days (23 views all time');
+      expect(out).not.toContain('no events visible');
+      expect(out).not.toContain('unavailable');
+    }
+  });
+
+  it('positive control: an empty window with no history says the token may not see the tables', async () => {
+    const fetchImpl = vi.fn().mockResolvedValueOnce(succeeded([allTimeRow(0, 0)]));
+    const s = await loadMarketplaceFunnel(ENV, { fetchImpl, ...noSleep });
+    expect(s).toEqual({ status: 'ok', listings: [], allTime: { views: 0, installs: 0 } });
+    for (const out of [renderFunnelHtml(s), renderFunnelText(s)]) {
+      expect(out).toContain('no events visible: check the token can read system.marketplace tables');
+      expect(out).not.toContain('no events in the last 14 days');
+    }
+  });
+
+  it('treats a successful result with no rows at all (not even the control) as "not looking"', async () => {
+    const fetchImpl = vi.fn().mockResolvedValueOnce(succeeded(undefined));
+    const s = await loadMarketplaceFunnel(ENV, { fetchImpl, ...noSleep });
+    expect(s).toEqual({ status: 'ok', listings: [], allTime: { views: 0, installs: 0 } });
+    expect(renderFunnelHtml(s)).toContain('no events visible');
     expect(renderFunnelHtml(s)).not.toContain('unavailable');
   });
 
@@ -177,7 +252,8 @@ describe('loadMarketplaceFunnel', () => {
         manifest: manifestOf(cols),
         result: {
           data_array: [
-            ['NPD Archive', 'current', '2', '0', '1', 'leak-sentinel@example.com', 'Sentinel Person', 'Sentinel Co'],
+            [null, 'all_time', '9', '0', '3', '0', '0', '0', '0', 'leak-sentinel@example.com', 'Sentinel Person', 'Sentinel Co'],
+            ['NPD Archive', 'current', '2', '0', '1', '1', '1', '0', '0', 'leak-sentinel@example.com', 'Sentinel Person', 'Sentinel Co'],
           ],
         },
       }),
