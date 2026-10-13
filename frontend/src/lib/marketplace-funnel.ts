@@ -32,8 +32,14 @@
  * with the permission error, which is the designed failure.
  *
  * Cost: each digest wakes the serverless SQL warehouse once, which bills
- * roughly its 10-minute auto-stop minimum. Weekly, so about one extra wake a
- * week on top of the daily install poll.
+ * roughly its auto-stop minimum (5 minutes since 2026-10-12). Weekly, so about
+ * one extra wake a week on top of the daily install poll.
+ *
+ * Deadline: 40s. runStatement submits with wait_timeout 30s and gives each
+ * request whatever is left of the deadline, so a 30s deadline would abort the
+ * submit at the same instant Databricks returns PENDING on a cold warehouse,
+ * leaving no statement_id to cancel. 40s leaves room for the PENDING response
+ * and a few polls while staying under the route's maxDuration of 60.
  */
 import {
   readPollConfig,
@@ -138,7 +144,7 @@ export async function loadMarketplaceFunnel(
     const query = buildFunnelQuery();
     const got = deps.run
       ? await deps.run(query)
-      : await runStatement(cfg, query, { deadlineMs: 30_000, ...deps });
+      : await runStatement(cfg, query, { deadlineMs: 40_000, ...deps });
     if (!got.ok) return { status: 'unavailable', reason: shortReason(got.error) };
     return { status: 'ok', listings: toFunnelListings(got.rows) };
   } catch (err) {
