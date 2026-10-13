@@ -516,9 +516,13 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
 # Known health systems per state, for the positive control in
 # `check_system_controls`. Each entry is the system's name and the label
 # prefixes it can surface under: a brand stem, an NPPES parent name or a CMS
-# owner name, whichever tier wins for that system on a given release. Every
-# prefix family was checked against the PA slice of the 2026-08-20 release.
-# A system on this list that is excluded as a vendor, or that stops being
+# owner name, whichever tier wins for that system on a given release. Eight
+# of the nine resolved to a grouped label in the PA slice of the 2026-08-20
+# release. MAIN LINE did not exist there, because the pre-FHI-39 key for Main
+# Line Health was the bare opener MAIN; it is expected from the specialty
+# opener change and is first exercised by the post-2026-10-07 regeneration.
+# Penn State Health matches only through its NPPES parent, because its brand
+# key is PENN, shared with Penn Medicine. A system on this list that is excluded as a vendor, or that stops being
 # grouped at all, fails the run: a rule that quietly dissolves UPMC is a
 # worse bug than a missed vendor.
 KNOWN_SYSTEMS = {
