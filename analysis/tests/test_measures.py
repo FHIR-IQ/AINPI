@@ -258,6 +258,77 @@ def test_role_gap_delta_yields_both_releases(tmp_path):
     assert [p["numerator"] for p in out["series"]] == [38, 44]
 
 
+# The shape the next reload produces: the outgoing role-gap-delta.json is
+# vendored as published (2026-05-08 -> 2026-08-20) and the live file is
+# regenerated for the next pair (2026-08-20 -> 2026-10-07). Three releases,
+# two files, one release shared between them.
+THREE_RELEASES = ["2026-05-08", "2026-08-20", "2026-10-07"]
+
+
+def rgd(frm, to, before, after, state="PA"):
+    return {"from": frm, "to": to, "state": state,
+            "overall": {"before": {"active": 1000, "with_role": before},
+                        "after": {"active": 1000, "with_role": after}}}
+
+
+def test_role_gap_delta_regenerated_for_a_new_release_adds_a_point(tmp_path):
+    vendored = write(tmp_path, "published/role-gap-delta@abc1234.json",
+                     rgd("2026-05-08", "2026-08-20", 381, 437))
+    live = write(tmp_path, "role-gap-delta.json", rgd("2026-08-20", "2026-10-07", 437, 460))
+    m = measure([M.Source(vendored, M.role_gap_delta_pa_side("before"), vendored_from="abc1234"),
+                 M.Source(live, M.role_gap_delta_pa)])
+    out = M.build_measure(m, tmp_path, THREE_RELEASES)
+    assert [p["release"] for p in out["series"]] == THREE_RELEASES
+    assert [p["numerator"] for p in out["series"]] == [381, 437, 460]
+    assert out["omitted"] == []
+    may, aug, octo = out["series"]
+    assert may["source"] == {"file": vendored, "field": "overall.before.with_role / overall.before.active",
+                             "commit": "abc1234", "vendored": True}
+    assert aug["source"]["file"] == live and aug["source"]["field"].startswith("overall.before.")
+    assert octo["source"]["file"] == live and octo["source"]["field"].startswith("overall.after.")
+
+
+def test_role_gap_delta_both_files_read_whole_is_the_hazard_the_side_extractor_avoids(tmp_path):
+    vendored = write(tmp_path, "v.json", rgd("2026-05-08", "2026-08-20", 381, 437))
+    live = write(tmp_path, "l.json", rgd("2026-08-20", "2026-10-07", 437, 460))
+    m = measure([M.Source(vendored, M.role_gap_delta_pa), M.Source(live, M.role_gap_delta_pa)])
+    with pytest.raises(ValueError, match="two sources for 2026-08-20"):
+        M.build_measure(m, tmp_path, THREE_RELEASES)
+
+
+def test_role_gap_delta_vendored_copy_as_restatement_publishes_a_difference(tmp_path):
+    # The other legal registration: the vendored copy's shared side declared a
+    # restatement. If the regenerated file restates the shared release, the
+    # difference is published rather than resolved silently.
+    vendored = write(tmp_path, "v.json", rgd("2026-05-08", "2026-08-20", 381, 437))
+    live = write(tmp_path, "l.json", rgd("2026-08-20", "2026-10-07", 439, 460))
+    m = measure([M.Source(vendored, M.role_gap_delta_pa_side("before"), vendored_from="abc1234"),
+                 M.Source(vendored, M.role_gap_delta_pa_side("after"), vendored_from="abc1234",
+                          restatement_of="2026-08-20", restatement_reason="fixture"),
+                 M.Source(live, M.role_gap_delta_pa)])
+    out = M.build_measure(m, tmp_path, THREE_RELEASES)
+    assert [p["numerator"] for p in out["series"]] == [381, 439, 460]
+    assert out["series"][1]["restatements"][0]["as_published_numerator"] == 437
+
+
+def test_role_gap_delta_side_before_new_release_is_listed_is_ignored_not_raised(tmp_path):
+    # Between the regenerated file landing and KNOWN_RELEASES naming the new
+    # release, the new side is outside the series and must be skipped quietly.
+    live = write(tmp_path, "l.json", rgd("2026-08-20", "2026-10-07", 437, 460))
+    out = build_one(tmp_path, measure([M.Source(live, M.role_gap_delta_pa)]))
+    assert [p["release"] for p in out["series"]] == ["2026-08-20"]
+    assert [o["release"] for o in out["omitted"]] == ["2026-05-08"]
+
+
+def test_role_gap_delta_side_rejects_unknown_side_and_other_states(tmp_path):
+    with pytest.raises(ValueError):
+        M.role_gap_delta_pa_side("middle")
+    a = write(tmp_path, "oh.json", rgd("2026-05-08", "2026-08-20", 1, 2, state="OH"))
+    out = build_one(tmp_path, measure([M.Source(a, M.role_gap_delta_pa_side("before"))]))
+    assert out["series"] == []
+    assert "not PA" in out["omitted"][0]["reason"]
+
+
 # --- the real registry against the committed tree ------------------------
 
 def test_series_starts_at_may_and_excludes_april():

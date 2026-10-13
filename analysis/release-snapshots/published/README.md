@@ -41,8 +41,22 @@ In the same commit as `python3 analysis/release_snapshot.py --release <outgoing>
    release, and add a row to the table above. `role-gap-delta.json` is the
    exception to a plain copy: it carries two releases (`from` and `to`), and
    the regenerated file's `from` repeats the outgoing release. Registering
-   both as-is makes the generator raise "two sources for one release", so
-   give one of them an extractor that reads only its own side.
+   both with `role_gap_delta_pa` makes the generator raise "two sources for
+   one release". Register the vendored copy with the per-side extractor so it
+   supplies only the release the regenerated file drops, and keep the live
+   file on `role_gap_delta_pa`:
+
+   ```python
+   sources=(Source(f"{PUBLISHED}/role-gap-delta@<sha>.json",
+                   role_gap_delta_pa_side("before"), vendored_from="<sha>"),
+            Source("frontend/public/api/v1/role-gap-delta.json", role_gap_delta_pa)),
+   ```
+
+   If the regenerated file restates the shared release, also register the
+   vendored copy's `"after"` side with `restatement_of=<outgoing release>` so
+   the difference is published. `test_role_gap_delta_*` in
+   `analysis/tests/test_measures.py` pins both registrations against a
+   three-release fixture.
 3. Run `python3 analysis/measures.py` and confirm the outgoing release is
    still a point, not an omission, for every measure.
 

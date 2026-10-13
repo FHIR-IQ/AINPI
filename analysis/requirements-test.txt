@@ -1,0 +1,12 @@
+# What `python -m pytest analysis/tests/` needs, and nothing else. Used by the
+# "Analysis unit tests" job in .github/workflows/ci.yml.
+#
+# pandas + pyarrow: test_export_parquet, test_org_endpoint_table and the
+#   health-system notebook test import modules that use them at module scope.
+# google-cloud-bigquery: test_finding_detail imports h27_pii_exposure, which
+#   imports the client at module scope. No test constructs a client or runs a
+#   query; the suite passes offline with no credentials.
+pytest>=8,<10
+pandas>=2.2,<4
+pyarrow>=15
+google-cloud-bigquery>=3.20,<4

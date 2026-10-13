@@ -20,6 +20,7 @@ on:
 
 permissions:
   contents: write
+  issues: write   # only for the measure-series failure issue below
 
 concurrency:
   group: weekly-refresh
@@ -174,7 +175,10 @@ jobs:
         # would change. Runs after the finding scripts so a refreshed finding
         # reaches the series in the same commit. continue-on-error because a
         # failure here should leave measures.json stale, not strand every
-        # finding refresh behind it in this fail-fast chain.
+        # finding refresh behind it in this fail-fast chain. It is not
+        # silent: the last two steps open an issue and fail the run when this
+        # step fails, after the findings have been committed.
+        id: measures
         continue-on-error: true
         run: python analysis/measures.py
 
@@ -224,3 +228,38 @@ jobs:
           git add frontend/public/api/v1/
           git commit -m "Weekly refresh: regenerate /api/v1/*.json from latest BQ analyses"
           git push origin main
+
+      # A measures.py failure leaves measures.json stale while every other
+      # step reports success, which is the silent-failure shape this repo keeps
+      # paying for. Surface it twice: an issue (deduplicated on an exact title,
+      # as ndh-release-watch.yml does) and a red run. Both run after the commit
+      # step so the finding refresh still publishes.
+      - name: Open issue if the measure series did not rebuild
+        if: always() && steps.measures.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TITLE: "Weekly refresh: analysis/measures.py failed; measures.json is stale"
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 200 \
+            --json number,title | jq -r --arg t "$TITLE" '.[] | select(.title == $t) | .number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" --body "Failed again: $RUN_URL"
+            exit 0
+          fi
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" --body "$(cat <<BODY
+          The \`Rebuild the measure series\` step failed in $RUN_URL.
+          The finding refresh was still committed, so \`frontend/public/api/v1/measures.json\` now lags the findings it reads.
+
+          Reproduce locally with \`python3 analysis/measures.py --check\`. After a warehouse reload the usual cause is
+          a source file the registry reads having been regenerated without the outgoing release being vendored first;
+          see \`analysis/release-snapshots/published/README.md\`.
+          BODY
+          )"
+
+      - name: Fail the run if the measure series did not rebuild
+        if: always() && steps.measures.outcome == 'failure'
+        run: |
+          echo "::error::analysis/measures.py failed; measures.json was not rebuilt. See the step log above and the issue opened for it."
+          exit 1
