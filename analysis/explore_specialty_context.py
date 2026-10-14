@@ -75,7 +75,7 @@ METHODOLOGY = "0.7.2-draft"
 # Role rows in the pinned release. The control below fails the run if the table
 # has drifted from this by more than 5%, which catches a partial load and a
 # release bump nobody updated this script for.
-EXPECTED_ROLE_ROWS = 16_545_158
+EXPECTED_ROLE_ROWS = 11_056_751
 ROLE_ROW_TOLERANCE = 0.05
 
 # NPPES stores 15 (taxonomy, primary switch) pairs per NPI. Entity type 1 is an

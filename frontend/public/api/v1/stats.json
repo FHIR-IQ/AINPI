@@ -1,12 +1,12 @@
 {
-  "release_date": "2026-08-20",
-  "generated_at": "2026-10-12T19:06:34+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:52:29+00:00",
   "methodology_version": "0.7.3-draft",
-  "commit_sha": "05fa715",
+  "commit_sha": "6e74041",
   "counters": {
-    "resources_processed": 32468908,
-    "npis_checked": 11607656,
-    "npis_flagged": 4,
+    "resources_processed": 24761939,
+    "npis_checked": 9526462,
+    "npis_flagged": 0,
     "endpoints_live_pct": 85.37,
     "findings_published": 24,
     "findings_in_progress": 1,

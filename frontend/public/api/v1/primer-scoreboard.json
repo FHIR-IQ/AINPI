@@ -1,17 +1,17 @@
 {
   "title": "Provider directory scoreboard",
   "note": "Six metrics with a current baseline, each reproducible from public data. Stated so progress is arguable rather than felt. Recompute them against the next release with analysis/primer_scoreboard.py.",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T13:03:14+00:00",
-  "commit_sha": "163c6bc2ede9092f966d19be1975b2d30789cdd9",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:00:20+00:00",
+  "commit_sha": "6e7404180d8092bf31d3c799acacb1d7fcd4bd09",
   "metrics": [
     {
       "key": "endpoint-attribution",
       "label": "Endpoint attribution",
       "question": "Does the directory say who an endpoint belongs to?",
-      "value": 14.7,
+      "value": 14.6,
       "unit": "%",
-      "detail": "16,262 of 110,973 FHIR REST endpoints name a managing organization.",
+      "detail": "16,247 of 111,259 FHIR REST endpoints name a managing organization.",
       "headroom": "79.9% using only public vendor files that exist today.",
       "finding": "endpoint-org-linkage"
     },
@@ -21,7 +21,7 @@
       "question": "Does the organization hierarchy point at anything?",
       "value": 100.0,
       "unit": "%",
-      "detail": "140,017 references to 43,551 distinct parent organizations. 140,017 resolve to a record in the export.",
+      "detail": "146,627 references to 43,820 distinct parent organizations. 146,627 resolve to a record in the export.",
       "headroom": "Publish the parents, or drop the field.",
       "finding": null
     },
@@ -29,9 +29,9 @@
       "key": "organization-typing",
       "label": "Organization typing",
       "question": "Can a consumer tell entities from tax records?",
-      "value": 50.0,
+      "value": 3.9,
       "unit": "% untyped",
-      "detail": "2,199,519 of 4,402,671 Organization records are tax-entity records carrying free text rather than a coding, against 2,202,028 provider records.",
+      "detail": "79,721 of 2,058,500 Organization records are tax-entity records carrying free text rather than a coding, against 1,976,702 provider records.",
       "headroom": "Give them a real code so they can be filtered.",
       "finding": null
     },
@@ -41,7 +41,7 @@
       "question": "How many endpoints can software actually query?",
       "value": 9.8,
       "unit": "%",
-      "detail": "110,973 of 1,128,169 Endpoint resources are FHIR REST. The rest are Direct messaging addresses.",
+      "detail": "111,259 of 1,140,836 Endpoint resources are FHIR REST. The rest are Direct messaging addresses.",
       "headroom": "Not a defect. It is the right denominator to publish.",
       "finding": "endpoint-url-validity"
     },
@@ -49,9 +49,9 @@
       "key": "affiliation-coverage",
       "label": "Affiliation coverage",
       "question": "Does the directory say where a clinician works?",
-      "value": 43.7,
+      "value": 44.0,
       "unit": "% have one",
-      "detail": "100,918 of 230,837 active Pennsylvania practitioners carry a PractitionerRole. Coverage is uneven by profession, from 82.0% of advanced practice to 4.2% of pharmacy providers.",
+      "detail": "100,379 of 227,917 active Pennsylvania practitioners carry a PractitionerRole. Coverage is uneven by profession, from 77.2% of advanced practice to 6.2% of nursing providers.",
       "headroom": "Publish role provenance so absence can be read.",
       "finding": "role-gap-composition"
     },

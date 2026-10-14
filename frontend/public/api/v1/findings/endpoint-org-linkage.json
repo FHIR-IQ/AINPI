@@ -5,63 +5,63 @@
     "H50"
   ],
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T10:37:44+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T01:20:53+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "95feac2",
-  "headline": "Of 110,973 FHIR REST endpoints in the 2026-08-20 NDH release, 16,262 (14.7%) resolve to a managing organization. The remaining 94,711 are URLs with no owner in the directory. Every endpoint that does resolve reaches an organization carrying an NPI, so the link yields a usable base-URL-to-NPI crosswalk for 16,262 endpoints across 15,940 organizations.",
-  "numerator": 16262,
-  "denominator": 110973,
+  "commit_sha": "6e74041",
+  "headline": "Of 111,259 FHIR REST endpoints in the 2026-10-07 NDH release, 16,247 (14.6%) resolve to a managing organization. The remaining 95,012 are URLs with no owner in the directory. Every endpoint that does resolve reaches an organization carrying an NPI, so the link yields a usable base-URL-to-NPI crosswalk for 16,247 endpoints across 15,928 organizations.",
+  "numerator": 16247,
+  "denominator": 111259,
   "chart": {
     "type": "bar",
     "unit": "percent",
     "data": [
       {
         "label": "direct-project resolvable",
-        "value": 9.0
+        "value": 8.9
       },
       {
         "label": "hl7-fhir-rest resolvable",
-        "value": 14.7
+        "value": 14.6
       }
     ]
   },
-  "notes": "Presence and resolvability are reported separately because a reference can exist and point at nothing. In this release they are identical: 724 of the managingOrganization references across both connection types dangle. The gap is absence, not breakage, which matters because absence is fixed by populating a field and breakage would be fixed by repairing referential integrity.\n\nHost is not a substitute for the organization link. EHR vendors host thousands of tenants on one domain, so a host identifies the vendor and never the practice. The rate is bimodal rather than uniformly low. Of the 23 hosts carrying at least 100 endpoints, 13 publish no organization link on any of them, covering 43,601 endpoints; others attribute most of theirs. That is a publishing-behaviour difference between vendors rather than one systemic cause, and it means the fix is per-vendor: a host sitting at 0% is not partially populated, it has never populated the field at all.\n\nDirect Trust addresses are excluded from the crosswalk. They are messaging addresses rather than callable base URLs (H28), though their linkage rate is reported in the chart for completeness. The crosswalk covers the FHIR REST subset only, which is the right denominator for anything that resolves a base URL.",
+  "notes": "Presence and resolvability are reported separately because a reference can exist and point at nothing. In this release they are identical: 841 of the managingOrganization references across both connection types dangle. The gap is absence, not breakage, which matters because absence is fixed by populating a field and breakage would be fixed by repairing referential integrity.\n\nHost is not a substitute for the organization link. EHR vendors host thousands of tenants on one domain, so a host identifies the vendor and never the practice. The rate is bimodal rather than uniformly low. Of the 23 hosts carrying at least 100 endpoints, 13 publish no organization link on any of them, covering 43,601 endpoints; others attribute most of theirs. That is a publishing-behaviour difference between vendors rather than one systemic cause, and it means the fix is per-vendor: a host sitting at 0% is not partially populated, it has never populated the field at all.\n\nDirect Trust addresses are excluded from the crosswalk. They are messaging addresses rather than callable base URLs (H28), though their linkage rate is reported in the chart for completeness. The crosswalk covers the FHIR REST subset only, which is the right denominator for anything that resolves a base URL.",
   "detail": {
     "by_connection_type": [
       {
         "connection_type": "direct-project",
-        "total": 1017196,
-        "reference_present": 92234,
-        "resolvable": 91598,
-        "resolves_to_npi": 91598,
-        "distinct_orgs": 4560
+        "total": 1029577,
+        "reference_present": 92862,
+        "resolvable": 92127,
+        "resolves_to_npi": 92127,
+        "distinct_orgs": 5433
       },
       {
         "connection_type": "hl7-fhir-rest",
-        "total": 110973,
-        "reference_present": 16350,
-        "resolvable": 16262,
-        "resolves_to_npi": 16262,
-        "distinct_orgs": 15940
+        "total": 111259,
+        "reference_present": 16353,
+        "resolvable": 16247,
+        "resolves_to_npi": 16247,
+        "distinct_orgs": 15928
       }
     ],
-    "all_endpoints_total": 1128169,
-    "all_endpoints_resolvable": 107860,
-    "dangling_references": 724,
-    "crosswalk_rows": 16262,
+    "all_endpoints_total": 1140836,
+    "all_endpoints_resolvable": 108374,
+    "dangling_references": 841,
+    "crosswalk_rows": 16247,
     "crosswalk_url": "/api/v1/findings/endpoint-org-crosswalk.csv",
     "top_hosts_by_linkage": [
       {
         "host": "api.platform.athenahealth.com",
-        "endpoints": 35012,
-        "resolvable": 8560,
+        "endpoints": 35015,
+        "resolvable": 8550,
         "resolvable_pct": 24.4
       },
       {
         "host": "fhir4.healow.com",
-        "endpoints": 23179,
-        "resolvable": 4449,
+        "endpoints": 23176,
+        "resolvable": 4446,
         "resolvable_pct": 19.2
       },
       {
@@ -108,7 +108,7 @@
       },
       {
         "host": "fhir-api.fhirprod.aws.greenwayhealth.com",
-        "endpoints": 1475,
+        "endpoints": 1476,
         "resolvable": 512,
         "resolvable_pct": 34.7
       },
@@ -126,9 +126,9 @@
       },
       {
         "host": "fhir-usa.unify.chbase.com",
-        "endpoints": 886,
-        "resolvable": 290,
-        "resolvable_pct": 32.7
+        "endpoints": 885,
+        "resolvable": 288,
+        "resolvable_pct": 32.5
       },
       {
         "host": "ct-fhir.harrisambulatory.com",

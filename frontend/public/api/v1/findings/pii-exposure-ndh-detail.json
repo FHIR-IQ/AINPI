@@ -1,7 +1,7 @@
 {
-  "queried_at": "2026-10-12T19:06:08+00:00",
-  "release_date": "2026-08-20",
-  "denominator_practitioners": 7373232,
+  "queried_at": "2026-10-14T01:26:18+00:00",
+  "release_date": "2026-10-07",
+  "denominator_practitioners": 7481907,
   "totals": {
     "flagged_pattern_match": 0,
     "confirmed_ssn_exposures": 0,
@@ -14,8 +14,8 @@
   "state_breakdown": [],
   "birthdate_watch": {
     "control_passed": true,
-    "practitioners": 7373232,
-    "gender_present": 7373232,
+    "practitioners": 7481907,
+    "gender_present": 7481907,
     "birth_date_present": 0,
     "year_only": 0,
     "full_date": 0,
@@ -23,8 +23,8 @@
       "year_only": "birthDate is exactly four characters (YYYY)",
       "full_date": "birthDate is longer than four characters (YYYY-MM or YYYY-MM-DD)"
     },
-    "note": "Release watch, Practitioner.birthDate: 0 of 7,373,232 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,373,232 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
-    "release_date": "2026-08-20"
+    "note": "Release watch, Practitioner.birthDate: 0 of 7,481,907 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,481,907 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
+    "release_date": "2026-10-07"
   },
   "samples": [],
   "limitations": [

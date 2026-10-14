@@ -2,14 +2,14 @@
   "state": "WA",
   "state_name": "Washington",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:29:46+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:52:06+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 176734,
-    "organization": 61035,
-    "location": 57090
+    "practitioner": 177831,
+    "organization": 31766,
+    "location": 57574
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 172998,
-      "state_denominator": 176734,
-      "state_pct": 97.8861,
-      "national_pct": 99.9985,
-      "state_headline": "172,998 of 176,734 WA practitioner NPIs (97.8861%) match NPPES; 361 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 172576,
+      "state_denominator": 177831,
+      "state_pct": 97.0449,
+      "national_pct": 97.7651,
+      "state_headline": "172,576 of 177,831 WA practitioner NPIs (97.0449%) match NPPES; 361 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 30475,
-      "state_denominator": 61035,
-      "state_pct": 49.9304,
-      "national_pct": 11.3992,
-      "state_headline": "WA has 61,035 Organization resources covering 30,560 unique NPIs \u2014 30,475 excess resources (49.9304%) appear duplicated.",
+      "state_numerator": 1084,
+      "state_denominator": 31766,
+      "state_pct": 3.4125,
+      "national_pct": 1.4362,
+      "state_headline": "WA has 31,766 Organization resources covering 30,682 unique NPIs \u2014 1,084 excess resources (3.4125%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 294859,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 294,859 WA-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 267171,
+      "state_denominator": 267171,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "267,171 of 267,171 WA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -142,13 +142,13 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1699776930",
-      "display_name": "MACNEILL, MARTIN",
+      "npi": "1871673970",
+      "display_name": "DILLON, DEBORAH",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-08-19 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1699776930",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-09-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1871673970",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

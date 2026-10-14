@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-10-13T15:01:24+00:00",
+  "generated_at": "2026-10-14T02:07:02+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
     "2026-05-08",
-    "2026-08-20"
+    "2026-08-20",
+    "2026-10-07"
   ],
   "series_start": "2026-05-08",
   "series_start_reason": "The 2026-04-09 export is held as an archive artifact rather than a published point, per the measure-series design.",
@@ -43,10 +44,10 @@
           "denominator": 227727,
           "definition_version": 1,
           "source": {
-            "file": "frontend/public/api/v1/role-gap-delta.json",
+            "file": "analysis/release-snapshots/published/role-gap-delta@6e74041.json",
             "field": "overall.before.with_role / overall.before.active",
-            "commit": null,
-            "vendored": false
+            "commit": "6e74041",
+            "vendored": true
           },
           "comparable_to_previous": null
         },
@@ -58,12 +59,26 @@
           "definition_version": 1,
           "source": {
             "file": "frontend/public/api/v1/role-gap-delta.json",
-            "field": "overall.after.with_role / overall.after.active",
+            "field": "overall.before.with_role / overall.before.active",
             "commit": null,
             "vendored": false
           },
           "comparable_to_previous": true,
           "comparability_reason": "reviewed: PractitionerRole more than doubled in this release (3,952,445 to 10,806,327 active). Coverage reads no specialty code, so the vocabulary change cannot touch it; the rise is the directory adding roles, most of them to practitioners who already had one."
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.4404190999355028,
+          "numerator": 100379,
+          "denominator": 227917,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/role-gap-delta.json",
+            "field": "overall.after.with_role / overall.after.active",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": true
         }
       ],
       "omitted": [],
@@ -122,6 +137,20 @@
             "vendored": false
           },
           "comparable_to_previous": true
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.09752409636442048,
+          "numerator": 111259,
+          "denominator": 1140836,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/2026-10-07.json",
+            "field": "shape.endpoint_connection_types[hl7-fhir-rest].n / tables.endpoint.rows",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": true
         }
       ],
       "omitted": [],
@@ -174,9 +203,23 @@
           "denominator": 110973,
           "definition_version": 1,
           "source": {
+            "file": "analysis/release-snapshots/published/endpoint-org-linkage@6e74041.json",
+            "field": "numerator / denominator",
+            "commit": "6e74041",
+            "vendored": true
+          },
+          "comparable_to_previous": true
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.14602863588563622,
+          "numerator": 16247,
+          "denominator": 111259,
+          "definition_version": 1,
+          "source": {
             "file": "frontend/public/api/v1/findings/endpoint-org-linkage.json",
             "field": "numerator / denominator",
-            "commit": "95feac2",
+            "commit": "6e74041",
             "vendored": false
           },
           "comparable_to_previous": true
@@ -232,13 +275,27 @@
           "denominator": 94711,
           "definition_version": 1,
           "source": {
-            "file": "frontend/public/api/v1/findings/vendor-endpoint-attribution.json",
+            "file": "analysis/release-snapshots/published/vendor-endpoint-attribution@6e74041.json",
             "field": "numerator / denominator",
-            "commit": "51bf5d5",
-            "vendored": false
+            "commit": "6e74041",
+            "vendored": true
           },
           "comparable_to_previous": "unreviewed",
           "comparability_reason": "moved 0.1099 against a declared ordinary move of 0.05 (absolute); not yet reviewed"
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.6437292131520229,
+          "numerator": 61162,
+          "denominator": 95012,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/vendor-endpoint-attribution.json",
+            "field": "numerator / denominator",
+            "commit": "6e74041",
+            "vendored": false
+          },
+          "comparable_to_previous": true
         }
       ],
       "omitted": [],
@@ -291,9 +348,23 @@
           "denominator": 110973,
           "definition_version": 1,
           "source": {
+            "file": "analysis/release-snapshots/published/ndh-payer-endpoint-coverage@6e74041.json",
+            "field": "numerator / denominator",
+            "commit": "6e74041",
+            "vendored": true
+          },
+          "comparable_to_previous": true
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.000449401846142784,
+          "numerator": 50,
+          "denominator": 111259,
+          "definition_version": 1,
+          "source": {
             "file": "frontend/public/api/v1/findings/ndh-payer-endpoint-coverage.json",
             "field": "numerator / denominator",
-            "commit": "05fa715",
+            "commit": "6e74041",
             "vendored": false
           },
           "comparable_to_previous": true
@@ -349,14 +420,30 @@
           "denominator": 7373232,
           "definition_version": 1,
           "source": {
-            "file": "frontend/public/api/v1/findings/pii-exposure-ndh.json",
+            "file": "analysis/release-snapshots/published/pii-exposure-ndh@6e74041.json",
             "field": "numerator / denominator",
-            "commit": "05fa715",
-            "vendored": false
+            "commit": "6e74041",
+            "vendored": true
           },
           "zero_control": "asserted in source notes, not yet a structured field: The zero is checked, not assumed: 7,371,126 of 7,373,232 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field",
           "comparable_to_previous": true,
           "comparability_reason": "reviewed: Remediation, not an empty query: the source records that 7,371,126 of 7,373,232 Practitioner resources still carry the qualification array the exposures were found in."
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0,
+          "numerator": 0,
+          "denominator": 7481907,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/pii-exposure-ndh.json",
+            "field": "numerator / denominator",
+            "commit": "6e74041",
+            "vendored": false
+          },
+          "zero_control": "asserted in source notes, not yet a structured field: The zero is checked, not assumed: 7,451,577 of 7,481,907 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field",
+          "comparable_to_previous": "unreviewed",
+          "comparability_reason": "moved inf against a declared ordinary move of 0.5 (relative); not yet reviewed"
         }
       ],
       "omitted": [],
@@ -409,15 +496,20 @@
           "denominator": 11607656,
           "definition_version": 1,
           "source": {
-            "file": "frontend/public/api/v1/findings/npi-validity-summary.json",
+            "file": "analysis/release-snapshots/published/npi-validity-summary@6e74041.json",
             "field": "npis_flagged / npis_checked",
-            "commit": null,
-            "vendored": false
+            "commit": "6e74041",
+            "vendored": true
           },
           "comparable_to_previous": true
         }
       ],
-      "omitted": [],
+      "omitted": [
+        {
+          "release": "2026-10-07",
+          "reason": "frontend/public/api/v1/findings/npi-validity-summary.json: npis_flagged / npis_checked: zero with no positive control proving the field was read"
+        }
+      ],
       "notes": "The 2026-05-08 point comes from an H9 run whose payload was still marked in-progress. It is the only H9 count for that release that survived: H10-H13 later overwrote the shared slug."
     },
     {
@@ -482,10 +574,10 @@
           "denominator": 5759162,
           "definition_version": 2,
           "source": {
-            "file": "frontend/public/api/v1/findings/npi-taxonomy-correctness.json",
+            "file": "analysis/release-snapshots/published/npi-taxonomy-correctness@6e74041.json",
             "field": "numerator / denominator",
-            "commit": "pending",
-            "vendored": false
+            "commit": "6e74041",
+            "vendored": true
           },
           "restatements": [
             {
@@ -503,6 +595,20 @@
           ],
           "comparable_to_previous": false,
           "comparability_reason": "definition break: PractitionerRole.specialty moved from CMS Medicare codes to NUCC taxonomy codes, so definition 1 measured a lossy Medicare-to-NUCC crosswalk rather than disagreement. Definition 2 compares NUCC to NUCC."
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.9776506378231317,
+          "numerator": 3156480,
+          "denominator": 3228638,
+          "definition_version": 2,
+          "source": {
+            "file": "frontend/public/api/v1/findings/npi-taxonomy-correctness.json",
+            "field": "numerator / denominator",
+            "commit": "pending",
+            "vendored": false
+          },
+          "comparable_to_previous": true
         }
       ],
       "omitted": [],
@@ -555,12 +661,27 @@
           "denominator": 7373232,
           "definition_version": 1,
           "source": {
-            "file": "frontend/public/api/v1/findings/practitioner-phone-reachability.json",
+            "file": "analysis/release-snapshots/published/practitioner-phone-reachability@6e74041.json",
             "field": "numerator / denominator",
-            "commit": "05fa715",
-            "vendored": false
+            "commit": "6e74041",
+            "vendored": true
           },
           "comparable_to_previous": true
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.9774418473792844,
+          "numerator": 7313129,
+          "denominator": 7481907,
+          "definition_version": 1,
+          "source": {
+            "file": "frontend/public/api/v1/findings/practitioner-phone-reachability.json",
+            "field": "numerator / denominator",
+            "commit": "6e74041",
+            "vendored": false
+          },
+          "comparable_to_previous": "unreviewed",
+          "comparability_reason": "moved 0.0223 against a declared ordinary move of 0.01 (absolute); not yet reviewed"
         }
       ],
       "omitted": [],
@@ -618,6 +739,21 @@
           },
           "comparable_to_previous": "unreviewed",
           "comparability_reason": "moved 0.08538 against a declared ordinary move of 0.05 (absolute); not yet reviewed"
+        },
+        {
+          "release": "2026-10-07",
+          "value": 0.9610896283701724,
+          "numerator": 1978403,
+          "denominator": 2058500,
+          "definition_version": 1,
+          "source": {
+            "file": "analysis/release-snapshots/2026-10-07.json",
+            "field": "shape.organization_types[coded].n / tables.organization.rows",
+            "commit": null,
+            "vendored": false
+          },
+          "comparable_to_previous": "unreviewed",
+          "comparability_reason": "moved 0.4608 against a declared ordinary move of 0.05 (absolute); not yet reviewed"
         }
       ],
       "omitted": [],

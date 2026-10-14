@@ -2,14 +2,14 @@
   "state": "WY",
   "state_name": "Wyoming",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:30:20+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:52:27+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 10846,
-    "organization": 7392,
-    "location": 4446
+    "practitioner": 10903,
+    "organization": 3703,
+    "location": 4506
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 10686,
-      "state_denominator": 10846,
-      "state_pct": 98.5248,
-      "national_pct": 99.9985,
-      "state_headline": "10,686 of 10,846 WY practitioner NPIs (98.5248%) match NPPES; 20 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 10655,
+      "state_denominator": 10903,
+      "state_pct": 97.7254,
+      "national_pct": 97.7651,
+      "state_headline": "10,655 of 10,903 WY practitioner NPIs (97.7254%) match NPPES; 15 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 3863,
-      "state_denominator": 7392,
-      "state_pct": 52.2592,
-      "national_pct": 11.3992,
-      "state_headline": "WY has 7,392 Organization resources covering 3,529 unique NPIs \u2014 3,863 excess resources (52.2592%) appear duplicated.",
+      "state_numerator": 170,
+      "state_denominator": 3703,
+      "state_pct": 4.5909,
+      "national_pct": 1.4362,
+      "state_headline": "WY has 3,703 Organization resources covering 3,533 unique NPIs \u2014 170 excess resources (4.5909%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 22684,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 22,684 WY-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 19112,
+      "state_denominator": 19112,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "19,112 of 19,112 WY-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,6 +110,14 @@
   ],
   "verify_samples": [
     {
+      "npi": "1538121025",
+      "display_name": "BAUMSTARCK JR, JOSEPH",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-05-20 (exclusion type 1128a4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1538121025",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
       "npi": "1962516443",
       "display_name": "HAND, MARY",
       "flagged_by": "oig-leie-exclusions",
@@ -123,14 +131,6 @@
       "flagged_by": "oig-leie-exclusions",
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2012-08-20 (exclusion type 1128b4)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1962441618",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
-      "npi": "1306963863",
-      "display_name": "SCHREINER, ROBERT",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2014-05-20 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306963863",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WY-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WY-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

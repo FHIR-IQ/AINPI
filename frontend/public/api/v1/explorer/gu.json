@@ -1,78 +1,78 @@
 {
  "state": "GU",
- "release_date": "2026-08-20",
- "generated_at": "2026-08-22T15:06:12+00:00",
+ "release_date": "2026-10-07",
+ "generated_at": "2026-10-14T01:59:34+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
-  "practitioners": 669,
-  "with_role": 282,
-  "orgs_provider": 233,
-  "orgs_ein": 270,
+  "practitioners": 698,
+  "with_role": 303,
+  "orgs_provider": 229,
+  "orgs_ein": 12,
   "orgs_other": 0,
-  "locations": 452,
-  "with_coords": 409
+  "locations": 453,
+  "with_coords": 410
  },
  "zips_with_out_of_state_county": 0,
  "by_category": [
   {
    "category": "physician",
-   "practitioners": 219,
-   "with_role": 169,
-   "role_pct": 77.2
+   "practitioners": 244,
+   "with_role": 184,
+   "role_pct": 75.4
   },
   {
    "category": "behavioral-health",
-   "practitioners": 77,
-   "with_role": 2,
-   "role_pct": 2.6
+   "practitioners": 78,
+   "with_role": 7,
+   "role_pct": 9.0
   },
   {
    "category": "nursing",
-   "practitioners": 69,
-   "with_role": 15,
-   "role_pct": 21.7
+   "practitioners": 71,
+   "with_role": 16,
+   "role_pct": 22.5
   },
   {
    "category": "rehab-therapy",
-   "practitioners": 64,
-   "with_role": 11,
-   "role_pct": 17.2
+   "practitioners": 62,
+   "with_role": 14,
+   "role_pct": 22.6
   },
   {
    "category": "advanced-practice",
-   "practitioners": 54,
-   "with_role": 38,
-   "role_pct": 70.4
+   "practitioners": 56,
+   "with_role": 32,
+   "role_pct": 57.1
   },
   {
    "category": "pharmacy",
-   "practitioners": 50,
-   "with_role": 3,
-   "role_pct": 6.0
+   "practitioners": 52,
+   "with_role": 5,
+   "role_pct": 9.6
   },
   {
    "category": "dental",
-   "practitioners": 40,
-   "with_role": 2,
-   "role_pct": 5.0
+   "practitioners": 41,
+   "with_role": 3,
+   "role_pct": 7.3
   },
   {
    "category": "other-clinical",
-   "practitioners": 36,
-   "with_role": 18,
-   "role_pct": 50.0
-  },
-  {
-   "category": "chiropractic",
-   "practitioners": 15,
-   "with_role": 2,
-   "role_pct": 13.3
+   "practitioners": 31,
+   "with_role": 16,
+   "role_pct": 51.6
   },
   {
    "category": "group",
-   "practitioners": 13,
-   "with_role": 12,
-   "role_pct": 92.3
+   "practitioners": 15,
+   "with_role": 13,
+   "role_pct": 86.7
+  },
+  {
+   "category": "chiropractic",
+   "practitioners": 14,
+   "with_role": 2,
+   "role_pct": 14.3
   },
   {
    "category": "dietary",
@@ -82,9 +82,9 @@
   },
   {
    "category": "eye-vision",
-   "practitioners": 7,
+   "practitioners": 8,
    "with_role": 2,
-   "role_pct": 28.6
+   "role_pct": 25.0
   },
   {
    "category": "support",
@@ -93,16 +93,16 @@
    "role_pct": 16.7
   },
   {
+   "category": "agency",
+   "practitioners": 3,
+   "with_role": 1,
+   "role_pct": 33.3
+  },
+  {
    "category": "podiatry",
    "practitioners": 3,
    "with_role": 3,
    "role_pct": 100.0
-  },
-  {
-   "category": "agency",
-   "practitioners": 2,
-   "with_role": 0,
-   "role_pct": 0.0
   },
   {
    "category": "facility",
@@ -122,20 +122,20 @@
    "county_fips": null,
    "county": "(county unknown)",
    "zip_count": 7,
-   "practitioners": 669,
-   "with_role": 282,
-   "role_pct": 42.2,
-   "orgs_provider": 233,
-   "orgs_ein": 270,
+   "practitioners": 698,
+   "with_role": 303,
+   "role_pct": 43.4,
+   "orgs_provider": 229,
+   "orgs_ein": 12,
    "by_category": {
-    "physician": 219,
-    "behavioral-health": 77,
-    "nursing": 69,
-    "rehab-therapy": 64,
-    "advanced-practice": 54,
-    "pharmacy": 50,
-    "dental": 40,
-    "other-clinical": 36
+    "physician": 244,
+    "behavioral-health": 78,
+    "nursing": 71,
+    "rehab-therapy": 62,
+    "advanced-practice": 56,
+    "pharmacy": 52,
+    "dental": 41,
+    "other-clinical": 31
    }
   }
  ],
@@ -144,23 +144,23 @@
    "zip": "96910",
    "county_fips": null,
    "county": null,
-   "practitioners": 81,
-   "with_role": 7,
-   "orgs_provider": 28,
-   "orgs_ein": 27,
+   "practitioners": 87,
+   "with_role": 9,
+   "orgs_provider": 26,
+   "orgs_ein": 1,
    "locations": 79,
    "lat": 13.47511,
    "lng": 144.75092,
    "by_category": {
-    "behavioral-health": 29,
+    "behavioral-health": 30,
     "nursing": 17,
     "dental": 9,
+    "physician": 6,
     "chiropractic": 5,
-    "advanced-practice": 4,
-    "physician": 4,
-    "rehab-therapy": 3,
-    "pharmacy": 3,
+    "advanced-practice": 5,
+    "rehab-therapy": 5,
     "dietary": 3,
+    "pharmacy": 3,
     "other-clinical": 2,
     "eye-vision": 1,
     "agency": 1
@@ -183,27 +183,27 @@
    "zip": "96913",
    "county_fips": null,
    "county": null,
-   "practitioners": 332,
-   "with_role": 106,
-   "orgs_provider": 167,
-   "orgs_ein": 210,
+   "practitioners": 338,
+   "with_role": 107,
+   "orgs_provider": 166,
+   "orgs_ein": 8,
    "locations": 315,
    "lat": 13.47817,
    "lng": 144.80902,
    "by_category": {
-    "physician": 95,
+    "physician": 96,
     "behavioral-health": 38,
-    "nursing": 36,
-    "pharmacy": 31,
-    "rehab-therapy": 29,
-    "advanced-practice": 28,
-    "other-clinical": 20,
+    "nursing": 37,
+    "pharmacy": 33,
+    "rehab-therapy": 32,
+    "advanced-practice": 27,
     "dental": 19,
-    "group": 8,
+    "other-clinical": 18,
+    "group": 9,
     "dietary": 7,
-    "support": 6,
-    "eye-vision": 6,
+    "eye-vision": 7,
     "chiropractic": 6,
+    "support": 6,
     "facility": 2,
     "agency": 1
    }
@@ -242,27 +242,28 @@
    "zip": "96929",
    "county_fips": null,
    "county": null,
-   "practitioners": 254,
-   "with_role": 167,
-   "orgs_provider": 38,
-   "orgs_ein": 33,
-   "locations": 54,
+   "practitioners": 271,
+   "with_role": 185,
+   "orgs_provider": 37,
+   "orgs_ein": 3,
+   "locations": 55,
    "lat": 13.53794,
    "lng": 144.89849,
    "by_category": {
-    "physician": 120,
-    "rehab-therapy": 31,
-    "advanced-practice": 21,
+    "physician": 142,
+    "rehab-therapy": 24,
+    "advanced-practice": 23,
+    "nursing": 17,
     "pharmacy": 16,
-    "nursing": 16,
-    "other-clinical": 14,
-    "dental": 12,
+    "dental": 13,
+    "other-clinical": 11,
     "behavioral-health": 10,
-    "group": 5,
-    "chiropractic": 4,
+    "group": 6,
+    "chiropractic": 3,
     "podiatry": 3,
-    "dietary": 1,
-    "student": 1
+    "student": 1,
+    "agency": 1,
+    "dietary": 1
    }
   },
   {

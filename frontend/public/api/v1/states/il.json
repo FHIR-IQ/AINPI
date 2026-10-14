@@ -2,14 +2,14 @@
   "state": "IL",
   "state_name": "Illinois",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:23:35+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:47:59+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 218788,
-    "organization": 138954,
-    "location": 100787
+    "practitioner": 211794,
+    "organization": 74218,
+    "location": 101581
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 213230,
-      "state_denominator": 218788,
-      "state_pct": 97.4596,
-      "national_pct": 99.9985,
-      "state_headline": "213,230 of 218,788 IL practitioner NPIs (97.4596%) match NPPES; 482 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 204097,
+      "state_denominator": 211794,
+      "state_pct": 96.3658,
+      "national_pct": 97.7651,
+      "state_headline": "204,097 of 211,794 IL practitioner NPIs (96.3658%) match NPPES; 458 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 67076,
-      "state_denominator": 138954,
-      "state_pct": 48.2721,
-      "national_pct": 11.3992,
-      "state_headline": "IL has 138,954 Organization resources covering 71,876 unique NPIs \u2014 67,076 excess resources (48.2721%) appear duplicated.",
+      "state_numerator": 2212,
+      "state_denominator": 74218,
+      "state_pct": 2.9804,
+      "national_pct": 1.4362,
+      "state_headline": "IL has 74,218 Organization resources covering 72,004 unique NPIs \u2014 2,212 excess resources (2.9804%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 458527,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 458,527 IL-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 387591,
+      "state_denominator": 387591,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "387,591 of 387,591 IL-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -134,21 +134,21 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1710101688",
-      "display_name": "HARDY JR, ANDREW",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-03-19 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710101688",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
       "npi": "1114922044",
       "display_name": "DABASH, KHALED",
       "flagged_by": "oig-leie-exclusions",
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-04-20 (exclusion type 1128a1)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1114922044",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
+      "npi": "1255381307",
+      "display_name": "JOHNSON, WILLIAM",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-05-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1255381307",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five IL-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five IL-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

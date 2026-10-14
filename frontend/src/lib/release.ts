@@ -17,10 +17,10 @@
  * the site is currently pinned to. They agree in a healthy repo, and the
  * payload is the honest answer when they do not.
  */
-export const CURRENT_RELEASE = '2026-08-20';
+export const CURRENT_RELEASE = '2026-10-07';
 
 /** Releases this project has ingested, newest first. */
-export const KNOWN_RELEASES = ['2026-08-20', '2026-05-08', '2026-04-09'] as const;
+export const KNOWN_RELEASES = ['2026-10-07', '2026-08-20', '2026-05-08', '2026-04-09'] as const;
 
 /** Human-facing form, e.g. "August 2026". */
 export function releaseLabel(iso: string = CURRENT_RELEASE): string {

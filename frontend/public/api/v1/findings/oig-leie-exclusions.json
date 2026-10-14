@@ -5,18 +5,59 @@
     "H24"
   ],
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-10-12T18:50:05+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:25:22+00:00",
   "methodology_version": "0.3.0",
-  "commit_sha": "05fa715",
-  "headline": "0 of 0 actively-excluded LEIE NPIs (0.00%) appear in the 2026-08-20 NDH bulk export \u2014 0 as Practitioner resources, 0 as Organization resources (0 total NDH appearances; some excluded individuals are listed as both a Practitioner and an Organization). Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
-  "numerator": 0,
-  "denominator": 0,
-  "appearances_in_ndh": 0,
+  "commit_sha": "6e74041",
+  "headline": "7,799 of 8,924 actively-excluded LEIE NPIs (87.39%) appear in the 2026-10-07 NDH bulk export \u2014 7,378 as Practitioner resources, 602 as Organization resources (7,980 total NDH appearances; some excluded individuals are listed as both a Practitioner and an Organization). Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
+  "numerator": 7799,
+  "denominator": 8924,
+  "appearances_in_ndh": 7980,
   "chart": {
     "type": "bar",
     "unit": "count",
-    "data": []
+    "data": [
+      {
+        "label": "UNKNOWN",
+        "value": 1489
+      },
+      {
+        "label": "CA",
+        "value": 828
+      },
+      {
+        "label": "FL",
+        "value": 526
+      },
+      {
+        "label": "NY",
+        "value": 479
+      },
+      {
+        "label": "TX",
+        "value": 380
+      },
+      {
+        "label": "OH",
+        "value": 287
+      },
+      {
+        "label": "MI",
+        "value": 281
+      },
+      {
+        "label": "PA",
+        "value": 266
+      },
+      {
+        "label": "IL",
+        "value": 169
+      },
+      {
+        "label": "TN",
+        "value": 137
+      }
+    ]
   },
-  "notes": "LEIE source: oig.hhs.gov/exclusions/downloadables/UPDATED.csv. Total LEIE rows: 84,093; with real NPI: 84,093 (100.0%); still actively excluded: 0. The 89% of LEIE rows without a populated NPI (pre-NPI-era exclusions) require demographic match logic in the state MMIS \u2014 out of scope for AINPI's NPI-keyed methodology. Each match here is a data-quality flag, not a fraud determination \u2014 investigation, hearing rights, and reinstatement claims belong to the state PI unit and the OIG. The LEIE search portal at exclusions.oig.hhs.gov is the authoritative source for any individual verification."
+  "notes": "LEIE source: oig.hhs.gov/exclusions/downloadables/UPDATED.csv. Total LEIE rows: 84,093; with real NPI: 8,924 (10.6%); still actively excluded: 8,924. The 89% of LEIE rows without a populated NPI (pre-NPI-era exclusions) require demographic match logic in the state MMIS \u2014 out of scope for AINPI's NPI-keyed methodology. Each match here is a data-quality flag, not a fraud determination \u2014 investigation, hearing rights, and reinstatement claims belong to the state PI unit and the OIG. The LEIE search portal at exclusions.oig.hhs.gov is the authoritative source for any individual verification."
 }

@@ -354,8 +354,10 @@ def test_real_registry_builds_and_obeys_the_rules():
                 assert after["comparable_to_previous"] == b["comparable_across_break"]
     by_slug = {m["slug"]: m for m in doc["measures"]}
     agreement = by_slug["role-specialty-agreement"]
-    assert agreement["series"][-1]["comparable_to_previous"] is False
-    assert agreement["series"][-1]["restatements"][0]["as_published_numerator"] == 5275554
+    # Select the break point by release, not position: later releases append after it.
+    at_break = next(p for p in agreement["series"] if p["release"] == "2026-08-20")
+    assert at_break["comparable_to_previous"] is False
+    assert at_break["restatements"][0]["as_published_numerator"] == 5275554
 
 
 def test_committed_measures_json_matches_the_generator():

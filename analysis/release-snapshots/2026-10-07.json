@@ -1,0 +1,84 @@
+{
+  "release": "2026-10-07",
+  "captured_at": "2026-10-14T01:14:05+00:00",
+  "tables": {
+    "endpoint": {
+      "rows": 1140836,
+      "bytes": 731482966
+    },
+    "location": {
+      "rows": 2558069,
+      "bytes": 1199943853
+    },
+    "organization": {
+      "rows": 2058500,
+      "bytes": 2528852774
+    },
+    "organization_affiliation": {
+      "rows": 465876,
+      "bytes": 211682751
+    },
+    "practitioner": {
+      "rows": 7481907,
+      "bytes": 10232133575
+    },
+    "practitioner_role": {
+      "rows": 11056751,
+      "bytes": 9902829386
+    }
+  },
+  "shape": {
+    "organization_types": [
+      {
+        "kind": "prov",
+        "n": 1976702
+      },
+      {
+        "kind": "text:ein",
+        "n": 79721
+      },
+      {
+        "kind": "pay",
+        "n": 997
+      },
+      {
+        "kind": "team",
+        "n": 639
+      },
+      {
+        "kind": "text:ntwk",
+        "n": 356
+      },
+      {
+        "kind": "govt",
+        "n": 65
+      },
+      {
+        "kind": null,
+        "n": 20
+      }
+    ],
+    "endpoint_connection_types": [
+      {
+        "kind": "direct-project",
+        "n": 1029577
+      },
+      {
+        "kind": "hl7-fhir-rest",
+        "n": 111259
+      }
+    ],
+    "practitioners_active": {
+      "active": 7481907,
+      "total": 7481907
+    },
+    "roles_active": {
+      "active": 7708681,
+      "total": 11056751
+    },
+    "endpoints_with_managing_org": {
+      "with_org": 16353,
+      "total": 111259
+    }
+  }
+}

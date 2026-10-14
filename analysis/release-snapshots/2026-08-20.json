@@ -1,6 +1,6 @@
 {
   "release": "2026-08-20",
-  "captured_at": "2026-08-21T10:34:30+00:00",
+  "captured_at": "2026-10-13T16:13:15+00:00",
   "tables": {
     "endpoint": {
       "rows": 1128169,
@@ -24,7 +24,7 @@
     },
     "practitioner_role": {
       "rows": 16545158,
-      "bytes": 14763105219
+      "bytes": 14831731648
     }
   },
   "shape": {

@@ -2,14 +2,14 @@
   "state": "MS",
   "state_name": "Mississippi",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:25:45+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:49:15+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 35668,
-    "organization": 27083,
-    "location": 18494
+    "practitioner": 35877,
+    "organization": 13962,
+    "location": 18638
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 34766,
-      "state_denominator": 35668,
-      "state_pct": 97.4711,
-      "national_pct": 99.9985,
-      "state_headline": "34,766 of 35,668 MS practitioner NPIs (97.4711%) match NPPES; 59 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 34640,
+      "state_denominator": 35877,
+      "state_pct": 96.5521,
+      "national_pct": 97.7651,
+      "state_headline": "34,640 of 35,877 MS practitioner NPIs (96.5521%) match NPPES; 55 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 13607,
-      "state_denominator": 27083,
-      "state_pct": 50.2418,
-      "national_pct": 11.3992,
-      "state_headline": "MS has 27,083 Organization resources covering 13,476 unique NPIs \u2014 13,607 excess resources (50.2418%) appear duplicated.",
+      "state_numerator": 595,
+      "state_denominator": 13962,
+      "state_pct": 4.2616,
+      "national_pct": 1.4362,
+      "state_headline": "MS has 13,962 Organization resources covering 13,367 unique NPIs \u2014 595 excess resources (4.2616%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 81245,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 81,245 MS-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 68477,
+      "state_denominator": 68477,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "68,477 of 68,477 MS-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -142,13 +142,13 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1194815266",
-      "display_name": "DENNEY, JAMES",
+      "npi": "1821311937",
+      "display_name": "SWIMS-KING, REGINA",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2015-05-20 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1194815266",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2015-10-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1821311937",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five MS-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five MS-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

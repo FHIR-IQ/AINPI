@@ -2,14 +2,14 @@
   "state": "MI",
   "state_name": "Michigan",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:25:10+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:49:02+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 253336,
-    "organization": 112806,
-    "location": 77444
+    "practitioner": 255188,
+    "organization": 53939,
+    "location": 78131
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 244093,
-      "state_denominator": 253336,
-      "state_pct": 96.3515,
-      "national_pct": 99.9985,
-      "state_headline": "244,093 of 253,336 MI practitioner NPIs (96.3515%) match NPPES; 548 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 241984,
+      "state_denominator": 255188,
+      "state_pct": 94.8258,
+      "national_pct": 97.7651,
+      "state_headline": "241,984 of 255,188 MI practitioner NPIs (94.8258%) match NPPES; 539 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 60426,
-      "state_denominator": 112806,
-      "state_pct": 53.5663,
-      "national_pct": 11.3992,
-      "state_headline": "MI has 112,806 Organization resources covering 52,380 unique NPIs \u2014 60,426 excess resources (53.5663%) appear duplicated.",
+      "state_numerator": 1741,
+      "state_denominator": 53939,
+      "state_pct": 3.2277,
+      "national_pct": 1.4362,
+      "state_headline": "MI has 53,939 Organization resources covering 52,198 unique NPIs \u2014 1,741 excess resources (3.2277%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 443586,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 443,586 MI-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 387258,
+      "state_denominator": 387258,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "387,258 of 387,258 MI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -142,13 +142,13 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1124216833",
-      "display_name": "MCDADE, DANA",
+      "npi": "1710101688",
+      "display_name": "HARDY JR, ANDREW",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-06-18 (exclusion type 1128a1)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124216833",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-03-19 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1710101688",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five MI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five MI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

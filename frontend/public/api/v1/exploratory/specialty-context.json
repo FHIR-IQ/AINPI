@@ -3,13 +3,13 @@
   "title": "Where the NDH puts specialty, and how often it is empty",
   "status": "exploratory",
   "not_preregistered": "The question came from the CMS NDH community Slack and this analysis followed it. AINPI findings register a hypothesis before the numbers exist; this did not, so it is published as exploratory rather than as a finding.",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-28T19:23:47.422515+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:06:08.684000+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "51e3bb1f05ab4a426552f3ac6a0b623e4e84004c",
-  "headline": "82,977 practitioners carry a different specialty at differently-named organizations, out of 445,527 the directory places at two or more (18.6%). Counting organization records instead of names, which the directory duplicates, it is 89,061. The field that carries any of this is empty on 11,269,522 of 16,545,158 role records (68.1%).",
+  "commit_sha": "6e7404180d8092bf31d3c799acacb1d7fcd4bd09",
+  "headline": "76,539 practitioners carry a different specialty at differently-named organizations, out of 418,268 the directory places at two or more (18.3%). Counting organization records instead of names, which the directory duplicates, it is 82,598. The field that carries any of this is empty on 8,093,993 of 11,056,751 role records (73.2%).",
   "source": {
-    "ndh": "cms_npd.practitioner_role and cms_npd.practitioner, release 2026-08-20",
+    "ndh": "cms_npd.practitioner_role and cms_npd.practitioner, release 2026-10-07",
     "nppes": "bigquery-public-data.nppes.npi_raw, a static snapshot whose newest enumeration is 2026-02-07. Used here for the shape of taxonomy multiplicity rather than for currency.",
     "compute": "analysis/explore_specialty_context.py"
   },
@@ -23,36 +23,36 @@
     "npis_with_multiple_primaries_flagged": 0
   },
   "role_specialty_presence": {
-    "role_rows": 16545158,
-    "rows_with_no_specialty": 11269522,
-    "rows_with_no_specialty_pct": 68.1,
-    "rows_with_one_specialty": 4854023,
-    "rows_with_2plus_specialties": 421613,
+    "role_rows": 11056751,
+    "rows_with_no_specialty": 8093993,
+    "rows_with_no_specialty_pct": 73.2,
+    "rows_with_one_specialty": 2731809,
+    "rows_with_2plus_specialties": 230949,
     "max_specialty_entries": 17,
-    "active_practitioners": 7373232,
-    "practitioners_with_active_role": 2315046,
-    "practitioners_with_role_specialty": 1193395,
-    "practitioners_with_role_specialty_pct": 16.2
+    "active_practitioners": 7481907,
+    "practitioners_with_active_role": 2430258,
+    "practitioners_with_role_specialty": 1175092,
+    "practitioners_with_role_specialty_pct": 15.7
   },
   "context_variation": {
     "denominator": "Practitioners holding at least one active PractitionerRole that carries both an organization reference and a specialty.",
-    "practitioners": 1193395,
-    "at_2plus_orgs": 445527,
-    "carry_2plus_specialties": 154273,
-    "multi_specialty_at_one_org": 131539,
-    "max_specialties_at_one_org": 16,
-    "specialty_varies_by_org": 89061,
-    "specialty_varies_by_distinct_org_name": 82977,
-    "varies_only_across_same_named_records": 6084,
-    "specialty_varies_by_org_pct": 20.0,
-    "same_specialty_everywhere": 356466
+    "practitioners": 1175092,
+    "at_2plus_orgs": 418268,
+    "carry_2plus_specialties": 149746,
+    "multi_specialty_at_one_org": 129049,
+    "max_specialties_at_one_org": 17,
+    "specialty_varies_by_org": 82598,
+    "specialty_varies_by_distinct_org_name": 76539,
+    "varies_only_across_same_named_records": 6059,
+    "specialty_varies_by_org_pct": 19.7,
+    "same_specialty_everywhere": 335670
   },
   "flattened_column_collapse": {
     "what": "practitioner_role._specialty_code keeps the first specialty entry only. Same queries against that column instead of the stored resource JSON, so the difference is attributable to the column. The raw figure is the current one.",
-    "varies_by_org_raw": 89061,
-    "varies_by_org_via_flattened_column": 52898,
-    "understatement_pct": 40.6,
-    "multi_specialty_at_one_org_raw": 131539,
+    "varies_by_org_raw": 82598,
+    "varies_by_org_via_flattened_column": 48736,
+    "understatement_pct": 41.0,
+    "multi_specialty_at_one_org_raw": 129049,
     "multi_specialty_at_one_org_via_flattened_column": 0
   },
   "chart": {
@@ -65,17 +65,17 @@
       },
       {
         "label": "Role records carrying a specialty",
-        "value": 31.9
+        "value": 26.8
       },
       {
         "label": "Active practitioners with a role specialty",
-        "value": 16.2
+        "value": 15.7
       },
       {
         "label": "Multi-org practitioners whose specialty varies",
-        "value": 20.0
+        "value": 19.7
       }
     ]
   },
-  "notes": "Read from the stored resource JSON rather than the flattened _specialty_code column, which keeps the first specialty entry only. Through that column the varies-by-organization count reads 52,898 instead of 89,061. Two figures in npi-taxonomy-correctness.json were computed the same way and were recomputed across the full arrays on 2026-08-28; the flattened column now has a pipe-joined _specialty_codes companion. Roles with no organization reference are excluded from the funnel, because whether a specialty varies BY organization is undefined without one. NPPES multiplicity is measured on entity type 1 only; organizations carry taxonomies too and are a different question."
+  "notes": "Read from the stored resource JSON rather than the flattened _specialty_code column, which keeps the first specialty entry only. Through that column the varies-by-organization count reads 48,736 instead of 82,598. Two figures in npi-taxonomy-correctness.json were computed the same way and were recomputed across the full arrays on 2026-08-28; the flattened column now has a pipe-joined _specialty_codes companion. Roles with no organization reference are excluded from the funnel, because whether a specialty varies BY organization is undefined without one. NPPES multiplicity is measured on entity type 1 only; organizations carry taxonomies too and are a different question."
 }

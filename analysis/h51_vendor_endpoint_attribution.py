@@ -72,7 +72,9 @@ UA = "AINPI-research/1.0 (+https://ainpi.dev; open provider-directory audit)"
 SOURCES = [
     ("Epic (User-access Brands)", "https://open.epic.com/Endpoints/Brands", True),
     ("athenahealth", "https://service-base-urls.api.fhir.athena.io/athena-fhir-service-base-urls.json", False),
-    ("eClinicalWorks", "https://fhir.eclinicalworks.com/ecwopendev/external/practiceList", False),
+    # Moved from /external/practiceList (406 Not Acceptable from 2026-10-13) to
+    # /global/practiceList, the link on eCW's fhir-endpoints page. Same Bundle.
+    ("eClinicalWorks", "https://fhir.eclinicalworks.com/ecwopendev/global/practiceList", False),
     ("Office Ally", "https://fhirpt.officeally.com/fhir/r4/endpoints", False),
     ("Practice Fusion", "https://www.practicefusion.com/assets/static_files/ServiceBaseURLs.json", False),
     ("PointClickCare", "https://fhir.pointclickcare.com/R4endpoints.json", False),

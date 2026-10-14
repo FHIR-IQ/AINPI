@@ -1,4 +1,146 @@
 {
-  "samples": [],
-  "state_breakdown": []
+  "samples": [
+    {
+      "npi": "1841258738",
+      "display_name": "MAASS, ADAM",
+      "ndh_state": "AR",
+      "leie_state": "AR",
+      "exclusion_type": "1128a2",
+      "exclusion_date": "20251020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1841258738"
+    },
+    {
+      "npi": "1568476968",
+      "display_name": "OSTAD, ABRAHAM",
+      "ndh_state": "NY",
+      "leie_state": "NY",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20171220",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568476968"
+    },
+    {
+      "npi": "1053393405",
+      "display_name": "KATZ, JOSE",
+      "ndh_state": "NJ",
+      "leie_state": "NC",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20140420",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053393405"
+    },
+    {
+      "npi": "1053454009",
+      "display_name": "HEROMAN, JAMES",
+      "ndh_state": "SC",
+      "leie_state": "SC",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20230720",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053454009"
+    },
+    {
+      "npi": "1053301671",
+      "display_name": "HARTMAN, DAVID",
+      "ndh_state": "OH",
+      "leie_state": "OH",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20250520",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053301671"
+    },
+    {
+      "npi": "1053458638",
+      "display_name": "EMERSON, PAUL",
+      "ndh_state": "MI",
+      "leie_state": "MI",
+      "exclusion_type": "1128a2",
+      "exclusion_date": "20111020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053458638"
+    },
+    {
+      "npi": "1053332296",
+      "display_name": "ABED, HUSAM",
+      "ndh_state": "MI",
+      "leie_state": "MI",
+      "exclusion_type": "1128a2",
+      "exclusion_date": "20241020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053332296"
+    },
+    {
+      "npi": "1992781660",
+      "display_name": "COUNCE, CHARLES",
+      "ndh_state": "",
+      "leie_state": "CO",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20081020",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992781660"
+    },
+    {
+      "npi": "1992784698",
+      "display_name": "GROSSMAN, JOSEPH",
+      "ndh_state": "NY",
+      "leie_state": "NY",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20190320",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992784698"
+    },
+    {
+      "npi": "1992988257",
+      "display_name": "MOHAMED, AMR",
+      "ndh_state": "OH",
+      "leie_state": "KY",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20260618",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1992988257"
+    }
+  ],
+  "state_breakdown": [
+    {
+      "state": "UNKNOWN",
+      "n": 1489
+    },
+    {
+      "state": "CA",
+      "n": 828
+    },
+    {
+      "state": "FL",
+      "n": 526
+    },
+    {
+      "state": "NY",
+      "n": 479
+    },
+    {
+      "state": "TX",
+      "n": 380
+    },
+    {
+      "state": "OH",
+      "n": 287
+    },
+    {
+      "state": "MI",
+      "n": 281
+    },
+    {
+      "state": "PA",
+      "n": 266
+    },
+    {
+      "state": "IL",
+      "n": 169
+    },
+    {
+      "state": "TN",
+      "n": 137
+    }
+  ]
 }

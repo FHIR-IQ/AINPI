@@ -3,58 +3,58 @@
   "state_name": "Virginia",
   "medicaid_program": "Cardinal Care",
   "agency": "Department of Medical Assistance Services (DMAS)",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:44:56+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:52:27+00:00",
   "methodology_version": "0.2.0",
   "denominators": {
-    "practitioner": 128246,
-    "organization": 74192,
-    "location": 61478
+    "practitioner": 129075,
+    "organization": 37133,
+    "location": 62083
   },
   "findings": {
     "npi-taxonomy-correctness": {
-      "headline": "124,688 of 128,246 VA practitioner NPIs (97.2256%) match NPPES; 273 are flagged deactivated in NPPES while still active in the federal NDH.",
-      "state_pct": 97.2256,
-      "state_numerator": 124688,
-      "state_denominator": 128246
+      "headline": "124,260 of 129,075 VA practitioner NPIs (96.2696%) match NPPES; 286 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_pct": 96.2696,
+      "state_numerator": 124260,
+      "state_denominator": 129075
     },
     "duplicate-detection": {
-      "headline": "VA has 74,192 Organization resources covering 36,290 unique NPIs \u2014 37,902 excess resources (51.0864%) appear duplicated.",
-      "state_pct": 51.0864,
-      "state_numerator": 37902,
-      "state_denominator": 74192
+      "headline": "VA has 37,133 Organization resources covering 35,903 unique NPIs \u2014 1,230 excess resources (3.3124%) appear duplicated.",
+      "state_pct": 3.3124,
+      "state_numerator": 1230,
+      "state_denominator": 37133
     },
     "temporal-staleness": {
-      "headline": "0 of 263,916 VA-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
-      "state_pct": 0.0,
-      "state_numerator": 0,
-      "state_denominator": 263916
+      "headline": "228,291 of 228,291 VA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_pct": 100.0,
+      "state_numerator": 228291,
+      "state_denominator": 228291
     }
   },
   "federally_excluded_cohort": {
-    "total_critical": 106,
+    "total_critical": 108,
     "reason_breakdown": [
+      {
+        "reasons": [
+          "oig_excluded"
+        ],
+        "count": 55,
+        "pct_of_critical": 50.93
+      },
       {
         "reasons": [
           "oig_excluded",
           "sam_excluded"
         ],
-        "count": 56,
-        "pct_of_critical": 52.83
-      },
-      {
-        "reasons": [
-          "oig_excluded"
-        ],
-        "count": 49,
-        "pct_of_critical": 46.23
+        "count": 51,
+        "pct_of_critical": 47.22
       },
       {
         "reasons": [
           "sam_excluded"
         ],
-        "count": 1,
-        "pct_of_critical": 0.94
+        "count": 2,
+        "pct_of_critical": 1.85
       }
     ],
     "top_samples": [
@@ -167,8 +167,8 @@
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1104870302"
       },
       {
-        "npi": "1124089016",
-        "name": "GORDINHO, JOSE",
+        "npi": "1144277765",
+        "name": "SCRANAGE JR, CLARENCE",
         "score": 3.0,
         "reason_codes": [
           "oig_excluded",
@@ -176,49 +176,49 @@
         ],
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124089016"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144277765"
       }
     ],
     "all_npis_csv": "/api/v1/states/va-cohort-critical.csv"
   },
   "h26_payer_directory_exposure": {
-    "headline": "5 of 106 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 5, UnitedHealthcare 0, Molina 0.",
+    "headline": "5 of 108 federally excluded VA-resident providers (LEIE or SAM, score >= 1.5) appear in at least one of 4 wired payer provider directories. Per-payer: Humana 0, Cigna 5, UnitedHealthcare 0, Molina 0.",
     "numerator": 5,
-    "denominator": 106,
+    "denominator": 108,
     "per_payer": [
       {
         "name": "Humana",
         "matched": 0,
-        "queried": 106,
+        "queried": 108,
         "errors": 0
       },
       {
         "name": "Cigna",
         "matched": 5,
-        "queried": 106,
+        "queried": 108,
         "errors": 0
       },
       {
         "name": "UnitedHealthcare",
         "matched": 0,
-        "queried": 106,
+        "queried": 108,
         "errors": 0
       },
       {
         "name": "Molina",
         "matched": 0,
-        "queried": 106,
+        "queried": 108,
         "errors": 0
       }
     ],
     "matched_npis": [
       {
-        "npi": "1629256540",
-        "name": "COLLINS, RACHEL",
+        "npi": "1083654669",
+        "name": "SAMUELS, GARFIELD",
         "matched_in": [
           "Cigna"
         ],
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1629256540"
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1083654669"
       },
       {
         "npi": "1639208705",

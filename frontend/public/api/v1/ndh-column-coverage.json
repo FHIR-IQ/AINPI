@@ -1,40 +1,40 @@
 {
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T13:03:42+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:00:07+00:00",
   "description": "Coverage of the flattened telecom, address.line and Location.position columns extracted from the NDH bulk export. phone_pct counts the first telecom entry whose system is 'phone', not the first telecom entry. position is Location-only and is the only geography in the NDH.",
   "columns": [
     {
       "scope": "location",
-      "rows_scored": 2535686,
-      "phone_pct": 79.0,
+      "rows_scored": 2558069,
+      "phone_pct": 72.91,
       "address_line_pct": 99.99,
-      "position_pct": 98.28
+      "position_pct": 98.27
     },
     {
       "scope": "organization",
-      "rows_scored": 4402671,
-      "phone_pct": 95.61,
-      "address_line_pct": 75.41,
+      "rows_scored": 2058500,
+      "phone_pct": 97.42,
+      "address_line_pct": 81.74,
       "position_pct": null
     },
     {
       "scope": "practitioner_active",
-      "rows_scored": 7373232,
-      "phone_pct": 99.97,
-      "address_line_pct": 85.2,
+      "rows_scored": 7481907,
+      "phone_pct": 97.65,
+      "address_line_pct": 84.24,
       "position_pct": null
     },
     {
       "scope": "practitioner_all",
-      "rows_scored": 7373232,
-      "phone_pct": 99.97,
-      "address_line_pct": 85.2,
+      "rows_scored": 7481907,
+      "phone_pct": 97.65,
+      "address_line_pct": 84.24,
       "position_pct": null
     },
     {
       "scope": "practitioner_role",
-      "rows_scored": 16545158,
-      "phone_pct": 83.89,
+      "rows_scored": 11056751,
+      "phone_pct": 81.56,
       "address_line_pct": null,
       "position_pct": null
     }

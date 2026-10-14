@@ -5,23 +5,23 @@
     "H27"
   ],
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-10-12T19:06:08+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T01:26:18+00:00",
   "methodology_version": "0.7.3-draft",
-  "commit_sha": "05fa715",
-  "headline": "No Social Security Numbers remain in the 2026-08-20 NDH bulk export. The dashed-SSN pattern matches zero of 7,373,232 Practitioner and zero Organization resources, against 46 confirmed exposures in 2026-04-09 and 41 in 2026-05-08. CMS has now removed them rather than partially scrubbing them. The scan is unchanged and still reads the same fields: 7,371,126 of those Practitioner resources still carry the qualification array the exposures were found in, so the zero is an empty result and not an empty query.",
+  "commit_sha": "6e74041",
+  "headline": "No Social Security Numbers remain in the 2026-10-07 NDH bulk export. The dashed-SSN pattern matches zero of 7,481,907 Practitioner and zero Organization resources, against 46 confirmed exposures in 2026-04-09 and 41 in 2026-05-08. CMS has now removed them rather than partially scrubbing them. The scan is unchanged and still reads the same fields: 7,451,577 of those Practitioner resources still carry the qualification array the exposures were found in, so the zero is an empty result and not an empty query.",
   "numerator": 0,
-  "denominator": 7373232,
+  "denominator": 7481907,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": []
   },
-  "notes": "Re-runs the scan that independently verified the 2026-04-30 Washington Post finding, against the 2026-08-20 NDH bulk export (loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`), matching the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. It finds no confirmed exposures in either resource type. Earlier releases carried 46 (2026-04-09) and 41 (2026-05-08), most of them in qualification.identifier.value, the state-license slot. The zero is checked, not assumed: 7,371,126 of 7,373,232 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field. Privacy posture is unchanged: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII) and state breakdowns, never SSN values.\n\nRelease watch, Practitioner.birthDate: 0 of 7,373,232 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,373,232 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
+  "notes": "Re-runs the scan that independently verified the 2026-04-30 Washington Post finding, against the 2026-10-07 NDH bulk export (loaded into BigQuery as `cms_npd.practitioner`/`cms_npd.organization`), matching the dashed SSN format \\\\d{3}-\\\\d{2}-\\\\d{4} in the full resource JSON. It finds no confirmed exposures in either resource type. Earlier releases carried 46 (2026-04-09) and 41 (2026-05-08), most of them in qualification.identifier.value, the state-license slot. The zero is checked, not assumed: 7,451,577 of 7,481,907 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field. Privacy posture is unchanged: AINPI publishes counts, JSON locations, NPIs (professional IDs, not PII) and state breakdowns, never SSN values.\n\nRelease watch, Practitioner.birthDate: 0 of 7,481,907 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,481,907 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
   "birthdate_watch": {
     "control_passed": true,
-    "practitioners": 7373232,
-    "gender_present": 7373232,
+    "practitioners": 7481907,
+    "gender_present": 7481907,
     "birth_date_present": 0,
     "year_only": 0,
     "full_date": 0,
@@ -29,7 +29,7 @@
       "year_only": "birthDate is exactly four characters (YYYY)",
       "full_date": "birthDate is longer than four characters (YYYY-MM or YYYY-MM-DD)"
     },
-    "note": "Release watch, Practitioner.birthDate: 0 of 7,373,232 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,373,232 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
-    "release_date": "2026-08-20"
+    "note": "Release watch, Practitioner.birthDate: 0 of 7,481,907 Practitioner resources carry birthDate (0 year only, 0 more precise than the year). The positive control is gender, read in the same scan: 7,481,907 carry it, so a zero here is an empty field and not an empty query. The HL7 NDH STU2 draft adds a warning-severity invariant that birthDate carry only the year (Jira FHIR-57885); the published STU1 (https://hl7.org/fhir/us/ndh/STU1/) has no such constraint. AINPI publishes counts only, never the dates.",
+    "release_date": "2026-10-07"
   }
 }

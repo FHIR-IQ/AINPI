@@ -33,6 +33,18 @@ export interface ReportOption {
 
 export const REPORTS: ReportOption[] = [
   {
+    id: 'oct-2026-10-14-update',
+    version: '2026-10-14-update',
+    title:
+      '2026-10-14 update: the directory got smaller, and almost nobody fell out of it',
+    description:
+      'We reloaded the 2026-10-07 release and re-ran every measurement. The file shrank by a quarter, to 24.8M records, as 2.1M tax-only organization records and 5.5M where-they-work records left, yet Pennsylvania coverage held at 44.0%. 997 insurers and 7,575 health plans arrived, and none of the insurers has a web address. Phone coverage and Pennsylvania record reachability both slipped.',
+    format: 'web',
+    url: '/reports/2026-10-14-update',
+    badge: 'NEW',
+    length: '~4 min read',
+  },
+  {
     id: 'sep-2026-09-17-update',
     version: '2026-09-17-update',
     title:
@@ -41,7 +53,6 @@ export const REPORTS: ReportOption[] = [
       'CMS keeps only the newest copy of the national provider directory. We kept both releases so far, 54,162,643 rows across six tables, and put the archive on Databricks Marketplace for free, readable with or without a Databricks account. Plus what is new on the site: explore by state, county and ZIP; find listed care near you; a primer; related work; and a tool endpoint for AI agents.',
     format: 'web',
     url: '/reports/2026-09-17-update',
-    badge: 'NEW',
     length: '~4 min read',
   },
   {
