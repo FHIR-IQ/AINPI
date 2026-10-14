@@ -50,6 +50,10 @@ import urllib.request
 from datetime import datetime, timezone
 from google.cloud import bigquery
 
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
+
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 TABLE = f"{PROJECT}.{DATASET}.oig_leie"
@@ -196,7 +200,7 @@ def report_quality(client: bigquery.Client) -> dict:
       COUNT(DISTINCT STATE)                                            AS distinct_states
     FROM `{TABLE}`
     """
-    row = next(iter(client.query(sql).result()))
+    row = next(iter(client.query(sql, job_config=bq_job_config()).result()))
     stats = {
         "total": int(row.total),
         "with_real_npi": int(row.with_real_npi),
