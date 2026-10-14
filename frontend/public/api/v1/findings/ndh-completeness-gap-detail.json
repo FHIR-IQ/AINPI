@@ -1,75 +1,75 @@
 {
-  "queried_at": "2026-08-21T12:54:28+00:00",
+  "queried_at": "2026-10-14T02:05:59+00:00",
   "part_b_total_npis": 1259343,
-  "absent_from_ndh_any": 5356,
-  "absent_from_ndh_material": 3575,
+  "absent_from_ndh_any": 7007,
+  "absent_from_ndh_material": 4784,
   "material_threshold_usd": 10000,
-  "total_paid_absent_any": 426342423.32000047,
-  "total_paid_absent_material": 418133909.07,
+  "total_paid_absent_any": 569926898.8100011,
+  "total_paid_absent_material": 559708823.73,
   "entity_type_breakdown_material": {
-    "I": 2695,
-    "O": 880
+    "I": 3873,
+    "O": 911
   },
   "top_states_by_material_absences": [
     {
-      "state": "FL",
-      "matches": 375
+      "state": "CA",
+      "matches": 496
     },
     {
-      "state": "CA",
-      "matches": 342
+      "state": "FL",
+      "matches": 490
     },
     {
       "state": "TX",
-      "matches": 270
+      "matches": 392
     },
     {
       "state": "NY",
-      "matches": 242
+      "matches": 337
     },
     {
       "state": "PA",
-      "matches": 167
+      "matches": 218
     },
     {
       "state": "IL",
-      "matches": 155
-    },
-    {
-      "state": "GA",
-      "matches": 142
-    },
-    {
-      "state": "OH",
-      "matches": 122
-    },
-    {
-      "state": "MI",
-      "matches": 122
+      "matches": 207
     },
     {
       "state": "NJ",
-      "matches": 111
+      "matches": 166
+    },
+    {
+      "state": "OH",
+      "matches": 162
+    },
+    {
+      "state": "MI",
+      "matches": 159
+    },
+    {
+      "state": "GA",
+      "matches": 157
     },
     {
       "state": "MA",
-      "matches": 104
+      "matches": 128
     },
     {
       "state": "NC",
-      "matches": 91
+      "matches": 116
+    },
+    {
+      "state": "MD",
+      "matches": 111
     },
     {
       "state": "VA",
-      "matches": 83
-    },
-    {
-      "state": "TN",
-      "matches": 83
+      "matches": 106
     },
     {
       "state": "MO",
-      "matches": 78
+      "matches": 102
     }
   ],
   "top_10_material_absences_nationally": [
@@ -144,6 +144,16 @@
       "beneficiaries_2023": 25250
     },
     {
+      "npi": "1629059902",
+      "name": "Szanto Martin",
+      "billing_state": "IL",
+      "provider_type": "Internal Medicine",
+      "entity_type": "I",
+      "medicare_paid_2023": 7077417.0,
+      "services_2023": 7566,
+      "beneficiaries_2023": 141
+    },
+    {
       "npi": "1447518543",
       "name": "Continuum Services Llc",
       "billing_state": "FL",
@@ -154,27 +164,17 @@
       "beneficiaries_2023": 1633
     },
     {
-      "npi": "1881342293",
-      "name": "White Glove Med Labs Llc",
-      "billing_state": "NJ",
-      "provider_type": "Clinical Laboratory",
+      "npi": "1689263147",
+      "name": "Cardionet, Llc",
+      "billing_state": "NY",
+      "provider_type": "Independent Diagnostic Testing Facility (IDTF)",
       "entity_type": "O",
-      "medicare_paid_2023": 6085256.28,
-      "services_2023": 15298,
-      "beneficiaries_2023": 1433
-    },
-    {
-      "npi": "1457091324",
-      "name": "Triple Helix Diagnostics",
-      "billing_state": "TX",
-      "provider_type": "Clinical Laboratory",
-      "entity_type": "O",
-      "medicare_paid_2023": 5574983.84,
-      "services_2023": 455888,
-      "beneficiaries_2023": 18444
+      "medicare_paid_2023": 6734432.22,
+      "services_2023": 165387,
+      "beneficiaries_2023": 38917
     }
   ],
-  "va_material_absences": 83,
+  "va_material_absences": 106,
   "csv_url_national": "/api/v1/findings/ndh-completeness-gap-detail.csv",
   "csv_url_va": "/api/v1/states/va/h36-billers-absent-from-ndh.csv"
 }

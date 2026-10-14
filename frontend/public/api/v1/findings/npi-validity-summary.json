@@ -4,11 +4,11 @@
   "hypotheses": [
     "H9"
   ],
-  "release_date": "2026-08-20",
-  "generated_at": "2026-10-12T18:48:18+00:00",
-  "npis_checked": 11607656,
-  "npis_flagged": 4,
-  "invalid_structure": 4,
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T01:19:08+00:00",
+  "npis_checked": 9526462,
+  "npis_flagged": 0,
+  "invalid_structure": 0,
   "luhn_fail": 0,
-  "missing_npi": 168247
+  "missing_npi": 13945
 }

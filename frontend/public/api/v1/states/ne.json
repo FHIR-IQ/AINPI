@@ -2,14 +2,14 @@
   "state": "NE",
   "state_name": "Nebraska",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:26:33+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:49:37+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 57298,
-    "organization": 20546,
-    "location": 15883
+    "practitioner": 58841,
+    "organization": 10326,
+    "location": 15988
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 53639,
-      "state_denominator": 57298,
-      "state_pct": 93.6141,
-      "national_pct": 99.9985,
-      "state_headline": "53,639 of 57,298 NE practitioner NPIs (93.6141%) match NPPES; 51 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 53590,
+      "state_denominator": 58841,
+      "state_pct": 91.076,
+      "national_pct": 97.7651,
+      "state_headline": "53,590 of 58,841 NE practitioner NPIs (91.076%) match NPPES; 54 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 10840,
-      "state_denominator": 20546,
-      "state_pct": 52.7597,
-      "national_pct": 11.3992,
-      "state_headline": "NE has 20,546 Organization resources covering 9,706 unique NPIs \u2014 10,840 excess resources (52.7597%) appear duplicated.",
+      "state_numerator": 699,
+      "state_denominator": 10326,
+      "state_pct": 6.7693,
+      "national_pct": 1.4362,
+      "state_headline": "NE has 10,326 Organization resources covering 9,627 unique NPIs \u2014 699 excess resources (6.7693%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 93727,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 93,727 NE-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 85155,
+      "state_denominator": 85155,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "85,155 of 85,155 NE-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -118,14 +118,6 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1306834643",
-      "display_name": "DAHLIN, JAN",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2008-12-18 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306834643",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
       "npi": "1558420422",
       "display_name": "PALERMO, CHRISTINE",
       "flagged_by": "oig-leie-exclusions",
@@ -148,7 +140,15 @@
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-02-24 (exclusion type 1128a1)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1063589703",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
+      "npi": "1780685230",
+      "display_name": "YAZDI, NAVID",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2011-10-20 (exclusion type 1128a2)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780685230",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NE-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NE-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

@@ -2,14 +2,14 @@
   "state": "DC",
   "state_name": "District of Columbia",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:22:10+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:47:22+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 37368,
-    "organization": 8977,
-    "location": 8484
+    "practitioner": 37128,
+    "organization": 4788,
+    "location": 8630
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 36270,
-      "state_denominator": 37368,
-      "state_pct": 97.0617,
-      "national_pct": 99.9985,
-      "state_headline": "36,270 of 37,368 DC practitioner NPIs (97.0617%) match NPPES; 98 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 35814,
+      "state_denominator": 37128,
+      "state_pct": 96.4609,
+      "national_pct": 97.7651,
+      "state_headline": "35,814 of 37,128 DC practitioner NPIs (96.4609%) match NPPES; 96 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 4240,
-      "state_denominator": 8977,
-      "state_pct": 47.2318,
-      "national_pct": 11.3992,
-      "state_headline": "DC has 8,977 Organization resources covering 4,737 unique NPIs \u2014 4,240 excess resources (47.2318%) appear duplicated.",
+      "state_numerator": 114,
+      "state_denominator": 4788,
+      "state_pct": 2.381,
+      "national_pct": 1.4362,
+      "state_headline": "DC has 4,788 Organization resources covering 4,674 unique NPIs \u2014 114 excess resources (2.381%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 54829,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 54,829 DC-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 50546,
+      "state_denominator": 50546,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "50,546 of 50,546 DC-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -110,14 +110,6 @@
   ],
   "verify_samples": [
     {
-      "npi": "1306049531",
-      "display_name": "WOLDE-TSADEK, SEIFE",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2008-12-18 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306049531",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
       "npi": "1003938416",
       "display_name": "WHITAKER, AARON",
       "flagged_by": "oig-leie-exclusions",
@@ -134,6 +126,14 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
+      "npi": "1578504460",
+      "display_name": "HENRY, VICTOR",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2012-07-19 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1578504460",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
       "npi": "1255479804",
       "display_name": "BROWN, CHARLES",
       "flagged_by": "oig-leie-exclusions",
@@ -142,13 +142,13 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1801953054",
-      "display_name": "SALERIAN, ALLEN",
+      "npi": "1306910476",
+      "display_name": "WADE, LARREN",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2014-05-20 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1801953054",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2013-08-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306910476",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five DC-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five DC-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

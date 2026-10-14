@@ -1,99 +1,53 @@
 {
-  "from": "2026-05-08",
-  "to": "2026-08-20",
-  "generated_at": "2026-08-21T10:34:30+00:00",
+  "from": "2026-08-20",
+  "to": "2026-10-07",
+  "generated_at": "2026-10-14T01:14:05+00:00",
   "note": "Row-count deltas between two NDH bulk releases. Captured before and after ingest because the tables carry no release column and the load replaces them.",
   "tables": [
     {
       "table": "endpoint",
-      "before": 1360585,
-      "after": 1128169,
-      "delta": -232416,
-      "pct": -17.1
+      "before": 1128169,
+      "after": 1140836,
+      "delta": 12667,
+      "pct": 1.1
     },
     {
       "table": "location",
-      "before": 1362869,
-      "after": 2535686,
-      "delta": 1172817,
-      "pct": 86.1
+      "before": 2535686,
+      "after": 2558069,
+      "delta": 22383,
+      "pct": 0.9
     },
     {
       "table": "organization",
-      "before": 3414375,
-      "after": 4402671,
-      "delta": 988296,
-      "pct": 28.9
+      "before": 4402671,
+      "after": 2058500,
+      "delta": -2344171,
+      "pct": -53.2
     },
     {
       "table": "organization_affiliation",
-      "before": 1086694,
-      "after": 483992,
-      "delta": -602702,
-      "pct": -55.5
+      "before": 483992,
+      "after": 465876,
+      "delta": -18116,
+      "pct": -3.7
     },
     {
       "table": "practitioner",
-      "before": 7441211,
-      "after": 7373232,
-      "delta": -67979,
-      "pct": -0.9
+      "before": 7373232,
+      "after": 7481907,
+      "delta": 108675,
+      "pct": 1.5
     },
     {
       "table": "practitioner_role",
-      "before": 7028001,
-      "after": 16545158,
-      "delta": 9517157,
-      "pct": 135.4
+      "before": 16545158,
+      "after": 11056751,
+      "delta": -5488407,
+      "pct": -33.2
     }
   ],
   "before_shape": {
-    "organization_types": [
-      {
-        "kind": "prov",
-        "n": 1999118
-      },
-      {
-        "kind": "text:ein",
-        "n": 1414522
-      },
-      {
-        "kind": "team",
-        "n": 639
-      },
-      {
-        "kind": "govt",
-        "n": 61
-      },
-      {
-        "kind": "text:ntwk",
-        "n": 35
-      }
-    ],
-    "endpoint_connection_types": [
-      {
-        "kind": "direct-project",
-        "n": 1246514
-      },
-      {
-        "kind": "hl7-fhir-rest",
-        "n": 114071
-      }
-    ],
-    "practitioners_active": {
-      "active": 7196385,
-      "total": 7441211
-    },
-    "roles_active": {
-      "active": 3952445,
-      "total": 7028001
-    },
-    "endpoints_with_managing_org": {
-      "with_org": 19334,
-      "total": 114071
-    }
-  },
-  "after_shape": {
     "organization_types": [
       {
         "kind": "prov",
@@ -145,6 +99,60 @@
     "endpoints_with_managing_org": {
       "with_org": 16350,
       "total": 110973
+    }
+  },
+  "after_shape": {
+    "organization_types": [
+      {
+        "kind": "prov",
+        "n": 1976702
+      },
+      {
+        "kind": "text:ein",
+        "n": 79721
+      },
+      {
+        "kind": "pay",
+        "n": 997
+      },
+      {
+        "kind": "team",
+        "n": 639
+      },
+      {
+        "kind": "text:ntwk",
+        "n": 356
+      },
+      {
+        "kind": "govt",
+        "n": 65
+      },
+      {
+        "kind": null,
+        "n": 20
+      }
+    ],
+    "endpoint_connection_types": [
+      {
+        "kind": "direct-project",
+        "n": 1029577
+      },
+      {
+        "kind": "hl7-fhir-rest",
+        "n": 111259
+      }
+    ],
+    "practitioners_active": {
+      "active": 7481907,
+      "total": 7481907
+    },
+    "roles_active": {
+      "active": 7708681,
+      "total": 11056751
+    },
+    "endpoints_with_managing_org": {
+      "with_org": 16353,
+      "total": 111259
     }
   }
 }

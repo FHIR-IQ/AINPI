@@ -2,14 +2,14 @@
   "state": "VT",
   "state_name": "Vermont",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:29:35+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:51:50+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 14088,
-    "organization": 5874,
-    "location": 5049
+    "practitioner": 13833,
+    "organization": 2957,
+    "location": 5074
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 13506,
-      "state_denominator": 14088,
-      "state_pct": 95.8688,
-      "national_pct": 99.9985,
-      "state_headline": "13,506 of 14,088 VT practitioner NPIs (95.8688%) match NPPES; 21 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 13111,
+      "state_denominator": 13833,
+      "state_pct": 94.7806,
+      "national_pct": 97.7651,
+      "state_headline": "13,111 of 13,833 VT practitioner NPIs (94.7806%) match NPPES; 21 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 3013,
-      "state_denominator": 5874,
-      "state_pct": 51.2938,
-      "national_pct": 11.3992,
-      "state_headline": "VT has 5,874 Organization resources covering 2,861 unique NPIs \u2014 3,013 excess resources (51.2938%) appear duplicated.",
+      "state_numerator": 92,
+      "state_denominator": 2957,
+      "state_pct": 3.1113,
+      "national_pct": 1.4362,
+      "state_headline": "VT has 2,957 Organization resources covering 2,865 unique NPIs \u2014 92 excess resources (3.1113%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 25011,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 25,011 VT-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 21864,
+      "state_denominator": 21864,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "21,864 of 21,864 VT-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -142,13 +142,13 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1144232117",
-      "display_name": "MCMAHON, SCOTT",
+      "npi": "1215227467",
+      "display_name": "BLOHM, EIKE",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2022-02-20 (exclusion type 1128a4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144232117",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2022-11-20 (exclusion type 1128b4)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1215227467",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VT-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five VT-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

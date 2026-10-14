@@ -7,10 +7,10 @@
     "data": "Public domain (US federal government work)",
     "citation": "https://ainpi.dev/api/v1/manifest.json + CITATION.cff"
   },
-  "release_date": "2026-08-20",
+  "release_date": "2026-10-07",
   "methodology_version": "0.7.3-draft",
-  "commit_sha": "05fa715",
-  "generated_at": "2026-10-12T19:06:34+00:00",
+  "commit_sha": "86c2349",
+  "generated_at": "2026-10-14T03:13:14+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -179,7 +179,7 @@
         "H15"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/duplicate-detection.json",
       "html_url": "https://ainpi.dev/findings/duplicate-detection",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -207,7 +207,7 @@
         "H44"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/endpoint-metadata-coverage.json",
       "html_url": "https://ainpi.dev/findings/endpoint-metadata-coverage",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -219,7 +219,7 @@
         "H50"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/endpoint-org-linkage.json",
       "html_url": "https://ainpi.dev/findings/endpoint-org-linkage",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -231,7 +231,7 @@
         "H28"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/endpoint-url-validity.json",
       "html_url": "https://ainpi.dev/findings/endpoint-url-validity",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -337,7 +337,7 @@
         "H23"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/high-risk-cohort.json",
       "html_url": "https://ainpi.dev/findings/high-risk-cohort",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -359,7 +359,7 @@
         "H26"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/mco-exposure-va.json",
       "html_url": "https://ainpi.dev/findings/mco-exposure-va",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -381,7 +381,7 @@
         "H36"
       ],
       "status": "published",
-      "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-08-20",
+      "release_date": "CY 2023 (RY2025 P05) Part B \u00d7 NDH 2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/ndh-completeness-gap.json",
       "html_url": "https://ainpi.dev/findings/ndh-completeness-gap",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -393,7 +393,7 @@
         "H55"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/ndh-new-resource-types.json",
       "html_url": "https://ainpi.dev/findings/ndh-new-resource-types",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -405,7 +405,7 @@
         "H49"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/ndh-payer-endpoint-coverage.json",
       "html_url": "https://ainpi.dev/findings/ndh-payer-endpoint-coverage",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -455,7 +455,7 @@
         "H13"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/npi-taxonomy-correctness.json",
       "html_url": "https://ainpi.dev/findings/npi-taxonomy-correctness",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -467,7 +467,7 @@
         "H9"
       ],
       "status": null,
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/npi-validity-summary.json",
       "html_url": "https://ainpi.dev/findings/npi-validity-summary",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -489,7 +489,7 @@
         "H24"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/oig-leie-exclusions.json",
       "html_url": "https://ainpi.dev/findings/oig-leie-exclusions",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -587,7 +587,7 @@
       "title": null,
       "hypotheses": [],
       "status": null,
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/pii-exposure-ndh-detail.json",
       "html_url": "https://ainpi.dev/findings/pii-exposure-ndh-detail",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -599,7 +599,7 @@
         "H27"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/pii-exposure-ndh.json",
       "html_url": "https://ainpi.dev/findings/pii-exposure-ndh",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -609,7 +609,7 @@
       "title": null,
       "hypotheses": [],
       "status": null,
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/practitioner-phone-reachability-detail.json",
       "html_url": "https://ainpi.dev/findings/practitioner-phone-reachability",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -621,7 +621,7 @@
         "H43"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/practitioner-phone-reachability.json",
       "html_url": "https://ainpi.dev/findings/practitioner-phone-reachability",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -635,7 +635,7 @@
         "H8"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/referential-integrity.json",
       "html_url": "https://ainpi.dev/findings/referential-integrity",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -647,7 +647,7 @@
         "H54"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/role-gap-composition.json",
       "html_url": "https://ainpi.dev/findings/role-gap-composition",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -681,7 +681,7 @@
         "H25"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/sam-exclusions.json",
       "html_url": "https://ainpi.dev/findings/sam-exclusions",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -705,7 +705,7 @@
         "H18"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/temporal-staleness.json",
       "html_url": "https://ainpi.dev/findings/temporal-staleness",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -717,7 +717,7 @@
         "H51"
       ],
       "status": "published",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/findings/vendor-endpoint-attribution.json",
       "html_url": "https://ainpi.dev/findings/vendor-endpoint-attribution",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1Finding"
@@ -727,7 +727,7 @@
     {
       "state": "AK",
       "state_name": "Alaska",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ak.json",
       "html_url": "https://ainpi.dev/states/ak",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ak",
@@ -740,7 +740,7 @@
     {
       "state": "AL",
       "state_name": "Alabama",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/al.json",
       "html_url": "https://ainpi.dev/states/al",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/al",
@@ -753,7 +753,7 @@
     {
       "state": "AR",
       "state_name": "Arkansas",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ar.json",
       "html_url": "https://ainpi.dev/states/ar",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ar",
@@ -766,7 +766,7 @@
     {
       "state": "AZ",
       "state_name": "Arizona",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/az.json",
       "html_url": "https://ainpi.dev/states/az",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/az",
@@ -779,7 +779,7 @@
     {
       "state": "CA",
       "state_name": "California",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ca.json",
       "html_url": "https://ainpi.dev/states/ca",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ca",
@@ -792,7 +792,7 @@
     {
       "state": "CO",
       "state_name": "Colorado",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/co.json",
       "html_url": "https://ainpi.dev/states/co",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/co",
@@ -805,7 +805,7 @@
     {
       "state": "CT",
       "state_name": "Connecticut",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ct.json",
       "html_url": "https://ainpi.dev/states/ct",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ct",
@@ -818,7 +818,7 @@
     {
       "state": "DC",
       "state_name": "District of Columbia",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/dc.json",
       "html_url": "https://ainpi.dev/states/dc",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/dc",
@@ -831,7 +831,7 @@
     {
       "state": "DE",
       "state_name": "Delaware",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/de.json",
       "html_url": "https://ainpi.dev/states/de",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/de",
@@ -844,7 +844,7 @@
     {
       "state": "FL",
       "state_name": "Florida",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/fl.json",
       "html_url": "https://ainpi.dev/states/fl",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/fl",
@@ -857,7 +857,7 @@
     {
       "state": "GA",
       "state_name": "Georgia",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ga.json",
       "html_url": "https://ainpi.dev/states/ga",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ga",
@@ -870,7 +870,7 @@
     {
       "state": "HI",
       "state_name": "Hawaii",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/hi.json",
       "html_url": "https://ainpi.dev/states/hi",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/hi",
@@ -883,7 +883,7 @@
     {
       "state": "IA",
       "state_name": "Iowa",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ia.json",
       "html_url": "https://ainpi.dev/states/ia",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ia",
@@ -896,7 +896,7 @@
     {
       "state": "ID",
       "state_name": "Idaho",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/id.json",
       "html_url": "https://ainpi.dev/states/id",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/id",
@@ -909,7 +909,7 @@
     {
       "state": "IL",
       "state_name": "Illinois",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/il.json",
       "html_url": "https://ainpi.dev/states/il",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/il",
@@ -922,7 +922,7 @@
     {
       "state": "IN",
       "state_name": "Indiana",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/in.json",
       "html_url": "https://ainpi.dev/states/in",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/in",
@@ -935,7 +935,7 @@
     {
       "state": "KS",
       "state_name": "Kansas",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ks.json",
       "html_url": "https://ainpi.dev/states/ks",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ks",
@@ -948,7 +948,7 @@
     {
       "state": "KY",
       "state_name": "Kentucky",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ky.json",
       "html_url": "https://ainpi.dev/states/ky",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ky",
@@ -961,7 +961,7 @@
     {
       "state": "LA",
       "state_name": "Louisiana",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/la.json",
       "html_url": "https://ainpi.dev/states/la",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/la",
@@ -974,7 +974,7 @@
     {
       "state": "MA",
       "state_name": "Massachusetts",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ma.json",
       "html_url": "https://ainpi.dev/states/ma",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ma",
@@ -987,7 +987,7 @@
     {
       "state": "MD",
       "state_name": "Maryland",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/md.json",
       "html_url": "https://ainpi.dev/states/md",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/md",
@@ -1000,7 +1000,7 @@
     {
       "state": "ME",
       "state_name": "Maine",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/me.json",
       "html_url": "https://ainpi.dev/states/me",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/me",
@@ -1013,7 +1013,7 @@
     {
       "state": "MI",
       "state_name": "Michigan",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/mi.json",
       "html_url": "https://ainpi.dev/states/mi",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mi",
@@ -1026,7 +1026,7 @@
     {
       "state": "MN",
       "state_name": "Minnesota",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/mn.json",
       "html_url": "https://ainpi.dev/states/mn",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mn",
@@ -1039,7 +1039,7 @@
     {
       "state": "MO",
       "state_name": "Missouri",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/mo.json",
       "html_url": "https://ainpi.dev/states/mo",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mo",
@@ -1052,7 +1052,7 @@
     {
       "state": "MS",
       "state_name": "Mississippi",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ms.json",
       "html_url": "https://ainpi.dev/states/ms",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ms",
@@ -1065,7 +1065,7 @@
     {
       "state": "MT",
       "state_name": "Montana",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/mt.json",
       "html_url": "https://ainpi.dev/states/mt",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/mt",
@@ -1078,7 +1078,7 @@
     {
       "state": "NC",
       "state_name": "North Carolina",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/nc.json",
       "html_url": "https://ainpi.dev/states/nc",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nc",
@@ -1091,7 +1091,7 @@
     {
       "state": "ND",
       "state_name": "North Dakota",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/nd.json",
       "html_url": "https://ainpi.dev/states/nd",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nd",
@@ -1104,7 +1104,7 @@
     {
       "state": "NE",
       "state_name": "Nebraska",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ne.json",
       "html_url": "https://ainpi.dev/states/ne",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ne",
@@ -1117,7 +1117,7 @@
     {
       "state": "NH",
       "state_name": "New Hampshire",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/nh.json",
       "html_url": "https://ainpi.dev/states/nh",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nh",
@@ -1130,7 +1130,7 @@
     {
       "state": "NJ",
       "state_name": "New Jersey",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/nj.json",
       "html_url": "https://ainpi.dev/states/nj",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nj",
@@ -1143,7 +1143,7 @@
     {
       "state": "NM",
       "state_name": "New Mexico",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/nm.json",
       "html_url": "https://ainpi.dev/states/nm",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nm",
@@ -1156,7 +1156,7 @@
     {
       "state": "NV",
       "state_name": "Nevada",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/nv.json",
       "html_url": "https://ainpi.dev/states/nv",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/nv",
@@ -1169,7 +1169,7 @@
     {
       "state": "NY",
       "state_name": "New York",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ny.json",
       "html_url": "https://ainpi.dev/states/ny",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ny",
@@ -1182,7 +1182,7 @@
     {
       "state": "OH",
       "state_name": "Ohio",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/oh.json",
       "html_url": "https://ainpi.dev/states/oh",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/oh",
@@ -1195,7 +1195,7 @@
     {
       "state": "OK",
       "state_name": "Oklahoma",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ok.json",
       "html_url": "https://ainpi.dev/states/ok",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ok",
@@ -1208,7 +1208,7 @@
     {
       "state": "OR",
       "state_name": "Oregon",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/or.json",
       "html_url": "https://ainpi.dev/states/or",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/or",
@@ -1221,7 +1221,7 @@
     {
       "state": "PA",
       "state_name": "Pennsylvania",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/pa.json",
       "html_url": "https://ainpi.dev/states/pa",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/pa",
@@ -1234,7 +1234,7 @@
     {
       "state": "RI",
       "state_name": "Rhode Island",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ri.json",
       "html_url": "https://ainpi.dev/states/ri",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ri",
@@ -1247,7 +1247,7 @@
     {
       "state": "SC",
       "state_name": "South Carolina",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/sc.json",
       "html_url": "https://ainpi.dev/states/sc",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/sc",
@@ -1260,7 +1260,7 @@
     {
       "state": "SD",
       "state_name": "South Dakota",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/sd.json",
       "html_url": "https://ainpi.dev/states/sd",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/sd",
@@ -1273,7 +1273,7 @@
     {
       "state": "TN",
       "state_name": "Tennessee",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/tn.json",
       "html_url": "https://ainpi.dev/states/tn",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/tn",
@@ -1286,7 +1286,7 @@
     {
       "state": "TX",
       "state_name": "Texas",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/tx.json",
       "html_url": "https://ainpi.dev/states/tx",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/tx",
@@ -1299,7 +1299,7 @@
     {
       "state": "UT",
       "state_name": "Utah",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/ut.json",
       "html_url": "https://ainpi.dev/states/ut",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/ut",
@@ -1312,12 +1312,12 @@
     {
       "state": "VA",
       "state_name": "Virginia",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/va.json",
       "html_url": "https://ainpi.dev/states/va",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/va",
       "cohort_csv_url": "https://ainpi.dev/api/v1/states/va-cohort-critical.csv",
-      "cohort_critical_count": 106,
+      "cohort_critical_count": 108,
       "connectivity_url": null,
       "connectivity_html_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
@@ -1325,7 +1325,7 @@
     {
       "state": "VT",
       "state_name": "Vermont",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/vt.json",
       "html_url": "https://ainpi.dev/states/vt",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/vt",
@@ -1338,7 +1338,7 @@
     {
       "state": "WA",
       "state_name": "Washington",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/wa.json",
       "html_url": "https://ainpi.dev/states/wa",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wa",
@@ -1351,7 +1351,7 @@
     {
       "state": "WI",
       "state_name": "Wisconsin",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/wi.json",
       "html_url": "https://ainpi.dev/states/wi",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wi",
@@ -1364,7 +1364,7 @@
     {
       "state": "WV",
       "state_name": "West Virginia",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/wv.json",
       "html_url": "https://ainpi.dev/states/wv",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wv",
@@ -1377,7 +1377,7 @@
     {
       "state": "WY",
       "state_name": "Wyoming",
-      "release_date": "2026-08-20",
+      "release_date": "2026-10-07",
       "url": "https://ainpi.dev/api/v1/states/wy.json",
       "html_url": "https://ainpi.dev/states/wy",
       "cmo_html_url": "https://ainpi.dev/for-state-medicaid/wy",

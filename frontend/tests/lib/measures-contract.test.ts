@@ -131,6 +131,10 @@ describe('/api/v1/measures.json', () => {
   it('never draws the role-specialty agreement across the 2026-08-20 vocabulary break', () => {
     const m = doc.measures.find((x) => x.slug === 'role-specialty-agreement');
     expect(m).toBeDefined();
-    expect(m!.series.at(-1)!.comparable_to_previous).toBe(false);
+    // Select by release, not position: later releases append after the break.
+    const atBreak = m!.series.find((p) => p.release === '2026-08-20');
+    expect(atBreak!.comparable_to_previous).toBe(false);
+    const after = m!.series.find((p) => p.release > '2026-08-20');
+    if (after) expect(after.comparable_to_previous).toBe(true);
   });
 });

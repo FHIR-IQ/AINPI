@@ -5,42 +5,47 @@
     "H49"
   ],
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-10-12T19:06:17+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T03:12:29+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "05fa715",
-  "headline": "CMS added payer organizations in the 2026-08-20 release: 27 carry a 'pay' type coding and own 233 Medicare Advantage plans, where the previous release had no payer type at all. Payer endpoints did not follow. 0 of the 27 payer organizations carry an endpoint, 1 of 110,973 FHIR REST endpoints is a payer provider directory, and a live CMS-9115-F directory is still absent from the index.",
-  "numerator": 1,
-  "denominator": 110973,
+  "commit_sha": "86c2349",
+  "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. 50 of 111,259 FHIR REST endpoints have a provider-directory address, none of them attached to a payer organization, and a live CMS-9115-F directory is still absent from the index.",
+  "numerator": 50,
+  "denominator": 111259,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
         "label": "Payer organizations (type pay)",
-        "value": 27
+        "value": 997
       },
       {
-        "label": "Medicare Advantage plans",
-        "value": 233
+        "label": "Health plans (InsurancePlan)",
+        "value": 7575
       },
       {
         "label": "Payer orgs carrying an endpoint",
         "value": 0
       },
       {
-        "label": "Payer provider-directory endpoints",
-        "value": 1
+        "label": "Provider-directory endpoints",
+        "value": 50
       }
     ]
   },
-  "notes": "Re-measured against the 2026-08-20 release by streaming the published NDJSON directly, not through BigQuery, so the check could run the day the release landed rather than after a 45 GB ingest. Classification constants are imported from analysis/h49_ndh_payer_endpoints.py rather than copied, so this cannot drift from the finding it updates. Half of the original result is resolved: a payer organization type now exists. The other half stands: no payer organization carries an endpoint, and the control directory (Capital BlueCross) answers 200 to an unauthenticated request while remaining absent from the index, which separates 'nothing to index' from 'not indexed yet'. Reproduce with analysis/h49_recheck_release.py --dir <release dir>.\n\nRelease watch, payer PIN: 0 of the 27 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 27 payer-typed organizations were found, so these counts come from a query that could see them.",
+  "notes": "Re-measured against the 2026-10-07 release by streaming the published NDJSON directly, not through BigQuery, so the check could run the day the release landed rather than after a 45 GB ingest. Classification constants are imported from analysis/h49_ndh_payer_endpoints.py rather than copied, so this cannot drift from the finding it updates. A payer organization type exists. No payer organization carries an endpoint. Provider-directory addresses are classified by URL pattern; none of the 50 is linked to a payer organization from either side. The control directory Capital BlueCross answered 200 to an unauthenticated request and is absent from the index, which separates 'nothing to index' from 'not indexed yet'. Reproduce with analysis/h49_recheck_release.py --dir <release dir>.\n\nRelease watch, payer PIN: 0 of the 997 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 997 payer-typed organizations were found, so these counts come from a query that could see them.",
   "detail": {
     "organization_type_codings": [
       {
         "code": "prov",
         "display": "Healthcare Provider",
-        "count": 2202028
+        "count": 1976702
+      },
+      {
+        "code": "pay",
+        "display": "Payer",
+        "count": 997
       },
       {
         "code": "team",
@@ -51,18 +56,13 @@
         "code": "govt",
         "display": "Government",
         "count": 65
-      },
-      {
-        "code": "pay",
-        "display": "Payer",
-        "count": 27
       }
     ],
-    "distinct_endpoint_hosts": 1599,
-    "payer_operated_hosts": 32,
-    "payer_endpoint_rows": 58,
+    "distinct_endpoint_hosts": 1720,
+    "payer_operated_hosts": 53,
+    "payer_endpoint_rows": 107,
     "payer_endpoint_status": {
-      "active": 58
+      "active": 107
     },
     "payer_endpoints_with_managing_org": 5,
     "control_directories": [
@@ -80,17 +80,17 @@
     "live_but_absent_from_ndh": 1,
     "payer_pin_watch": {
       "control_passed": true,
-      "payer_orgs": 27,
+      "payer_orgs": 997,
       "payer_orgs_with_any_identifier": 0,
       "payer_orgs_with_payerid": 0,
-      "note": "Release watch, payer PIN: 0 of the 27 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 27 payer-typed organizations were found, so these counts come from a query that could see them.",
-      "release_date": "2026-08-20"
+      "note": "Release watch, payer PIN: 0 of the 997 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 997 payer-typed organizations were found, so these counts come from a query that could see them.",
+      "release_date": "2026-10-07"
     },
     "endpoint_url_kinds": {
-      "unlabelled": 110968,
-      "patient-access": 4,
-      "provider-directory": 1
+      "unlabelled": 111203,
+      "provider-directory": 50,
+      "patient-access": 6
     },
-    "detail_release_date": "2026-08-20"
+    "detail_release_date": "2026-10-07"
   }
 }

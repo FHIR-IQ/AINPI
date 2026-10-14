@@ -101,6 +101,7 @@ def main():
     kinds = collections.Counter()
     payer_hosts: set[str] = set()
     payer_eps = []
+    dir_managing: list[str] = []
     total = rest = 0
     ep = d / "03-Endpoint.ndjson.zst"
     if ep.exists():
@@ -113,6 +114,7 @@ def main():
             addr = (r.get("address") or "").lower()
             if directory_re.search(addr):
                 kinds["provider-directory"] += 1
+                dir_managing.append(((r.get("managingOrganization") or {}).get("reference") or "").split("/")[-1])
             elif patient_re.search(addr):
                 kinds["patient-access"] += 1
             else:
@@ -182,9 +184,11 @@ def main():
     # ---- Control: is a live, mandated payer directory in the index? ----
     print("\nControl probe:")
     all_addrs = {a for _, a, _ in payer_eps}
+    control_results = []
     for c in CONTROL_DIRECTORIES:
         code, size = probe(c["base"] + c["probe"])
         present = any(c["base"].lower() in a for a in all_addrs)
+        control_results.append((c["payer"], code, present))
         print(f"   {c['payer']:22s} live={code} bytes={size} present_in_ndh={present}")
 
     if PUBLISHED.exists():
@@ -198,18 +202,33 @@ def main():
                              "which file it measured")
         import datetime as dt
         pub = json.loads(PUBLISHED.read_text()) if PUBLISHED.exists() else {}
-        payer_orgs_with_ep = len(with_ep)
         directories = kinds["provider-directory"]
-        control_absent = [c["payer"] for c in CONTROL_DIRECTORIES]
+        # Counted from the type coding itself. len(payer_org_ids) is the
+        # organizations an InsurancePlan names, a different and smaller set
+        # (962 of 997 at 2026-10-07); the first template conflated the two.
+        payer_typed_n = len(payer_typed)
+        payer_typed_with_ep = sum(1 for r in payer_typed if r.get("endpoint"))
+        # Linkage measured from both sides: the payer org's endpoint list
+        # above, and each directory endpoint's managingOrganization here.
+        payer_ids = {r.get("id") for r in payer_typed}
+        dirs_to_payer = sum(1 for ref in dir_managing if ref and ref in payer_ids)
+        print(f"   directory endpoints whose managingOrganization is a payer: {dirs_to_payer}")
+        # No "first appearance" claim: that was true once, at 2026-08-20, and
+        # a template reused on every release must not assert history.
         headline = (
-            f"CMS added payer organizations in the {args.release} release: "
-            f"{len(payer_org_ids)} carry a 'pay' type coding and own "
-            f"{plans} Medicare Advantage plans, where the previous release had "
-            f"no payer type at all. Payer endpoints did not follow. "
-            f"{payer_orgs_with_ep} of the {len(payer_org_ids)} payer "
-            f"organizations carry an endpoint, {directories} of {rest:,} FHIR "
-            f"REST endpoints is a payer provider directory, and a live "
-            f"CMS-9115-F directory is still absent from the index."
+            f"The {args.release} release names {payer_typed_n:,} payer "
+            f"organizations and {plans:,} health plans, and "
+            f"{payer_typed_with_ep:,} of those organizations carry an endpoint. "
+            f"{directories:,} of {rest:,} FHIR REST endpoints have a "
+            f"provider-directory address, none of them attached to a payer "
+            f"organization, and a live CMS-9115-F directory is still absent "
+            f"from the index."
+            if payer_typed_with_ep == 0 and dirs_to_payer == 0
+            and not any(present for _, _, present in control_results) else
+            f"The {args.release} release names {payer_typed_n:,} payer "
+            f"organizations and {plans:,} health plans; {payer_typed_with_ep:,} "
+            f"of those organizations carry an endpoint, and {directories:,} of "
+            f"{rest:,} FHIR REST endpoints have a provider-directory address."
         )
         pub.update({
             "release_date": args.release,
@@ -222,10 +241,10 @@ def main():
                 "type": "bar",
                 "unit": "count",
                 "data": [
-                    {"label": "Payer organizations (type pay)", "value": len(payer_org_ids)},
-                    {"label": "Medicare Advantage plans", "value": plans},
-                    {"label": "Payer orgs carrying an endpoint", "value": payer_orgs_with_ep},
-                    {"label": "Payer provider-directory endpoints", "value": directories},
+                    {"label": "Payer organizations (type pay)", "value": payer_typed_n},
+                    {"label": "Health plans (InsurancePlan)", "value": plans},
+                    {"label": "Payer orgs carrying an endpoint", "value": payer_typed_with_ep},
+                    {"label": "Provider-directory endpoints", "value": directories},
                 ],
             },
             "notes": (
@@ -235,13 +254,20 @@ def main():
                 "ingest. Classification constants are imported from "
                 "analysis/h49_ndh_payer_endpoints.py rather than copied, so this "
                 "cannot drift from the finding it updates. "
-                "Half of the original result is resolved: a payer organization "
-                "type now exists. The other half stands: no payer organization "
-                "carries an endpoint, and the control directory ("
-                + ", ".join(control_absent) +
-                ") answers 200 to an unauthenticated request while remaining "
-                "absent from the index, which separates 'nothing to index' from "
-                "'not indexed yet'. Reproduce with "
+                "A payer organization type exists. "
+                + (f"No payer organization carries an endpoint. "
+                   if payer_typed_with_ep == 0 else
+                   f"{payer_typed_with_ep:,} payer organizations carry an endpoint. ")
+                + "Provider-directory addresses are classified by URL pattern; "
+                + (f"none of the {directories:,} is linked to a payer organization from either side. "
+                   if dirs_to_payer == 0 else
+                   f"{dirs_to_payer:,} of the {directories:,} name a payer organization as managingOrganization. ")
+                + " ".join(
+                    f"The control directory {name} answered {code} to an unauthenticated request "
+                    + ("and is present in the index." if present else
+                       "and is absent from the index, which separates 'nothing to index' from 'not indexed yet'.")
+                    for name, code, present in control_results)
+                + " Reproduce with "
                 "analysis/h49_recheck_release.py --dir <release dir>."
             ),
         })

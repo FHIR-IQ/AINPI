@@ -23,6 +23,15 @@ recompute is a later step of the measure-series design
 | `npi-taxonomy-correctness@c34fe94.json` | c34fe94d859c | 2026-05-08 | role-specialty-agreement (H13, definition 1) |
 | `npi-taxonomy-correctness@3fe0500.json` | 3fe05005b08d | 2026-05-08 | npi-validation-failures (H9, written before H10-H13 overwrote the shared slug) |
 | `npi-taxonomy-correctness@be51fe6.json` | be51fe6ee4bb | 2026-08-20 | role-specialty-agreement restatement (first-entry reading, superseded 2026-08-28) |
+| `endpoint-org-linkage@6e74041.json` | 6e7404180d80 | 2026-08-20 | endpoint-org-linkage |
+| `vendor-endpoint-attribution@6e74041.json` | 6e7404180d80 | 2026-08-20 | vendor-filled-attribution |
+| `ndh-payer-endpoint-coverage@6e74041.json` | 6e7404180d80 | 2026-08-20 | payer-directory-endpoints |
+| `pii-exposure-ndh@6e74041.json` | 6e7404180d80 | 2026-08-20 | ssn-exposures |
+| `npi-validity-summary@6e74041.json` | 6e7404180d80 | 2026-08-20 | npi-validation-failures |
+| `npi-taxonomy-correctness@6e74041.json` | 6e7404180d80 | 2026-08-20 | role-specialty-agreement (H13, definition 2) |
+| `practitioner-phone-reachability@6e74041.json` | 6e7404180d80 | 2026-08-20 | practitioner-phone-reachability |
+| `role-gap-delta@6e74041.json` | 6e7404180d80 | 2026-05-08 (`before` side) | role-coverage-pa; its `after` side repeats 2026-08-20, which the regenerated file now supplies |
+| `role-gap-composition@6e74041.json` | 6e7404180d80 | 2026-08-20 | `--before` input to `analysis/role_gap_delta.py` |
 
 ## Required before every warehouse reload
 

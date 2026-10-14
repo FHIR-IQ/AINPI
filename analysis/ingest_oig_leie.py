@@ -50,6 +50,10 @@ import urllib.request
 from datetime import datetime, timezone
 from google.cloud import bigquery
 
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from claims_sources._cohorts import bq_job_config  # noqa: E402
+
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 TABLE = f"{PROJECT}.{DATASET}.oig_leie"
@@ -85,6 +89,75 @@ def download() -> int:
     rows = body.count(b"\n") - 1  # subtract header
     print(f"  {len(body):,} bytes, {rows:,} data rows → {LEIE_CACHE}")
     return rows
+
+
+# Fields whose "not applicable" value the downstream queries test as a fixed
+# sentinel. OIG wrote them zero-padded until 2026; the UPDATED.csv fetched on
+# 2026-10-12 writes a bare "0" in every one. Nothing errored: REINDATE =
+# '00000000' simply matched no row, every exclusion read as reinstated, and
+# H24 published "0 of 0" while the cohort lost every LEIE-only match.
+SENTINELS = {
+    "NPI": "0000000000",
+    "UPIN": "",
+    "EXCLDATE": "00000000",
+    "REINDATE": "00000000",
+    "WAIVERDATE": "00000000",
+    "DOB": "",
+}
+
+
+def normalize_row(row: dict) -> dict:
+    """Map OIG's bare-zero blanks back to the sentinels the queries test for."""
+    out = dict(row)
+    for col, sentinel in SENTINELS.items():
+        if (out.get(col) or "").strip() == "0":
+            out[col] = sentinel
+    return out
+
+
+def preload_counts(rows: list[dict]) -> dict:
+    """Counts the control needs, computed before anything touches BigQuery."""
+    return {
+        "total": len(rows),
+        "still_excluded": sum(1 for r in rows if (r.get("REINDATE") or "") in ("00000000", "")),
+        "with_real_npi": sum(1 for r in rows if (r.get("NPI") or "") not in ("", "0000000000")),
+    }
+
+
+def check_control(counts: dict) -> None:
+    """Refuse a file the sentinel tests cannot read. Runs BEFORE the load,
+    because the load is WRITE_TRUNCATE and a refusal after it would leave the
+    bad table in place for every consumer outside the weekly chain."""
+    if counts["total"] == 0:
+        raise SystemExit("LEIE file has no data rows")
+    if counts["still_excluded"] < 0.5 * counts["total"]:
+        raise SystemExit(
+            f"only {counts['still_excluded']:,} of {counts['total']:,} rows read as still "
+            "excluded; the REINDATE sentinel no longer matches the source. Nothing loaded.")
+    if counts["with_real_npi"] == 0:
+        raise SystemExit("no LEIE row carries a real NPI; the NPI sentinel no longer matches. Nothing loaded.")
+
+
+def normalize_file(path: str) -> dict:
+    """Rewrite the cached CSV in place with normalize_row. Returns preload_counts."""
+    with open(path, newline="", encoding="latin-1") as fh:
+        reader = csv.DictReader(fh)
+        header = reader.fieldnames
+        rows = list(reader)
+    if header != LEIE_COLUMNS:
+        raise SystemExit(f"LEIE header changed: {header}")
+    changed = 0
+    fixed = []
+    for r in rows:
+        n = normalize_row(r)
+        changed += n != r
+        fixed.append(n)
+    with open(path, "w", newline="", encoding="latin-1") as fh:
+        w = csv.DictWriter(fh, fieldnames=LEIE_COLUMNS)
+        w.writeheader()
+        w.writerows(fixed)
+    print(f"  normalized bare-zero blanks on {changed:,} of {len(rows):,} rows")
+    return preload_counts(fixed)
 
 
 def load_to_bq(client: bigquery.Client) -> int:
@@ -127,7 +200,7 @@ def report_quality(client: bigquery.Client) -> dict:
       COUNT(DISTINCT STATE)                                            AS distinct_states
     FROM `{TABLE}`
     """
-    row = next(iter(client.query(sql).result()))
+    row = next(iter(client.query(sql, job_config=bq_job_config()).result()))
     stats = {
         "total": int(row.total),
         "with_real_npi": int(row.with_real_npi),
@@ -150,9 +223,15 @@ def run(from_csv: str | None = None) -> None:
         print(f"Using local LEIE extract: {src} ({src.stat().st_size:,} bytes) → {LEIE_CACHE}")
     else:
         download()
+    # Positive control, before the load. The LEIE has always held tens of
+    # thousands of still-excluded rows; zero means the sentinel test failed,
+    # not that OIG reinstated everyone.
+    check_control(normalize_file(LEIE_CACHE))
     client = bigquery.Client(project=PROJECT)
     rows = load_to_bq(client)
     stats = report_quality(client)
+    # Same control read back from BigQuery, as confirmation of the load.
+    check_control(stats)
     stats["rows_loaded"] = rows
     stats["loaded_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     stats["source"] = from_csv or LEIE_URL

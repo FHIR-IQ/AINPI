@@ -7,13 +7,13 @@
     "H8"
   ],
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-10-12T18:49:02+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T01:20:16+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
-  "headline": "Referential integrity is clean but coverage is sparse. 0.002% of 33.4M declared cross-resource references actually dangle (target missing). But only 9.6% of Endpoints carry a managingOrganization (108,584 of 1,128,169) and only 61.8% of Locations do (1,567,973 of 2,535,686). H8: the NPD bulk export now ships HealthcareService. CMS added it in the 2026-08-20 release, alongside InsurancePlan, taking the export from 6 resources to 8.",
-  "numerator": 724,
-  "denominator": 33425181,
+  "headline": "Referential integrity is clean but coverage is sparse. 0.004% of 22.4M declared cross-resource references actually dangle (target missing). But only 9.6% of Endpoints carry a managingOrganization (109,215 of 1,140,836) and only 61.9% of Locations do (1,584,722 of 2,558,069). H8: the NPD bulk export now ships HealthcareService. CMS added it in the 2026-08-20 release, alongside InsurancePlan, taking the export from 6 resources to 8.",
+  "numerator": 841,
+  "denominator": 22449219,
   "chart": {
     "type": "bar",
     "unit": "percent",
@@ -24,17 +24,17 @@
       },
       {
         "label": "PR \u2192 Organization (coverage)",
-        "value": 91.89
+        "value": 87.72
       },
       {
         "label": "Location \u2192 Org (coverage)",
-        "value": 61.84
+        "value": 61.95
       },
       {
         "label": "Endpoint \u2192 Org (coverage)",
-        "value": 9.62
+        "value": 9.57
       }
     ]
   },
-  "notes": "Integrity (dangling rate among declared references): H6a PR\u2192Practitioner 0.0000%, H6b PR\u2192Organization 0.0000%, H7 Location\u2192Org 0.0000%, Endpoint\u2192Org 0.6668%. All near zero \u2014 when a reference is declared, it resolves. Coverage (share of rows with the optional reference populated): PR\u2192Practitioner 100.00% (required), PR\u2192Organization 91.89%, Location\u2192managingOrganization 61.84%, Endpoint\u2192managingOrganization 9.62%. The Endpoint\u2192Organization gap pairs with H5 (98.69% of Orgs have no Endpoint referencing them) \u2014 the Endpoint\u2194Organization link is sparse in both directions. H8 requires HealthcareService. Which NDH IG resources the export carries is read from the published manifest on every run rather than hardcoded, because it changed: HealthcareService and InsurancePlan were absent through 2026-05-08 and present from 2026-08-20. Resources shipped in this release: Endpoint, HealthcareService, InsurancePlan, Location, Organization, OrganizationAffiliation, Practitioner, PractitionerRole."
+  "notes": "Integrity (dangling rate among declared references): H6a PR\u2192Practitioner 0.0000%, H6b PR\u2192Organization 0.0000%, H7 Location\u2192Org 0.0000%, Endpoint\u2192Org 0.7700%. All near zero \u2014 when a reference is declared, it resolves. Coverage (share of rows with the optional reference populated): PR\u2192Practitioner 100.00% (required), PR\u2192Organization 87.72%, Location\u2192managingOrganization 61.95%, Endpoint\u2192managingOrganization 9.57%. The Endpoint\u2192Organization gap pairs with H5 (98.69% of Orgs have no Endpoint referencing them) \u2014 the Endpoint\u2194Organization link is sparse in both directions. H8 requires HealthcareService. Which NDH IG resources the export carries is read from the published manifest on every run rather than hardcoded, because it changed: HealthcareService and InsurancePlan were absent through 2026-05-08 and present from 2026-08-20. Resources shipped in this release: Endpoint, HealthcareService, InsurancePlan, Location, Organization, OrganizationAffiliation, Practitioner, PractitionerRole."
 }

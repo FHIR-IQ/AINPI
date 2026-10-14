@@ -17,13 +17,13 @@ It is never the default.
 """
 from __future__ import annotations
 
-# Bumped 2026-08-21 when the warehouse was reloaded from the 2026-08-20
-# bulk export. Previous: 2026-05-08.
-CURRENT_RELEASE = "2026-08-20"
+# Bumped 2026-10-13 when the warehouse was reloaded from the 2026-10-07
+# bulk export. Previous: 2026-08-20.
+CURRENT_RELEASE = "2026-10-07"
 
 # Releases this project has ingested, newest first. Kept so a delta can name
 # its endpoints without a second source of truth.
-KNOWN_RELEASES = ("2026-08-20", "2026-05-08", "2026-04-09")
+KNOWN_RELEASES = ("2026-10-07", "2026-08-20", "2026-05-08", "2026-04-09")
 
 
 def live_release() -> str:

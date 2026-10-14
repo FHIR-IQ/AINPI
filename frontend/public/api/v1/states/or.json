@@ -2,14 +2,14 @@
   "state": "OR",
   "state_name": "Oregon",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:28:05+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:50:48+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 113787,
-    "organization": 38847,
-    "location": 33120
+    "practitioner": 114219,
+    "organization": 19776,
+    "location": 33374
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 111390,
-      "state_denominator": 113787,
-      "state_pct": 97.8934,
-      "national_pct": 99.9985,
-      "state_headline": "111,390 of 113,787 OR practitioner NPIs (97.8934%) match NPPES; 252 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 110840,
+      "state_denominator": 114219,
+      "state_pct": 97.0416,
+      "national_pct": 97.7651,
+      "state_headline": "110,840 of 114,219 OR practitioner NPIs (97.0416%) match NPPES; 253 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 19658,
-      "state_denominator": 38847,
-      "state_pct": 50.6037,
-      "national_pct": 11.3992,
-      "state_headline": "OR has 38,847 Organization resources covering 19,189 unique NPIs \u2014 19,658 excess resources (50.6037%) appear duplicated.",
+      "state_numerator": 685,
+      "state_denominator": 19776,
+      "state_pct": 3.4638,
+      "national_pct": 1.4362,
+      "state_headline": "OR has 19,776 Organization resources covering 19,091 unique NPIs \u2014 685 excess resources (3.4638%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 185754,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 185,754 OR-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 167369,
+      "state_denominator": 167369,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "167,369 of 167,369 OR-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OR-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OR-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

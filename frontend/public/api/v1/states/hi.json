@@ -2,14 +2,14 @@
   "state": "HI",
   "state_name": "Hawaii",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:22:59+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:47:44+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 25668,
-    "organization": 14070,
-    "location": 10309
+    "practitioner": 26465,
+    "organization": 6669,
+    "location": 10482
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 25053,
-      "state_denominator": 25668,
-      "state_pct": 97.604,
-      "national_pct": 99.9985,
-      "state_headline": "25,053 of 25,668 HI practitioner NPIs (97.604%) match NPPES; 58 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 25561,
+      "state_denominator": 26465,
+      "state_pct": 96.5842,
+      "national_pct": 97.7651,
+      "state_headline": "25,561 of 26,465 HI practitioner NPIs (96.5842%) match NPPES; 60 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 7588,
-      "state_denominator": 14070,
-      "state_pct": 53.9303,
-      "national_pct": 11.3992,
-      "state_headline": "HI has 14,070 Organization resources covering 6,482 unique NPIs \u2014 7,588 excess resources (53.9303%) appear duplicated.",
+      "state_numerator": 255,
+      "state_denominator": 6669,
+      "state_pct": 3.8237,
+      "national_pct": 1.4362,
+      "state_headline": "HI has 6,669 Organization resources covering 6,414 unique NPIs \u2014 255 excess resources (3.8237%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 50047,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 50,047 HI-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 43616,
+      "state_denominator": 43616,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "43,616 of 43,616 HI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -134,11 +134,11 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1073645545",
-      "display_name": "OKUBO, GARRETT",
+      "npi": "1568499960",
+      "display_name": "HARRIS, SHEILA",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2020-02-20 (exclusion type 1128a1)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1073645545",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2020-07-20 (exclusion type 1128a3)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568499960",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five HI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five HI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

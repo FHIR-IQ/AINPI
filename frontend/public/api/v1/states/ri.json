@@ -2,14 +2,14 @@
   "state": "RI",
   "state_name": "Rhode Island",
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:28:22+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T02:51:04+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "51bf5d5",
+  "commit_sha": "6e74041",
   "denominators": {
-    "practitioner": 23431,
-    "organization": 20845,
-    "location": 8428
+    "practitioner": 23466,
+    "organization": 14571,
+    "location": 8471
   },
   "findings": [
     {
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 22789,
-      "state_denominator": 23431,
-      "state_pct": 97.26,
-      "national_pct": 99.9985,
-      "state_headline": "22,789 of 23,431 RI practitioner NPIs (97.26%) match NPPES; 60 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_numerator": 22612,
+      "state_denominator": 23466,
+      "state_pct": 96.3607,
+      "national_pct": 97.7651,
+      "state_headline": "22,612 of 23,466 RI practitioner NPIs (96.3607%) match NPPES; 62 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 6364,
-      "state_denominator": 20845,
-      "state_pct": 30.5301,
-      "national_pct": 11.3992,
-      "state_headline": "RI has 20,845 Organization resources covering 14,481 unique NPIs \u2014 6,364 excess resources (30.5301%) appear duplicated.",
+      "state_numerator": 212,
+      "state_denominator": 14571,
+      "state_pct": 1.4549,
+      "national_pct": 1.4362,
+      "state_headline": "RI has 14,571 Organization resources covering 14,359 unique NPIs \u2014 212 excess resources (1.4549%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 0,
-      "state_denominator": 52704,
-      "state_pct": 0.0,
-      "national_pct": 0.0,
-      "state_headline": "0 of 52,704 RI-resident resources carry a meta.lastUpdated on the 2026-08-20 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_numerator": 46508,
+      "state_denominator": 46508,
+      "state_pct": 100.0,
+      "national_pct": 99.9958,
+      "state_headline": "46,508 of 46,508 RI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -89,7 +89,7 @@
       "state_numerator": null,
       "state_denominator": null,
       "state_pct": null,
-      "national_pct": 0.0022,
+      "national_pct": 0.0037,
       "state_headline": null,
       "not_computable_reason": "Cross-resource references in NDH are graph-level. State filtering on the source side (PractitionerRole.practitioner) is straightforward, but the target side (Organization, Location) may be in a different state, so a per-state integrity rate conflates two distinct populations. The national rate is the defensible reference."
     },
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-08-20 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five RI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five RI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
 }

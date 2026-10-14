@@ -5,24 +5,24 @@
     "H28"
   ],
   "status": "published",
-  "release_date": "2026-08-20",
-  "generated_at": "2026-08-21T12:42:55+00:00",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-14T01:20:40+00:00",
   "methodology_version": "0.6.0-draft",
-  "commit_sha": "51bf5d5",
-  "headline": "Of 1,128,169 Endpoint resources in the 2026-08-20 NDH bulk export, only 110,973 (9.8%) are machine-readable FHIR REST URLs an integrator can GET. The remaining 1,017,196 (90.2%) are Direct Trust HISP addresses (clinical messaging, not a queryable API), and 0 use other connection types. The 8.4% machine-readable share is the right denominator for any \"find the FHIR endpoint for this provider\" feature built on top of NDH.",
-  "numerator": 110973,
-  "denominator": 1128169,
+  "commit_sha": "6e74041",
+  "headline": "Of 1,140,836 Endpoint resources in the 2026-10-07 NDH bulk export, only 111,259 (9.8%) are machine-readable FHIR REST URLs an integrator can GET. The remaining 1,029,577 (90.2%) are Direct Trust HISP addresses (clinical messaging, not a queryable API), and 0 use other connection types. The 8.4% machine-readable share is the right denominator for any \"find the FHIR endpoint for this provider\" feature built on top of NDH.",
+  "numerator": 111259,
+  "denominator": 1140836,
   "chart": {
     "type": "bar",
     "unit": "count",
     "data": [
       {
         "label": "FHIR REST (machine-readable)",
-        "value": 110973
+        "value": 111259
       },
       {
         "label": "Direct Trust messaging",
-        "value": 1017196
+        "value": 1029577
       },
       {
         "label": "Other / unspecified",
@@ -30,5 +30,5 @@
       }
     ]
   },
-  "notes": "NDH ships two distinct connectionType.code values that share an Endpoint shape: hl7-fhir-rest (FHIR REST API URLs) and direct-project (Direct Trust HISP messaging addresses, of the form provider@hisp.example.com). Both are valuable but solve different problems. Of the 110,973 hl7-fhir-rest endpoints, 100% have a valid https:// URL \u2014 there is no http:// or malformed URL noise in this slice. 110,973 are flagged status=active. Crawler liveness (/findings/endpoint-liveness, H1-H5) probes the active subset. For consumers wiring 'find FHIR endpoint by NPI' \u2014 the right denominator is the 110,973 hl7-fhir-rest endpoints, NOT the 1,128,169 total resource count. This was a non-obvious cliff in the data quality dashboard until H28 surfaced it."
+  "notes": "NDH ships two distinct connectionType.code values that share an Endpoint shape: hl7-fhir-rest (FHIR REST API URLs) and direct-project (Direct Trust HISP messaging addresses, of the form provider@hisp.example.com). Both are valuable but solve different problems. Of the 111,259 hl7-fhir-rest endpoints, 100% have a valid https:// URL \u2014 there is no http:// or malformed URL noise in this slice. 111,259 are flagged status=active. Crawler liveness (/findings/endpoint-liveness, H1-H5) probes the active subset. For consumers wiring 'find FHIR endpoint by NPI' \u2014 the right denominator is the 111,259 hl7-fhir-rest endpoints, NOT the 1,140,836 total resource count. This was a non-obvious cliff in the data quality dashboard until H28 surfaced it."
 }

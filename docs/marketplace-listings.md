@@ -93,11 +93,11 @@ from the source. This archive keeps them.
 
 That is the entire product, and it is free.
 
-**What is in it.** Two releases so far, 2026-05-08 and 2026-08-20, 54,162,643
-rows across six tables: Practitioner, PractitionerRole, Organization,
+**What is in it.** Three releases so far, 2026-05-08, 2026-08-20 and
+2026-10-07, 78,924,582 rows across six tables: Practitioner, PractitionerRole, Organization,
 OrganizationAffiliation, Location and Endpoint. Every row carries the untouched
 FHIR resource JSON, plus flattened columns so ordinary questions do not require
-JSON parsing. Both releases are extracted by the same code, so comparing them is
+JSON parsing. Every release is extracted by the same code, so comparing them is
 not comparing two parsers. Each table is partitioned by `release_date`, which
 makes a cross-release comparison a `WHERE` clause rather than a download.
 
@@ -110,16 +110,19 @@ the two sources name different organizations for one URL, both rows are kept.
 40,005 of the 68,888 vendor rows name an organization without an NPI.
 
 **What it is for.** Questions that need two releases at once. One worked
-example, included as a notebook: between these two releases CMS added about
+example, included as a notebook: between May and August CMS added about
 seven million PractitionerRole records, a 173% rise. The share of clinicians who
 have one moved 4.5 points, from 26.9% to 31.4%. The rest went to people the
 directory already described, taking the average covered clinician from two role
 records to nearly five. That is a real improvement and a different improvement
 from covering more people, and a headline record count cannot tell them apart.
+The 2026-10-07 release then removed 5.5 million PractitionerRole records, and
+coverage held, which is the same lesson read in reverse.
 
 **One thing to know before you write a diff.** Practitioner ids embed the NPI and
 are stable across releases. Organization ids are stable for provider records,
-which are NPI-keyed; the tax-record half of that table carries a random UUID.
+which are NPI-keyed; its tax records (about half the table in August, under 4% in October) carry
+a random UUID.
 Endpoint and Location ids are random UUIDs that CMS regenerates on every export, so joining those two on `_id`
 across releases reports 100% churn that did not happen. Join Endpoint on
 `_address` instead. The table comments carry the same warning, and the notebook
