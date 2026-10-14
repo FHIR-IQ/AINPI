@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'The directory got smaller, and almost nobody fell out of it',
     description:
-      '7.7M fewer records in the 2026-10-07 release, coverage unchanged. 997 insurers named, 0 reachable. Phone coverage and Pennsylvania record reachability slipped.',
+      '7.7M fewer records in the 2026-10-07 release, and coverage held. 997 insurers named, none with a web address. Phone coverage and Pennsylvania record reachability slipped.',
     url: 'https://ainpi.dev/reports/2026-10-14-update',
     type: 'article',
   },
