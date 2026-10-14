@@ -111,8 +111,31 @@ def normalize_row(row: dict) -> dict:
     return out
 
 
-def normalize_file(path: str) -> int:
-    """Rewrite the cached CSV in place with normalize_row. Returns rows changed."""
+def preload_counts(rows: list[dict]) -> dict:
+    """Counts the control needs, computed before anything touches BigQuery."""
+    return {
+        "total": len(rows),
+        "still_excluded": sum(1 for r in rows if (r.get("REINDATE") or "") in ("00000000", "")),
+        "with_real_npi": sum(1 for r in rows if (r.get("NPI") or "") not in ("", "0000000000")),
+    }
+
+
+def check_control(counts: dict) -> None:
+    """Refuse a file the sentinel tests cannot read. Runs BEFORE the load,
+    because the load is WRITE_TRUNCATE and a refusal after it would leave the
+    bad table in place for every consumer outside the weekly chain."""
+    if counts["total"] == 0:
+        raise SystemExit("LEIE file has no data rows")
+    if counts["still_excluded"] < 0.5 * counts["total"]:
+        raise SystemExit(
+            f"only {counts['still_excluded']:,} of {counts['total']:,} rows read as still "
+            "excluded; the REINDATE sentinel no longer matches the source. Nothing loaded.")
+    if counts["with_real_npi"] == 0:
+        raise SystemExit("no LEIE row carries a real NPI; the NPI sentinel no longer matches. Nothing loaded.")
+
+
+def normalize_file(path: str) -> dict:
+    """Rewrite the cached CSV in place with normalize_row. Returns preload_counts."""
     with open(path, newline="", encoding="latin-1") as fh:
         reader = csv.DictReader(fh)
         header = reader.fieldnames
@@ -130,7 +153,7 @@ def normalize_file(path: str) -> int:
         w.writeheader()
         w.writerows(fixed)
     print(f"  normalized bare-zero blanks on {changed:,} of {len(rows):,} rows")
-    return changed
+    return preload_counts(fixed)
 
 
 def load_to_bq(client: bigquery.Client) -> int:
@@ -196,19 +219,15 @@ def run(from_csv: str | None = None) -> None:
         print(f"Using local LEIE extract: {src} ({src.stat().st_size:,} bytes) → {LEIE_CACHE}")
     else:
         download()
-    normalize_file(LEIE_CACHE)
+    # Positive control, before the load. The LEIE has always held tens of
+    # thousands of still-excluded rows; zero means the sentinel test failed,
+    # not that OIG reinstated everyone.
+    check_control(normalize_file(LEIE_CACHE))
     client = bigquery.Client(project=PROJECT)
     rows = load_to_bq(client)
     stats = report_quality(client)
-    # Positive control. The LEIE has always held tens of thousands of
-    # still-excluded rows; zero means the sentinel test failed, not that OIG
-    # reinstated everyone.
-    if stats["still_excluded"] < 0.5 * stats["total"]:
-        raise SystemExit(
-            f"only {stats['still_excluded']:,} of {stats['total']:,} rows read as still "
-            "excluded; the REINDATE sentinel no longer matches the source")
-    if stats["with_real_npi"] == 0:
-        raise SystemExit("no LEIE row carries a real NPI; the NPI sentinel no longer matches")
+    # Same control read back from BigQuery, as confirmation of the load.
+    check_control(stats)
     stats["rows_loaded"] = rows
     stats["loaded_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     stats["source"] = from_csv or LEIE_URL

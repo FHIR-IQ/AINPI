@@ -5,7 +5,7 @@
  * 2026-10-07 CMS release, reloaded and re-measured. The file shrank by a
  * quarter and coverage held; 997 insurers arrived with no web address; phone
  * coverage and Pennsylvania record reachability slipped; one correction (the
- * federal exclusion check read zero for a day after OIG changed its file).
+ * federal exclusion check read zero for two days after OIG changed its file).
  *
  * Same safety design as prior send scripts: dry-run by default, --confirm to
  * send, --preview writes the HTML and exits, --email / --limit narrow
@@ -106,8 +106,8 @@ function buildBody(): { text: string; html: string } {
     'For two days, our federal exclusion check and the high-risk list',
     'built on it showed no excluded providers in the directory. The government changed how its',
     'exclusion file marks empty fields, and our check read every',
-    'exclusion as lifted. It is fixed, and the loader now refuses a file',
-    'like that:',
+    'exclusion as lifted. It is fixed, and the loader now checks the file',
+    'first and refuses one like that:',
     '7,799 of 8,924 excluded providers with an NPI appear in the October',
     `directory. ${LEIE_URL}`,
     '',
@@ -115,7 +115,7 @@ function buildBody(): { text: string; html: string } {
     'The government serves only the newest file, so August is gone from',
     'its site. Every release since May, now including October, is in our',
     `free archive on Databricks Marketplace: ${LISTING_URL}`,
-    `Ten of the numbers we track, release by release: ${MEASURES_URL}`,
+    `The measures we track, release by release: ${MEASURES_URL}`,
     '',
     `Read the full update: ${REPORT_URL}`,
     '',
@@ -167,12 +167,12 @@ function buildBody(): { text: string; html: string } {
 
   <div style="padding:20px 28px;background:#fff;border-bottom:1px solid #d9d2c8;">
     <h2 style="font-size:17px;margin:0 0 8px;">A correction</h2>
-    <p style="margin:0;font-size:14px;">For two days, our federal exclusion check and the high-risk list built on it showed no excluded providers in the directory. The government changed how its exclusion file marks empty fields, and our check read every exclusion as lifted. It is fixed, and the loader now refuses a file like that: <a href="${LEIE_URL}" style="color:#08519c;">7,799 of 8,924 excluded providers with an NPI</a> appear in the October directory.</p>
+    <p style="margin:0;font-size:14px;">For two days, our federal exclusion check and the high-risk list built on it showed no excluded providers in the directory. The government changed how its exclusion file marks empty fields, and our check read every exclusion as lifted. It is fixed, and the loader now checks the file first and refuses one like that: <a href="${LEIE_URL}" style="color:#08519c;">7,799 of 8,924 excluded providers with an NPI</a> appear in the October directory.</p>
   </div>
 
   <div style="padding:20px 28px;border-bottom:1px solid #d9d2c8;">
     <h2 style="font-size:17px;margin:0 0 8px;">The August release is kept</h2>
-    <p style="margin:0;font-size:14px;">The government serves only the newest file, so August is gone from its site. Every release since May, now including October, is in our <a href="${LISTING_URL}" style="color:#08519c;">free archive on Databricks Marketplace</a>. <a href="${MEASURES_URL}" style="color:#08519c;">Ten of the numbers we track, release by release</a>.</p>
+    <p style="margin:0;font-size:14px;">The government serves only the newest file, so August is gone from its site. Every release since May, now including October, is in our <a href="${LISTING_URL}" style="color:#08519c;">free archive on Databricks Marketplace</a>. <a href="${MEASURES_URL}" style="color:#08519c;">The measures we track, release by release</a>.</p>
   </div>
 
   <div style="padding:28px;text-align:center;">

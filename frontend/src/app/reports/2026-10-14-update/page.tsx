@@ -32,8 +32,8 @@ export default function October2026Update1014Page() {
       <ReleaseTeaser
         eyebrow="Release update · 2026-10-14"
         headlineA="A quarter smaller."
-        headlineB="997 insurers, none reachable."
-        caption="CMS published a new National Provider Directory on 7 October. We reloaded it and re-ran every check. The file lost 7.7 million records, mostly tax-only organizations and duplicate where-they-work records, and the share of Pennsylvania clinicians it describes held steady. Insurers arrived by the hundreds, without a single web address."
+        headlineB="997 insurers, none with a web address."
+        caption="CMS published a new National Provider Directory on 7 October. We reloaded it and re-ran every check. The file lost 7.7 million records, mostly tax-only organizations and second or third where-they-work records for people already listed, and the share of Pennsylvania clinicians it describes held steady. Insurers arrived by the hundreds, without a single web address."
         stats={[
           { label: 'Records, August to October', delta: '−23.7%', tone: 'loss' },
           {
@@ -48,7 +48,7 @@ export default function October2026Update1014Page() {
           },
         ]}
         reportSlug="2026-10-14-update"
-        releaseDate="2026-10-14"
+        releaseDate="2026-10-07"
         methodologyVersion="0.7.3-draft"
       />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

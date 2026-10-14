@@ -110,7 +110,7 @@ the two sources name different organizations for one URL, both rows are kept.
 40,005 of the 68,888 vendor rows name an organization without an NPI.
 
 **What it is for.** Questions that need two releases at once. One worked
-example, included as a notebook: between these two releases CMS added about
+example, included as a notebook: between May and August CMS added about
 seven million PractitionerRole records, a 173% rise. The share of clinicians who
 have one moved 4.5 points, from 26.9% to 31.4%. The rest went to people the
 directory already described, taking the average covered clinician from two role

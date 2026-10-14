@@ -184,9 +184,11 @@ def main():
     # ---- Control: is a live, mandated payer directory in the index? ----
     print("\nControl probe:")
     all_addrs = {a for _, a, _ in payer_eps}
+    control_results = []
     for c in CONTROL_DIRECTORIES:
         code, size = probe(c["base"] + c["probe"])
         present = any(c["base"].lower() in a for a in all_addrs)
+        control_results.append((c["payer"], code, present))
         print(f"   {c['payer']:22s} live={code} bytes={size} present_in_ndh={present}")
 
     if PUBLISHED.exists():
@@ -200,9 +202,7 @@ def main():
                              "which file it measured")
         import datetime as dt
         pub = json.loads(PUBLISHED.read_text()) if PUBLISHED.exists() else {}
-        payer_orgs_with_ep = len(with_ep)
         directories = kinds["provider-directory"]
-        control_absent = [c["payer"] for c in CONTROL_DIRECTORIES]
         # Counted from the type coding itself. len(payer_org_ids) is the
         # organizations an InsurancePlan names, a different and smaller set
         # (962 of 997 at 2026-10-07); the first template conflated the two.
@@ -223,7 +223,8 @@ def main():
             f"provider-directory address, none of them attached to a payer "
             f"organization, and a live CMS-9115-F directory is still absent "
             f"from the index."
-            if payer_typed_with_ep == 0 and dirs_to_payer == 0 else
+            if payer_typed_with_ep == 0 and dirs_to_payer == 0
+            and not any(present for _, _, present in control_results) else
             f"The {args.release} release names {payer_typed_n:,} payer "
             f"organizations and {plans:,} health plans; {payer_typed_with_ep:,} "
             f"of those organizations carry an endpoint, and {directories:,} of "
@@ -253,15 +254,20 @@ def main():
                 "ingest. Classification constants are imported from "
                 "analysis/h49_ndh_payer_endpoints.py rather than copied, so this "
                 "cannot drift from the finding it updates. "
-                "Half of the original result is resolved: a payer organization "
-                "type now exists. The other half stands: no payer organization "
-                "carries an endpoint. Provider-directory addresses are classified "
-                "by URL pattern, and those found are not linked to any payer "
-                "organization, and the control directory ("
-                + ", ".join(control_absent) +
-                ") answers 200 to an unauthenticated request while remaining "
-                "absent from the index, which separates 'nothing to index' from "
-                "'not indexed yet'. Reproduce with "
+                "A payer organization type exists. "
+                + (f"No payer organization carries an endpoint. "
+                   if payer_typed_with_ep == 0 else
+                   f"{payer_typed_with_ep:,} payer organizations carry an endpoint. ")
+                + "Provider-directory addresses are classified by URL pattern; "
+                + (f"none of the {directories:,} is linked to a payer organization from either side. "
+                   if dirs_to_payer == 0 else
+                   f"{dirs_to_payer:,} of the {directories:,} name a payer organization as managingOrganization. ")
+                + " ".join(
+                    f"The control directory {name} answered {code} to an unauthenticated request "
+                    + ("and is present in the index." if present else
+                       "and is absent from the index, which separates 'nothing to index' from 'not indexed yet'.")
+                    for name, code, present in control_results)
+                + " Reproduce with "
                 "analysis/h49_recheck_release.py --dir <release dir>."
             ),
         })

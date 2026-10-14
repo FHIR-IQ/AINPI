@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T02:07:02+00:00",
+  "generated_at": "2026-10-14T03:13:13+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -364,7 +364,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/ndh-payer-endpoint-coverage.json",
             "field": "numerator / denominator",
-            "commit": "6e74041",
+            "commit": "86c2349",
             "vendored": false
           },
           "comparable_to_previous": true

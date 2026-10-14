@@ -3,7 +3,9 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
-from ingest_oig_leie import normalize_row  # noqa: E402
+import pytest  # noqa: E402
+
+from ingest_oig_leie import check_control, normalize_row, preload_counts  # noqa: E402
 
 
 def test_bare_zero_blanks_become_the_sentinels_queries_test():
@@ -25,3 +27,17 @@ def test_real_values_and_old_format_are_untouched():
 
 def test_a_real_reinstatement_date_is_kept():
     assert normalize_row({"REINDATE": "20240105"})["REINDATE"] == "20240105"
+
+
+def test_control_refuses_the_unnormalized_file_before_any_load():
+    raw = [{"NPI": "0", "REINDATE": "0"}] * 10 + [{"NPI": "1801839139", "REINDATE": "0"}]
+    with pytest.raises(SystemExit):
+        check_control(preload_counts(raw))
+
+
+def test_control_passes_the_normalized_file():
+    rows = [normalize_row({"NPI": "0", "REINDATE": "0"})] * 10 + [
+        normalize_row({"NPI": "1801839139", "REINDATE": "0"})]
+    c = preload_counts(rows)
+    assert c == {"total": 11, "still_excluded": 11, "with_real_npi": 1}
+    check_control(c)
