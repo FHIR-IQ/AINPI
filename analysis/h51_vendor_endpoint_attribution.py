@@ -347,6 +347,13 @@ def main() -> int:
         f"public today would move endpoint attribution from {attributed/total*100:.1f}% to "
         f"{after/total*100:.1f}%."
     )
+    grain = (
+        "The crosswalk CSV has one row per (url, org_npi); a URL with no NPI has one row with an empty "
+        f"org_npi. Since FHI-73 a URL may repeat, once per NPI its publisher lists: "
+        f"{sum(len(v) for v in url2npi.values()):,} url-NPI pairs (published_url_npi_pairs) across "
+        f"{len(url2name):,} URLs. Earlier files kept only the first NPI per URL. On an NPI row, "
+        "org_name is the organization that published that NPI."
+    )
     notes = (
         "The gap measured in H50 is not absent data. It is data published by the EHR vendors and "
         "not carried into the directory. PointClickCare publishes 4,015 endpoints and the NDH holds "
@@ -360,6 +367,7 @@ def main() -> int:
         "matches, which is the same failure that produced a wrong published claim about Epic in H47. "
         "Both reference styles and both link directions are handled, and the hierarchy rollup is "
         "asserted against the organization count so a double-count cannot pass silently.\n\n"
+        + grain + "\n\n"
         "Every figure is a floor. These are the largest publishers; ONC's Lantern catalogues over 200 "
         "sources. Matching is exact on a normalized URL, so a vendor that spells a path differently "
         "from the NDH is counted as a miss.\n\n"
@@ -396,6 +404,7 @@ def main() -> int:
             "by_vendor": dict(by_vendor),
             "vendors": per_vendor,
             "crosswalk_url": f"/api/v1/findings/{SLUG}.csv",
+            "crosswalk_grain": grain,
         },
     }
     (OUT_DIR / f"{SLUG}.json").write_text(json.dumps(payload, indent=2) + "\n")

@@ -320,7 +320,7 @@ def test_h53_tier_reaches_geisinger_and_is_labelled():
     assert s["reaches_endpoint"] == 3
     assert s["reaches_endpoint_deterministic"] == 0
     assert s["reach_by_tier"]["brand-state"] == 3
-    assert res["reach_by_system"][s["system_key"]] == {GEIS: 3}
+    assert res["reach_by_system"][s["system_key"]] == {GEIS: {"brand-state": 3}}
 
 
 def test_practitioner_counts_once_at_the_strongest_tier():
@@ -435,6 +435,30 @@ def test_acknowledged_gap_is_published_and_cannot_go_stale():
     assert any("remove the entry" in p for p in stale)
 
 
+def test_reach_control_fails_with_no_endpoint_urls_loaded():
+    problems = check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system={"brand:GEISINGER": {}}, available_urls=set(),
+        known_domains=DOMAINS)
+    assert any("no endpoint URLs were loaded" in p for p in problems)
+
+
+def test_enrollment_alone_does_not_satisfy_the_reach_control():
+    only_enrollment = {"brand:GEISINGER": {
+        GEIS: {"cms-enrollment-own-endpoint": 40}}}
+    problems = check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system=only_enrollment, available_urls={GEIS},
+        known_domains=DOMAINS)
+    assert any("member tier" in p for p in problems)
+    with_member = {"brand:GEISINGER": {
+        GEIS: {"cms-enrollment-own-endpoint": 40, "brand-state": 1}}}
+    assert check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system=with_member, available_urls={GEIS},
+        known_domains=DOMAINS) == []
+
+
 def test_reach_on_another_domain_does_not_satisfy_the_control():
     problems = check_system_controls(
         "PA", [], geisinger_systems(), [], known=KNOWN,
@@ -481,3 +505,9 @@ def test_build_payload_systems_block():
     assert systems["tiers"]["order"][0] == "ndh"
     link = payload["graph"]["links"][0]
     assert link["tier"] == "brand-state"
+    node = next(n for n in payload["graph"]["nodes"] if n["type"] == "system")
+    assert node["connected"] is True
+    assert node["connected_deterministic"] is False
+    assert systems[
+        "practitioners_in_a_system_that_reaches_an_endpoint_deterministic"] == 0
+    assert "_deterministic keys" in systems["tiers"]["note"]

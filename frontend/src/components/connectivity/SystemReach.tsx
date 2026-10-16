@@ -57,9 +57,15 @@ export function SystemReachCell({ row }: { row: ConnectivitySystem }) {
     return <span className="text-signal">0</span>;
   }
   const parts = reachParts(row);
+  const det = row.reaches_endpoint_deterministic;
   return (
     <span>
       <span className="font-mono">{fmt(row.reaches_endpoint)}</span>
+      {typeof det === 'number' && (
+        <span className="ml-1 text-xs text-gray-600">
+          ({fmt(det)} NDH or vendor NPI)
+        </span>
+      )}
       <span className="block text-xs text-gray-600">
         {parts.map((p, i) => (
           <span key={p.tier}>
@@ -69,6 +75,49 @@ export function SystemReachCell({ row }: { row: ConnectivitySystem }) {
           </span>
         ))}
       </span>
+    </span>
+  );
+}
+
+/**
+ * Split of an endpoint count into deterministic and inferred parts, or null
+ * for payloads that predate `endpoint_count_deterministic` (whose
+ * `endpoint_count` only counted deterministic tiers).
+ */
+export function endpointSplit(
+  row: ConnectivitySystem,
+): { deterministic: number; inferred: number } | null {
+  if (typeof row.endpoint_count_deterministic !== 'number') return null;
+  return {
+    deterministic: row.endpoint_count_deterministic,
+    inferred: Math.max(0, row.endpoint_count - row.endpoint_count_deterministic),
+  };
+}
+
+/**
+ * The "Endpoints" cell. With per-tier counts it reads "{deterministic} +
+ * {inferred}*", so an endpoint reached only by name or brand inference is
+ * never shown as if the directory stated it. The star is explained in the
+ * tier note above the table.
+ */
+export function EndpointCountCell({ row }: { row: ConnectivitySystem }) {
+  const split = endpointSplit(row);
+  if (!split) {
+    return row.endpoint_count === 0 ? (
+      <span className="text-signal">0</span>
+    ) : (
+      <span>{fmt(row.endpoint_count)}</span>
+    );
+  }
+  if (split.deterministic === 0 && split.inferred === 0) {
+    return <span className="text-signal">0</span>;
+  }
+  return (
+    <span>
+      <span className={split.deterministic === 0 ? 'text-signal' : undefined}>
+        {fmt(split.deterministic)}
+      </span>
+      {split.inferred > 0 && <> + {fmt(split.inferred)}*</>}
     </span>
   );
 }

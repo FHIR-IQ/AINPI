@@ -4,6 +4,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import * as d3 from 'd3';
 
 import type { ConnectivityGraph as GraphPayload } from '@/lib/connectivity-types';
+import {
+  linkDash,
+  systemFilled,
+  systemInferredOnly,
+} from '@/components/charts/connectivity-graph-style';
 
 /**
  * Force-directed view of health system -> endpoint -> EHR vendor.
@@ -19,10 +24,17 @@ import type { ConnectivityGraph as GraphPayload } from '@/lib/connectivity-types
  * - Connection is encoded by fill and by shape, never by hue alone, so the
  *   distinction survives greyscale and colour-blindness. Same constraint the
  *   treemap ramp is under.
+ * - Inference is never drawn as fact (FHI-73). A system is filled only when
+ *   the NDH or a vendor-published NPI reaches it; reached only by name,
+ *   brand, alias or CMS enrollment it is hollow with a blue ring, and those
+ *   links are dashed.
  */
 
 type SimNode = GraphPayload['nodes'][number] & d3.SimulationNodeDatum;
-type SimLink = d3.SimulationLinkDatum<SimNode> & { kind: string };
+type SimLink = d3.SimulationLinkDatum<SimNode> & {
+  kind: GraphPayload['links'][number]['kind'];
+  tier?: GraphPayload['links'][number]['tier'];
+};
 
 const INK = '#171310';
 const SIGNAL = '#a8321c';
@@ -115,7 +127,7 @@ export default function ConnectivityGraph({
       .data(data.links)
       .join('line')
       .attr('stroke-width', (d) => (d.kind === 'reaches' ? 1.4 : 0.8))
-      .attr('stroke-dasharray', (d) => (d.kind === 'served-by' ? '3 3' : null));
+      .attr('stroke-dasharray', (d) => linkDash(d));
 
     const node = root
       .append('g')
@@ -174,7 +186,7 @@ export default function ConnectivityGraph({
       .attr('r', radius)
       // Filled means connected, hollow with a signal ring means nothing public
       // reaches it. Hollow is the state worth noticing.
-      .attr('fill', (d) => (d.connected ? PRIMARY : '#faf8f5'))
+      .attr('fill', (d) => (systemFilled(d) ? PRIMARY : '#faf8f5'))
       .attr('stroke', (d) => (d.connected ? PRIMARY : SIGNAL))
       .attr('stroke-width', (d) => (d.connected ? 1 : 1.75));
 
@@ -222,7 +234,13 @@ export default function ConnectivityGraph({
           <svg width="14" height="14" aria-hidden="true">
             <circle cx="7" cy="7" r="5" fill={PRIMARY} />
           </svg>
-          System that reaches an endpoint
+          Reached through the NDH or a vendor NPI
+        </span>
+        <span className="flex items-center gap-1.5">
+          <svg width="14" height="14" aria-hidden="true">
+            <circle cx="7" cy="7" r="5" fill="#faf8f5" stroke={PRIMARY} strokeWidth="1" />
+          </svg>
+          Reached only by inference (dashed links)
         </span>
         <span className="flex items-center gap-1.5">
           <svg width="14" height="14" aria-hidden="true">
@@ -275,9 +293,11 @@ export default function ConnectivityGraph({
                 {(hovered.practitioners ?? 0).toLocaleString('en-US')}{' '}
                 practitioners across {hovered.organizations} organizations.
                 Grouped by {hovered.basis}.{' '}
-                {hovered.connected
-                  ? 'Reaches an endpoint.'
-                  : 'Nothing public reaches it.'}
+                {systemInferredOnly(hovered)
+                  ? 'Reaches an endpoint only through inferred tiers.'
+                  : hovered.connected
+                    ? 'Reaches an endpoint.'
+                    : 'Nothing public reaches it.'}
               </p>
             )}
             {hovered.type === 'endpoint' && (

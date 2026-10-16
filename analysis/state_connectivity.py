@@ -630,7 +630,10 @@ SYSTEM_CORRECTIONS = [
             "clinicians reaching the system's own endpoint. Reach is now "
             "reported per tier."
         ),
-        "since": "2026-10-13 (FHI-18, #169), when the table was rebuilt",
+        "since": (
+            "2026-08-16 (26a6208), when the system rollup was added; #169 "
+            "(2026-10-13) rebuilt the table and kept the omission"
+        ),
     },
     {
         "date": "2026-10-16",
@@ -653,7 +656,9 @@ SYSTEM_CORRECTIONS = [
             "Jefferson University Health System), so University of Pittsburgh "
             "Physicians and PinnacleHealth resolved to nothing. H51 also kept "
             "one NPI per vendor endpoint, and the JEFFERSON name group "
-            "included two Allegheny Health Network hospitals."
+            "included four organizations that Epic lists under other brands, "
+            "among them Jefferson Regional Medical Center (two under "
+            "Allegheny Health Network, two under West Virginia University)."
         ),
         "since": (
             "aliases: an unknown date no later than the 2026-10-13 vendor "
@@ -735,7 +740,7 @@ def rollup_system_reach(state, systems, org_by_id, prac_by_org,
     member, or sits on the system's curated own domain
     (`KNOWN_SYSTEM_DOMAINS`), and it is its own tier.
 
-    Returns reach_by_system (system_key -> {url: practitioners}), the
+    Returns reach_by_system (system_key -> {url: {tier: practitioners}}), the
     out-of-state drops, the unknown-state count, and the union of reached
     practitioners at their strongest tier across systems.
     """
@@ -817,7 +822,11 @@ def rollup_system_reach(state, systems, org_by_id, prac_by_org,
             e["practitioners"] = by_url[e["url"]]
         ep_tiers = collections.Counter(e["tier"] for e in endpoints)
 
-        reach_by_system[sysrow["system_key"]] = dict(by_url)
+        by_url_tier = collections.defaultdict(collections.Counter)
+        for u, t in best.values():
+            by_url_tier[u][t] += 1
+        reach_by_system[sysrow["system_key"]] = {
+            u: dict(c) for u, c in by_url_tier.items()}
         sysrow["_all_member_org_ids"] = list(sysrow["member_org_ids"])
         sysrow["endpoints"] = endpoints[:10]
         sysrow["endpoint_count"] = len(endpoints)
@@ -1191,6 +1200,12 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         for oid in s["_all_member_org_ids"]:
             in_reaching_system |= prac_by_org.get(oid, set())
     practitioners_gained = len(in_reaching_system)
+    in_det_system = set()
+    for s in systems:
+        if s["endpoint_count_deterministic"]:
+            for oid in s["_all_member_org_ids"]:
+                in_det_system |= prac_by_org.get(oid, set())
+    practitioners_gained_det = len(in_det_system)
     for s in systems:
         del s["_all_member_org_ids"]
     reached_union = tiered["reached_union"]
@@ -1334,6 +1349,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             # Distinct clinicians since FHI-73; was a sum of member counts.
             "practitioners_in_a_system_that_reaches_an_endpoint":
                 practitioners_gained,
+            "practitioners_in_a_system_that_reaches_an_endpoint_deterministic":
+                practitioners_gained_det,
             "practitioners_reached_through_a_system": reached_union,
             "tiers": {
                 "note": (
@@ -1350,7 +1367,10 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                     "group resolves to an endpoint this system already "
                     "reaches, or one on the system's own domain; enrollment "
                     "that lands on another system's endpoint is not counted "
-                    "for this one."
+                    "for this one. systems_reaching_an_endpoint and "
+                    "practitioners_in_a_system_that_reaches_an_endpoint count "
+                    "every tier; the _deterministic keys count the NDH and "
+                    "vendor-NPI tiers only."
                 ),
                 "order": list(SYSTEM_TIERS),
                 "deterministic": list(DETERMINISTIC_TIERS),
@@ -1411,9 +1431,13 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         "graph": {
             "note": (
                 "The 50 largest systems, the endpoints any of their members "
-                "reach, and the EHR vendor behind each endpoint. Systems with "
-                "no edge are the finding: they hold practitioners and nothing "
-                "public connects them to a system that serves records."
+                "reach, and the EHR vendor behind each endpoint. A system is "
+                "filled only when the NDH or a vendor-published NPI reaches "
+                "it (connected_deterministic); one reached only by alias, "
+                "name or brand match, or CMS enrollment is hollow with a blue "
+                "ring and its links are dashed (tier on each link). Systems "
+                "with no edge are the finding: they hold practitioners and "
+                "nothing public connects them to a system that serves records."
             ),
             "nodes": g_nodes,
             "links": g_links,

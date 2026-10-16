@@ -346,7 +346,9 @@ export interface ConnectivityPayload {
     systems_reaching_an_endpoint: number;
     /** Distinct clinicians since FHI-73; a sum of member counts before. */
     practitioners_in_a_system_that_reaches_an_endpoint: number;
+    /** Counts every tier; the _deterministic keys count NDH + vendor NPI only. */
     systems_reaching_an_endpoint_deterministic?: number;
+    practitioners_in_a_system_that_reaches_an_endpoint_deterministic?: number;
     practitioners_reached_through_a_system?: {
       practitioners: number;
       by_tier: Record<SystemReachTier, number>;

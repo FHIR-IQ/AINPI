@@ -672,6 +672,11 @@ KNOWN_UNREACHED = {
 }
 
 
+# Tiers that describe one practitioner's own record rather than a member
+# organization; excluded from the reach control's "reached" count.
+ENROLLMENT_TIERS = frozenset({"cms-enrollment-own-endpoint"})
+
+
 def url_host(url):
     """Lower-cased host of a URL, or '' when there is none."""
     url = (url or "").strip().lower()
@@ -719,7 +724,11 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
        `KNOWN_SYSTEM_DOMAINS`, if any URL in `available_urls` sits on that
        domain, the systems carrying its labels must, between them, reach at
        least one practitioner on that domain. `reach_by_system` maps
-       system_key -> {url: practitioners reaching it through the rollup}.
+       system_key -> {url: {tier: practitioners}} (a bare count per URL is
+       read as member-tier reach). Only member tiers count toward "reached":
+       CMS enrollment belongs to one clinician, so reach through it alone
+       does not show the rollup connects the system. With no endpoint URLs
+       loaded at all the check fails rather than passing vacuously.
        This is what was missing when the published table showed Geisinger at
        zero endpoints while its own funnel counted 5,199 of its clinicians
        reaching geisapi.geisinger.edu. Skipped when `reach_by_system` is None.
@@ -770,7 +779,13 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                            if known_domains is None else known_domains)
         unreached = (KNOWN_UNREACHED.get(state, {})
                      if known_unreached is None else known_unreached)
-        hosts = {url_host(u) for u in (available_urls or ())}
+        hosts = {url_host(u) for u in (available_urls or ())} - {""}
+        if domains_by_name and not hosts:
+            # Silent-zero guard: with no endpoint URLs loaded every domain
+            # reads as unpublished and the check passes by looking at nothing.
+            problems.append(
+                f"no endpoint URLs were loaded for {state}; the reach control "
+                f"cannot tell an unpublished domain from a missing input")
         for name, domains in domains_by_name.items():
             prefixes = known.get(name, ())
             if not prefixes:
@@ -785,8 +800,14 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                            for p in prefixes):
                     continue
                 for url, n in (reach_by_system.get(s["system_key"]) or {}).items():
-                    if any(host_on_domain(url_host(url), d) for d in present):
-                        reached += n
+                    if not any(host_on_domain(url_host(url), d) for d in present):
+                        continue
+                    # Only member tiers count. CMS enrollment is one
+                    # clinician's record and cannot show the rollup works.
+                    if isinstance(n, dict):
+                        n = sum(v for t, v in n.items()
+                                if t not in ENROLLMENT_TIERS)
+                    reached += n
             excused = unreached.get(name)
             if reached == 0 and excused:
                 if acknowledged is not None:
@@ -797,7 +818,8 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                 problems.append(
                     f"known system {name} publishes an endpoint on "
                     f"{', '.join(present)} but the system rollup reaches no "
-                    f"practitioner on it through any tier")
+                    f"practitioner on it through any member tier (CMS "
+                    f"enrollment does not count)")
             elif excused:
                 problems.append(
                     f"known system {name} is listed in KNOWN_UNREACHED but "

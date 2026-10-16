@@ -13,6 +13,7 @@ import type { ConnectivityPayload } from '@/lib/connectivity-types';
 import ConnectivityChain from './connectivity-chain';
 import SystemsExclusionsNote from '@/components/connectivity/SystemsExclusionsNote';
 import {
+  EndpointCountCell,
   SystemReachCell,
   SystemsCorrections,
   countsDistinct,
@@ -459,7 +460,9 @@ function Connectivity({
           <SystemsCorrections corrections={systems.corrections} />
           {hasTiers && systems.tiers && (
             <p className="measure mb-3 text-xs text-gray-600">
-              {systems.tiers.note} Tiers marked * are inference.
+              {systems.tiers.note} Counts marked * are inference: reached by
+              alias, name or brand match, or CMS enrollment, not by the NDH or
+              a vendor-published NPI.
             </p>
           )}
           <div className="overflow-x-auto border border-gray-200 bg-white">
@@ -509,11 +512,7 @@ function Connectivity({
                       </td>
                     )}
                     <td className="px-4 py-2 text-right font-mono">
-                      {row.endpoint_count === 0 ? (
-                        <span className="text-signal">0</span>
-                      ) : (
-                        fmt(row.endpoint_count)
-                      )}
+                      <EndpointCountCell row={row} />
                     </td>
                     <td className="px-4 py-2 text-gray-700">
                       {row.vendors.join(', ') || '—'}
