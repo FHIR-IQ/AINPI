@@ -132,8 +132,18 @@ def test_reach_counts_counts_each_practitioner_once_at_best_tier():
     }
     got = reach_counts(prac_orgs, {"a", "b", "c"}, strict_orgs={"a"},
                        resolved_orgs={"b"}, enrollment_npis={"3", "1"})
-    assert got == {"practitioners": 4, "strict": 1, "resolution": 1,
-                   "enrollment": 1, "none": 1, "reaches_any": 3}
+    assert got == {"practitioners": 4, "strict": 1, "vendor_list": 0,
+                   "resolution": 1, "enrollment": 1, "none": 1,
+                   "reaches_any": 3}
+
+
+def test_reach_counts_puts_vendor_list_below_strict_above_resolution():
+    prac_orgs = {"1": {"a", "l"}, "2": {"l", "b"}, "3": {"b"}}
+    got = reach_counts(prac_orgs, {"a", "b", "l"}, strict_orgs={"a"},
+                       resolved_orgs={"b"}, enrollment_npis=set(),
+                       list_orgs={"l"})
+    assert (got["strict"], got["vendor_list"], got["resolution"]) == (1, 1, 1)
+    assert got["reaches_any"] == 3
 
 
 def test_reach_counts_has_stable_keys_when_empty():
@@ -323,7 +333,8 @@ def test_summarize_is_conditional_on_counts():
     union = {"practitioners": 10, "reaches_any": 4, "strict": 0,
              "resolution": 3, "enrollment": 1}
     text = summarize([row, unpublished], union)
-    assert not text.startswith("The zero is not an absence")
+    assert not text.startswith("The zero the system table showed")
     assert "1 of 2 systems publish" in text
     assert "In 1 of 2 no member organization carries partOf" in text
-    assert summarize([row], union).startswith("The zero is not an absence")
+    assert summarize([row], union).startswith("The zero the system table showed")
+    assert "the only links the system rollup counts" not in text

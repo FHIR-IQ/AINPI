@@ -8,6 +8,7 @@ import type {
 export const TIER_LABELS: Record<SystemReachTier, string> = {
   ndh: 'NDH',
   'vendor-npi': 'vendor NPI',
+  'vendor-npi-list': 'vendor NPI list',
   alias: 'curated alias',
   'name-state': 'name match',
   'brand-state': 'brand match',

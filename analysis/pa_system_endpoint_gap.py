@@ -1,10 +1,15 @@
-"""Why the largest health systems in a state show zero endpoints (FHI-19).
+"""How the largest health systems in a state reach their endpoints (FHI-19).
 
 The connectivity ledger (`state_connectivity.py`) rolls organizations up into
-health systems and lists every FHIR endpoint any member reaches. For
-Pennsylvania on the 2026-10-07 release the six largest systems all show
-`endpoint_count: 0`. This script explains that zero, one system at a time,
-and separates three different things a zero can mean:
+health systems and lists every FHIR endpoint any member reaches. Until FHI-73
+its system rollup counted only the NDH and vendor-published NPIs, so for
+Pennsylvania on the 2026-10-07 release the six largest systems all showed
+`endpoint_count: 0`. Since FHI-73 the rollup counts every tier the funnel
+counts, each labelled (NDH, vendor NPI, vendor NPI on a practice-wide list,
+alias, name, brand, CMS enrollment on the system's own endpoint), so the
+zeros are gone. This script still walks each system's chain, because the
+tiers that reach them are mostly inference, and separates three different
+things a zero at the deterministic tiers can mean:
 
   1. The system publishes no FHIR endpoint anywhere.
   2. It publishes one, and nothing in the public record ties it to the
@@ -70,10 +75,12 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 from analysis.claims_sources._cohorts import DEFAULT_MAX_BYTES_BILLED  # noqa: E402
 from analysis.fhir_identifiers import extract_npis  # noqa: E402
-from analysis.org_systems import build_systems, normalize  # noqa: E402
+from analysis.org_systems import LIST_THRESHOLD, build_systems, normalize  # noqa: E402
 from analysis.state_connectivity import (  # noqa: E402
     PARENT_SQL,
     load_endpoint_crosswalk,
+    load_vendor_npi_counts,
+    org_npi_endpoint,
     load_enrollment_endpoints,
     load_hospital_owners,
     load_org_resolution,
@@ -148,15 +155,17 @@ CAUSES = {
         "than about the record.",
         ["system"]),
     "rollup-omits-h53-tier": (
-        "AINPI defect: the ledger's system rollup accepts only NDH and "
-        "vendor-NPI links, while its practitioner funnel also counts H53 "
-        "name/brand resolution, an organization-level tier. The system shows "
-        "zero endpoints while the same payload's funnel credits clinicians "
-        "of its member organizations, through H53, with reaching one.",
+        "AINPI defect, fixed in FHI-73 and raised only if it recurs: the "
+        "ledger shows the system with zero endpoints while the same "
+        "payload's funnel credits clinicians of its member organizations, "
+        "through H53 name/brand resolution, with reaching one. Before FHI-73 "
+        "the system rollup accepted only NDH and vendor-NPI links.",
         ["ainpi"]),
     "rollup-omits-enrollment-own-domain": (
-        "AINPI defect: the rollup also ignores CMS enrollment, a "
-        "practitioner-level tier the funnel counts. Raised only when most of "
+        "AINPI defect, fixed in FHI-73 and raised only if it recurs: the "
+        "ledger shows zero endpoints although CMS enrollment, a "
+        "practitioner-level tier the funnel counts, reaches the system's own "
+        "domain. Raised only when most of "
         "the system's enrollment-tier reach (clinicians reached by no "
         "stronger tier) lands on the system's own domain, so the omission "
         "hides the system's own endpoint rather than some other "
@@ -169,9 +178,10 @@ CAUSES = {
         "resolves nothing and does not error.",
         ["ainpi"]),
     "h51-one-npi-per-url": (
-        "AINPI defect: the vendor publishes an NPI that matches a member "
-        "organization, but H51's CSV keeps one NPI per endpoint URL and "
-        "dropped it.",
+        "AINPI defect, fixed in FHI-73 and raised only if it recurs: the "
+        "vendor publishes an NPI that matches a member organization, but "
+        "H51's CSV does not carry it (before FHI-73 it kept one NPI per "
+        "endpoint URL).",
         ["ainpi"]),
     "system-split-across-groups": (
         "The same vendor brand is matched by more than one ledger system, so "
@@ -307,16 +317,21 @@ def match_brands(label, brands, state, curated=None):
 
 
 def reach_counts(prac_orgs, member_ids, strict_orgs, resolved_orgs,
-                 enrollment_npis):
+                 enrollment_npis, list_orgs=frozenset()):
     """Distinct practitioners in a system, and how many reach an endpoint.
 
     `prac_orgs`: practitioner NPI -> set of org ids (system members only).
     A practitioner counts once, at the strongest tier any of their member
-    organizations reaches: strict (NDH or vendor NPI, what the system rollup
-    accepts), then H53 resolution, then CMS enrollment.
+    organizations reaches: strict (NDH, or a vendor NPI on a URL listing
+    LIST_THRESHOLD or fewer NPIs; the ledger's deterministic tiers), then
+    vendor_list (a vendor NPI on a practice-wide list, `vendor-npi-list`),
+    then H53 resolution, then CMS enrollment. The ledger's own enrollment
+    tier is narrower (own endpoint only), so `enrollment` here is an upper
+    bound on it.
     """
     c = collections.Counter({k: 0 for k in (
-        "practitioners", "strict", "resolution", "enrollment", "none")})
+        "practitioners", "strict", "vendor_list", "resolution", "enrollment",
+        "none")})
     for npi, oids in prac_orgs.items():
         oids = set(oids) & member_ids
         if not oids:
@@ -324,13 +339,16 @@ def reach_counts(prac_orgs, member_ids, strict_orgs, resolved_orgs,
         c["practitioners"] += 1
         if oids & strict_orgs:
             c["strict"] += 1
+        elif oids & list_orgs:
+            c["vendor_list"] += 1
         elif oids & resolved_orgs:
             c["resolution"] += 1
         elif npi in enrollment_npis:
             c["enrollment"] += 1
         else:
             c["none"] += 1
-    c["reaches_any"] = c["strict"] + c["resolution"] + c["enrollment"]
+    c["reaches_any"] = (c["strict"] + c["vendor_list"] + c["resolution"]
+                        + c["enrollment"])
     return dict(c)
 
 
@@ -669,16 +687,26 @@ def run(state, top, refresh):
     org_by_id = {o["org_id"]: o for o in org_rows}
     ep_by_id, ep_by_npi = load_endpoint_crosswalk()
     url_vendor, h51_npi_url, _ = load_vendor_attribution()
+    url_npi_count = load_vendor_npi_counts()
     resolution = load_org_resolution(state)
     enrollment = load_enrollment_endpoints(state)
 
     bundle, epic_fetched = load_epic(refresh)
     brands = index_epic_brands(bundle)
 
-    strict_orgs = {o["org_id"] for o in org_rows
-                   if o["org_id"] in ep_by_id
-                   or (o["org_npi"] and (o["org_npi"] in ep_by_npi
-                                         or o["org_npi"] in h51_npi_url))}
+    # Same ladder as the ledger: NDH, then the NPI tiers, split by whether
+    # the vendor URL is a practice-wide list.
+    org_tier = {}
+    for o in org_rows:
+        if o["org_id"] in ep_by_id:
+            org_tier[o["org_id"]] = "ndh"
+            continue
+        hit = org_npi_endpoint(o["org_npi"] or "", ep_by_npi, h51_npi_url,
+                               url_npi_count)
+        if hit:
+            org_tier[o["org_id"]] = hit[1]
+    strict_orgs = {k for k, t in org_tier.items() if t in ("ndh", "vendor-npi")}
+    list_orgs = {k for k, t in org_tier.items() if t == "vendor-npi-list"}
     resolved_orgs = set(resolution)
 
     member_ids = set()
@@ -735,7 +763,7 @@ def run(state, top, refresh):
         mids = set(s["member_org_ids"])
         pr = payload_rows.get(key, {})
         reach = reach_counts(prac_orgs, mids, strict_orgs, resolved_orgs,
-                             set(enrollment))
+                             set(enrollment), list_orgs)
         # Which of the reaching practitioners land on the system's own host.
         own_hosts = {host_of(u) for b, _ in sys_brands[key] for u in b["urls"]}
         own_domains = {domain_of(h) for h in own_hosts} - {None}
@@ -756,7 +784,7 @@ def run(state, top, refresh):
                 own += 1
             # The tier this practitioner is counted at in reach_counts, and
             # whether that tier's own endpoint is on the system's domain.
-            if oids & strict_orgs:
+            if oids & (strict_orgs | list_orgs):
                 continue
             if oids & resolved_orgs:
                 if any(on_own_domain(u) for u in res_urls if u):
@@ -901,7 +929,7 @@ def run(state, top, refresh):
 
     dropped_unresolved = [o for o in dropped if o["tier"] == "unresolved"]
     union_reach = reach_counts(prac_orgs, member_ids, strict_orgs,
-                               resolved_orgs, set(enrollment))
+                               resolved_orgs, set(enrollment), list_orgs)
     union = {n for n, oids in prac_orgs.items() if oids & member_ids}
     payload = {
         "state": state,
@@ -909,8 +937,9 @@ def run(state, top, refresh):
         "release_date": CURRENT_RELEASE,
         "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "methodology_version": METHODOLOGY,
-        "question": ("Why do the largest health systems in the connectivity "
-                     "ledger show zero endpoints?"),
+        "question": ("How do the largest health systems in the connectivity "
+                     "ledger reach their endpoints, and why did the system "
+                     "table show zero endpoints for them before FHI-73?"),
         "answer": None,  # filled below
         "sources": {
             "systems": f"/api/v1/states/{state.lower()}-connectivity.json "
@@ -959,9 +988,10 @@ def run(state, top, refresh):
                 "systems_affected_in_this_table": [
                     r["system_key"] for r in out_rows
                     if any(c["code"] == "rollup-omits-h53-tier" for c in r["causes"])],
-                "where": "analysis/state_connectivity.py build(): the system "
-                         "rollup calls resolve_org(), which never consults "
-                         "org_resolution (H53, organization level).",
+                "where": "fixed in FHI-73: analysis/state_connectivity.py "
+                         "rollup_system_reach() walks member_endpoint(), which "
+                         "includes org_resolution (H53). Listed systems are "
+                         "any where the defect recurs.",
             },
             "rollup_omits_enrollment_own_domain": {
                 "systems_affected_in_this_table": [
@@ -973,9 +1003,10 @@ def run(state, top, refresh):
                     for r in out_rows},
                 "threshold": "raised when more than half of a system's "
                              "enrollment-tier reach lands on its own domain",
-                "where": "analysis/state_connectivity.py build(): the system "
-                         "rollup never consults enrollment_endpoints "
-                         "(CMS enrollment, practitioner level).",
+                "where": "fixed in FHI-73: rollup_system_reach() counts "
+                         "enrollment_endpoints when they land on an endpoint "
+                         "the system reaches or on its own domain "
+                         "(cms-enrollment-own-endpoint).",
             },
             "dead_curated_aliases": {
                 "count": len(aliases_dead),
@@ -998,8 +1029,10 @@ def run(state, top, refresh):
                          "practitioners": o["practitioners"], "tier": o["tier"],
                          "epic_url": o["epic_url"]}
                         for o in sorted(dropped, key=lambda o: -o["practitioners"])[:15]],
-                "where": "analysis/h51_vendor_endpoint_attribution.py parse_bundle(): "
-                         "url2npi.setdefault keeps the first NPI per URL.",
+                "where": "fixed in FHI-73: h51_vendor_endpoint_attribution.py "
+                         "parse_bundle() keeps every NPI per URL. Counted here "
+                         "are member NPIs Epic publishes that the H51 CSV still "
+                         "does not carry.",
             },
         },
         "causes": {k: {"explanation": v[0], "fixable_by": v[1]} for k, v in CAUSES.items()},
@@ -1048,25 +1081,28 @@ def summarize(rows, union):
     no_npi = sum(1 for r in rows
                  if not any(b["npis_matching_members"] for b in r["vendor_brands"]))
     parts = [
-        ("The zero is not an absence. " if published == n else ""),
+        ("The zero the system table showed before FHI-73 was not an absence. "
+         if published == n else ""),
         f"{published} of {n} systems publish a FHIR endpoint in Epic's brand "
         f"file, and the NDH itself carries that endpoint for {len(in_ndh)}. ",
         f"For {orphaned} of those {len(in_ndh)}, every copy has either no "
         f"managingOrganization or one holding no practitioner roles in the "
         f"state. ",
         f"In {no_partof} of {n} no member organization carries partOf, and in "
-        f"{no_npi} of {n} the vendor publishes no member organization's NPI. ",
+        f"{no_npi} of {n} the system's own Epic brand lists none of its member "
+        f"organizations' NPIs. ",
         f"The systems hold {union.get('practitioners', 0):,} distinct "
-        f"clinicians (the ledger's per-system counts sum "
-        f"practitioner-organization links). Through a member organization or "
-        f"CMS enrollment, the same tiers the ledger's practitioner funnel "
-        f"accepts, {union.get('reaches_any', 0):,} of them already reach an "
-        f"endpoint (a lower bound on what the funnel credits them, since it "
-        f"also counts non-member organizations): "
-        f"{union.get('strict', 0):,} through the NDH or a vendor-published NPI, "
-        f"the only links the system rollup counts, "
-        f"{union.get('resolution', 0):,} through name or brand resolution (H53) "
-        f"and {union.get('enrollment', 0):,} through CMS enrollment.",
+        f"clinicians. The system rollup now counts every tier the "
+        f"practitioner funnel counts, each labelled. Through a member "
+        f"organization or CMS enrollment, {union.get('reaches_any', 0):,} of "
+        f"them reach an endpoint: {union.get('strict', 0):,} through the NDH "
+        f"or a vendor NPI on a URL listing {LIST_THRESHOLD} or fewer NPIs (the "
+        f"deterministic tiers), {union.get('vendor_list', 0):,} through a "
+        f"vendor NPI on a practice-wide or brand-wide list, "
+        f"{union.get('resolution', 0):,} through name or brand resolution "
+        f"(H53) and {union.get('enrollment', 0):,} through CMS enrollment "
+        f"(any enrolled group; the ledger counts enrollment only when it lands "
+        f"on the system's own endpoint).",
     ]
     return "".join(parts)
 

@@ -417,6 +417,11 @@ export default function DeveloperPage() {
               with an empty org_npi. Since FHI-73 a URL may repeat, once per NPI its
               publisher lists, so do not key it on the URL alone. The H51 finding JSON
               reports the pair count as <code className="font-mono">published_url_npi_pairs</code>.
+              The last column, <code className="font-mono">npis_on_url</code>, is the number of
+              distinct NPIs the vendor lists for that URL (0 on a row with no NPI). Above 10 the
+              URL is a practice-wide or brand-wide list: the NPI is published beside it, but the
+              URL is not shown to serve that one organization. Read columns by header name.
+              athenahealth&apos;s shared base URL, used by all its customers, is excluded.
             </p>
             <p className="text-xs text-gray-600 mt-2">
               The server is public. A client that must send credentials, such as a

@@ -14,7 +14,8 @@
  *   vendor-endpoint-attribution.csv (H51)  The endpoint lists EHR vendors
  *     publish themselves. A vendor naming an organization for a URL is the
  *     vendor's claim, not CMS data, and every row served from it says so.
- *     Columns: url,org_name,org_npi,vendor,in_ndh,ndh_has_owner.
+ *     Columns: url,org_name,org_npi,vendor,in_ndh,ndh_has_owner,npis_on_url
+ *     (the last since FHI-73; read by header, not position).
  *
  * Why HTTPS and not fs: next.config.js excludes public/api/v1/findings/** from
  * every lambda bundle (the 250 MB limit), so the files do not exist on disk at

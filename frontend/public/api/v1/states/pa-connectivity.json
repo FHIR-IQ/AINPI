@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-16T21:47:36+00:00",
+  "generated_at": "2026-10-16T22:45:11+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "4023860",
+  "commit_sha": "d936c61",
   "summary": {
     "practitioners": 227917,
     "with_role": 100379,
@@ -14,6 +14,10 @@
     "reaches_endpoint_pct": 22.3,
     "reaches_endpoint_ndh_only": 1907,
     "reaches_endpoint_after_vendor_npi_fill": 16563,
+    "reaches_endpoint_deterministic": 6555,
+    "reaches_endpoint_deterministic_pct": 2.9,
+    "reaches_endpoint_via_vendor_npi_list": 10008,
+    "vendor_npi_list_threshold": 10,
     "reaches_endpoint_after_resolution": 42736,
     "reaches_endpoint_after_cms_enrollment": 50812,
     "reaches_endpoint_via_enrollment_only": 8076,
@@ -23,7 +27,8 @@
     "reaches_endpoint_pct_of_ndh_affiliated": 50.0,
     "vendor_known": 49456,
     "organizations": 33663,
-    "organizations_with_endpoint": 3376,
+    "organizations_with_endpoint": 1748,
+    "organizations_with_endpoint_via_vendor_npi_list": 1628,
     "name_matched_candidates": 1693,
     "organizations_with_name_candidate_only": 1185
   },
@@ -64,7 +69,7 @@
       "step": "Reaches a FHIR endpoint",
       "count": 50812,
       "pct": 22.3,
-      "note": "Includes 14,656 reachable only after the vendor-published NPI fill, 26,173 only after name or brand resolution, and 8,076 only via the practitioner's CMS-enrolled group, of which 595 carry no PractitionerRole at all. The NDH alone reaches 1,907.",
+      "note": "Of these, 6,555 are deterministic (the NDH, or a vendor NPI on a URL listing 10 or fewer). Includes 14,656 reachable only after the vendor-published NPI fill (10,008 of them only through a URL whose vendor lists more than 10 NPIs, which is not deterministic), 26,173 only after name or brand resolution, and 8,076 only via the practitioner's CMS-enrolled group, of which 595 carry no PractitionerRole at all. The NDH alone reaches 1,907.",
       "finding": "endpoint-org-linkage"
     },
     {
@@ -84,9 +89,12 @@
     }
   ],
   "confidence": {
-    "note": "Bands describe method, not quality. Green means the NDH itself carries the whole chain. Yellow means the last link came from a vendor-published NPI that matches an NDH organization: deterministic, but not the directory's own statement. Red means the practitioner reaches an organization and stops. None means no organization at all. Candidate is weaker than red on evidence and is never counted as connectivity: an endpoint exists under a matching name, with nothing deterministic tying it to this organization.",
+    "note": "Bands describe method, not quality. Green means the NDH itself carries the whole chain. Yellow means the last link came from a vendor-published NPI that matches an NDH organization: deterministic, but not the directory's own statement. Vendor list means the vendor publishes the organization's NPI beside a URL together with more than 10 other NPIs (a practice-wide or brand-wide list), so the NPI is published but the URL is not shown to serve that organization: counted as reaching an endpoint, not as deterministic. Resolved means the organization was matched to a vendor brand by curated alias, name or brand prefix plus state (H53). Enrolled means only the practitioner's CMS-enrolled group reaches an endpoint. Red means the practitioner reaches an organization and stops. None means no organization at all. Candidate is weaker than red on evidence and is never counted as connectivity: an endpoint exists under a matching name, with nothing deterministic tying it to this organization.",
     "green": 1907,
-    "yellow": 14656,
+    "yellow": 4648,
+    "vendor_list": 10008,
+    "resolved": 26173,
+    "enrolled": 8076,
     "candidate": 1693,
     "red": 41588,
     "none": 133824
@@ -1585,7 +1593,7 @@
         "lat": 41.98128,
         "lng": -76.51503,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PENN STATE HEALTH COMMUNITY MEDICAL GROUP LLC",
@@ -1706,7 +1714,7 @@
         "lat": 40.59424,
         "lng": -79.16207,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EXCELA HEALTH PHYSICIAN PRACTICES INC",
@@ -1761,7 +1769,7 @@
         "lat": 40.30645,
         "lng": -78.91705,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GROW HEALTHCARE GROUP PA",
@@ -1948,7 +1956,7 @@
         "lat": 39.92544,
         "lng": -75.26741,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CARDIOLOGY LIMERICK TOWER HEALTH MEDICAL GROUP",
@@ -1981,7 +1989,7 @@
         "lat": 40.32848,
         "lng": -76.42432,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "METHODIST ASSOCIATES IN HEALTHCARE INC",
@@ -2223,7 +2231,7 @@
         "lat": 40.36507,
         "lng": -75.32811,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UPMC ALTOONA",
@@ -2267,7 +2275,7 @@
         "lat": 40.09163,
         "lng": -79.52334,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DELAWARE COUNTY PROFESSIONAL SERVICES INC",
@@ -2344,7 +2352,7 @@
         "lat": 39.90095,
         "lng": -79.72952,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -2421,7 +2429,7 @@
         "lat": 40.2506,
         "lng": -75.13352,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UPMC PINNACLE ANESTHESIA SERVICES LLC",
@@ -2454,7 +2462,7 @@
         "lat": 40.60214,
         "lng": -75.495,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HERITAGE VALLEY MULTISPECIALTY GROUP INC",
@@ -2520,7 +2528,7 @@
         "lat": 40.44569,
         "lng": -75.88164,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
@@ -2817,7 +2825,7 @@
         "lat": 40.06758,
         "lng": -74.98024,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SMG ANESTHESIA",
@@ -2916,7 +2924,7 @@
         "lat": 42.08032,
         "lng": -80.09056,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MSHMC RESPIRATORY INTENSIVE CARE",
@@ -3004,7 +3012,7 @@
         "lat": 41.16958,
         "lng": -79.0978,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "THRIVE COUNSELING",
@@ -3444,7 +3452,7 @@
         "lat": 40.67499,
         "lng": -78.24986,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CITY OF PHILADELPHIA",
@@ -3477,7 +3485,7 @@
         "lat": 41.16127,
         "lng": -79.07702,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PATIENT FIRST",
@@ -3653,7 +3661,7 @@
         "lat": 42.0853,
         "lng": -80.14535,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA HEALTH",
@@ -3829,7 +3837,7 @@
         "lat": 40.5654,
         "lng": -80.01733,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "THE GETTYSBURG HOSPITAL",
@@ -3851,7 +3859,7 @@
         "lat": 40.21176,
         "lng": -75.28172,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLEGHENY CLINIC",
@@ -3884,7 +3892,7 @@
         "lat": 40.67653,
         "lng": -80.1014,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ST CLAIR MEDICAL GROUP RADIOLOGY",
@@ -3906,7 +3914,7 @@
         "lat": 40.96026,
         "lng": -79.00174,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HIGHLANDS HOSPITAL AND HEALTH CENTER",
@@ -4060,7 +4068,7 @@
         "lat": 40.64887,
         "lng": -75.40337,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ARS TREATMENT CENTERS PC",
@@ -4324,7 +4332,7 @@
         "lat": 40.31566,
         "lng": -76.41811,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ORTHOPEDIC ASSOC OF LANCASTER LTD",
@@ -4610,7 +4618,7 @@
         "lat": 40.43589,
         "lng": -79.76803,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TELEMEDICINE JENNERSVILLE TOWER HEALTH MEDICAL GROUP",
@@ -4764,7 +4772,7 @@
         "lat": 39.88785,
         "lng": -75.53295,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -4962,7 +4970,7 @@
         "lat": 40.50023,
         "lng": -80.06574,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ORTHOPEDIC INSTITUTE OF PENNSYLVANIA",
@@ -5028,7 +5036,7 @@
         "lat": 40.18392,
         "lng": -75.09131,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CLEARFIELD JEFFERSON PRIMARY CARE ASSOCIATES",
@@ -5050,7 +5058,7 @@
         "lat": 40.04645,
         "lng": -76.29044,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DIV OF GENERAL SURGERY",
@@ -5303,7 +5311,7 @@
         "lat": 40.99193,
         "lng": -75.19085,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MEDICAL ASSOCIATES OF ERIE",
@@ -5380,7 +5388,7 @@
         "lat": 40.79915,
         "lng": -77.84769,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ESOLUTIONS INC",
@@ -5666,7 +5674,7 @@
         "lat": 40.18057,
         "lng": -76.18324,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MILLCREEK COMM HSPPROF FEES",
@@ -5721,7 +5729,7 @@
         "lat": 40.96026,
         "lng": -79.00174,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "JOHN G KUNA PSY D ASSOCIATES LLC",
@@ -5754,7 +5762,7 @@
         "lat": 39.88211,
         "lng": -75.53542,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ACMH NEUROLOGY",
@@ -5930,7 +5938,7 @@
         "lat": 40.15122,
         "lng": -75.34419,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -6733,7 +6741,7 @@
         "lat": 40.00728,
         "lng": -79.08805,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "NULTON DIAGNOSTIC TREATMENT CENTER PC",
@@ -6898,7 +6906,7 @@
         "lat": 40.04253,
         "lng": -76.30946,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "KEYSTONE ORTHOPAEDIC SPECIALISTS LLC",
@@ -6931,7 +6939,7 @@
         "lat": 40.96026,
         "lng": -79.00174,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
@@ -6964,7 +6972,7 @@
         "lat": 39.87806,
         "lng": -75.31949,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BHS FASTER CARE",
@@ -7272,7 +7280,7 @@
         "lat": 40.36208,
         "lng": -75.91358,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FAMILY FIRST HEALTH CORPORATION",
@@ -7492,7 +7500,7 @@
         "lat": 41.42573,
         "lng": -78.57632,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "REHABCARE GROUP EAST LLC",
@@ -7943,7 +7951,7 @@
         "lat": 40.04857,
         "lng": -76.3149,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ST LUKE'S PHYSICIAN GROUP INC",
@@ -7965,7 +7973,7 @@
         "lat": 40.17598,
         "lng": -75.04491,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -8064,7 +8072,7 @@
         "lat": 40.36575,
         "lng": -80.02418,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLEGHENY CLINIC",
@@ -8108,7 +8116,7 @@
         "lat": 40.23138,
         "lng": -76.13555,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -8328,7 +8336,7 @@
         "lat": 39.92878,
         "lng": -75.3507,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CMCOUNSEL",
@@ -8493,7 +8501,7 @@
         "lat": 41.95647,
         "lng": -77.43553,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PENN STATE HEALTH COMMUNITY MEDICAL GROUP LLC",
@@ -8878,7 +8886,7 @@
         "lat": 40.15122,
         "lng": -75.34419,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALBERT EINSTEIN MEDRADIOLOGY",
@@ -8889,7 +8897,7 @@
         "lat": 40.16922,
         "lng": -75.28774,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "KINETIC PHYSICAL THERAPY",
@@ -9087,7 +9095,7 @@
         "lat": 39.87703,
         "lng": -75.3202,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CONEMAUGH PHYSICIAN GROUP EAST HILLS PRIMARY CARE",
@@ -9098,7 +9106,7 @@
         "lat": 40.3222,
         "lng": -78.92089,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DRMG MULTI-SPECIALTY PRACTICE",
@@ -9208,7 +9216,7 @@
         "lat": 40.15216,
         "lng": -75.34864,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BUTLER IMAGING AND INTERVENTIONAL ASSOCIATES LLC",
@@ -9582,7 +9590,7 @@
         "lat": 40.87893,
         "lng": -77.77621,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PROVIDER BASED CLINICS",
@@ -9659,7 +9667,7 @@
         "lat": 39.87193,
         "lng": -75.36551,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BUCKS REHABILITATION LLC",
@@ -9835,7 +9843,7 @@
         "lat": 40.99243,
         "lng": -75.17381,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EINSTEIN OPHTHALMOLOGY ASSOC",
@@ -9846,7 +9854,7 @@
         "lat": 40.03569,
         "lng": -75.04313,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -9868,7 +9876,7 @@
         "lat": 40.09748,
         "lng": -75.03066,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GLADE RUN MEDICAL ASSOCIATES",
@@ -10033,7 +10041,7 @@
         "lat": 40.12432,
         "lng": -75.29224,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PERIOPERATIVE ANESTHESIA CONSULTANTS INC",
@@ -10154,7 +10162,7 @@
         "lat": 39.8778,
         "lng": -75.34467,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "IU HEALTH MEDICAL GROUP LLC",
@@ -10165,7 +10173,7 @@
         "lat": 40.00369,
         "lng": -75.23093,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ENNOBLE HC NJ",
@@ -10264,7 +10272,7 @@
         "lat": 41.03464,
         "lng": -78.45116,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CMS HIH",
@@ -10275,7 +10283,7 @@
         "lat": 40.25674,
         "lng": -80.18594,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CHARLES COLE MEMORIAL DBA UPMC COLE",
@@ -10352,7 +10360,7 @@
         "lat": 39.95392,
         "lng": -75.28385,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DALLASTOWN FAMILY PRACTICE CTR",
@@ -10407,7 +10415,7 @@
         "lat": 40.12047,
         "lng": -74.95916,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HORSHAM CLINIC",
@@ -10418,7 +10426,7 @@
         "lat": 40.18745,
         "lng": -75.18439,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PINNACLE HEALTH MEDICAL SERVICES",
@@ -10715,7 +10723,7 @@
         "lat": 40.03438,
         "lng": -75.14498,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "LEHIGH VALLEY PHYSICIAN GROUP",
@@ -10781,7 +10789,7 @@
         "lat": 40.2712,
         "lng": -78.8581,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ST CLARE PHARMACY",
@@ -10847,7 +10855,7 @@
         "lat": 41.4257,
         "lng": -78.57629,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "STRIVE PHYSICAL THERAPY SPECIALISTS LLC",
@@ -10913,7 +10921,7 @@
         "lat": 40.4685,
         "lng": -78.75864,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ST LUKE'S OB-GYN STONERIDGE",
@@ -11001,7 +11009,7 @@
         "lat": 39.95472,
         "lng": -75.28214,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ADFINITAS HEALTH PALLIATIVE SERVICES LLC",
@@ -11056,7 +11064,7 @@
         "lat": 39.92232,
         "lng": -75.34844,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "POST ACUTE CARE SPECIALISTS",
@@ -11100,7 +11108,7 @@
         "lat": 40.46727,
         "lng": -78.75919,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "LEHIGH VALLEY PHYSICIAN GROUP",
@@ -11166,7 +11174,7 @@
         "lat": 41.42573,
         "lng": -78.57632,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CARBON - SCHUYLKILL COMMUNITY HOSPITAL INC",
@@ -11353,7 +11361,7 @@
         "lat": 40.30513,
         "lng": -78.91856,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ELLIE MENTAL HEALTH",
@@ -11375,7 +11383,7 @@
         "lat": 40.09748,
         "lng": -75.03066,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ST LUKE'S PHYSICIAN GROUP INC",
@@ -11441,7 +11449,7 @@
         "lat": 40.32153,
         "lng": -76.46765,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COMMUNITY HEALTH NET",
@@ -11463,7 +11471,7 @@
         "lat": 41.11425,
         "lng": -78.77575,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FAVORED WELLNESS COUNSELING",
@@ -11704,8 +11712,8 @@
         "city": "Pittsburgh",
         "lat": 40.44947,
         "lng": -80.16505,
-        "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "vendor": "Oracle Health",
+        "tier": "vendor-npi-list"
       },
       {
         "name": "LCH HEALTH AND COMMUNITY SERVICES",
@@ -11826,7 +11834,7 @@
         "lat": 40.68719,
         "lng": -75.21332,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -11936,7 +11944,7 @@
         "lat": 40.39573,
         "lng": -78.67566,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "VITALITY NP GROUP",
@@ -12035,7 +12043,7 @@
         "lat": 40.96026,
         "lng": -79.00174,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MEADVILLE MEDICAL CENTER",
@@ -12167,7 +12175,7 @@
         "lat": 40.62472,
         "lng": -78.72498,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MIND MATTERS COACHING COUNSELING PSYCHOLOGICAL ASSOCIATES LLC",
@@ -12244,7 +12252,7 @@
         "lat": 40.19429,
         "lng": -74.92886,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TEMPLE FACULTY EMPLOYEE HEALTH ASSOCIATES",
@@ -12310,7 +12318,7 @@
         "lat": 39.8567,
         "lng": -75.36651,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TEMPLE FACULTY PLASTIC SURGERY ASSOCIATE",
@@ -12486,7 +12494,7 @@
         "lat": 40.47039,
         "lng": -78.83725,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SAINT VINCENT CONSULT CARDIO DISEASES",
@@ -12519,7 +12527,7 @@
         "lat": 39.97934,
         "lng": -75.59112,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "LEHIGH VALLEY PHYSICIAN GROUP",
@@ -12695,7 +12703,7 @@
         "lat": 40.3222,
         "lng": -78.92089,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "WELLSPAN FAMILY MEDICINE-MANHEIM",
@@ -12948,7 +12956,7 @@
         "lat": 39.95472,
         "lng": -75.28214,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ABC'S OF BUILDING BETTER LIVES",
@@ -13003,7 +13011,7 @@
         "lat": 40.09748,
         "lng": -75.03066,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CHADDS FORD AMBULATORY SURGICAL CENTER LLC",
@@ -13102,7 +13110,7 @@
         "lat": 40.22355,
         "lng": -74.90468,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UROLOGY HEALTH SURGERY CENTER",
@@ -13267,7 +13275,7 @@
         "lat": 39.84563,
         "lng": -75.53776,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HAN OB-GYN ASSOCIATES OF DELAWARE COUNTY",
@@ -13278,7 +13286,7 @@
         "lat": 39.92088,
         "lng": -75.34853,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CENTER FOR INTERVENTIONAL PAIN SPINE LLC",
@@ -13333,7 +13341,7 @@
         "lat": 40.13945,
         "lng": -76.30347,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "REMCARE ANESTHESIA SOLUTIONS LLC",
@@ -13619,7 +13627,7 @@
         "lat": 41.42573,
         "lng": -78.57632,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CS CONTRACT SPEECH LANGUAGE PATHOLOGY SERVICES",
@@ -13707,7 +13715,7 @@
         "lat": 41.1141,
         "lng": -78.77513,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BIG SPRING PHYSICAL THERAPY AND SPORTS MEDICINE",
@@ -14059,7 +14067,7 @@
         "lat": 40.32671,
         "lng": -78.92135,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -14114,7 +14122,7 @@
         "lat": 40.30513,
         "lng": -78.91856,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GEISINGER CLINIC",
@@ -14356,7 +14364,7 @@
         "lat": 39.88785,
         "lng": -75.53295,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "E RONALD SALVITTI MD INC",
@@ -14499,7 +14507,7 @@
         "lat": 40.33812,
         "lng": -78.38955,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COLLEGE HEIGHTS ANESTHESIA",
@@ -14587,7 +14595,7 @@
         "lat": 40.19429,
         "lng": -74.92886,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HYPERTENSION AND KIDNEY SPECIALISTS",
@@ -14598,7 +14606,7 @@
         "lat": 40.21914,
         "lng": -76.12976,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "WONSETLER PHYSICAL THERAPY",
@@ -14686,7 +14694,7 @@
         "lat": 40.11825,
         "lng": -75.04827,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BURGETTSTOWN PHYSICAL THERAPY",
@@ -15280,7 +15288,7 @@
         "lat": 40.32647,
         "lng": -78.92128,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "AFC URGENT CARE",
@@ -15390,7 +15398,7 @@
         "lat": 40.10154,
         "lng": -75.4125,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DAWN MARIE FRIEND PSY D LLC",
@@ -15555,7 +15563,7 @@
         "lat": 40.43989,
         "lng": -79.24102,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GOOD SAMARITAN PHYSICIAN SERVICES",
@@ -16116,7 +16124,7 @@
         "lat": 41.1138,
         "lng": -78.77175,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -16127,7 +16135,7 @@
         "lat": 40.22355,
         "lng": -74.90468,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -17062,7 +17070,7 @@
         "lat": 40.44569,
         "lng": -75.88164,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DRAYER PHYSICAL THERAPY INSTITUTE LLC",
@@ -17403,7 +17411,7 @@
         "lat": 40.21507,
         "lng": -75.01067,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PINNACLE HEALTH MEDICAL SERVICES",
@@ -17777,7 +17785,7 @@
         "lat": 40.0724,
         "lng": -75.10207,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ORTHOPAEDIC ASSOCIATES OF READING LTD",
@@ -17810,7 +17818,7 @@
         "lat": 39.8567,
         "lng": -75.36651,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MON HEALTH MEDICAL CENTER",
@@ -17821,7 +17829,7 @@
         "lat": 39.89134,
         "lng": -80.1254,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SCOTT A FLEISCHER MD PC",
@@ -18074,7 +18082,7 @@
         "lat": 40.18437,
         "lng": -75.05646,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "THE COLMAN CENTER PC",
@@ -18173,7 +18181,7 @@
         "lat": 40.60902,
         "lng": -79.15897,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MERAKEY PARKSIDE RECOVERY",
@@ -18514,7 +18522,7 @@
         "lat": 40.25691,
         "lng": -76.87988,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -18734,7 +18742,7 @@
         "lat": 39.8567,
         "lng": -75.36651,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MHEDS",
@@ -18987,7 +18995,7 @@
         "lat": 40.19351,
         "lng": -74.92851,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SPIEGEL FREEDMAN PSYCHOLOGICAL ASSOCIATES",
@@ -19163,7 +19171,7 @@
         "lat": 39.91794,
         "lng": -75.30166,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BHS FORD CITY FAMILY PRACTICE",
@@ -19185,7 +19193,7 @@
         "lat": 40.81167,
         "lng": -77.90569,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "KIDNEY GROUP",
@@ -19196,7 +19204,7 @@
         "lat": 41.22663,
         "lng": -80.46935,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BRADFORD REGIONAL MEDICAL CENTER",
@@ -19405,7 +19413,7 @@
         "lat": 40.06353,
         "lng": -75.0875,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HERITAGE FAMILY MEDICINE",
@@ -19548,7 +19556,7 @@
         "lat": 41.39135,
         "lng": -78.55762,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DERMATOLOGY",
@@ -19757,7 +19765,7 @@
         "lat": 40.109,
         "lng": -75.08112,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EINSTEIN PRAC PLAN NEPHR",
@@ -19911,7 +19919,7 @@
         "lat": 40.20332,
         "lng": -75.07604,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "AMERICAN TREATMENT NETWORK LLC",
@@ -20120,7 +20128,7 @@
         "lat": 40.00181,
         "lng": -75.11787,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ROMANO PONTZER",
@@ -20384,7 +20392,7 @@
         "lat": 40.04851,
         "lng": -75.05529,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PHS PHYSICAL THERAPY LLC",
@@ -20560,7 +20568,7 @@
         "lat": 40.29939,
         "lng": -79.55623,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COMPREHENSIVE CARDIOLOGY CONSULTANTS",
@@ -20571,7 +20579,7 @@
         "lat": 40.13791,
         "lng": -74.88071,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MAPLE CITY ANESTHESIA LLC",
@@ -20780,7 +20788,7 @@
         "lat": 40.2313,
         "lng": -79.24144,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "WELLSPAN MEDICAL GROUP",
@@ -20956,7 +20964,7 @@
         "lat": 40.21718,
         "lng": -75.01031,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ASPIRE CHILD FAMILY SERVICES",
@@ -21198,7 +21206,7 @@
         "lat": 40.02486,
         "lng": -79.07674,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "WALLACE NILAN PHYSICAL THERAPY AND FITNESS LLC",
@@ -21231,7 +21239,7 @@
         "lat": 39.9973,
         "lng": -76.74564,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FAYETTE PHYSICIAN NETWORK",
@@ -21242,7 +21250,7 @@
         "lat": 40.44947,
         "lng": -80.16505,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "RAMESH B ELURI MD PC",
@@ -21275,7 +21283,7 @@
         "lat": 40.21507,
         "lng": -75.01067,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EINSTEIN INFECTIOUS DISEASE ASSOCIATES",
@@ -21286,7 +21294,7 @@
         "lat": 40.03438,
         "lng": -75.14498,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "B-K HEALTH CENTER INC",
@@ -21308,7 +21316,7 @@
         "lat": 40.109,
         "lng": -75.08112,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SOUTHWEST BEHAVIORAL CARE INC",
@@ -21385,7 +21393,7 @@
         "lat": 40.04016,
         "lng": -76.32067,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "A JOURNEY TO YOULLC",
@@ -21858,7 +21866,7 @@
         "lat": 40.13785,
         "lng": -74.97576,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -21979,7 +21987,7 @@
         "lat": 40.24629,
         "lng": -75.64739,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MEDICAL PRACTICES OF ANTIETAM",
@@ -22034,7 +22042,7 @@
         "lat": 40.3614,
         "lng": -75.98969,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CLARITY COUNSELING LLC",
@@ -22111,7 +22119,7 @@
         "lat": 41.79517,
         "lng": -76.46483,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TREND EYE CARE",
@@ -22320,7 +22328,7 @@
         "lat": 40.49345,
         "lng": -78.01336,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ON SITE DERMATOLOGY OF PENNSYLVANIA",
@@ -22353,7 +22361,7 @@
         "lat": 40.15273,
         "lng": -75.21333,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EAST LIBERTY FAMILY HEALTH CARE CENTER INC",
@@ -22408,7 +22416,7 @@
         "lat": 40.07569,
         "lng": -76.30719,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "LIBERTY MED ASSOCIATES",
@@ -22540,7 +22548,7 @@
         "lat": 41.83381,
         "lng": -75.87082,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "KEYSTONE PEDIATRICS",
@@ -22562,7 +22570,7 @@
         "lat": 40.109,
         "lng": -75.08112,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "WELLSPAN MEDICAL GROUP",
@@ -23145,7 +23153,7 @@
         "lat": 40.07157,
         "lng": -76.30001,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CHILDEN'S COMMUNITY CARE",
@@ -23420,7 +23428,7 @@
         "lat": 40.33685,
         "lng": -76.42607,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "WELLSPAN INTERVENTIONAL PAIN SPECIALISTS",
@@ -23574,7 +23582,7 @@
         "lat": 41.16958,
         "lng": -79.0978,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ROBBINS REHABILITATION WEST",
@@ -23629,7 +23637,7 @@
         "lat": 40.42076,
         "lng": -80.04627,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "AHN CROSSROADS FAMILY PRACTICE",
@@ -23684,7 +23692,7 @@
         "lat": 40.21507,
         "lng": -75.01067,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "LANCASTER GENERAL HOSPITAL",
@@ -24047,7 +24055,7 @@
         "lat": 40.19429,
         "lng": -74.92886,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "STEEL CITY INTERNAL MEDICINE-UPMC",
@@ -24113,7 +24121,7 @@
         "lat": 41.49006,
         "lng": -78.67596,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PINNACLE HEALTH MEDICAL SERVICES",
@@ -24267,7 +24275,7 @@
         "lat": 40.19351,
         "lng": -74.92851,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "NEIGHBORHOOD HEALTH CENTERS OF THE LEHIGH VALLEY",
@@ -24300,7 +24308,7 @@
         "lat": 40.04683,
         "lng": -76.30544,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "REDI CARE MEDICAL CENTER",
@@ -24729,7 +24737,7 @@
         "lat": 40.15836,
         "lng": -75.11542,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EINSTEIN PRACTICE PLAN INC",
@@ -24993,7 +25001,7 @@
         "lat": 40.19429,
         "lng": -74.92886,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TEMPLE UNIVERSITY KORNBERG SCHOOL OF DENTISTRY OS",
@@ -25411,7 +25419,7 @@
         "lat": 40.18479,
         "lng": -77.22506,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FRANCO COUNSELING ASSOC PC",
@@ -25554,7 +25562,7 @@
         "lat": 40.15836,
         "lng": -75.11542,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DIAKON CHILD FAMILY AND COMMUNITY MINISTRIES",
@@ -26082,7 +26090,7 @@
         "lat": 40.18021,
         "lng": -77.2206,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FIRST DOCS",
@@ -26401,7 +26409,7 @@
         "lat": 40.42494,
         "lng": -79.66892,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "KAY TABAS OPHTHALMOLOGY",
@@ -26896,7 +26904,7 @@
         "lat": 39.86673,
         "lng": -76.4673,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BAY CITY PSYCHIATRY LLC",
@@ -27204,7 +27212,7 @@
         "lat": 40.17024,
         "lng": -75.28674,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ACCESS SERVICES INC",
@@ -27369,7 +27377,7 @@
         "lat": 40.15296,
         "lng": -75.00887,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ASSOCIATED FAMILY HOME CARE",
@@ -27677,7 +27685,7 @@
         "lat": 41.1138,
         "lng": -78.77175,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BRIAN'S HOUSE",
@@ -27754,7 +27762,7 @@
         "lat": 40.34442,
         "lng": -76.42793,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HIGHPOINT PAIN REHABILITATION PHYSICIA",
@@ -27974,7 +27982,7 @@
         "lat": 40.17024,
         "lng": -75.28674,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "IMPACT PHYSIO",
@@ -28194,7 +28202,7 @@
         "lat": 39.7552,
         "lng": -76.5974,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MONROE ENDOSCOPY CENTER",
@@ -28227,7 +28235,7 @@
         "lat": 40.10827,
         "lng": -75.08255,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BLIND AND VISION REHABILITATION SERVICES OF PITTSBURGH",
@@ -28249,7 +28257,7 @@
         "lat": 40.59349,
         "lng": -75.52467,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EGER EYE GROUP",
@@ -28799,7 +28807,7 @@
         "lat": 39.9746,
         "lng": -75.33983,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FRANKLIN SURGICAL GROUP-UPMC",
@@ -29030,7 +29038,7 @@
         "lat": 39.84563,
         "lng": -75.53776,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FAMILY PRACTICE COUNSELING SERVICES NETWORK",
@@ -29052,7 +29060,7 @@
         "lat": 40.60905,
         "lng": -79.17046,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GOLANI MEDICAL ASSOCIATES-UPMC",
@@ -29525,7 +29533,7 @@
         "lat": 40.31202,
         "lng": -80.08985,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ATLAS THERAPY INC",
@@ -30361,7 +30369,7 @@
         "lat": 41.03224,
         "lng": -78.44957,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GRAND VIEW HEALTH PRIMARY CARE QUAKERTOW",
@@ -30647,7 +30655,7 @@
         "lat": 40.1801,
         "lng": -77.22048,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FOREFRONT DERMATOLOGY SC",
@@ -30889,7 +30897,7 @@
         "lat": 40.109,
         "lng": -75.08112,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "NUROWAV TMS PC",
@@ -31703,7 +31711,7 @@
         "lat": 40.15047,
         "lng": -75.34127,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLEGHENY CLINIC",
@@ -31923,7 +31931,7 @@
         "lat": 40.03696,
         "lng": -75.14454,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "OASIS LIFECARE LLC",
@@ -32242,7 +32250,7 @@
         "lat": 40.12668,
         "lng": -79.54906,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ADVANCED NEPHROLOGY ASSOC",
@@ -32286,7 +32294,7 @@
         "lat": 40.1536,
         "lng": -77.08391,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TEREDESAI MCCANN ASSOCIATES PC",
@@ -32407,7 +32415,7 @@
         "lat": 39.96105,
         "lng": -76.66149,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "VISION INNOVATION CENTERS OF PENNSYLVANIA LLC",
@@ -32682,7 +32690,7 @@
         "lat": 39.99558,
         "lng": -76.74437,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "VISION INNOVATION CENTERS OF PA LLC",
@@ -32726,7 +32734,7 @@
         "lat": 40.08929,
         "lng": -75.0937,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "THE WESTON GROUP INC",
@@ -32814,7 +32822,7 @@
         "lat": 39.96566,
         "lng": -76.69171,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "COBIUS HEALTHCARE SOLUTIONS",
@@ -32825,7 +32833,7 @@
         "lat": 39.97631,
         "lng": -75.33282,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "RHINO CARE INC",
@@ -32902,7 +32910,7 @@
         "lat": 40.32783,
         "lng": -75.10176,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "VANTAGE PHYSICAL THERAPY AND REHAB",
@@ -33276,7 +33284,7 @@
         "lat": 40.07288,
         "lng": -75.30718,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ARMSTRONG COUNTY MEMORIAL HOSPITAL",
@@ -33397,7 +33405,7 @@
         "lat": 40.42099,
         "lng": -80.06252,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PEAK PHYSICAL THERAPY PERFORMANCE",
@@ -33606,7 +33614,7 @@
         "lat": 39.9195,
         "lng": -76.63199,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CSONKA OPTOMETRIC",
@@ -34222,7 +34230,7 @@
         "lat": 40.04016,
         "lng": -76.32067,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DAWN Y STEIN DPM CWS LLC",
@@ -34519,7 +34527,7 @@
         "lat": 39.95611,
         "lng": -76.67327,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GRAY MEDICAL ASSOCIATES",
@@ -34629,7 +34637,7 @@
         "lat": 39.91794,
         "lng": -75.30166,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EINSTEIN PHYSICIANS COLLEGEVILLE",
@@ -34761,7 +34769,7 @@
         "lat": 40.5664,
         "lng": -78.3398,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FLORES FLORES MEDICAL ASSOCIATES",
@@ -35234,7 +35242,7 @@
         "lat": 40.00181,
         "lng": -75.11787,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CHOP BEHAVIORAL HEALTH",
@@ -35762,7 +35770,7 @@
         "lat": 40.34793,
         "lng": -80.11287,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MACKAREY AND MACKAREY PT CONSULTANTS",
@@ -36169,7 +36177,7 @@
         "lat": 40.04016,
         "lng": -76.32067,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SPRING FORD COUNSELING SERVICE",
@@ -36202,7 +36210,7 @@
         "lat": 40.02344,
         "lng": -79.59523,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLERGY ASTHMA CARE",
@@ -36246,7 +36254,7 @@
         "lat": 40.1595,
         "lng": -75.0171,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "J C BLAIR MEMORIAL HOSPITAL",
@@ -36642,7 +36650,7 @@
         "lat": 40.10827,
         "lng": -75.08255,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "A-Z URGENT CARE",
@@ -37148,7 +37156,7 @@
         "lat": 39.92989,
         "lng": -75.26417,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "JENNIFER L HARTEY PSYD LLC",
@@ -37324,7 +37332,7 @@
         "lat": 40.60492,
         "lng": -75.47068,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FINN CHIROPRACTIC WEXFORD PLLC",
@@ -37412,7 +37420,7 @@
         "lat": 42.08032,
         "lng": -80.09056,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "TITUSVILLE AREA HEALTH SERVICES INC",
@@ -37489,7 +37497,7 @@
         "lat": 40.16579,
         "lng": -75.13373,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BERKSHIRE PODIATRY CENTER",
@@ -38028,7 +38036,7 @@
         "lat": 41.0086,
         "lng": -75.30709,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "RMC PT LLC",
@@ -38138,7 +38146,7 @@
         "lat": 40.87204,
         "lng": -79.93687,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLIED SERVICE REHABILITATION HOSPITAL",
@@ -38589,7 +38597,7 @@
         "lat": 40.10827,
         "lng": -75.08255,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "RESILIENT MINDS BEHAVIORAL HEALTH LLC",
@@ -38666,7 +38674,7 @@
         "lat": 40.71881,
         "lng": -76.19015,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ERIC R MILLER OD PC",
@@ -39392,7 +39400,7 @@
         "lat": 39.99067,
         "lng": -75.12994,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GRAND VIEW HEALTH INTERVENTIONAL CARDIOL",
@@ -39447,7 +39455,7 @@
         "lat": 40.03249,
         "lng": -79.07529,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLEGHENY CLINIC",
@@ -39964,7 +39972,7 @@
         "lat": 40.10949,
         "lng": -75.07963,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "YOUR NORTH WELLNESS PLLC",
@@ -40140,7 +40148,7 @@
         "lat": 40.19351,
         "lng": -74.92851,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UPMC COMMUNITY DERMATOLOGY",
@@ -40382,7 +40390,7 @@
         "lat": 40.31777,
         "lng": -76.42811,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "NEW START MEDICAL",
@@ -40756,7 +40764,7 @@
         "lat": 40.13697,
         "lng": -79.84279,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MOVEMENT METHOD",
@@ -40987,7 +40995,7 @@
         "lat": 40.2793,
         "lng": -78.86196,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BUCKS COUNTY KIDNEY SPECIALISTS",
@@ -41086,7 +41094,7 @@
         "lat": 40.43221,
         "lng": -79.24605,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ALLIANCE OTOLARYNGOLOGY AND FACIAL PLASTIC SURGERY LLC",
@@ -41394,7 +41402,7 @@
         "lat": 39.95167,
         "lng": -75.23037,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HOLCOMB ASSOCIATES INC",
@@ -41625,7 +41633,7 @@
         "lat": 40.60534,
         "lng": -79.16392,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EMPOWER SPEECH LLC",
@@ -42208,7 +42216,7 @@
         "lat": 40.05084,
         "lng": -76.29069,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FEASTERVILLE FAMILY PRACTICE",
@@ -42857,7 +42865,7 @@
         "lat": 40.33193,
         "lng": -79.74132,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "IDEAL HOMEHEALTH AGENCY LLC",
@@ -43440,7 +43448,7 @@
         "lat": 41.98244,
         "lng": -76.5189,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "UNITY HEALING LLC",
@@ -44606,7 +44614,7 @@
         "lat": 40.49335,
         "lng": -78.01401,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EXCELA HEALTH PHYSICIAN PRACTICES INC",
@@ -44672,7 +44680,7 @@
         "lat": 40.13265,
         "lng": -75.01114,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HEMLER FAMILY EYE CARE",
@@ -44914,7 +44922,7 @@
         "lat": 40.00422,
         "lng": -75.21989,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BIGLEY ASSOCIATES",
@@ -45079,7 +45087,7 @@
         "lat": 39.96523,
         "lng": -76.69547,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ACTIVE FAMILY AND SPORTS CHIROPRACTIC LLC",
@@ -45838,7 +45846,7 @@
         "lat": 40.10949,
         "lng": -75.07963,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ADVANCED HEALTH PSYCHIATRY PLLC",
@@ -46025,7 +46033,7 @@
         "lat": 40.82306,
         "lng": -78.34991,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BULL FAMILY CHIROPRACTIC LLC",
@@ -46553,7 +46561,7 @@
         "lat": 40.19559,
         "lng": -75.07709,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DOC KLEINS CHIROPRACTIC",
@@ -46652,7 +46660,7 @@
         "lat": 40.69691,
         "lng": -80.04267,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "HARTZELL EYE SPECIALISTS",
@@ -47917,7 +47925,7 @@
         "lat": 40.0692,
         "lng": -76.35723,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "RENAL CARE CONSULTANTS PC",
@@ -48335,7 +48343,7 @@
         "lat": 39.94077,
         "lng": -77.63428,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BRENDA J BENNETT",
@@ -48489,7 +48497,7 @@
         "lat": 40.49335,
         "lng": -78.01401,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MAT'S PHARMACY",
@@ -49292,7 +49300,7 @@
         "lat": 40.177,
         "lng": -75.04799,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BRUCE RICHMAN DO PC",
@@ -50469,7 +50477,7 @@
         "lat": 40.49351,
         "lng": -78.01388,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CENTER FOR HEARING AND BALANCE",
@@ -53527,7 +53535,7 @@
         "lat": 40.2062,
         "lng": -75.45908,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "ADVANCE INFUSION CENTER AT KHAN MEDICAL",
@@ -53912,7 +53920,7 @@
         "lat": 40.109,
         "lng": -75.08112,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "BENSALEM PODIATRY ASSOC",
@@ -54110,7 +54118,7 @@
         "lat": 39.87876,
         "lng": -75.3908,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MAIN LINE INSTITUTE OF PLASTIC SURGERY",
@@ -54143,7 +54151,7 @@
         "lat": 40.81167,
         "lng": -77.90569,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "H2 HEALTH",
@@ -55749,7 +55757,7 @@
         "lat": 40.14008,
         "lng": -75.31436,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "GERRITY'S SUPERMARKET INC",
@@ -59181,7 +59189,7 @@
         "lat": 40.18479,
         "lng": -77.22506,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MELISSA SCHWARTZ DO",
@@ -60589,7 +60597,7 @@
         "lat": 40.20818,
         "lng": -75.29741,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MIRACLE DENTAL ASSOCIATES",
@@ -61095,7 +61103,7 @@
         "lat": 40.25773,
         "lng": -76.92281,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "RESIDENTIAL HOSPICE OF CARLISLE LLC",
@@ -61711,7 +61719,7 @@
         "lat": 40.10827,
         "lng": -75.08255,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MEDICAL ASSOCIATES OF BRIDESBURG",
@@ -62756,7 +62764,7 @@
         "lat": 39.9006,
         "lng": -79.74071,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PEACEFUL COMFORT PSYCHIATRY PLLC",
@@ -66485,7 +66493,7 @@
         "lat": 39.9725,
         "lng": -75.30069,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FALLING SPRING COUNSELING AND CONSULTING LLC",
@@ -70918,7 +70926,7 @@
         "lat": 40.07568,
         "lng": -76.33225,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "MULLIGAN PHYSICAL THERAPY",
@@ -71017,7 +71025,7 @@
         "lat": 40.05899,
         "lng": -76.36097,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CAPITAL FOOT SPECIALISTS PC",
@@ -77760,7 +77768,7 @@
         "lat": 40.20355,
         "lng": -75.4584,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "EXTON KIDS DENTAL",
@@ -81071,7 +81079,7 @@
         "lat": 39.93018,
         "lng": -77.64025,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "NAVIEL COMPASSIONATE CARE HEALTH ADVOCACY",
@@ -81852,7 +81860,7 @@
         "lat": 40.80431,
         "lng": -75.60698,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "REVIVE WOMENS THERAPY LLC",
@@ -82765,7 +82773,7 @@
         "lat": 40.64092,
         "lng": -75.37266,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "JENNA RAU COUNSELING LLC",
@@ -83337,7 +83345,7 @@
         "lat": 41.11425,
         "lng": -78.77575,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "FARFALLA INTEGRATIVE HEALTH LLC",
@@ -93677,7 +93685,7 @@
         "lat": 40.031,
         "lng": -76.2931,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "PGH SMILE BOUTIQUE",
@@ -96515,7 +96523,7 @@
         "lat": 40.34625,
         "lng": -75.97282,
         "vendor": "Epic (User-access Brands)",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "DR YESENIA COLON RIVERA PSYCHOLOGICAL SERVICES LLC",
@@ -99056,7 +99064,7 @@
         "lat": 40.0338,
         "lng": -76.30688,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "STEEL VALLEY CHIROPRACTIC CENTER",
@@ -102631,7 +102639,7 @@
         "lat": 40.09973,
         "lng": -74.95633,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "CENTERVILLE FAMILY DENTAL LTD",
@@ -106844,7 +106852,7 @@
         "lat": 40.42492,
         "lng": -79.96639,
         "vendor": "Oracle Health",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "JMC THERAPY LLC",
@@ -109473,7 +109481,7 @@
         "lat": 40.08929,
         "lng": -75.0937,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "THEODORE L YARBORO MD INC",
@@ -114929,7 +114937,7 @@
         "lat": 39.8967,
         "lng": -80.14779,
         "vendor": "athenahealth",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "name": "SUSAN V ESTRADA MD PC",
@@ -116419,10 +116427,10 @@
     ]
   },
   "vendors": {
-    "Epic (User-access Brands)": 39101,
-    "athenahealth": 5539,
-    "Oracle Health": 4700,
-    "Practice Fusion": 73,
+    "Epic (User-access Brands)": 38934,
+    "athenahealth": 5773,
+    "Oracle Health": 4622,
+    "Practice Fusion": 84,
     "Veradigm": 43
   },
   "systems": {
@@ -116485,25 +116493,27 @@
       "cms-ownership": 15
     },
     "systems_reaching_an_endpoint": 433,
-    "systems_reaching_an_endpoint_deterministic": 355,
+    "systems_reaching_an_endpoint_deterministic": 250,
     "practitioners_in_a_system_that_reaches_an_endpoint": 52289,
-    "practitioners_in_a_system_that_reaches_an_endpoint_deterministic": 35529,
+    "practitioners_in_a_system_that_reaches_an_endpoint_deterministic": 22751,
     "practitioners_reached_through_a_system": {
-      "practitioners": 39833,
+      "practitioners": 39828,
       "by_tier": {
         "ndh": 823,
-        "vendor-npi": 9951,
+        "vendor-npi": 2217,
+        "vendor-npi-list": 7728,
         "alias": 10362,
         "name-state": 5076,
-        "brand-state": 10335,
+        "brand-state": 10336,
         "cms-enrollment-own-endpoint": 3286
       }
     },
     "tiers": {
-      "note": "Each system's reach is counted per distinct clinician at the strongest tier among the member organizations they hold roles at. ndh: the NDH attributes the endpoint to the member. vendor-npi: an EHR vendor publishes the member's NPI beside the endpoint. Both are deterministic. alias: a curated, sourced legal-name-to-brand link (analysis/org_aliases.json). name-state and brand-state: the member's name or brand prefix matches a vendor brand in the same state (H53). Those three are inference. cms-enrollment-own-endpoint: the clinician's CMS-enrolled group resolves to an endpoint this system already reaches, or one on the system's own domain; enrollment that lands on another system's endpoint is not counted for this one. systems_reaching_an_endpoint and practitioners_in_a_system_that_reaches_an_endpoint count every tier; the _deterministic keys count the NDH and vendor-NPI tiers only.",
+      "note": "Each system's reach is counted per distinct clinician at the strongest tier among the member organizations they hold roles at. ndh: the NDH attributes the endpoint to the member. vendor-npi: an EHR vendor publishes the member's NPI beside the endpoint, on a URL listing 10 or fewer NPIs. Both are deterministic. vendor-npi-list: the vendor publishes the member's NPI beside a URL listing more than 10 NPIs, a practice-wide or brand-wide list (athenahealth attaches one practice list to every department), so the URL is not shown to serve that member; inference. alias: a curated, sourced legal-name-to-brand link (analysis/org_aliases.json). name-state and brand-state: the member's name or brand prefix matches a vendor brand in the same state (H53). Those three are inference. cms-enrollment-own-endpoint: the clinician's CMS-enrolled group resolves to an endpoint this system already reaches, or one on the system's own domain; enrollment that lands on another system's endpoint is not counted for this one. systems_reaching_an_endpoint and practitioners_in_a_system_that_reaches_an_endpoint count every tier; the _deterministic keys count the NDH and vendor-npi tiers only.",
       "order": [
         "ndh",
         "vendor-npi",
+        "vendor-npi-list",
         "alias",
         "name-state",
         "brand-state",
@@ -116530,19 +116540,30 @@
       {
         "date": "2026-10-16",
         "issue": "FHI-73",
-        "what": "Nine of thirteen curated PA aliases matched no vendor brand because Epic renamed them (MyUPMC, TempleHealth, Thomas Jefferson University Health System), so University of Pittsburgh Physicians and PinnacleHealth resolved to nothing. H51 also kept one NPI per vendor endpoint, and the JEFFERSON name group included four organizations that Epic lists under other brands, among them Jefferson Regional Medical Center (two under Allegheny Health Network, two under West Virginia University).",
+        "what": "Nine of thirteen curated PA aliases matched no vendor brand because Epic renamed them (MyUPMC, TempleHealth, Thomas Jefferson University Health System), so University of Pittsburgh Physicians and PinnacleHealth resolved to nothing. H51 also kept one NPI per vendor endpoint. The JEFFERSON name group also held organizations that are not Jefferson: on the 2026-10-07 release the Epic brand veto removes two that Epic lists under West Virginia University, and two Jefferson Regional Medical Center units that Epic lists under Allegheny Health Network leave through the CMS hospital ownership path, which groups them before brand grouping runs.",
         "since": "aliases: an unknown date no later than the 2026-10-13 vendor download, which is the first cache checked; one NPI per endpoint: since H51 was published; JEFFERSON merge: since brand grouping (2026-08-16)"
+      },
+      {
+        "date": "2026-10-16",
+        "issue": "FHI-73",
+        "what": "A vendor-published NPI was counted as a deterministic link even when the vendor lists that NPI beside a URL together with dozens or hundreds of others: athenahealth attaches one practice-wide list to every department, and Epic brands list up to 1,881. A match through a URL listing more than 10 NPIs is now its own tier, vendor-npi-list, shown as inference. athenahealth's shared base URL, common to all its customers, no longer attributes at all.",
+        "since": "the vendor-NPI fill (2026-08-16); the shared athenahealth URL since H51 was published"
       }
     ],
     "known_systems_unreached": {
-      "note": "Known systems that publish an endpoint on their own domain which no tier connects to their clinicians in this release. Listed by name with the evidence, because a zero here is a measured gap, not a missing lookup.",
+      "note": "Known systems that publish an endpoint on their own domain which no member organization's route (NDH, vendor NPI, alias, name or brand) connects to their clinicians in this release. Each row says whether CMS enrollment reaches it instead. Measured every run, because a zero here is a measured gap, not a missing lookup.",
       "rows": [
         {
           "system": "Jefferson",
           "domains": [
             "jefferson.edu"
           ],
-          "reason": "Epic publishes Thomas Jefferson University Health System at fhir.jefferson.edu and the NDH attributes that endpoint to ARIA HEALTH FRANKFORD CAMPUS, which groups under ARIA, not JEFFERSON. No JEFFERSON-named member resolves to it at any tier on the 2026-10-07 release: the brand prefix differs (THOMAS), the JEFFERSON UNIVERSITY PHYSICIANS alias matches only out-of-state or stateless records, and no CMS-enrolled group resolves to it (FHI-73)."
+          "reason": "No member organization's own route (NDH attribution, vendor-published NPI, or H53 alias, name or brand resolution) reaches jefferson.edu. 1,378 clinicians reach it only through their CMS-enrolled group.",
+          "reached_through_member_tiers": 0,
+          "reached_through_enrollment_only": 1378,
+          "via": [
+            "CMS-enrolled group: Jefferson University Physicians"
+          ]
         }
       ]
     },
@@ -116588,7 +116609,7 @@
     },
     "out_of_state_endpoints_dropped": {
       "note": "Endpoints a system would have reached only through a member organization recorded in another state. Dropped from the system rollup unless that member is the system itself. Members with no recorded state are kept and counted, because they cannot be shown to be out of state.",
-      "count": 1526,
+      "count": 1543,
       "kept_from_members_without_state": 51,
       "rows": [
         {
@@ -116619,7 +116640,7 @@
           "system": "OPTUM",
           "via_member": "OPTUM MEDICAL CARE OF NEW JERSEY PC",
           "member_state": "NY",
-          "url": "https://api.platform.athenahealth.com/17375/brand/1/csg/1/fhir/r4",
+          "url": "https://api.platform.athenahealth.com/20099/brand/1/csg/1/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
         },
@@ -116675,7 +116696,7 @@
           "system": "DLP",
           "via_member": "DLP MARQUETTE PHYSICIAN PRACTICES INC",
           "member_state": "MI",
-          "url": "https://api.platform.athenahealth.com/8233/brand/3/csg/21/fhir/r4",
+          "url": "https://api.platform.athenahealth.com/8233/brand/6/csg/22/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
         },
@@ -116683,15 +116704,7 @@
           "system": "DLP",
           "via_member": "DLP WESTERN CAROLINA PHYSICIAN PRACTICES LLC",
           "member_state": "NC",
-          "url": "https://api.platform.athenahealth.com/9865/brand/1/csg/1/fhir/r4",
-          "vendor": "athenahealth",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "DLP",
-          "via_member": "DLP TWIN COUNTY PHYSICIAN PRACTICES LLC",
-          "member_state": "VA",
-          "url": "https://api.platform.athenahealth.com/10112/brand/1/csg/1/fhir/r4",
+          "url": "https://api.platform.athenahealth.com/9865/brand/1/csg/21/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
         },
@@ -116705,14 +116718,6 @@
         },
         {
           "system": "DLP",
-          "via_member": "DLP MARIA PARHAM PHYSICIAN PRACTICES LLC",
-          "member_state": "NC",
-          "url": "https://api.platform.athenahealth.com/20247/brand/1/csg/21/fhir/r4",
-          "vendor": "athenahealth",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "DLP",
           "via_member": "DLP PERSON PHYSICIAN PRACTICES LLC",
           "member_state": "TN",
           "url": "https://api.platform.athenahealth.com/20247/brand/2/csg/41/fhir/r4",
@@ -116721,11 +116726,27 @@
         },
         {
           "system": "DLP",
+          "via_member": "DLP TWIN COUNTY PHYSICIAN PRACTICES LLC",
+          "member_state": "VA",
+          "url": "https://api.platform.athenahealth.com/10112/brand/1/csg/21/fhir/r4",
+          "vendor": "athenahealth",
+          "tier": "vendor-npi-list"
+        },
+        {
+          "system": "DLP",
+          "via_member": "DLP MARIA PARHAM PHYSICIAN PRACTICES LLC",
+          "member_state": "NC",
+          "url": "https://api.platform.athenahealth.com/20247/brand/1/csg/21/fhir/r4",
+          "vendor": "athenahealth",
+          "tier": "vendor-npi-list"
+        },
+        {
+          "system": "DLP",
           "via_member": "DLP FRYE MEDICAL GROUP LLC",
           "member_state": "NC",
-          "url": "https://api.platform.athenahealth.com/15786/brand/1/csg/1/fhir/r4",
+          "url": "https://api.platform.athenahealth.com/15786/brand/1/csg/21/fhir/r4",
           "vendor": "athenahealth",
-          "tier": "vendor-npi"
+          "tier": "vendor-npi-list"
         },
         {
           "system": "PENNSYLVANIA",
@@ -116749,7 +116770,7 @@
           "member_state": "DE",
           "url": "https://epicproxy.et1154.epichosted.com/fhirproxy/api/fhir/r4",
           "vendor": "Epic (User-access Brands)",
-          "tier": "vendor-npi"
+          "tier": "vendor-npi-list"
         },
         {
           "system": "DELAWARE",
@@ -116787,7 +116808,7 @@
           "system": "ST VINCENT",
           "via_member": "ST VINCENT'S PRIMARY CARE GARDENDALE",
           "member_state": "AL",
-          "url": "https://api.platform.athenahealth.com/9069/brand/1/csg/1/fhir/r4",
+          "url": "https://api.platform.athenahealth.com/9069/brand/1/csg/21/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
         },
@@ -116795,23 +116816,7 @@
           "system": "ST VINCENT",
           "via_member": "ST VINCENT'S AMBULATORY CARE INC",
           "member_state": "FL",
-          "url": "https://api.platform.athenahealth.com/8967/brand/3/csg/1/fhir/r4",
-          "vendor": "athenahealth",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "ST VINCENT",
-          "via_member": "ST VINCENT HOSPITAL",
-          "member_state": "NM",
-          "url": "https://api.platform.athenahealth.com/996/brand/22/csg/301/fhir/r4",
-          "vendor": "athenahealth",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "ST VINCENT",
-          "via_member": "ST VINCENT PEDIATRIC SUBSPECIALTIES",
-          "member_state": "IN",
-          "url": "https://api.platform.athenahealth.com/7598/brand/1/csg/25/fhir/r4",
+          "url": "https://api.platform.athenahealth.com/8967/brand/3/csg/61/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
         },
@@ -116822,6 +116827,22 @@
           "url": "https://api.platform.athenahealth.com/7598/brand/1/csg/24/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
+        },
+        {
+          "system": "ST VINCENT",
+          "via_member": "ST VINCENT HOSPITAL",
+          "member_state": "NM",
+          "url": "https://api.platform.athenahealth.com/996/brand/22/csg/301/fhir/r4",
+          "vendor": "athenahealth",
+          "tier": "vendor-npi-list"
+        },
+        {
+          "system": "ST VINCENT",
+          "via_member": "ST VINCENT PEDIATRIC SUBSPECIALTIES",
+          "member_state": "IN",
+          "url": "https://api.platform.athenahealth.com/7598/brand/1/csg/26/fhir/r4",
+          "vendor": "athenahealth",
+          "tier": "vendor-npi-list"
         },
         {
           "system": "EXCEL",
@@ -116841,22 +116862,6 @@
         },
         {
           "system": "ST JOSEPH",
-          "via_member": "ST JOSEPH HOSPITAL",
-          "member_state": "CA",
-          "url": "https://fhir-myrecord.cerner.com/r4/rii-5tqziehcg01uwocn3latp151-1q9",
-          "vendor": "Oracle Health",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "ST JOSEPH",
-          "via_member": "ST JOSEPH'S EMERGENCY PHYSICIANS INC",
-          "member_state": "NJ",
-          "url": "https://fhir-myrecord.cerner.com/r4/6f2341d3-c614-4a71-9cef-bdca1a222d48",
-          "vendor": "Oracle Health",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "ST JOSEPH",
           "via_member": "ST JOSEPH HOSPITAL LLC",
           "member_state": "WA",
           "url": "https://api.platform.athenahealth.com/16883/brand/1/csg/1/fhir/r4",
@@ -116865,11 +116870,27 @@
         },
         {
           "system": "ST JOSEPH",
+          "via_member": "ST JOSEPH HOSPITAL",
+          "member_state": "CA",
+          "url": "https://fhir-myrecord.cerner.com/r4/rii-5tqziehcg01uwocn3latp151-1q9",
+          "vendor": "Oracle Health",
+          "tier": "vendor-npi-list"
+        },
+        {
+          "system": "ST JOSEPH",
+          "via_member": "ST JOSEPH'S EMERGENCY PHYSICIANS INC",
+          "member_state": "NJ",
+          "url": "https://fhir-myrecord.cerner.com/r4/6f2341d3-c614-4a71-9cef-bdca1a222d48",
+          "vendor": "Oracle Health",
+          "tier": "vendor-npi-list"
+        },
+        {
+          "system": "ST JOSEPH",
           "via_member": "ST JOSEPH MEDICAL GROUP",
           "member_state": "IN",
           "url": "https://fhir-myrecord.cerner.com/r4/62f3918e-1f4f-42f1-a374-2667f4059c19",
           "vendor": "Oracle Health",
-          "tier": "vendor-npi"
+          "tier": "vendor-npi-list"
         },
         {
           "system": "FAYETTE",
@@ -116877,23 +116898,7 @@
           "member_state": "IL",
           "url": "https://fhir-myrecord.cerner.com/r4/70a80a72-e84a-495e-83fd-937e0d2effcd",
           "vendor": "Oracle Health",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "MID ATLANTIC",
-          "via_member": "MID-ATLANTIC GASTROINTESTINAL CENTER",
-          "member_state": "TN",
-          "url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
-          "vendor": "Epic (User-access Brands)",
-          "tier": "vendor-npi"
-        },
-        {
-          "system": "MID ATLANTIC",
-          "via_member": "MID-ATLANTIC SURGICAL ASSOC",
-          "member_state": "NJ",
-          "url": "https://fhir-myrecord.cerner.com/r4/6f2341d3-c614-4a71-9cef-bdca1a222d48",
-          "vendor": "Oracle Health",
-          "tier": "vendor-npi"
+          "tier": "vendor-npi-list"
         },
         {
           "system": "MID ATLANTIC",
@@ -116910,6 +116915,22 @@
           "url": "https://api.platform.athenahealth.com/27532/brand/1/csg/1/fhir/r4",
           "vendor": "athenahealth",
           "tier": "vendor-npi"
+        },
+        {
+          "system": "MID ATLANTIC",
+          "via_member": "MID-ATLANTIC GASTROINTESTINAL CENTER",
+          "member_state": "TN",
+          "url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
+          "vendor": "Epic (User-access Brands)",
+          "tier": "vendor-npi-list"
+        },
+        {
+          "system": "MID ATLANTIC",
+          "via_member": "MID-ATLANTIC SURGICAL ASSOC",
+          "member_state": "NJ",
+          "url": "https://fhir-myrecord.cerner.com/r4/6f2341d3-c614-4a71-9cef-bdca1a222d48",
+          "vendor": "Oracle Health",
+          "tier": "vendor-npi-list"
         },
         {
           "system": "INTEGRATED",
@@ -117048,6 +117069,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 6751,
           "name-state": 0,
           "brand-state": 0,
@@ -117111,6 +117133,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 1275,
           "brand-state": 3924,
@@ -117174,6 +117197,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 3410,
@@ -117223,7 +117247,7 @@
             "url": "https://api.platform.athenahealth.com/6385/brand/1/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "AHN EMERGENCY GROUP OF PITTSBURGH LTD",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 310
           },
           {
@@ -117236,15 +117260,16 @@
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1,
+          "vendor-npi-list": 1,
           "cms-enrollment-own-endpoint": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 2960,
-        "reaches_endpoint_deterministic": 310,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 310,
+          "vendor-npi": 0,
+          "vendor-npi-list": 310,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -117295,7 +117320,7 @@
             "url": "https://fhir-myrecord.cerner.com/r4/6f2341d3-c614-4a71-9cef-bdca1a222d48",
             "vendor": "Oracle Health",
             "via_member": "ST LUKE'S PHYSICIAN GROUP INC",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 99
           },
           {
@@ -117308,15 +117333,16 @@
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1,
+          "vendor-npi-list": 1,
           "name-state": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 3028,
-        "reaches_endpoint_deterministic": 99,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 99,
+          "vendor-npi": 0,
+          "vendor-npi-list": 99,
           "alias": 0,
           "name-state": 393,
           "brand-state": 2536,
@@ -117388,6 +117414,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 2620,
           "brand-state": 336,
@@ -117434,18 +117461,18 @@
         ],
         "endpoints": [
           {
-            "url": "https://fhir-myrecord.cerner.com/r4/96fd612b-7f6c-4509-9e0b-25e1bdc16363",
-            "vendor": "Oracle Health",
-            "via_member": "CHILDRENS CLINIC AT LVH",
-            "tier": "vendor-npi",
-            "practitioners": 35
-          },
-          {
             "url": "https://api.platform.athenahealth.com/11088/brand/1/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "LEHIGH VALLEY PHYSICIAN GROUP",
             "tier": "vendor-npi",
             "practitioners": 12
+          },
+          {
+            "url": "https://fhir-myrecord.cerner.com/r4/96fd612b-7f6c-4509-9e0b-25e1bdc16363",
+            "vendor": "Oracle Health",
+            "via_member": "CHILDRENS CLINIC AT LVH",
+            "tier": "vendor-npi-list",
+            "practitioners": 35
           },
           {
             "url": "https://proxy.lvh.com/fhir/api/fhir/r4",
@@ -117457,15 +117484,17 @@
         ],
         "endpoint_count": 3,
         "endpoint_count_by_tier": {
-          "vendor-npi": 2,
+          "vendor-npi": 1,
+          "vendor-npi-list": 1,
           "name-state": 1
         },
-        "endpoint_count_deterministic": 2,
+        "endpoint_count_deterministic": 1,
         "reaches_endpoint": 2534,
-        "reaches_endpoint_deterministic": 47,
+        "reaches_endpoint_deterministic": 12,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 47,
+          "vendor-npi": 12,
+          "vendor-npi-list": 35,
           "alias": 0,
           "name-state": 1,
           "brand-state": 2325,
@@ -117517,7 +117546,7 @@
             "url": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "PINNACLE HEALTH REGIONAL PHYSICIANS",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 431
           },
           {
@@ -117530,15 +117559,16 @@
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1,
+          "vendor-npi-list": 1,
           "alias": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 1976,
-        "reaches_endpoint_deterministic": 431,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 431,
+          "vendor-npi": 0,
+          "vendor-npi-list": 431,
           "alias": 1512,
           "name-state": 0,
           "brand-state": 0,
@@ -117603,6 +117633,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -117634,6 +117665,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -117672,30 +117704,32 @@
         ],
         "endpoints": [
           {
-            "url": "https://api.platform.athenahealth.com/28623/brand/1/csg/1/fhir/r4",
-            "vendor": "athenahealth",
-            "via_member": "OPTUM BEHAVIORAL CARE OF CONNECTICUT PC",
-            "tier": "vendor-npi",
-            "practitioners": 129
-          },
-          {
             "url": "https://api.platform.athenahealth.com/5045/brand/1/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "OPTUM",
             "tier": "vendor-npi",
             "practitioners": 1
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/28623/brand/1/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "OPTUM BEHAVIORAL CARE OF CONNECTICUT PC",
+            "tier": "vendor-npi-list",
+            "practitioners": 129
           }
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 2
+          "vendor-npi": 1,
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 2,
+        "endpoint_count_deterministic": 1,
         "reaches_endpoint": 130,
-        "reaches_endpoint_deterministic": 130,
+        "reaches_endpoint_deterministic": 1,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 130,
+          "vendor-npi": 1,
+          "vendor-npi-list": 129,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -117747,6 +117781,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -117824,6 +117859,7 @@
         "reach_by_tier": {
           "ndh": 2,
           "vendor-npi": 3,
+          "vendor-npi-list": 0,
           "alias": 1544,
           "name-state": 0,
           "brand-state": 3,
@@ -117911,6 +117947,7 @@
         "reach_by_tier": {
           "ndh": 7,
           "vendor-npi": 3,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 1626,
@@ -117968,35 +118005,36 @@
             "url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "LANCASTER ORTHOPEDIC GROUP INC",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 1440
           },
           {
             "url": "https://api.platform.athenahealth.com/14261/brand/6/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "LANCASTER HEALTH CENTER",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 93
           },
           {
             "url": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "LANCASTER PULMONARY AND SLEEP ASSOCIATES",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 21
           }
         ],
         "endpoint_count": 4,
         "endpoint_count_by_tier": {
           "ndh": 1,
-          "vendor-npi": 3
+          "vendor-npi-list": 3
         },
-        "endpoint_count_deterministic": 4,
+        "endpoint_count_deterministic": 1,
         "reaches_endpoint": 1556,
-        "reaches_endpoint_deterministic": 187,
+        "reaches_endpoint_deterministic": 2,
         "reach_by_tier": {
           "ndh": 2,
-          "vendor-npi": 185,
+          "vendor-npi": 0,
+          "vendor-npi-list": 185,
           "alias": 785,
           "name-state": 0,
           "brand-state": 584,
@@ -118062,6 +118100,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 296,
           "name-state": 0,
           "brand-state": 0,
@@ -118097,6 +118136,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118144,20 +118184,21 @@
             "url": "https://fhir-myrecord.cerner.com/r4/czxzx6lxe-l3uyv_vyuzukxovalymhgz",
             "vendor": "Oracle Health",
             "via_member": "EINSTEIN PRACTICE PLAN INC",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 991
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 991,
-        "reaches_endpoint_deterministic": 991,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 991,
+          "vendor-npi": 0,
+          "vendor-npi-list": 991,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118211,6 +118252,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118258,20 +118300,21 @@
             "url": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "GUTHRIE CLINIC LTD",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 1053
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 1053,
-        "reaches_endpoint_deterministic": 982,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 982,
+          "vendor-npi": 0,
+          "vendor-npi-list": 982,
           "alias": 0,
           "name-state": 55,
           "brand-state": 16,
@@ -118335,6 +118378,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 296,
           "name-state": 58,
           "brand-state": 0,
@@ -118380,6 +118424,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118431,6 +118476,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118478,20 +118524,21 @@
             "url": "https://fhir-myrecord.cerner.com/r4/n7ld0qx6o97vwg2k68nv0s0g4xzq2rtm",
             "vendor": "Oracle Health",
             "via_member": "BROOKVILLE HOSPITAL",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 488
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 488,
-        "reaches_endpoint_deterministic": 488,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 488,
+          "vendor-npi": 0,
+          "vendor-npi-list": 488,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118562,6 +118609,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 126,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118612,20 +118660,21 @@
             "url": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "DLP CONEMAUGH PHYSICIAN PRACTICES LLC",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 694
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 694,
-        "reaches_endpoint_deterministic": 694,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 694,
+          "vendor-npi": 0,
+          "vendor-npi-list": 694,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118711,6 +118760,7 @@
         "reach_by_tier": {
           "ndh": 7,
           "vendor-npi": 66,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118741,27 +118791,28 @@
             "url": "https://fhir-myrecord.cerner.com/r4/2ff937d5-49c0-4d88-b923-0f5bdcf3b04f",
             "vendor": "Oracle Health",
             "via_member": "CROZER-KEYSTONE GENERAL SURGERY ASSOCIATES",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 112
           },
           {
             "url": "https://fhir-myrecord.cerner.com/r4/60763645-ac00-4eaa-9f95-71337d5e80c1",
             "vendor": "Oracle Health",
             "via_member": "CROZER KEYSTONE PHYSICAL MEDICINE AND REHABILITATION",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 15
           }
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 2
+          "vendor-npi-list": 2
         },
-        "endpoint_count_deterministic": 2,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 127,
-        "reaches_endpoint_deterministic": 127,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 127,
+          "vendor-npi": 0,
+          "vendor-npi-list": 127,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118815,6 +118866,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118860,20 +118912,21 @@
             "url": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "CONEMAUGH PHYSICIAN GROUP CRESSON",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 663
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 663,
-        "reaches_endpoint_deterministic": 660,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 660,
+          "vendor-npi": 0,
+          "vendor-npi-list": 660,
           "alias": 0,
           "name-state": 3,
           "brand-state": 0,
@@ -118937,6 +118990,7 @@
         "reach_by_tier": {
           "ndh": 15,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -118965,20 +119019,21 @@
             "url": "https://fhir-myrecord.cerner.com/r4/2ff937d5-49c0-4d88-b923-0f5bdcf3b04f",
             "vendor": "Oracle Health",
             "via_member": "HAN INFECTIOUS DISEASE TRAVEL MEDICINE",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 49
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 49,
-        "reaches_endpoint_deterministic": 49,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 49,
+          "vendor-npi": 0,
+          "vendor-npi-list": 49,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119032,6 +119087,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119064,6 +119120,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119115,6 +119172,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119169,21 +119227,22 @@
             "url": "https://fhir-myrecord.cerner.com/r4/2ff937d5-49c0-4d88-b923-0f5bdcf3b04f",
             "vendor": "Oracle Health",
             "via_member": "DELAWARE VALLEY UROGYNECOLOGY",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 14
           }
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
           "ndh": 1,
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 2,
+        "endpoint_count_deterministic": 1,
         "reaches_endpoint": 16,
-        "reaches_endpoint_deterministic": 16,
+        "reaches_endpoint_deterministic": 2,
         "reach_by_tier": {
           "ndh": 1,
-          "vendor-npi": 15,
+          "vendor-npi": 1,
+          "vendor-npi-list": 14,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119256,6 +119315,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 3,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 16,
           "brand-state": 0,
@@ -119312,6 +119372,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 149,
@@ -119343,6 +119404,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119374,6 +119436,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119418,25 +119481,11 @@
         ],
         "endpoints": [
           {
-            "url": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4",
-            "vendor": "Epic (User-access Brands)",
-            "via_member": "CMS HIH",
-            "tier": "vendor-npi",
-            "practitioners": 433
-          },
-          {
             "url": "https://fhir-myrecord.cerner.com/r4/136fea15-c667-40bc-9ed2-b1115d62123b",
             "vendor": "Oracle Health",
             "via_member": "CMS HIH",
             "tier": "vendor-npi",
             "practitioners": 37
-          },
-          {
-            "url": "https://fhir-myrecord.cerner.com/r4/ea592379-b0ed-4cfa-aa0c-6e5256a40b54",
-            "vendor": "Oracle Health",
-            "via_member": "CMS HIH",
-            "tier": "vendor-npi",
-            "practitioners": 4
           },
           {
             "url": "https://api.platform.athenahealth.com/2518/brand/1/csg/22/fhir/r4",
@@ -119450,19 +119499,35 @@
             "vendor": "athenahealth",
             "via_member": "CMS HIH",
             "tier": "vendor-npi",
-            "practitioners": 1
+            "practitioners": 2
+          },
+          {
+            "url": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4",
+            "vendor": "Epic (User-access Brands)",
+            "via_member": "CMS HIH",
+            "tier": "vendor-npi-list",
+            "practitioners": 407
+          },
+          {
+            "url": "https://fhir-myrecord.cerner.com/r4/ea592379-b0ed-4cfa-aa0c-6e5256a40b54",
+            "vendor": "Oracle Health",
+            "via_member": "CMS HIH",
+            "tier": "vendor-npi-list",
+            "practitioners": 29
           }
         ],
         "endpoint_count": 5,
         "endpoint_count_by_tier": {
-          "vendor-npi": 5
+          "vendor-npi": 3,
+          "vendor-npi-list": 2
         },
-        "endpoint_count_deterministic": 5,
+        "endpoint_count_deterministic": 3,
         "reaches_endpoint": 479,
-        "reaches_endpoint_deterministic": 479,
+        "reaches_endpoint_deterministic": 43,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 479,
+          "vendor-npi": 43,
+          "vendor-npi-list": 436,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119510,6 +119575,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119557,7 +119623,7 @@
             "url": "https://epicproxy.et1041.epichosted.com/fhirproxy/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "READING NEPHROLOGY",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 11
           },
           {
@@ -119570,15 +119636,16 @@
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1,
+          "vendor-npi-list": 1,
           "name-state": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 424,
-        "reaches_endpoint_deterministic": 11,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 11,
+          "vendor-npi": 0,
+          "vendor-npi-list": 11,
           "alias": 0,
           "name-state": 381,
           "brand-state": 0,
@@ -119635,20 +119702,22 @@
             "url": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "KEYSTONE CANCER CENTER",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 2
           }
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi": 2
+          "vendor-npi": 1,
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 2,
+        "endpoint_count_deterministic": 1,
         "reaches_endpoint": 53,
-        "reaches_endpoint_deterministic": 53,
+        "reaches_endpoint_deterministic": 51,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 53,
+          "vendor-npi": 51,
+          "vendor-npi-list": 2,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119700,6 +119769,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119739,6 +119809,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119771,20 +119842,21 @@
             "url": "https://scripts.prevea.com/fhir-arr-prd/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "ST VINCENT HOSPITAL",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 1
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 1,
-        "reaches_endpoint_deterministic": 1,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 1,
+          "vendor-npi": 0,
+          "vendor-npi-list": 1,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119848,6 +119920,7 @@
         "reach_by_tier": {
           "ndh": 45,
           "vendor-npi": 3,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -119911,6 +119984,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 384,
           "name-state": 0,
           "brand-state": 0,
@@ -119953,6 +120027,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120006,6 +120081,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120054,6 +120130,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120105,6 +120182,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120148,6 +120226,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120202,6 +120281,7 @@
         "reach_by_tier": {
           "ndh": 7,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120239,20 +120319,21 @@
             "url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "DIGESTIVE DISEASE ASSOCIATES LTD",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 319
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 319,
-        "reaches_endpoint_deterministic": 318,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 318,
+          "vendor-npi": 0,
+          "vendor-npi-list": 318,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120302,6 +120383,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 105,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120357,6 +120439,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 344,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120420,6 +120503,7 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
+          "vendor-npi-list": 0,
           "alias": 0,
           "name-state": 2,
           "brand-state": 0,
@@ -120465,20 +120549,21 @@
             "url": "https://fhir-myrecord.cerner.com/r4/66620725-6ef3-4a7f-a15f-88b48c4af7dd",
             "vendor": "Oracle Health",
             "via_member": "ST JOSEPH MEDICAL GROUP",
-            "tier": "vendor-npi",
+            "tier": "vendor-npi-list",
             "practitioners": 282
           }
         ],
         "endpoint_count": 1,
         "endpoint_count_by_tier": {
-          "vendor-npi": 1
+          "vendor-npi-list": 1
         },
-        "endpoint_count_deterministic": 1,
+        "endpoint_count_deterministic": 0,
         "reaches_endpoint": 282,
-        "reaches_endpoint_deterministic": 282,
+        "reaches_endpoint_deterministic": 0,
         "reach_by_tier": {
           "ndh": 0,
-          "vendor-npi": 282,
+          "vendor-npi": 0,
+          "vendor-npi-list": 282,
           "alias": 0,
           "name-state": 0,
           "brand-state": 0,
@@ -120491,7 +120576,7 @@
     ]
   },
   "graph": {
-    "note": "The 50 largest systems, the endpoints any of their members reach, and the EHR vendor behind each endpoint. A system is filled only when the NDH or a vendor-published NPI reaches it (connected_deterministic); one reached only by alias, name or brand match, or CMS enrollment is hollow with a blue ring and its links are dashed (tier on each link). Systems with no edge are the finding: they hold practitioners and nothing public connects them to a system that serves records.",
+    "note": "The 50 largest systems, the endpoints any of their members reach, and the EHR vendor behind each endpoint. A system is filled only when the NDH or a vendor-published NPI reaches it (connected_deterministic); one reached only through a vendor NPI on a URL listing more than 10 NPIs, alias, name or brand match, or CMS enrollment is hollow with a blue ring and its links are dashed (tier on each link). Systems with no edge are the finding: they hold practitioners and nothing public connects them to a system that serves records.",
     "nodes": [
       {
         "id": "sys:brand:UNIVERSITY OF PITTSBURGH",
@@ -120552,7 +120637,7 @@
         "organizations": 59,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "ep:api.platform.athenahealth.com",
@@ -120576,7 +120661,7 @@
         "organizations": 257,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "ep:fhir-myrecord.cerner.com",
@@ -120627,7 +120712,7 @@
         "organizations": 213,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "sys:brand:JEFFERSON",
@@ -120762,7 +120847,7 @@
         "organizations": 52,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "sys:brand:CHCA",
@@ -120782,7 +120867,7 @@
         "organizations": 46,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "ep:fhir.guthrie.org",
@@ -120829,7 +120914,7 @@
         "organizations": 63,
         "basis": "nppes-parent",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "sys:brand:SUSQUEHANNA",
@@ -120849,7 +120934,7 @@
         "organizations": 34,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "ep:epicproxy.et0962.epichosted.com",
@@ -120876,7 +120961,7 @@
         "organizations": 6,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "sys:parent:EXCELA HEALTH HOLDING",
@@ -120896,7 +120981,7 @@
         "organizations": 23,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "sys:brand:ABINGTON",
@@ -120916,7 +121001,7 @@
         "organizations": 6,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "sys:brand:ARIA",
@@ -121023,13 +121108,6 @@
         "connected_deterministic": true
       },
       {
-        "id": "ep:apps.mywvuchart.com",
-        "label": "apps.mywvuchart.com",
-        "type": "endpoint",
-        "vendor": "Epic (User-access Brands)",
-        "via": "CMS HIH"
-      },
-      {
         "id": "sys:brand:METHODIST",
         "label": "METHODIST",
         "type": "system",
@@ -121047,7 +121125,7 @@
         "organizations": 39,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "ep:epicproxy.et1041.epichosted.com",
@@ -121094,7 +121172,7 @@
         "organizations": 10,
         "basis": "brand-name",
         "connected": true,
-        "connected_deterministic": true
+        "connected_deterministic": false
       },
       {
         "id": "ep:scripts.prevea.com",
@@ -121197,7 +121275,7 @@
         "source": "sys:brand:AHN",
         "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:api.platform.athenahealth.com",
@@ -121219,7 +121297,7 @@
         "source": "sys:brand:ST LUKE",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121261,17 +121339,6 @@
       },
       {
         "source": "sys:parent:LEHIGH VALLEY PHYSICIAN GROUP",
-        "target": "ep:fhir-myrecord.cerner.com",
-        "kind": "reaches",
-        "tier": "vendor-npi"
-      },
-      {
-        "source": "ep:fhir-myrecord.cerner.com",
-        "target": "vendor:Oracle Health",
-        "kind": "served-by"
-      },
-      {
-        "source": "sys:parent:LEHIGH VALLEY PHYSICIAN GROUP",
         "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
         "tier": "vendor-npi"
@@ -121279,6 +121346,17 @@
       {
         "source": "ep:api.platform.athenahealth.com",
         "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:parent:LEHIGH VALLEY PHYSICIAN GROUP",
+        "target": "ep:fhir-myrecord.cerner.com",
+        "kind": "reaches",
+        "tier": "vendor-npi-list"
+      },
+      {
+        "source": "ep:fhir-myrecord.cerner.com",
+        "target": "vendor:Oracle Health",
         "kind": "served-by"
       },
       {
@@ -121296,7 +121374,7 @@
         "source": "sys:brand:PINNACLE",
         "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:api.platform.athenahealth.com",
@@ -121340,7 +121418,7 @@
         "source": "sys:brand:OPTUM",
         "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:api.platform.athenahealth.com",
@@ -121413,7 +121491,7 @@
         "source": "sys:brand:LANCASTER",
         "target": "ep:epicproxy.lghealth.org",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:epicproxy.lghealth.org",
@@ -121424,7 +121502,7 @@
         "source": "sys:brand:LANCASTER",
         "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:api.platform.athenahealth.com",
@@ -121446,7 +121524,7 @@
         "source": "sys:brand:EINSTEIN",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121457,7 +121535,7 @@
         "source": "sys:brand:GUTHRIE",
         "target": "ep:fhir.guthrie.org",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir.guthrie.org",
@@ -121479,7 +121557,7 @@
         "source": "sys:parent:PENN HIGHLANDS HEALTHCARE",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121512,7 +121590,7 @@
         "source": "sys:brand:DLP",
         "target": "ep:epicproxy.et0962.epichosted.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:epicproxy.et0962.epichosted.com",
@@ -121541,7 +121619,7 @@
         "source": "sys:brand:CROZER",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121552,7 +121630,7 @@
         "source": "sys:brand:CROZER",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121563,7 +121641,7 @@
         "source": "sys:brand:CONEMAUGH",
         "target": "ep:epicproxy.et0962.epichosted.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:epicproxy.et0962.epichosted.com",
@@ -121580,7 +121658,7 @@
         "source": "sys:brand:HAN",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121602,7 +121680,7 @@
         "source": "sys:brand:DELAWARE",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:fhir-myrecord.cerner.com",
@@ -121644,17 +121722,6 @@
       },
       {
         "source": "sys:brand:CMS HIH",
-        "target": "ep:apps.mywvuchart.com",
-        "kind": "reaches",
-        "tier": "vendor-npi"
-      },
-      {
-        "source": "ep:apps.mywvuchart.com",
-        "target": "vendor:Epic (User-access Brands)",
-        "kind": "served-by"
-      },
-      {
-        "source": "sys:brand:CMS HIH",
         "target": "ep:fhir-myrecord.cerner.com",
         "kind": "reaches",
         "tier": "vendor-npi"
@@ -121666,20 +121733,31 @@
       },
       {
         "source": "sys:brand:CMS HIH",
-        "target": "ep:fhir-myrecord.cerner.com",
+        "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
         "tier": "vendor-npi"
       },
       {
-        "source": "ep:fhir-myrecord.cerner.com",
-        "target": "vendor:Oracle Health",
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:CMS HIH",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches",
+        "tier": "vendor-npi"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
         "kind": "served-by"
       },
       {
         "source": "sys:brand:READING",
         "target": "ep:epicproxy.et1041.epichosted.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:epicproxy.et1041.epichosted.com",
@@ -121712,7 +121790,7 @@
         "source": "sys:brand:KEYSTONE",
         "target": "ep:api.platform.athenahealth.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:api.platform.athenahealth.com",
@@ -121723,7 +121801,7 @@
         "source": "sys:brand:ST VINCENT",
         "target": "ep:scripts.prevea.com",
         "kind": "reaches",
-        "tier": "vendor-npi"
+        "tier": "vendor-npi-list"
       },
       {
         "source": "ep:scripts.prevea.com",
@@ -122206,7 +122284,7 @@
       "practitioners": 962,
       "endpoint": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122230,7 +122308,7 @@
       "practitioners": 873,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/czxzx6lxe-l3uyv_vyuzukxovalymhgz",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -122362,7 +122440,7 @@
       "practitioners": 661,
       "endpoint": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122422,7 +122500,7 @@
       "practitioners": 600,
       "endpoint": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122470,7 +122548,7 @@
       "practitioners": 568,
       "endpoint": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122650,7 +122728,7 @@
       "practitioners": 459,
       "endpoint": "https://api.platform.athenahealth.com/11127/brand/1/csg/1/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "athenahealth"
     },
     {
@@ -122686,7 +122764,7 @@
       "practitioners": 430,
       "endpoint": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "athenahealth"
     },
     {
@@ -123022,7 +123100,7 @@
       "practitioners": 318,
       "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123082,7 +123160,7 @@
       "practitioners": 306,
       "endpoint": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123178,7 +123256,7 @@
       "practitioners": 294,
       "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123214,7 +123292,7 @@
       "practitioners": 288,
       "endpoint": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123274,7 +123352,7 @@
       "practitioners": 275,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/5c7467fb-60f9-4172-add4-57667a5dfcfa",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -123298,7 +123376,7 @@
       "practitioners": 272,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/czxzx6lxe-l3uyv_vyuzukxovalymhgz",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -123358,7 +123436,7 @@
       "practitioners": 265,
       "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123418,7 +123496,7 @@
       "practitioners": 256,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/66620725-6ef3-4a7f-a15f-88b48c4af7dd",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -123512,9 +123590,9 @@
       "city": "Meadowbrook",
       "state": "PA",
       "practitioners": 249,
-      "endpoint": "https://api.platform.athenahealth.com/17399/brand/1/csg/1/fhir/r4",
+      "endpoint": "https://api.platform.athenahealth.com/17399/brand/1/csg/21/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "athenahealth"
     },
     {
@@ -123802,7 +123880,7 @@
       "practitioners": 215,
       "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123982,7 +124060,7 @@
       "practitioners": 189,
       "endpoint": "https://api.platform.athenahealth.com/27404/brand/1/csg/1/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "athenahealth"
     },
     {
@@ -124102,7 +124180,7 @@
       "practitioners": 177,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/n7ld0qx6o97vwg2k68nv0s0g4xzq2rtm",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -124174,7 +124252,7 @@
       "practitioners": 173,
       "endpoint": "https://call.api.northwell.io/epic-proxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -124414,7 +124492,7 @@
       "practitioners": 152,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/5c7467fb-60f9-4172-add4-57667a5dfcfa",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -124666,7 +124744,7 @@
       "practitioners": 145,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/n7ld0qx6o97vwg2k68nv0s0g4xzq2rtm",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {
@@ -124738,7 +124816,7 @@
       "practitioners": 144,
       "endpoint": "https://fhir-myrecord.cerner.com/r4/1031a3cd-9903-4995-baa5-734895a3e2a2",
       "endpoint_candidate": null,
-      "endpoint_basis": "vendor-npi",
+      "endpoint_basis": "vendor-npi-list",
       "vendor": "Oracle Health"
     },
     {

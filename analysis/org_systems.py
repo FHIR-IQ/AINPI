@@ -70,6 +70,7 @@ Cost: no BigQuery of its own. Operates on rows the caller already fetched.
 from __future__ import annotations
 
 import collections
+import csv
 
 # Leading tokens too generic to identify a system on their own. Grouping on
 # these merges unrelated organizations, which is worse than not grouping: a
@@ -651,24 +652,73 @@ KNOWN_SYSTEM_DOMAINS = {
 }
 
 
-# Known systems that publish an own-domain endpoint the rollup measurably does
-# not reach, each with the evidence. An entry turns the reach control's
-# failure into a published, named gap instead of a crash, and the control
-# fails again the moment the system is reached, so an entry cannot outlive the
-# gap it describes. Adding one is a decision, not a fix.
+# A vendor URL listing more NPIs than this is a practice-wide or brand-wide
+# list. Matching an organization NPI through it is its own tier,
+# `vendor-npi-list`, never deterministic (FHI-73). Same value as
+# h51_vendor_endpoint_attribution.LIST_THRESHOLD, which bands the pairs.
+LIST_THRESHOLD = 10
+
+
+def read_vendor_npi_urls(path):
+    """H51 CSV -> (npi -> url, url -> NPIs the vendor lists for it).
+
+    An NPI the vendor lists beside several URLs maps to the URL listing the
+    fewest NPIs (ties keep the first row), because that is the most specific
+    statement the file makes about it. Reading first-seen instead let an NPI
+    listed on its own department URL and on a practice-wide list take the
+    list, and its tier with it. The count comes from `npis_on_url`, or from
+    the rows themselves for a file written before that column existed.
+    Missing file: two empty maps.
+    """
+    npi_urls = collections.defaultdict(list)
+    url_npis = collections.defaultdict(set)
+    declared = {}
+    try:
+        fh = open(path, newline="")
+    except FileNotFoundError:
+        return {}, {}
+    with fh:
+        for row in csv.DictReader(fh):
+            url = (row.get("url") or "").strip()
+            npi = (row.get("org_npi") or "").strip()
+            if not url or not npi:
+                continue
+            if url not in npi_urls[npi]:
+                npi_urls[npi].append(url)
+            url_npis[url].add(npi)
+            n = (row.get("npis_on_url") or "").strip()
+            if n.isdigit():
+                declared[url] = int(n)
+    count = {u: declared.get(u, len(v)) for u, v in url_npis.items()}
+    npi_url = {npi: min(urls, key=lambda u: count[u])  # min keeps first on ties
+               for npi, urls in npi_urls.items()}
+    return npi_url, count
+
+
+def vendor_npi_tier(url, url_npi_count):
+    """`vendor-npi` or `vendor-npi-list` for a URL reached by a vendor NPI."""
+    return ("vendor-npi-list"
+            if (url_npi_count or {}).get(url, 0) > LIST_THRESHOLD
+            else "vendor-npi")
+
+
+# Known systems that publish an own-domain endpoint which NO tier reaches,
+# CMS enrollment included, each with the evidence. An entry turns the reach
+# control's failure into a published, named gap instead of a crash, and the
+# control fails again the moment any tier reaches the system, so an entry
+# cannot outlive the gap it describes. Adding one is a decision, not a fix.
+#
+# Empty for PA since 2026-10-16. Jefferson was listed with the reason "no
+# CMS-enrolled group resolves to it", which was wrong on the 2026-10-07
+# release: 1,378 clinicians reach fhir.jefferson.edu through the CMS-enrolled
+# group Jefferson University Physicians. The control did not catch it because
+# it counted only member tiers. It now counts every tier when judging an
+# entry, so that text would have failed the run. What is still true, that no
+# member organization's own NDH, vendor or H53 route reaches the domain, is
+# measured each run and published as an acknowledged row (see
+# `check_system_controls`, check 4) rather than asserted here.
 KNOWN_UNREACHED = {
-    "PA": {
-        "Jefferson": (
-            "Epic publishes Thomas Jefferson University Health System at "
-            "fhir.jefferson.edu and the NDH attributes that endpoint to ARIA "
-            "HEALTH FRANKFORD CAMPUS, which groups under ARIA, not JEFFERSON. "
-            "No JEFFERSON-named member resolves to it at any tier on the "
-            "2026-10-07 release: the brand prefix differs (THOMAS), the "
-            "JEFFERSON UNIVERSITY PHYSICIANS alias matches only out-of-state "
-            "or stateless records, and no CMS-enrolled group resolves to it "
-            "(FHI-73)."
-        ),
-    },
+    "PA": {},
 }
 
 
@@ -725,17 +775,26 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
        domain, the systems carrying its labels must, between them, reach at
        least one practitioner on that domain. `reach_by_system` maps
        system_key -> {url: {tier: practitioners}} (a bare count per URL is
-       read as member-tier reach). Only member tiers count toward "reached":
-       CMS enrollment belongs to one clinician, so reach through it alone
-       does not show the rollup connects the system. With no endpoint URLs
-       loaded at all the check fails rather than passing vacuously.
-       This is what was missing when the published table showed Geisinger at
-       zero endpoints while its own funnel counted 5,199 of its clinicians
-       reaching geisapi.geisinger.edu. Skipped when `reach_by_system` is None.
-       A system listed in `KNOWN_UNREACHED` (or `known_unreached`) is not a
-       problem while it stays unreached; it is appended to `acknowledged`
-       (a list the caller publishes). Once it is reached the entry is stale
-       and that is a problem, so the exception cannot linger.
+       read as member-tier reach). With no endpoint URLs loaded at all the
+       check fails rather than passing vacuously. This is what was missing
+       when the published table showed Geisinger at zero endpoints while its
+       own funnel counted 5,199 of its clinicians reaching
+       geisapi.geisinger.edu. Skipped when `reach_by_system` is None.
+
+       Reach is counted two ways: through member tiers only, and through
+       every tier including `cms-enrollment-own-endpoint`.
+         - Zero at every tier: a problem, unless the system is listed in
+           `KNOWN_UNREACHED` (or `known_unreached`), in which case it is
+           appended to `acknowledged` (a list the caller publishes).
+         - Reached at any tier while listed in `KNOWN_UNREACHED`: a problem,
+           the entry is stale. Counting enrollment here is what makes a wrong
+           "no CMS-enrolled group resolves to it" fail the run (FHI-73).
+         - Zero through member tiers but reached through enrollment: not a
+           problem, appended to `acknowledged` with the measured counts, so
+           the member-route gap is published every run without a hardcoded
+           entry. Trade-off, stated plainly: a regression that dropped every
+           member tier for a system that enrollment still reaches no longer
+           crashes the run; it publishes a member-tier zero instead.
 
     `systems` and `excluded` are the full lists from `build_systems`, not the
     truncated payload rows. Organizations claimed by an attested tier are
@@ -794,7 +853,8 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                        if any(host_on_domain(h, d) for h in hosts)]
             if not present:
                 continue  # nothing published on the domain to reach
-            reached = 0
+            reached = 0        # member tiers only
+            reached_any = 0    # every tier, CMS enrollment included
             for s in systems:
                 if not any(_label_matches(s.get("label") or "", p)
                            for p in prefixes):
@@ -802,27 +862,44 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                 for url, n in (reach_by_system.get(s["system_key"]) or {}).items():
                     if not any(host_on_domain(url_host(url), d) for d in present):
                         continue
-                    # Only member tiers count. CMS enrollment is one
-                    # clinician's record and cannot show the rollup works.
                     if isinstance(n, dict):
+                        reached_any += sum(n.values())
                         n = sum(v for t, v in n.items()
                                 if t not in ENROLLMENT_TIERS)
+                    else:
+                        reached_any += n
                     reached += n
             excused = unreached.get(name)
-            if reached == 0 and excused:
+            if reached_any == 0 and excused:
                 if acknowledged is not None:
                     acknowledged.append({"system": name,
                                          "domains": present,
-                                         "reason": excused})
-            elif reached == 0:
+                                         "reason": excused,
+                                         "reached_through_member_tiers": 0,
+                                         "reached_through_enrollment_only": 0})
+            elif reached_any == 0:
                 problems.append(
                     f"known system {name} publishes an endpoint on "
                     f"{', '.join(present)} but the system rollup reaches no "
-                    f"practitioner on it through any member tier (CMS "
-                    f"enrollment does not count)")
+                    f"practitioner on it at any tier")
             elif excused:
                 problems.append(
                     f"known system {name} is listed in KNOWN_UNREACHED but "
-                    f"now reaches {reached:,} practitioners on "
-                    f"{', '.join(present)}; remove the entry")
+                    f"reaches {reached_any:,} practitioners on "
+                    f"{', '.join(present)} ({reached:,} through member tiers, "
+                    f"{reached_any - reached:,} through CMS enrollment); "
+                    f"remove or restate the entry")
+            elif reached == 0 and acknowledged is not None:
+                acknowledged.append({
+                    "system": name,
+                    "domains": present,
+                    "reason": (
+                        f"No member organization's own route (NDH "
+                        f"attribution, vendor-published NPI, or H53 alias, "
+                        f"name or brand resolution) reaches "
+                        f"{', '.join(present)}. {reached_any:,} clinicians "
+                        f"reach it only through their CMS-enrolled group."),
+                    "reached_through_member_tiers": 0,
+                    "reached_through_enrollment_only": reached_any,
+                })
     return problems

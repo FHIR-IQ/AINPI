@@ -352,7 +352,13 @@ REGISTRY: tuple = (
             "FHIR REST endpoints with no resolvable managingOrganization"),),
         sources=(Source(f"{PUBLISHED}/vendor-endpoint-attribution@0f8f39d.json", finding_ratio, vendored_from="0f8f39d"),
                  Source(f"{PUBLISHED}/vendor-endpoint-attribution@6e74041.json", finding_ratio, vendored_from="6e74041"),
-                 Source(f"{FINDINGS}/vendor-endpoint-attribution.json", finding_ratio)),
+                 Source(f"{FINDINGS}/vendor-endpoint-attribution.json", finding_ratio),
+                 Source(f"{PUBLISHED}/vendor-endpoint-attribution@4023860.json", finding_ratio,
+                        vendored_from="4023860", restatement_of="2026-10-07",
+                        restatement_reason="First published counting athenahealth's shared base URL "
+                                           "(https://api.platform.athenahealth.com/fhir/r4), which every athenahealth "
+                                           "customer uses and which names no organization, as a vendor attribution; "
+                                           "restated on 2026-10-16 (FHI-73) with that URL excluded.")),
         ordinary_move={"kind": "absolute", "max": 0.05,
                        "why": "Both inputs change: the NDH by release and the vendor files whenever vendors republish."},
         notes="This measure has two clocks. The vendor files are fetched when the script runs, not when CMS "

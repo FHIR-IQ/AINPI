@@ -2,10 +2,10 @@
   "state": "PA",
   "slug": "pa-system-endpoint-gap",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-16T22:03:29+00:00",
+  "generated_at": "2026-10-16T22:45:19+00:00",
   "methodology_version": "0.7.3-draft",
-  "question": "Why do the largest health systems in the connectivity ledger show zero endpoints?",
-  "answer": "The zero is not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the vendor publishes no member organization's NPI. The systems hold 21,963 distinct clinicians (the ledger's per-system counts sum practitioner-organization links). Through a member organization or CMS enrollment, the same tiers the ledger's practitioner funnel accepts, 21,460 of them already reach an endpoint (a lower bound on what the funnel credits them, since it also counts non-member organizations): 839 through the NDH or a vendor-published NPI, the only links the system rollup counts, 18,268 through name or brand resolution (H53) and 2,353 through CMS enrollment.",
+  "question": "How do the largest health systems in the connectivity ledger reach their endpoints, and why did the system table show zero endpoints for them before FHI-73?",
+  "answer": "The zero the system table showed before FHI-73 was not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the system's own Epic brand lists none of its member organizations' NPIs. The systems hold 21,963 distinct clinicians. The system rollup now counts every tier the practitioner funnel counts, each labelled. Through a member organization or CMS enrollment, 21,460 of them reach an endpoint: 0 through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs (the deterministic tiers), 839 through a vendor NPI on a practice-wide or brand-wide list, 18,268 through name or brand resolution (H53) and 2,353 through CMS enrollment (any enrolled group; the ledger counts enrollment only when it lands on the system's own endpoint).",
   "sources": {
     "systems": "/api/v1/states/pa-connectivity.json (grouping rebuilt with analysis/org_systems.build_systems)",
     "organizations": "/api/v1/states/pa-org-endpoint-resolution.csv (H53)",
@@ -71,6 +71,7 @@
       "reach": {
         "practitioners": 6793,
         "strict": 0,
+        "vendor_list": 0,
         "resolution": 6751,
         "enrollment": 5,
         "none": 37,
@@ -210,6 +211,7 @@
       "reach": {
         "practitioners": 5199,
         "strict": 0,
+        "vendor_list": 0,
         "resolution": 5199,
         "enrollment": 0,
         "none": 0,
@@ -348,15 +350,16 @@
         "partof_targets": [],
         "members_by_h53_tier": {
           "brand-state": 226,
-          "unresolved": 3,
           "name-state": 26,
-          "npi": 2
+          "npi": 2,
+          "unresolved": 3
         },
         "members_with_vendor_published_npi": 2
       },
       "reach": {
         "practitioners": 3029,
-        "strict": 99,
+        "strict": 0,
+        "vendor_list": 99,
         "resolution": 2929,
         "enrollment": 1,
         "none": 0,
@@ -507,14 +510,15 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "npi": 11,
-          "unresolved": 48
+          "unresolved": 48,
+          "npi": 11
         },
         "members_with_vendor_published_npi": 11
       },
       "reach": {
         "practitioners": 3215,
-        "strict": 310,
+        "strict": 0,
+        "vendor_list": 310,
         "resolution": 0,
         "enrollment": 2702,
         "none": 203,
@@ -656,15 +660,16 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "alias": 167,
           "unresolved": 34,
+          "alias": 167,
           "npi": 12
         },
         "members_with_vendor_published_npi": 12
       },
       "reach": {
         "practitioners": 2382,
-        "strict": 431,
+        "strict": 0,
+        "vendor_list": 431,
         "resolution": 1512,
         "enrollment": 117,
         "none": 322,
@@ -796,14 +801,15 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "name-state": 36,
-          "brand-state": 108
+          "brand-state": 108,
+          "name-state": 36
         },
         "members_with_vendor_published_npi": 0
       },
       "reach": {
         "practitioners": 2956,
         "strict": 0,
+        "vendor_list": 0,
         "resolution": 2956,
         "enrollment": 0,
         "none": 0,
@@ -891,7 +897,7 @@
     },
     "rollup_omits_h53_tier": {
       "systems_affected_in_this_table": [],
-      "where": "analysis/state_connectivity.py build(): the system rollup calls resolve_org(), which never consults org_resolution (H53, organization level)."
+      "where": "fixed in FHI-73: analysis/state_connectivity.py rollup_system_reach() walks member_endpoint(), which includes org_resolution (H53). Listed systems are any where the defect recurs."
     },
     "rollup_omits_enrollment_own_domain": {
       "systems_affected_in_this_table": [],
@@ -904,7 +910,7 @@
         "brand:WELLSPAN": 0
       },
       "threshold": "raised when more than half of a system's enrollment-tier reach lands on its own domain",
-      "where": "analysis/state_connectivity.py build(): the system rollup never consults enrollment_endpoints (CMS enrollment, practitioner level)."
+      "where": "fixed in FHI-73: rollup_system_reach() counts enrollment_endpoints when they land on an endpoint the system reaches or on its own domain (cms-enrollment-own-endpoint)."
     },
     "dead_curated_aliases": {
       "count": 0,
@@ -918,7 +924,7 @@
       "of_which_unresolved_by_any_tier": 0,
       "unresolved_practitioner_org_links": 0,
       "top": [],
-      "where": "analysis/h51_vendor_endpoint_attribution.py parse_bundle(): url2npi.setdefault keeps the first NPI per URL."
+      "where": "fixed in FHI-73: h51_vendor_endpoint_attribution.py parse_bundle() keeps every NPI per URL. Counted here are member NPIs Epic publishes that the H51 CSV still does not carry."
     }
   },
   "causes": {
@@ -964,13 +970,13 @@
       ]
     },
     "rollup-omits-h53-tier": {
-      "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
+      "explanation": "AINPI defect, fixed in FHI-73 and raised only if it recurs: the ledger shows the system with zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53 name/brand resolution, with reaching one. Before FHI-73 the system rollup accepted only NDH and vendor-NPI links.",
       "fixable_by": [
         "ainpi"
       ]
     },
     "rollup-omits-enrollment-own-domain": {
-      "explanation": "AINPI defect: the rollup also ignores CMS enrollment, a practitioner-level tier the funnel counts. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
+      "explanation": "AINPI defect, fixed in FHI-73 and raised only if it recurs: the ledger shows zero endpoints although CMS enrollment, a practitioner-level tier the funnel counts, reaches the system's own domain. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
       "fixable_by": [
         "ainpi"
       ]
@@ -982,7 +988,7 @@
       ]
     },
     "h51-one-npi-per-url": {
-      "explanation": "AINPI defect: the vendor publishes an NPI that matches a member organization, but H51's CSV keeps one NPI per endpoint URL and dropped it.",
+      "explanation": "AINPI defect, fixed in FHI-73 and raised only if it recurs: the vendor publishes an NPI that matches a member organization, but H51's CSV does not carry it (before FHI-73 it kept one NPI per endpoint URL).",
       "fixable_by": [
         "ainpi"
       ]
@@ -999,25 +1005,25 @@
     {
       "query": "parent",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     },
     {
       "query": "pairs",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     },
     {
       "query": "members",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     },
     {
       "query": "endpoints",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     }
   ],
@@ -1029,7 +1035,8 @@
   "all_analysed_systems": {
     "note": "Distinct practitioners across the analysed systems, each counted once at the strongest tier any member reaches.",
     "practitioners": 21963,
-    "strict": 839,
+    "strict": 0,
+    "vendor_list": 839,
     "resolution": 18268,
     "enrollment": 2353,
     "none": 503,

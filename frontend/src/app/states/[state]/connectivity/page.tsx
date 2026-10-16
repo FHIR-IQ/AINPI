@@ -101,6 +101,10 @@ const BAND_STYLE: Record<string, { label: string; className: string }> = {
     label: 'Vendor NPI',
     className: 'bg-primary-100 text-primary-900 border-primary-300',
   },
+  vendor_list: {
+    label: 'Vendor NPI list',
+    className: 'bg-primary-50 text-primary-900 border-primary-500 border-dashed',
+  },
   resolved: {
     label: 'Name/brand resolved',
     className: 'bg-primary-50 text-primary-900 border-primary-400',
@@ -164,7 +168,16 @@ function Connectivity({
   const hasTiers = systems.rows.some((r) => r.reach_by_tier);
 
   const bands = (
-    ['green', 'yellow', 'resolved', 'enrolled', 'candidate', 'red', 'none'] as const
+    [
+      'green',
+      'yellow',
+      'vendor_list',
+      'resolved',
+      'enrolled',
+      'candidate',
+      'red',
+      'none',
+    ] as const
   ).map(
     // A payload generated before the enrollment tier existed has no `enrolled`
     // key. Coercing to 0 keeps an older published state slice rendering rather
@@ -279,12 +292,20 @@ function Connectivity({
           <Stat
             label="Reach an endpoint"
             value={`${summary.reaches_endpoint_pct_of_affiliated}%`}
-            sub={`of those with an affiliation; ${summary.reaches_endpoint_pct}% of all`}
+            sub={`of those with an affiliation; ${summary.reaches_endpoint_pct}% of all${
+              typeof summary.reaches_endpoint_deterministic_pct === 'number'
+                ? `, ${summary.reaches_endpoint_deterministic_pct}% deterministically`
+                : ''
+            }`}
           />
           <Stat
             label="Organizations"
             value={fmt(summary.organizations)}
-            sub={`${fmt(summary.organizations_with_endpoint)} reach an endpoint`}
+            sub={
+              typeof summary.organizations_with_endpoint_via_vendor_npi_list === 'number'
+                ? `${fmt(summary.organizations_with_endpoint)} reach an endpoint deterministically, ${fmt(summary.organizations_with_endpoint_via_vendor_npi_list)} more through a vendor NPI list`
+                : `${fmt(summary.organizations_with_endpoint)} reach an endpoint`
+            }
           />
         </section>
 
@@ -460,9 +481,10 @@ function Connectivity({
           <SystemsCorrections corrections={systems.corrections} />
           {hasTiers && systems.tiers && (
             <p className="measure mb-3 text-xs text-gray-600">
-              {systems.tiers.note} Counts marked * are inference: reached by
-              alias, name or brand match, or CMS enrollment, not by the NDH or
-              a vendor-published NPI.
+              {systems.tiers.note} Counts marked * are inference: reached by a
+              vendor NPI on a practice-wide list, alias, name or brand match,
+              or CMS enrollment, not by the NDH or a vendor NPI on a URL
+              listing 10 or fewer.
             </p>
           )}
           <div className="overflow-x-auto border border-gray-200 bg-white">

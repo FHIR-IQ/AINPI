@@ -15,7 +15,18 @@
  * link.
  */
 
-export type EndpointBasis = 'ndh' | 'vendor-npi' | 'name-candidate' | null;
+/**
+ * `vendor-npi-list`: the vendor lists the organization's NPI beside a URL
+ * together with more than `vendor_npi_list_threshold` others (a practice-wide
+ * or brand-wide list). Counted as reaching an endpoint, never as
+ * deterministic (FHI-73).
+ */
+export type EndpointBasis =
+  | 'ndh'
+  | 'vendor-npi'
+  | 'vendor-npi-list'
+  | 'name-candidate'
+  | null;
 
 export interface ConnectivityFunnelStep {
   step: string;
@@ -38,7 +49,7 @@ export interface ConnectivityOrg {
   city: string | null;
   state: string | null;
   practitioners: number;
-  /** Resolved endpoint. Present only for `ndh` and `vendor-npi` bases. */
+  /** Resolved endpoint. Present for `ndh`, `vendor-npi` and `vendor-npi-list`. */
   endpoint: string | null;
   /** Name-matched only. Never a linkage. */
   endpoint_candidate: string | null;
@@ -83,13 +94,15 @@ export interface ConnectivityGraph {
 
 /**
  * How a system reaches an endpoint, strongest first (FHI-73). `ndh` and
- * `vendor-npi` are deterministic; `alias`, `name-state` and `brand-state` are
- * inference (H53); `cms-enrollment-own-endpoint` is a clinician's own CMS
+ * `vendor-npi` are deterministic; `vendor-npi-list` (a vendor NPI on a URL
+ * listing more than 10 NPIs), `alias`, `name-state` and `brand-state` are
+ * inference; `cms-enrollment-own-endpoint` is a clinician's own CMS
  * enrollment landing on this system's endpoint.
  */
 export type SystemReachTier =
   | 'ndh'
   | 'vendor-npi'
+  | 'vendor-npi-list'
   | 'alias'
   | 'name-state'
   | 'brand-state'
@@ -287,6 +300,15 @@ export interface ConnectivityPayload {
     reaches_endpoint_pct: number;
     reaches_endpoint_ndh_only: number;
     reaches_endpoint_after_vendor_npi_fill: number;
+    /**
+     * NDH, or a vendor NPI on a URL listing `vendor_npi_list_threshold` NPIs
+     * or fewer (FHI-73 and later). Not comparable with the any-route figures.
+     */
+    reaches_endpoint_deterministic?: number;
+    reaches_endpoint_deterministic_pct?: number;
+    /** Best route is a vendor NPI on a practice-wide or brand-wide list. */
+    reaches_endpoint_via_vendor_npi_list?: number;
+    vendor_npi_list_threshold?: number;
     reaches_endpoint_after_resolution: number;
     /** Cumulative total after the CMS-enrollment tier, which is the headline. */
     reaches_endpoint_after_cms_enrollment: number;
@@ -309,7 +331,9 @@ export interface ConnectivityPayload {
     reaches_endpoint_pct_of_ndh_affiliated: number;
     vendor_known: number;
     organizations: number;
+    /** NDH or vendor NPI; since FHI-73 excludes practice-wide lists. */
     organizations_with_endpoint: number;
+    organizations_with_endpoint_via_vendor_npi_list?: number;
     name_matched_candidates: number;
     organizations_with_name_candidate_only: number;
   };
@@ -319,6 +343,8 @@ export interface ConnectivityPayload {
     note: string;
     green: number;
     yellow: number;
+    /** Vendor NPI on a practice-wide list (FHI-73 and later). */
+    vendor_list?: number;
     resolved: number;
     /** Reached through CMS enrollment rather than through the directory. */
     enrolled: number;
@@ -357,7 +383,14 @@ export interface ConnectivityPayload {
     corrections?: ConnectivityCorrection[];
     known_systems_unreached?: {
       note: string;
-      rows: { system: string; domains: string[]; reason: string }[];
+      rows: {
+        system: string;
+        domains: string[];
+        reason: string;
+        reached_through_member_tiers?: number;
+        reached_through_enrollment_only?: number;
+        via?: string[];
+      }[];
     };
     vendor_brand_vetoes?: {
       note: string;

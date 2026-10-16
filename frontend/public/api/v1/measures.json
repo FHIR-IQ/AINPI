@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T22:04:07+00:00",
+  "generated_at": "2026-10-16T22:42:46+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -285,16 +285,30 @@
         },
         {
           "release": "2026-10-07",
-          "value": 0.6437292131520229,
-          "numerator": 61162,
+          "value": 0.6437186881657054,
+          "numerator": 61161,
           "denominator": 95012,
           "definition_version": 1,
           "source": {
             "file": "frontend/public/api/v1/findings/vendor-endpoint-attribution.json",
             "field": "numerator / denominator",
-            "commit": "4023860",
+            "commit": "d936c61",
             "vendored": false
           },
+          "restatements": [
+            {
+              "as_published_value": 0.6437292131520229,
+              "as_published_numerator": 61162,
+              "as_published_denominator": 95012,
+              "source": {
+                "file": "analysis/release-snapshots/published/vendor-endpoint-attribution@4023860.json",
+                "field": "numerator / denominator",
+                "commit": "4023860",
+                "vendored": true
+              },
+              "reason": "First published counting athenahealth's shared base URL (https://api.platform.athenahealth.com/fhir/r4), which every athenahealth customer uses and which names no organization, as a vendor attribution; restated on 2026-10-16 (FHI-73) with that URL excluded."
+            }
+          ],
           "comparable_to_previous": true
         }
       ],

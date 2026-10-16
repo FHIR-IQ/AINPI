@@ -66,7 +66,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
 from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
-from analysis.org_systems import GENERIC_OPENERS, normalize  # noqa: E402
+from analysis.org_systems import GENERIC_OPENERS, normalize, read_vendor_npi_urls  # noqa: E402
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
@@ -516,11 +516,9 @@ def main():
         for row in csv.DictReader(xw.open()):
             if row.get("org_npi"):
                 ep_by_npi.setdefault(row["org_npi"], row["base_url"])
-    va = OUT_DIR / "vendor-endpoint-attribution.csv"
-    if va.exists():
-        for row in csv.DictReader(va.open()):
-            if row.get("org_npi") and row.get("url"):
-                npi_url.setdefault(row["org_npi"], row["url"])
+    # Same NPI -> URL choice as the ledger (fewest NPIs on the URL wins), so
+    # the two cannot name different endpoints for one organization.
+    npi_url, _ = read_vendor_npi_urls(OUT_DIR / "vendor-endpoint-attribution.csv")
 
     # Before any query is paid for: a dead alias resolves nothing silently.
     aliases = load_aliases()

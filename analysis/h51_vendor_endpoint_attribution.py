@@ -35,7 +35,7 @@ Run:    python analysis/h51_vendor_endpoint_attribution.py
 Writes:
   - frontend/public/api/v1/findings/vendor-endpoint-attribution.json
   - frontend/public/api/v1/findings/vendor-endpoint-attribution.csv
-      url, org_name, org_npi, vendor, in_ndh, ndh_has_owner
+      url, org_name, org_npi, vendor, in_ndh, ndh_has_owner, npis_on_url
 
 Cost: one capped scan of cms_npd.endpoint. The vendor files are public HTTP
 downloads, roughly 250 MB in total, so allow a few minutes.
@@ -83,6 +83,36 @@ SOURCES = [
 
 CACHE = pathlib.Path("/tmp/ainpi-vendor-endpoints")
 
+# Vendor-wide base URLs that every customer of the vendor shares, so they
+# identify no organization. athenahealth's file hangs 125,917 organization
+# references (2026-10-13 download) off the one shared Endpoint below, beside
+# its per-practice /<practice>/brand/<n>/csg/<n>/fhir/r4 URLs. Attributing it
+# would hand 25,485 NPIs one URL and call that a match. Never attributed:
+# excluded from url2name and url2npi, counted in the JSON. Normalized form.
+SHARED_BASE_URLS = frozenset({
+    "https://api.platform.athenahealth.com/fhir/r4",
+})
+
+# A URL whose vendor lists more NPIs than this is a practice-wide or
+# brand-wide list, not a statement about one organization (athena attaches
+# the same practice list to every department; Epic brands list up to 1,881).
+# The ledger treats a match through such a URL as its own tier
+# (`vendor-npi-list` in state_connectivity.py), never as deterministic.
+LIST_THRESHOLD = 10
+
+
+def npis_band(n: int) -> str:
+    """Band label for a URL's NPI count; 0 is a URL listing none."""
+    if n <= 0:
+        return "0"
+    if n == 1:
+        return "1"
+    if n <= LIST_THRESHOLD:
+        return f"2-{LIST_THRESHOLD}"
+    if n <= 50:
+        return f"{LIST_THRESHOLD + 1}-50"
+    return ">50"
+
 
 def norm(u: str | None) -> str | None:
     """One URL spelling. Vendors and the NDH disagree on scheme and trailing slash."""
@@ -102,7 +132,8 @@ def npis_of(org: dict) -> list[str]:
     return extract_npis(org)
 
 
-def _add_npis(url2npi: dict, url: str, npis: list[str], name: str | None) -> None:
+def _add_npis(url2npi: dict, url: str, npis: list[str], name: str | None,
+              names_seen: dict | None = None) -> None:
     """Append (npi, publishing org name) pairs to a URL's ordered list.
 
     De-duplicated on the NPI: the first organization to publish an NPI beside
@@ -110,12 +141,22 @@ def _add_npis(url2npi: dict, url: str, npis: list[str], name: str | None) -> Non
     share one endpoint (Geisinger and CommunityCare both point at
     geisapi.geisinger.edu), and the brand an NPI is listed under is evidence
     the system rollup uses.
+
+    First-seen is a plain rule, not a precise one. athenahealth attaches the
+    same practice-wide NPI list to every department entry, so for those lists
+    the first department names every NPI, and it may be a sibling of the one
+    that employs the clinician. No cleaner rule exists in the file: the
+    entries are identical except for the name. `names_seen`, when given,
+    collects every distinct name per (url, npi) so the run can report how
+    often that happens.
     """
-    if not npis:
+    if not npis or url in SHARED_BASE_URLS:
         return
     bucket = url2npi.setdefault(url, [])
     have = {n for n, _ in bucket}
     for n in npis:
+        if names_seen is not None and name:
+            names_seen.setdefault((url, n), set()).add(name)
         if n not in have:
             bucket.append((n, name))
             have.add(n)
@@ -126,20 +167,44 @@ def csv_rows(url2name: dict, url2npi: dict, url2vendor: dict,
     """The crosswalk rows: one per (url, NPI), one bare row for a URL with none.
 
     Column order is the published contract and does not change; multi-NPI
-    URLs only add rows. On an NPI row, `org_name` is the organization that
-    published that NPI, which on a URL several brands share can differ from
-    the URL's first-seen name. The first row for a URL carries the NPI the
-    pre-FHI-73 file carried.
+    URLs only add rows. On an NPI row, `org_name` is the first vendor entry
+    that listed that NPI beside the URL, which on a URL several brands share
+    can differ from the URL's first-seen name, and for a practice-wide list
+    may name a sibling department. The first row for a URL carries the NPI
+    the pre-FHI-73 file carried.
+
+    `npis_on_url`, appended last so positional readers of the first six
+    columns are unaffected, is the number of distinct NPIs the vendor lists
+    for the URL (0 on a row with no NPI). Shared vendor base URLs never
+    appear.
     """
     out = []
     for u in sorted(url2name):
+        if u in SHARED_BASE_URLS:
+            continue
         in_ndh = "yes" if u in ndh_urls else "no"
         has_owner = "yes" if u in owned else ("no" if u in ndh_urls else "")
         pairs = url2npi.get(u) or [("", None)]
+        n_on_url = len(url2npi.get(u) or ())
         for npi, name in pairs:
             out.append([u, name or url2name[u], npi, url2vendor.get(u, ""),
-                        in_ndh, has_owner])
+                        in_ndh, has_owner, str(n_on_url)])
     return out
+
+
+CSV_HEADER = ["url", "org_name", "org_npi", "vendor", "in_ndh",
+              "ndh_has_owner", "npis_on_url"]
+
+
+def pair_bands(url2npi: dict) -> dict[str, int]:
+    """url-NPI pairs by the URL's NPI count: 1, 2-10, 11-50, >50."""
+    out = collections.Counter()
+    for u, pairs in url2npi.items():
+        if u in SHARED_BASE_URLS or not pairs:
+            continue
+        out[npis_band(len(pairs))] += len(pairs)
+    return {b: out[b] for b in ("1", f"2-{LIST_THRESHOLD}",
+                                f"{LIST_THRESHOLD + 1}-50", ">50")}
 
 
 def fetch(url: str, dest: pathlib.Path) -> dict:
@@ -163,7 +228,8 @@ def fetch(url: str, dest: pathlib.Path) -> dict:
     return json.loads(dest.read_text(errors="ignore"))
 
 
-def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
+def parse_bundle(bundle: dict, brands: bool, shared_refs: collections.Counter | None = None,
+                 names_seen: dict | None = None) -> tuple[dict, dict, int, int]:
     """Return (url -> org name, url -> [(npi, org name), ...], org count, orgs reachable).
 
     Every NPI published beside a URL is kept, in source order, from every
@@ -171,6 +237,9 @@ def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
     on a URL several differently named organizations share, an NPI can sit
     beside another organization's name; that was already true of the single
     NPI the earlier version kept.
+
+    A URL in SHARED_BASE_URLS is skipped at both insertion points and the
+    references to it are counted into `shared_refs`.
     """
     # Index by fullUrl AND id: Epic references entries as urn:uuid, everyone
     # else uses Type/id. Supporting only one of the two silently yields zero.
@@ -191,20 +260,29 @@ def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
         e = by_ref.get((ref or "").strip())
         return norm(e.get("address")) if e and e.get("resourceType") == "Endpoint" else None
 
-    # Organization -> Endpoint
-    for o in orgs.values():
+    # Organization -> Endpoint. `orgs` holds each organization under two or
+    # three keys; iterate each once so the shared-URL count is per reference.
+    for o in {id(v): v for v in orgs.values()}.values():
         for ep in o.get("endpoint") or []:
             u = ep_url(ep.get("reference"))
+            if u in SHARED_BASE_URLS:
+                if shared_refs is not None:
+                    shared_refs[u] += 1
+                continue
             if u and o.get("name"):
                 url2name.setdefault(u, o["name"])
-                _add_npis(url2npi, u, npis_of(o), o["name"])
+                _add_npis(url2npi, u, npis_of(o), o["name"], names_seen)
 
     # Endpoint -> Organization (managingOrganization, or a contained Organization)
-    for r in by_ref.values():
+    for r in {id(v): v for v in by_ref.values()}.values():
         if r.get("resourceType") != "Endpoint":
             continue
         u = norm(r.get("address"))
         if not u:
+            continue
+        if u in SHARED_BASE_URLS:
+            if shared_refs is not None and r.get("managingOrganization"):
+                shared_refs[u] += 1
             continue
         mo = r.get("managingOrganization") or {}
         o = by_ref.get((mo.get("reference") or "").strip())
@@ -218,7 +296,7 @@ def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
         if name:
             url2name.setdefault(u, name)
             if o:
-                _add_npis(url2npi, u, npis_of(o), name)
+                _add_npis(url2npi, u, npis_of(o), name, names_seen)
 
     reachable = 0
     if brands:
@@ -267,6 +345,8 @@ def main() -> int:
     url2npi: dict[str, list[tuple[str, str | None]]] = {}
     url2vendor: dict[str, str] = {}
     per_vendor = []
+    shared_refs: collections.Counter = collections.Counter()
+    names_seen: dict = {}
 
     for label, url, brands in SOURCES:
         dest = CACHE / (re.sub(r"\W+", "_", label).strip("_").lower() + ".json")
@@ -277,7 +357,7 @@ def main() -> int:
             print(f"    SKIPPED ({type(e).__name__}: {str(e)[:60]})")
             per_vendor.append({"vendor": label, "error": str(e)[:120]})
             continue
-        n, p, n_orgs, reach = parse_bundle(b, brands)
+        n, p, n_orgs, reach = parse_bundle(b, brands, shared_refs, names_seen)
         for u, v in n.items():
             url2name.setdefault(u, v)
             url2vendor.setdefault(u, label)
@@ -299,6 +379,11 @@ def main() -> int:
             "0% attribution finding assembled from no inputs. Errors:\n  "
             + "\n  ".join(f"{v['vendor']}: {v['error']}" for v in per_vendor)
         )
+    # Positive control on the exclusion: a misspelled constant would exclude
+    # nothing and say nothing.
+    for u in sorted(SHARED_BASE_URLS - set(shared_refs)):
+        print(f"  WARNING: shared base URL {u} was not seen in any vendor file; "
+              f"the exclusion did nothing")
     if len(fetched) < len(per_vendor):
         print(f"\n  WARNING: {len(per_vendor) - len(fetched)} of {len(per_vendor)} "
               f"vendor sources failed; every number below is a floor.")
@@ -335,7 +420,7 @@ def main() -> int:
     owned = {norm(r["addr"]) for r in ndh if r["_managing_org_id"]}
     with (OUT_DIR / f"{SLUG}.csv").open("w", newline="") as fh:
         w = csv.writer(fh)
-        w.writerow(["url", "org_name", "org_npi", "vendor", "in_ndh", "ndh_has_owner"])
+        w.writerow(CSV_HEADER)
         rows = csv_rows(url2name, url2npi, url2vendor, ndh_urls, owned)
         w.writerows(rows)
 
@@ -347,12 +432,29 @@ def main() -> int:
         f"public today would move endpoint attribution from {attributed/total*100:.1f}% to "
         f"{after/total*100:.1f}%."
     )
+    bands = pair_bands(url2npi)
+    n_pairs = sum(len(v) for v in url2npi.values())
+    multi_named = sum(1 for k, v in names_seen.items()
+                      if len(v) > 1 and k[0] not in SHARED_BASE_URLS)
+    big = bands[f"{LIST_THRESHOLD + 1}-50"] + bands[">50"]
     grain = (
         "The crosswalk CSV has one row per (url, org_npi); a URL with no NPI has one row with an empty "
         f"org_npi. Since FHI-73 a URL may repeat, once per NPI its publisher lists: "
-        f"{sum(len(v) for v in url2npi.values()):,} url-NPI pairs (published_url_npi_pairs) across "
-        f"{len(url2name):,} URLs. Earlier files kept only the first NPI per URL. On an NPI row, "
-        "org_name is the organization that published that NPI."
+        f"{n_pairs:,} url-NPI pairs (published_url_npi_pairs) across "
+        f"{len(url2name):,} URLs. Earlier files kept only the first NPI per URL. "
+        "The last column, npis_on_url, is the number of distinct NPIs the vendor lists for that URL "
+        "(0 on a row with no NPI). "
+        f"{big:,} of the {n_pairs:,} pairs ({big / n_pairs * 100:.1f}%) sit on a URL listing more "
+        f"than {LIST_THRESHOLD} NPIs (npis_on_url_bands). Those are practice-wide or brand-wide lists: "
+        "athenahealth attaches the same practice list to every department entry, and Epic brands list "
+        "up to hundreds. The NPI is genuinely published beside the URL, but it does not say which "
+        "organization the URL serves, so the connectivity ledger counts such a match as its own "
+        f"tier (vendor-npi-list), not as deterministic. org_name is the first vendor entry listing the "
+        f"NPI; for practice-wide lists it may name a sibling department ({multi_named:,} url-NPI pairs "
+        "are listed by more than one differently named entry). "
+        "Vendor-wide shared base URLs, which every customer of the vendor uses and which identify no "
+        f"organization, are excluded entirely ({', '.join(sorted(SHARED_BASE_URLS))}; "
+        f"{sum(shared_refs.values()):,} organization references dropped)."
     )
     notes = (
         "The gap measured in H50 is not absent data. It is data published by the EHR vendors and "
@@ -400,7 +502,12 @@ def main() -> int:
             "fillable_from_vendor_files": len(fillable),
             "fillable_with_npi": len(with_npi),
             "published_url_org_pairs": len(url2name),
-            "published_url_npi_pairs": sum(len(v) for v in url2npi.values()),
+            "published_url_npi_pairs": n_pairs,
+            "npis_on_url_bands": bands,
+            "npis_on_url_list_threshold": LIST_THRESHOLD,
+            "url_npi_pairs_with_more_than_one_publishing_name": multi_named,
+            "shared_base_urls_excluded": {
+                u: shared_refs[u] for u in sorted(SHARED_BASE_URLS)},
             "by_vendor": dict(by_vendor),
             "vendors": per_vendor,
             "crosswalk_url": f"/api/v1/findings/{SLUG}.csv",

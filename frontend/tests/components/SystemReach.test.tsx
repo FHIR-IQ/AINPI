@@ -36,6 +36,7 @@ const tiered: ConnectivitySystem = {
   reach_by_tier: {
     ndh: 1,
     'vendor-npi': 0,
+    'vendor-npi-list': 0,
     alias: 0,
     'name-state': 0,
     'brand-state': 5198,

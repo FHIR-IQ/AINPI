@@ -3,6 +3,8 @@ import type { ConnectivityGraph, SystemReachTier } from '@/lib/connectivity-type
 type Node = ConnectivityGraph['nodes'][number];
 type Link = ConnectivityGraph['links'][number];
 
+// `vendor-npi-list` (a vendor NPI on a practice-wide list) is deliberately
+// absent: it is drawn as inference, dashed, like name and brand matches.
 const DETERMINISTIC: SystemReachTier[] = ['ndh', 'vendor-npi'];
 
 /**
