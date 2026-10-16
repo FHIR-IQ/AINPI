@@ -38,6 +38,11 @@ Run:
     # and no --release it runs CREATE OR REPLACE on that table alone.
     python analysis/databricks_publish.py --upload --load --share --table org_endpoint
 
+    # The measure series. One file for every release, loaded whole with
+    # CREATE OR REPLACE; --release is refused for it.
+    python analysis/measures_parquet.py
+    python analysis/databricks_publish.py --upload --load --share --table measures
+
 Requires the `databricks` CLI authenticated (`databricks auth login`).
 """
 from __future__ import annotations
@@ -82,20 +87,34 @@ TABLES = [
 # recipient is computed on this workspace's compute each time it is read, so
 # every consumer query would bill here. A table costs one load per release.
 DERIVED_DIR = ROOT / "analysis" / "data" / "org-endpoint"
-DERIVED_TABLES = ["org_endpoint", "org_endpoint_summary"]
+DERIVED_TABLES = ["org_endpoint", "org_endpoint_summary", "measures"]
 ALL_TABLES = TABLES + DERIVED_TABLES
 
-# Cross-release ID stability, measured across 2026-04-09 and 2026-05-08 rather
-# than assumed. This is the first thing a consumer of a multi-release archive
-# gets wrong, so it belongs on the tables themselves:
+# Derived tables built from ONE file covering every release, rather than one
+# parquet per release. `measures` is the measure series from
+# frontend/public/api/v1/measures.json, exported by analysis/measures_parquet.py.
+# A regeneration can restate an earlier point and recomputes
+# comparable_to_previous across the whole series, so the table is a snapshot
+# of the series and is only ever loaded whole: one CREATE OR REPLACE, never a
+# per-release DELETE + INSERT. It keeps PARTITIONED BY (release_date) so a
+# consumer filters it the same way as every other table in the share.
+SERIES_TABLES = {"measures": PARQUET_DIR / "measures" / "measures.parquet"}
+
+# Cross-release ID stability, measured rather than assumed. This is the first
+# thing a consumer of a multi-release archive gets wrong, so it belongs on the
+# tables themselves:
 #
 #   practitioner / organization   ids are `Type-<NPI>`, stable across releases.
 #                                 Practitioner overlaps 100% Apr->May.
-#   endpoint / location           ids are `Type-<random UUID>`, REGENERATED on
-#                                 every export. Apr->May overlap is exactly 0.
+#   endpoint / location           ids are `Type-<random UUID>`. CMS regenerated
+#                                 them between 2026-04-09 and 2026-05-08
+#                                 (overlap exactly 0). From 2026-08-20 to
+#                                 2026-10-07 most carried over: endpoint
+#                                 983,770 of 1,128,169 (87.2%), location
+#                                 2,320,667 of 2,535,686 (91.5%).
 #
-# So a cross-release diff joining endpoint or location on `_id` reports 100%
-# churn every time, which is an artifact of id minting and not a finding.
+# So whether an _id join reports false churn depends on the release pair, and
+# nothing promises the carry-over will hold. Join endpoint on `_address`.
 ID_NOTE_STABLE = (
     " Resource ids are Type-<NPI> and are stable across releases, so joining "
     "on _id across release_date is valid."
@@ -105,19 +124,25 @@ ID_NOTE_STABLE = (
 # draft of this comment told consumers to join location on "name plus address"
 # without anyone having run that join. It recovers 9.7% of May rows raw.
 _UNSTABLE_ID = (
-    " WARNING: resource ids are Type-<random UUID> and are REGENERATED on every "
-    "release. Zero ids survive from one release to the next, so joining on _id "
-    "across release_date yields 100% false churn."
+    " WARNING: resource ids are Type-<random UUID> and are not a stable key. "
+    "CMS regenerated them at 2026-05-08 and again at 2026-08-20, when zero ids "
+    "carried over from the previous release each time, so an _id join across "
+    "either pair reports 100% false churn."
 )
 ID_NOTE_ENDPOINT = _UNSTABLE_ID + (
-    " Join on _address instead: it matches 100.0% of distinct addresses between "
-    "2026-04-09 and 2026-05-08. Note the April file repeats each address 3.9 "
-    "times on average and the May file 1.05 times, so the 73% fall in row count "
-    "between them is de-duplication, not removal: 1,299,999 of 1,300,241 "
-    "distinct April addresses are still present in May."
+    " From 2026-08-20 to 2026-10-07, 983,770 of 1,128,169 endpoint ids (87.2%) "
+    "carried over, which nothing guarantees for the next release. Join on "
+    "_address for every release pair: it matched 100.0% of distinct addresses "
+    "between 2026-04-09 and 2026-05-08, and 983,761 of 1,128,160 distinct "
+    "addresses between 2026-08-20 and 2026-10-07. Note the April file repeats "
+    "each address 3.9 times on average and the May file 1.05 times, so the 73% "
+    "fall in row count between them is de-duplication, not removal: 1,299,999 "
+    "of 1,300,241 distinct April addresses are still present in May."
 )
 ID_NOTE_LOCATION = _UNSTABLE_ID + (
-    " There is no reliable cross-release key for Location in these columns. "
+    " From 2026-08-20 to 2026-10-07, 2,320,667 of 2,535,686 location ids "
+    "(91.5%) carried over, which nothing guarantees for the next release. "
+    "There is no reliable cross-release key for Location in these columns. "
     "_name + _city + _state + _postal_code matches only 9.7% of May rows as "
     "stored, rising to 73.5% after upper-casing and stripping non-alphanumerics, "
     "because CMS re-cased and re-punctuated these fields between releases. Treat "
@@ -158,6 +183,30 @@ TABLE_COMMENTS = {
         "FROM org_endpoint_summary WHERE array_contains(sources, 'vendor_file') "
         "AND NOT array_contains(sources, 'ndh') AND release_date = '2026-08-20' "
         "lists organizations only the vendor files name."
+    ),
+    # No apostrophes: the COMMENT statement escapes them, but the convention in
+    # this dict is to avoid them.
+    "measures": (
+        "Curated by AINPI, not a CMS file. The measure series: a fixed set of "
+        "questions asked of every NDH release, one row per measure (slug) and "
+        "release_date. A row is the value as published from a committed finding "
+        "file, not recomputed: value = numerator / denominator for unit ratio, "
+        "value = numerator for unit count. definition_version names the "
+        "definition the point was measured under, and numerator_definition and "
+        "denominator_definition give its text. comparable_to_previous is a "
+        "string: true, false (a definition break), unreviewed (a move larger "
+        "than the declared ordinary move, not yet reviewed), or NULL for the "
+        "first point. Only a true pair should be drawn as a line. A missing "
+        "row means the generator refused to publish that point, for example a "
+        "zero with no positive control proving the field was read. It is not a "
+        "zero and must not be filled with one. Where a point was restated, "
+        "restated is true, value is the current reading, and as_published_value, "
+        "as_published_numerator and as_published_denominator carry what was "
+        "first published, with restatement_reason and the commit of the "
+        "original file. Sample: SELECT release_date, value, comparable_to_previous "
+        "FROM measures WHERE slug = 'role-coverage-pa' ORDER BY release_date. "
+        "Built by analysis/measures.py and analysis/measures_parquet.py; the same "
+        "series is at https://ainpi.dev/api/v1/measures.json."
     ),
 }
 
@@ -203,6 +252,8 @@ def sql(statement: str, poll_seconds: int = 1800) -> dict:
 
 def local_parquet(release: str, table: str) -> pathlib.Path:
     """Where the parquet for one table and release sits on disk."""
+    if table in SERIES_TABLES:
+        return SERIES_TABLES[table]
     if table in DERIVED_TABLES:
         return DERIVED_DIR / release / f"{table}.parquet"
     return PARQUET_DIR / release / f"{table}.parquet"
@@ -223,6 +274,52 @@ def select_from_parquet(release: str, table: str) -> str:
 
 def volume_path(release: str, table: str) -> str:
     return f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}/{table}.parquet"
+
+
+def series_volume_path(table: str) -> str:
+    """Volume path for a whole-series table. Not under release_date=<r>/,
+    because the one file holds every release."""
+    return f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/series/{table}.parquet"
+
+
+def upload_series(table: str) -> None:
+    src = SERIES_TABLES[table]
+    if not src.exists():
+        print(f"  {table}: no parquet at {src.relative_to(ROOT)}, skipped "
+              f"(run analysis/measures_parquet.py)")
+        return
+    dest_dir = f"dbfs:/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/series"
+    sh(["databricks", "fs", "mkdir", dest_dir], check=False)
+    dest = f"dbfs:{series_volume_path(table)}"
+    local = src.stat().st_size
+    if _remote_size(dest) == local:
+        print(f"  series/{table}: already uploaded ({local:,} bytes)")
+        return
+    print(f"  series/{table}: {local:,} bytes …", flush=True)
+    sh(["databricks", "fs", "cp", "--overwrite", str(src), dest])
+
+
+def load_series(table: str) -> bool:
+    """CREATE OR REPLACE a whole-series table from its one file.
+
+    Never DELETE + INSERT per release: a regeneration can change earlier
+    points, so the file is the unit of truth, not a release.
+    """
+    if not SERIES_TABLES[table].exists():
+        print(f"  {table}: no parquet on disk, skipped")
+        return False
+    fq = f"{CATALOG}.{SCHEMA}.{table}"
+    comment = TABLE_COMMENTS.get(table, "").replace("'", "\\'")
+    print(f"  {fq} <- series/{table}.parquet (CREATE OR REPLACE)", flush=True)
+    r = sql(
+        f"CREATE OR REPLACE TABLE {fq} USING DELTA PARTITIONED BY (release_date) "
+        f"COMMENT '{comment}' "
+        f"AS SELECT * FROM parquet.`{series_volume_path(table)}`"
+    )
+    if r.get("status", {}).get("state") != "SUCCEEDED":
+        print(f"    FAILED: {json.dumps(r.get('status'))[:300]}")
+        return False
+    return True
 
 
 def available_releases() -> list[str]:
@@ -261,12 +358,17 @@ def do_upload(only_release: str | None = None, tables: list[str] | None = None) 
     release on disk every run: adding the third release meant re-sending the
     first two, 8.7 GB of them.
     """
-    for release in available_releases():
+    wanted = tables or ALL_TABLES
+    for table in wanted:
+        if table in SERIES_TABLES:
+            upload_series(table)
+    per_release = [t for t in wanted if t not in SERIES_TABLES]
+    for release in available_releases() if per_release else []:
         if only_release and release != only_release:
             continue
         dest_dir = f"dbfs:/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}"
         sh(["databricks", "fs", "mkdir", dest_dir], check=False)
-        for table in tables or ALL_TABLES:
+        for table in per_release:
             src = local_parquet(release, table)
             if not src.exists():
                 print(f"  {release}/{table}: no parquet, skipped")
@@ -312,6 +414,12 @@ def load_one_release(release: str, tables: list[str] | None = None) -> bool:
     """
     ok = True
     for table in tables or ALL_TABLES:
+        if table in SERIES_TABLES:
+            # A whole-series table has no per-release load. main() refuses an
+            # explicit `--release X --table measures`; here it is only skipped.
+            print(f"  {table}: whole-series table, not loaded per release "
+                  f"(run --load --table {table} with no --release)")
+            continue
         src = local_parquet(release, table)
         if not src.exists():
             print(f"  {release}/{table}: no parquet, skipped")
@@ -351,17 +459,23 @@ def load_one_release(release: str, tables: list[str] | None = None) -> bool:
     return ok
 
 
-def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> None:
+def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> bool:
     """Rebuild the tables from parquet.
 
     `only` restricts and orders the releases. Without it every release found on
     disk is included, which is wrong once a release has been retired from the
     archive but its derived parquet is still sitting in the export directory.
     """
+    ok = True
     releases = [r for r in available_releases() if not only or r in only]
     if only:
         releases = [r for r in only if r in releases]
     for table in tables or ALL_TABLES:
+        if table in SERIES_TABLES:
+            # Releases do not scope this table: the file is the whole series.
+            if not load_series(table):
+                ok = False
+            continue
         present = [r for r in releases if local_parquet(r, table).exists()]
         if not present:
             continue
@@ -388,7 +502,8 @@ def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> N
             r = sql(f"INSERT INTO {fq} {select_from_parquet(rel, table)}")
             if r.get("status", {}).get("state") != "SUCCEEDED":
                 print(f"    FAILED: {json.dumps(r.get('status'))[:300]}")
-    print("load complete")
+    print("load complete" if ok else "load FAILED")
+    return ok
 
 
 def do_share(tables: list[str] | None = None) -> None:
@@ -510,20 +625,34 @@ def main() -> None:
         ap.print_help()
         return
     tables = [a.table] if a.table else None
+    if a.table in SERIES_TABLES and a.release:
+        sys.exit(f"--table {a.table} is one file covering every release and is "
+                 f"only loaded whole; drop --release.")
+    # Upload and load scope. A whole-series table is one file covering every
+    # release, so a release-scoped run must not upload or load it. --share is
+    # not release-scoped and keeps `tables`.
+    load_tables = tables
+    if a.release and a.table is None and (a.upload or a.load):
+        load_tables = [t for t in ALL_TABLES if t not in SERIES_TABLES]
+        for t in SERIES_TABLES:
+            print(f"{t} skipped: whole-series table, run with --table {t} and no --release")
     if a.upload:
-        do_upload(a.release, tables)
+        do_upload(a.release, load_tables)
     if a.load:
         wanted = [x.strip() for x in a.release.split(",")] if a.release else None
         if wanted and len(wanted) > 1:
-            do_load(wanted, tables)
+            if not do_load(wanted, load_tables):
+                sys.exit(1)
         elif a.release:
             # Exit non-zero on a partial load. The previous version printed
             # FAILED for four of six tables and still exited 0, which is
             # indistinguishable from success to anything reading the code.
-            if not load_one_release(a.release, tables):
+            if not load_one_release(a.release, load_tables):
                 sys.exit(1)
         else:
-            do_load(tables=tables)
+            # Exit non-zero when a whole-series load fails, for the same reason.
+            if not do_load(tables=load_tables):
+                sys.exit(1)
     if a.share:
         do_share(tables)
     if a.status:

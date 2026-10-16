@@ -109,6 +109,16 @@ The vendor rows are each vendor's own claim; CMS has not checked them. Where
 the two sources name different organizations for one URL, both rows are kept.
 40,005 of the 68,888 vendor rows name an organization without an NPI.
 
+**Measures.** A further table, measures, holds the measure series: a fixed set
+of questions asked of every release, one row per question and release_date,
+with the numerator, denominator and value as AINPI published them. A
+comparable_to_previous column says whether two consecutive points can be read
+as a trend; a change of definition is marked as a break, not a move. A missing
+row means AINPI withheld that point, usually because a zero could not be told
+apart from a field that was never read. It is not a zero. Where a published
+value was later corrected, the row carries both the current value and the value
+first published.
+
 **What it is for.** Questions that need two releases at once. One worked
 example, included as a notebook: between May and August CMS added about
 seven million PractitionerRole records, a 173% rise. The share of clinicians who
@@ -123,9 +133,8 @@ coverage held, which is the same lesson read in reverse.
 are stable across releases. Organization ids are stable for provider records,
 which are NPI-keyed; its tax records (about half the table in August, under 4% in October) carry
 a random UUID.
-Endpoint and Location ids are random UUIDs that CMS regenerates on every export, so joining those two on `_id`
-across releases reports 100% churn that did not happen. Join Endpoint on
-`_address` instead. The table comments carry the same warning, and the notebook
+CMS regenerated Endpoint and Location ids at 2026-05-08 and again at 2026-08-20 (zero overlap with the previous release each time), so
+an `_id` join can report false churn; join Endpoint on `_address` for every pair. The table comments carry the same warning, and the notebook
 demonstrates it.
 
 **Where it comes from.** Maintained by AINPI (ainpi.dev), a public-interest
