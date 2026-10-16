@@ -1,0 +1,1151 @@
+{
+  "state": "PA",
+  "slug": "pa-system-endpoint-gap",
+  "release_date": "2026-10-07",
+  "generated_at": "2026-10-16T19:40:25+00:00",
+  "methodology_version": "0.7.3-draft",
+  "question": "Why do the largest health systems in the connectivity ledger show zero endpoints?",
+  "answer": "The zero is not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the vendor publishes no member organization's NPI. The systems hold 21,963 distinct clinicians (the ledger's per-system counts sum practitioner-organization links). Through a member organization or CMS enrollment, the same tiers the ledger's practitioner funnel accepts, 13,755 of them already reach an endpoint (a lower bound on what the funnel credits them, since it also counts non-member organizations): 0 through the NDH or a vendor-published NPI, the only links the system rollup counts, 10,718 through name or brand resolution (H53) and 3,037 through CMS enrollment.",
+  "sources": {
+    "systems": "/api/v1/states/pa-connectivity.json (grouping rebuilt with analysis/org_systems.build_systems)",
+    "organizations": "/api/v1/states/pa-org-endpoint-resolution.csv (H53)",
+    "ndh_endpoint_attribution": "/api/v1/findings/endpoint-org-crosswalk.csv (H50)",
+    "vendor_attribution": "/api/v1/findings/vendor-endpoint-attribution.csv (H51)",
+    "epic_brands": {
+      "url": "https://open.epic.com/Endpoints/Brands",
+      "fetched": "2026-10-14"
+    },
+    "warehouse": "cms_npd 2026-10-07: practitioner, practitioner_role, organization, endpoint; bigquery-public-data.nppes.npi_raw (parent_organization_lbn only)"
+  },
+  "positive_control": {
+    "note": "The run refuses to write unless every check below holds, so a zero in this file is a measured absence.",
+    "epic_brands_parsed": 1282,
+    "epic_brands_floor": 500,
+    "vendor_hosts_looked_up": [
+      "epicent-prd-rp.upmc.com",
+      "epicprisfd.ahn.org",
+      "fhir.slhn.org",
+      "geisapi.geisinger.edu",
+      "interconnect.wellspan.org"
+    ],
+    "domains_looked_up_in_ndh": [
+      "ahn.org",
+      "geisinger.edu",
+      "slhn.org",
+      "upmc.com",
+      "wellspan.org"
+    ],
+    "ndh_fhir_endpoints_found_on_those_domains": 8,
+    "systems_with_warehouse_practitioners": 6,
+    "rebuilt_grouping_matches_payload": true
+  },
+  "systems": [
+    {
+      "system_key": "brand:UNIVERSITY OF PITTSBURGH",
+      "label": "UNIVERSITY OF PITTSBURGH",
+      "basis": "brand-name",
+      "organizations": 34,
+      "practitioner_org_links": 17882,
+      "practitioners_distinct": 6793,
+      "ledger_endpoint_count": 0,
+      "chain": {
+        "member_organizations": 34,
+        "members_with_npi": 34,
+        "members_found_in_warehouse": 34,
+        "members_with_organization_endpoint_reference": 1,
+        "member_endpoint_references_by_type": {
+          "direct-project": 1
+        },
+        "member_referenced_fhir_hosts": {},
+        "members_managing_an_ndh_endpoint": 0,
+        "members_with_partof": 0,
+        "members_with_partof_to_endpoint_holder": 0,
+        "partof_targets": [],
+        "members_by_h53_tier": {
+          "unresolved": 34
+        },
+        "members_with_vendor_published_npi": 0
+      },
+      "reach": {
+        "practitioners": 6793,
+        "strict": 0,
+        "resolution": 0,
+        "enrollment": 725,
+        "none": 6068,
+        "reaches_any": 725,
+        "reaches_systems_own_endpoint": 86,
+        "reaches_any_pct": 10.7
+      },
+      "vendor_brands": [
+        {
+          "brand": "MyUPMC",
+          "basis": "curated",
+          "basis_note": "University of Pittsburgh Physicians is UPMC's employed physician group; Epic publishes UPMC's tenant under the brand 'MyUPMC'.",
+          "urls": [
+            "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4"
+          ],
+          "care_sites": 784,
+          "npis_published": 0,
+          "npis_matching_members": [],
+          "npis_matching_any_ndh_org_in_state": 0,
+          "ndh_orgs_matched_elsewhere": [],
+          "npis_h51_csv_keeps_for_these_urls": []
+        }
+      ],
+      "ndh_endpoints_on_system_hosts": [
+        {
+          "address": "https://epicent-prd-rp.upmc.com/PRD-OAUTH2/api/FHIR/R4",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": true,
+          "manager_name": "CHARTWELL PENNSYLVANIA",
+          "manager_npi": "1033166244",
+          "manager_state": "PA",
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        },
+        {
+          "address": "https://epic-fhir-prd.upmc.com/FHIR-PRD/api/FHIR/R4",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": true,
+          "manager_name": "UNIVERSITY OF PITTSBURGH MEDICAL CENTER",
+          "manager_npi": "1033571351",
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        },
+        {
+          "address": "https://epic-fhir-prd.upmc.com/FHIR-PRD/api/FHIR/R4/",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": false,
+          "manager_name": null,
+          "manager_npi": null,
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        }
+      ],
+      "dead_aliases": [
+        {
+          "ndh_name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
+          "brand": "UPMC"
+        }
+      ],
+      "shares_vendor_brand_with": [
+        "brand:PINNACLE",
+        "brand:UPMC"
+      ],
+      "causes": [
+        {
+          "code": "vendor-brand-without-entity-npi",
+          "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+          "fixable_by": [
+            "system",
+            "vendor"
+          ]
+        },
+        {
+          "code": "endpoint-on-leaf-without-practitioners",
+          "explanation": "The NDH does carry the system's endpoint with a managingOrganization, but on an organization that holds no practitioner roles in the state, so no clinician reaches it.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "endpoint-without-managing-org",
+          "explanation": "The NDH carries the system's endpoint with no managingOrganization.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "no-hierarchy",
+          "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "rollup-omits-resolution-tiers",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        },
+        {
+          "code": "dead-curated-alias",
+          "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        },
+        {
+          "code": "system-split-across-groups",
+          "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
+          "fixable_by": [
+            "system",
+            "ainpi"
+          ]
+        }
+      ]
+    },
+    {
+      "system_key": "brand:GEISINGER",
+      "label": "GEISINGER",
+      "basis": "brand-name",
+      "organizations": 120,
+      "practitioner_org_links": 16799,
+      "practitioners_distinct": 5199,
+      "ledger_endpoint_count": 0,
+      "chain": {
+        "member_organizations": 120,
+        "members_with_npi": 120,
+        "members_found_in_warehouse": 120,
+        "members_with_organization_endpoint_reference": 0,
+        "member_endpoint_references_by_type": {},
+        "member_referenced_fhir_hosts": {},
+        "members_managing_an_ndh_endpoint": 0,
+        "members_with_partof": 0,
+        "members_with_partof_to_endpoint_holder": 0,
+        "partof_targets": [],
+        "members_by_h53_tier": {
+          "brand-state": 118,
+          "name-state": 2
+        },
+        "members_with_vendor_published_npi": 0
+      },
+      "reach": {
+        "practitioners": 5199,
+        "strict": 0,
+        "resolution": 5199,
+        "enrollment": 0,
+        "none": 0,
+        "reaches_any": 5199,
+        "reaches_systems_own_endpoint": 5199,
+        "reaches_any_pct": 100.0
+      },
+      "vendor_brands": [
+        {
+          "brand": "Geisinger",
+          "basis": "label-prefix",
+          "basis_note": null,
+          "urls": [
+            "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4"
+          ],
+          "care_sites": 392,
+          "npis_published": 10,
+          "npis_matching_members": [],
+          "npis_matching_any_ndh_org_in_state": 9,
+          "ndh_orgs_matched_elsewhere": [
+            {
+              "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATIO",
+              "npi": "1205928967",
+              "practitioners": 309
+            },
+            {
+              "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
+              "npi": "1083412084",
+              "practitioners": 272
+            },
+            {
+              "name": "CARING COMMUNITY HEALTH CENTER",
+              "npi": "1679038293",
+              "practitioners": 95
+            },
+            {
+              "name": "EVANGELICAL MEDICAL SERVICES FOUNDATION",
+              "npi": "1295834984",
+              "practitioners": 89
+            },
+            {
+              "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
+              "npi": "1942227632",
+              "practitioners": 59
+            }
+          ],
+          "npis_h51_csv_keeps_for_these_urls": [
+            "1295834984"
+          ]
+        }
+      ],
+      "ndh_endpoints_on_system_hosts": [
+        {
+          "address": "https://geisapi.geisinger.edu/FHIR_PROD/api/FHIR/R4/",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": false,
+          "manager_name": null,
+          "manager_npi": null,
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        },
+        {
+          "address": "https://geisapi.geisinger.edu/FHIR_PROD/api/FHIR/R4",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": false,
+          "manager_name": null,
+          "manager_npi": null,
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        }
+      ],
+      "dead_aliases": [],
+      "shares_vendor_brand_with": [],
+      "causes": [
+        {
+          "code": "vendor-brand-without-entity-npi",
+          "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+          "fixable_by": [
+            "system",
+            "vendor"
+          ]
+        },
+        {
+          "code": "endpoint-without-managing-org",
+          "explanation": "The NDH carries the system's endpoint with no managingOrganization.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "no-hierarchy",
+          "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "rollup-omits-resolution-tiers",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        }
+      ]
+    },
+    {
+      "system_key": "brand:ST LUKE",
+      "label": "ST LUKE",
+      "basis": "brand-name",
+      "organizations": 257,
+      "practitioner_org_links": 8651,
+      "practitioners_distinct": 3029,
+      "ledger_endpoint_count": 0,
+      "chain": {
+        "member_organizations": 257,
+        "members_with_npi": 257,
+        "members_found_in_warehouse": 257,
+        "members_with_organization_endpoint_reference": 0,
+        "member_endpoint_references_by_type": {},
+        "member_referenced_fhir_hosts": {},
+        "members_managing_an_ndh_endpoint": 0,
+        "members_with_partof": 0,
+        "members_with_partof_to_endpoint_holder": 0,
+        "partof_targets": [],
+        "members_by_h53_tier": {
+          "brand-state": 228,
+          "unresolved": 3,
+          "name-state": 26
+        },
+        "members_with_vendor_published_npi": 0
+      },
+      "reach": {
+        "practitioners": 3029,
+        "strict": 0,
+        "resolution": 3028,
+        "enrollment": 1,
+        "none": 0,
+        "reaches_any": 3029,
+        "reaches_systems_own_endpoint": 3028,
+        "reaches_any_pct": 100.0
+      },
+      "vendor_brands": [
+        {
+          "brand": "St Luke's",
+          "basis": "label-prefix",
+          "basis_note": null,
+          "urls": [
+            "https://fhir.slhn.org/fhir/api/fhir/r4"
+          ],
+          "care_sites": 624,
+          "npis_published": 13,
+          "npis_matching_members": [],
+          "npis_matching_any_ndh_org_in_state": 5,
+          "ndh_orgs_matched_elsewhere": [
+            {
+              "name": "SPA",
+              "npi": "1487960639",
+              "practitioners": 30
+            },
+            {
+              "name": "GASTROENTEROLOGY ASSOCIATES LTD",
+              "npi": "1518959360",
+              "practitioners": 7
+            },
+            {
+              "name": "ST LUKE'S HOSPITAL",
+              "npi": "1013933175",
+              "practitioners": 4
+            },
+            {
+              "name": "WHITEHALL MEDICAL ASSOCIATES LLC",
+              "npi": "1760730360",
+              "practitioners": 1
+            },
+            {
+              "name": "ORL ASSOCIATES",
+              "npi": "1437112224",
+              "practitioners": 1
+            }
+          ],
+          "npis_h51_csv_keeps_for_these_urls": [
+            "1518959360"
+          ]
+        }
+      ],
+      "ndh_endpoints_on_system_hosts": [
+        {
+          "address": "https://fhir.slhn.org/fhir/api/FHIR/R4/",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": true,
+          "manager_name": "ST LUKE'S UNIVERSITY HEALTH NETWORK",
+          "manager_npi": "1083064885",
+          "manager_state": "PA",
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        },
+        {
+          "address": "https://fhir.slhn.org/fhir/api/FHIR/DSTU2/",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": false,
+          "manager_name": null,
+          "manager_npi": null,
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        }
+      ],
+      "dead_aliases": [],
+      "shares_vendor_brand_with": [],
+      "causes": [
+        {
+          "code": "vendor-brand-without-entity-npi",
+          "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+          "fixable_by": [
+            "system",
+            "vendor"
+          ]
+        },
+        {
+          "code": "endpoint-on-leaf-without-practitioners",
+          "explanation": "The NDH does carry the system's endpoint with a managingOrganization, but on an organization that holds no practitioner roles in the state, so no clinician reaches it.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "endpoint-without-managing-org",
+          "explanation": "The NDH carries the system's endpoint with no managingOrganization.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "no-hierarchy",
+          "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "rollup-omits-resolution-tiers",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        }
+      ]
+    },
+    {
+      "system_key": "brand:AHN",
+      "label": "AHN",
+      "basis": "brand-name",
+      "organizations": 59,
+      "practitioner_org_links": 6472,
+      "practitioners_distinct": 3215,
+      "ledger_endpoint_count": 0,
+      "chain": {
+        "member_organizations": 59,
+        "members_with_npi": 59,
+        "members_found_in_warehouse": 59,
+        "members_with_organization_endpoint_reference": 38,
+        "member_endpoint_references_by_type": {
+          "direct-project": 1
+        },
+        "member_referenced_fhir_hosts": {},
+        "members_managing_an_ndh_endpoint": 0,
+        "members_with_partof": 0,
+        "members_with_partof_to_endpoint_holder": 0,
+        "partof_targets": [],
+        "members_by_h53_tier": {
+          "unresolved": 59
+        },
+        "members_with_vendor_published_npi": 0
+      },
+      "reach": {
+        "practitioners": 3215,
+        "strict": 0,
+        "resolution": 0,
+        "enrollment": 2723,
+        "none": 492,
+        "reaches_any": 2723,
+        "reaches_systems_own_endpoint": 2673,
+        "reaches_any_pct": 84.7
+      },
+      "vendor_brands": [
+        {
+          "brand": "Allegheny Health Network",
+          "basis": "curated",
+          "basis_note": "AHN is the abbreviation Allegheny Health Network uses in its own organization names.",
+          "urls": [
+            "https://epicprisfd.ahn.org/prd-fhir/mychart/api/fhir/r4"
+          ],
+          "care_sites": 237,
+          "npis_published": 35,
+          "npis_matching_members": [],
+          "npis_matching_any_ndh_org_in_state": 3,
+          "ndh_orgs_matched_elsewhere": [
+            {
+              "name": "JEFFERSON REGIONAL MEDICAL CENTER",
+              "npi": "1013985126",
+              "practitioners": 84
+            },
+            {
+              "name": "JEFFERSON HOSPITAL COUNSELING SERVICES",
+              "npi": "1720056138",
+              "practitioners": 47
+            },
+            {
+              "name": "WESTFIELD MEMORIAL HOSPITAL",
+              "npi": "1942236427",
+              "practitioners": 1
+            }
+          ],
+          "npis_h51_csv_keeps_for_these_urls": [
+            "1982632311"
+          ]
+        }
+      ],
+      "ndh_endpoints_on_system_hosts": [],
+      "dead_aliases": [],
+      "shares_vendor_brand_with": [
+        "brand:ALLEGHENY"
+      ],
+      "causes": [
+        {
+          "code": "vendor-brand-without-entity-npi",
+          "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+          "fixable_by": [
+            "system",
+            "vendor"
+          ]
+        },
+        {
+          "code": "no-ndh-endpoint",
+          "explanation": "The NDH carries no endpoint on the system's published address.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "no-hierarchy",
+          "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "rollup-omits-resolution-tiers",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        },
+        {
+          "code": "system-split-across-groups",
+          "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
+          "fixable_by": [
+            "system",
+            "ainpi"
+          ]
+        }
+      ]
+    },
+    {
+      "system_key": "brand:PINNACLE",
+      "label": "PINNACLE",
+      "basis": "brand-name",
+      "organizations": 213,
+      "practitioner_org_links": 5904,
+      "practitioners_distinct": 2382,
+      "ledger_endpoint_count": 0,
+      "chain": {
+        "member_organizations": 213,
+        "members_with_npi": 213,
+        "members_found_in_warehouse": 213,
+        "members_with_organization_endpoint_reference": 1,
+        "member_endpoint_references_by_type": {
+          "hl7-fhir-rest": 1
+        },
+        "member_referenced_fhir_hosts": {
+          "fhir.meditouchehr.com": 1
+        },
+        "members_managing_an_ndh_endpoint": 0,
+        "members_with_partof": 0,
+        "members_with_partof_to_endpoint_holder": 0,
+        "partof_targets": [],
+        "members_by_h53_tier": {
+          "unresolved": 213
+        },
+        "members_with_vendor_published_npi": 0
+      },
+      "reach": {
+        "practitioners": 2382,
+        "strict": 0,
+        "resolution": 0,
+        "enrollment": 398,
+        "none": 1984,
+        "reaches_any": 398,
+        "reaches_systems_own_endpoint": 21,
+        "reaches_any_pct": 16.7
+      },
+      "vendor_brands": [
+        {
+          "brand": "MyUPMC",
+          "basis": "curated",
+          "basis_note": "PinnacleHealth was acquired by UPMC in 2017 and operates as UPMC in Central Pa. (same basis as analysis/org_aliases.json).",
+          "urls": [
+            "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4"
+          ],
+          "care_sites": 784,
+          "npis_published": 0,
+          "npis_matching_members": [],
+          "npis_matching_any_ndh_org_in_state": 0,
+          "ndh_orgs_matched_elsewhere": [],
+          "npis_h51_csv_keeps_for_these_urls": []
+        }
+      ],
+      "ndh_endpoints_on_system_hosts": [
+        {
+          "address": "https://epicent-prd-rp.upmc.com/PRD-OAUTH2/api/FHIR/R4",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": true,
+          "manager_name": "CHARTWELL PENNSYLVANIA",
+          "manager_npi": "1033166244",
+          "manager_state": "PA",
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        },
+        {
+          "address": "https://epic-fhir-prd.upmc.com/FHIR-PRD/api/FHIR/R4",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": true,
+          "manager_name": "UNIVERSITY OF PITTSBURGH MEDICAL CENTER",
+          "manager_npi": "1033571351",
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        },
+        {
+          "address": "https://epic-fhir-prd.upmc.com/FHIR-PRD/api/FHIR/R4/",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": false,
+          "manager_name": null,
+          "manager_npi": null,
+          "manager_state": null,
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        }
+      ],
+      "dead_aliases": [
+        {
+          "ndh_name": "PINNACLE HEALTH MEDICAL SERVICES",
+          "brand": "UPMC"
+        }
+      ],
+      "shares_vendor_brand_with": [
+        "brand:UNIVERSITY OF PITTSBURGH",
+        "brand:UPMC"
+      ],
+      "causes": [
+        {
+          "code": "vendor-brand-without-entity-npi",
+          "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+          "fixable_by": [
+            "system",
+            "vendor"
+          ]
+        },
+        {
+          "code": "endpoint-on-leaf-without-practitioners",
+          "explanation": "The NDH does carry the system's endpoint with a managingOrganization, but on an organization that holds no practitioner roles in the state, so no clinician reaches it.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "endpoint-without-managing-org",
+          "explanation": "The NDH carries the system's endpoint with no managingOrganization.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "no-hierarchy",
+          "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "rollup-omits-resolution-tiers",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        },
+        {
+          "code": "dead-curated-alias",
+          "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        },
+        {
+          "code": "system-split-across-groups",
+          "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
+          "fixable_by": [
+            "system",
+            "ainpi"
+          ]
+        }
+      ]
+    },
+    {
+      "system_key": "brand:WELLSPAN",
+      "label": "WELLSPAN",
+      "basis": "brand-name",
+      "organizations": 144,
+      "practitioner_org_links": 5147,
+      "practitioners_distinct": 2956,
+      "ledger_endpoint_count": 0,
+      "chain": {
+        "member_organizations": 144,
+        "members_with_npi": 144,
+        "members_found_in_warehouse": 144,
+        "members_with_organization_endpoint_reference": 0,
+        "member_endpoint_references_by_type": {},
+        "member_referenced_fhir_hosts": {},
+        "members_managing_an_ndh_endpoint": 0,
+        "members_with_partof": 0,
+        "members_with_partof_to_endpoint_holder": 0,
+        "partof_targets": [],
+        "members_by_h53_tier": {
+          "name-state": 36,
+          "brand-state": 108
+        },
+        "members_with_vendor_published_npi": 0
+      },
+      "reach": {
+        "practitioners": 2956,
+        "strict": 0,
+        "resolution": 2956,
+        "enrollment": 0,
+        "none": 0,
+        "reaches_any": 2956,
+        "reaches_systems_own_endpoint": 2956,
+        "reaches_any_pct": 100.0
+      },
+      "vendor_brands": [
+        {
+          "brand": "WellSpan",
+          "basis": "label-prefix",
+          "basis_note": null,
+          "urls": [
+            "https://interconnect.wellspan.org/interconnect-prd-oauth2/api/fhir/r4"
+          ],
+          "care_sites": 774,
+          "npis_published": 1,
+          "npis_matching_members": [],
+          "npis_matching_any_ndh_org_in_state": 1,
+          "ndh_orgs_matched_elsewhere": [
+            {
+              "name": "HANOVER FAMILY PRACTICE",
+              "npi": "1235197104",
+              "practitioners": 18
+            }
+          ],
+          "npis_h51_csv_keeps_for_these_urls": [
+            "1235197104"
+          ]
+        }
+      ],
+      "ndh_endpoints_on_system_hosts": [
+        {
+          "address": "https://interconnect.wellspan.org/interconnect-prd-oauth2/api/FHIR/R4/",
+          "status": "active",
+          "connection_type": "hl7-fhir-rest",
+          "managed": true,
+          "manager_name": "THOMAS HART FAMILY PRACTICE CENTER",
+          "manager_npi": "1083918122",
+          "manager_state": "PA",
+          "manager_holds_practitioners": false,
+          "manager_in_this_system": false,
+          "manager_in_any_analysed_system": false
+        }
+      ],
+      "dead_aliases": [],
+      "shares_vendor_brand_with": [],
+      "causes": [
+        {
+          "code": "vendor-brand-without-entity-npi",
+          "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+          "fixable_by": [
+            "system",
+            "vendor"
+          ]
+        },
+        {
+          "code": "endpoint-on-leaf-without-practitioners",
+          "explanation": "The NDH does carry the system's endpoint with a managingOrganization, but on an organization that holds no practitioner roles in the state, so no clinician reaches it.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "no-hierarchy",
+          "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+          "fixable_by": [
+            "system",
+            "cms"
+          ]
+        },
+        {
+          "code": "rollup-omits-resolution-tiers",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "fixable_by": [
+            "ainpi"
+          ]
+        }
+      ]
+    }
+  ],
+  "ledger_defects": {
+    "note": "Defects in AINPI's own method found while answering this. Each one makes a reachable endpoint read as absent.",
+    "system_practitioners_are_link_sums": {
+      "note": "The ledger's per-system `practitioners` is the sum of each member organization's practitioner count, so a clinician with roles at several member organizations is counted once per organization.",
+      "practitioner_org_links_in_these_systems": 60855,
+      "distinct_practitioners_in_these_systems": 21963,
+      "where": "analysis/org_systems.py build_systems(): entry['practitioners'] += o['practitioners']."
+    },
+    "rollup_omits_resolution_tiers": {
+      "systems_affected_in_this_table": 6,
+      "where": "analysis/state_connectivity.py build(): the system rollup calls resolve_org(), which never consults org_resolution or enrollment_endpoints."
+    },
+    "dead_curated_aliases": {
+      "count": 9,
+      "of": 13,
+      "rows": [
+        {
+          "ndh_name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
+          "brand": "UPMC"
+        },
+        {
+          "ndh_name": "UPMC COMMUNITY MEDICINE INC",
+          "brand": "UPMC"
+        },
+        {
+          "ndh_name": "JEFFERSON UNIVERSITY PHYSICIANS",
+          "brand": "Jefferson Health"
+        },
+        {
+          "ndh_name": "TEMPLE FACULTY PRACTICE PLAN INC",
+          "brand": "Temple Health"
+        },
+        {
+          "ndh_name": "TEMPLE PHYSICIANS INC",
+          "brand": "Temple Health"
+        },
+        {
+          "ndh_name": "THE MILTON S HERSHEY MEDICAL CENTER PHYSICIANS",
+          "brand": "Penn State Health"
+        },
+        {
+          "ndh_name": "PENN STATE HEALTH MEDICAL GROUP LLC",
+          "brand": "Penn State Health"
+        },
+        {
+          "ndh_name": "PINNACLE HEALTH MEDICAL SERVICES",
+          "brand": "UPMC"
+        },
+        {
+          "ndh_name": "REGIONAL HEALTH SERVICES INC",
+          "brand": "UPMC"
+        }
+      ],
+      "where": "analysis/h53_org_endpoint_resolution.py resolve(): alias brand must equal a vendor-published label exactly; Epic now publishes 'MyUPMC', 'TempleHealth', 'Thomas Jefferson University Health System'."
+    },
+    "h51_one_npi_per_url": {
+      "organizations": 528,
+      "practitioner_org_links": 9442,
+      "of_which_unresolved_by_any_tier": 370,
+      "unresolved_practitioner_org_links": 6563,
+      "top": [
+        {
+          "name": "GUTHRIE MEDICAL GROUP PC",
+          "npi": "1245246644",
+          "practitioners": 962,
+          "tier": "brand-state",
+          "epic_url": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4"
+        },
+        {
+          "name": "DLP CONEMAUGH PHYSICIAN PRACTICES LLC",
+          "npi": "1205242609",
+          "practitioners": 661,
+          "tier": "unresolved",
+          "epic_url": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4"
+        },
+        {
+          "name": "CONEMAUGH PHYSICIAN GROUP CRESSON",
+          "npi": "1932515905",
+          "practitioners": 600,
+          "tier": "name-state",
+          "epic_url": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4"
+        },
+        {
+          "name": "GUTHRIE CLINIC LTD",
+          "npi": "1134178635",
+          "practitioners": 568,
+          "tier": "brand-state",
+          "epic_url": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4"
+        },
+        {
+          "name": "DIGESTIVE DISEASE ASSOCIATES LTD",
+          "npi": "1154422806",
+          "practitioners": 318,
+          "tier": "unresolved",
+          "epic_url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4"
+        },
+        {
+          "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATIO",
+          "npi": "1205928967",
+          "practitioners": 309,
+          "tier": "unresolved",
+          "epic_url": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4"
+        },
+        {
+          "name": "CMS HIH",
+          "npi": "1992107817",
+          "practitioners": 306,
+          "tier": "unresolved",
+          "epic_url": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4"
+        },
+        {
+          "name": "MID-ATLANTIC GASTROINTESTINAL CENTER",
+          "npi": "1255872784",
+          "practitioners": 294,
+          "tier": "unresolved",
+          "epic_url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4"
+        },
+        {
+          "name": "FAYETTE PHYSICIAN NETWORK INC",
+          "npi": "1437823044",
+          "practitioners": 288,
+          "tier": "unresolved",
+          "epic_url": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4"
+        },
+        {
+          "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
+          "npi": "1083412084",
+          "practitioners": 272,
+          "tier": "unresolved",
+          "epic_url": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4"
+        },
+        {
+          "name": "VALLEY HEALTH PARTNERS COMMUNITY HEALTH CENTER",
+          "npi": "1770118648",
+          "practitioners": 265,
+          "tier": "unresolved",
+          "epic_url": "https://proxy.lvh.com/fhir/api/fhir/r4"
+        },
+        {
+          "name": "RGAL ANESTHESIA SERVICES LLC",
+          "npi": "1699055251",
+          "practitioners": 215,
+          "tier": "unresolved",
+          "epic_url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4"
+        },
+        {
+          "name": "NHPP CARDIOLOGY AT GREAT NECK",
+          "npi": "1053688572",
+          "practitioners": 173,
+          "tier": "unresolved",
+          "epic_url": "https://call.api.northwell.io/epic-proxy/api/fhir/r4"
+        },
+        {
+          "name": "BUCYRUS RADIOLOGY SERVICESCCF",
+          "npi": "1679525919",
+          "practitioners": 131,
+          "tier": "unresolved",
+          "epic_url": "https://api.ccf.org/mu/api/fhir/r4"
+        },
+        {
+          "name": "GASTROENTEROLOGY CSLTS S JRSY",
+          "npi": "1649226515",
+          "practitioners": 110,
+          "tier": "unresolved",
+          "epic_url": "https://epicproxy.et1017.epichosted.com/fhirproxy/chfc/api/fhir/r4"
+        }
+      ],
+      "where": "analysis/h51_vendor_endpoint_attribution.py parse_bundle(): url2npi.setdefault keeps the first NPI per URL."
+    }
+  },
+  "causes": {
+    "vendor-brand-without-entity-npi": {
+      "explanation": "The vendor publishes the system's endpoint under a brand, and none of the NPIs it publishes is an NPI the directory files these clinicians under.",
+      "fixable_by": [
+        "system",
+        "vendor"
+      ]
+    },
+    "endpoint-on-leaf-without-practitioners": {
+      "explanation": "The NDH does carry the system's endpoint with a managingOrganization, but on an organization that holds no practitioner roles in the state, so no clinician reaches it.",
+      "fixable_by": [
+        "system",
+        "cms"
+      ]
+    },
+    "endpoint-without-managing-org": {
+      "explanation": "The NDH carries the system's endpoint with no managingOrganization.",
+      "fixable_by": [
+        "system",
+        "cms"
+      ]
+    },
+    "no-ndh-endpoint": {
+      "explanation": "The NDH carries no endpoint on the system's published address.",
+      "fixable_by": [
+        "system",
+        "cms"
+      ]
+    },
+    "no-hierarchy": {
+      "explanation": "No member organization carries Organization.partOf to an organization that holds the endpoint, so the directory has no path from the employing entity up to the one that serves records.",
+      "fixable_by": [
+        "system",
+        "cms"
+      ]
+    },
+    "no-endpoint-published": {
+      "explanation": "Epic's brand file matches no brand for this system and the NDH holds no FHIR endpoint on its domain. Other vendors' files are not indexed for brands, so check them before reading this as an absence. It is the only cause that would be a statement about the system rather than about the record.",
+      "fixable_by": [
+        "system"
+      ]
+    },
+    "rollup-omits-resolution-tiers": {
+      "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+      "fixable_by": [
+        "ainpi"
+      ]
+    },
+    "dead-curated-alias": {
+      "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
+      "fixable_by": [
+        "ainpi"
+      ]
+    },
+    "h51-one-npi-per-url": {
+      "explanation": "AINPI defect: the vendor publishes an NPI that matches a member organization, but H51's CSV keeps one NPI per endpoint URL and dropped it.",
+      "fixable_by": [
+        "ainpi"
+      ]
+    },
+    "system-split-across-groups": {
+      "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
+      "fixable_by": [
+        "system",
+        "ainpi"
+      ]
+    }
+  },
+  "bytes_billed": [
+    {
+      "query": "parent",
+      "bytes_billed": 226492416,
+      "cached": true
+    },
+    {
+      "query": "pairs",
+      "bytes_billed": 1164967936,
+      "cached": true
+    },
+    {
+      "query": "members",
+      "bytes_billed": 96468992,
+      "cached": true
+    },
+    {
+      "query": "endpoints",
+      "bytes_billed": 276824064,
+      "cached": true
+    }
+  ],
+  "limits": [
+    "Membership is the ledger's own grouping, which is name inference for every system in this table. Where a member is not really part of the system, its counts are here too.",
+    "Vendor brands are matched by label prefix or one curated name per system; the basis is on every row.",
+    "Reaching an endpoint is not the endpoint answering. Liveness is H1-H5 and is not folded in."
+  ],
+  "all_analysed_systems": {
+    "note": "Distinct practitioners across the analysed systems, each counted once at the strongest tier any member reaches.",
+    "practitioners": 21963,
+    "strict": 0,
+    "resolution": 10718,
+    "enrollment": 3037,
+    "none": 8208,
+    "reaches_any": 13755
+  }
+}
