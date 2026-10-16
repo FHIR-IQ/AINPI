@@ -14,7 +14,8 @@
  *   vendor-endpoint-attribution.csv (H51)  The endpoint lists EHR vendors
  *     publish themselves. A vendor naming an organization for a URL is the
  *     vendor's claim, not CMS data, and every row served from it says so.
- *     Columns: url,org_name,org_npi,vendor,in_ndh,ndh_has_owner.
+ *     Columns: url,org_name,org_npi,vendor,in_ndh,ndh_has_owner,npis_on_url
+ *     (the last since FHI-73; read by header, not position).
  *
  * Why HTTPS and not fs: next.config.js excludes public/api/v1/findings/** from
  * every lambda bundle (the 250 MB limit), so the files do not exist on disk at
@@ -163,6 +164,21 @@ interface VendorRow {
   vendor: string;
   in_ndh: string;
   ndh_has_owner: string;
+  npis_on_url: number | null;
+}
+
+/**
+ * A vendor URL listing more NPIs than this is a practice-wide or brand-wide
+ * list rather than a statement about one organization. Same value as
+ * LIST_THRESHOLD in analysis/org_systems.py, which the ledger and H53 use.
+ */
+export const VENDOR_NPI_LIST_THRESHOLD = 10;
+
+/** `npis_on_url` as a count, or null when the column is absent or blank. */
+function npiCount(v: string | undefined): number | null {
+  if (v === undefined || v.trim() === '') return null;
+  const n = Number(v);
+  return Number.isInteger(n) && n >= 0 ? n : null;
 }
 
 export interface H50Figure {
@@ -257,6 +273,7 @@ export function buildOrgIndex(input: {
       vendor: r.vendor,
       in_ndh: r.in_ndh,
       ndh_has_owner: r.ndh_has_owner,
+      npis_on_url: npiCount(r.npis_on_url),
     });
   }
 
@@ -291,6 +308,15 @@ export interface OrgEndpoint {
     url: string;
     in_ndh: boolean | null;
     ndh_has_owner: boolean | null;
+    /**
+     * How many NPIs the vendor lists beside this URL (H51 `npis_on_url`);
+     * null for a file written before the column existed. More than
+     * VENDOR_NPI_LIST_THRESHOLD means a practice-wide or brand-wide list, so
+     * the URL is not shown to serve this organization in particular.
+     */
+    npis_on_url: number | null;
+    /** True when npis_on_url exceeds VENDOR_NPI_LIST_THRESHOLD. */
+    practice_wide_list: boolean | null;
   } | null;
 }
 
@@ -364,6 +390,9 @@ export function lookupOrganization(
       url: r.url,
       in_ndh: yesNo(r.in_ndh),
       ndh_has_owner: yesNo(r.ndh_has_owner),
+      npis_on_url: r.npis_on_url,
+      practice_wide_list:
+        r.npis_on_url === null ? null : r.npis_on_url > VENDOR_NPI_LIST_THRESHOLD,
     };
     const existing = byKey.get(key);
     if (existing) {
@@ -409,8 +438,12 @@ export function lookupOrganization(
       'source "ndh" is the NDH Endpoint resource\'s own managingOrganization (CMS data, ' +
         'AINPI H50 crosswalk). source "vendor_file" is the EHR vendor\'s own published ' +
         'claim (AINPI H51), not CMS data; verify it with the organization before relying ' +
-        'on it. URLs are de-duplicated after lower-casing scheme and host and stripping ' +
-        'trailing slashes. State comes from the NDH only; the vendor files carry none.',
+        'on it. vendor_file.npis_on_url is how many NPIs the vendor lists beside that ' +
+        `URL; above ${VENDOR_NPI_LIST_THRESHOLD} (practice_wide_list) it is a practice-wide ` +
+        'or brand-wide list, so the URL is not shown to serve this organization in ' +
+        'particular and AINPI counts it as inference, not a deterministic link. URLs ' +
+        'are de-duplicated after lower-casing scheme and host and stripping trailing ' +
+        'slashes. State comes from the NDH only; the vendor files carry none.',
     );
     if (!ndh.length) parts.push(h50Sentence(index.h50));
   } else {

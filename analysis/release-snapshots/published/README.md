@@ -32,6 +32,7 @@ recompute is a later step of the measure-series design
 | `practitioner-phone-reachability@6e74041.json` | 6e7404180d80 | 2026-08-20 | practitioner-phone-reachability |
 | `role-gap-delta@6e74041.json` | 6e7404180d80 | 2026-05-08 (`before` side) | role-coverage-pa; its `after` side repeats 2026-08-20, which the regenerated file now supplies |
 | `role-gap-composition@6e74041.json` | 6e7404180d80 | 2026-08-20 | `--before` input to `analysis/role_gap_delta.py` |
+| `vendor-endpoint-attribution@4023860.json` | 40238604e34c (file last changed in c1129ee) | 2026-10-07 | as published before the FHI-73 regeneration (one NPI per URL, athenahealth's shared base URL attributed). Registered in `measures.py` as the as-published side of a 2026-10-07 restatement of `vendor-filled-attribution`: excluding the shared URL moved the numerator 61,162 to 61,161 |
 
 ## Required before every warehouse reload
 

@@ -30,8 +30,8 @@ const CROSSWALK =
   'endpoint_id,base_url,host,status,org_id,org_npi,org_name,org_state\n' +
   `Endpoint-1,https://fhir.example.com/r4,fhir.example.com,active,Organization-${NPI},${NPI},EXAMPLE CLINIC,KS\n`;
 const VENDOR =
-  'url,org_name,org_npi,vendor,in_ndh,ndh_has_owner\n' +
-  `https://fhir.example.com/r4/,Example Clinic,${NPI},Acme EHR,yes,yes\n`;
+  'url,org_name,org_npi,vendor,in_ndh,ndh_has_owner,npis_on_url\n' +
+  `https://fhir.example.com/r4/,Example Clinic,${NPI},Acme EHR,yes,yes,1\n`;
 const LINKAGE = JSON.stringify({ numerator: 200, denominator: 1000, release_date: '2026-08-20' });
 
 let failCsv = true;
@@ -100,6 +100,8 @@ describe('lookup_organization via /api/mcp', () => {
     expect(payload.endpoints).toHaveLength(1);
     expect(payload.endpoints[0].sources).toEqual(['ndh', 'vendor_file']);
     expect(payload.endpoints[0].vendor).toBe('Acme EHR');
+    expect(payload.endpoints[0].vendor_file.npis_on_url).toBe(1);
+    expect(payload.endpoints[0].vendor_file.practice_wide_list).toBe(false);
   });
 
   it('rejects a malformed NPI at the schema', async () => {

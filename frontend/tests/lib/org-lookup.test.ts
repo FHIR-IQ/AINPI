@@ -35,13 +35,19 @@ const CROSSWALK = [
 ].join('\n');
 
 const VENDOR = [
-  'url,org_name,org_npi,vendor,in_ndh,ndh_has_owner',
-  `https://fhir.example.com/Clinic/A/r4,"Example Clinic, Inc",${NPI_A},Acme EHR,yes,yes`,
-  // Vendor-only endpoint for NPI_A.
-  `https://portal.example.com/a/fhir,"Example Clinic, Inc",${NPI_A},Acme EHR,no,`,
+  'url,org_name,org_npi,vendor,in_ndh,ndh_has_owner,npis_on_url',
+  `https://fhir.example.com/Clinic/A/r4,"Example Clinic, Inc",${NPI_A},Acme EHR,yes,yes,1`,
+  // Vendor-only endpoint for NPI_A, on a practice-wide list of 42 NPIs.
+  `https://portal.example.com/a/fhir,"Example Clinic, Inc",${NPI_A},Acme EHR,no,,42`,
   // No NPI: indexable by URL only.
-  'https://ehr.example.com/b/r4,"Sample ""Main"" Office",,Beta EHR,yes,no',
+  'https://ehr.example.com/b/r4,"Sample ""Main"" Office",,Beta EHR,yes,no,0',
   // NPI_C: vendor file only.
+  `https://c.example.com/fhir,Test Practice LLC,${NPI_C},Beta EHR,yes,no,10`,
+].join('\n');
+
+// The same file as written before FHI-73, without npis_on_url.
+const VENDOR_OLD = [
+  'url,org_name,org_npi,vendor,in_ndh,ndh_has_owner',
   `https://c.example.com/fhir,Test Practice LLC,${NPI_C},Beta EHR,yes,no`,
 ].join('\n');
 
@@ -128,6 +134,26 @@ describe('lookupOrganization', () => {
       label: VENDOR_CLAIM_LABEL,
       in_ndh: true,
       ndh_has_owner: true,
+    });
+  });
+
+  it('carries npis_on_url and flags a practice-wide list above 10', () => {
+    const a = lookupOrganization(index(), NPI_A);
+    const precise = a.endpoints.find((e) => e.base_url === 'https://FHIR.Example.com/Clinic/A/r4/')!;
+    expect(precise.vendor_file).toMatchObject({ npis_on_url: 1, practice_wide_list: false });
+    const list = a.endpoints.find((e) => e.base_url === 'https://portal.example.com/a/fhir')!;
+    expect(list.vendor_file).toMatchObject({ npis_on_url: 42, practice_wide_list: true });
+    expect(a.notes).toMatch(/npis_on_url/);
+    const c = lookupOrganization(index(), NPI_C);
+    // Exactly at the threshold is not a list.
+    expect(c.endpoints[0].vendor_file).toMatchObject({
+      npis_on_url: 10,
+      practice_wide_list: false,
+    });
+    const old = buildOrgIndex({ crosswalkCsv: CROSSWALK, vendorCsv: VENDOR_OLD, linkageJson: LINKAGE });
+    expect(lookupOrganization(old, NPI_C).endpoints[0].vendor_file).toMatchObject({
+      npis_on_url: null,
+      practice_wide_list: null,
     });
   });
 

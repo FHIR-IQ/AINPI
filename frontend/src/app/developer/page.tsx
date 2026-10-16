@@ -333,6 +333,51 @@ export default function DeveloperPage() {
               <EndpointCard key={ep.path} ep={ep} />
             ))}
           </div>
+          <div className="mt-4 border border-gray-200 bg-white p-4 text-xs text-gray-700">
+            <p className="mb-2 font-semibold text-gray-900">
+              Connectivity ledger: five keys narrowed on 2026-10-16 (FHI-73)
+            </p>
+            <p className="mb-2">
+              In <code className="font-mono">/api/v1/states/&lt;state&gt;-connectivity.json</code>{' '}
+              these keys kept their names and lost the matches made through a vendor NPI on a
+              URL listing more than 10 NPIs (a practice-wide or brand-wide list), which now count
+              as the inferred <code className="font-mono">vendor-npi-list</code> tier. Values are
+              not comparable with files written before that date. The payload states the same
+              thing in <code className="font-mono">field_notes</code>.
+            </p>
+            <ul className="list-disc space-y-1 pl-5">
+              <li>
+                <code className="font-mono">summary.organizations_with_endpoint</code>: NDH or
+                vendor NPI on a URL listing 10 or fewer. List matches are in{' '}
+                <code className="font-mono">organizations_with_endpoint_via_vendor_npi_list</code>.
+              </li>
+              <li>
+                <code className="font-mono">confidence.yellow</code>: vendor NPI on a URL listing
+                10 or fewer. List matches are{' '}
+                <code className="font-mono">confidence.vendor_list</code>.
+              </li>
+              <li>
+                <code className="font-mono">systems.rows[].endpoint_count_deterministic</code>:
+                endpoints reached through the NDH or a vendor NPI on a URL listing 10 or fewer.
+              </li>
+              <li>
+                <code className="font-mono">systems.systems_reaching_an_endpoint_deterministic</code>:
+                systems with at least one such endpoint.
+              </li>
+              <li>
+                <code className="font-mono">graph.nodes[].connected_deterministic</code>: false
+                for a system reached only through a vendor NPI list, alias, name or brand match,
+                or CMS enrollment.
+              </li>
+            </ul>
+            <p className="mt-2">
+              Tier order, strongest first: ndh, vendor-npi, alias, vendor-npi-list, name-state,
+              brand-state, cms-enrollment-own-endpoint. A curated alias outranks a practice-wide
+              list. <code className="font-mono">organizations_top[]</code> now also carries H53
+              tiers, with <code className="font-mono">endpoint_inferred</code> and{' '}
+              <code className="font-mono">npis_on_url</code>.
+            </p>
+          </div>
         </section>
 
         {/* Live API */}
@@ -417,6 +462,15 @@ export default function DeveloperPage() {
               with an empty org_npi. Since FHI-73 a URL may repeat, once per NPI its
               publisher lists, so do not key it on the URL alone. The H51 finding JSON
               reports the pair count as <code className="font-mono">published_url_npi_pairs</code>.
+              The last column, <code className="font-mono">npis_on_url</code>, is the number of
+              distinct NPIs the vendor lists for that URL (0 on a row with no NPI). Above 10 the
+              URL is a practice-wide or brand-wide list: the NPI is published beside it, but the
+              URL is not shown to serve that one organization. Read columns by header name.
+              athenahealth&apos;s shared base URL, used by all its customers, is excluded.
+              The tool returns that count on each vendor claim as{' '}
+              <code className="font-mono">vendor_file.npis_on_url</code>, with{' '}
+              <code className="font-mono">vendor_file.practice_wide_list</code> set to true
+              above 10 (null for a file written before the column existed).
             </p>
             <p className="text-xs text-gray-600 mt-2">
               The server is public. A client that must send credentials, such as a

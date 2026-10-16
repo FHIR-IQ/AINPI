@@ -14,9 +14,12 @@ import ConnectivityChain from './connectivity-chain';
 import SystemsExclusionsNote from '@/components/connectivity/SystemsExclusionsNote';
 import {
   EndpointCountCell,
+  KnownSystemsUnreached,
   SystemReachCell,
   SystemsCorrections,
+  basisLabel,
   countsDistinct,
+  isInferredTier,
 } from '@/components/connectivity/SystemReach';
 // Aliased: this file also exports `const dynamic = 'force-static'`, and the
 // bare import name collides with it.
@@ -101,8 +104,12 @@ const BAND_STYLE: Record<string, { label: string; className: string }> = {
     label: 'Vendor NPI',
     className: 'bg-primary-100 text-primary-900 border-primary-300',
   },
+  vendor_list: {
+    label: 'Vendor NPI list',
+    className: 'bg-primary-50 text-primary-900 border-primary-500 border-dashed',
+  },
   resolved: {
-    label: 'Name/brand resolved',
+    label: 'Alias, name or brand resolved',
     className: 'bg-primary-50 text-primary-900 border-primary-400',
   },
   enrolled: {
@@ -145,6 +152,7 @@ function Connectivity({
     summary,
     geo,
     funnel,
+    corrections,
     confidence,
     vendors,
     organizations_top,
@@ -164,7 +172,16 @@ function Connectivity({
   const hasTiers = systems.rows.some((r) => r.reach_by_tier);
 
   const bands = (
-    ['green', 'yellow', 'resolved', 'enrolled', 'candidate', 'red', 'none'] as const
+    [
+      'green',
+      'yellow',
+      'vendor_list',
+      'resolved',
+      'enrolled',
+      'candidate',
+      'red',
+      'none',
+    ] as const
   ).map(
     // A payload generated before the enrollment tier existed has no `enrolled`
     // key. Coercing to 0 keeps an older published state slice rendering rather
@@ -265,6 +282,15 @@ function Connectivity({
           </p>
         </header>
 
+        {/* The statewide headline moved with a method change (FHI-73). The
+            notice sits beside the headline figures it qualifies, not only in
+            the systems table further down. */}
+        <SystemsCorrections
+          corrections={corrections}
+          title="Correction to the headline figures"
+          testId="funnel-corrections"
+        />
+
         <section className="mb-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
           <Stat
             label="Active practitioners"
@@ -279,12 +305,20 @@ function Connectivity({
           <Stat
             label="Reach an endpoint"
             value={`${summary.reaches_endpoint_pct_of_affiliated}%`}
-            sub={`of those with an affiliation; ${summary.reaches_endpoint_pct}% of all`}
+            sub={`of those with an affiliation; ${summary.reaches_endpoint_pct}% of all${
+              typeof summary.reaches_endpoint_deterministic_pct === 'number'
+                ? `, ${summary.reaches_endpoint_deterministic_pct}% deterministically`
+                : ''
+            }`}
           />
           <Stat
             label="Organizations"
             value={fmt(summary.organizations)}
-            sub={`${fmt(summary.organizations_with_endpoint)} reach an endpoint`}
+            sub={
+              typeof summary.organizations_with_endpoint_via_vendor_npi_list === 'number'
+                ? `${fmt(summary.organizations_with_endpoint)} reach an endpoint deterministically, ${fmt(summary.organizations_with_endpoint_via_vendor_npi_list)} more through a vendor NPI list`
+                : `${fmt(summary.organizations_with_endpoint)} reach an endpoint`
+            }
           />
         </section>
 
@@ -458,11 +492,13 @@ function Connectivity({
           </div>
 
           <SystemsCorrections corrections={systems.corrections} />
+          <KnownSystemsUnreached block={systems.known_systems_unreached} />
           {hasTiers && systems.tiers && (
             <p className="measure mb-3 text-xs text-gray-600">
-              {systems.tiers.note} Counts marked * are inference: reached by
-              alias, name or brand match, or CMS enrollment, not by the NDH or
-              a vendor-published NPI.
+              {systems.tiers.note} Counts marked * are inference: reached by a
+              curated alias, vendor NPI on a practice-wide list, name or brand
+              match, or CMS enrollment, not by the NDH or a vendor NPI on a URL
+              listing 10 or fewer.
             </p>
           )}
           <div className="overflow-x-auto border border-gray-200 bg-white">
@@ -596,9 +632,12 @@ function Connectivity({
             Largest organizations, and what reaches them
           </h2>
           <p className="measure mb-6 text-sm text-gray-600">
-            Ranked by how many {state_name} practitioners name them. A candidate
-            endpoint is shown in its own column so it cannot be read as a
-            resolved one.
+            Ranked by how many {state_name} practitioners name them. Each row
+            shows its strongest route; an endpoint marked * is inference (a
+            curated alias, a vendor NPI on a practice-wide list, or a name or
+            brand match), not the NDH or a vendor NPI on a URL listing 10 or
+            fewer. A candidate endpoint is shown in grey so it cannot be read
+            as a resolved one.
           </p>
           <div className="overflow-x-auto border border-gray-200 bg-white">
             <table className="min-w-full text-sm">
@@ -622,16 +661,29 @@ function Connectivity({
                     </td>
                     <td className="px-4 py-2">
                       {org.endpoint_basis ? (
-                        <span className="border border-gray-300 px-1.5 py-0.5 text-xs text-gray-700">
-                          {org.endpoint_basis}
+                        <span
+                          className={`border px-1.5 py-0.5 text-xs text-gray-700 ${
+                            isInferredTier(org.endpoint_basis)
+                              ? 'border-dashed border-gray-400'
+                              : 'border-gray-300'
+                          }`}
+                        >
+                          {basisLabel(org.endpoint_basis, org.npis_on_url)}
                         </span>
                       ) : (
                         <span className="text-xs text-gray-400">none</span>
                       )}
                     </td>
                     <td className="px-4 py-2 text-gray-700">{org.vendor ?? '—'}</td>
-                    <td className="max-w-xs truncate px-4 py-2 font-mono text-xs text-gray-600">
+                    <td
+                      className={`max-w-xs truncate px-4 py-2 font-mono text-xs ${
+                        org.endpoint ? 'text-gray-600' : 'text-gray-400'
+                      }`}
+                    >
                       {org.endpoint ?? org.endpoint_candidate ?? '—'}
+                      {org.endpoint && isInferredTier(org.endpoint_basis) ? (
+                        <span title="inferred, not deterministic"> *</span>
+                      ) : null}
                     </td>
                   </tr>
                 ))}

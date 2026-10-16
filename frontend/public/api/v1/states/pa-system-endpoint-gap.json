@@ -2,10 +2,10 @@
   "state": "PA",
   "slug": "pa-system-endpoint-gap",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-16T19:56:29+00:00",
+  "generated_at": "2026-10-16T23:34:31+00:00",
   "methodology_version": "0.7.3-draft",
-  "question": "Why do the largest health systems in the connectivity ledger show zero endpoints?",
-  "answer": "The zero is not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the vendor publishes no member organization's NPI. The systems hold 21,963 distinct clinicians (the ledger's per-system counts sum practitioner-organization links). Through a member organization or CMS enrollment, the same tiers the ledger's practitioner funnel accepts, 13,755 of them already reach an endpoint (a lower bound on what the funnel credits them, since it also counts non-member organizations): 0 through the NDH or a vendor-published NPI, the only links the system rollup counts, 10,718 through name or brand resolution (H53) and 3,037 through CMS enrollment.",
+  "question": "How do the largest health systems in the connectivity ledger reach their endpoints, and why did the system table show zero endpoints for them before FHI-73?",
+  "answer": "The zero the system table showed before FHI-73 was not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the system's own Epic brand lists none of its member organizations' NPIs. The systems hold 21,963 distinct clinicians. The system rollup now counts every tier the practitioner funnel counts, each labelled. Through a member organization or CMS enrollment, 21,460 of them reach an endpoint: 0 through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs (the deterministic tiers), 524 through a vendor NPI on a practice-wide or brand-wide list, 18,583 through alias, name or brand resolution (H53) and 2,353 through CMS enrollment (any enrolled group; the ledger counts enrollment only when it lands on the system's own endpoint).",
   "sources": {
     "systems": "/api/v1/states/pa-connectivity.json (grouping rebuilt with analysis/org_systems.build_systems)",
     "organizations": "/api/v1/states/pa-org-endpoint-resolution.csv (H53)",
@@ -48,7 +48,7 @@
       "organizations": 34,
       "practitioner_org_links": 17882,
       "practitioners_distinct": 6793,
-      "ledger_endpoint_count": 0,
+      "ledger_endpoint_count": 1,
       "chain": {
         "member_organizations": 34,
         "members_with_npi": 34,
@@ -63,21 +63,23 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "unresolved": 34
+          "alias": 31,
+          "unresolved": 3
         },
         "members_with_vendor_published_npi": 0
       },
       "reach": {
         "practitioners": 6793,
         "strict": 0,
-        "resolution": 0,
-        "enrollment": 725,
-        "none": 6068,
-        "reaches_any": 725,
-        "reaches_systems_own_endpoint": 86,
-        "resolution_on_own_domain": 0,
-        "enrollment_on_own_domain": 86,
-        "reaches_any_pct": 10.7
+        "vendor_list": 0,
+        "resolution": 6751,
+        "enrollment": 5,
+        "none": 37,
+        "reaches_any": 6756,
+        "reaches_systems_own_endpoint": 6756,
+        "resolution_on_own_domain": 6751,
+        "enrollment_on_own_domain": 5,
+        "reaches_any_pct": 99.5
       },
       "vendor_brands": [
         {
@@ -133,12 +135,7 @@
           "manager_in_any_analysed_system": false
         }
       ],
-      "dead_aliases": [
-        {
-          "ndh_name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-          "brand": "UPMC"
-        }
-      ],
+      "dead_aliases": [],
       "shares_vendor_brand_with": [
         "brand:PINNACLE",
         "brand:UPMC"
@@ -177,13 +174,6 @@
           ]
         },
         {
-          "code": "dead-curated-alias",
-          "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
-          "fixable_by": [
-            "ainpi"
-          ]
-        },
-        {
           "code": "system-split-across-groups",
           "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
           "fixable_by": [
@@ -200,7 +190,7 @@
       "organizations": 120,
       "practitioner_org_links": 16799,
       "practitioners_distinct": 5199,
-      "ledger_endpoint_count": 0,
+      "ledger_endpoint_count": 1,
       "chain": {
         "member_organizations": 120,
         "members_with_npi": 120,
@@ -221,6 +211,7 @@
       "reach": {
         "practitioners": 5199,
         "strict": 0,
+        "vendor_list": 0,
         "resolution": 5199,
         "enrollment": 0,
         "none": 0,
@@ -270,7 +261,16 @@
             }
           ],
           "npis_h51_csv_keeps_for_these_urls": [
-            "1295834984"
+            "1083412084",
+            "1205206943",
+            "1205928967",
+            "1295834984",
+            "1386323566",
+            "1386637296",
+            "1508966722",
+            "1679038293",
+            "1720187370",
+            "1942227632"
           ]
         }
       ],
@@ -326,13 +326,6 @@
             "system",
             "cms"
           ]
-        },
-        {
-          "code": "rollup-omits-h53-tier",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
-          "fixable_by": [
-            "ainpi"
-          ]
         }
       ]
     },
@@ -343,7 +336,7 @@
       "organizations": 257,
       "practitioner_org_links": 8651,
       "practitioners_distinct": 3029,
-      "ledger_endpoint_count": 0,
+      "ledger_endpoint_count": 2,
       "chain": {
         "member_organizations": 257,
         "members_with_npi": 257,
@@ -356,21 +349,23 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "brand-state": 228,
+          "brand-state": 226,
           "name-state": 26,
+          "npi-list": 2,
           "unresolved": 3
         },
-        "members_with_vendor_published_npi": 0
+        "members_with_vendor_published_npi": 2
       },
       "reach": {
         "practitioners": 3029,
         "strict": 0,
-        "resolution": 3028,
+        "vendor_list": 99,
+        "resolution": 2929,
         "enrollment": 1,
         "none": 0,
         "reaches_any": 3029,
-        "reaches_systems_own_endpoint": 3028,
-        "resolution_on_own_domain": 3028,
+        "reaches_systems_own_endpoint": 3027,
+        "resolution_on_own_domain": 2929,
         "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
@@ -414,7 +409,19 @@
             }
           ],
           "npis_h51_csv_keeps_for_these_urls": [
-            "1518959360"
+            "1013933175",
+            "1174515753",
+            "1255414678",
+            "1386830057",
+            "1437112224",
+            "1487960639",
+            "1518959360",
+            "1528023132",
+            "1609845544",
+            "1649530627",
+            "1760730360",
+            "1881638674",
+            "1891755070"
           ]
         }
       ],
@@ -478,13 +485,6 @@
             "system",
             "cms"
           ]
-        },
-        {
-          "code": "rollup-omits-h53-tier",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
-          "fixable_by": [
-            "ainpi"
-          ]
         }
       ]
     },
@@ -495,7 +495,7 @@
       "organizations": 59,
       "practitioner_org_links": 6472,
       "practitioners_distinct": 3215,
-      "ledger_endpoint_count": 0,
+      "ledger_endpoint_count": 2,
       "chain": {
         "member_organizations": 59,
         "members_with_npi": 59,
@@ -510,21 +510,23 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "unresolved": 59
+          "unresolved": 48,
+          "npi-list": 11
         },
-        "members_with_vendor_published_npi": 0
+        "members_with_vendor_published_npi": 11
       },
       "reach": {
         "practitioners": 3215,
         "strict": 0,
+        "vendor_list": 310,
         "resolution": 0,
-        "enrollment": 2723,
-        "none": 492,
-        "reaches_any": 2723,
+        "enrollment": 2702,
+        "none": 203,
+        "reaches_any": 3012,
         "reaches_systems_own_endpoint": 2673,
         "resolution_on_own_domain": 0,
-        "enrollment_on_own_domain": 2673,
-        "reaches_any_pct": 84.7
+        "enrollment_on_own_domain": 2650,
+        "reaches_any_pct": 93.7
       },
       "vendor_brands": [
         {
@@ -556,6 +558,40 @@
             }
           ],
           "npis_h51_csv_keeps_for_these_urls": [
+            "1013985126",
+            "1023000296",
+            "1073572947",
+            "1144348194",
+            "1194744805",
+            "1235873084",
+            "1285667493",
+            "1295857530",
+            "1316975626",
+            "1326406489",
+            "1336117787",
+            "1346489143",
+            "1366488108",
+            "1538223714",
+            "1578560504",
+            "1588269898",
+            "1619096161",
+            "1679592380",
+            "1689679581",
+            "1710007596",
+            "1720056138",
+            "1760599344",
+            "1801812573",
+            "1821110172",
+            "1831254788",
+            "1861435042",
+            "1871568725",
+            "1902135098",
+            "1902920622",
+            "1912029265",
+            "1932125606",
+            "1942236427",
+            "1952420325",
+            "1962401497",
             "1982632311"
           ]
         }
@@ -591,13 +627,6 @@
           ]
         },
         {
-          "code": "rollup-omits-enrollment-own-domain",
-          "explanation": "AINPI defect: the rollup also ignores CMS enrollment, a practitioner-level tier the funnel counts. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
-          "fixable_by": [
-            "ainpi"
-          ]
-        },
-        {
           "code": "system-split-across-groups",
           "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
           "fixable_by": [
@@ -614,7 +643,7 @@
       "organizations": 213,
       "practitioner_org_links": 5904,
       "practitioners_distinct": 2382,
-      "ledger_endpoint_count": 0,
+      "ledger_endpoint_count": 2,
       "chain": {
         "member_organizations": 213,
         "members_with_npi": 213,
@@ -631,21 +660,24 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "unresolved": 213
+          "alias": 167,
+          "npi-list": 12,
+          "unresolved": 34
         },
-        "members_with_vendor_published_npi": 0
+        "members_with_vendor_published_npi": 12
       },
       "reach": {
         "practitioners": 2382,
         "strict": 0,
-        "resolution": 0,
-        "enrollment": 398,
-        "none": 1984,
-        "reaches_any": 398,
-        "reaches_systems_own_endpoint": 21,
-        "resolution_on_own_domain": 0,
-        "enrollment_on_own_domain": 21,
-        "reaches_any_pct": 16.7
+        "vendor_list": 161,
+        "resolution": 1782,
+        "enrollment": 117,
+        "none": 322,
+        "reaches_any": 2060,
+        "reaches_systems_own_endpoint": 1817,
+        "resolution_on_own_domain": 1782,
+        "enrollment_on_own_domain": 33,
+        "reaches_any_pct": 86.5
       },
       "vendor_brands": [
         {
@@ -701,12 +733,7 @@
           "manager_in_any_analysed_system": false
         }
       ],
-      "dead_aliases": [
-        {
-          "ndh_name": "PINNACLE HEALTH MEDICAL SERVICES",
-          "brand": "UPMC"
-        }
-      ],
+      "dead_aliases": [],
       "shares_vendor_brand_with": [
         "brand:UNIVERSITY OF PITTSBURGH",
         "brand:UPMC"
@@ -745,13 +772,6 @@
           ]
         },
         {
-          "code": "dead-curated-alias",
-          "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
-          "fixable_by": [
-            "ainpi"
-          ]
-        },
-        {
           "code": "system-split-across-groups",
           "explanation": "The same vendor brand is matched by more than one ledger system, so one enterprise is counted as several. Fixable by the system (NPPES subpart/parent) or by AINPI (grouping).",
           "fixable_by": [
@@ -768,7 +788,7 @@
       "organizations": 144,
       "practitioner_org_links": 5147,
       "practitioners_distinct": 2956,
-      "ledger_endpoint_count": 0,
+      "ledger_endpoint_count": 2,
       "chain": {
         "member_organizations": 144,
         "members_with_npi": 144,
@@ -789,6 +809,7 @@
       "reach": {
         "practitioners": 2956,
         "strict": 0,
+        "vendor_list": 0,
         "resolution": 2956,
         "enrollment": 0,
         "none": 0,
@@ -862,204 +883,53 @@
             "system",
             "cms"
           ]
-        },
-        {
-          "code": "rollup-omits-h53-tier",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
-          "fixable_by": [
-            "ainpi"
-          ]
         }
       ]
     }
   ],
   "ledger_defects": {
-    "note": "Defects in AINPI's own method found while answering this. Each one makes a reachable endpoint read as absent.",
-    "system_practitioners_are_link_sums": {
-      "note": "The ledger's per-system `practitioners` is the sum of each member organization's practitioner count, so a clinician with roles at several member organizations is counted once per organization.",
+    "note": "Defects in AINPI's own method that this analysis found, all fixed in FHI-73 (2026-10-16). Each entry says how it was fixed and re-measures it on this run: an empty list or a zero count means the defect has not recurred, a non-empty one means it has. Before the fix each one made a reachable endpoint read as absent or, for the link sums, overstated a system's clinicians.",
+    "system_practitioners_were_link_sums": {
+      "status": "fixed in FHI-73",
+      "note": "Before FHI-73 the ledger's per-system `practitioners` was the sum of each member organization's practitioner count, so a clinician with roles at several member organizations counted once per organization. It now counts distinct clinicians; the old sum is kept as practitioner_org_links.",
       "practitioner_org_links_in_these_systems": 60855,
       "distinct_practitioners_in_these_systems": 21963,
-      "where": "analysis/org_systems.py build_systems(): entry['practitioners'] += o['practitioners']."
+      "where": "fixed in analysis/org_systems.py build_systems(), which collects distinct practitioner NPIs per system (practitioners_by_org)."
     },
     "rollup_omits_h53_tier": {
-      "systems_affected_in_this_table": [
-        "brand:GEISINGER",
-        "brand:ST LUKE",
-        "brand:WELLSPAN"
-      ],
-      "where": "analysis/state_connectivity.py build(): the system rollup calls resolve_org(), which never consults org_resolution (H53, organization level)."
+      "status": "fixed in FHI-73",
+      "systems_affected_in_this_table": [],
+      "where": "fixed in FHI-73: analysis/state_connectivity.py rollup_system_reach() walks member_endpoint(), which includes org_resolution (H53). Listed systems are any where the defect recurs."
     },
     "rollup_omits_enrollment_own_domain": {
-      "systems_affected_in_this_table": [
-        "brand:AHN"
-      ],
+      "status": "fixed in FHI-73",
+      "systems_affected_in_this_table": [],
       "enrollment_on_own_domain_by_system": {
-        "brand:UNIVERSITY OF PITTSBURGH": 86,
+        "brand:UNIVERSITY OF PITTSBURGH": 5,
         "brand:GEISINGER": 0,
         "brand:ST LUKE": 0,
-        "brand:AHN": 2673,
-        "brand:PINNACLE": 21,
+        "brand:AHN": 2650,
+        "brand:PINNACLE": 33,
         "brand:WELLSPAN": 0
       },
       "threshold": "raised when more than half of a system's enrollment-tier reach lands on its own domain",
-      "where": "analysis/state_connectivity.py build(): the system rollup never consults enrollment_endpoints (CMS enrollment, practitioner level)."
+      "where": "fixed in FHI-73: rollup_system_reach() counts enrollment_endpoints when they land on an endpoint the system reaches or on its own domain (cms-enrollment-own-endpoint)."
     },
     "dead_curated_aliases": {
-      "count": 9,
-      "of": 13,
-      "rows": [
-        {
-          "ndh_name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-          "brand": "UPMC"
-        },
-        {
-          "ndh_name": "UPMC COMMUNITY MEDICINE INC",
-          "brand": "UPMC"
-        },
-        {
-          "ndh_name": "JEFFERSON UNIVERSITY PHYSICIANS",
-          "brand": "Jefferson Health"
-        },
-        {
-          "ndh_name": "TEMPLE FACULTY PRACTICE PLAN INC",
-          "brand": "Temple Health"
-        },
-        {
-          "ndh_name": "TEMPLE PHYSICIANS INC",
-          "brand": "Temple Health"
-        },
-        {
-          "ndh_name": "THE MILTON S HERSHEY MEDICAL CENTER PHYSICIANS",
-          "brand": "Penn State Health"
-        },
-        {
-          "ndh_name": "PENN STATE HEALTH MEDICAL GROUP LLC",
-          "brand": "Penn State Health"
-        },
-        {
-          "ndh_name": "PINNACLE HEALTH MEDICAL SERVICES",
-          "brand": "UPMC"
-        },
-        {
-          "ndh_name": "REGIONAL HEALTH SERVICES INC",
-          "brand": "UPMC"
-        }
-      ],
+      "status": "fixed in FHI-73; H53 now raises on a dead alias, so a non-zero count cannot ship",
+      "count": 0,
+      "of": 11,
+      "rows": [],
       "where": "analysis/h53_org_endpoint_resolution.py resolve(): alias brand must equal a vendor-published label exactly; Epic now publishes 'MyUPMC', 'TempleHealth', 'Thomas Jefferson University Health System'."
     },
     "h51_one_npi_per_url": {
-      "organizations": 528,
-      "practitioner_org_links": 9442,
-      "of_which_unresolved_by_any_tier": 370,
-      "unresolved_practitioner_org_links": 6563,
-      "top": [
-        {
-          "name": "GUTHRIE MEDICAL GROUP PC",
-          "npi": "1245246644",
-          "practitioners": 962,
-          "tier": "brand-state",
-          "epic_url": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4"
-        },
-        {
-          "name": "DLP CONEMAUGH PHYSICIAN PRACTICES LLC",
-          "npi": "1205242609",
-          "practitioners": 661,
-          "tier": "unresolved",
-          "epic_url": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4"
-        },
-        {
-          "name": "CONEMAUGH PHYSICIAN GROUP CRESSON",
-          "npi": "1932515905",
-          "practitioners": 600,
-          "tier": "name-state",
-          "epic_url": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4"
-        },
-        {
-          "name": "GUTHRIE CLINIC LTD",
-          "npi": "1134178635",
-          "practitioners": 568,
-          "tier": "brand-state",
-          "epic_url": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4"
-        },
-        {
-          "name": "DIGESTIVE DISEASE ASSOCIATES LTD",
-          "npi": "1154422806",
-          "practitioners": 318,
-          "tier": "unresolved",
-          "epic_url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4"
-        },
-        {
-          "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATIO",
-          "npi": "1205928967",
-          "practitioners": 309,
-          "tier": "unresolved",
-          "epic_url": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4"
-        },
-        {
-          "name": "CMS HIH",
-          "npi": "1992107817",
-          "practitioners": 306,
-          "tier": "unresolved",
-          "epic_url": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4"
-        },
-        {
-          "name": "MID-ATLANTIC GASTROINTESTINAL CENTER",
-          "npi": "1255872784",
-          "practitioners": 294,
-          "tier": "unresolved",
-          "epic_url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4"
-        },
-        {
-          "name": "FAYETTE PHYSICIAN NETWORK INC",
-          "npi": "1437823044",
-          "practitioners": 288,
-          "tier": "unresolved",
-          "epic_url": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4"
-        },
-        {
-          "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
-          "npi": "1083412084",
-          "practitioners": 272,
-          "tier": "unresolved",
-          "epic_url": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4"
-        },
-        {
-          "name": "VALLEY HEALTH PARTNERS COMMUNITY HEALTH CENTER",
-          "npi": "1770118648",
-          "practitioners": 265,
-          "tier": "unresolved",
-          "epic_url": "https://proxy.lvh.com/fhir/api/fhir/r4"
-        },
-        {
-          "name": "RGAL ANESTHESIA SERVICES LLC",
-          "npi": "1699055251",
-          "practitioners": 215,
-          "tier": "unresolved",
-          "epic_url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4"
-        },
-        {
-          "name": "NHPP CARDIOLOGY AT GREAT NECK",
-          "npi": "1053688572",
-          "practitioners": 173,
-          "tier": "unresolved",
-          "epic_url": "https://call.api.northwell.io/epic-proxy/api/fhir/r4"
-        },
-        {
-          "name": "BUCYRUS RADIOLOGY SERVICESCCF",
-          "npi": "1679525919",
-          "practitioners": 131,
-          "tier": "unresolved",
-          "epic_url": "https://api.ccf.org/mu/api/fhir/r4"
-        },
-        {
-          "name": "GASTROENTEROLOGY CSLTS S JRSY",
-          "npi": "1649226515",
-          "practitioners": 110,
-          "tier": "unresolved",
-          "epic_url": "https://epicproxy.et1017.epichosted.com/fhirproxy/chfc/api/fhir/r4"
-        }
-      ],
-      "where": "analysis/h51_vendor_endpoint_attribution.py parse_bundle(): url2npi.setdefault keeps the first NPI per URL."
+      "status": "fixed in FHI-73",
+      "organizations": 0,
+      "practitioner_org_links": 0,
+      "of_which_unresolved_by_any_tier": 0,
+      "unresolved_practitioner_org_links": 0,
+      "top": [],
+      "where": "fixed in FHI-73: h51_vendor_endpoint_attribution.py parse_bundle() keeps every NPI per URL. Counted here are member NPIs Epic publishes that the H51 CSV still does not carry."
     }
   },
   "causes": {
@@ -1105,13 +975,13 @@
       ]
     },
     "rollup-omits-h53-tier": {
-      "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
+      "explanation": "AINPI defect, fixed in FHI-73 and raised only if it recurs: the ledger shows the system with zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53 name/brand resolution, with reaching one. Before FHI-73 the system rollup accepted only NDH and vendor-NPI links.",
       "fixable_by": [
         "ainpi"
       ]
     },
     "rollup-omits-enrollment-own-domain": {
-      "explanation": "AINPI defect: the rollup also ignores CMS enrollment, a practitioner-level tier the funnel counts. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
+      "explanation": "AINPI defect, fixed in FHI-73 and raised only if it recurs: the ledger shows zero endpoints although CMS enrollment, a practitioner-level tier the funnel counts, reaches the system's own domain. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
       "fixable_by": [
         "ainpi"
       ]
@@ -1123,7 +993,7 @@
       ]
     },
     "h51-one-npi-per-url": {
-      "explanation": "AINPI defect: the vendor publishes an NPI that matches a member organization, but H51's CSV keeps one NPI per endpoint URL and dropped it.",
+      "explanation": "AINPI defect, fixed in FHI-73 and raised only if it recurs: the vendor publishes an NPI that matches a member organization, but H51's CSV does not carry it (before FHI-73 it kept one NPI per endpoint URL).",
       "fixable_by": [
         "ainpi"
       ]
@@ -1140,25 +1010,25 @@
     {
       "query": "parent",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     },
     {
       "query": "pairs",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     },
     {
       "query": "members",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     },
     {
       "query": "endpoints",
       "bytes_billed": 0,
-      "cached": false,
+      "cached": true,
       "bq_result_cache_hit": true
     }
   ],
@@ -1171,10 +1041,11 @@
     "note": "Distinct practitioners across the analysed systems, each counted once at the strongest tier any member reaches.",
     "practitioners": 21963,
     "strict": 0,
-    "resolution": 10718,
-    "enrollment": 3037,
-    "none": 8208,
-    "reaches_any": 13755
+    "vendor_list": 524,
+    "resolution": 18583,
+    "enrollment": 2353,
+    "none": 503,
+    "reaches_any": 21460
   },
   "pairwise_overlap": {
     "note": "Distinct practitioners holding roles in member organizations of both systems, and in either. Only pairs sharing at least one practitioner are listed.",

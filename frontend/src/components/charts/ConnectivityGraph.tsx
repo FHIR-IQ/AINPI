@@ -234,7 +234,7 @@ export default function ConnectivityGraph({
           <svg width="14" height="14" aria-hidden="true">
             <circle cx="7" cy="7" r="5" fill={PRIMARY} />
           </svg>
-          Reached through the NDH or a vendor NPI
+          Reached through the NDH or a vendor NPI (on a URL listing 10 or fewer)
         </span>
         <span className="flex items-center gap-1.5">
           <svg width="14" height="14" aria-hidden="true">

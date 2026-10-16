@@ -85,6 +85,42 @@ class Report:
         return not self.errors
 
 
+# Keys of states/<state>-connectivity.json that the page, the MCP tool docs
+# and external consumers read. Dotted paths into the payload.
+CONNECTIVITY_KEYS = (
+    "summary.reaches_endpoint",
+    "summary.reaches_endpoint_pct",
+    "summary.reaches_endpoint_pct_of_affiliated",
+    "summary.reaches_endpoint_deterministic",
+    "summary.reaches_endpoint_deterministic_pct",
+    "summary.reaches_endpoint_via_vendor_npi_list",
+    "summary.vendor_npi_list_threshold",
+    "summary.organizations_with_endpoint",
+    "summary.organizations_with_endpoint_via_vendor_npi_list",
+    "corrections",
+    "field_notes",
+    "funnel",
+    "confidence.yellow",
+    "confidence.vendor_list",
+    "confidence.resolved",
+    "confidence.resolved_by_tier",
+    "confidence.enrolled",
+    "systems.rows",
+    "systems.tiers.order",
+    "systems.tiers.deterministic",
+    "systems.corrections",
+    "systems.known_systems_unreached.rows",
+    "systems.systems_reaching_an_endpoint_deterministic",
+    "graph.nodes",
+    "organizations_top",
+    "organizations_unlinked.rows",
+)
+
+# Columns of findings/vendor-endpoint-attribution.csv, in order.
+VENDOR_CSV_HEADER = ["url", "org_name", "org_npi", "vendor", "in_ndh",
+                     "ndh_has_owner", "npis_on_url"]
+
+
 def load(path: pathlib.Path):
     try:
         return json.loads(path.read_text())
@@ -308,6 +344,37 @@ def invariant_pass(rep: Report) -> None:
                     f"unattributed ({expected:,}). One of them is counting "
                     f"references present and the other references that resolve.",
                 )
+
+    # --- connectivity ledger: keys consumers and the page read ---------------
+    # No JSON schema covers this payload, so a regeneration that dropped a key
+    # would ship silently; check presence for every published slice.
+    for f in sorted((API / "states").glob("*-connectivity.json")):
+        doc = load(f)
+        where = rel(f)
+        if not isinstance(doc, dict):
+            rep.error(where, "not valid JSON")
+            continue
+        rep.checked += 1
+        for k in CONNECTIVITY_KEYS:
+            node = doc
+            for part in k.split("."):
+                node = node.get(part) if isinstance(node, dict) else None
+                if node is None:
+                    break
+            if node is None:
+                rep.error(where, f"missing key {k}")
+        if doc.get("release_date") != CURRENT_RELEASE:
+            rep.error(where, f"release_date {doc.get('release_date')} != {CURRENT_RELEASE}")
+
+    # --- H51 CSV header: org-lookup, the ledger and H53 all parse it ---------
+    csv_path = API / "findings" / "vendor-endpoint-attribution.csv"
+    if csv_path.exists():
+        rep.checked += 1
+        with csv_path.open(newline="") as fh:
+            header = fh.readline().strip().split(",")
+        if header != VENDOR_CSV_HEADER:
+            rep.error("findings/vendor-endpoint-attribution.csv",
+                      f"header {header} != {VENDOR_CSV_HEADER}")
 
     # --- manifest points at files that exist --------------------------------
     man = load(API / "manifest.json") if (API / "manifest.json").exists() else None
