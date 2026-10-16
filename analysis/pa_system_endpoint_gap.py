@@ -379,6 +379,17 @@ def classify(m):
     return causes
 
 
+def system_links(row):
+    """A system row's practitioner-organization link sum, either shape.
+
+    FHI-73 payloads (and `build_systems` since then) carry the link sum as
+    `practitioner_org_links` and distinct clinicians as `practitioners`.
+    Earlier payloads carry only `practitioners`, which was the link sum.
+    """
+    links = row.get("practitioner_org_links")
+    return links if links is not None else row.get("practitioners")
+
+
 def positive_control(conn_release, release, chosen, payload_rows, n_brands,
                      hosts, domains, ndh_eps, prac_orgs):
     """The silent-zero checks. Pure; returns the list of problems.
@@ -398,10 +409,14 @@ def positive_control(conn_release, release, chosen, payload_rows, n_brands,
         if not pr:
             problems.append(f"rebuilt {key} has no payload row")
             continue
-        if pr.get("practitioners") != s["practitioners"]:
-            problems.append(f"rebuilt {key} ({s['practitioners']} links) does "
-                            f"not match the payload row "
-                            f"({pr.get('practitioners')})")
+        # Compare link sums. Since FHI-73 the payload's `practitioners` is
+        # distinct clinicians and the link sum is `practitioner_org_links`;
+        # payloads generated before that put the link sum in `practitioners`.
+        rebuilt_links = system_links(s)
+        payload_links = system_links(pr)
+        if payload_links != rebuilt_links:
+            problems.append(f"rebuilt {key} ({rebuilt_links} links) does "
+                            f"not match the payload row ({payload_links})")
         # state_connectivity.py keeps only the first 25 member ids per row,
         # so membership is checked as payload ids within the rebuilt ids plus
         # an equal organization count, not as set equality.
@@ -845,7 +860,7 @@ def run(state, top, refresh):
             "label": s["label"],
             "basis": s["basis"],
             "organizations": s["organizations"],
-            "practitioner_org_links": s["practitioners"],
+            "practitioner_org_links": system_links(s),
             "practitioners_distinct": reach.get("practitioners", 0),
             "ledger_endpoint_count": pr.get("endpoint_count"),
             "chain": {

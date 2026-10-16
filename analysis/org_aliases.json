@@ -25,20 +25,33 @@
     "    is a worse outcome than telling them we do not know.",
     "",
     "Aliased links are reported as their own tier and never counted as",
-    "deterministic."
+    "deterministic.",
+    "",
+    "The brand must be the label as the cached vendor file publishes it today.",
+    "h53_org_endpoint_resolution.check_aliases raises when an alias matches no",
+    "vendor label in its state, because a renamed brand otherwise resolves",
+    "nothing and reports no error. On 2026-10-16 (FHI-73) nine of thirteen PA",
+    "aliases were dead that way: Epic publishes 'MyUPMC', 'TempleHealth' and",
+    "'Thomas Jefferson University Health System', and no cached vendor file",
+    "publishes a 'Penn State Health' brand in PA. The two Penn State Health",
+    "aliases were removed rather than repointed: Oracle Health lists 'Penn State",
+    "Health Care Partners' (Reading, PA) with NPIs that the NDH files under other",
+    "organizations' names too (a Tower Health Medical Group anesthesia entity,",
+    "Haven Behavioral Hospital), so an alias to it would be a guess. Those NPIs",
+    "reach the endpoint through the NPI tier instead, which states what it is."
   ],
   "aliases": [
     {
       "ndh_name": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-      "brand": "UPMC",
+      "brand": "MyUPMC",
       "state": "PA",
-      "basis": "University of Pittsburgh Physicians is UPMC's employed physician group; UPMC publishes it as part of the UPMC system on upmc.com and it shares UPMC's Epic tenancy."
+      "basis": "University of Pittsburgh Physicians is UPMC's employed physician group; UPMC publishes it as part of the UPMC system on upmc.com and it shares UPMC's Epic tenancy. Epic publishes UPMC's patient-access brand as 'MyUPMC' (epicent-prd-rp.upmc.com)."
     },
     {
       "ndh_name": "UPMC COMMUNITY MEDICINE INC",
-      "brand": "UPMC",
+      "brand": "MyUPMC",
       "state": "PA",
-      "basis": "Named UPMC in its own legal business name."
+      "basis": "Named UPMC in its own legal business name. Epic publishes UPMC's patient-access brand as 'MyUPMC' (epicent-prd-rp.upmc.com)."
     },
     {
       "ndh_name": "UNIVERSITY OF PENN MEDICAL GROUP",
@@ -54,9 +67,9 @@
     },
     {
       "ndh_name": "LANCASTER GENERAL MEDICAL GROUP",
-      "brand": "Penn Medicine",
+      "brand": "Lancaster",
       "state": "PA",
-      "basis": "Lancaster General Health joined the University of Pennsylvania Health System in 2015 and trades as Penn Medicine Lancaster General Health."
+      "basis": "Lancaster General Health joined the University of Pennsylvania Health System in 2015 and trades as Penn Medicine Lancaster General Health. Epic publishes Lancaster General Health as its own brand, 'Lancaster', with its own endpoint (epicproxy.lghealth.org) and LG Health care sites beneath it; the earlier alias to 'Penn Medicine' pointed these practitioners at the University of Pennsylvania tenant instead."
     },
     {
       "ndh_name": "ALLEGHENY CLINIC",
@@ -66,45 +79,33 @@
     },
     {
       "ndh_name": "JEFFERSON UNIVERSITY PHYSICIANS",
-      "brand": "Jefferson Health",
+      "brand": "Thomas Jefferson University Health System",
       "state": "PA",
-      "basis": "Jefferson University Physicians is the faculty practice of Thomas Jefferson University, which operates Jefferson Health."
+      "basis": "Jefferson University Physicians is the faculty practice of Thomas Jefferson University, which operates Jefferson Health. Epic publishes the brand as 'Thomas Jefferson University Health System' (fhir.jefferson.edu)."
     },
     {
       "ndh_name": "TEMPLE FACULTY PRACTICE PLAN INC",
-      "brand": "Temple Health",
+      "brand": "TempleHealth",
       "state": "PA",
-      "basis": "Temple Faculty Practice Plan is the physician organization of Temple University Health System, which trades as Temple Health."
+      "basis": "Temple Faculty Practice Plan is the physician organization of Temple University Health System, which trades as Temple Health. Epic publishes the brand as 'TempleHealth' (epicaccess.templehealth.org)."
     },
     {
       "ndh_name": "TEMPLE PHYSICIANS INC",
-      "brand": "Temple Health",
+      "brand": "TempleHealth",
       "state": "PA",
-      "basis": "Temple Physicians Inc is a subsidiary of Temple University Health System."
-    },
-    {
-      "ndh_name": "THE MILTON S HERSHEY MEDICAL CENTER PHYSICIANS",
-      "brand": "Penn State Health",
-      "state": "PA",
-      "basis": "Penn State Milton S. Hershey Medical Center is the academic medical centre of Penn State Health."
-    },
-    {
-      "ndh_name": "PENN STATE HEALTH MEDICAL GROUP LLC",
-      "brand": "Penn State Health",
-      "state": "PA",
-      "basis": "Named Penn State Health in its own legal business name. Recorded explicitly because a token rule wrongly matched this to Penn Medicine, a different system."
+      "basis": "Temple Physicians Inc is a subsidiary of Temple University Health System. Epic publishes the brand as 'TempleHealth' (epicaccess.templehealth.org)."
     },
     {
       "ndh_name": "PINNACLE HEALTH MEDICAL SERVICES",
-      "brand": "UPMC",
+      "brand": "MyUPMC",
       "state": "PA",
-      "basis": "PinnacleHealth was acquired by UPMC in 2017 and operates as UPMC in Central Pa."
+      "basis": "PinnacleHealth was acquired by UPMC in 2017 and operates as UPMC in Central Pa. Epic lists PinnacleHealth care sites (for example 'PinnacleHealth FamilyCare Middletown') under its 'MyUPMC' brand."
     },
     {
       "ndh_name": "REGIONAL HEALTH SERVICES INC",
-      "brand": "UPMC",
+      "brand": "MyUPMC",
       "state": "PA",
-      "basis": "Bradford Regional and Elk Regional joined UPMC as UPMC Cole and UPMC Bradford."
+      "basis": "Bradford Regional and Elk Regional joined UPMC as UPMC Cole and UPMC Bradford. Epic lists 'UPMC Cole', 'UPMC Kane' and 'UPMC Outpatient Center - Bradford' under its 'MyUPMC' brand."
     }
   ]
 }

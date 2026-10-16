@@ -413,6 +413,10 @@ export default function DeveloperPage() {
               endpoint list names it, which is the vendor&apos;s claim and not CMS data. It reads{' '}
               <code className="font-mono">/api/v1/findings/endpoint-org-crosswalk.csv</code> and{' '}
               <code className="font-mono">/api/v1/findings/vendor-endpoint-attribution.csv</code>.
+              The vendor file has one row per (url, org_npi); a URL with no NPI has one row
+              with an empty org_npi. Since FHI-73 a URL may repeat, once per NPI its
+              publisher lists, so do not key it on the URL alone. The H51 finding JSON
+              reports the pair count as <code className="font-mono">published_url_npi_pairs</code>.
             </p>
             <p className="text-xs text-gray-600 mt-2">
               The server is public. A client that must send credentials, such as a

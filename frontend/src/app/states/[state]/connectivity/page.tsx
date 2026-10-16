@@ -12,6 +12,12 @@ import { STATE_FIPS } from '@/lib/connectivity-types';
 import type { ConnectivityPayload } from '@/lib/connectivity-types';
 import ConnectivityChain from './connectivity-chain';
 import SystemsExclusionsNote from '@/components/connectivity/SystemsExclusionsNote';
+import {
+  EndpointCountCell,
+  SystemReachCell,
+  SystemsCorrections,
+  countsDistinct,
+} from '@/components/connectivity/SystemReach';
 // Aliased: this file also exports `const dynamic = 'force-static'`, and the
 // bare import name collides with it.
 import nextDynamic from 'next/dynamic';
@@ -151,6 +157,11 @@ function Connectivity({
     generated_at,
     methodology_version,
   } = payload;
+
+  // FHI-73: payloads written before the fix summed member counts into
+  // `practitioners` and had no per-tier reach. Label by what the file holds.
+  const distinctCounts = systems.rows.length > 0 && countsDistinct(systems.rows[0]);
+  const hasTiers = systems.rows.some((r) => r.reach_by_tier);
 
   const bands = (
     ['green', 'yellow', 'resolved', 'enrolled', 'candidate', 'red', 'none'] as const
@@ -446,6 +457,14 @@ function Connectivity({
             </div>
           </div>
 
+          <SystemsCorrections corrections={systems.corrections} />
+          {hasTiers && systems.tiers && (
+            <p className="measure mb-3 text-xs text-gray-600">
+              {systems.tiers.note} Counts marked * are inference: reached by
+              alias, name or brand match, or CMS enrollment, not by the NDH or
+              a vendor-published NPI.
+            </p>
+          )}
           <div className="overflow-x-auto border border-gray-200 bg-white">
             <table className="min-w-full text-sm">
               <thead className="border-b border-gray-200 bg-gray-50 text-left">
@@ -455,9 +474,14 @@ function Connectivity({
                     Orgs
                   </th>
                   <th className="px-4 py-2 text-right font-medium text-gray-700">
-                    Practitioners
+                    {distinctCounts ? 'Clinicians (distinct)' : 'Practitioner-org links'}
                   </th>
                   <th className="px-4 py-2 font-medium text-gray-700">Grouped by</th>
+                  {hasTiers && (
+                    <th className="px-4 py-2 text-right font-medium text-gray-700">
+                      Reach an endpoint, by tier
+                    </th>
+                  )}
                   <th className="px-4 py-2 text-right font-medium text-gray-700">
                     Endpoints
                   </th>
@@ -482,12 +506,13 @@ function Connectivity({
                         {row.basis}
                       </span>
                     </td>
+                    {hasTiers && (
+                      <td className="px-4 py-2 text-right">
+                        <SystemReachCell row={row} />
+                      </td>
+                    )}
                     <td className="px-4 py-2 text-right font-mono">
-                      {row.endpoint_count === 0 ? (
-                        <span className="text-signal">0</span>
-                      ) : (
-                        fmt(row.endpoint_count)
-                      )}
+                      <EndpointCountCell row={row} />
                     </td>
                     <td className="px-4 py-2 text-gray-700">
                       {row.vendors.join(', ') || '—'}

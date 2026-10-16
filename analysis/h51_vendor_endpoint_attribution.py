@@ -51,10 +51,9 @@ import subprocess
 import sys
 from datetime import datetime, timezone
 
-from google.cloud import bigquery
-
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config  # noqa: E402
+from fhir_identifiers import extract_npis  # noqa: E402
 
 PROJECT = "thematic-fort-453901-t7"
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
@@ -92,12 +91,55 @@ def norm(u: str | None) -> str | None:
     return re.sub(r"^http://", "https://", u.strip().lower().rstrip("/")) or None
 
 
-def npi_of(org: dict) -> str | None:
-    for i in org.get("identifier") or []:
-        if "us-npi" in str(i.get("system", "")).lower():
-            v = re.sub(r"\D", "", str(i.get("value") or ""))
-            return v if len(v) == 10 else None
-    return None
+def npis_of(org: dict) -> list[str]:
+    """Every NPI on a vendor Organization, in source order.
+
+    Uses the shared extractor so both NPI system URLs and the type-coded form
+    are recognised. The earlier `npi_of` matched only systems containing
+    "us-npi" and returned the first one, so an Epic brand listing 35 NPIs
+    contributed one (FHI-73).
+    """
+    return extract_npis(org)
+
+
+def _add_npis(url2npi: dict, url: str, npis: list[str], name: str | None) -> None:
+    """Append (npi, publishing org name) pairs to a URL's ordered list.
+
+    De-duplicated on the NPI: the first organization to publish an NPI beside
+    a URL names it. The name travels with the NPI because several Epic brands
+    share one endpoint (Geisinger and CommunityCare both point at
+    geisapi.geisinger.edu), and the brand an NPI is listed under is evidence
+    the system rollup uses.
+    """
+    if not npis:
+        return
+    bucket = url2npi.setdefault(url, [])
+    have = {n for n, _ in bucket}
+    for n in npis:
+        if n not in have:
+            bucket.append((n, name))
+            have.add(n)
+
+
+def csv_rows(url2name: dict, url2npi: dict, url2vendor: dict,
+             ndh_urls: set, owned: set) -> list[list[str]]:
+    """The crosswalk rows: one per (url, NPI), one bare row for a URL with none.
+
+    Column order is the published contract and does not change; multi-NPI
+    URLs only add rows. On an NPI row, `org_name` is the organization that
+    published that NPI, which on a URL several brands share can differ from
+    the URL's first-seen name. The first row for a URL carries the NPI the
+    pre-FHI-73 file carried.
+    """
+    out = []
+    for u in sorted(url2name):
+        in_ndh = "yes" if u in ndh_urls else "no"
+        has_owner = "yes" if u in owned else ("no" if u in ndh_urls else "")
+        pairs = url2npi.get(u) or [("", None)]
+        for npi, name in pairs:
+            out.append([u, name or url2name[u], npi, url2vendor.get(u, ""),
+                        in_ndh, has_owner])
+    return out
 
 
 def fetch(url: str, dest: pathlib.Path) -> dict:
@@ -122,7 +164,14 @@ def fetch(url: str, dest: pathlib.Path) -> dict:
 
 
 def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
-    """Return (url -> org name, url -> npi, org count, orgs reachable)."""
+    """Return (url -> org name, url -> [(npi, org name), ...], org count, orgs reachable).
+
+    Every NPI published beside a URL is kept, in source order, from every
+    organization that references it. The name stays first-seen, as before, so
+    on a URL several differently named organizations share, an NPI can sit
+    beside another organization's name; that was already true of the single
+    NPI the earlier version kept.
+    """
     # Index by fullUrl AND id: Epic references entries as urn:uuid, everyone
     # else uses Type/id. Supporting only one of the two silently yields zero.
     by_ref: dict[str, dict] = {}
@@ -136,7 +185,7 @@ def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
 
     orgs = {k: v for k, v in by_ref.items() if v.get("resourceType") == "Organization"}
     url2name: dict[str, str] = {}
-    url2npi: dict[str, str] = {}
+    url2npi: dict[str, list[tuple[str, str | None]]] = {}
 
     def ep_url(ref: str | None) -> str | None:
         e = by_ref.get((ref or "").strip())
@@ -148,9 +197,7 @@ def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
             u = ep_url(ep.get("reference"))
             if u and o.get("name"):
                 url2name.setdefault(u, o["name"])
-                n = npi_of(o)
-                if n:
-                    url2npi.setdefault(u, n)
+                _add_npis(url2npi, u, npis_of(o), o["name"])
 
     # Endpoint -> Organization (managingOrganization, or a contained Organization)
     for r in by_ref.values():
@@ -171,9 +218,7 @@ def parse_bundle(bundle: dict, brands: bool) -> tuple[dict, dict, int, int]:
         if name:
             url2name.setdefault(u, name)
             if o:
-                n = npi_of(o)
-                if n:
-                    url2npi.setdefault(u, n)
+                _add_npis(url2npi, u, npis_of(o), name)
 
     reachable = 0
     if brands:
@@ -219,7 +264,7 @@ def git_sha() -> str:
 def main() -> int:
     CACHE.mkdir(parents=True, exist_ok=True)
     url2name: dict[str, str] = {}
-    url2npi: dict[str, str] = {}
+    url2npi: dict[str, list[tuple[str, str | None]]] = {}
     url2vendor: dict[str, str] = {}
     per_vendor = []
 
@@ -238,6 +283,7 @@ def main() -> int:
             url2vendor.setdefault(u, label)
         url2npi.update({u: v for u, v in p.items() if u not in url2npi})
         per_vendor.append({"vendor": label, "url_org_pairs": len(n), "with_npi": len(p),
+                           "url_npi_pairs": sum(len(v) for v in p.values()),
                            "organizations": n_orgs, "orgs_reachable_via_hierarchy": reach,
                            "publishes_brand_hierarchy": brands})
         print(f"    {len(n):,} url->org pairs, {n_orgs:,} organizations"
@@ -258,6 +304,8 @@ def main() -> int:
               f"vendor sources failed; every number below is a floor.")
 
     print("\n  querying the NDH ...")
+    from google.cloud import bigquery  # lazy: tests import this module offline
+
     client = bigquery.Client(project=PROJECT)
     # Attributed means the managingOrganization reference RESOLVES, not merely
     # that it is present. H50 counts it that way, and counting presence here
@@ -288,10 +336,8 @@ def main() -> int:
     with (OUT_DIR / f"{SLUG}.csv").open("w", newline="") as fh:
         w = csv.writer(fh)
         w.writerow(["url", "org_name", "org_npi", "vendor", "in_ndh", "ndh_has_owner"])
-        for u in sorted(url2name):
-            w.writerow([u, url2name[u], url2npi.get(u, ""), url2vendor.get(u, ""),
-                        "yes" if u in ndh_urls else "no",
-                        "yes" if u in owned else ("no" if u in ndh_urls else "")])
+        rows = csv_rows(url2name, url2npi, url2vendor, ndh_urls, owned)
+        w.writerows(rows)
 
     after = attributed + len(fillable)
     headline = (
@@ -300,6 +346,13 @@ def main() -> int:
         f"{len(with_npi):,} of those resolve to an NPI directly. Ingesting files that are "
         f"public today would move endpoint attribution from {attributed/total*100:.1f}% to "
         f"{after/total*100:.1f}%."
+    )
+    grain = (
+        "The crosswalk CSV has one row per (url, org_npi); a URL with no NPI has one row with an empty "
+        f"org_npi. Since FHI-73 a URL may repeat, once per NPI its publisher lists: "
+        f"{sum(len(v) for v in url2npi.values()):,} url-NPI pairs (published_url_npi_pairs) across "
+        f"{len(url2name):,} URLs. Earlier files kept only the first NPI per URL. On an NPI row, "
+        "org_name is the organization that published that NPI."
     )
     notes = (
         "The gap measured in H50 is not absent data. It is data published by the EHR vendors and "
@@ -314,6 +367,7 @@ def main() -> int:
         "matches, which is the same failure that produced a wrong published claim about Epic in H47. "
         "Both reference styles and both link directions are handled, and the hierarchy rollup is "
         "asserted against the organization count so a double-count cannot pass silently.\n\n"
+        + grain + "\n\n"
         "Every figure is a floor. These are the largest publishers; ONC's Lantern catalogues over 200 "
         "sources. Matching is exact on a normalized URL, so a vendor that spells a path differently "
         "from the NDH is counted as a miss.\n\n"
@@ -346,16 +400,19 @@ def main() -> int:
             "fillable_from_vendor_files": len(fillable),
             "fillable_with_npi": len(with_npi),
             "published_url_org_pairs": len(url2name),
+            "published_url_npi_pairs": sum(len(v) for v in url2npi.values()),
             "by_vendor": dict(by_vendor),
             "vendors": per_vendor,
             "crosswalk_url": f"/api/v1/findings/{SLUG}.csv",
+            "crosswalk_grain": grain,
         },
     }
     (OUT_DIR / f"{SLUG}.json").write_text(json.dumps(payload, indent=2) + "\n")
 
     print("\n" + headline)
     print(f"\n  wrote {OUT_DIR / (SLUG + '.json')}")
-    print(f"  wrote {OUT_DIR / (SLUG + '.csv')} ({len(url2name):,} rows)")
+    print(f"  wrote {OUT_DIR / (SLUG + '.csv')} ({len(rows):,} rows, "
+          f"{len(url2name):,} URLs)")
     return 0
 
 
