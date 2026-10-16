@@ -409,8 +409,48 @@ def rollup_system_endpoints(state, label, candidates):
     return kept, dropped, unknown
 
 
+def vendor_brand_conflicts(org_name, brand_labels):
+    """True when a vendor brand contradicts the name-inferred brand key.
+
+    `brand_labels` are the brand names under which a brand-hierarchy publisher
+    (Epic's User-access Brands file) lists this organization's NPI. That file
+    states which portal brand an NPI belongs to, which is evidence about the
+    NPI; the brand key is only a guess from the legal name. When the two
+    disagree, the guess loses.
+
+    The key agrees with a label when every distinctive token of the key
+    appears in the label ("JEFFERSON" in "Thomas Jefferson University Health
+    System", "ST LUKE" in "St Luke's"), or when the key is the label's
+    initials ("AHN" for "Allegheny Health Network"). No labels, or no key,
+    means no conflict.
+
+    Measured case (FHI-73): JEFFERSON REGIONAL MEDICAL CENTER and JEFFERSON
+    HOSPITAL COUNSELING SERVICES are listed under Epic's Allegheny Health
+    Network brand, and the JEFFERSON brand key grouped them with Thomas
+    Jefferson University.
+    """
+    key = brand_key(org_name)
+    labels = [normalize(b).split() for b in (brand_labels or ()) if b]
+    labels = [toks for toks in labels if toks]
+    if not key or not labels:
+        return False
+    want = [t for t in key.split()
+            if t not in GENERIC_OPENERS and t not in CONNECTORS
+            and t not in SPECIALTY_OPENERS]
+    for toks in labels:
+        have = set(toks)
+        if want and all(t in have for t in want):
+            return False
+        initials = "".join(t[0] for t in toks if t not in CONNECTORS)
+        if len(want) == 1 and want[0] == initials:
+            return False
+    return True
+
+
 def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
-                  min_practitioners=1, min_members=2, excluded=None):
+                  min_practitioners=1, min_members=2, excluded=None,
+                  practitioners_by_org=None, vendor_brands_by_npi=None,
+                  vetoed=None):
     """Group organizations into health systems, best evidence first.
 
     Tier 1, attested ownership: CMS enrollment ownership data. It states
@@ -423,7 +463,13 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
     sometimes a program rather than an owner, so it sits below tier 1.
 
     Tier 3, inferred: brand key from the organization name. Covers the rest and
-    is labelled as inference everywhere it surfaces.
+    is labelled as inference everywhere it surfaces. A brand-hierarchy vendor
+    file can veto it: when the vendor lists the organization's NPI under a
+    brand that does not agree with the key (`vendor_brand_conflicts`), the
+    organization is left out of the name group and reported in `vetoed`. It is
+    not moved into the vendor's brand, because a portal brand also lists hosted
+    affiliates it does not own (Epic's "Lancaster" brand lists independent
+    gastroenterology and anesthesia groups).
 
     The affiliation graph is used for neither: see the module docstring for why
     connected components of an untyped edge set produced a UPMC cluster
@@ -439,14 +485,23 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
     evidence the vendor name is not. Pass a list as `excluded` to receive one
     row per excluded group.
 
+    Counting (FHI-73). `practitioner_org_links` is the sum of member
+    organizations' practitioner counts, so a clinician with roles at four
+    members counts four times. `practitioners` is distinct clinicians, and
+    needs `practitioners_by_org` (org_id -> set of practitioner NPIs). Without
+    it `practitioners` falls back to the link sum and `practitioners_counted`
+    says so; every published caller passes the mapping.
+
     A group needs at least two organizations. One organization is not a system,
     and emitting it as one inflates the count with noise.
     """
     parent_by_npi = parent_by_npi or {}
     owner_by_npi = owner_by_npi or {}
+    vendor_brands_by_npi = vendor_brands_by_npi or {}
     groups = collections.defaultdict(
-        lambda: {"members": [], "practitioners": 0, "bases": set()})
+        lambda: {"members": [], "links": 0, "bases": set()})
     listed = collections.defaultdict(list)
+    vetoes = []
     for o in org_rows:
         npi = o["org_npi"] or ""
         owner = owner_by_npi.get(npi)
@@ -462,17 +517,36 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
             bk = brand_key(o["org_name"])
             if not bk:
                 continue
+            brands = vendor_brands_by_npi.get(npi)
+            if brands and vendor_brand_conflicts(o["org_name"], brands):
+                vetoes.append({
+                    "org_id": o["org_id"], "org_npi": npi,
+                    "org_name": o["org_name"], "brand_key": bk,
+                    "vendor_brands": sorted(brands),
+                    "practitioners": o["practitioners"],
+                })
+                continue
             key, basis = f"brand:{bk}", "brand-name"
         entry = groups[key]
         entry["members"].append(o)
-        entry["practitioners"] += o["practitioners"]
+        entry["links"] += o["practitioners"]
         entry["bases"].add(basis)
 
+    def distinct(members):
+        if practitioners_by_org is None:
+            return sum(o["practitioners"] for o in members)
+        seen = set()
+        for o in members:
+            seen |= set(practitioners_by_org.get(o["org_id"]) or ())
+        return len(seen)
+
+    counted = "link-sum" if practitioners_by_org is None else "distinct"
     exclusions = [
         {"system_key": f"brand:{bk}", "label": bk,
          "reason": "listed third-party vendor",
          "organizations": len(members),
-         "practitioners": sum(o["practitioners"] for o in members)}
+         "practitioners": distinct(members),
+         "practitioner_org_links": sum(o["practitioners"] for o in members)}
         for bk, members in listed.items()
     ]
 
@@ -481,6 +555,7 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
         basis = ("cms-ownership" if "cms-ownership" in entry["bases"]
                  else "nppes-parent" if "nppes-parent" in entry["bases"]
                  else "brand-name")
+        n_distinct = distinct(entry["members"])
         # Attested tiers state ownership, so the vendor heuristic is applied
         # to inferred brand groups only.
         if basis == "brand-name":
@@ -491,10 +566,11 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
                     "label": system_label(basis, key, entry["members"]),
                     "reason": reason,
                     "organizations": len(entry["members"]),
-                    "practitioners": entry["practitioners"],
+                    "practitioners": n_distinct,
+                    "practitioner_org_links": entry["links"],
                 })
                 continue
-        if (entry["practitioners"] < min_practitioners
+        if (n_distinct < min_practitioners
                 or len(entry["members"]) < min_members):
             continue
         out.append({
@@ -503,13 +579,18 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
                                   parent_by_npi, owner_by_npi),
             "basis": basis,
             "organizations": len(entry["members"]),
-            "practitioners": entry["practitioners"],
+            "practitioners": n_distinct,
+            "practitioner_org_links": entry["links"],
+            "practitioners_counted": counted,
             "member_org_ids": [o["org_id"] for o in entry["members"]],
         })
-    out.sort(key=lambda s: -s["practitioners"])
+    out.sort(key=lambda s: (-s["practitioners"], s["system_key"]))
     if excluded is not None:
         exclusions.sort(key=lambda r: -r["practitioners"])
         excluded.extend(exclusions)
+    if vetoed is not None:
+        vetoes.sort(key=lambda r: -r["practitioners"])
+        vetoed.extend(vetoes)
     return out
 
 
@@ -540,6 +621,43 @@ KNOWN_SYSTEMS = {
 }
 
 
+# The registrable domains each known system serves its own FHIR endpoints
+# from, for the reach control in `check_system_controls`. Every entry was read
+# off an endpoint URL in the cached vendor files or the H50 crosswalk on
+# 2026-10-16 (FHI-73), never written from memory: MyUPMC at
+# epicent-prd-rp.upmc.com, Allegheny Health Network at epicprisfd.ahn.org,
+# Geisinger at geisapi.geisinger.edu, WellSpan at interconnect.wellspan.org,
+# St Luke's at fhir.slhn.org, Thomas Jefferson University Health System at
+# fhir.jefferson.edu. Penn State Health, Lehigh Valley and Main Line Health
+# are absent because no endpoint on a domain of theirs was found. A domain
+# matches its own host and any subdomain, so upmc.com does not match
+# upmchp.com (UPMC Health Plan, a different tenant).
+KNOWN_SYSTEM_DOMAINS = {
+    "PA": {
+        "UPMC": ("upmc.com",),
+        "Allegheny Health Network": ("ahn.org",),
+        "Geisinger": ("geisinger.edu",),
+        "WellSpan": ("wellspan.org",),
+        "St. Luke's": ("slhn.org",),
+        "Jefferson": ("jefferson.edu",),
+    },
+}
+
+
+def url_host(url):
+    """Lower-cased host of a URL, or '' when there is none."""
+    url = (url or "").strip().lower()
+    if "//" not in url:
+        return ""
+    return url.split("//", 1)[1].split("/", 1)[0].split(":", 1)[0]
+
+
+def host_on_domain(host, domain):
+    """True when `host` is `domain` or a subdomain of it."""
+    host, domain = (host or "").lower(), (domain or "").lower()
+    return bool(domain) and (host == domain or host.endswith("." + domain))
+
+
 def _label_matches(label, prefix):
     """True when `label`'s normalized tokens start with `prefix`'s tokens.
 
@@ -552,10 +670,12 @@ def _label_matches(label, prefix):
 
 
 def check_system_controls(state, org_rows, systems, excluded, known=None,
-                          parent_by_npi=None, owner_by_npi=None):
+                          parent_by_npi=None, owner_by_npi=None,
+                          reach_by_system=None, available_urls=None,
+                          known_domains=None):
     """Positive controls on the system rollup. Returns a list of problems.
 
-    An empty list means the run may publish. Three checks:
+    An empty list means the run may publish. Four checks:
 
     1. Every organization whose name is a listed third-party vendor (Cobius)
        and which no attested tier claimed must sit in an excluded group.
@@ -566,6 +686,14 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
        Without this, check 2 passes vacuously when a brand-key change stops
        grouping a system at all, which is the "not looking" reading of an
        empty result.
+    4. Reach (FHI-73). For every known system with an entry in
+       `KNOWN_SYSTEM_DOMAINS`, if any URL in `available_urls` sits on that
+       domain, the systems carrying its labels must, between them, reach at
+       least one practitioner on that domain. `reach_by_system` maps
+       system_key -> {url: practitioners reaching it through the rollup}.
+       This is what was missing when the published table showed Geisinger at
+       zero endpoints while its own funnel counted 5,199 of its clinicians
+       reaching geisapi.geisinger.edu. Skipped when `reach_by_system` is None.
 
     `systems` and `excluded` are the full lists from `build_systems`, not the
     truncated payload rows. Organizations claimed by an attested tier are
@@ -603,4 +731,30 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
             problems.append(
                 f"known system {name} is not among the grouped systems "
                 f"(looked for labels starting {', '.join(prefixes)})")
+
+    if reach_by_system is not None:
+        domains_by_name = (KNOWN_SYSTEM_DOMAINS.get(state, {})
+                           if known_domains is None else known_domains)
+        hosts = {url_host(u) for u in (available_urls or ())}
+        for name, domains in domains_by_name.items():
+            prefixes = known.get(name, ())
+            if not prefixes:
+                continue
+            present = [d for d in domains
+                       if any(host_on_domain(h, d) for h in hosts)]
+            if not present:
+                continue  # nothing published on the domain to reach
+            reached = 0
+            for s in systems:
+                if not any(_label_matches(s.get("label") or "", p)
+                           for p in prefixes):
+                    continue
+                for url, n in (reach_by_system.get(s["system_key"]) or {}).items():
+                    if any(host_on_domain(url_host(url), d) for d in present):
+                        reached += n
+            if reached == 0:
+                problems.append(
+                    f"known system {name} publishes an endpoint on "
+                    f"{', '.join(present)} but the system rollup reaches no "
+                    f"practitioner on it through any tier")
     return problems

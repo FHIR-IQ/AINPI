@@ -64,6 +64,8 @@ export interface ConnectivityGraphNode {
   basis?: string;
   /** Systems only. False is the state the picture exists to show. */
   connected?: boolean;
+  /** Systems only: connected through the NDH or a vendor-published NPI. */
+  connected_deterministic?: boolean;
   vendor?: string | null;
   via?: string | null;
 }
@@ -71,19 +73,69 @@ export interface ConnectivityGraphNode {
 export interface ConnectivityGraph {
   note: string;
   nodes: ConnectivityGraphNode[];
-  links: { source: string; target: string; kind: 'reaches' | 'served-by' }[];
+  links: {
+    source: string;
+    target: string;
+    kind: 'reaches' | 'served-by';
+    tier?: SystemReachTier;
+  }[];
 }
+
+/**
+ * How a system reaches an endpoint, strongest first (FHI-73). `ndh` and
+ * `vendor-npi` are deterministic; `alias`, `name-state` and `brand-state` are
+ * inference (H53); `cms-enrollment-own-endpoint` is a clinician's own CMS
+ * enrollment landing on this system's endpoint.
+ */
+export type SystemReachTier =
+  | 'ndh'
+  | 'vendor-npi'
+  | 'alias'
+  | 'name-state'
+  | 'brand-state'
+  | 'cms-enrollment-own-endpoint';
 
 export interface ConnectivitySystem {
   system_key: string;
   label: string;
   basis: 'cms-ownership' | 'nppes-parent' | 'brand-name';
   organizations: number;
+  /**
+   * Distinct clinicians holding a role at any member, in payloads that carry
+   * `practitioner_org_links`. Older payloads (before FHI-73) put the sum of
+   * member counts here, which counts a clinician once per member.
+   */
   practitioners: number;
+  /** Sum of member organizations' practitioner counts. FHI-73 and later. */
+  practitioner_org_links?: number;
   member_org_ids: string[];
+  /**
+   * Endpoints any member reaches. Before FHI-73 this counted only the `ndh`
+   * and `vendor-npi` tiers; since then every tier, broken down below.
+   */
   endpoint_count: number;
-  endpoints: { url: string; vendor: string | null; via_member: string }[];
+  endpoint_count_by_tier?: Partial<Record<SystemReachTier, number>>;
+  endpoint_count_deterministic?: number;
+  endpoints: {
+    url: string;
+    vendor: string | null;
+    via_member: string;
+    tier?: SystemReachTier;
+    practitioners?: number;
+  }[];
   vendors: string[];
+  /** Distinct clinicians reached at any tier. FHI-73 and later. */
+  reaches_endpoint?: number;
+  reaches_endpoint_deterministic?: number;
+  /** Distinct clinicians, each counted once at their strongest tier. */
+  reach_by_tier?: Record<SystemReachTier, number>;
+}
+
+export interface ConnectivityCorrection {
+  date: string;
+  issue: string;
+  what: string;
+  since: string;
 }
 
 /**
@@ -292,7 +344,27 @@ export interface ConnectivityPayload {
     systems_found: number;
     systems_by_basis: Record<string, number>;
     systems_reaching_an_endpoint: number;
+    /** Distinct clinicians since FHI-73; a sum of member counts before. */
     practitioners_in_a_system_that_reaches_an_endpoint: number;
+    systems_reaching_an_endpoint_deterministic?: number;
+    practitioners_reached_through_a_system?: {
+      practitioners: number;
+      by_tier: Record<SystemReachTier, number>;
+    };
+    tiers?: { note: string; order: SystemReachTier[]; deterministic: SystemReachTier[] };
+    corrections?: ConnectivityCorrection[];
+    vendor_brand_vetoes?: {
+      note: string;
+      count: number;
+      rows: {
+        org_id: string;
+        org_npi: string;
+        org_name: string;
+        brand_key: string;
+        vendor_brands: string[];
+        practitioners: number;
+      }[];
+    };
     routing_caveat: string;
     /** Billing/RCM/staffing vendors kept out of system grouping (FHI-18). */
     excluded_third_party?: {
@@ -303,6 +375,7 @@ export interface ConnectivityPayload {
         reason: string;
         organizations: number;
         practitioners: number;
+        practitioner_org_links?: number;
       }[];
     };
     /** Endpoints dropped because the member carrying them is out of state. */
@@ -316,6 +389,7 @@ export interface ConnectivityPayload {
         member_state: string | null;
         url: string;
         vendor: string | null;
+        tier?: SystemReachTier;
       }[];
     };
     rows: ConnectivitySystem[];

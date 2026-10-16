@@ -47,10 +47,15 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
 from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
 from analysis.org_systems import (  # noqa: E402
+    KNOWN_SYSTEM_DOMAINS,
+    KNOWN_SYSTEMS,
+    _label_matches,
     build_systems,
     check_system_controls,
     describe_affiliation_graph,
+    host_on_domain,
     rollup_system_endpoints,
+    url_host,
 )
 from analysis.pa_rural_health import load_counties  # noqa: E402
 from analysis.zip_county import STATE_FIPS, load_zip_county  # noqa: E402
@@ -176,6 +181,33 @@ def load_vendor_attribution():
     return url_vendor, npi_url, name_url
 
 
+# The one publisher whose file states which portal brand an NPI belongs to.
+BRAND_HIERARCHY_VENDORS = ("Epic (User-access Brands)",)
+
+
+def load_vendor_brands():
+    """H51: organization NPI -> brand labels a brand-hierarchy vendor lists it under.
+
+    Only Epic's User-access Brands file qualifies: there the NPI sits on the
+    brand organization itself, so a row says "this NPI belongs to this portal
+    brand". A flat endpoint list names a practice, not a brand, and is not
+    used. Since FHI-73 the H51 CSV carries one row per (url, NPI) with the
+    publishing organization's name on each, so a URL shared by two brands
+    (Geisinger and CommunityCare) keeps the right label per NPI.
+    """
+    out = collections.defaultdict(set)
+    path = FINDINGS_DIR / "vendor-endpoint-attribution.csv"
+    if not path.exists():
+        return {}
+    with path.open() as fh:
+        for row in csv.DictReader(fh):
+            npi = (row.get("org_npi") or "").strip()
+            if npi and row.get("vendor") in BRAND_HIERARCHY_VENDORS \
+                    and row.get("org_name"):
+                out[npi].add(row["org_name"])
+    return dict(out)
+
+
 def load_org_resolution(state):
     """org_id -> (endpoint, tier) from H53 entity resolution.
 
@@ -218,7 +250,8 @@ def load_enrollment_endpoints(state):
         for row in csv.DictReader(fh):
             if row.get("endpoint"):
                 out.setdefault(row["npi"], (row["endpoint"], row["tier"],
-                                            row.get("vendor") or None))
+                                            row.get("vendor") or None,
+                                            row.get("org_name") or None))
     return out
 
 
@@ -569,9 +602,241 @@ def build_geo(state, prac_bands, org_points, counties, categories, zip_xw):
     }
 
 
+# Published with every payload until the regenerated numbers have been out
+# for a release. Kept here, in the generator, so the correction cannot be lost
+# by regenerating the file it corrects.
+SYSTEM_CORRECTIONS = [
+    {
+        "date": "2026-10-16",
+        "issue": "FHI-73",
+        "what": (
+            "The health-systems table reported endpoints only through the NDH "
+            "and vendor-published NPIs, while the practitioner funnel on the "
+            "same page also counted name and brand resolution and CMS "
+            "enrollment. Geisinger, St. Luke's, WellSpan and other systems "
+            "showed zero endpoints although the funnel counted their "
+            "clinicians reaching the system's own endpoint. Reach is now "
+            "reported per tier."
+        ),
+        "since": "2026-10-13 (FHI-18, #169), when the table was rebuilt",
+    },
+    {
+        "date": "2026-10-16",
+        "issue": "FHI-73",
+        "what": (
+            "The system Practitioners column summed member organizations' "
+            "practitioner counts, so a clinician with roles at four members "
+            "counted four times; the six largest PA systems summed to 60,855 "
+            "against 21,963 distinct clinicians. It now counts distinct "
+            "clinicians; the old figure is kept as practitioner_org_links."
+        ),
+        "since": "2026-08-16 (26a6208), when the system rollup was added",
+    },
+    {
+        "date": "2026-10-16",
+        "issue": "FHI-73",
+        "what": (
+            "Nine of thirteen curated PA aliases matched no vendor brand "
+            "because Epic renamed them (MyUPMC, TempleHealth, Thomas "
+            "Jefferson University Health System), so University of Pittsburgh "
+            "Physicians and PinnacleHealth resolved to nothing. H51 also kept "
+            "one NPI per vendor endpoint, and the JEFFERSON name group "
+            "included two Allegheny Health Network hospitals."
+        ),
+        "since": (
+            "aliases: an unknown date no later than the 2026-10-13 vendor "
+            "download, which is the first cache checked; one NPI per "
+            "endpoint: since H51 was published; JEFFERSON merge: since brand "
+            "grouping (2026-08-16)"
+        ),
+    },
+]
+
+
+# --------------------------------------------------------------------------
+# health-system reach, by tier (FHI-73)
+# --------------------------------------------------------------------------
+
+# Strongest first. The first five describe a member organization; the last
+# describes one practitioner's CMS enrollment and is counted only when it
+# lands on the system's own endpoint (see `rollup_system_reach`).
+SYSTEM_TIERS = ("ndh", "vendor-npi", "alias", "name-state", "brand-state",
+                "cms-enrollment-own-endpoint")
+DETERMINISTIC_TIERS = ("ndh", "vendor-npi")
+_TIER_RANK = {t: i for i, t in enumerate(SYSTEM_TIERS)}
+
+
+def member_endpoint(o, ep_by_id, ep_by_npi, npi_url, org_resolution):
+    """(url, tier) for one member organization, the funnel's ladder, or None.
+
+    Same order the practitioner funnel uses: the NDH's own attribution, then a
+    vendor-published NPI, then H53 alias / name-state / brand-state
+    resolution. The name-candidate layer is never a linkage and is not here.
+    """
+    url = ep_by_id.get(o["org_id"])
+    if url:
+        return url, "ndh"
+    npi = o.get("org_npi") or ""
+    url = ep_by_npi.get(npi) or npi_url.get(npi)
+    if url:
+        return url, "vendor-npi"
+    hit = org_resolution.get(o["org_id"])
+    if hit and hit[1] in _TIER_RANK:
+        return hit[0], hit[1]
+    return None
+
+
+def own_domains(state, label):
+    """Curated own domains for the known system(s) a label belongs to."""
+    out = []
+    domains = KNOWN_SYSTEM_DOMAINS.get((state or "").upper(), {})
+    for name, prefixes in KNOWN_SYSTEMS.get((state or "").upper(), {}).items():
+        if any(_label_matches(label or "", p) for p in prefixes):
+            out.extend(domains.get(name, ()))
+    return tuple(out)
+
+
+def rollup_system_reach(state, systems, org_by_id, prac_by_org,
+                        member_endpoint, enrollment_endpoints, url_vendor):
+    """Per-system endpoints and practitioner reach, every tier labelled.
+
+    Mutates each system row, adding:
+
+      endpoints                 each with `tier` and `practitioners` (those
+                                whose best path in this system lands there)
+      endpoint_count            endpoints at any tier
+      endpoint_count_by_tier
+      endpoint_count_deterministic   NDH + vendor-NPI only, the pre-FHI-73
+                                meaning of `endpoint_count`
+      reaches_endpoint          distinct practitioners reached at any tier
+      reaches_endpoint_deterministic
+      reach_by_tier             distinct practitioners at their strongest tier
+
+    A practitioner is in a system when they hold a role at a member. Their
+    tier is the strongest one among the members they hold roles at; a member's
+    endpoint counts only if it survived the in-state guard.
+
+    CMS enrollment is one practitioner's own record, not the system's, so it
+    is never rolled up wholesale: for UPP only 86 of the 725 clinicians
+    enrollment reaches land on upmc.com. It counts here only when the
+    enrolled group's endpoint is one the system already reaches through a
+    member, or sits on the system's curated own domain
+    (`KNOWN_SYSTEM_DOMAINS`), and it is its own tier.
+
+    Returns reach_by_system (system_key -> {url: practitioners}), the
+    out-of-state drops, the unknown-state count, and the union of reached
+    practitioners at their strongest tier across systems.
+    """
+    out_of_state_dropped = []
+    unknown_state_kept = 0
+    reach_by_system = {}
+    best_overall = {}
+    for sysrow in systems:
+        members = [org_by_id[oid] for oid in sysrow["member_org_ids"]
+                   if oid in org_by_id]
+        hits = {}
+        candidates = []
+        for m in members:
+            hit = member_endpoint(m)
+            if not hit:
+                continue
+            hits[m["org_id"]] = hit
+            candidates.append({
+                "url": hit[0], "vendor": url_vendor.get(hit[0]),
+                "via_member": m["org_name"],
+                "member_state": m.get("org_state"), "tier": hit[1],
+            })
+        # Strongest tier first, so the per-URL dedup keeps the best evidence.
+        candidates.sort(key=lambda c: _TIER_RANK[c["tier"]])
+        kept, dropped, unknown = rollup_system_endpoints(
+            state, sysrow["label"], candidates)
+        unknown_state_kept += unknown
+        for c in dropped:
+            out_of_state_dropped.append({
+                "system": sysrow["label"], "via_member": c["via_member"],
+                "member_state": c["member_state"], "url": c["url"],
+                "vendor": c["vendor"], "tier": c["tier"],
+            })
+        found = {c["url"]: {"url": c["url"], "vendor": c["vendor"],
+                            "via_member": c["via_member"], "tier": c["tier"]}
+                 for c in kept}
+
+        best = {}
+        for m in members:
+            hit = hits.get(m["org_id"])
+            if not hit or hit[0] not in found:
+                continue
+            for npi in prac_by_org.get(m["org_id"]) or ():
+                cur = best.get(npi)
+                if cur is None or _TIER_RANK[hit[1]] < _TIER_RANK[cur[1]]:
+                    best[npi] = (hit[0], hit[1])
+
+        domains = own_domains(state, sysrow["label"])
+        everyone = set()
+        for m in members:
+            everyone |= set(prac_by_org.get(m["org_id"]) or ())
+        for npi in everyone - set(best):
+            hit = enrollment_endpoints.get(npi)
+            if not hit:
+                continue
+            url = hit[0]
+            if url not in found and not any(
+                    host_on_domain(url_host(url), d) for d in domains):
+                continue
+            best[npi] = (url, "cms-enrollment-own-endpoint")
+            if url not in found:
+                found[url] = {
+                    "url": url,
+                    "vendor": url_vendor.get(url) or (hit[2] if len(hit) > 2 else None),
+                    "via_member": "CMS-enrolled group"
+                                  + (f": {hit[3]}" if len(hit) > 3 and hit[3] else ""),
+                    "tier": "cms-enrollment-own-endpoint",
+                }
+
+        by_url = collections.Counter(u for u, _ in best.values())
+        by_tier = collections.Counter(t for _, t in best.values())
+        for npi, (u, t) in best.items():
+            cur = best_overall.get(npi)
+            if cur is None or _TIER_RANK[t] < _TIER_RANK[cur]:
+                best_overall[npi] = t
+        endpoints = sorted(found.values(),
+                           key=lambda e: (_TIER_RANK[e["tier"]], -by_url[e["url"]]))
+        for e in endpoints:
+            e["practitioners"] = by_url[e["url"]]
+        ep_tiers = collections.Counter(e["tier"] for e in endpoints)
+
+        reach_by_system[sysrow["system_key"]] = dict(by_url)
+        sysrow["_all_member_org_ids"] = list(sysrow["member_org_ids"])
+        sysrow["endpoints"] = endpoints[:10]
+        sysrow["endpoint_count"] = len(endpoints)
+        sysrow["endpoint_count_by_tier"] = {
+            t: ep_tiers[t] for t in SYSTEM_TIERS if ep_tiers[t]}
+        sysrow["endpoint_count_deterministic"] = sum(
+            ep_tiers[t] for t in DETERMINISTIC_TIERS)
+        sysrow["reaches_endpoint"] = len(best)
+        sysrow["reaches_endpoint_deterministic"] = sum(
+            by_tier[t] for t in DETERMINISTIC_TIERS)
+        sysrow["reach_by_tier"] = {t: by_tier[t] for t in SYSTEM_TIERS}
+        sysrow["vendors"] = sorted({e["vendor"] for e in endpoints if e["vendor"]})
+        # Trim the id list: useful in aggregate, noise in a published payload.
+        sysrow["member_org_ids"] = sysrow["member_org_ids"][:25]
+
+    by_tier_overall = collections.Counter(best_overall.values())
+    return {
+        "reach_by_system": reach_by_system,
+        "out_of_state_dropped": out_of_state_dropped,
+        "unknown_state_kept": unknown_state_kept,
+        "reached_union": {
+            "practitioners": len(best_overall),
+            "by_tier": {t: by_tier_overall[t] for t in SYSTEM_TIERS},
+        },
+    }
+
+
 def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
           org_resolution, ep_by_id, ep_by_npi, url_vendor, npi_url, name_url,
-          hospitals, enrollment_endpoints=None, geo_inputs=None):
+          hospitals, enrollment_endpoints=None, geo_inputs=None,
+          vendor_brands_by_npi=None):
     enrollment_endpoints = enrollment_endpoints or {}
     prac_bands = []
     total = len(rows)
@@ -820,86 +1085,73 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         })
 
     # Health-system rollup. Organizations are the leaves; the systems that own
-    # them are mostly not in the directory. Where a system member reaches an
-    # endpoint, every practitioner in that system gets a system-level path,
-    # which is weaker than a direct one and is reported as its own number.
+    # them are mostly not in the directory.
+    #
+    # FHI-73: the rollup used to accept only the NDH and vendor-NPI tiers
+    # (`resolve_org`), while the practitioner funnel above also accepts H53
+    # name/brand resolution and CMS enrollment. The table therefore showed
+    # Geisinger, St. Luke's and WellSpan with zero endpoints while the funnel
+    # counted every one of their clinicians reaching the system's own
+    # endpoint. It now walks the same tiers, reports each tier separately, and
+    # counts distinct clinicians rather than summing member counts.
+    prac_by_org = collections.defaultdict(set)
+    for r in rows:
+        for oid in r["org_ids"] or []:
+            prac_by_org[oid].add(r["npi"])
     org_by_id = {o["org_id"]: o for o in org_rows}
     excluded_vendors = []
+    vetoed = []
     systems = build_systems(org_rows, parent_by_npi, owner_by_npi,
-                            excluded=excluded_vendors)
-    # Totals printed for context; the positive control below is what fails.
-    grouped_prac = sum(s["practitioners"] for s in systems)
+                            excluded=excluded_vendors,
+                            practitioners_by_org=prac_by_org,
+                            vendor_brands_by_npi=vendor_brands_by_npi,
+                            vetoed=vetoed)
+    grouped_prac = len(set().union(*(
+        prac_by_org.get(oid, set())
+        for s in systems for oid in s["member_org_ids"]))) if systems else 0
     excluded_prac = sum(r["practitioners"] for r in excluded_vendors)
     print(f"  systems: {len(systems):,} grouped holding {grouped_prac:,} "
-          f"practitioner-org links; {len(excluded_vendors):,} third-party "
-          f"groups excluded holding {excluded_prac:,}")
+          f"distinct practitioners; {len(excluded_vendors):,} third-party "
+          f"groups excluded holding {excluded_prac:,}; {len(vetoed):,} "
+          f"organizations kept out of a name group by a vendor brand")
     for r in excluded_vendors[:10]:
         print(f"    excluded {r['label']}: {r['organizations']:,} orgs, "
               f"{r['practitioners']:,} practitioners ({r['reason']})")
+    for r in vetoed[:10]:
+        print(f"    vetoed {r['org_name']} from brand {r['brand_key']}: "
+              f"vendor lists it under {', '.join(r['vendor_brands'])}")
+    affiliation = describe_affiliation_graph(edges, edge_names)
+
+    tiered = rollup_system_reach(
+        state, systems, org_by_id, prac_by_org,
+        member_endpoint=lambda o: member_endpoint(
+            o, ep_by_id, ep_by_npi, npi_url, org_resolution),
+        enrollment_endpoints=enrollment_endpoints,
+        url_vendor=url_vendor)
+    out_of_state_dropped = tiered["out_of_state_dropped"]
+    unknown_state_kept = tiered["unknown_state_kept"]
+
     # Positive control, enforced: a listed vendor present in the state must be
-    # excluded, and no known real system may be excluded or vanish from the
-    # grouping. A failure here means a grouping rule regressed, and publishing
-    # anyway would hand one system's endpoints to another's practitioners.
+    # excluded, no known real system may be excluded or vanish from the
+    # grouping, and a known system whose own-domain endpoint is published
+    # must reach at least one practitioner on it. A failure means a rule
+    # regressed, and publishing anyway would either hand one system's
+    # endpoints to another's practitioners or show a published endpoint as
+    # absent.
+    available_urls = (set(ep_by_id.values()) | set(ep_by_npi.values())
+                      | set(url_vendor) | set(npi_url.values())
+                      | {h[0] for h in org_resolution.values()}
+                      | {h[0] for h in enrollment_endpoints.values()})
     problems = check_system_controls(state, org_rows, systems,
                                      excluded_vendors,
                                      parent_by_npi=parent_by_npi,
-                                     owner_by_npi=owner_by_npi)
+                                     owner_by_npi=owner_by_npi,
+                                     reach_by_system=tiered["reach_by_system"],
+                                     available_urls=available_urls)
     if problems:
         raise RuntimeError(
             f"{state}: system rollup failed its positive control:\n  "
             + "\n  ".join(problems))
-    affiliation = describe_affiliation_graph(edges, edge_names)
-    out_of_state_dropped = []
-    unknown_state_kept = 0
-    for sysrow in systems:
-        # Collect every endpoint anywhere in the system, not the first one
-        # found. A health system does not have "an endpoint": UPMC publishes an
-        # Epic endpoint for its physicians and separate athenahealth endpoints
-        # for individual surgery centres. Taking the first member with a hit
-        # handed all 7,308 UPMC practitioners an ambulatory surgery centre's
-        # athenahealth URL, which is not where their records live.
-        # Every (url, member) pair goes through the guard before any URL
-        # dedup: one vendor tenant URL is often attached to many NPIs, and
-        # deduping first would let an out-of-state copy shadow an in-state one.
-        candidates = []
-        for oid in sysrow["member_org_ids"]:
-            member = org_by_id.get(oid)
-            if not member:
-                continue
-            url, basis = resolve_org(member)
-            if basis in ("ndh", "vendor-npi"):
-                candidates.append({
-                    "url": url,
-                    "vendor": url_vendor.get(url),
-                    "via_member": member["org_name"],
-                    "member_state": member.get("org_state"),
-                })
-        # A system must not reach an endpoint through a member in another
-        # state unless that member is the system itself: a Pennsylvania
-        # practitioner is not served by an out-of-state affiliate's tenant.
-        kept, dropped, unknown = rollup_system_endpoints(
-            state, sysrow["label"], candidates)
-        unknown_state_kept += unknown
-        found = {
-            c["url"]: {"url": c["url"], "vendor": c["vendor"],
-                       "via_member": c["via_member"]}
-            for c in kept
-        }
-        for c in dropped:
-            out_of_state_dropped.append({
-                "system": sysrow["label"],
-                "via_member": c["via_member"],
-                "member_state": c["member_state"],
-                "url": c["url"],
-                "vendor": c["vendor"],
-            })
-        sysrow["endpoints"] = list(found.values())[:10]
-        sysrow["endpoint_count"] = len(found)
-        sysrow["vendors"] = sorted(
-            {e["vendor"] for e in found.values() if e["vendor"]}
-        )
-        # Trim the id list: useful in aggregate, noise in a published payload.
-        sysrow["member_org_ids"] = sysrow["member_org_ids"][:25]
 
     print(f"  systems: dropped {len(out_of_state_dropped):,} out-of-state "
           f"member endpoints; kept {unknown_state_kept:,} from members with "
@@ -907,11 +1159,20 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     for d in out_of_state_dropped[:20]:
         print(f"    dropped {d['url']} via {d['via_member']} "
               f"({d['member_state']}) from {d['system']}")
+    for sysrow in systems[:10]:
+        print(f"    {sysrow['label']}: {sysrow['practitioners']:,} distinct "
+              f"({sysrow['practitioner_org_links']:,} links), reach "
+              f"{sysrow['reaches_endpoint']:,} {sysrow['reach_by_tier']}")
 
     systems_with_endpoint = [s for s in systems if s["endpoint_count"]]
-    practitioners_gained = sum(
-        s["practitioners"] for s in systems_with_endpoint
-    )
+    in_reaching_system = set()
+    for s in systems_with_endpoint:
+        for oid in s["_all_member_org_ids"]:
+            in_reaching_system |= prac_by_org.get(oid, set())
+    practitioners_gained = len(in_reaching_system)
+    for s in systems:
+        del s["_all_member_org_ids"]
+    reached_union = tiered["reached_union"]
 
     # Graph payload, precomputed here so the browser renders rather than
     # derives. Capped at the 50 largest systems: a force layout of 19,535
@@ -930,6 +1191,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "organizations": sysrow["organizations"],
             "basis": sysrow["basis"],
             "connected": bool(sysrow["endpoint_count"]),
+            "connected_deterministic":
+                bool(sysrow["endpoint_count_deterministic"]),
         })
         for ep in sysrow["endpoints"][:3]:
             host = (ep["url"] or "").split("/")[2] if "//" in (ep["url"] or "") else ep["url"]
@@ -939,7 +1202,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                     "id": eid, "label": host, "type": "endpoint",
                     "vendor": ep["vendor"], "via": ep["via_member"],
                 })
-            g_links.append({"source": sid, "target": eid, "kind": "reaches"})
+            g_links.append({"source": sid, "target": eid, "kind": "reaches",
+                            "tier": ep["tier"]})
             if ep["vendor"]:
                 vid = f"vendor:{ep['vendor']}"
                 if vid not in seen_vendor:
@@ -1042,8 +1306,43 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "systems_by_basis": dict(collections.Counter(
                 s["basis"] for s in systems)),
             "systems_reaching_an_endpoint": len(systems_with_endpoint),
+            "systems_reaching_an_endpoint_deterministic": sum(
+                1 for s in systems if s["endpoint_count_deterministic"]),
+            # Distinct clinicians since FHI-73; was a sum of member counts.
             "practitioners_in_a_system_that_reaches_an_endpoint":
                 practitioners_gained,
+            "practitioners_reached_through_a_system": reached_union,
+            "tiers": {
+                "note": (
+                    "Each system's reach is counted per distinct clinician at "
+                    "the strongest tier among the member organizations they "
+                    "hold roles at. ndh: the NDH attributes the endpoint to "
+                    "the member. vendor-npi: an EHR vendor publishes the "
+                    "member's NPI beside the endpoint. Both are deterministic. "
+                    "alias: a curated, sourced legal-name-to-brand link "
+                    "(analysis/org_aliases.json). name-state and brand-state: "
+                    "the member's name or brand prefix matches a vendor brand "
+                    "in the same state (H53). Those three are inference. "
+                    "cms-enrollment-own-endpoint: the clinician's CMS-enrolled "
+                    "group resolves to an endpoint this system already "
+                    "reaches, or one on the system's own domain; enrollment "
+                    "that lands on another system's endpoint is not counted "
+                    "for this one."
+                ),
+                "order": list(SYSTEM_TIERS),
+                "deterministic": list(DETERMINISTIC_TIERS),
+            },
+            "corrections": SYSTEM_CORRECTIONS,
+            "vendor_brand_vetoes": {
+                "note": (
+                    "Organizations kept out of a name-inferred brand group "
+                    "because Epic's User-access Brands file lists their NPI "
+                    "under a brand that does not agree with the name. They "
+                    "stay in the ledger as standalone organizations."
+                ),
+                "count": len(vetoed),
+                "rows": vetoed[:25],
+            },
             "routing_caveat": (
                 "A system reaching an endpoint is not a routing answer. Large "
                 "systems publish several: UPMC has an Epic endpoint for its "
@@ -1171,6 +1470,7 @@ def main():
 
     ep_by_id, ep_by_npi = load_endpoint_crosswalk()
     url_vendor, npi_url, name_url = load_vendor_attribution()
+    vendor_brands = load_vendor_brands()
     print(f"Reused artifacts: {len(ep_by_id):,} NDH-attributed endpoints, "
           f"{len(url_vendor):,} vendor-attributed URLs, "
           f"{len(npi_url):,} vendor-published NPIs, "
@@ -1230,7 +1530,8 @@ def main():
         payload = build(code, rows, org_rows, edges, edge_names, parent_by_npi,
                         owner_by_npi, org_resolution, ep_by_id, ep_by_npi,
                         url_vendor, npi_url, name_url, load_hospitals(code),
-                        enrollment, geo_inputs)
+                        enrollment, geo_inputs,
+                        vendor_brands_by_npi=vendor_brands)
         path = out_dir / f"{code.lower()}-connectivity.json"
         path.write_text(json.dumps(payload, indent=2) + "\n")
         s = payload["summary"]

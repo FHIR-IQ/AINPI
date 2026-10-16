@@ -76,7 +76,7 @@ CACHE = pathlib.Path("/tmp/ainpi-vendor-endpoints")
 PROJECT = "thematic-fort-453901-t7"
 DATASET = "cms_npd"
 SLUG = "org-endpoint-resolution"
-NDH_RELEASE = "2026-05-08"
+from analysis.release import CURRENT_RELEASE as NDH_RELEASE  # noqa: E402
 METHODOLOGY = "0.7.2-draft"
 
 EPIC_FILE = "epic_user_access_brands.json"
@@ -262,6 +262,51 @@ def load_aliases():
     doc = json.loads(path.read_text())
     return {(normalize(a["ndh_name"]), a["state"]): a
             for a in doc.get("aliases", [])}
+
+
+class DeadAliasError(RuntimeError):
+    """A curated alias names a brand no cached vendor file publishes."""
+
+
+def dead_aliases(aliases, vendor_rows):
+    """Aliases whose brand matches no vendor-published label in their state.
+
+    The alias tier requires the alias brand to equal a vendor label exactly
+    (after `normalize`), in the alias's state. When a vendor renames a brand
+    the alias silently resolves nothing: on the 2026-10-07 cache, 9 of the 13
+    PA aliases were dead because Epic now publishes "MyUPMC", "TempleHealth"
+    and "Thomas Jefferson University Health System" (FHI-73). This is the
+    positive control that turns that silence into an error.
+
+    `aliases` is the dict from `load_aliases`. Returns the dead alias records.
+    """
+    labels = set()
+    for v in vendor_rows:
+        label = normalize(v["brand"] or v["name"])
+        for st in (v["states"] or set()):
+            labels.add((label, st))
+    return [a for (_, st), a in sorted(aliases.items())
+            if (normalize(a["brand"]), st) not in labels]
+
+
+def check_aliases(aliases, vendor_rows):
+    """Raise DeadAliasError if any alias matches no vendor label.
+
+    Refuses on an empty vendor set too: with no vendor files every alias is
+    dead, and the right reading is that the cache is missing, not that every
+    alias is wrong. The message says which.
+    """
+    if aliases and not vendor_rows:
+        raise DeadAliasError(
+            "no vendor rows loaded; run h51_vendor_endpoint_attribution.py to "
+            f"populate {CACHE} before resolving aliases")
+    dead = dead_aliases(aliases, vendor_rows)
+    if dead:
+        raise DeadAliasError(
+            f"{len(dead)} curated alias(es) match no vendor-published brand "
+            "label in their state; fix analysis/org_aliases.json:\n  "
+            + "\n  ".join(f"{a['ndh_name']} -> '{a['brand']}' ({a['state']})"
+                           for a in dead))
 
 
 def resolve(org_rows, vendor_rows, ep_by_npi, npi_url, aliases=None):
@@ -488,6 +533,7 @@ def main():
               f"{total_prac:,} affiliated practitioner slots")
 
         aliases = load_aliases()
+        check_aliases(aliases, vendor_rows)
         rows, tiers, prac, ambiguous = resolve(
             org_rows, vendor_rows, ep_by_npi, npi_url, aliases)
         print(f"  {len(aliases)} curated aliases loaded")
