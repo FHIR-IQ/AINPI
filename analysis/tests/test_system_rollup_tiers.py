@@ -417,6 +417,24 @@ def test_reach_control_passes_when_reached_or_nothing_published():
     assert nothing == []
 
 
+def test_acknowledged_gap_is_published_and_cannot_go_stale():
+    acknowledged = []
+    problems = check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system={"brand:GEISINGER": {}}, available_urls={GEIS},
+        known_domains=DOMAINS, known_unreached={"Geisinger": "evidence"},
+        acknowledged=acknowledged)
+    assert problems == []
+    assert acknowledged == [{"system": "Geisinger",
+                             "domains": ["geisinger.edu"],
+                             "reason": "evidence"}]
+    stale = check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system={"brand:GEISINGER": {GEIS: 3}}, available_urls={GEIS},
+        known_domains=DOMAINS, known_unreached={"Geisinger": "evidence"})
+    assert any("remove the entry" in p for p in stale)
+
+
 def test_reach_on_another_domain_does_not_satisfy_the_control():
     problems = check_system_controls(
         "PA", [], geisinger_systems(), [], known=KNOWN,

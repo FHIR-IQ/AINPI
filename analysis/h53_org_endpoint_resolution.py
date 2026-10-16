@@ -522,6 +522,10 @@ def main():
             if row.get("org_npi") and row.get("url"):
                 npi_url.setdefault(row["org_npi"], row["url"])
 
+    # Before any query is paid for: a dead alias resolves nothing silently.
+    aliases = load_aliases()
+    check_aliases(aliases, vendor_rows)
+
     for code in [c.upper() for c in args.states]:
         cfg = bq_job_config()
         cfg.query_parameters = [
@@ -532,8 +536,6 @@ def main():
         print(f"\n{code}: {len(org_rows):,} organizations holding "
               f"{total_prac:,} affiliated practitioner slots")
 
-        aliases = load_aliases()
-        check_aliases(aliases, vendor_rows)
         rows, tiers, prac, ambiguous = resolve(
             org_rows, vendor_rows, ep_by_npi, npi_url, aliases)
         print(f"  {len(aliases)} curated aliases loaded")

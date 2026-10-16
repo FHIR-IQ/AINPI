@@ -1154,6 +1154,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     # regressed, and publishing anyway would either hand one system's
     # endpoints to another's practitioners or show a published endpoint as
     # absent.
+    acknowledged_gaps = []
     available_urls = (set(ep_by_id.values()) | set(ep_by_npi.values())
                       | set(url_vendor) | set(npi_url.values())
                       | {h[0] for h in org_resolution.values()}
@@ -1163,11 +1164,15 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                                      parent_by_npi=parent_by_npi,
                                      owner_by_npi=owner_by_npi,
                                      reach_by_system=tiered["reach_by_system"],
-                                     available_urls=available_urls)
+                                     available_urls=available_urls,
+                                     acknowledged=acknowledged_gaps)
     if problems:
         raise RuntimeError(
             f"{state}: system rollup failed its positive control:\n  "
             + "\n  ".join(problems))
+    for g in acknowledged_gaps:
+        print(f"  known gap: {g['system']} publishes on "
+              f"{', '.join(g['domains'])} and reaches nobody (KNOWN_UNREACHED)")
 
     print(f"  systems: dropped {len(out_of_state_dropped):,} out-of-state "
           f"member endpoints; kept {unknown_state_kept:,} from members with "
@@ -1311,7 +1316,9 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 "than an owner. `brand-name` groups are inferred from the "
                 "organization name and cover the rest. The directory's own "
                 "OrganizationAffiliation resource was tried and rejected: see "
-                "affiliation_graph below."
+                "affiliation_graph below. Since FHI-73 each system's reach is "
+                "reported per tier and per distinct clinician; see tiers and "
+                "corrections."
             ),
             "affiliation_graph": affiliation,
             "organizations_with_cms_attested_owner": sum(
@@ -1349,6 +1356,15 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 "deterministic": list(DETERMINISTIC_TIERS),
             },
             "corrections": SYSTEM_CORRECTIONS,
+            "known_systems_unreached": {
+                "note": (
+                    "Known systems that publish an endpoint on their own "
+                    "domain which no tier connects to their clinicians in "
+                    "this release. Listed by name with the evidence, because "
+                    "a zero here is a measured gap, not a missing lookup."
+                ),
+                "rows": acknowledged_gaps,
+            },
             "vendor_brand_vetoes": {
                 "note": (
                     "Organizations kept out of a name-inferred brand group "

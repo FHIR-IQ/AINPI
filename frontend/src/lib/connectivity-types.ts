@@ -353,6 +353,10 @@ export interface ConnectivityPayload {
     };
     tiers?: { note: string; order: SystemReachTier[]; deterministic: SystemReachTier[] };
     corrections?: ConnectivityCorrection[];
+    known_systems_unreached?: {
+      note: string;
+      rows: { system: string; domains: string[]; reason: string }[];
+    };
     vendor_brand_vetoes?: {
       note: string;
       count: number;

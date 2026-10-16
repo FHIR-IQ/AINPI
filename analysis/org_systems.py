@@ -651,6 +651,27 @@ KNOWN_SYSTEM_DOMAINS = {
 }
 
 
+# Known systems that publish an own-domain endpoint the rollup measurably does
+# not reach, each with the evidence. An entry turns the reach control's
+# failure into a published, named gap instead of a crash, and the control
+# fails again the moment the system is reached, so an entry cannot outlive the
+# gap it describes. Adding one is a decision, not a fix.
+KNOWN_UNREACHED = {
+    "PA": {
+        "Jefferson": (
+            "Epic publishes Thomas Jefferson University Health System at "
+            "fhir.jefferson.edu and the NDH attributes that endpoint to ARIA "
+            "HEALTH FRANKFORD CAMPUS, which groups under ARIA, not JEFFERSON. "
+            "No JEFFERSON-named member resolves to it at any tier on the "
+            "2026-10-07 release: the brand prefix differs (THOMAS), the "
+            "JEFFERSON UNIVERSITY PHYSICIANS alias matches only out-of-state "
+            "or stateless records, and no CMS-enrolled group resolves to it "
+            "(FHI-73)."
+        ),
+    },
+}
+
+
 def url_host(url):
     """Lower-cased host of a URL, or '' when there is none."""
     url = (url or "").strip().lower()
@@ -679,7 +700,8 @@ def _label_matches(label, prefix):
 def check_system_controls(state, org_rows, systems, excluded, known=None,
                           parent_by_npi=None, owner_by_npi=None,
                           reach_by_system=None, available_urls=None,
-                          known_domains=None):
+                          known_domains=None, known_unreached=None,
+                          acknowledged=None):
     """Positive controls on the system rollup. Returns a list of problems.
 
     An empty list means the run may publish. Four checks:
@@ -701,6 +723,10 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
        This is what was missing when the published table showed Geisinger at
        zero endpoints while its own funnel counted 5,199 of its clinicians
        reaching geisapi.geisinger.edu. Skipped when `reach_by_system` is None.
+       A system listed in `KNOWN_UNREACHED` (or `known_unreached`) is not a
+       problem while it stays unreached; it is appended to `acknowledged`
+       (a list the caller publishes). Once it is reached the entry is stale
+       and that is a problem, so the exception cannot linger.
 
     `systems` and `excluded` are the full lists from `build_systems`, not the
     truncated payload rows. Organizations claimed by an attested tier are
@@ -742,6 +768,8 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
     if reach_by_system is not None:
         domains_by_name = (KNOWN_SYSTEM_DOMAINS.get(state, {})
                            if known_domains is None else known_domains)
+        unreached = (KNOWN_UNREACHED.get(state, {})
+                     if known_unreached is None else known_unreached)
         hosts = {url_host(u) for u in (available_urls or ())}
         for name, domains in domains_by_name.items():
             prefixes = known.get(name, ())
@@ -759,9 +787,20 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                 for url, n in (reach_by_system.get(s["system_key"]) or {}).items():
                     if any(host_on_domain(url_host(url), d) for d in present):
                         reached += n
-            if reached == 0:
+            excused = unreached.get(name)
+            if reached == 0 and excused:
+                if acknowledged is not None:
+                    acknowledged.append({"system": name,
+                                         "domains": present,
+                                         "reason": excused})
+            elif reached == 0:
                 problems.append(
                     f"known system {name} publishes an endpoint on "
                     f"{', '.join(present)} but the system rollup reaches no "
                     f"practitioner on it through any tier")
+            elif excused:
+                problems.append(
+                    f"known system {name} is listed in KNOWN_UNREACHED but "
+                    f"now reaches {reached:,} practitioners on "
+                    f"{', '.join(present)}; remove the entry")
     return problems
