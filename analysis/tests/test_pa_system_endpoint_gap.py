@@ -18,6 +18,7 @@ from analysis.pa_system_endpoint_gap import (  # noqa: E402
     pairwise_overlap,
     positive_control,
     reach_counts,
+    system_links,
     summarize,
 )
 
@@ -232,6 +233,42 @@ def _control_inputs(**over):
 
 def test_positive_control_passes_on_good_inputs():
     assert positive_control(**_control_inputs()) == []
+
+
+def test_positive_control_accepts_the_fhi73_payload_shape():
+    # After FHI-73 `practitioners` is distinct and the link sum moved to
+    # `practitioner_org_links`; the rebuilt link sum must match the latter.
+    rows = {"brand:G": {"organizations": 2, "practitioners": 4,
+                        "practitioner_org_links": 7,
+                        "member_org_ids": ["o1"]}}
+    assert positive_control(**_control_inputs(payload_rows=rows)) == []
+
+
+def test_positive_control_compares_links_not_distinct_on_new_payloads():
+    rows = {"brand:G": {"organizations": 2, "practitioners": 7,
+                        "practitioner_org_links": 9,
+                        "member_org_ids": ["o1"]}}
+    got = positive_control(**_control_inputs(payload_rows=rows))
+    assert len(got) == 1 and "(7 links)" in got[0] and "(9)" in got[0]
+
+
+def test_positive_control_with_a_rebuilt_row_carrying_both_fields():
+    # build_systems since FHI-73 emits both fields; without the distinct
+    # mapping `practitioners` equals the link sum. Both payload shapes pass.
+    rebuilt = {"system_key": "brand:G", "organizations": 2, "practitioners": 7,
+               "practitioner_org_links": 7, "member_org_ids": ["o1", "o2"]}
+    old = {"brand:G": {"organizations": 2, "practitioners": 7,
+                       "member_org_ids": ["o1"]}}
+    new = {"brand:G": {"organizations": 2, "practitioners": 3,
+                       "practitioner_org_links": 7, "member_org_ids": ["o1"]}}
+    for rows in (old, new):
+        assert positive_control(**_control_inputs(
+            chosen=[rebuilt], payload_rows=rows)) == []
+
+
+def test_system_links_reads_either_shape():
+    assert system_links({"practitioners": 7}) == 7
+    assert system_links({"practitioners": 3, "practitioner_org_links": 7}) == 7
 
 
 def test_positive_control_fails_on_release_mismatch():
