@@ -129,7 +129,10 @@ def build_rows(doc: dict) -> list[dict]:
                 "source_field": src.get("field"),
                 "source_commit": src.get("commit"),
                 "source_vendored": src.get("vendored"),
-                "zero_control": None if zc is None else json.dumps(zc, sort_keys=True),
+                # measures.json already stores zero_control as a string; json.dumps
+                # on it would wrap it in a second pair of quotes.
+                "zero_control": (zc if zc is None or isinstance(zc, str)
+                                 else json.dumps(zc, sort_keys=True)),
                 "restated": bool(rs),
                 "as_published_value": None if not rs else float(r["as_published_value"]),
                 "as_published_numerator": None if not rs else float(r["as_published_numerator"]),

@@ -51,3 +51,48 @@ def test_release_flag_is_refused_for_measures(monkeypatch):
     with pytest.raises(SystemExit) as e:
         dp.main()
     assert "drop --release" in str(e.value)
+
+
+def test_release_run_without_table_skips_measures(monkeypatch, capsys):
+    # --release with no --table must upload and load the per-release tables
+    # only; the whole-series table would otherwise be rebuilt by a run that
+    # was meant to touch one release.
+    seen = {}
+    monkeypatch.setattr(dp, "do_upload", lambda rel, tables: seen.setdefault("upload", tables))
+    monkeypatch.setattr(dp, "do_load", lambda only, tables: seen.setdefault("load", tables) or True)
+    monkeypatch.setattr("sys.argv", ["x", "--upload", "--load", "--release", "2026-05-08,2026-10-07"])
+    dp.main()
+    for step in ("upload", "load"):
+        assert "measures" not in seen[step]
+        assert "practitioner" in seen[step] and "org_endpoint" in seen[step]
+    assert ("measures skipped: whole-series table, run with --table measures "
+            "and no --release") in capsys.readouterr().out
+
+
+def test_single_release_run_never_loads_measures(monkeypatch):
+    ran = []
+    monkeypatch.setattr(dp, "sql", lambda s, **k: ran.append(s) or {"status": {"state": "SUCCEEDED"}})
+    monkeypatch.setattr(dp, "local_parquet", lambda rel, t: dp.ROOT / "does-not-exist" / t)
+    monkeypatch.setattr("sys.argv", ["x", "--load", "--release", "2026-10-07"])
+    dp.main()
+    assert not any("measures" in s for s in ran)
+
+
+def test_failed_series_load_exits_nonzero(monkeypatch, tmp_path):
+    f = tmp_path / "measures.parquet"
+    f.write_bytes(b"x")
+    monkeypatch.setitem(dp.SERIES_TABLES, "measures", f)
+    monkeypatch.setattr(dp, "sql", lambda s, **k: {"status": {"state": "FAILED"}})
+    assert dp.do_load(tables=["measures"]) is False
+    monkeypatch.setattr("sys.argv", ["x", "--load", "--table", "measures"])
+    with pytest.raises(SystemExit) as e:
+        dp.main()
+    assert e.value.code == 1
+
+
+def test_successful_series_load_returns_true(monkeypatch, tmp_path):
+    f = tmp_path / "measures.parquet"
+    f.write_bytes(b"x")
+    monkeypatch.setitem(dp.SERIES_TABLES, "measures", f)
+    monkeypatch.setattr(dp, "sql", lambda s, **k: {"status": {"state": "SUCCEEDED"}})
+    assert dp.do_load(tables=["measures"]) is True

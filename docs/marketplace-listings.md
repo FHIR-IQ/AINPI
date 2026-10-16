@@ -133,9 +133,8 @@ coverage held, which is the same lesson read in reverse.
 are stable across releases. Organization ids are stable for provider records,
 which are NPI-keyed; its tax records (about half the table in August, under 4% in October) carry
 a random UUID.
-Endpoint and Location ids are random UUIDs that CMS regenerates on every export, so joining those two on `_id`
-across releases reports 100% churn that did not happen. Join Endpoint on
-`_address` instead. The table comments carry the same warning, and the notebook
+CMS regenerated Endpoint and Location ids between 2026-04-09 and 2026-05-08, so
+an `_id` join can report false churn; join Endpoint on `_address` for every pair. The table comments carry the same warning, and the notebook
 demonstrates it.
 
 **Where it comes from.** Maintained by AINPI (ainpi.dev), a public-interest

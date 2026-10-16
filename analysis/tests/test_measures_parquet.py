@@ -147,3 +147,14 @@ def test_real_measures_json_every_point_exactly_once():
     n_restated = sum(1 for m in doc["measures"] for p in m["series"] if p.get("restatements"))
     assert sum(r["restated"] for r in rows) == n_restated
     assert all(r["release_date"] in doc["releases"] for r in rows)
+
+
+def test_string_zero_control_is_not_double_quoted():
+    # measures.json stores zero_control as a string already; json.dumps on it
+    # would wrap it in a second pair of quotes.
+    doc = json.loads(pathlib.Path(SRC_PATH).read_text())
+    rows = [r for r in build_rows(doc) if r["slug"] == "ssn-exposures" and r["zero_control"]]
+    assert rows, "ssn-exposures has no zero_control; the test is not checking anything"
+    for r in rows:
+        assert not r["zero_control"].startswith('"'), r["zero_control"][:60]
+        assert r["zero_control"].startswith("asserted in source notes")

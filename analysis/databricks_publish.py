@@ -100,17 +100,21 @@ ALL_TABLES = TABLES + DERIVED_TABLES
 # consumer filters it the same way as every other table in the share.
 SERIES_TABLES = {"measures": PARQUET_DIR / "measures" / "measures.parquet"}
 
-# Cross-release ID stability, measured across 2026-04-09 and 2026-05-08 rather
-# than assumed. This is the first thing a consumer of a multi-release archive
-# gets wrong, so it belongs on the tables themselves:
+# Cross-release ID stability, measured rather than assumed. This is the first
+# thing a consumer of a multi-release archive gets wrong, so it belongs on the
+# tables themselves:
 #
 #   practitioner / organization   ids are `Type-<NPI>`, stable across releases.
 #                                 Practitioner overlaps 100% Apr->May.
-#   endpoint / location           ids are `Type-<random UUID>`, REGENERATED on
-#                                 every export. Apr->May overlap is exactly 0.
+#   endpoint / location           ids are `Type-<random UUID>`. CMS regenerated
+#                                 them between 2026-04-09 and 2026-05-08
+#                                 (overlap exactly 0). From 2026-08-20 to
+#                                 2026-10-07 most carried over: endpoint
+#                                 983,770 of 1,128,169 (87.2%), location
+#                                 2,320,667 of 2,535,686 (91.5%).
 #
-# So a cross-release diff joining endpoint or location on `_id` reports 100%
-# churn every time, which is an artifact of id minting and not a finding.
+# So whether an _id join reports false churn depends on the release pair, and
+# nothing promises the carry-over will hold. Join endpoint on `_address`.
 ID_NOTE_STABLE = (
     " Resource ids are Type-<NPI> and are stable across releases, so joining "
     "on _id across release_date is valid."
@@ -120,19 +124,24 @@ ID_NOTE_STABLE = (
 # draft of this comment told consumers to join location on "name plus address"
 # without anyone having run that join. It recovers 9.7% of May rows raw.
 _UNSTABLE_ID = (
-    " WARNING: resource ids are Type-<random UUID> and are REGENERATED on every "
-    "release. Zero ids survive from one release to the next, so joining on _id "
-    "across release_date yields 100% false churn."
+    " WARNING: resource ids are Type-<random UUID> and are not a stable key. "
+    "CMS regenerated them between 2026-04-09 and 2026-05-08, when zero ids "
+    "carried over, so an _id join across that pair reports 100% false churn."
 )
 ID_NOTE_ENDPOINT = _UNSTABLE_ID + (
-    " Join on _address instead: it matches 100.0% of distinct addresses between "
-    "2026-04-09 and 2026-05-08. Note the April file repeats each address 3.9 "
-    "times on average and the May file 1.05 times, so the 73% fall in row count "
-    "between them is de-duplication, not removal: 1,299,999 of 1,300,241 "
-    "distinct April addresses are still present in May."
+    " From 2026-08-20 to 2026-10-07, 983,770 of 1,128,169 endpoint ids (87.2%) "
+    "carried over, which nothing guarantees for the next release. Join on "
+    "_address for every release pair: it matched 100.0% of distinct addresses "
+    "between 2026-04-09 and 2026-05-08, and 983,761 of 1,128,160 distinct "
+    "addresses between 2026-08-20 and 2026-10-07. Note the April file repeats "
+    "each address 3.9 times on average and the May file 1.05 times, so the 73% "
+    "fall in row count between them is de-duplication, not removal: 1,299,999 "
+    "of 1,300,241 distinct April addresses are still present in May."
 )
 ID_NOTE_LOCATION = _UNSTABLE_ID + (
-    " There is no reliable cross-release key for Location in these columns. "
+    " From 2026-08-20 to 2026-10-07, 2,320,667 of 2,535,686 location ids "
+    "(91.5%) carried over, which nothing guarantees for the next release. "
+    "There is no reliable cross-release key for Location in these columns. "
     "_name + _city + _state + _postal_code matches only 9.7% of May rows as "
     "stored, rising to 73.5% after upper-casing and stripping non-alphanumerics, "
     "because CMS re-cased and re-punctuated these fields between releases. Treat "
@@ -449,20 +458,22 @@ def load_one_release(release: str, tables: list[str] | None = None) -> bool:
     return ok
 
 
-def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> None:
+def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> bool:
     """Rebuild the tables from parquet.
 
     `only` restricts and orders the releases. Without it every release found on
     disk is included, which is wrong once a release has been retired from the
     archive but its derived parquet is still sitting in the export directory.
     """
+    ok = True
     releases = [r for r in available_releases() if not only or r in only]
     if only:
         releases = [r for r in only if r in releases]
     for table in tables or ALL_TABLES:
         if table in SERIES_TABLES:
             # Releases do not scope this table: the file is the whole series.
-            load_series(table)
+            if not load_series(table):
+                ok = False
             continue
         present = [r for r in releases if local_parquet(r, table).exists()]
         if not present:
@@ -490,7 +501,8 @@ def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> N
             r = sql(f"INSERT INTO {fq} {select_from_parquet(rel, table)}")
             if r.get("status", {}).get("state") != "SUCCEEDED":
                 print(f"    FAILED: {json.dumps(r.get('status'))[:300]}")
-    print("load complete")
+    print("load complete" if ok else "load FAILED")
+    return ok
 
 
 def do_share(tables: list[str] | None = None) -> None:
@@ -615,20 +627,31 @@ def main() -> None:
     if a.table in SERIES_TABLES and a.release:
         sys.exit(f"--table {a.table} is one file covering every release and is "
                  f"only loaded whole; drop --release.")
+    # Upload and load scope. A whole-series table is one file covering every
+    # release, so a release-scoped run must not upload or load it. --share is
+    # not release-scoped and keeps `tables`.
+    load_tables = tables
+    if a.release and a.table is None and (a.upload or a.load):
+        load_tables = [t for t in ALL_TABLES if t not in SERIES_TABLES]
+        for t in SERIES_TABLES:
+            print(f"{t} skipped: whole-series table, run with --table {t} and no --release")
     if a.upload:
-        do_upload(a.release, tables)
+        do_upload(a.release, load_tables)
     if a.load:
         wanted = [x.strip() for x in a.release.split(",")] if a.release else None
         if wanted and len(wanted) > 1:
-            do_load(wanted, tables)
+            if not do_load(wanted, load_tables):
+                sys.exit(1)
         elif a.release:
             # Exit non-zero on a partial load. The previous version printed
             # FAILED for four of six tables and still exited 0, which is
             # indistinguishable from success to anything reading the code.
-            if not load_one_release(a.release, tables):
+            if not load_one_release(a.release, load_tables):
                 sys.exit(1)
         else:
-            do_load(tables=tables)
+            # Exit non-zero when a whole-series load fails, for the same reason.
+            if not do_load(tables=load_tables):
+                sys.exit(1)
     if a.share:
         do_share(tables)
     if a.status:
