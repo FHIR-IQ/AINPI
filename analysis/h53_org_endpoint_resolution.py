@@ -27,8 +27,18 @@ with a separate fix and mixing them flatters both.
 
 Tiers, strongest first. Each is counted on its own.
 
-  npi          The vendor published an NPI beside the endpoint and it matches
-               the NDH organization NPI. No inference.
+  npi          The NDH's own crosswalk (H50) names the organization's NPI on
+               the endpoint, or a vendor published the NPI beside a URL listing
+               LIST_THRESHOLD (10) NPIs or fewer. No inference.
+  alias        A curated, sourced legal-name-to-brand link
+               (analysis/org_aliases.json) and the state agrees. Outranks
+               `npi-list`: a sourced alias names this organization, a
+               practice-wide list names everyone in the practice.
+  npi-list     A vendor published the NPI beside a URL listing more than
+               LIST_THRESHOLD NPIs (athenahealth's practice-wide department
+               lists, Epic brands listing up to 1,881). The NPI is published,
+               but the URL is not shown to serve this organization, so it is
+               inference. Same tier as `vendor-npi-list` in the ledger.
   name-state   Normalized organization names match exactly and the state
                agrees. Two independent signals.
   brand-state  The NDH name and a vendor brand share a leading brand token
@@ -66,7 +76,12 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
 
 from analysis.claims_sources._cohorts import bq_job_config  # noqa: E402
-from analysis.org_systems import GENERIC_OPENERS, normalize, read_vendor_npi_urls  # noqa: E402
+from analysis.org_systems import (  # noqa: E402
+    GENERIC_OPENERS,
+    normalize,
+    read_vendor_npi_urls,
+    vendor_npi_tier,
+)
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUT_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings"
@@ -309,7 +324,22 @@ def check_aliases(aliases, vendor_rows):
                            for a in dead))
 
 
-def resolve(org_rows, vendor_rows, ep_by_npi, npi_url, aliases=None):
+# Strongest first; the same order as state_connectivity.SYSTEM_TIERS, with
+# `npi` covering the ledger's ndh/vendor-npi and `npi-list` its
+# vendor-npi-list.
+RESOLVE_TIERS = ("npi", "alias", "npi-list", "name-state", "brand-state",
+                 "unresolved")
+
+
+def resolve(org_rows, vendor_rows, ep_by_npi, npi_url, aliases=None,
+            url_npi_count=None):
+    """Resolve each organization at its strongest tier (`RESOLVE_TIERS`).
+
+    A vendor NPI on a URL listing more than LIST_THRESHOLD NPIs is `npi-list`,
+    not `npi`, and a curated alias is tried ahead of it, so the CSV and the
+    ledger rank the same evidence the same way. `url_npi_count` comes from
+    `read_vendor_npi_urls`; without it every vendor NPI reads as `npi`.
+    """
     aliases = aliases or {}
     vendor_by_brand = {}
     by_name_state = {}
@@ -400,17 +430,30 @@ def resolve(org_rows, vendor_rows, ep_by_npi, npi_url, aliases=None):
         state = o["org_state"]
         tier = url = vendor = evidence = None
 
-        if npi and (npi in ep_by_npi or npi in npi_url):
+        list_url = None
+        if npi and npi in ep_by_npi:
             tier = "npi"
-            url = ep_by_npi.get(npi) or npi_url.get(npi)
-            evidence = f"vendor published NPI {npi}"
-        else:
+            url = ep_by_npi[npi]
+            evidence = f"NDH endpoint names NPI {npi}"
+        elif npi and npi in npi_url:
+            if vendor_npi_tier(npi_url[npi], url_npi_count) == "vendor-npi":
+                tier = "npi"
+                url = npi_url[npi]
+                evidence = f"vendor published NPI {npi}"
+            else:
+                list_url = npi_url[npi]
+        if tier is None:
             alias = aliases.get((name, state))
             hit = by_name_state.get((name, state))
             if alias and vendor_by_brand.get((normalize(alias["brand"]), state)):
                 av = vendor_by_brand[(normalize(alias["brand"]), state)]
                 tier, url, vendor = "alias", av["url"], av["vendor"]
                 evidence = f"curated alias to '{alias['brand']}': {alias['basis'][:90]}"
+            elif list_url:
+                tier, url = "npi-list", list_url
+                n = (url_npi_count or {}).get(list_url, 0)
+                evidence = (f"vendor published NPI {npi} on a URL listing "
+                            f"{n:,} NPIs")
             elif hit:
                 tier, url, vendor = "name-state", hit["url"], hit["vendor"]
                 evidence = f"name '{hit['name']}' + state {state}"
@@ -430,7 +473,8 @@ def resolve(org_rows, vendor_rows, ep_by_npi, npi_url, aliases=None):
     return out, tiers, practitioners, ambiguous
 
 
-def resolve_enrollment_orgs(state, vendor_rows, ep_by_npi, npi_url, aliases):
+def resolve_enrollment_orgs(state, vendor_rows, ep_by_npi, npi_url, aliases,
+                            url_npi_count=None):
     """Resolve the organizations named by CMS enrollment, not by the directory.
 
     The directory and CMS enrollment name the same legal entities, and they
@@ -466,7 +510,7 @@ def resolve_enrollment_orgs(state, vendor_rows, ep_by_npi, npi_url, aliases):
     org_rows = [{**{k: v for k, v in o.items() if k != "npis"},
                  "practitioners": len(o["npis"])} for o in orgs.values()]
     rows, tiers, prac, ambiguous = resolve(
-        org_rows, vendor_rows, ep_by_npi, npi_url, aliases)
+        org_rows, vendor_rows, ep_by_npi, npi_url, aliases, url_npi_count)
 
     by_org = {r["org_id"]: r for r in rows}
     out = STATES_DIR / f"{state.lower()}-enrollment-endpoint.csv"
@@ -518,7 +562,8 @@ def main():
                 ep_by_npi.setdefault(row["org_npi"], row["base_url"])
     # Same NPI -> URL choice as the ledger (fewest NPIs on the URL wins), so
     # the two cannot name different endpoints for one organization.
-    npi_url, _ = read_vendor_npi_urls(OUT_DIR / "vendor-endpoint-attribution.csv")
+    npi_url, url_npi_count = read_vendor_npi_urls(
+        OUT_DIR / "vendor-endpoint-attribution.csv")
 
     # Before any query is paid for: a dead alias resolves nothing silently.
     aliases = load_aliases()
@@ -535,13 +580,13 @@ def main():
               f"{total_prac:,} affiliated practitioner slots")
 
         rows, tiers, prac, ambiguous = resolve(
-            org_rows, vendor_rows, ep_by_npi, npi_url, aliases)
+            org_rows, vendor_rows, ep_by_npi, npi_url, aliases, url_npi_count)
         print(f"  {len(aliases)} curated aliases loaded")
         print(f"  {ambiguous:,} brand keys refused as ambiguous "
               f"(more than one vendor brand shares the key in-state)")
         resolved_prac = sum(v for k, v in prac.items() if k != "unresolved")
         print(f"  {'tier':<14}{'orgs':>8}{'practitioners':>16}")
-        for tier in ("npi", "alias", "name-state", "brand-state", "unresolved"):
+        for tier in RESOLVE_TIERS:
             print(f"  {tier:<14}{tiers[tier]:>8,}{prac[tier]:>16,}")
         print(f"  resolved: {resolved_prac:,} of {total_prac:,} "
               f"({100.0 * resolved_prac / total_prac:.1f}%)")
@@ -556,7 +601,8 @@ def main():
                 w.writerow(r)
         print(f"  wrote {csv_path}")
 
-        resolve_enrollment_orgs(code, vendor_rows, ep_by_npi, npi_url, aliases)
+        resolve_enrollment_orgs(code, vendor_rows, ep_by_npi, npi_url, aliases,
+                                url_npi_count)
 
         print(f"\n  Hand-check sample (largest {args.sample} resolved):")
         shown = 0

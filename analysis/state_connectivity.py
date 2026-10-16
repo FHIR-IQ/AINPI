@@ -708,17 +708,103 @@ SYSTEM_CORRECTIONS = [
 ]
 
 
+# Statewide figures as first published, per state, for the funnel-level
+# correction. Literals on purpose: they are what readers saw, and nothing
+# regenerates them. The current figures are filled in from the run.
+PUBLISHED_BEFORE_FHI73 = {
+    "PA": {
+        "report": "2026-10-14 update",
+        "reaches_endpoint_pct": 15.8,
+        "reaches_endpoint_pct_of_affiliated": 35.8,
+        "august_reaches_endpoint_pct": 18.7,
+    },
+}
+
+
+def funnel_corrections(state, summary):
+    """Funnel-level correction for a state whose headline moved with FHI-73.
+
+    Built from the run's own summary so the current figures cannot drift from
+    the payload they sit in. Empty for a state with no earlier publication.
+    """
+    before = PUBLISHED_BEFORE_FHI73.get((state or "").upper())
+    if not before:
+        return []
+    name = STATE_NAMES.get(state.upper(), state.upper())
+    return [{
+        "date": "2026-10-16",
+        "issue": "FHI-73",
+        "what": (
+            f"The {before['report']} reported {before['reaches_endpoint_pct']}% "
+            f"of {name} practitioners reaching a FHIR endpoint "
+            f"({before['reaches_endpoint_pct_of_affiliated']}% of those with "
+            f"an affiliation). On 2026-10-16 the method changed: H51 now "
+            f"keeps every NPI a vendor lists beside an endpoint URL, where "
+            f"before it kept only the first. Under the new method the "
+            f"any-route figure reads {summary['reaches_endpoint_pct']}% "
+            f"({summary['reaches_endpoint_pct_of_affiliated']}% of "
+            f"practitioners affiliated through any source). The "
+            f"deterministic figure (the NDH's own attribution, or a vendor "
+            f"NPI on a URL listing {LIST_THRESHOLD} or fewer NPIs) reads "
+            f"{summary['reaches_endpoint_deterministic_pct']}%. Neither is "
+            f"comparable with the {before['reaches_endpoint_pct']}% of "
+            f"{before['report'].split()[0]} or the "
+            f"{before['august_reaches_endpoint_pct']}% of the 2026-08-20 "
+            f"release."
+        ),
+        "since": f"the {before['report']}",
+    }]
+
+
+# What five existing keys mean since FHI-73. Each kept its name and lost
+# the vendor-NPI-list matches it used to include, so a consumer comparing
+# across files must read this rather than assume the key is unchanged.
+FIELD_NOTES = {
+    "summary.organizations_with_endpoint": (
+        "Organizations reached through the NDH or a vendor NPI on a URL "
+        f"listing {LIST_THRESHOLD} or fewer NPIs. Before FHI-73 (2026-10-16) "
+        "it also counted every vendor NPI match through a practice-wide "
+        "list; those are now organizations_with_endpoint_via_vendor_npi_list "
+        "(an organization a curated alias reaches is counted at alias "
+        "instead). Not comparable with earlier files."
+    ),
+    "confidence.yellow": (
+        "Practitioners whose best route is a vendor NPI on a URL listing "
+        f"{LIST_THRESHOLD} or fewer NPIs. Before FHI-73 it included vendor "
+        "NPIs on practice-wide lists, now confidence.vendor_list."
+    ),
+    "systems.rows[].endpoint_count_deterministic": (
+        "Endpoints a system reaches through the NDH or a vendor NPI on a "
+        f"URL listing {LIST_THRESHOLD} or fewer NPIs. vendor-npi-list "
+        "endpoints are counted in endpoint_count only."
+    ),
+    "systems.systems_reaching_an_endpoint_deterministic": (
+        "Systems with at least one endpoint_count_deterministic endpoint; "
+        "excludes systems reached only through a vendor NPI list."
+    ),
+    "graph.nodes[].connected_deterministic": (
+        "True when a system reaches an endpoint through the NDH or a vendor "
+        f"NPI on a URL listing {LIST_THRESHOLD} or fewer NPIs; false for a "
+        "system reached only through a vendor NPI list, alias, name or brand "
+        "match, or CMS enrollment."
+    ),
+}
+
+
 # --------------------------------------------------------------------------
 # health-system reach, by tier (FHI-73)
 # --------------------------------------------------------------------------
 
-# Strongest first. The first five describe a member organization; the last
+# Strongest first. The first six describe a member organization; the last
 # describes one practitioner's CMS enrollment and is counted only when it
 # lands on the system's own endpoint (see `rollup_system_reach`).
 # `vendor-npi-list` is a vendor NPI match through a URL listing more than
 # LIST_THRESHOLD NPIs: the NPI is published beside the URL, but so are the
-# rest of a practice or brand, so it is not deterministic.
-SYSTEM_TIERS = ("ndh", "vendor-npi", "vendor-npi-list", "alias", "name-state",
+# rest of a practice or brand, so it is not deterministic. It ranks below
+# `alias`: a curated, sourced alias names this organization, while a
+# practice-wide list names everyone in the practice. H53 applies the same
+# order (`npi`, `alias`, `npi-list`, ...), so its CSV and this ledger agree.
+SYSTEM_TIERS = ("ndh", "vendor-npi", "alias", "vendor-npi-list", "name-state",
                 "brand-state", "cms-enrollment-own-endpoint")
 DETERMINISTIC_TIERS = ("ndh", "vendor-npi")
 _TIER_RANK = {t: i for i, t in enumerate(SYSTEM_TIERS)}
@@ -742,27 +828,31 @@ def org_npi_endpoint(npi, ep_by_npi, npi_url, url_npi_count=None):
     return None
 
 
-def member_endpoint(o, ep_by_id, ep_by_npi, npi_url, org_resolution,
-                    url_npi_count=None):
-    """(url, tier) for one member organization, the funnel's ladder, or None.
+def best_tier(*hits):
+    """The strongest (url, tier) among `hits` by SYSTEM_TIERS rank, or None."""
+    hits = [h for h in hits if h and h[1] in _TIER_RANK]
+    return min(hits, key=lambda h: _TIER_RANK[h[1]]) if hits else None
 
-    Same order the practitioner funnel uses: the NDH's own attribution, then a
-    vendor-published NPI (`vendor-npi`, or `vendor-npi-list` when the URL
-    lists more than LIST_THRESHOLD NPIs), then H53 alias / name-state /
-    brand-state resolution. The name-candidate layer is never a linkage and
-    is not here.
+
+def member_endpoint(o, ep_by_id, ep_by_npi, npi_url, org_resolution,
+                    url_npi_count=None, with_resolution=True):
+    """(url, tier) for one organization at its strongest tier, or None.
+
+    The one ladder every view on the page uses (funnel bands, systems table,
+    organization table, map): the NDH's own attribution, a vendor-published
+    NPI (`vendor-npi`, or `vendor-npi-list` when the URL lists more than
+    LIST_THRESHOLD NPIs), and H53 alias / name-state / brand-state
+    resolution, ranked by SYSTEM_TIERS rather than taken in source order, so
+    a curated alias beats a practice-wide list. `with_resolution=False`
+    leaves H53 out (the identifier-only routes). The name-candidate layer is
+    never a linkage and is not here.
     """
     url = ep_by_id.get(o["org_id"])
-    if url:
-        return url, "ndh"
-    hit = org_npi_endpoint(o.get("org_npi") or "", ep_by_npi, npi_url,
+    ndh = (url, "ndh") if url else None
+    npi = org_npi_endpoint(o.get("org_npi") or "", ep_by_npi, npi_url,
                            url_npi_count)
-    if hit:
-        return hit
-    hit = org_resolution.get(o["org_id"])
-    if hit and hit[1] in _TIER_RANK:
-        return hit[0], hit[1]
-    return None
+    res = org_resolution.get(o["org_id"]) if with_resolution else None
+    return best_tier(ndh, npi, res)
 
 
 def own_domains(state, label):
@@ -937,6 +1027,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     enrolled_without_role = 0
     vendors = collections.Counter()
     bands = collections.Counter()
+    resolved_by_tier = collections.Counter()
 
     for r in rows:
         has_role = r["n_roles"] > 0
@@ -964,26 +1055,29 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         # another of the practitioner's organizations wins over it.
         filled = None
         if not native:
-            for onpi in r["org_npis"] or []:
-                hit = org_npi_endpoint(onpi, ep_by_npi, npi_url, url_npi_count)
-                if not hit:
-                    continue
-                if filled is None or hit[1] == "vendor-npi":
-                    url, filled = hit
-                if filled == "vendor-npi":
-                    break
+            fill_hit = best_tier(*(
+                org_npi_endpoint(onpi, ep_by_npi, npi_url, url_npi_count)
+                for onpi in r["org_npis"] or []))
+            if fill_hit:
+                url, filled = fill_hit
 
         # H53 resolution: name or brand agreement with a vendor-published
         # organization, plus state. Inference, so it never counts as green.
+        # The strongest H53 tier across the practitioner's organizations.
         resolved = None
         if not native:
-            for oid in r["org_ids"] or []:
-                hit = org_resolution.get(oid)
-                if hit:
-                    resolved = hit
-                    if not filled:
-                        url = hit[0]
-                    break
+            resolved = best_tier(*(org_resolution.get(oid)
+                                   for oid in r["org_ids"] or []))
+            if resolved and not filled:
+                url = resolved[0]
+
+        # Band by SYSTEM_TIERS rank: a curated alias outranks a vendor NPI on
+        # a practice-wide list. The cumulative ladder below (fill_only,
+        # resolved_only) keeps source order so it stays monotone.
+        alias_beats_list = bool(filled == "vendor-npi-list" and resolved
+                                and resolved[1] == "alias")
+        if alias_beats_list:
+            url = resolved[0]
 
         # CMS enrollment layer: the practitioner's enrolled group resolves to
         # an endpoint. Unlike every layer above it, this does not require a
@@ -1011,7 +1105,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
         if native or filled or resolved or enrolled:
             reaches_endpoint += 1
             fill_only += bool(filled)
-            list_only += filled == "vendor-npi-list"
+            list_only += bool(filled == "vendor-npi-list"
+                              and not alias_beats_list)
             resolved_only += bool(resolved and not (native or filled))
             enrolled_only += bool(enrolled)
             vendor = url_vendor.get(url) or (enrolled[2] if enrolled else None)
@@ -1026,10 +1121,14 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             bands["green"] += 1
         elif filled == "vendor-npi":
             bands["yellow"] += 1
+        elif alias_beats_list:
+            bands["resolved"] += 1
+            resolved_by_tier["alias"] += 1
         elif filled:
             bands["vendor_list"] += 1
         elif resolved:
             bands["resolved"] += 1
+            resolved_by_tier[resolved[1]] += 1
         elif enrolled:
             bands["enrolled"] += 1
         elif candidate_url:
@@ -1094,13 +1193,16 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
          "finding": "vendor-endpoint-attribution"},
     ]
 
-    def resolve_org(o):
-        """(url, basis) for one organization, best evidence first."""
-        url = ep_by_id.get(o["org_id"])
-        if url:
-            return url, "ndh"
-        hit = org_npi_endpoint(o["org_npi"] or "", ep_by_npi, npi_url,
-                               url_npi_count)
+    def resolve_org(o, with_resolution=True):
+        """(url, basis) for one organization at its strongest tier.
+
+        The shared ladder (`member_endpoint`), then the name candidate, which
+        is never a linkage. `with_resolution=False` leaves out H53, for the
+        work queue and the candidate count, whose meaning is "nothing but a
+        name match" and "no identifier route" respectively.
+        """
+        hit = member_endpoint(o, ep_by_id, ep_by_npi, npi_url, org_resolution,
+                              url_npi_count, with_resolution=with_resolution)
         if hit:
             return hit
         url = name_url.get(norm_org_name(o["org_name"]))
@@ -1113,11 +1215,11 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
     orgs_with_candidate = 0
     for o in org_rows:
         _, basis = resolve_org(o)
-        if basis in ("ndh", "vendor-npi"):
+        if basis in DETERMINISTIC_TIERS:
             orgs_with_endpoint += 1
         elif basis == "vendor-npi-list":
             orgs_with_list += 1
-        elif basis == "name-candidate":
+        if resolve_org(o, with_resolution=False)[1] == "name-candidate":
             orgs_with_candidate += 1
 
     geo = None
@@ -1130,10 +1232,6 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             url, basis = resolve_org(o)
             if basis == "name-candidate":
                 url, basis = None, None  # a candidate is not a linkage
-            if not url:
-                hit = org_resolution.get(o["org_id"])
-                if hit:
-                    url, basis = hit[0], hit[1]
             o["endpoint"] = url
             o["tier"] = basis
             o["vendor"] = url_vendor.get(url) if url else None
@@ -1163,7 +1261,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 if o["org_npi"] else None,
         }
         for o in org_rows
-        if resolve_org(o)[1] is None and o["practitioners"] >= 25
+        if resolve_org(o, with_resolution=False)[1] is None
+        and o["practitioners"] >= 25
     ]
     unlinked.sort(key=lambda r: -r["practitioners"])
     unlinked = unlinked[:100]
@@ -1180,10 +1279,17 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "practitioners": o["practitioners"],
             # A candidate URL is reported in its own field so a consumer cannot
             # read it as a resolved endpoint by accident.
-            "endpoint": url if basis in ("ndh", "vendor-npi",
-                                         "vendor-npi-list") else None,
+            "endpoint": url if basis in _TIER_RANK else None,
             "endpoint_candidate": url if basis == "name-candidate" else None,
             "endpoint_basis": basis,
+            # False for NDH and vendor-npi; true for every other tier.
+            "endpoint_inferred": (basis not in DETERMINISTIC_TIERS
+                                  if basis in _TIER_RANK else None),
+            # How many NPIs the vendor lists beside this URL (H51), for a
+            # vendor-NPI basis; more than LIST_THRESHOLD is vendor-npi-list.
+            "npis_on_url": (url_npi_count.get(url)
+                            if basis in ("vendor-npi", "vendor-npi-list")
+                            else None),
             "vendor": url_vendor.get(url) if url else None,
         })
 
@@ -1402,6 +1508,11 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "name_matched_candidates": bands["candidate"],
             "organizations_with_name_candidate_only": orgs_with_candidate,
         },
+        # Funnel-level corrections: the statewide headline moved with a
+        # method change. Rendered beside the headline, not only in the
+        # systems table.
+        "corrections": [],
+        "field_notes": FIELD_NOTES,
         "funnel": funnel,
         "confidence": {
             "note": (
@@ -1409,14 +1520,17 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 "itself carries the whole chain. Yellow means the last link "
                 "came from a vendor-published NPI that matches an NDH "
                 "organization: deterministic, but not the directory's own "
-                "statement. Vendor list means the vendor publishes the "
+                f"statement; since FHI-73 only on a URL listing {LIST_THRESHOLD} "
+                "or fewer NPIs. Vendor list means the vendor publishes the "
                 f"organization's NPI beside a URL together with more than "
                 f"{LIST_THRESHOLD} other NPIs (a practice-wide or brand-wide "
                 "list), so the NPI is published but the URL is not shown to "
                 "serve that organization: counted as reaching an endpoint, "
                 "not as deterministic. Resolved means the organization was "
                 "matched to a vendor brand by curated alias, name or brand "
-                "prefix plus state (H53). Enrolled means only the "
+                "prefix plus state (H53); a curated alias outranks a vendor "
+                "list, a name or brand match does not (resolved_by_tier "
+                "splits it). Enrolled means only the "
                 "practitioner's CMS-enrolled group reaches an endpoint. Red "
                 "means the practitioner reaches an "
                 "organization and stops. None means no organization at all. "
@@ -1431,6 +1545,8 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             # page's band bar silently left out every practitioner reached
             # through H53 resolution or CMS enrollment.
             "resolved": bands["resolved"],
+            "resolved_by_tier": {t: resolved_by_tier[t] for t in
+                                 ("alias", "name-state", "brand-state")},
             "enrolled": bands["enrolled"],
             "candidate": bands["candidate"],
             "red": bands["red"],
@@ -1482,9 +1598,12 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                     f"beside a URL listing more than {LIST_THRESHOLD} NPIs, a "
                     "practice-wide or brand-wide list (athenahealth attaches "
                     "one practice list to every department), so the URL is "
-                    "not shown to serve that member; inference. "
+                    "not shown to serve that member; inference, ranked below "
+                    "alias. "
                     "alias: a curated, sourced legal-name-to-brand link "
-                    "(analysis/org_aliases.json). name-state and brand-state: "
+                    "(analysis/org_aliases.json); it outranks a vendor NPI "
+                    "list because it names this member, while a list names "
+                    "everyone in a practice. name-state and brand-state: "
                     "the member's name or brand prefix matches a vendor brand "
                     "in the same state (H53). Those three are inference. "
                     "cms-enrollment-own-endpoint: the clinician's CMS-enrolled "
@@ -1494,7 +1613,9 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                     "for this one. systems_reaching_an_endpoint and "
                     "practitioners_in_a_system_that_reaches_an_endpoint count "
                     "every tier; the _deterministic keys count the NDH and "
-                    "vendor-npi tiers only."
+                    "vendor-npi tiers only, and since FHI-73 vendor-npi means "
+                    f"a URL listing {LIST_THRESHOLD} or fewer NPIs, so they "
+                    "are narrower than in earlier files (see field_notes)."
                 ),
                 "order": list(SYSTEM_TIERS),
                 "deterministic": list(DETERMINISTIC_TIERS),
@@ -1565,7 +1686,9 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                 "alias, name or brand match, or CMS enrollment is hollow with a blue "
                 "ring and its links are dashed (tier on each link). Systems "
                 "with no edge are the finding: they hold practitioners and "
-                "nothing public connects them to a system that serves records."
+                "nothing public connects them to a system that serves records. "
+                "Since FHI-73 connected_deterministic excludes a system "
+                "reached only through a vendor NPI list (see field_notes)."
             ),
             "nodes": g_nodes,
             "links": g_links,
@@ -1607,6 +1730,7 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "per role.",
         ],
     }
+    payload["corrections"] = funnel_corrections(state, payload["summary"])
     return payload
 
 

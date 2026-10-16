@@ -654,8 +654,10 @@ KNOWN_SYSTEM_DOMAINS = {
 
 # A vendor URL listing more NPIs than this is a practice-wide or brand-wide
 # list. Matching an organization NPI through it is its own tier,
-# `vendor-npi-list`, never deterministic (FHI-73). Same value as
-# h51_vendor_endpoint_attribution.LIST_THRESHOLD, which bands the pairs.
+# `vendor-npi-list` in the ledger and `npi-list` in H53, never deterministic
+# (FHI-73). The single source: h51_vendor_endpoint_attribution.py (which
+# bands the pairs), h53_org_endpoint_resolution.py and state_connectivity.py
+# all import it from here.
 LIST_THRESHOLD = 10
 
 
@@ -722,6 +724,32 @@ KNOWN_UNREACHED = {
 }
 
 
+# Known systems whose own-domain endpoint no MEMBER organization's route
+# reaches (NDH, vendor NPI, alias, vendor NPI list, name or brand), although
+# a clinician's CMS-enrolled group does. A member-tier zero for a known system
+# fails the run unless the system is listed here, and a listed system that
+# any member tier reaches fails as stale, so an entry cannot outlive the gap.
+# The enrollment reach is still published every run as a measured row.
+#
+# Jefferson, measured on the 2026-10-07 PA slice (FHI-73): fhir.jefferson.edu
+# is published by Epic under "Thomas Jefferson University Health System";
+# none of the JEFFERSON group's member organizations carries the NPI Epic
+# lists there or a name or alias that resolves to that brand, and 1,378
+# clinicians reach the domain only through the CMS-enrolled group Jefferson
+# University Physicians.
+KNOWN_MEMBER_UNREACHED = {
+    "PA": {
+        "Jefferson": (
+            "No JEFFERSON member organization carries the NPI Epic lists on "
+            "fhir.jefferson.edu or a name or curated alias that resolves to "
+            "the Thomas Jefferson University Health System brand (measured on "
+            "the 2026-10-07 release); clinicians reach the domain only "
+            "through the CMS-enrolled group Jefferson University Physicians."
+        ),
+    },
+}
+
+
 # Tiers that describe one practitioner's own record rather than a member
 # organization; excluded from the reach control's "reached" count.
 ENROLLMENT_TIERS = frozenset({"cms-enrollment-own-endpoint"})
@@ -756,7 +784,7 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                           parent_by_npi=None, owner_by_npi=None,
                           reach_by_system=None, available_urls=None,
                           known_domains=None, known_unreached=None,
-                          acknowledged=None):
+                          acknowledged=None, known_member_unreached=None):
     """Positive controls on the system rollup. Returns a list of problems.
 
     An empty list means the run may publish. Four checks:
@@ -789,12 +817,15 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
          - Reached at any tier while listed in `KNOWN_UNREACHED`: a problem,
            the entry is stale. Counting enrollment here is what makes a wrong
            "no CMS-enrolled group resolves to it" fail the run (FHI-73).
-         - Zero through member tiers but reached through enrollment: not a
-           problem, appended to `acknowledged` with the measured counts, so
-           the member-route gap is published every run without a hardcoded
-           entry. Trade-off, stated plainly: a regression that dropped every
-           member tier for a system that enrollment still reaches no longer
-           crashes the run; it publishes a member-tier zero instead.
+         - Zero through member tiers but reached through enrollment: a
+           problem unless the system is listed in `KNOWN_MEMBER_UNREACHED`
+           (or `known_member_unreached`). Either way the measured row is
+           appended to `acknowledged`, so the enrollment reach is published.
+           Without the allowlist, a regression that dropped every member
+           tier for a system enrollment still reaches would publish a
+           member-tier zero instead of failing.
+         - Reached through a member tier while listed in
+           `KNOWN_MEMBER_UNREACHED`: a problem, the entry is stale.
 
     `systems` and `excluded` are the full lists from `build_systems`, not the
     truncated payload rows. Organizations claimed by an attested tier are
@@ -838,6 +869,9 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                            if known_domains is None else known_domains)
         unreached = (KNOWN_UNREACHED.get(state, {})
                      if known_unreached is None else known_unreached)
+        member_unreached = (KNOWN_MEMBER_UNREACHED.get(state, {})
+                            if known_member_unreached is None
+                            else known_member_unreached)
         hosts = {url_host(u) for u in (available_urls or ())} - {""}
         if domains_by_name and not hosts:
             # Silent-zero guard: with no endpoint URLs loaded every domain
@@ -889,17 +923,35 @@ def check_system_controls(state, org_rows, systems, excluded, known=None,
                     f"{', '.join(present)} ({reached:,} through member tiers, "
                     f"{reached_any - reached:,} through CMS enrollment); "
                     f"remove or restate the entry")
-            elif reached == 0 and acknowledged is not None:
-                acknowledged.append({
-                    "system": name,
-                    "domains": present,
-                    "reason": (
-                        f"No member organization's own route (NDH "
-                        f"attribution, vendor-published NPI, or H53 alias, "
-                        f"name or brand resolution) reaches "
-                        f"{', '.join(present)}. {reached_any:,} clinicians "
-                        f"reach it only through their CMS-enrolled group."),
-                    "reached_through_member_tiers": 0,
-                    "reached_through_enrollment_only": reached_any,
-                })
+            elif reached == 0:
+                listed = member_unreached.get(name)
+                if not listed:
+                    problems.append(
+                        f"known system {name} publishes an endpoint on "
+                        f"{', '.join(present)} that no member organization's "
+                        f"route reaches ({reached_any:,} clinicians reach it "
+                        f"only through CMS enrollment); fix the member route "
+                        f"or list the system in KNOWN_MEMBER_UNREACHED with "
+                        f"measured evidence")
+                if acknowledged is not None:
+                    row = {
+                        "system": name,
+                        "domains": present,
+                        "reason": (
+                            f"No member organization's own route (NDH "
+                            f"attribution, vendor-published NPI, or H53 "
+                            f"alias, name or brand resolution) reaches "
+                            f"{', '.join(present)}. {reached_any:,} clinicians "
+                            f"reach it only through their CMS-enrolled group."),
+                        "reached_through_member_tiers": 0,
+                        "reached_through_enrollment_only": reached_any,
+                    }
+                    if listed:
+                        row["listed_reason"] = listed
+                    acknowledged.append(row)
+            elif member_unreached.get(name):
+                problems.append(
+                    f"known system {name} is listed in KNOWN_MEMBER_UNREACHED "
+                    f"but {reached:,} practitioners reach {', '.join(present)} "
+                    f"through member tiers; remove the entry")
     return problems

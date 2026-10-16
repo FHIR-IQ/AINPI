@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-16T22:45:11+00:00",
+  "generated_at": "2026-10-16T23:34:27+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "d936c61",
+  "commit_sha": "0929ad5",
   "summary": {
     "practitioners": 227917,
     "with_role": 100379,
@@ -16,7 +16,7 @@
     "reaches_endpoint_after_vendor_npi_fill": 16563,
     "reaches_endpoint_deterministic": 6555,
     "reaches_endpoint_deterministic_pct": 2.9,
-    "reaches_endpoint_via_vendor_npi_list": 10008,
+    "reaches_endpoint_via_vendor_npi_list": 8967,
     "vendor_npi_list_threshold": 10,
     "reaches_endpoint_after_resolution": 42736,
     "reaches_endpoint_after_cms_enrollment": 50812,
@@ -31,6 +31,21 @@
     "organizations_with_endpoint_via_vendor_npi_list": 1628,
     "name_matched_candidates": 1693,
     "organizations_with_name_candidate_only": 1185
+  },
+  "corrections": [
+    {
+      "date": "2026-10-16",
+      "issue": "FHI-73",
+      "what": "The 2026-10-14 update reported 15.8% of Pennsylvania practitioners reaching a FHIR endpoint (35.8% of those with an affiliation). On 2026-10-16 the method changed: H51 now keeps every NPI a vendor lists beside an endpoint URL, where before it kept only the first. Under the new method the any-route figure reads 22.3% (50.3% of practitioners affiliated through any source). The deterministic figure (the NDH's own attribution, or a vendor NPI on a URL listing 10 or fewer NPIs) reads 2.9%. Neither is comparable with the 15.8% of 2026-10-14 or the 18.7% of the 2026-08-20 release.",
+      "since": "the 2026-10-14 update"
+    }
+  ],
+  "field_notes": {
+    "summary.organizations_with_endpoint": "Organizations reached through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs. Before FHI-73 (2026-10-16) it also counted every vendor NPI match through a practice-wide list; those are now organizations_with_endpoint_via_vendor_npi_list (an organization a curated alias reaches is counted at alias instead). Not comparable with earlier files.",
+    "confidence.yellow": "Practitioners whose best route is a vendor NPI on a URL listing 10 or fewer NPIs. Before FHI-73 it included vendor NPIs on practice-wide lists, now confidence.vendor_list.",
+    "systems.rows[].endpoint_count_deterministic": "Endpoints a system reaches through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs. vendor-npi-list endpoints are counted in endpoint_count only.",
+    "systems.systems_reaching_an_endpoint_deterministic": "Systems with at least one endpoint_count_deterministic endpoint; excludes systems reached only through a vendor NPI list.",
+    "graph.nodes[].connected_deterministic": "True when a system reaches an endpoint through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs; false for a system reached only through a vendor NPI list, alias, name or brand match, or CMS enrollment."
   },
   "funnel": [
     {
@@ -69,7 +84,7 @@
       "step": "Reaches a FHIR endpoint",
       "count": 50812,
       "pct": 22.3,
-      "note": "Of these, 6,555 are deterministic (the NDH, or a vendor NPI on a URL listing 10 or fewer). Includes 14,656 reachable only after the vendor-published NPI fill (10,008 of them only through a URL whose vendor lists more than 10 NPIs, which is not deterministic), 26,173 only after name or brand resolution, and 8,076 only via the practitioner's CMS-enrolled group, of which 595 carry no PractitionerRole at all. The NDH alone reaches 1,907.",
+      "note": "Of these, 6,555 are deterministic (the NDH, or a vendor NPI on a URL listing 10 or fewer). Includes 14,656 reachable only after the vendor-published NPI fill (8,967 of them only through a URL whose vendor lists more than 10 NPIs, which is not deterministic), 26,173 only after name or brand resolution, and 8,076 only via the practitioner's CMS-enrolled group, of which 595 carry no PractitionerRole at all. The NDH alone reaches 1,907.",
       "finding": "endpoint-org-linkage"
     },
     {
@@ -89,11 +104,16 @@
     }
   ],
   "confidence": {
-    "note": "Bands describe method, not quality. Green means the NDH itself carries the whole chain. Yellow means the last link came from a vendor-published NPI that matches an NDH organization: deterministic, but not the directory's own statement. Vendor list means the vendor publishes the organization's NPI beside a URL together with more than 10 other NPIs (a practice-wide or brand-wide list), so the NPI is published but the URL is not shown to serve that organization: counted as reaching an endpoint, not as deterministic. Resolved means the organization was matched to a vendor brand by curated alias, name or brand prefix plus state (H53). Enrolled means only the practitioner's CMS-enrolled group reaches an endpoint. Red means the practitioner reaches an organization and stops. None means no organization at all. Candidate is weaker than red on evidence and is never counted as connectivity: an endpoint exists under a matching name, with nothing deterministic tying it to this organization.",
+    "note": "Bands describe method, not quality. Green means the NDH itself carries the whole chain. Yellow means the last link came from a vendor-published NPI that matches an NDH organization: deterministic, but not the directory's own statement; since FHI-73 only on a URL listing 10 or fewer NPIs. Vendor list means the vendor publishes the organization's NPI beside a URL together with more than 10 other NPIs (a practice-wide or brand-wide list), so the NPI is published but the URL is not shown to serve that organization: counted as reaching an endpoint, not as deterministic. Resolved means the organization was matched to a vendor brand by curated alias, name or brand prefix plus state (H53); a curated alias outranks a vendor list, a name or brand match does not (resolved_by_tier splits it). Enrolled means only the practitioner's CMS-enrolled group reaches an endpoint. Red means the practitioner reaches an organization and stops. None means no organization at all. Candidate is weaker than red on evidence and is never counted as connectivity: an endpoint exists under a matching name, with nothing deterministic tying it to this organization.",
     "green": 1907,
     "yellow": 4648,
-    "vendor_list": 10008,
-    "resolved": 26173,
+    "vendor_list": 8967,
+    "resolved": 27214,
+    "resolved_by_tier": {
+      "alias": 11393,
+      "name-state": 5548,
+      "brand-state": 10273
+    },
     "enrolled": 8076,
     "candidate": 1693,
     "red": 41588,
@@ -116427,9 +116447,9 @@
     ]
   },
   "vendors": {
-    "Epic (User-access Brands)": 38934,
-    "athenahealth": 5773,
-    "Oracle Health": 4622,
+    "Epic (User-access Brands)": 39583,
+    "athenahealth": 5340,
+    "Oracle Health": 4406,
     "Practice Fusion": 84,
     "Veradigm": 43
   },
@@ -116501,20 +116521,20 @@
       "by_tier": {
         "ndh": 823,
         "vendor-npi": 2217,
-        "vendor-npi-list": 7728,
-        "alias": 10362,
+        "alias": 11220,
+        "vendor-npi-list": 6870,
         "name-state": 5076,
         "brand-state": 10336,
         "cms-enrollment-own-endpoint": 3286
       }
     },
     "tiers": {
-      "note": "Each system's reach is counted per distinct clinician at the strongest tier among the member organizations they hold roles at. ndh: the NDH attributes the endpoint to the member. vendor-npi: an EHR vendor publishes the member's NPI beside the endpoint, on a URL listing 10 or fewer NPIs. Both are deterministic. vendor-npi-list: the vendor publishes the member's NPI beside a URL listing more than 10 NPIs, a practice-wide or brand-wide list (athenahealth attaches one practice list to every department), so the URL is not shown to serve that member; inference. alias: a curated, sourced legal-name-to-brand link (analysis/org_aliases.json). name-state and brand-state: the member's name or brand prefix matches a vendor brand in the same state (H53). Those three are inference. cms-enrollment-own-endpoint: the clinician's CMS-enrolled group resolves to an endpoint this system already reaches, or one on the system's own domain; enrollment that lands on another system's endpoint is not counted for this one. systems_reaching_an_endpoint and practitioners_in_a_system_that_reaches_an_endpoint count every tier; the _deterministic keys count the NDH and vendor-npi tiers only.",
+      "note": "Each system's reach is counted per distinct clinician at the strongest tier among the member organizations they hold roles at. ndh: the NDH attributes the endpoint to the member. vendor-npi: an EHR vendor publishes the member's NPI beside the endpoint, on a URL listing 10 or fewer NPIs. Both are deterministic. vendor-npi-list: the vendor publishes the member's NPI beside a URL listing more than 10 NPIs, a practice-wide or brand-wide list (athenahealth attaches one practice list to every department), so the URL is not shown to serve that member; inference, ranked below alias. alias: a curated, sourced legal-name-to-brand link (analysis/org_aliases.json); it outranks a vendor NPI list because it names this member, while a list names everyone in a practice. name-state and brand-state: the member's name or brand prefix matches a vendor brand in the same state (H53). Those three are inference. cms-enrollment-own-endpoint: the clinician's CMS-enrolled group resolves to an endpoint this system already reaches, or one on the system's own domain; enrollment that lands on another system's endpoint is not counted for this one. systems_reaching_an_endpoint and practitioners_in_a_system_that_reaches_an_endpoint count every tier; the _deterministic keys count the NDH and vendor-npi tiers only, and since FHI-73 vendor-npi means a URL listing 10 or fewer NPIs, so they are narrower than in earlier files (see field_notes).",
       "order": [
         "ndh",
         "vendor-npi",
-        "vendor-npi-list",
         "alias",
+        "vendor-npi-list",
         "name-state",
         "brand-state",
         "cms-enrollment-own-endpoint"
@@ -116561,6 +116581,7 @@
           "reason": "No member organization's own route (NDH attribution, vendor-published NPI, or H53 alias, name or brand resolution) reaches jefferson.edu. 1,378 clinicians reach it only through their CMS-enrolled group.",
           "reached_through_member_tiers": 0,
           "reached_through_enrollment_only": 1378,
+          "listed_reason": "No JEFFERSON member organization carries the NPI Epic lists on fhir.jefferson.edu or a name or curated alias that resolves to the Thomas Jefferson University Health System brand (measured on the 2026-10-07 release); clinicians reach the domain only through the CMS-enrolled group Jefferson University Physicians.",
           "via": [
             "CMS-enrolled group: Jefferson University Physicians"
           ]
@@ -117069,8 +117090,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 6751,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 5
@@ -117133,8 +117154,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 1275,
           "brand-state": 3924,
           "cms-enrollment-own-endpoint": 0
@@ -117197,8 +117218,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 3410,
           "cms-enrollment-own-endpoint": 1
@@ -117269,8 +117290,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 310,
           "alias": 0,
+          "vendor-npi-list": 310,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 2650
@@ -117342,8 +117363,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 99,
           "alias": 0,
+          "vendor-npi-list": 99,
           "name-state": 393,
           "brand-state": 2536,
           "cms-enrollment-own-endpoint": 0
@@ -117414,8 +117435,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 2620,
           "brand-state": 336,
           "cms-enrollment-own-endpoint": 0
@@ -117494,8 +117515,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 12,
-          "vendor-npi-list": 35,
           "alias": 0,
+          "vendor-npi-list": 35,
           "name-state": 1,
           "brand-state": 2325,
           "cms-enrollment-own-endpoint": 161
@@ -117543,24 +117564,24 @@
         ],
         "endpoints": [
           {
-            "url": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
-            "vendor": "athenahealth",
-            "via_member": "PINNACLE HEALTH REGIONAL PHYSICIANS",
-            "tier": "vendor-npi-list",
-            "practitioners": 431
-          },
-          {
             "url": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
             "via_member": "PINNACLE HEALTH MEDICAL SERVICES",
             "tier": "alias",
-            "practitioners": 1545
+            "practitioners": 1815
+          },
+          {
+            "url": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
+            "vendor": "athenahealth",
+            "via_member": "PINNACLE HEALTH REGIONAL PHYSICIANS",
+            "tier": "vendor-npi-list",
+            "practitioners": 161
           }
         ],
         "endpoint_count": 2,
         "endpoint_count_by_tier": {
-          "vendor-npi-list": 1,
-          "alias": 1
+          "alias": 1,
+          "vendor-npi-list": 1
         },
         "endpoint_count_deterministic": 0,
         "reaches_endpoint": 1976,
@@ -117568,8 +117589,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 431,
-          "alias": 1512,
+          "alias": 1782,
+          "vendor-npi-list": 161,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 33
@@ -117633,8 +117654,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 1378
@@ -117665,8 +117686,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -117729,8 +117750,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 1,
-          "vendor-npi-list": 129,
           "alias": 0,
+          "vendor-npi-list": 129,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -117781,8 +117802,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -117859,8 +117880,8 @@
         "reach_by_tier": {
           "ndh": 2,
           "vendor-npi": 3,
-          "vendor-npi-list": 0,
           "alias": 1544,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 3,
           "cms-enrollment-own-endpoint": 40
@@ -117947,8 +117968,8 @@
         "reach_by_tier": {
           "ndh": 7,
           "vendor-npi": 3,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 1626,
           "cms-enrollment-own-endpoint": 0
@@ -118004,16 +118025,16 @@
           {
             "url": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
             "vendor": "Epic (User-access Brands)",
-            "via_member": "LANCASTER ORTHOPEDIC GROUP INC",
-            "tier": "vendor-npi-list",
-            "practitioners": 1440
+            "via_member": "LANCASTER GENERAL MEDICAL GROUP",
+            "tier": "alias",
+            "practitioners": 1445
           },
           {
             "url": "https://api.platform.athenahealth.com/14261/brand/6/csg/1/fhir/r4",
             "vendor": "athenahealth",
             "via_member": "LANCASTER HEALTH CENTER",
             "tier": "vendor-npi-list",
-            "practitioners": 93
+            "practitioners": 88
           },
           {
             "url": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
@@ -118026,7 +118047,8 @@
         "endpoint_count": 4,
         "endpoint_count_by_tier": {
           "ndh": 1,
-          "vendor-npi-list": 3
+          "alias": 1,
+          "vendor-npi-list": 2
         },
         "endpoint_count_deterministic": 1,
         "reaches_endpoint": 1556,
@@ -118034,8 +118056,8 @@
         "reach_by_tier": {
           "ndh": 2,
           "vendor-npi": 0,
-          "vendor-npi-list": 185,
-          "alias": 785,
+          "alias": 790,
+          "vendor-npi-list": 180,
           "name-state": 0,
           "brand-state": 584,
           "cms-enrollment-own-endpoint": 0
@@ -118100,8 +118122,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 296,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 1037
@@ -118136,8 +118158,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118198,8 +118220,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 991,
           "alias": 0,
+          "vendor-npi-list": 991,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118252,8 +118274,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118314,8 +118336,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 982,
           "alias": 0,
+          "vendor-npi-list": 982,
           "name-state": 55,
           "brand-state": 16,
           "cms-enrollment-own-endpoint": 0
@@ -118378,8 +118400,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 296,
+          "vendor-npi-list": 0,
           "name-state": 58,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 137
@@ -118424,8 +118446,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118476,8 +118498,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118538,8 +118560,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 488,
           "alias": 0,
+          "vendor-npi-list": 488,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118609,8 +118631,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 126,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 52
@@ -118674,8 +118696,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 694,
           "alias": 0,
+          "vendor-npi-list": 694,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118760,8 +118782,8 @@
         "reach_by_tier": {
           "ndh": 7,
           "vendor-npi": 66,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118812,8 +118834,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 127,
           "alias": 0,
+          "vendor-npi-list": 127,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118866,8 +118888,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118926,8 +118948,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 660,
           "alias": 0,
+          "vendor-npi-list": 660,
           "name-state": 3,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -118990,8 +119012,8 @@
         "reach_by_tier": {
           "ndh": 15,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119033,8 +119055,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 49,
           "alias": 0,
+          "vendor-npi-list": 49,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119087,8 +119109,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119120,8 +119142,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119172,8 +119194,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119242,8 +119264,8 @@
         "reach_by_tier": {
           "ndh": 1,
           "vendor-npi": 1,
-          "vendor-npi-list": 14,
           "alias": 0,
+          "vendor-npi-list": 14,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119315,8 +119337,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 3,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 16,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 186
@@ -119372,8 +119394,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 149,
           "cms-enrollment-own-endpoint": 364
@@ -119404,8 +119426,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119436,8 +119458,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119527,8 +119549,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 43,
-          "vendor-npi-list": 436,
           "alias": 0,
+          "vendor-npi-list": 436,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119575,8 +119597,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119645,8 +119667,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 11,
           "alias": 0,
+          "vendor-npi-list": 11,
           "name-state": 381,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 32
@@ -119717,8 +119739,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 51,
-          "vendor-npi-list": 2,
           "alias": 0,
+          "vendor-npi-list": 2,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119769,8 +119791,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119809,8 +119831,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119856,8 +119878,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 1,
           "alias": 0,
+          "vendor-npi-list": 1,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119920,8 +119942,8 @@
         "reach_by_tier": {
           "ndh": 45,
           "vendor-npi": 3,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -119984,8 +120006,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 384,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 12
@@ -120027,8 +120049,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 184
@@ -120081,8 +120103,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120130,8 +120152,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120182,8 +120204,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120226,8 +120248,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120281,8 +120303,8 @@
         "reach_by_tier": {
           "ndh": 7,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120333,8 +120355,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 318,
           "alias": 0,
+          "vendor-npi-list": 318,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 1
@@ -120383,8 +120405,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 105,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120439,8 +120461,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 344,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 2
@@ -120503,8 +120525,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 0,
           "alias": 0,
+          "vendor-npi-list": 0,
           "name-state": 2,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 10
@@ -120563,8 +120585,8 @@
         "reach_by_tier": {
           "ndh": 0,
           "vendor-npi": 0,
-          "vendor-npi-list": 282,
           "alias": 0,
+          "vendor-npi-list": 282,
           "name-state": 0,
           "brand-state": 0,
           "cms-enrollment-own-endpoint": 0
@@ -120576,7 +120598,7 @@
     ]
   },
   "graph": {
-    "note": "The 50 largest systems, the endpoints any of their members reach, and the EHR vendor behind each endpoint. A system is filled only when the NDH or a vendor-published NPI reaches it (connected_deterministic); one reached only through a vendor NPI on a URL listing more than 10 NPIs, alias, name or brand match, or CMS enrollment is hollow with a blue ring and its links are dashed (tier on each link). Systems with no edge are the finding: they hold practitioners and nothing public connects them to a system that serves records.",
+    "note": "The 50 largest systems, the endpoints any of their members reach, and the EHR vendor behind each endpoint. A system is filled only when the NDH or a vendor-published NPI reaches it (connected_deterministic); one reached only through a vendor NPI on a URL listing more than 10 NPIs, alias, name or brand match, or CMS enrollment is hollow with a blue ring and its links are dashed (tier on each link). Systems with no edge are the finding: they hold practitioners and nothing public connects them to a system that serves records. Since FHI-73 connected_deterministic excludes a system reached only through a vendor NPI list (see field_notes).",
     "nodes": [
       {
         "id": "sys:brand:UNIVERSITY OF PITTSBURGH",
@@ -120810,7 +120832,7 @@
         "label": "epicproxy.lghealth.org",
         "type": "endpoint",
         "vendor": "Epic (User-access Brands)",
-        "via": "LANCASTER ORTHOPEDIC GROUP INC"
+        "via": "LANCASTER GENERAL MEDICAL GROUP"
       },
       {
         "id": "sys:brand:TEMPLE",
@@ -121372,17 +121394,6 @@
       },
       {
         "source": "sys:brand:PINNACLE",
-        "target": "ep:api.platform.athenahealth.com",
-        "kind": "reaches",
-        "tier": "vendor-npi-list"
-      },
-      {
-        "source": "ep:api.platform.athenahealth.com",
-        "target": "vendor:athenahealth",
-        "kind": "served-by"
-      },
-      {
-        "source": "sys:brand:PINNACLE",
         "target": "ep:epicent-prd-rp.upmc.com",
         "kind": "reaches",
         "tier": "alias"
@@ -121390,6 +121401,17 @@
       {
         "source": "ep:epicent-prd-rp.upmc.com",
         "target": "vendor:Epic (User-access Brands)",
+        "kind": "served-by"
+      },
+      {
+        "source": "sys:brand:PINNACLE",
+        "target": "ep:api.platform.athenahealth.com",
+        "kind": "reaches",
+        "tier": "vendor-npi-list"
+      },
+      {
+        "source": "ep:api.platform.athenahealth.com",
+        "target": "vendor:athenahealth",
         "kind": "served-by"
       },
       {
@@ -121491,7 +121513,7 @@
         "source": "sys:brand:LANCASTER",
         "target": "ep:epicproxy.lghealth.org",
         "kind": "reaches",
-        "tier": "vendor-npi-list"
+        "tier": "alias"
       },
       {
         "source": "ep:epicproxy.lghealth.org",
@@ -121862,10 +121884,12 @@
       "city": "Pittsburgh",
       "state": "PA",
       "practitioners": 6479,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1619935004",
@@ -121874,10 +121898,12 @@
       "city": "Pittsburgh",
       "state": "PA",
       "practitioners": 5518,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1558313023",
@@ -121886,10 +121912,12 @@
       "city": "Lewisburg",
       "state": "PA",
       "practitioners": 4777,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1366493868",
@@ -121898,10 +121926,12 @@
       "city": "Reedsville",
       "state": "PA",
       "practitioners": 3963,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1871981985",
@@ -121913,6 +121943,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -121922,10 +121954,12 @@
       "city": "Frackville",
       "state": "PA",
       "practitioners": 3100,
-      "endpoint": null,
+      "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1710845144",
@@ -121934,10 +121968,12 @@
       "city": "Bethlehem",
       "state": "PA",
       "practitioners": 2850,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1104799428",
@@ -121946,10 +121982,12 @@
       "city": "Lewisburg",
       "state": "PA",
       "practitioners": 2801,
-      "endpoint": null,
+      "endpoint": "https://interconnect.wellspan.org/interconnect-prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1215752548",
@@ -121961,6 +121999,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -121973,6 +122013,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -121982,10 +122024,12 @@
       "city": "York",
       "state": "PA",
       "practitioners": 2528,
-      "endpoint": null,
+      "endpoint": "https://interconnect.wellspan.org/interconnect-prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1073081493",
@@ -121997,6 +122041,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122009,6 +122055,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122021,6 +122069,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122033,6 +122083,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122045,6 +122097,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122057,6 +122111,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122066,10 +122122,12 @@
       "city": "Carlisle",
       "state": "PA",
       "practitioners": 1739,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1982643003",
@@ -122081,6 +122139,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122093,6 +122153,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122102,10 +122164,12 @@
       "city": "Carlisle",
       "state": "PA",
       "practitioners": 1501,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1407638794",
@@ -122117,6 +122181,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122126,10 +122192,12 @@
       "city": "Montoursville",
       "state": "PA",
       "practitioners": 1496,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1922077643",
@@ -122138,10 +122206,12 @@
       "city": "Wynnewood",
       "state": "PA",
       "practitioners": 1421,
-      "endpoint": null,
+      "endpoint": "https://epicproxy.et1007.epichosted.com/fhirproxy/launch/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1881176949",
@@ -122153,6 +122223,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122165,6 +122237,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122177,6 +122251,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122186,10 +122262,12 @@
       "city": "Montoursville",
       "state": "PA",
       "practitioners": 1274,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1033125455",
@@ -122198,10 +122276,12 @@
       "city": "Cranberry Twp",
       "state": "PA",
       "practitioners": 1198,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1609291350",
@@ -122213,6 +122293,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122225,6 +122307,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122237,6 +122321,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122249,6 +122335,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122261,6 +122349,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122273,6 +122363,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122285,6 +122377,8 @@
       "endpoint": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 37,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122297,6 +122391,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122309,6 +122405,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/czxzx6lxe-l3uyv_vyuzukxovalymhgz",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 33,
       "vendor": "Oracle Health"
     },
     {
@@ -122321,6 +122419,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122333,6 +122433,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122342,10 +122444,12 @@
       "city": "Parkesburg",
       "state": "PA",
       "practitioners": 788,
-      "endpoint": null,
+      "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1174520654",
@@ -122354,10 +122458,12 @@
       "city": "Pittsburgh",
       "state": "PA",
       "practitioners": 726,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1073361564",
@@ -122369,6 +122475,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122381,6 +122489,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122393,6 +122503,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122405,6 +122517,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122414,10 +122528,12 @@
       "city": "Lancaster",
       "state": "PA",
       "practitioners": 665,
-      "endpoint": null,
+      "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1962451153",
@@ -122426,10 +122542,12 @@
       "city": "Sayre",
       "state": "PA",
       "practitioners": 663,
-      "endpoint": null,
+      "endpoint": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1205242609",
@@ -122441,6 +122559,8 @@
       "endpoint": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 37,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122453,6 +122573,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122465,6 +122587,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122477,6 +122601,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122489,6 +122615,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122501,6 +122629,8 @@
       "endpoint": "https://epicproxy.et0962.epichosted.com/apiproxyprd/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 37,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122513,6 +122643,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122525,6 +122657,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122537,6 +122671,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122549,6 +122685,8 @@
       "endpoint": "https://fhir.guthrie.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 37,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -122561,6 +122699,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122570,10 +122710,12 @@
       "city": "Phillipsburg",
       "state": "NJ",
       "practitioners": 566,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1225096639",
@@ -122582,10 +122724,12 @@
       "city": "Pittsburgh",
       "state": "PA",
       "practitioners": 560,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1053181297",
@@ -122597,6 +122741,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122609,6 +122755,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122621,6 +122769,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122633,6 +122783,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122645,6 +122797,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122657,6 +122811,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122669,6 +122825,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122681,6 +122839,8 @@
       "endpoint": null,
       "endpoint_candidate": "https://api.platform.athenahealth.com/11440/brand/1/csg/1/fhir/r4",
       "endpoint_basis": "name-candidate",
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": "athenahealth"
     },
     {
@@ -122693,6 +122853,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122705,6 +122867,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122717,6 +122881,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122729,6 +122895,8 @@
       "endpoint": "https://api.platform.athenahealth.com/11127/brand/1/csg/1/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 42,
       "vendor": "athenahealth"
     },
     {
@@ -122738,10 +122906,12 @@
       "city": "West Grove",
       "state": "PA",
       "practitioners": 451,
-      "endpoint": null,
+      "endpoint": "https://epicsoap.readinghospital.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1134187834",
@@ -122750,10 +122920,12 @@
       "city": "Uniontown",
       "state": "PA",
       "practitioners": 441,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1013441690",
@@ -122765,6 +122937,8 @@
       "endpoint": "https://api.platform.athenahealth.com/15523/brand/3/csg/1/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 62,
       "vendor": "athenahealth"
     },
     {
@@ -122777,6 +122951,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122789,6 +122965,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122798,10 +122976,12 @@
       "city": "Bala Cynwyd",
       "state": "PA",
       "practitioners": 405,
-      "endpoint": null,
+      "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1902881477",
@@ -122813,6 +122993,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122825,6 +123007,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122837,6 +123021,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122849,6 +123035,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122861,6 +123049,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122873,6 +123063,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122882,10 +123074,12 @@
       "city": "Pittsburgh",
       "state": "PA",
       "practitioners": 368,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1487468914",
@@ -122894,10 +123088,12 @@
       "city": "Reading",
       "state": "PA",
       "practitioners": 368,
-      "endpoint": null,
+      "endpoint": "https://epicsoap.readinghospital.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1588603567",
@@ -122906,10 +123102,12 @@
       "city": "Frackville",
       "state": "PA",
       "practitioners": 367,
-      "endpoint": null,
+      "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1942444088",
@@ -122918,10 +123116,12 @@
       "city": "Philadelphia",
       "state": "PA",
       "practitioners": 367,
-      "endpoint": null,
+      "endpoint": "https://epicaccess.templehealth.org/fhirproxyprd/mth/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1588661235",
@@ -122933,6 +123133,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122942,10 +123144,12 @@
       "city": "Montoursville",
       "state": "PA",
       "practitioners": 350,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1467725184",
@@ -122954,10 +123158,12 @@
       "city": "Phillipsburg",
       "state": "NJ",
       "practitioners": 348,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1679677975",
@@ -122969,6 +123175,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122981,6 +123189,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -122993,6 +123203,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123005,6 +123217,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123017,6 +123231,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123029,6 +123245,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123041,6 +123259,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123053,6 +123273,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123065,6 +123287,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123077,6 +123301,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123089,6 +123315,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123101,6 +123329,8 @@
       "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 40,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123110,10 +123340,12 @@
       "city": "Everett",
       "state": "PA",
       "practitioners": 317,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1992387518",
@@ -123122,10 +123354,12 @@
       "city": "Wyomissing",
       "state": "PA",
       "practitioners": 313,
-      "endpoint": null,
+      "endpoint": "https://epicsoap.readinghospital.org/fhir-prd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1205928967",
@@ -123137,6 +123371,8 @@
       "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi",
+      "endpoint_inferred": false,
+      "npis_on_url": 10,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123149,6 +123385,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123161,6 +123399,8 @@
       "endpoint": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 160,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123173,6 +123413,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123185,6 +123427,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123197,6 +123441,8 @@
       "endpoint": null,
       "endpoint_candidate": "https://api.platform.athenahealth.com/20915/brand/1/csg/1/fhir/r4",
       "endpoint_basis": "name-candidate",
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": "athenahealth"
     },
     {
@@ -123209,6 +123455,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123218,10 +123466,12 @@
       "city": "Clarion",
       "state": "PA",
       "practitioners": 298,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1861469223",
@@ -123233,6 +123483,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123245,6 +123497,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123257,6 +123511,8 @@
       "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 40,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123269,6 +123525,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123281,6 +123539,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123293,6 +123553,8 @@
       "endpoint": "https://apps.mywvuchart.com/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 160,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123305,6 +123567,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123317,6 +123581,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123326,10 +123592,12 @@
       "city": "Philadelphia",
       "state": "PA",
       "practitioners": 279,
-      "endpoint": null,
+      "endpoint": "https://epicproxy.et4001.epichosted.com/apiproxyprd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1497831655",
@@ -123341,6 +123609,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123353,6 +123623,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/5c7467fb-60f9-4172-add4-57667a5dfcfa",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 64,
       "vendor": "Oracle Health"
     },
     {
@@ -123365,6 +123637,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123377,6 +123651,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/czxzx6lxe-l3uyv_vyuzukxovalymhgz",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 33,
       "vendor": "Oracle Health"
     },
     {
@@ -123389,6 +123665,8 @@
       "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi",
+      "endpoint_inferred": false,
+      "npis_on_url": 10,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123401,6 +123679,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123413,6 +123693,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123422,10 +123704,12 @@
       "city": "Easton",
       "state": "PA",
       "practitioners": 266,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1770118648",
@@ -123437,6 +123721,8 @@
       "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 16,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123449,6 +123735,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123458,10 +123746,12 @@
       "city": "Easton",
       "state": "PA",
       "practitioners": 259,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1679450910",
@@ -123473,6 +123763,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123485,6 +123777,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123497,6 +123791,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/66620725-6ef3-4a7f-a15f-88b48c4af7dd",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 27,
       "vendor": "Oracle Health"
     },
     {
@@ -123509,6 +123805,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123518,10 +123816,12 @@
       "city": "McKeesport",
       "state": "PA",
       "practitioners": 255,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1447260435",
@@ -123533,6 +123833,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123542,10 +123844,12 @@
       "city": "Tunkhannock",
       "state": "PA",
       "practitioners": 251,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1023458148",
@@ -123557,6 +123861,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123569,6 +123875,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123578,10 +123886,12 @@
       "city": "Philadelphia",
       "state": "PA",
       "practitioners": 249,
-      "endpoint": null,
+      "endpoint": "https://epicproxy.et4001.epichosted.com/apiproxyprd/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1881696698",
@@ -123593,6 +123903,8 @@
       "endpoint": "https://api.platform.athenahealth.com/17399/brand/1/csg/21/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 37,
       "vendor": "athenahealth"
     },
     {
@@ -123602,10 +123914,12 @@
       "city": "Easton",
       "state": "PA",
       "practitioners": 245,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1639158488",
@@ -123617,6 +123931,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123626,10 +123942,12 @@
       "city": "Canonsburg",
       "state": "PA",
       "practitioners": 240,
-      "endpoint": null,
+      "endpoint": "https://epicprisfd.ahn.org/prd-fhir/mychart/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1326060492",
@@ -123641,6 +123959,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123650,10 +123970,12 @@
       "city": "Canonsburg",
       "state": "PA",
       "practitioners": 238,
-      "endpoint": null,
+      "endpoint": "https://epicprisfd.ahn.org/prd-fhir/mychart/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1427604222",
@@ -123662,10 +123984,12 @@
       "city": "Montoursville",
       "state": "PA",
       "practitioners": 238,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1568427532",
@@ -123674,10 +123998,12 @@
       "city": "Monongahela",
       "state": "PA",
       "practitioners": 237,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1114885480",
@@ -123686,10 +124012,12 @@
       "city": "Hanover",
       "state": "PA",
       "practitioners": 235,
-      "endpoint": null,
+      "endpoint": "https://interconnect.wellspan.org/interconnect-prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1740836808",
@@ -123698,10 +124026,12 @@
       "city": "Montoursville",
       "state": "PA",
       "practitioners": 233,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1790737468",
@@ -123713,6 +124043,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123722,10 +124054,12 @@
       "city": "Danville",
       "state": "PA",
       "practitioners": 231,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1114955010",
@@ -123737,6 +124071,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123749,6 +124085,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123761,6 +124099,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123770,10 +124110,12 @@
       "city": "Kittanning",
       "state": "PA",
       "practitioners": 230,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1588489272",
@@ -123785,6 +124127,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123794,10 +124138,12 @@
       "city": "Sugarloaf",
       "state": "PA",
       "practitioners": 228,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1659488351",
@@ -123809,6 +124155,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123818,10 +124166,12 @@
       "city": "Montoursville",
       "state": "PA",
       "practitioners": 225,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1730174731",
@@ -123830,10 +124180,12 @@
       "city": "Allentown",
       "state": "PA",
       "practitioners": 225,
-      "endpoint": null,
+      "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1053848051",
@@ -123845,6 +124197,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123857,6 +124211,8 @@
       "endpoint": "https://api.platform.athenahealth.com/22724/brand/8/csg/122/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi",
+      "endpoint_inferred": false,
+      "npis_on_url": 1,
       "vendor": "athenahealth"
     },
     {
@@ -123869,6 +124225,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123881,6 +124239,8 @@
       "endpoint": "https://epicproxy.lghealth.org/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 40,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -123893,6 +124253,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123902,10 +124264,12 @@
       "city": "Kittanning",
       "state": "PA",
       "practitioners": 213,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1841680881",
@@ -123917,6 +124281,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123929,6 +124295,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123938,10 +124306,12 @@
       "city": "Quakertown",
       "state": "PA",
       "practitioners": 204,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1215904800",
@@ -123953,6 +124323,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123965,6 +124337,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/0d26bd04-9128-4f58-8e6d-ffda5cd00f89",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi",
+      "endpoint_inferred": false,
+      "npis_on_url": 1,
       "vendor": "Oracle Health"
     },
     {
@@ -123977,6 +124351,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -123989,6 +124365,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124001,6 +124379,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124013,6 +124393,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124022,10 +124404,12 @@
       "city": "Kittanning",
       "state": "PA",
       "practitioners": 192,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1245892314",
@@ -124037,6 +124421,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124049,6 +124435,8 @@
       "endpoint": "https://api.platform.athenahealth.com/1606/brand/1/csg/101/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "ndh",
+      "endpoint_inferred": false,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124061,6 +124449,8 @@
       "endpoint": "https://api.platform.athenahealth.com/27404/brand/1/csg/1/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 59,
       "vendor": "athenahealth"
     },
     {
@@ -124073,6 +124463,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124085,6 +124477,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124097,6 +124491,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124109,6 +124505,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124118,10 +124516,12 @@
       "city": "Greenville",
       "state": "PA",
       "practitioners": 179,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1487693404",
@@ -124133,6 +124533,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124142,10 +124544,12 @@
       "city": "Stroudsburg",
       "state": "PA",
       "practitioners": 178,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1376965731",
@@ -124154,10 +124558,12 @@
       "city": "Wind Gap",
       "state": "PA",
       "practitioners": 178,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1215181300",
@@ -124169,6 +124575,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124181,6 +124589,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/n7ld0qx6o97vwg2k68nv0s0g4xzq2rtm",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 80,
       "vendor": "Oracle Health"
     },
     {
@@ -124193,6 +124603,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124205,6 +124617,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124214,10 +124628,12 @@
       "city": "Pittsburgh",
       "state": "PA",
       "practitioners": 175,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1093688491",
@@ -124229,6 +124645,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124241,6 +124659,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124253,6 +124673,8 @@
       "endpoint": "https://call.api.northwell.io/epic-proxy/api/fhir/r4",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 34,
       "vendor": "Epic (User-access Brands)"
     },
     {
@@ -124265,6 +124687,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124277,6 +124701,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124289,6 +124715,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124301,6 +124729,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124313,6 +124743,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124325,6 +124757,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124334,10 +124768,12 @@
       "city": "Clarion",
       "state": "PA",
       "practitioners": 163,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1952848905",
@@ -124349,6 +124785,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124361,6 +124799,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124373,6 +124813,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124385,6 +124827,8 @@
       "endpoint": null,
       "endpoint_candidate": "https://api.platform.athenahealth.com/11440/brand/1/csg/1/fhir/r4",
       "endpoint_basis": "name-candidate",
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": "athenahealth"
     },
     {
@@ -124397,6 +124841,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124406,10 +124852,12 @@
       "city": "Washington",
       "state": "PA",
       "practitioners": 158,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1447281092",
@@ -124421,6 +124869,8 @@
       "endpoint": null,
       "endpoint_candidate": "https://api.platform.athenahealth.com/34140/brand/1/csg/1/fhir/r4",
       "endpoint_basis": "name-candidate",
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": "athenahealth"
     },
     {
@@ -124433,6 +124883,8 @@
       "endpoint": null,
       "endpoint_candidate": "https://api.platform.athenahealth.com/34140/brand/1/csg/1/fhir/r4",
       "endpoint_basis": "name-candidate",
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": "athenahealth"
     },
     {
@@ -124445,6 +124897,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124457,6 +124911,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124469,6 +124925,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124481,6 +124939,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124493,6 +124953,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/5c7467fb-60f9-4172-add4-57667a5dfcfa",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 64,
       "vendor": "Oracle Health"
     },
     {
@@ -124502,10 +124964,12 @@
       "city": "Philadelphia",
       "state": "PA",
       "practitioners": 151,
-      "endpoint": null,
+      "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1417932609",
@@ -124517,6 +124981,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124526,10 +124992,12 @@
       "city": "Seneca",
       "state": "PA",
       "practitioners": 151,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "alias",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1104787613",
@@ -124538,10 +125006,12 @@
       "city": "New Hyde Park",
       "state": "NY",
       "practitioners": 151,
-      "endpoint": null,
+      "endpoint": "https://epicproxy-pub.et1089.epichosted.com/fhirproxy/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1932992609",
@@ -124553,6 +125023,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124565,6 +125037,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124577,6 +125051,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124589,6 +125065,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124601,6 +125079,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124613,6 +125093,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124625,6 +125107,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124637,6 +125121,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124649,6 +125135,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124661,6 +125149,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124673,6 +125163,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124685,6 +125177,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124694,10 +125188,12 @@
       "city": "Orwigsburg",
       "state": "PA",
       "practitioners": 147,
-      "endpoint": null,
+      "endpoint": "https://geisapi.geisinger.edu/fhir_prod/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1053348409",
@@ -124709,6 +125205,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124721,6 +125219,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124733,6 +125233,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124745,6 +125247,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/n7ld0qx6o97vwg2k68nv0s0g4xzq2rtm",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 80,
       "vendor": "Oracle Health"
     },
     {
@@ -124757,6 +125261,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124766,10 +125272,12 @@
       "city": "Philadelphia",
       "state": "PA",
       "practitioners": 145,
-      "endpoint": null,
+      "endpoint": "https://proxy.lvh.com/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1992802391",
@@ -124781,6 +125289,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124793,6 +125303,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124805,6 +125317,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124817,6 +125331,8 @@
       "endpoint": "https://fhir-myrecord.cerner.com/r4/1031a3cd-9903-4995-baa5-734895a3e2a2",
       "endpoint_candidate": null,
       "endpoint_basis": "vendor-npi-list",
+      "endpoint_inferred": true,
+      "npis_on_url": 43,
       "vendor": "Oracle Health"
     },
     {
@@ -124826,10 +125342,12 @@
       "city": "Kittanning",
       "state": "PA",
       "practitioners": 144,
-      "endpoint": null,
+      "endpoint": "https://epicent-prd-rp.upmc.com/prd-oauth2/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "name-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     },
     {
       "org_id": "Organization-1194039560",
@@ -124841,6 +125359,8 @@
       "endpoint": null,
       "endpoint_candidate": null,
       "endpoint_basis": null,
+      "endpoint_inferred": null,
+      "npis_on_url": null,
       "vendor": null
     },
     {
@@ -124850,10 +125370,12 @@
       "city": "New Ringgold",
       "state": "PA",
       "practitioners": 142,
-      "endpoint": null,
+      "endpoint": "https://fhir.slhn.org/fhir/api/fhir/r4",
       "endpoint_candidate": null,
-      "endpoint_basis": null,
-      "vendor": null
+      "endpoint_basis": "brand-state",
+      "endpoint_inferred": true,
+      "npis_on_url": null,
+      "vendor": "Epic (User-access Brands)"
     }
   ],
   "organizations_unlinked": {

@@ -84,7 +84,7 @@ SOURCES = [
 CACHE = pathlib.Path("/tmp/ainpi-vendor-endpoints")
 
 # Vendor-wide base URLs that every customer of the vendor shares, so they
-# identify no organization. athenahealth's file hangs 125,917 organization
+# identify no organization. athenahealth's file hangs 125,911 organization
 # references (2026-10-13 download) off the one shared Endpoint below, beside
 # its per-practice /<practice>/brand/<n>/csg/<n>/fhir/r4 URLs. Attributing it
 # would hand 25,485 NPIs one URL and call that a match. Never attributed:
@@ -93,12 +93,14 @@ SHARED_BASE_URLS = frozenset({
     "https://api.platform.athenahealth.com/fhir/r4",
 })
 
-# A URL whose vendor lists more NPIs than this is a practice-wide or
+# A URL whose vendor lists more NPIs than LIST_THRESHOLD is a practice-wide or
 # brand-wide list, not a statement about one organization (athena attaches
 # the same practice list to every department; Epic brands list up to 1,881).
 # The ledger treats a match through such a URL as its own tier
-# (`vendor-npi-list` in state_connectivity.py), never as deterministic.
-LIST_THRESHOLD = 10
+# (`vendor-npi-list` in state_connectivity.py, `npi-list` in H53), never as
+# deterministic. Defined once, in org_systems, so the bands here, the ledger
+# and H53 cannot disagree about the cut.
+from org_systems import LIST_THRESHOLD  # noqa: E402
 
 
 def npis_band(n: int) -> str:

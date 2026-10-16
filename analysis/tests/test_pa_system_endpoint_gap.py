@@ -146,6 +146,16 @@ def test_reach_counts_puts_vendor_list_below_strict_above_resolution():
     assert got["reaches_any"] == 3
 
 
+def test_reach_counts_puts_alias_above_vendor_list():
+    """Same order as the ledger's SYSTEM_TIERS: a curated alias outranks a
+    vendor NPI on a practice-wide list; a name or brand match does not."""
+    prac_orgs = {"1": {"l", "al"}, "2": {"l", "b"}}
+    got = reach_counts(prac_orgs, {"l", "al", "b"}, strict_orgs=set(),
+                       resolved_orgs={"al", "b"}, enrollment_npis=set(),
+                       list_orgs={"l"}, alias_orgs={"al"})
+    assert (got["vendor_list"], got["resolution"]) == (1, 1)
+
+
 def test_reach_counts_has_stable_keys_when_empty():
     got = reach_counts({}, set(), set(), set(), set())
     assert got["strict"] == 0 and got["reaches_any"] == 0

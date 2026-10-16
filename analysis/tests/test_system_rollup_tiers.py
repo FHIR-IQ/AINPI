@@ -531,30 +531,135 @@ def test_reach_control_fails_with_no_endpoint_urls_loaded():
     assert any("no endpoint URLs were loaded" in p for p in problems)
 
 
-def test_enrollment_only_reach_is_published_not_crashed():
-    """Member tiers reach nobody, CMS enrollment reaches 40: the run passes and
-    the member-route gap is published as a measured row (FHI-73)."""
-    only_enrollment = {"brand:GEISINGER": {
-        GEIS: {"cms-enrollment-own-endpoint": 40}}}
+ONLY_ENROLLMENT = {"brand:GEISINGER": {
+    GEIS: {"cms-enrollment-own-endpoint": 40}}}
+
+
+def test_unlisted_member_tier_zero_raises_even_with_enrollment_reach():
+    """Member tiers reach nobody, CMS enrollment reaches 40, and the system is
+    not on KNOWN_MEMBER_UNREACHED: the run fails, and the measured row is
+    still recorded (FHI-73 QA)."""
     acknowledged = []
     problems = check_system_controls(
         "PA", [], geisinger_systems(), [], known=KNOWN,
-        reach_by_system=only_enrollment, available_urls={GEIS},
-        known_domains=DOMAINS, known_unreached={}, acknowledged=acknowledged)
-    assert problems == []
-    assert acknowledged[0]["reached_through_member_tiers"] == 0
+        reach_by_system=ONLY_ENROLLMENT, available_urls={GEIS},
+        known_domains=DOMAINS, known_unreached={}, known_member_unreached={},
+        acknowledged=acknowledged)
+    assert any("KNOWN_MEMBER_UNREACHED" in p and "Geisinger" in p
+               for p in problems)
     assert acknowledged[0]["reached_through_enrollment_only"] == 40
+
+
+def test_listed_member_tier_zero_passes_and_is_published():
+    acknowledged = []
+    problems = check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system=ONLY_ENROLLMENT, available_urls={GEIS},
+        known_domains=DOMAINS, known_unreached={},
+        known_member_unreached={"Geisinger": "measured evidence"},
+        acknowledged=acknowledged)
+    assert problems == []
+    row = acknowledged[0]
+    assert row["reached_through_member_tiers"] == 0
+    assert row["reached_through_enrollment_only"] == 40
+    assert row["listed_reason"] == "measured evidence"
     assert "40 clinicians reach it only through their CMS-enrolled group" in \
-        acknowledged[0]["reason"]
+        row["reason"]
+
+
+def test_stale_member_unreached_entry_raises():
     with_member = {"brand:GEISINGER": {
         GEIS: {"cms-enrollment-own-endpoint": 40, "brand-state": 1}}}
     acknowledged = []
+    problems = check_system_controls(
+        "PA", [], geisinger_systems(), [], known=KNOWN,
+        reach_by_system=with_member, available_urls={GEIS},
+        known_domains=DOMAINS, known_unreached={},
+        known_member_unreached={"Geisinger": "measured evidence"},
+        acknowledged=acknowledged)
+    assert any("KNOWN_MEMBER_UNREACHED" in p and "remove the entry" in p
+               for p in problems)
+    assert acknowledged == []
+    # Unlisted and reached through a member: nothing to report.
     assert check_system_controls(
         "PA", [], geisinger_systems(), [], known=KNOWN,
         reach_by_system=with_member, available_urls={GEIS},
         known_domains=DOMAINS, known_unreached={},
-        acknowledged=acknowledged) == []
-    assert acknowledged == []
+        known_member_unreached={}) == []
+
+
+def test_pa_member_allowlist_is_jefferson_only():
+    from analysis.org_systems import KNOWN_MEMBER_UNREACHED
+    assert set(KNOWN_MEMBER_UNREACHED["PA"]) == {"Jefferson"}
+    assert "1,378" not in KNOWN_MEMBER_UNREACHED["PA"]["Jefferson"]
+
+
+# --------------------------------------------------------------------------
+# tier order: a curated alias outranks a vendor NPI on a practice-wide list
+# --------------------------------------------------------------------------
+
+def test_system_tiers_rank_alias_above_vendor_npi_list():
+    t = sc.SYSTEM_TIERS
+    assert t.index("vendor-npi") < t.index("alias") < t.index("vendor-npi-list")
+    assert t.index("vendor-npi-list") < t.index("name-state") < t.index("brand-state")
+    assert sc.DETERMINISTIC_TIERS == ("ndh", "vendor-npi")
+    assert h53.RESOLVE_TIERS[:5] == ("npi", "alias", "npi-list", "name-state",
+                                     "brand-state")
+
+
+def test_member_endpoint_prefers_alias_over_vendor_npi_list():
+    o = org(1, "UNIVERSITY OF PITTSBURGH PHYSICIANS", npi="1111111111")
+    lst = "https://athena.example/practice/fhir"
+    counts = {lst: 50}
+    npi_url = {"1111111111": lst}
+    assert sc.member_endpoint(o, {}, {}, npi_url, {}, counts) == (
+        lst, "vendor-npi-list")
+    assert sc.member_endpoint(
+        o, {}, {}, npi_url, {"Organization-1": (UPMC, "alias")}, counts) == (
+        UPMC, "alias")
+    # Below the list: a name or brand match does not displace it.
+    assert sc.member_endpoint(
+        o, {}, {}, npi_url, {"Organization-1": (UPMC, "brand-state")},
+        counts) == (lst, "vendor-npi-list")
+    # A precise vendor NPI still beats an alias.
+    assert sc.member_endpoint(
+        o, {}, {}, npi_url, {"Organization-1": (UPMC, "alias")},
+        {lst: 3}) == (lst, "vendor-npi")
+
+
+def test_h53_labels_a_list_match_npi_list_and_tries_alias_first():
+    from analysis.org_systems import LIST_THRESHOLD
+    aliases = {(h53.normalize(a["ndh_name"]), a["state"]): a
+               for a in alias("UNIVERSITY OF PITTSBURGH PHYSICIANS", "MyUPMC").values()}
+    lst = "https://athena.example/practice/fhir"
+    orgs = [org(1, "UNIVERSITY OF PITTSBURGH PHYSICIANS", npi="1111111111"),
+            org(2, "SOME PRACTICE", npi="2222222222"),
+            org(3, "OTHER PRACTICE", npi="3333333333")]
+    npi_url = {"1111111111": lst, "2222222222": lst,
+               "3333333333": "https://one.example/fhir"}
+    counts = {lst: LIST_THRESHOLD + 1, "https://one.example/fhir": 1}
+    rows, tiers, _, _ = h53.resolve(orgs, VENDOR_ROWS, {}, npi_url, aliases,
+                                    counts)
+    by = {r["org_id"]: r for r in rows}
+    assert by["Organization-1"]["tier"] == "alias"
+    assert by["Organization-2"]["tier"] == "npi-list"
+    assert by["Organization-2"]["endpoint"] == lst
+    assert by["Organization-3"]["tier"] == "npi"
+    # At the threshold itself the match is precise.
+    rows, _, _, _ = h53.resolve(orgs[1:2], VENDOR_ROWS, {}, npi_url, aliases,
+                                {lst: LIST_THRESHOLD})
+    assert rows[0]["tier"] == "npi"
+
+
+def test_list_threshold_has_one_source():
+    from analysis import org_systems
+    assert h51.LIST_THRESHOLD == org_systems.LIST_THRESHOLD == sc.LIST_THRESHOLD
+    src = (pathlib.Path(h51.__file__)).read_text()
+    assert "LIST_THRESHOLD = " not in src
+    for mod in ("state_connectivity.py", "h53_org_endpoint_resolution.py",
+                "pa_system_endpoint_gap.py"):
+        text = (pathlib.Path(org_systems.__file__).parent / mod).read_text()
+        assert "LIST_THRESHOLD = " not in text, mod
 
 
 def test_known_unreached_entry_fails_when_enrollment_reaches_the_domain():
@@ -619,9 +724,9 @@ def test_vendor_npi_list_tier_boundary(listed, tier):
     assert s["reaches_endpoint"] == 2
 
 
-def test_list_tier_sits_after_vendor_npi_and_is_not_deterministic():
+def test_list_tier_sits_after_alias_and_is_not_deterministic():
     assert sc.SYSTEM_TIERS.index("vendor-npi-list") == \
-        sc.SYSTEM_TIERS.index("vendor-npi") + 1
+        sc.SYSTEM_TIERS.index("alias") + 1
     assert "vendor-npi-list" not in sc.DETERMINISTIC_TIERS
 
 
@@ -646,6 +751,52 @@ def test_funnel_bands_vendor_list_separately():
     assert summ["reaches_endpoint_via_vendor_npi_list"] == 1
     assert summ["organizations_with_endpoint"] == 1
     assert summ["organizations_with_endpoint_via_vendor_npi_list"] == 1
+
+
+def test_funnel_bands_alias_above_a_vendor_list():
+    """A practitioner whose organization a vendor lists on a practice-wide URL
+    and a curated alias also reaches is banded at alias (resolved), not at
+    vendor list; one reached by a list and a brand match stays at the list.
+    The cumulative ladder and the any-route total do not move."""
+    orgs = [org(1, "UNIVERSITY OF PITTSBURGH PHYSICIANS", state="ZZ",
+                practitioners=1),
+            org(2, "DEPT OF A PRACTICE", state="ZZ", practitioners=1)]
+    a = {**prac("a", ["Organization-1"]), "org_npis": [orgs[0]["org_npi"]]}
+    b = {**prac("b", ["Organization-2"]), "org_npis": [orgs[1]["org_npi"]]}
+    lst = "https://x/list"
+    npi_url = {orgs[0]["org_npi"]: lst, orgs[1]["org_npi"]: lst}
+    payload = sc.build(
+        "ZZ", [a, b], orgs, [], {}, {}, {},
+        {"Organization-1": (UPMC, "alias"),
+         "Organization-2": (UPMC, "brand-state")},
+        {}, {}, {}, npi_url, {}, None, url_npi_count={lst: 11})
+    conf = payload["confidence"]
+    assert (conf["resolved"], conf["vendor_list"]) == (1, 1)
+    assert conf["resolved_by_tier"] == {"alias": 1, "name-state": 0,
+                                        "brand-state": 0}
+    summ = payload["summary"]
+    assert summ["reaches_endpoint"] == 2
+    assert summ["reaches_endpoint_after_vendor_npi_fill"] == 2
+    assert summ["organizations_with_endpoint_via_vendor_npi_list"] == 1
+    top = {o["org_id"]: o for o in payload["organizations_top"]}
+    assert top["Organization-1"]["endpoint_basis"] == "alias"
+    assert top["Organization-1"]["endpoint_inferred"] is True
+    assert top["Organization-2"]["endpoint_basis"] == "vendor-npi-list"
+    assert top["Organization-2"]["npis_on_url"] == 11
+    assert payload["corrections"] == []  # no earlier ZZ publication
+    assert "summary.organizations_with_endpoint" in payload["field_notes"]
+
+
+def test_pa_funnel_correction_quotes_the_run():
+    summary = {"reaches_endpoint_pct": 22.3,
+               "reaches_endpoint_pct_of_affiliated": 50.3,
+               "reaches_endpoint_deterministic_pct": 2.9}
+    (c,) = sc.funnel_corrections("pa", summary)
+    for text in ("15.8%", "35.8%", "22.3%", "50.3%", "2.9%", "18.7%",
+                 "2026-10-14", "every NPI", "10 or fewer"):
+        assert text in c["what"], text
+    assert "\u2014" not in c["what"]
+    assert sc.funnel_corrections("oh", summary) == []
 
 
 def test_build_payload_systems_block():

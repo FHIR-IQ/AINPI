@@ -1,6 +1,8 @@
 import type {
   ConnectivityCorrection,
+  ConnectivityPayload,
   ConnectivitySystem,
+  EndpointBasis,
   SystemReachTier,
 } from '@/lib/connectivity-types';
 
@@ -8,8 +10,10 @@ import type {
 export const TIER_LABELS: Record<SystemReachTier, string> = {
   ndh: 'NDH',
   'vendor-npi': 'vendor NPI',
-  'vendor-npi-list': 'vendor NPI list',
+  // A sourced alias names this organization; a practice-wide list names
+  // everyone in the practice, so the alias ranks first (FHI-73).
   alias: 'curated alias',
+  'vendor-npi-list': 'vendor NPI list',
   'name-state': 'name match',
   'brand-state': 'brand match',
   'cms-enrollment-own-endpoint': 'CMS enrollment',
@@ -17,6 +21,37 @@ export const TIER_LABELS: Record<SystemReachTier, string> = {
 
 const TIER_ORDER = Object.keys(TIER_LABELS) as SystemReachTier[];
 const DETERMINISTIC: SystemReachTier[] = ['ndh', 'vendor-npi'];
+
+/**
+ * True for a resolved tier that is inference rather than a deterministic
+ * link (everything but `ndh` and `vendor-npi`); false for those two and for
+ * no tier at all.
+ */
+export function isInferredTier(tier: string | null | undefined): boolean {
+  if (!tier) return false;
+  return (tier in TIER_LABELS) && !DETERMINISTIC.includes(tier as SystemReachTier);
+}
+
+/**
+ * Human label for an organization's endpoint basis. A vendor-NPI basis with
+ * a known count reads "vendor list (N NPIs)" or "vendor NPI (N NPIs on
+ * URL)", so a practice-wide list is visible as one.
+ */
+export function basisLabel(
+  basis: EndpointBasis | string | null | undefined,
+  npisOnUrl?: number | null,
+): string | null {
+  if (!basis) return null;
+  const n = typeof npisOnUrl === 'number' ? npisOnUrl : null;
+  if (basis === 'vendor-npi-list') {
+    return n !== null ? `vendor list (${fmt(n)} NPIs)` : 'vendor list';
+  }
+  if (basis === 'vendor-npi') {
+    return n !== null && n > 1 ? `vendor NPI (${fmt(n)} NPIs on URL)` : 'vendor NPI';
+  }
+  if (basis === 'name-candidate') return 'name candidate, not a link';
+  return TIER_LABELS[basis as SystemReachTier] ?? basis;
+}
 
 function fmt(n: number) {
   return n.toLocaleString('en-US');
@@ -123,19 +158,26 @@ export function EndpointCountCell({ row }: { row: ConnectivitySystem }) {
   );
 }
 
-/** Correction notice above the systems table. Renders nothing when absent. */
+/**
+ * Correction notice. Used above the systems table and, for the funnel-level
+ * corrections, beside the headline. Renders nothing when absent.
+ */
 export function SystemsCorrections({
   corrections,
+  title = 'Correction',
+  testId = 'systems-corrections',
 }: {
   corrections?: ConnectivityCorrection[];
+  title?: string;
+  testId?: string;
 }) {
   if (!corrections || corrections.length === 0) return null;
   return (
     <div
       className="measure mb-6 border border-signal bg-white p-4 text-sm"
-      data-testid="systems-corrections"
+      data-testid={testId}
     >
-      <p className="mb-2 font-medium text-ink">Correction</p>
+      <p className="mb-2 font-medium text-ink">{title}</p>
       <ul className="list-disc space-y-1 pl-5 text-gray-700">
         {corrections.map((c) => (
           <li key={c.what}>
@@ -143,6 +185,67 @@ export function SystemsCorrections({
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+type UnreachedRows = NonNullable<
+  ConnectivityPayload['systems']['known_systems_unreached']
+>;
+
+/**
+ * Known systems whose own-domain endpoint no member organization's route
+ * reaches (the Jefferson row on the PA slice), with what CMS enrollment
+ * reaches instead. Renders nothing when there are none.
+ */
+export function KnownSystemsUnreached({ block }: { block?: UnreachedRows }) {
+  if (!block || block.rows.length === 0) return null;
+  return (
+    <div
+      className="measure mb-6 border border-gray-300 bg-white p-4 text-sm"
+      data-testid="known-systems-unreached"
+    >
+      <p className="mb-2 font-medium text-ink">
+        Known systems no member organization reaches
+      </p>
+      <p className="mb-3 text-gray-700">{block.note}</p>
+      <table className="min-w-full text-xs">
+        <thead className="border-b border-gray-200 text-left">
+          <tr>
+            <th className="py-1 pr-4 font-medium text-gray-700">System</th>
+            <th className="py-1 pr-4 font-medium text-gray-700">Own domain</th>
+            <th className="py-1 pr-4 text-right font-medium text-gray-700">
+              Through members
+            </th>
+            <th className="py-1 pr-4 text-right font-medium text-gray-700">
+              Through CMS enrollment only
+            </th>
+            <th className="py-1 font-medium text-gray-700">Via</th>
+          </tr>
+        </thead>
+        <tbody>
+          {block.rows.map((r) => (
+            <tr key={r.system} className="border-b border-gray-100 last:border-0 align-top">
+              <td className="py-1 pr-4 text-ink">{r.system}</td>
+              <td className="py-1 pr-4 font-mono">{r.domains.join(', ')}</td>
+              <td className="py-1 pr-4 text-right font-mono text-signal">
+                {fmt(r.reached_through_member_tiers ?? 0)}
+              </td>
+              <td className="py-1 pr-4 text-right font-mono">
+                {fmt(r.reached_through_enrollment_only ?? 0)}*
+              </td>
+              <td className="py-1 text-gray-700">{(r.via ?? []).join('; ') || '—'}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {block.rows.map((r) =>
+        r.listed_reason ? (
+          <p key={`${r.system}-why`} className="mt-2 text-xs text-gray-600">
+            {r.system}: {r.listed_reason}
+          </p>
+        ) : null,
+      )}
     </div>
   );
 }

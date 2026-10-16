@@ -317,15 +317,17 @@ def match_brands(label, brands, state, curated=None):
 
 
 def reach_counts(prac_orgs, member_ids, strict_orgs, resolved_orgs,
-                 enrollment_npis, list_orgs=frozenset()):
+                 enrollment_npis, list_orgs=frozenset(), alias_orgs=frozenset()):
     """Distinct practitioners in a system, and how many reach an endpoint.
 
     `prac_orgs`: practitioner NPI -> set of org ids (system members only).
     A practitioner counts once, at the strongest tier any of their member
-    organizations reaches: strict (NDH, or a vendor NPI on a URL listing
-    LIST_THRESHOLD or fewer NPIs; the ledger's deterministic tiers), then
+    organizations reaches, in the ledger's SYSTEM_TIERS order: strict (NDH,
+    or a vendor NPI on a URL listing LIST_THRESHOLD or fewer NPIs; the
+    ledger's deterministic tiers), then a curated alias (`alias_orgs`, counted
+    as resolution: a sourced alias outranks a practice-wide list), then
     vendor_list (a vendor NPI on a practice-wide list, `vendor-npi-list`),
-    then H53 resolution, then CMS enrollment. The ledger's own enrollment
+    then the rest of H53 resolution, then CMS enrollment. The ledger's own enrollment
     tier is narrower (own endpoint only), so `enrollment` here is an upper
     bound on it.
     """
@@ -339,6 +341,8 @@ def reach_counts(prac_orgs, member_ids, strict_orgs, resolved_orgs,
         c["practitioners"] += 1
         if oids & strict_orgs:
             c["strict"] += 1
+        elif oids & alias_orgs:
+            c["resolution"] += 1
         elif oids & list_orgs:
             c["vendor_list"] += 1
         elif oids & resolved_orgs:
@@ -708,6 +712,7 @@ def run(state, top, refresh):
     strict_orgs = {k for k, t in org_tier.items() if t in ("ndh", "vendor-npi")}
     list_orgs = {k for k, t in org_tier.items() if t == "vendor-npi-list"}
     resolved_orgs = set(resolution)
+    alias_orgs = {k for k, v in resolution.items() if v[1] == "alias"}
 
     member_ids = set()
     for s in chosen:
@@ -763,7 +768,7 @@ def run(state, top, refresh):
         mids = set(s["member_org_ids"])
         pr = payload_rows.get(key, {})
         reach = reach_counts(prac_orgs, mids, strict_orgs, resolved_orgs,
-                             set(enrollment), list_orgs)
+                             set(enrollment), list_orgs, alias_orgs)
         # Which of the reaching practitioners land on the system's own host.
         own_hosts = {host_of(u) for b, _ in sys_brands[key] for u in b["urls"]}
         own_domains = {domain_of(h) for h in own_hosts} - {None}
@@ -784,7 +789,9 @@ def run(state, top, refresh):
                 own += 1
             # The tier this practitioner is counted at in reach_counts, and
             # whether that tier's own endpoint is on the system's domain.
-            if oids & (strict_orgs | list_orgs):
+            if oids & strict_orgs:
+                continue
+            if oids & list_orgs and not oids & alias_orgs:
                 continue
             if oids & resolved_orgs:
                 if any(on_own_domain(u) for u in res_urls if u):
@@ -929,7 +936,8 @@ def run(state, top, refresh):
 
     dropped_unresolved = [o for o in dropped if o["tier"] == "unresolved"]
     union_reach = reach_counts(prac_orgs, member_ids, strict_orgs,
-                               resolved_orgs, set(enrollment), list_orgs)
+                               resolved_orgs, set(enrollment), list_orgs,
+                               alias_orgs)
     union = {n for n, oids in prac_orgs.items() if oids & member_ids}
     payload = {
         "state": state,
@@ -970,21 +978,30 @@ def run(state, top, refresh):
         },
         "systems": out_rows,
         "ledger_defects": {
-            "note": ("Defects in AINPI's own method found while answering "
-                     "this. Each one makes a reachable endpoint read as "
-                     "absent."),
-            "system_practitioners_are_link_sums": {
-                "note": ("The ledger's per-system `practitioners` is the sum of "
-                         "each member organization's practitioner count, so a "
-                         "clinician with roles at several member organizations "
-                         "is counted once per organization."),
+            "note": ("Defects in AINPI's own method that this analysis "
+                     "found, all fixed in FHI-73 (2026-10-16). Each entry "
+                     "says how it was fixed and re-measures it on this run: "
+                     "an empty list or a zero count means the defect has not "
+                     "recurred, a non-empty one means it has. Before the fix "
+                     "each one made a reachable endpoint read as absent or, "
+                     "for the link sums, overstated a system's clinicians."),
+            "system_practitioners_were_link_sums": {
+                "status": "fixed in FHI-73",
+                "note": ("Before FHI-73 the ledger's per-system `practitioners` "
+                         "was the sum of each member organization's "
+                         "practitioner count, so a clinician with roles at "
+                         "several member organizations counted once per "
+                         "organization. It now counts distinct clinicians; "
+                         "the old sum is kept as practitioner_org_links."),
                 "practitioner_org_links_in_these_systems":
                     sum(r["practitioner_org_links"] for r in out_rows),
                 "distinct_practitioners_in_these_systems": len(union),
-                "where": "analysis/org_systems.py build_systems(): "
-                         "entry['practitioners'] += o['practitioners'].",
+                "where": "fixed in analysis/org_systems.py build_systems(), "
+                         "which collects distinct practitioner NPIs per "
+                         "system (practitioners_by_org).",
             },
             "rollup_omits_h53_tier": {
+                "status": "fixed in FHI-73",
                 "systems_affected_in_this_table": [
                     r["system_key"] for r in out_rows
                     if any(c["code"] == "rollup-omits-h53-tier" for c in r["causes"])],
@@ -994,6 +1011,7 @@ def run(state, top, refresh):
                          "any where the defect recurs.",
             },
             "rollup_omits_enrollment_own_domain": {
+                "status": "fixed in FHI-73",
                 "systems_affected_in_this_table": [
                     r["system_key"] for r in out_rows
                     if any(c["code"] == "rollup-omits-enrollment-own-domain"
@@ -1009,6 +1027,8 @@ def run(state, top, refresh):
                          "(cms-enrollment-own-endpoint).",
             },
             "dead_curated_aliases": {
+                "status": ("fixed in FHI-73; H53 now raises on a dead alias, "
+                           "so a non-zero count cannot ship"),
                 "count": len(aliases_dead),
                 "of": sum(1 for a in json.loads((REPO_ROOT / "analysis" / "org_aliases.json")
                                                 .read_text())["aliases"]
@@ -1020,6 +1040,7 @@ def run(state, top, refresh):
                          "'Thomas Jefferson University Health System'.",
             },
             "h51_one_npi_per_url": {
+                "status": "fixed in FHI-73",
                 "organizations": len(dropped),
                 "practitioner_org_links": sum(o["practitioners"] for o in dropped),
                 "of_which_unresolved_by_any_tier": len(dropped_unresolved),
@@ -1099,7 +1120,7 @@ def summarize(rows, union):
         f"or a vendor NPI on a URL listing {LIST_THRESHOLD} or fewer NPIs (the "
         f"deterministic tiers), {union.get('vendor_list', 0):,} through a "
         f"vendor NPI on a practice-wide or brand-wide list, "
-        f"{union.get('resolution', 0):,} through name or brand resolution "
+        f"{union.get('resolution', 0):,} through alias, name or brand resolution "
         f"(H53) and {union.get('enrollment', 0):,} through CMS enrollment "
         f"(any enrolled group; the ledger counts enrollment only when it lands "
         f"on the system's own endpoint).",

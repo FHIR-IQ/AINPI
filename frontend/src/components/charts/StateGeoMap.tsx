@@ -11,6 +11,8 @@ import {
   type ConnectivityGeoOrg,
   type GeoLayerKey,
 } from '@/lib/connectivity-types';
+import { TIER_LABELS, isInferredTier } from '@/components/connectivity/SystemReach';
+import { INFERRED_DASH, POINT_BLUE, pointStyle } from './state-geo-style';
 
 /**
  * County choropleth plus an organization point layer, for one state.
@@ -45,7 +47,11 @@ import {
  * **Proportional symbols for magnitude.** Organizations are circles scaled by
  * the square root of practitioner count, because area reads as magnitude and
  * radius does not. Reachability is fill plus stroke, so it survives greyscale
- * and colour blindness.
+ * and colour blindness: filled for a deterministic route (the NDH, or a
+ * vendor NPI on a URL listing 10 or fewer), hollow with a dashed blue ring
+ * for an inferred one (curated alias, vendor NPI on a practice-wide list,
+ * name or brand match), hollow with a solid signal ring for none. Dash
+ * versus solid, filled versus hollow, carries the distinction without hue.
  *
  * **Semantic zoom.** Points are noise at state level and the signal at city
  * level, so they fade in as the reader zooms. Stroke widths are divided by the
@@ -258,10 +264,13 @@ export default function StateGeoMap({
       .attr('cx', (o) => projection([o.lng, o.lat])?.[0] ?? -99)
       .attr('cy', (o) => projection([o.lng, o.lat])?.[1] ?? -99)
       .attr('r', (o) => radius(Math.max(1, o.practitioners)))
-      .attr('fill', (o) => (o.tier ? '#08519c' : 'none'))
+      .attr('fill', (o) => pointStyle(o.tier).fill)
       .attr('fill-opacity', 0.5)
-      .attr('stroke', (o) => (o.tier ? '#08519c' : SIGNAL))
-      .attr('stroke-width', 0.9)
+      .attr('stroke', (o) => pointStyle(o.tier).stroke)
+      .attr('stroke-width', (o) => (pointStyle(o.tier).dashed ? 1.2 : 0.9))
+      .attr('stroke-dasharray', (o) =>
+        pointStyle(o.tier).dashed ? `${INFERRED_DASH} ${INFERRED_DASH}` : null,
+      )
       .attr('display', (o) =>
         o.practitioners >= minVisible(1) ? null : 'none',
       )
@@ -310,7 +319,14 @@ export default function StateGeoMap({
         countyG.selectAll('path').attr('stroke-width', 0.6 / k);
         const floor = minVisible(k);
         points
-          .attr('stroke-width', 0.9 / k)
+          .attr('stroke-width', (o: any) =>
+            (pointStyle(o.tier).dashed ? 1.2 : 0.9) / k,
+          )
+          .attr('stroke-dasharray', (o: any) =>
+            pointStyle(o.tier).dashed
+              ? `${INFERRED_DASH / k} ${INFERRED_DASH / k}`
+              : null,
+          )
           // Divided by sqrt(k) against a transform that multiplies by k, so
           // circles grow as sqrt(zoom): they stay clickable when zoomed out
           // and stop swallowing the county underneath when zoomed in.
@@ -408,7 +424,7 @@ export default function StateGeoMap({
           width={width}
           height={height}
           role="img"
-          aria-label={`Choropleth of ${stateName} counties shaded by ${meta.label}, with ${geo.point_layer.organizations_plotted} organizations plotted as proportional circles filled where a FHIR endpoint is reachable.`}
+          aria-label={`Choropleth of ${stateName} counties shaded by ${meta.label}, with ${geo.point_layer.organizations_plotted} organizations plotted as proportional circles: filled where a FHIR endpoint is reached deterministically, a dashed ring where it is reached only by inference, a solid red ring where nothing reaches one.`}
         />
         {hover && (
           <div className="pointer-events-none absolute left-3 top-3 max-w-xs border border-gray-300 bg-paper/95 p-3 text-xs shadow-sm">
@@ -443,7 +459,10 @@ export default function StateGeoMap({
                 </p>
                 <p className="mt-1 text-gray-600">
                   {hover.d.tier
-                    ? `Endpoint reached via ${hover.d.tier}${
+                    ? `Endpoint reached via ${
+                        TIER_LABELS[hover.d.tier as keyof typeof TIER_LABELS] ??
+                        hover.d.tier
+                      }${isInferredTier(hover.d.tier) ? ' (inferred)' : ''}${
                         hover.d.vendor ? `, served by ${hover.d.vendor}` : ''
                       }.`
                     : 'Nothing public reaches an endpoint for this organization.'}
@@ -521,9 +540,24 @@ export default function StateGeoMap({
           </p>
           <p className="mb-1.5 flex items-center gap-1.5">
             <svg width="14" height="14" aria-hidden="true">
-              <circle cx="7" cy="7" r="5" fill="#08519c" fillOpacity="0.55" stroke="#08519c" />
+              <circle cx="7" cy="7" r="5" fill={POINT_BLUE} fillOpacity="0.55" stroke={POINT_BLUE} />
             </svg>
-            Organization an endpoint reaches
+            Endpoint reached deterministically (NDH, or vendor NPI on a URL
+            listing 10 or fewer)
+          </p>
+          <p className="mb-1.5 flex items-center gap-1.5">
+            <svg width="14" height="14" aria-hidden="true">
+              <circle
+                cx="7"
+                cy="7"
+                r="5"
+                fill="none"
+                stroke={POINT_BLUE}
+                strokeWidth="1.5"
+                strokeDasharray="2.4 2.4"
+              />
+            </svg>
+            Endpoint reached by inference (alias, vendor NPI list, name or brand)
           </p>
           <p className="flex items-center gap-1.5">
             <svg width="14" height="14" aria-hidden="true">

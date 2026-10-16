@@ -224,7 +224,10 @@ const handler = createMcpHandler(
         'name(s), state and EHR vendor. Two sources, labelled per endpoint: "ndh" is the ' +
         'NDH Endpoint resource naming this organization as its managingOrganization (CMS ' +
         'data); "vendor_file" is an EHR vendor\'s own published endpoint list naming it, ' +
-        'which is the vendor\'s claim and not CMS data. An NPI in neither source returns ' +
+        'which is the vendor\'s claim and not CMS data. Each vendor_file claim carries ' +
+        'npis_on_url, how many NPIs the vendor lists beside that URL; above 10 ' +
+        '(practice_wide_list: true) it is a practice-wide or brand-wide list, so the URL ' +
+        'is not shown to serve this organization in particular. An NPI in neither source returns ' +
         'an explicit not-found result. Reads two published CSVs; no live database query.',
       { npi: z.string().regex(/^\d{10}$/).describe('10-digit organization NPI') },
       async ({ npi }) => {

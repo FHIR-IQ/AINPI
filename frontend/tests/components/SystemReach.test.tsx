@@ -2,12 +2,17 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import {
   EndpointCountCell,
+  KnownSystemsUnreached,
   SystemReachCell,
   SystemsCorrections,
+  TIER_LABELS,
+  basisLabel,
   countsDistinct,
   endpointSplit,
+  isInferredTier,
   reachParts,
 } from '@/components/connectivity/SystemReach';
+import { POINT_BLUE, POINT_SIGNAL, pointStyle } from '@/components/charts/state-geo-style';
 import {
   linkDash,
   linkInferred,
@@ -138,5 +143,74 @@ describe('connectivity graph style', () => {
     expect(linkDash({ kind: 'reaches', tier: 'ndh' })).toBeNull();
     expect(linkDash({ kind: 'reaches' })).toBeNull();
     expect(linkDash({ kind: 'served-by' })).toBe('3 3');
+  });
+});
+
+describe('FHI-73 QA: tier order, basis labels, map points, unreached systems', () => {
+  it('ranks a curated alias above a vendor NPI list', () => {
+    const order = Object.keys(TIER_LABELS);
+    expect(order.indexOf('alias')).toBeLessThan(order.indexOf('vendor-npi-list'));
+    expect(order.indexOf('vendor-npi-list')).toBeLessThan(order.indexOf('name-state'));
+  });
+
+  it('marks every tier but NDH and vendor NPI as inferred', () => {
+    expect(isInferredTier('ndh')).toBe(false);
+    expect(isInferredTier('vendor-npi')).toBe(false);
+    for (const t of ['alias', 'vendor-npi-list', 'name-state', 'brand-state']) {
+      expect(isInferredTier(t)).toBe(true);
+    }
+    expect(isInferredTier(null)).toBe(false);
+    expect(isInferredTier('name-candidate')).toBe(false);
+  });
+
+  it('labels the basis in words, with the list size', () => {
+    expect(basisLabel('vendor-npi-list', 42)).toBe('vendor list (42 NPIs)');
+    expect(basisLabel('vendor-npi', 3)).toBe('vendor NPI (3 NPIs on URL)');
+    expect(basisLabel('vendor-npi', 1)).toBe('vendor NPI');
+    expect(basisLabel('alias')).toBe('curated alias');
+    expect(basisLabel(null)).toBeNull();
+  });
+
+  it('draws inferred points as a dashed hollow ring, deterministic filled', () => {
+    expect(pointStyle('ndh')).toEqual({ fill: POINT_BLUE, stroke: POINT_BLUE, dashed: false });
+    expect(pointStyle('vendor-npi-list')).toEqual({ fill: 'none', stroke: POINT_BLUE, dashed: true });
+    expect(pointStyle('alias').dashed).toBe(true);
+    expect(pointStyle(null)).toEqual({ fill: 'none', stroke: POINT_SIGNAL, dashed: false });
+  });
+
+  it('renders the known-systems-unreached row with its enrollment reach', () => {
+    render(
+      <KnownSystemsUnreached
+        block={{
+          note: 'note',
+          rows: [
+            {
+              system: 'Jefferson',
+              domains: ['jefferson.edu'],
+              reason: 'r',
+              reached_through_member_tiers: 0,
+              reached_through_enrollment_only: 1378,
+              listed_reason: 'measured',
+              via: ['CMS-enrolled group: Jefferson University Physicians'],
+            },
+          ],
+        }}
+      />,
+    );
+    expect(screen.getByTestId('known-systems-unreached')).toBeTruthy();
+    expect(screen.getByText('Jefferson')).toBeTruthy();
+    expect(screen.getByText('1,378*')).toBeTruthy();
+    expect(screen.getByText(/Jefferson University Physicians/)).toBeTruthy();
+  });
+
+  it('renders the funnel correction under its own title and test id', () => {
+    render(
+      <SystemsCorrections
+        corrections={[{ date: 'd', issue: 'FHI-73', what: 'The headline moved.', since: 's' }]}
+        title="Correction to the headline figures"
+        testId="funnel-corrections"
+      />,
+    );
+    expect(screen.getByTestId('funnel-corrections').textContent).toMatch(/headline moved/);
   });
 });
