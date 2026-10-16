@@ -133,7 +133,7 @@ coverage held, which is the same lesson read in reverse.
 are stable across releases. Organization ids are stable for provider records,
 which are NPI-keyed; its tax records (about half the table in August, under 4% in October) carry
 a random UUID.
-CMS regenerated Endpoint and Location ids between 2026-04-09 and 2026-05-08, so
+CMS regenerated Endpoint and Location ids at 2026-05-08 and again at 2026-08-20 (zero overlap with the previous release each time), so
 an `_id` join can report false churn; join Endpoint on `_address` for every pair. The table comments carry the same warning, and the notebook
 demonstrates it.
 

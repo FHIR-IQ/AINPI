@@ -125,8 +125,9 @@ ID_NOTE_STABLE = (
 # without anyone having run that join. It recovers 9.7% of May rows raw.
 _UNSTABLE_ID = (
     " WARNING: resource ids are Type-<random UUID> and are not a stable key. "
-    "CMS regenerated them between 2026-04-09 and 2026-05-08, when zero ids "
-    "carried over, so an _id join across that pair reports 100% false churn."
+    "CMS regenerated them at 2026-05-08 and again at 2026-08-20, when zero ids "
+    "carried over from the previous release each time, so an _id join across "
+    "either pair reports 100% false churn."
 )
 ID_NOTE_ENDPOINT = _UNSTABLE_ID + (
     " From 2026-08-20 to 2026-10-07, 983,770 of 1,128,169 endpoint ids (87.2%) "
