@@ -190,21 +190,33 @@ def load_vendor_brands():
 
     Only Epic's User-access Brands file qualifies: there the NPI sits on the
     brand organization itself, so a row says "this NPI belongs to this portal
-    brand". A flat endpoint list names a practice, not a brand, and is not
+    brand". The labels returned are every brand on the NPI's endpoint. A flat endpoint list names a practice, not a brand, and is not
     used. Since FHI-73 the H51 CSV carries one row per (url, NPI) with the
     publishing organization's name on each, so a URL shared by two brands
     (Geisinger and CommunityCare) keeps the right label per NPI.
     """
-    out = collections.defaultdict(set)
     path = FINDINGS_DIR / "vendor-endpoint-attribution.csv"
     if not path.exists():
         return {}
+    names_by_url = collections.defaultdict(set)
+    npis_by_url = collections.defaultdict(set)
     with path.open() as fh:
         for row in csv.DictReader(fh):
+            if row.get("vendor") not in BRAND_HIERARCHY_VENDORS:
+                continue
+            url = (row.get("url") or "").strip()
+            if row.get("org_name"):
+                names_by_url[url].add(row["org_name"])
             npi = (row.get("org_npi") or "").strip()
-            if npi and row.get("vendor") in BRAND_HIERARCHY_VENDORS \
-                    and row.get("org_name"):
-                out[npi].add(row["org_name"])
+            if npi:
+                npis_by_url[url].add(npi)
+    # Every brand sharing the endpoint counts as the NPI's brand: Geisinger
+    # and CommunityCare publish one endpoint, and a Geisinger organization
+    # listed under CommunityCare is not evidence against "GEISINGER".
+    out = collections.defaultdict(set)
+    for url, npis in npis_by_url.items():
+        for npi in npis:
+            out[npi] |= names_by_url[url]
     return dict(out)
 
 
@@ -1105,7 +1117,11 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
                             excluded=excluded_vendors,
                             practitioners_by_org=prac_by_org,
                             vendor_brands_by_npi=vendor_brands_by_npi,
-                            vetoed=vetoed)
+                            vetoed=vetoed,
+                            veto_prefixes=[
+                                pfx for pfxs in KNOWN_SYSTEMS.get(
+                                    state.upper(), {}).values()
+                                for pfx in pfxs])
     grouped_prac = len(set().union(*(
         prac_by_org.get(oid, set())
         for s in systems for oid in s["member_org_ids"]))) if systems else 0

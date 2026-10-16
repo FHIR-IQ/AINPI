@@ -129,8 +129,9 @@ def test_csv_rows_are_readable_by_the_ledger_loader(tmp_path, monkeypatch):
     for npi in ("1982632311", "1013985126", "1720056138", "1306838065"):
         assert npi_url[npi] == url
     brands = sc.load_vendor_brands()
-    assert brands["1013985126"] == {"Allegheny Health Network"}
-    assert brands["1306838065"] == {"CommunityCare"}
+    # Every brand on the shared endpoint is the NPI's brand.
+    assert brands["1013985126"] == {"Allegheny Health Network", "CommunityCare"}
+    assert brands["1306838065"] == {"Allegheny Health Network", "CommunityCare"}
 
 
 # --------------------------------------------------------------------------
@@ -235,13 +236,25 @@ def test_jefferson_group_drops_ahn_hospitals_on_vendor_evidence():
     before = build_systems(rows)
     assert [s["organizations"] for s in before] == [4]
     vetoed = []
-    after = build_systems(rows, vendor_brands_by_npi=brands, vetoed=vetoed)
+    after = build_systems(rows, vendor_brands_by_npi=brands, vetoed=vetoed,
+                          veto_prefixes=("JEFFERSON",))
     assert [s["label"] for s in after] == ["JEFFERSON"]
     assert after[0]["organizations"] == 2
     assert {v["org_name"] for v in vetoed} == {
         "JEFFERSON REGIONAL MEDICAL CENTER",
         "JEFFERSON HOSPITAL COUNSELING SERVICES"}
     assert vetoed[0]["vendor_brands"] == ["Allegheny Health Network"]
+
+
+def test_veto_is_limited_to_known_system_groups():
+    # Evangelical's medical group sits under Geisinger's CommunityCare portal.
+    # A hosted affiliate is not evidence against its own name group.
+    rows = [org(1, "EVANGELICAL COMMUNITY HOSPITAL"),
+            org(2, "EVANGELICAL MEDICAL SERVICES ORGANIZATION", npi="1555555555")]
+    brands = {"1555555555": {"CommunityCare", "Geisinger"}}
+    systems = build_systems(rows, vendor_brands_by_npi=brands,
+                            veto_prefixes=("GEISINGER", "JEFFERSON"))
+    assert systems[0]["organizations"] == 2
 
 
 def test_vendor_brand_does_not_override_an_attested_parent():

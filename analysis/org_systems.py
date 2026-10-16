@@ -450,7 +450,7 @@ def vendor_brand_conflicts(org_name, brand_labels):
 def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
                   min_practitioners=1, min_members=2, excluded=None,
                   practitioners_by_org=None, vendor_brands_by_npi=None,
-                  vetoed=None):
+                  vetoed=None, veto_prefixes=()):
     """Group organizations into health systems, best evidence first.
 
     Tier 1, attested ownership: CMS enrollment ownership data. It states
@@ -464,12 +464,17 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
 
     Tier 3, inferred: brand key from the organization name. Covers the rest and
     is labelled as inference everywhere it surfaces. A brand-hierarchy vendor
-    file can veto it: when the vendor lists the organization's NPI under a
-    brand that does not agree with the key (`vendor_brand_conflicts`), the
-    organization is left out of the name group and reported in `vetoed`. It is
-    not moved into the vendor's brand, because a portal brand also lists hosted
-    affiliates it does not own (Epic's "Lancaster" brand lists independent
-    gastroenterology and anesthesia groups).
+    file can veto it for a known system: when the brand key starts with one of
+    `veto_prefixes` (the caller passes the `KNOWN_SYSTEMS` label prefixes) and
+    the vendor lists the organization's NPI under brands none of which agree
+    with the key (`vendor_brand_conflicts`), the organization is left out of
+    the name group and reported in `vetoed`. It is not moved into the vendor's
+    brand, and the veto is not applied to every group, because a portal brand
+    also lists hosted affiliates it does not own: Epic's "Lancaster" brand
+    lists independent gastroenterology and anesthesia groups, and
+    Evangelical's medical group sits under Geisinger's CommunityCare portal.
+    Applied everywhere on the PA slice it pulled 366 organizations out of
+    their name groups, most of them correctly named.
 
     The affiliation graph is used for neither: see the module docstring for why
     connected components of an untyped edge set produced a UPMC cluster
@@ -518,7 +523,9 @@ def build_systems(org_rows, parent_by_npi=None, owner_by_npi=None,
             if not bk:
                 continue
             brands = vendor_brands_by_npi.get(npi)
-            if brands and vendor_brand_conflicts(o["org_name"], brands):
+            if (brands
+                    and any(_label_matches(bk, p) for p in veto_prefixes)
+                    and vendor_brand_conflicts(o["org_name"], brands)):
                 vetoes.append({
                     "org_id": o["org_id"], "org_npi": npi,
                     "org_name": o["org_name"], "brand_key": bk,
