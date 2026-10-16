@@ -38,6 +38,11 @@ Run:
     # and no --release it runs CREATE OR REPLACE on that table alone.
     python analysis/databricks_publish.py --upload --load --share --table org_endpoint
 
+    # The measure series. One file for every release, loaded whole with
+    # CREATE OR REPLACE; --release is refused for it.
+    python analysis/measures_parquet.py
+    python analysis/databricks_publish.py --upload --load --share --table measures
+
 Requires the `databricks` CLI authenticated (`databricks auth login`).
 """
 from __future__ import annotations
@@ -82,8 +87,18 @@ TABLES = [
 # recipient is computed on this workspace's compute each time it is read, so
 # every consumer query would bill here. A table costs one load per release.
 DERIVED_DIR = ROOT / "analysis" / "data" / "org-endpoint"
-DERIVED_TABLES = ["org_endpoint", "org_endpoint_summary"]
+DERIVED_TABLES = ["org_endpoint", "org_endpoint_summary", "measures"]
 ALL_TABLES = TABLES + DERIVED_TABLES
+
+# Derived tables built from ONE file covering every release, rather than one
+# parquet per release. `measures` is the measure series from
+# frontend/public/api/v1/measures.json, exported by analysis/measures_parquet.py.
+# A regeneration can restate an earlier point and recomputes
+# comparable_to_previous across the whole series, so the table is a snapshot
+# of the series and is only ever loaded whole: one CREATE OR REPLACE, never a
+# per-release DELETE + INSERT. It keeps PARTITIONED BY (release_date) so a
+# consumer filters it the same way as every other table in the share.
+SERIES_TABLES = {"measures": PARQUET_DIR / "measures" / "measures.parquet"}
 
 # Cross-release ID stability, measured across 2026-04-09 and 2026-05-08 rather
 # than assumed. This is the first thing a consumer of a multi-release archive
@@ -159,6 +174,30 @@ TABLE_COMMENTS = {
         "AND NOT array_contains(sources, 'ndh') AND release_date = '2026-08-20' "
         "lists organizations only the vendor files name."
     ),
+    # No apostrophes: the COMMENT statement escapes them, but the convention in
+    # this dict is to avoid them.
+    "measures": (
+        "Curated by AINPI, not a CMS file. The measure series: a fixed set of "
+        "questions asked of every NDH release, one row per measure (slug) and "
+        "release_date. A row is the value as published from a committed finding "
+        "file, not recomputed: value = numerator / denominator for unit ratio, "
+        "value = numerator for unit count. definition_version names the "
+        "definition the point was measured under, and numerator_definition and "
+        "denominator_definition give its text. comparable_to_previous is a "
+        "string: true, false (a definition break), unreviewed (a move larger "
+        "than the declared ordinary move, not yet reviewed), or NULL for the "
+        "first point. Only a true pair should be drawn as a line. A missing "
+        "row means the generator refused to publish that point, for example a "
+        "zero with no positive control proving the field was read. It is not a "
+        "zero and must not be filled with one. Where a point was restated, "
+        "restated is true, value is the current reading, and as_published_value, "
+        "as_published_numerator and as_published_denominator carry what was "
+        "first published, with restatement_reason and the commit of the "
+        "original file. Sample: SELECT release_date, value, comparable_to_previous "
+        "FROM measures WHERE slug = 'role-coverage-pa' ORDER BY release_date. "
+        "Built by analysis/measures.py and analysis/measures_parquet.py; the same "
+        "series is at https://ainpi.dev/api/v1/measures.json."
+    ),
 }
 
 
@@ -203,6 +242,8 @@ def sql(statement: str, poll_seconds: int = 1800) -> dict:
 
 def local_parquet(release: str, table: str) -> pathlib.Path:
     """Where the parquet for one table and release sits on disk."""
+    if table in SERIES_TABLES:
+        return SERIES_TABLES[table]
     if table in DERIVED_TABLES:
         return DERIVED_DIR / release / f"{table}.parquet"
     return PARQUET_DIR / release / f"{table}.parquet"
@@ -223,6 +264,52 @@ def select_from_parquet(release: str, table: str) -> str:
 
 def volume_path(release: str, table: str) -> str:
     return f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}/{table}.parquet"
+
+
+def series_volume_path(table: str) -> str:
+    """Volume path for a whole-series table. Not under release_date=<r>/,
+    because the one file holds every release."""
+    return f"/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/series/{table}.parquet"
+
+
+def upload_series(table: str) -> None:
+    src = SERIES_TABLES[table]
+    if not src.exists():
+        print(f"  {table}: no parquet at {src.relative_to(ROOT)}, skipped "
+              f"(run analysis/measures_parquet.py)")
+        return
+    dest_dir = f"dbfs:/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/series"
+    sh(["databricks", "fs", "mkdir", dest_dir], check=False)
+    dest = f"dbfs:{series_volume_path(table)}"
+    local = src.stat().st_size
+    if _remote_size(dest) == local:
+        print(f"  series/{table}: already uploaded ({local:,} bytes)")
+        return
+    print(f"  series/{table}: {local:,} bytes …", flush=True)
+    sh(["databricks", "fs", "cp", "--overwrite", str(src), dest])
+
+
+def load_series(table: str) -> bool:
+    """CREATE OR REPLACE a whole-series table from its one file.
+
+    Never DELETE + INSERT per release: a regeneration can change earlier
+    points, so the file is the unit of truth, not a release.
+    """
+    if not SERIES_TABLES[table].exists():
+        print(f"  {table}: no parquet on disk, skipped")
+        return False
+    fq = f"{CATALOG}.{SCHEMA}.{table}"
+    comment = TABLE_COMMENTS.get(table, "").replace("'", "\\'")
+    print(f"  {fq} <- series/{table}.parquet (CREATE OR REPLACE)", flush=True)
+    r = sql(
+        f"CREATE OR REPLACE TABLE {fq} USING DELTA PARTITIONED BY (release_date) "
+        f"COMMENT '{comment}' "
+        f"AS SELECT * FROM parquet.`{series_volume_path(table)}`"
+    )
+    if r.get("status", {}).get("state") != "SUCCEEDED":
+        print(f"    FAILED: {json.dumps(r.get('status'))[:300]}")
+        return False
+    return True
 
 
 def available_releases() -> list[str]:
@@ -261,12 +348,17 @@ def do_upload(only_release: str | None = None, tables: list[str] | None = None) 
     release on disk every run: adding the third release meant re-sending the
     first two, 8.7 GB of them.
     """
-    for release in available_releases():
+    wanted = tables or ALL_TABLES
+    for table in wanted:
+        if table in SERIES_TABLES:
+            upload_series(table)
+    per_release = [t for t in wanted if t not in SERIES_TABLES]
+    for release in available_releases() if per_release else []:
         if only_release and release != only_release:
             continue
         dest_dir = f"dbfs:/Volumes/{CATALOG}/{SCHEMA}/{VOLUME}/release_date={release}"
         sh(["databricks", "fs", "mkdir", dest_dir], check=False)
-        for table in tables or ALL_TABLES:
+        for table in per_release:
             src = local_parquet(release, table)
             if not src.exists():
                 print(f"  {release}/{table}: no parquet, skipped")
@@ -312,6 +404,12 @@ def load_one_release(release: str, tables: list[str] | None = None) -> bool:
     """
     ok = True
     for table in tables or ALL_TABLES:
+        if table in SERIES_TABLES:
+            # A whole-series table has no per-release load. main() refuses an
+            # explicit `--release X --table measures`; here it is only skipped.
+            print(f"  {table}: whole-series table, not loaded per release "
+                  f"(run --load --table {table} with no --release)")
+            continue
         src = local_parquet(release, table)
         if not src.exists():
             print(f"  {release}/{table}: no parquet, skipped")
@@ -362,6 +460,10 @@ def do_load(only: list[str] | None = None, tables: list[str] | None = None) -> N
     if only:
         releases = [r for r in only if r in releases]
     for table in tables or ALL_TABLES:
+        if table in SERIES_TABLES:
+            # Releases do not scope this table: the file is the whole series.
+            load_series(table)
+            continue
         present = [r for r in releases if local_parquet(r, table).exists()]
         if not present:
             continue
@@ -510,6 +612,9 @@ def main() -> None:
         ap.print_help()
         return
     tables = [a.table] if a.table else None
+    if a.table in SERIES_TABLES and a.release:
+        sys.exit(f"--table {a.table} is one file covering every release and is "
+                 f"only loaded whole; drop --release.")
     if a.upload:
         do_upload(a.release, tables)
     if a.load:

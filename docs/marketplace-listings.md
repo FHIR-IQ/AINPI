@@ -109,6 +109,16 @@ The vendor rows are each vendor's own claim; CMS has not checked them. Where
 the two sources name different organizations for one URL, both rows are kept.
 40,005 of the 68,888 vendor rows name an organization without an NPI.
 
+**Measures.** A further table, measures, holds the measure series: a fixed set
+of questions asked of every release, one row per question and release_date,
+with the numerator, denominator and value as AINPI published them. A
+comparable_to_previous column says whether two consecutive points can be read
+as a trend; a change of definition is marked as a break, not a move. A missing
+row means AINPI withheld that point, usually because a zero could not be told
+apart from a field that was never read. It is not a zero. Where a published
+value was later corrected, the row carries both the current value and the value
+first published.
+
 **What it is for.** Questions that need two releases at once. One worked
 example, included as a notebook: between May and August CMS added about
 seven million PractitionerRole records, a 173% rise. The share of clinicians who
