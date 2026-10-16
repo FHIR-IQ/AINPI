@@ -15,6 +15,8 @@ from analysis.pa_system_endpoint_gap import (  # noqa: E402
     index_epic_brands,
     match_brands,
     norm_url,
+    pairwise_overlap,
+    positive_control,
     reach_counts,
     summarize,
 )
@@ -143,7 +145,8 @@ def _metrics(**over):
         "published": True, "npis_matching_members": 0,
         "ndh_endpoints": [{"managed": True, "manager_holds_practitioners": False}],
         "members_with_partof_to_endpoint_holder": 0,
-        "ledger_endpoint_count": 0, "reach_resolution_or_enrollment": 10,
+        "ledger_endpoint_count": 0, "reach_resolution": 10,
+        "reach_enrollment": 0, "reach_enrollment_own_domain": 0,
         "dead_aliases": 0, "h51_dropped_member_npis": 0,
         "shared_brand_with": [],
     }
@@ -156,7 +159,7 @@ def test_classify_typical_large_system():
         "vendor-brand-without-entity-npi",
         "endpoint-on-leaf-without-practitioners",
         "no-hierarchy",
-        "rollup-omits-resolution-tiers",
+        "rollup-omits-h53-tier",
     ]
 
 
@@ -187,8 +190,89 @@ def test_classify_ainpi_defects():
     assert {"dead-curated-alias", "h51-one-npi-per-url",
             "system-split-across-groups"} <= set(got)
     # A rollup that already shows an endpoint is not under-counting.
-    assert "rollup-omits-resolution-tiers" not in classify(
-        _metrics(ledger_endpoint_count=2))
+    got = classify(_metrics(ledger_endpoint_count=2, reach_enrollment=10,
+                            reach_enrollment_own_domain=10))
+    assert not {"rollup-omits-h53-tier",
+                "rollup-omits-enrollment-own-domain"} & set(got)
+
+
+def test_classify_splits_h53_from_enrollment_own_domain():
+    # AHN shape: no H53 reach, enrollment lands mostly on the own domain.
+    got = classify(_metrics(reach_resolution=0, reach_enrollment=2723,
+                            reach_enrollment_own_domain=2673))
+    assert "rollup-omits-enrollment-own-domain" in got
+    assert "rollup-omits-h53-tier" not in got
+    # UPP shape: enrollment reach mostly lands on someone else's endpoint.
+    got = classify(_metrics(reach_resolution=0, reach_enrollment=725,
+                            reach_enrollment_own_domain=86))
+    assert not {"rollup-omits-h53-tier",
+                "rollup-omits-enrollment-own-domain"} & set(got)
+    # Enrollment reach off the own domain never raises the enrollment cause.
+    assert "rollup-omits-enrollment-own-domain" not in classify(
+        _metrics(reach_enrollment=5, reach_enrollment_own_domain=0))
+
+
+def _control_inputs(**over):
+    sysrow = {"system_key": "brand:G", "organizations": 2, "practitioners": 7,
+              "member_org_ids": ["o1", "o2"]}
+    args = {
+        "conn_release": "2026-10-07", "release": "2026-10-07",
+        "chosen": [sysrow],
+        "payload_rows": {"brand:G": {"organizations": 2, "practitioners": 7,
+                                     "member_org_ids": ["o1"]}},
+        "n_brands": 1282,
+        "hosts": ["geisapi.geisinger.edu"], "domains": ["geisinger.edu"],
+        "ndh_eps": [{"connection_type": "hl7-fhir-rest",
+                     "address": "https://geisapi.geisinger.edu/fhir"}],
+        "prac_orgs": {"111": {"o1"}},
+    }
+    args.update(over)
+    return args
+
+
+def test_positive_control_passes_on_good_inputs():
+    assert positive_control(**_control_inputs()) == []
+
+
+def test_positive_control_fails_on_release_mismatch():
+    got = positive_control(**_control_inputs(conn_release="2026-08-20"))
+    assert len(got) == 1 and "2026-08-20" in got[0]
+
+
+def test_positive_control_fails_on_empty_hosts():
+    got = positive_control(**_control_inputs(hosts=[], domains=[]))
+    assert any("no host" in p for p in got)
+
+
+def test_positive_control_fails_when_ndh_has_no_fhir_endpoint_on_domains():
+    # A Direct address on the domain is not a FHIR endpoint found.
+    got = positive_control(**_control_inputs(ndh_eps=[
+        {"connection_type": "direct-project",
+         "address": "someone@direct.geisinger.edu"}]))
+    assert any("no FHIR endpoint" in p for p in got)
+
+
+def test_positive_control_fails_on_membership_mismatch():
+    rows = {"brand:G": {"organizations": 2, "practitioners": 7,
+                        "member_org_ids": ["o1", "o9"]}}
+    got = positive_control(**_control_inputs(payload_rows=rows))
+    assert any("not in the rebuilt grouping" in p for p in got)
+    rows = {"brand:G": {"organizations": 3, "practitioners": 7,
+                        "member_org_ids": ["o1"]}}
+    assert any("members, rebuilt has" in p
+               for p in positive_control(**_control_inputs(payload_rows=rows)))
+
+
+def test_positive_control_fails_on_no_practitioners_and_few_brands():
+    got = positive_control(**_control_inputs(prac_orgs={}, n_brands=12))
+    assert any("no practitioners" in p for p in got)
+    assert any("12 brands" in p for p in got)
+
+
+def test_pairwise_overlap():
+    prac_orgs = {"1": {"a"}, "2": {"a", "b"}, "3": {"b"}, "4": {"c"}}
+    got = pairwise_overlap(prac_orgs, [("A", {"a"}), ("B", {"b"}), ("C", {"c"})])
+    assert got == [{"a": "A", "b": "B", "both": 1, "either": 3}]
 
 
 def test_summarize_is_conditional_on_counts():

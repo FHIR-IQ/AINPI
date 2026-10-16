@@ -2,7 +2,7 @@
   "state": "PA",
   "slug": "pa-system-endpoint-gap",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-16T19:40:25+00:00",
+  "generated_at": "2026-10-16T19:56:29+00:00",
   "methodology_version": "0.7.3-draft",
   "question": "Why do the largest health systems in the connectivity ledger show zero endpoints?",
   "answer": "The zero is not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the vendor publishes no member organization's NPI. The systems hold 21,963 distinct clinicians (the ledger's per-system counts sum practitioner-organization links). Through a member organization or CMS enrollment, the same tiers the ledger's practitioner funnel accepts, 13,755 of them already reach an endpoint (a lower bound on what the funnel credits them, since it also counts non-member organizations): 0 through the NDH or a vendor-published NPI, the only links the system rollup counts, 10,718 through name or brand resolution (H53) and 3,037 through CMS enrollment.",
@@ -37,7 +37,8 @@
     ],
     "ndh_fhir_endpoints_found_on_those_domains": 8,
     "systems_with_warehouse_practitioners": 6,
-    "rebuilt_grouping_matches_payload": true
+    "rebuilt_grouping_matches_payload": true,
+    "membership_check": "payload member_org_ids (first 25 per row) within the rebuilt ids, equal organization count, equal link total"
   },
   "systems": [
     {
@@ -74,6 +75,8 @@
         "none": 6068,
         "reaches_any": 725,
         "reaches_systems_own_endpoint": 86,
+        "resolution_on_own_domain": 0,
+        "enrollment_on_own_domain": 86,
         "reaches_any_pct": 10.7
       },
       "vendor_brands": [
@@ -174,13 +177,6 @@
           ]
         },
         {
-          "code": "rollup-omits-resolution-tiers",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
-          "fixable_by": [
-            "ainpi"
-          ]
-        },
-        {
           "code": "dead-curated-alias",
           "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
           "fixable_by": [
@@ -230,6 +226,8 @@
         "none": 0,
         "reaches_any": 5199,
         "reaches_systems_own_endpoint": 5199,
+        "resolution_on_own_domain": 5199,
+        "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
       "vendor_brands": [
@@ -330,8 +328,8 @@
           ]
         },
         {
-          "code": "rollup-omits-resolution-tiers",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "code": "rollup-omits-h53-tier",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
           "fixable_by": [
             "ainpi"
           ]
@@ -359,8 +357,8 @@
         "partof_targets": [],
         "members_by_h53_tier": {
           "brand-state": 228,
-          "unresolved": 3,
-          "name-state": 26
+          "name-state": 26,
+          "unresolved": 3
         },
         "members_with_vendor_published_npi": 0
       },
@@ -372,6 +370,8 @@
         "none": 0,
         "reaches_any": 3029,
         "reaches_systems_own_endpoint": 3028,
+        "resolution_on_own_domain": 3028,
+        "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
       "vendor_brands": [
@@ -480,8 +480,8 @@
           ]
         },
         {
-          "code": "rollup-omits-resolution-tiers",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "code": "rollup-omits-h53-tier",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
           "fixable_by": [
             "ainpi"
           ]
@@ -522,6 +522,8 @@
         "none": 492,
         "reaches_any": 2723,
         "reaches_systems_own_endpoint": 2673,
+        "resolution_on_own_domain": 0,
+        "enrollment_on_own_domain": 2673,
         "reaches_any_pct": 84.7
       },
       "vendor_brands": [
@@ -589,8 +591,8 @@
           ]
         },
         {
-          "code": "rollup-omits-resolution-tiers",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "code": "rollup-omits-enrollment-own-domain",
+          "explanation": "AINPI defect: the rollup also ignores CMS enrollment, a practitioner-level tier the funnel counts. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
           "fixable_by": [
             "ainpi"
           ]
@@ -641,6 +643,8 @@
         "none": 1984,
         "reaches_any": 398,
         "reaches_systems_own_endpoint": 21,
+        "resolution_on_own_domain": 0,
+        "enrollment_on_own_domain": 21,
         "reaches_any_pct": 16.7
       },
       "vendor_brands": [
@@ -741,13 +745,6 @@
           ]
         },
         {
-          "code": "rollup-omits-resolution-tiers",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
-          "fixable_by": [
-            "ainpi"
-          ]
-        },
-        {
           "code": "dead-curated-alias",
           "explanation": "AINPI defect: a curated alias in analysis/org_aliases.json points member names at a brand label no vendor publishes any more, so it resolves nothing and does not error.",
           "fixable_by": [
@@ -784,8 +781,8 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "name-state": 36,
-          "brand-state": 108
+          "brand-state": 108,
+          "name-state": 36
         },
         "members_with_vendor_published_npi": 0
       },
@@ -797,6 +794,8 @@
         "none": 0,
         "reaches_any": 2956,
         "reaches_systems_own_endpoint": 2956,
+        "resolution_on_own_domain": 2955,
+        "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
       "vendor_brands": [
@@ -865,8 +864,8 @@
           ]
         },
         {
-          "code": "rollup-omits-resolution-tiers",
-          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+          "code": "rollup-omits-h53-tier",
+          "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
           "fixable_by": [
             "ainpi"
           ]
@@ -882,9 +881,28 @@
       "distinct_practitioners_in_these_systems": 21963,
       "where": "analysis/org_systems.py build_systems(): entry['practitioners'] += o['practitioners']."
     },
-    "rollup_omits_resolution_tiers": {
-      "systems_affected_in_this_table": 6,
-      "where": "analysis/state_connectivity.py build(): the system rollup calls resolve_org(), which never consults org_resolution or enrollment_endpoints."
+    "rollup_omits_h53_tier": {
+      "systems_affected_in_this_table": [
+        "brand:GEISINGER",
+        "brand:ST LUKE",
+        "brand:WELLSPAN"
+      ],
+      "where": "analysis/state_connectivity.py build(): the system rollup calls resolve_org(), which never consults org_resolution (H53, organization level)."
+    },
+    "rollup_omits_enrollment_own_domain": {
+      "systems_affected_in_this_table": [
+        "brand:AHN"
+      ],
+      "enrollment_on_own_domain_by_system": {
+        "brand:UNIVERSITY OF PITTSBURGH": 86,
+        "brand:GEISINGER": 0,
+        "brand:ST LUKE": 0,
+        "brand:AHN": 2673,
+        "brand:PINNACLE": 21,
+        "brand:WELLSPAN": 0
+      },
+      "threshold": "raised when more than half of a system's enrollment-tier reach lands on its own domain",
+      "where": "analysis/state_connectivity.py build(): the system rollup never consults enrollment_endpoints (CMS enrollment, practitioner level)."
     },
     "dead_curated_aliases": {
       "count": 9,
@@ -1086,8 +1104,14 @@
         "system"
       ]
     },
-    "rollup-omits-resolution-tiers": {
-      "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts the H53 name/brand tier and CMS enrollment. The system shows zero endpoints while the same payload's funnel credits its clinicians, through member organizations or enrollment, with reaching one.",
+    "rollup-omits-h53-tier": {
+      "explanation": "AINPI defect: the ledger's system rollup accepts only NDH and vendor-NPI links, while its practitioner funnel also counts H53 name/brand resolution, an organization-level tier. The system shows zero endpoints while the same payload's funnel credits clinicians of its member organizations, through H53, with reaching one.",
+      "fixable_by": [
+        "ainpi"
+      ]
+    },
+    "rollup-omits-enrollment-own-domain": {
+      "explanation": "AINPI defect: the rollup also ignores CMS enrollment, a practitioner-level tier the funnel counts. Raised only when most of the system's enrollment-tier reach (clinicians reached by no stronger tier) lands on the system's own domain, so the omission hides the system's own endpoint rather than some other organization's. The raw count is reach.enrollment_on_own_domain on every row, including systems below that threshold.",
       "fixable_by": [
         "ainpi"
       ]
@@ -1115,23 +1139,27 @@
   "bytes_billed": [
     {
       "query": "parent",
-      "bytes_billed": 226492416,
-      "cached": true
+      "bytes_billed": 0,
+      "cached": false,
+      "bq_result_cache_hit": true
     },
     {
       "query": "pairs",
-      "bytes_billed": 1164967936,
-      "cached": true
+      "bytes_billed": 0,
+      "cached": false,
+      "bq_result_cache_hit": true
     },
     {
       "query": "members",
-      "bytes_billed": 96468992,
-      "cached": true
+      "bytes_billed": 0,
+      "cached": false,
+      "bq_result_cache_hit": true
     },
     {
       "query": "endpoints",
-      "bytes_billed": 276824064,
-      "cached": true
+      "bytes_billed": 0,
+      "cached": false,
+      "bq_result_cache_hit": true
     }
   ],
   "limits": [
@@ -1147,5 +1175,102 @@
     "enrollment": 3037,
     "none": 8208,
     "reaches_any": 13755
+  },
+  "pairwise_overlap": {
+    "note": "Distinct practitioners holding roles in member organizations of both systems, and in either. Only pairs sharing at least one practitioner are listed.",
+    "pairs": [
+      {
+        "a": "brand:UNIVERSITY OF PITTSBURGH",
+        "b": "brand:AHN",
+        "both": 434,
+        "either": 9574
+      },
+      {
+        "a": "brand:GEISINGER",
+        "b": "brand:ST LUKE",
+        "both": 291,
+        "either": 7937
+      },
+      {
+        "a": "brand:PINNACLE",
+        "b": "brand:WELLSPAN",
+        "both": 174,
+        "either": 5164
+      },
+      {
+        "a": "brand:UNIVERSITY OF PITTSBURGH",
+        "b": "brand:PINNACLE",
+        "both": 173,
+        "either": 9002
+      },
+      {
+        "a": "brand:GEISINGER",
+        "b": "brand:WELLSPAN",
+        "both": 157,
+        "either": 7998
+      },
+      {
+        "a": "brand:UNIVERSITY OF PITTSBURGH",
+        "b": "brand:GEISINGER",
+        "both": 139,
+        "either": 11853
+      },
+      {
+        "a": "brand:GEISINGER",
+        "b": "brand:PINNACLE",
+        "both": 90,
+        "either": 7491
+      },
+      {
+        "a": "brand:UNIVERSITY OF PITTSBURGH",
+        "b": "brand:WELLSPAN",
+        "both": 48,
+        "either": 9701
+      },
+      {
+        "a": "brand:ST LUKE",
+        "b": "brand:PINNACLE",
+        "both": 42,
+        "either": 5369
+      },
+      {
+        "a": "brand:GEISINGER",
+        "b": "brand:AHN",
+        "both": 34,
+        "either": 8380
+      },
+      {
+        "a": "brand:ST LUKE",
+        "b": "brand:WELLSPAN",
+        "both": 29,
+        "either": 5956
+      },
+      {
+        "a": "brand:AHN",
+        "b": "brand:PINNACLE",
+        "both": 28,
+        "either": 5569
+      },
+      {
+        "a": "brand:UNIVERSITY OF PITTSBURGH",
+        "b": "brand:ST LUKE",
+        "both": 26,
+        "either": 9796
+      },
+      {
+        "a": "brand:AHN",
+        "b": "brand:WELLSPAN",
+        "both": 20,
+        "either": 6151
+      },
+      {
+        "a": "brand:ST LUKE",
+        "b": "brand:AHN",
+        "both": 12,
+        "either": 6232
+      }
+    ],
+    "sum_of_system_counts": 23574,
+    "union": 21963
   }
 }

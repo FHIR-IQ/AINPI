@@ -58,6 +58,9 @@ def main() -> None:
         # Connectivity ledger: the whole practitioner-to-endpoint chain for a
         # state. Only published for states that have been run.
         conn = states_dir / f"{code_lower}-connectivity.json"
+        # Why the ledger's largest systems show zero endpoints (FHI-19).
+        # Pinned to CURRENT_RELEASE; regenerated with the ledger at a reload.
+        gap = states_dir / f"{code_lower}-system-endpoint-gap.json"
         # Per-state cohort CSV — only populated for states with ≥1 critical NPI
         cohort_csv = states_dir / f"{code_lower}-cohort-critical.csv"
         cohort_count = 0
@@ -79,6 +82,7 @@ def main() -> None:
             "cohort_critical_count": cohort_count,
             "connectivity_url": f"{SITE}/api/v1/states/{code_lower}-connectivity.json" if conn.exists() else None,
             "connectivity_html_url": f"{SITE}/states/{code_lower}/connectivity" if conn.exists() else None,
+            "system_endpoint_gap_url": f"{SITE}/api/v1/states/{code_lower}-system-endpoint-gap.json" if gap.exists() else None,
             "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State",
         })
 

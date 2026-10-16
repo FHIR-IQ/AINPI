@@ -29,13 +29,16 @@ For each system it walks the chain and counts what survives each step:
 Then it classifies the gap into a small set of named causes, each with who can
 fix it (the system, CMS, the vendor, or this project).
 
-Positive control (the silent-zero rule): the run refuses to write unless the
-Epic bundle parses to a plausible number of brands, every analysed system's
-members return practitioners from the warehouse, and the NDH Endpoint lookup
-finds at least one endpoint on a host the vendor file names. A zero below that
-line means "looked and found nothing", never "did not look".
+Positive control (the silent-zero rule, `positive_control()`): the run
+refuses to write unless the connectivity payload is on the warehouse release,
+the rebuilt grouping matches every analysed payload row, the Epic bundle
+parses to a plausible number of brands, the vendor names at least one host
+for the analysed systems, the NDH Endpoint lookup finds at least one FHIR
+endpoint on those hosts' domains, and every analysed system's members return
+practitioners from the warehouse. A zero below that line means "looked and
+found nothing", never "did not look".
 
-Cost: four small capped queries (about 2.5 GB in all at 2026-10-07). Runs
+Cost: four small capped queries (1.76 GB billed in all at 2026-10-07). Runs
 through the `bq` CLI with `--maximum_bytes_billed` set to the project cap
 (`DEFAULT_MAX_BYTES_BILLED`, the same value `bq_job_config()` applies), so it
 works with gcloud user credentials when Application Default Credentials have
@@ -144,12 +147,21 @@ CAUSES = {
         "the only cause that would be a statement about the system rather "
         "than about the record.",
         ["system"]),
-    "rollup-omits-resolution-tiers": (
+    "rollup-omits-h53-tier": (
         "AINPI defect: the ledger's system rollup accepts only NDH and "
-        "vendor-NPI links, while its practitioner funnel also counts the H53 "
-        "name/brand tier and CMS enrollment. The system shows zero endpoints "
-        "while the same payload's funnel credits its clinicians, through "
-        "member organizations or enrollment, with reaching one.",
+        "vendor-NPI links, while its practitioner funnel also counts H53 "
+        "name/brand resolution, an organization-level tier. The system shows "
+        "zero endpoints while the same payload's funnel credits clinicians "
+        "of its member organizations, through H53, with reaching one.",
+        ["ainpi"]),
+    "rollup-omits-enrollment-own-domain": (
+        "AINPI defect: the rollup also ignores CMS enrollment, a "
+        "practitioner-level tier the funnel counts. Raised only when most of "
+        "the system's enrollment-tier reach (clinicians reached by no "
+        "stronger tier) lands on the system's own domain, so the omission "
+        "hides the system's own endpoint rather than some other "
+        "organization's. The raw count is reach.enrollment_on_own_domain on "
+        "every row, including systems below that threshold.",
         ["ainpi"]),
     "dead-curated-alias": (
         "AINPI defect: a curated alias in analysis/org_aliases.json points "
@@ -328,8 +340,14 @@ def classify(m):
     `m` keys: published (bool), npis_matching_members (int),
     ndh_endpoints (list of dicts with managed, manager_holds_practitioners),
     members_with_partof_to_endpoint_holder (int), ledger_endpoint_count,
-    reach_resolution_or_enrollment (int), dead_aliases (int),
+    reach_resolution (int, H53 tier), reach_enrollment (int, enrollment
+    tier), reach_enrollment_own_domain (int, enrollment-tier clinicians whose
+    enrollment endpoint is on the system's own domain), dead_aliases (int),
     h51_dropped_member_npis (int), shared_brand_with (list).
+
+    The two rollup causes are kept apart because they are different defects:
+    H53 resolves an organization, CMS enrollment resolves a practitioner, and
+    enrollment often lands on an endpoint that is not the system's.
     """
     causes = []
     if not m["published"] and not m["ndh_endpoints"]:
@@ -346,8 +364,12 @@ def classify(m):
             causes.append("endpoint-without-managing-org")
     if m["members_with_partof_to_endpoint_holder"] == 0:
         causes.append("no-hierarchy")
-    if m["ledger_endpoint_count"] == 0 and m["reach_resolution_or_enrollment"] > 0:
-        causes.append("rollup-omits-resolution-tiers")
+    if m["ledger_endpoint_count"] == 0:
+        if m["reach_resolution"] > 0:
+            causes.append("rollup-omits-h53-tier")
+        own = m["reach_enrollment_own_domain"]
+        if own > 0 and 2 * own > m["reach_enrollment"]:
+            causes.append("rollup-omits-enrollment-own-domain")
     if m["dead_aliases"]:
         causes.append("dead-curated-alias")
     if m["h51_dropped_member_npis"]:
@@ -355,6 +377,80 @@ def classify(m):
     if m["shared_brand_with"]:
         causes.append("system-split-across-groups")
     return causes
+
+
+def positive_control(conn_release, release, chosen, payload_rows, n_brands,
+                     hosts, domains, ndh_eps, prac_orgs):
+    """The silent-zero checks. Pure; returns the list of problems.
+
+    `chosen`: rebuilt systems (system_key, organizations, practitioners,
+    member_org_ids). `payload_rows`: system_key -> connectivity payload row.
+    `ndh_eps`: rows from ENDPOINT_SQL. `prac_orgs`: practitioner NPI -> set
+    of member org ids.
+    """
+    problems = []
+    if conn_release != release:
+        problems.append(f"connectivity payload is {conn_release}, "
+                        f"warehouse is {release}")
+    for s in chosen:
+        key = s["system_key"]
+        pr = payload_rows.get(key)
+        if not pr:
+            problems.append(f"rebuilt {key} has no payload row")
+            continue
+        if pr.get("practitioners") != s["practitioners"]:
+            problems.append(f"rebuilt {key} ({s['practitioners']} links) does "
+                            f"not match the payload row "
+                            f"({pr.get('practitioners')})")
+        # state_connectivity.py keeps only the first 25 member ids per row,
+        # so membership is checked as payload ids within the rebuilt ids plus
+        # an equal organization count, not as set equality.
+        pids = set(pr.get("member_org_ids") or [])
+        rids = set(s["member_org_ids"])
+        if pids - rids:
+            problems.append(f"{key}: {len(pids - rids)} payload member ids "
+                            f"are not in the rebuilt grouping")
+        if pr.get("organizations") is not None and \
+                pr["organizations"] != len(rids):
+            problems.append(f"{key}: payload has {pr['organizations']} "
+                            f"members, rebuilt has {len(rids)}")
+    if n_brands < MIN_EPIC_BRANDS:
+        problems.append(f"Epic bundle parsed to {n_brands} brands "
+                        f"(< {MIN_EPIC_BRANDS}); refusing to report absences")
+    if chosen and not hosts:
+        problems.append("vendor file names no host for any analysed system; "
+                        "the NDH Endpoint lookup would search nothing")
+    want = set(domains)
+    if hosts and not any(e.get("connection_type") == "hl7-fhir-rest"
+                         and domain_of(host_of(e.get("address"))) in want
+                         for e in ndh_eps):
+        problems.append("NDH Endpoint lookup found no FHIR endpoint on the "
+                        f"{len(want)} domains of {len(hosts)} vendor-published "
+                        "hosts")
+    for s in chosen:
+        mids = set(s["member_org_ids"])
+        if not any(oids & mids for oids in prac_orgs.values()):
+            problems.append(f"{s['system_key']}: warehouse returned no "
+                            f"practitioners for its {len(mids)} members")
+    return problems
+
+
+def pairwise_overlap(prac_orgs, systems):
+    """Distinct practitioners held by both of each pair of systems.
+
+    `systems`: list of (system_key, member id set). Only pairs that share at
+    least one practitioner are returned, largest first.
+    """
+    sets = [(k, {n for n, oids in prac_orgs.items() if oids & mids})
+            for k, mids in systems]
+    out = []
+    for i, (a, sa) in enumerate(sets):
+        for b, sb in sets[i + 1:]:
+            both = len(sa & sb)
+            if both:
+                out.append({"a": a, "b": b, "both": both,
+                            "either": len(sa | sb)})
+    return sorted(out, key=lambda r: (-r["both"], r["a"], r["b"]))
 
 
 # --------------------------------------------------------------------------
@@ -384,7 +480,8 @@ def bq_rows(label, sql, params, refresh=False):
     if path.exists() and not refresh:
         cached = json.loads(path.read_text())
         BYTES_BILLED.append({"query": label, "bytes_billed": cached["bytes_billed"],
-                             "cached": True})
+                             "cached": True,
+                             "bq_result_cache_hit": cached.get("cache_hit", False)})
         print(f"  {label}: {len(cached['rows']):,} rows (cached)")
         return cached["rows"]
     job_id = f"fhi19_{label}_{uuid.uuid4().hex[:10]}"
@@ -400,12 +497,19 @@ def bq_rows(label, sql, params, refresh=False):
                            "--format=json", "-j", job_id],
                           capture_output=True, text=True)
     billed = 0
+    cache_hit = False
     if show.returncode == 0:
         stats = json.loads(show.stdout).get("statistics", {}).get("query", {})
         billed = int(stats.get("totalBytesBilled") or 0)
-    BYTES_BILLED.append({"query": label, "bytes_billed": billed, "cached": False})
-    print(f"  {label}: {len(rows):,} rows, {billed / 1e9:.2f} GB billed")
-    path.write_text(json.dumps({"rows": rows, "bytes_billed": billed}))
+        # A BigQuery result-cache hit bills nothing; say so rather than let a
+        # zero read as a free scan.
+        cache_hit = bool(stats.get("cacheHit"))
+    BYTES_BILLED.append({"query": label, "bytes_billed": billed, "cached": False,
+                         "bq_result_cache_hit": cache_hit})
+    print(f"  {label}: {len(rows):,} rows, {billed / 1e9:.2f} GB billed"
+          + (" (BigQuery result cache)" if cache_hit else ""))
+    path.write_text(json.dumps({"rows": rows, "bytes_billed": billed,
+                                "cache_hit": cache_hit}))
     return rows
 
 
@@ -536,10 +640,6 @@ def run(state, top, refresh):
     state = state.upper()
     conn_path = STATES_DIR / f"{state.lower()}-connectivity.json"
     conn = json.loads(conn_path.read_text())
-    problems = []
-    if conn.get("release_date") != CURRENT_RELEASE:
-        problems.append(f"connectivity payload is {conn.get('release_date')}, "
-                        f"warehouse is {CURRENT_RELEASE}")
 
     # Rebuild the ledger's grouping exactly, so membership is the full list
     # rather than the 25 ids the payload keeps.
@@ -550,12 +650,6 @@ def run(state, top, refresh):
     systems = build_systems(org_rows, parent_by_npi, owner_by_npi, excluded=[])
     payload_rows = {r["system_key"]: r for r in conn["systems"]["rows"]}
     chosen = systems[:top]
-    for s in chosen:
-        pr = payload_rows.get(s["system_key"])
-        if not pr or pr["practitioners"] != s["practitioners"]:
-            problems.append(f"rebuilt {s['system_key']} ({s['practitioners']}) "
-                            f"does not match the payload row "
-                            f"({pr and pr['practitioners']})")
 
     org_by_id = {o["org_id"]: o for o in org_rows}
     ep_by_id, ep_by_npi = load_endpoint_crosswalk()
@@ -563,11 +657,8 @@ def run(state, top, refresh):
     resolution = load_org_resolution(state)
     enrollment = load_enrollment_endpoints(state)
 
-    bundle, epic_fetched = load_epic()
+    bundle, epic_fetched = load_epic(refresh)
     brands = index_epic_brands(bundle)
-    if len(brands) < MIN_EPIC_BRANDS:
-        problems.append(f"Epic bundle parsed to {len(brands)} brands "
-                        f"(< {MIN_EPIC_BRANDS}); refusing to report absences")
 
     strict_orgs = {o["org_id"] for o in org_rows
                    if o["org_id"] in ep_by_id
@@ -612,10 +703,12 @@ def run(state, top, refresh):
     host_re = domain_regex(domains)
     ndh_eps = bq_rows("endpoints", ENDPOINT_SQL,
                       {"host_re": host_re, "refs": refs or {"none"}}, refresh)
-    if hosts and not any(domain_of(host_of(e["address"])) in set(domains)
-                         for e in ndh_eps):
-        problems.append("NDH Endpoint lookup returned nothing for "
-                        f"{len(hosts)} vendor-published hosts")
+    problems = positive_control(conn.get("release_date"), CURRENT_RELEASE,
+                                chosen, payload_rows, len(brands), hosts,
+                                domains, ndh_eps, prac_orgs)
+    if problems:
+        raise RuntimeError("positive control failed, not writing:\n  "
+                           + "\n  ".join(problems))
 
     prac_org_ids = {o["org_id"] for o in org_rows}
     aliases_dead = dead_aliases(state, brands)
@@ -626,9 +719,6 @@ def run(state, top, refresh):
         key = s["system_key"]
         mids = set(s["member_org_ids"])
         pr = payload_rows.get(key, {})
-        if not any(prac_orgs[n] & mids for n in prac_orgs):
-            problems.append(f"{key}: warehouse returned no practitioners for "
-                            f"its {len(mids)} members")
         reach = reach_counts(prac_orgs, mids, strict_orgs, resolved_orgs,
                              set(enrollment))
         # Which of the reaching practitioners land on the system's own host.
@@ -638,16 +728,26 @@ def run(state, top, refresh):
         def on_own_domain(url):
             return domain_of(host_of(url)) in own_domains
         own = 0
+        own_by_tier = collections.Counter()
         for npi, all_oids in prac_orgs.items():
             oids = all_oids & mids
             if not oids:
                 continue
-            urls = {resolution[o][0] for o in oids if o in resolution}
-            urls |= {ep_by_id.get(o) for o in oids}
-            if npi in enrollment:
-                urls.add(enrollment[npi][0])
+            res_urls = {resolution[o][0] for o in oids if o in resolution}
+            strict_urls = {ep_by_id.get(o) for o in oids} - {None}
+            enr_url = enrollment[npi][0] if npi in enrollment else None
+            urls = res_urls | strict_urls | ({enr_url} if enr_url else set())
             if any(on_own_domain(u) for u in urls if u):
                 own += 1
+            # The tier this practitioner is counted at in reach_counts, and
+            # whether that tier's own endpoint is on the system's domain.
+            if oids & strict_orgs:
+                continue
+            if oids & resolved_orgs:
+                if any(on_own_domain(u) for u in res_urls if u):
+                    own_by_tier["resolution"] += 1
+            elif enr_url and on_own_domain(enr_url):
+                own_by_tier["enrollment"] += 1
 
         mrows = [members.get(i) for i in mids]
         with_ref = sum(1 for r in mrows if r and r.get("endpoint_refs"))
@@ -732,8 +832,9 @@ def run(state, top, refresh):
             "ndh_endpoints": ep_out,
             "members_with_partof_to_endpoint_holder": partof_to_holder,
             "ledger_endpoint_count": pr.get("endpoint_count", 0),
-            "reach_resolution_or_enrollment":
-                reach.get("resolution", 0) + reach.get("enrollment", 0),
+            "reach_resolution": reach.get("resolution", 0),
+            "reach_enrollment": reach.get("enrollment", 0),
+            "reach_enrollment_own_domain": own_by_tier["enrollment"],
             "dead_aliases": len(sys_dead),
             "h51_dropped_member_npis": h51_member_drop,
             "shared_brand_with": shared,
@@ -769,6 +870,8 @@ def run(state, top, refresh):
             "reach": {
                 **reach,
                 "reaches_systems_own_endpoint": own,
+                "resolution_on_own_domain": own_by_tier["resolution"],
+                "enrollment_on_own_domain": own_by_tier["enrollment"],
                 "reaches_any_pct": round(100.0 * reach.get("reaches_any", 0)
                                          / reach["practitioners"], 1)
                 if reach.get("practitioners") else None,
@@ -780,10 +883,6 @@ def run(state, top, refresh):
             "causes": [{"code": c, "explanation": CAUSES[c][0],
                         "fixable_by": CAUSES[c][1]} for c in causes],
         })
-
-    if problems:
-        raise RuntimeError("positive control failed, not writing:\n  "
-                           + "\n  ".join(problems))
 
     dropped_unresolved = [o for o in dropped if o["tier"] == "unresolved"]
     union_reach = reach_counts(prac_orgs, member_ids, strict_orgs,
@@ -821,6 +920,9 @@ def run(state, top, refresh):
                 and domain_of(host_of(e["address"])) in set(domains)),
             "systems_with_warehouse_practitioners": len(out_rows),
             "rebuilt_grouping_matches_payload": True,
+            "membership_check": ("payload member_org_ids (first 25 per row) "
+                                 "within the rebuilt ids, equal organization "
+                                 "count, equal link total"),
         },
         "systems": out_rows,
         "ledger_defects": {
@@ -838,13 +940,27 @@ def run(state, top, refresh):
                 "where": "analysis/org_systems.py build_systems(): "
                          "entry['practitioners'] += o['practitioners'].",
             },
-            "rollup_omits_resolution_tiers": {
-                "systems_affected_in_this_table": sum(
-                    1 for r in out_rows
-                    if any(c["code"] == "rollup-omits-resolution-tiers" for c in r["causes"])),
+            "rollup_omits_h53_tier": {
+                "systems_affected_in_this_table": [
+                    r["system_key"] for r in out_rows
+                    if any(c["code"] == "rollup-omits-h53-tier" for c in r["causes"])],
                 "where": "analysis/state_connectivity.py build(): the system "
                          "rollup calls resolve_org(), which never consults "
-                         "org_resolution or enrollment_endpoints.",
+                         "org_resolution (H53, organization level).",
+            },
+            "rollup_omits_enrollment_own_domain": {
+                "systems_affected_in_this_table": [
+                    r["system_key"] for r in out_rows
+                    if any(c["code"] == "rollup-omits-enrollment-own-domain"
+                           for c in r["causes"])],
+                "enrollment_on_own_domain_by_system": {
+                    r["system_key"]: r["reach"]["enrollment_on_own_domain"]
+                    for r in out_rows},
+                "threshold": "raised when more than half of a system's "
+                             "enrollment-tier reach lands on its own domain",
+                "where": "analysis/state_connectivity.py build(): the system "
+                         "rollup never consults enrollment_endpoints "
+                         "(CMS enrollment, practitioner level).",
             },
             "dead_curated_aliases": {
                 "count": len(aliases_dead),
@@ -887,6 +1003,15 @@ def run(state, top, refresh):
         "note": "Distinct practitioners across the analysed systems, each "
                 "counted once at the strongest tier any member reaches.",
         **union_reach,
+    }
+    payload["pairwise_overlap"] = {
+        "note": "Distinct practitioners holding roles in member organizations "
+                "of both systems, and in either. Only pairs sharing at least "
+                "one practitioner are listed.",
+        "pairs": pairwise_overlap(
+            prac_orgs, [(s["system_key"], set(s["member_org_ids"])) for s in chosen]),
+        "sum_of_system_counts": sum(r["practitioners_distinct"] for r in out_rows),
+        "union": len(union),
     }
     payload["answer"] = summarize(out_rows, union_reach)
     return payload

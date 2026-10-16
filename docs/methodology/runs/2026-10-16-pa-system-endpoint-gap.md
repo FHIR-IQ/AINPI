@@ -7,7 +7,13 @@ Script: `analysis/pa_system_endpoint_gap.py`
 Output: `frontend/public/api/v1/states/pa-system-endpoint-gap.json`
 Cost: 2.05 GB billed in total; the four capped queries behind the published
 payload are 1.76 GB of that (a first endpoint lookup by exact host, 0.28 GB,
-was replaced by the domain lookup).
+was replaced by the domain lookup). The QA regeneration re-ran the same four
+queries and hit BigQuery's result cache, so the payload's `bytes_billed` reads
+0 with `bq_result_cache_hit: true`.
+
+The output is pinned to `CURRENT_RELEASE` and must be regenerated alongside
+the connectivity ledger at the next reload; its positive control refuses to
+write against a ledger on another release.
 
 ## Question
 
@@ -19,7 +25,7 @@ misses a connection that exists?
 
 ## Short answer
 
-All three happen, and the first is the least important. Each of the six
+The second and third happen; the first does not. Each of the six
 publishes a FHIR endpoint in Epic's User-access Brands file, and the NDH itself
 carries that endpoint for five of them. None of the six has a link that the
 ledger's system rollup accepts (an NDH `managingOrganization` on a member, or
@@ -27,7 +33,7 @@ an NPI the vendor publishes for a member). Yet 13,755 of the systems' 21,963
 distinct clinicians already reach an endpoint through a member organization or
 CMS enrollment, the tiers the ledger's own practitioner funnel accepts and the
 rollup does not. For Geisinger, St. Luke's and WellSpan that is every
-clinician, and every one of them lands on the system's own endpoint. The
+clinician, and all but one at St. Luke's land on the system's own endpoint. The
 13,755 is a lower bound on what the funnel credits these clinicians, because
 the funnel also counts organizations outside the system.
 
@@ -67,7 +73,7 @@ reach lands on an endpoint other than UPMC's, so it says little about UPMC.
 The six distinct counts sum to 23,574, more than the 21,963 union, because
 clinicians hold roles in more than one system (434 in both AHN and UPP, 291 in
 both Geisinger and St. Luke's). UPP and Pinnacle share 173, so the UPMC pair
-holds 9,002 distinct.
+holds 9,002 distinct. Every pair is in the payload's `pairwise_overlap`.
 
 ## Where the chain breaks
 
@@ -101,7 +107,8 @@ one NPI is Hanover Family Practice.
 | `endpoint-without-managing-org`: an NDH copy of the endpoint names no organization | UPP, Geisinger, St. Luke's, Pinnacle | system, CMS |
 | `no-ndh-endpoint`: the NDH carries no FHIR endpoint on the system's domain | AHN | system, CMS |
 | `no-hierarchy`: no member carries `partOf` to the organization holding the endpoint | all 6 | system (NPPES subpart, NDH attestation), CMS |
-| `rollup-omits-resolution-tiers`: AINPI defect, see below | all 6 | AINPI |
+| `rollup-omits-h53-tier`: AINPI defect, see below | Geisinger, St. Luke's, WellSpan | AINPI |
+| `rollup-omits-enrollment-own-domain`: AINPI defect, see below | AHN | AINPI |
 | `dead-curated-alias`: AINPI defect, see below | UPP, Pinnacle | AINPI |
 | `system-split-across-groups`: one vendor brand is matched by several ledger systems | UPP, Pinnacle (with UPMC), AHN (with ALLEGHENY) | system (NPPES parent), AINPI (grouping) |
 | `no-endpoint-published` | none | system |
@@ -117,9 +124,19 @@ read as absent.
 1. **The system rollup ignores two tiers the funnel counts.** In
    `state_connectivity.py` `build()`, the rollup calls `resolve_org()`, which
    accepts only `ndh` and `vendor-npi`. The practitioner funnel in the same
-   function also accepts H53 resolution and CMS enrollment. The payload
-   therefore shows Geisinger with zero endpoints while counting all 5,199 of
-   its clinicians as reaching `geisapi.geisinger.edu`. The rollup should either
+   function also accepts H53 resolution (organization level) and CMS
+   enrollment (practitioner level), and the two are different defects. H53
+   is the whole zero for Geisinger, St. Luke's and WellSpan: the rollup shows
+   Geisinger with zero endpoints while the ledger's state-wide funnel credits
+   all 5,199 (measured here) as reaching `geisapi.geisinger.edu`. Enrollment
+   is the zero for AHN, where 2,673 of the 2,723 enrollment-tier clinicians
+   land on AHN's own domain. For UPP and Pinnacle enrollment reaches 725 and
+   398 clinicians, but only 86 and 21 of them land on `upmc.com`, so the
+   rollup omission is not what hides UPMC; the dead UPMC alias (defect 2)
+   and the split of one brand across three ledger systems are. The
+   enrollment cause is raised only when more than half of a system's
+   enrollment-tier reach lands on its own domain; the raw count is
+   `reach.enrollment_on_own_domain` on every row. The rollup should either
    report endpoints by tier or say in its note that it is NDH and vendor-NPI
    only.
 2. **Nine of the thirteen PA curated aliases are dead.** H53's alias tier
@@ -148,11 +165,17 @@ Also noted, not fixed here: `h53_org_endpoint_resolution.py` still hardcodes
 
 ## Positive control
 
-The script refuses to write unless the Epic bundle parses to at least 500
-brands (1,282 here), the rebuilt grouping matches the payload row for every
-analysed system, every system's members return practitioners from the
-warehouse, and the NDH Endpoint lookup finds endpoints on the domains the
-vendor names (8 FHIR endpoints on 5 domains here). A zero in the output
+`positive_control()` returns the problems and the script refuses to write
+unless the list is empty: the connectivity payload is on the warehouse
+release, the Epic bundle parses to at least 500 brands (1,282 here), the
+vendor names at least one host for the analysed systems, the rebuilt
+grouping matches the payload row for every analysed system, every system's
+members return practitioners from the warehouse, and the NDH Endpoint lookup
+finds FHIR endpoints on the domains the vendor names (8 FHIR endpoints on 5
+domains here). The grouping check compares link totals and organization
+counts, and requires the payload's member ids to be within the rebuilt ones;
+it cannot test set equality because the ledger keeps only the first 25
+member ids per system. A zero in the output
 therefore means the record was searched and holds nothing, not that the
 lookup failed.
 
