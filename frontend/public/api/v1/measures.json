@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T03:13:13+00:00",
+  "generated_at": "2026-10-16T22:04:07+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -292,7 +292,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/vendor-endpoint-attribution.json",
             "field": "numerator / denominator",
-            "commit": "6e74041",
+            "commit": "4023860",
             "vendored": false
           },
           "comparable_to_previous": true

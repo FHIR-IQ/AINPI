@@ -32,6 +32,7 @@ recompute is a later step of the measure-series design
 | `practitioner-phone-reachability@6e74041.json` | 6e7404180d80 | 2026-08-20 | practitioner-phone-reachability |
 | `role-gap-delta@6e74041.json` | 6e7404180d80 | 2026-05-08 (`before` side) | role-coverage-pa; its `after` side repeats 2026-08-20, which the regenerated file now supplies |
 | `role-gap-composition@6e74041.json` | 6e7404180d80 | 2026-08-20 | `--before` input to `analysis/role_gap_delta.py` |
+| `vendor-endpoint-attribution@4023860.json` | 40238604e34c (file last changed in c1129ee) | 2026-10-07 | as published before the FHI-73 regeneration (one NPI per URL). Not registered in `measures.py`: the regenerated file carries the same numerator and denominator, so there is nothing to restate |
 
 ## Required before every warehouse reload
 
