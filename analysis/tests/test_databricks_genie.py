@@ -59,7 +59,7 @@ def test_instructions_say_location_has_no_reliable_key():
 
 
 def test_instructions_require_a_release_filter():
-    assert "Always filter release_date" in TEXT
+    assert "Always filter or GROUP BY release_date on every table" in TEXT
     assert "Never add counts across releases" in TEXT
 
 
@@ -152,3 +152,91 @@ def test_payload_is_deterministic():
     a = json.dumps(genie.serialize_space(genie.build_space_spec()), sort_keys=True)
     b = json.dumps(genie.serialize_space(genie.build_space_spec()), sort_keys=True)
     assert a == b
+
+
+def test_every_space_table_has_columns():
+    for t in genie.SPACE_TABLES:
+        assert t in genie.TABLE_COLUMNS, t
+        assert genie.TABLE_COLUMNS[t], t
+
+
+def test_measures_columns_come_from_the_exporter():
+    from analysis.measures_parquet import COLUMNS
+    assert "measures" in genie.SPACE_TABLES
+    assert genie.TABLE_COLUMNS["measures"] == list(COLUMNS)
+    assert "MEASURES" in TEXT and "not a zero" in TEXT
+
+
+def test_vendor_ranking_excludes_the_placeholder_npi():
+    s = next(s for s in SPEC["samples"] if "EHR vendors" in s["question"])
+    assert "org_npi != '1234567890'" in s["sql"]
+    assert "athenahealth 20,942" in s["expected"]
+
+
+def test_instructions_carry_the_aug_oct_carry_over():
+    assert "983,770 of 1,128,169 endpoint ids (87.2%)" in TEXT
+    assert "2,320,667 of 2,535,686 location ids (91.5%)" in TEXT
+
+
+# ---- read-back comparison -------------------------------------------------
+import copy  # noqa: E402
+
+SENT = genie.serialize_space(SPEC)
+GOT = {"title": SPEC["title"], "warehouse_id": SPEC["warehouse_id"]}
+
+
+def _cmp(back=None, got=None):
+    return genie.compare_space(SENT, back if back is not None else copy.deepcopy(SENT),
+                               SPEC, got if got is not None else dict(GOT))
+
+
+def test_identical_read_back_has_no_problems():
+    assert _cmp() == []
+
+
+def test_example_question_text_mismatch():
+    back = copy.deepcopy(SENT)
+    back["instructions"]["example_question_sqls"][0]["question"] = ["something else"]
+    assert any("example" in p and "question text" in p for p in _cmp(back))
+
+
+def test_example_sql_mismatch():
+    back = copy.deepcopy(SENT)
+    back["instructions"]["example_question_sqls"][0]["sql"] = ["SELECT 1"]
+    assert any("example" in p and "sql differs" in p for p in _cmp(back))
+
+
+def test_benchmark_question_text_mismatch():
+    back = copy.deepcopy(SENT)
+    back["benchmarks"]["questions"][0]["question"] = ["something else"]
+    assert any("benchmark" in p and "question text" in p for p in _cmp(back))
+
+
+def test_benchmark_sql_mismatch():
+    back = copy.deepcopy(SENT)
+    back["benchmarks"]["questions"][0]["answer"][0]["content"] = ["SELECT 1"]
+    assert any("benchmark" in p and "sql differs" in p for p in _cmp(back))
+
+
+def test_instruction_content_mismatch():
+    back = copy.deepcopy(SENT)
+    back["instructions"]["text_instructions"][0]["content"] = ["truncated"]
+    probs = _cmp(back)
+    assert "general instructions differ from the spec" in probs
+    assert "general instructions came back without the join rules" in probs
+
+
+def test_address_rule_needs_the_exact_phrase():
+    back = copy.deepcopy(SENT)
+    content = "".join(back["instructions"]["text_instructions"][0]["content"])
+    back["instructions"]["text_instructions"][0]["content"] = [
+        content.replace("join on _address, never on _id", "join on _address")]
+    assert "general instructions came back without the join rules" in _cmp(back)
+
+
+def test_title_mismatch():
+    assert any(p.startswith("title:") for p in _cmp(got={**GOT, "title": "Other"}))
+
+
+def test_warehouse_mismatch():
+    assert any(p.startswith("warehouse_id:") for p in _cmp(got={**GOT, "warehouse_id": "x"}))

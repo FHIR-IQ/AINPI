@@ -55,6 +55,7 @@ from databricks_publish import (  # noqa: E402
     TABLES,
     WAREHOUSE_ID,
 )
+from measures_parquet import COLUMNS as MEASURES_COLUMNS  # noqa: E402
 from release import CURRENT_RELEASE  # noqa: E402
 
 TITLE = "Ask the provider directory"
@@ -83,7 +84,8 @@ _REF = {"_id", "_practitioner_id", "_org_id", "_managing_org_id",
         "_participating_org_id", "_location_ids", "resource"}
 _MATCH = {"_state", "_city", "_connection_type", "_status", "_org_type",
           "_specialty_code", "_specialty_display", "_gender", "release_date",
-          "vendor", "source", "org_state", "host"}
+          "vendor", "source", "org_state", "host",
+          "slug", "unit", "comparable_to_previous"}
 TABLE_COLUMNS = {
     "practitioner": ["resource", "_id", "_npi", "_family_name", "_given_name",
                      "_state", "_city", "_postal_code", "_gender", "_active",
@@ -106,15 +108,20 @@ TABLE_COLUMNS = {
                      "vendor", "source", "in_ndh", "ndh_has_owner", "release_date"],
     "org_endpoint_summary": ["org_npi", "org_name", "n_endpoints", "vendors",
                              "sources", "release_date"],
+    # The measure series: one row per measure (slug) and release_date, the
+    # value as published, never recomputed. Columns come from the exporter so
+    # the two cannot drift; the MEASURES section of the instructions describes
+    # the table to Genie.
+    "measures": list(MEASURES_COLUMNS),
 }
 
 # One general instruction block. The API holds it as a list of lines.
 INSTRUCTIONS = f"""\
 DATA
 * These tables are the CMS National Directory of Healthcare (NDH) bulk export, FHIR R4, for three releases: {", ".join(ARCHIVE_RELEASES)}. release_date is a STRING partition column on every table.
-* Every release is a complete snapshot, not an increment. Always filter release_date on every table in a query, on both sides of a join. If the user names no release, use '{CURRENT_RELEASE}' and say so in the answer. Never add counts across releases.
+* Every release is a complete snapshot, not an increment. Always filter or GROUP BY release_date on every table, on both sides of a join. If the user names no release, use '{CURRENT_RELEASE}' and say so in the answer. Never add counts across releases.
 * Each NDH table has `resource`, the full FHIR resource as a JSON STRING (read it with get_json_object(resource, '$.path') or resource:path), plus flattened columns whose names start with an underscore. Prefer the flattened columns; use `resource` only for a field they do not carry.
-* org_endpoint and org_endpoint_summary are curated by AINPI, not CMS files. Run SELECT DISTINCT release_date on them before assuming a release is present.
+* org_endpoint, org_endpoint_summary and measures are curated by AINPI, not CMS files. Run SELECT DISTINCT release_date on them before assuming a release is present.
 
 JOINS
 * Reference columns hold full FHIR reference strings, not bare ids: practitioner_role._practitioner_id is like 'Practitioner/Practitioner-1639539059', _org_id and _managing_org_id like 'Organization/Organization-1043899859'. Join by rebuilding the reference from the target id:
@@ -144,14 +151,18 @@ COUNTING
 COMPARING RELEASES
 * practitioner: _id is 'Practitioner-<NPI>' and _npi is the NPI. Both are stable across releases; join on _npi.
 * organization: ids are a mix of NPI-based and random ids. Join on _npi, and say that organizations without an NPI (mostly payer, team and government records) are not compared.
-* endpoint: join on _address, never on _id. Endpoint ids were regenerated between 2026-05-08 and 2026-08-20 (zero ids in common), so an _id join reports false 100% churn for that pair. Use _address for every pair, including 2026-08-20 to 2026-10-07 where most ids happen to carry over.
-* location: there is no reliable cross-release key. Location ids were also regenerated between 2026-05-08 and 2026-08-20, and the name and address fields were re-cased and re-punctuated. Treat any Location comparison as lossy and state the match rate.
+* endpoint: join on _address, never on _id. Endpoint ids were regenerated between 2026-05-08 and 2026-08-20 (zero ids in common), so an _id join reports false 100% churn for that pair. From 2026-08-20 to 2026-10-07, 983,770 of 1,128,169 endpoint ids (87.2%) carried over, and 983,761 of 1,128,160 distinct addresses did; nothing guarantees the carry-over for a later release. Use _address for every pair.
+* location: there is no reliable cross-release key. Location ids were also regenerated between 2026-05-08 and 2026-08-20; from 2026-08-20 to 2026-10-07, 2,320,667 of 2,535,686 location ids (91.5%) carried over. The name and address fields were re-cased and re-punctuated between releases. Treat any Location comparison as lossy and state the match rate.
 * A change in a row count between releases is not by itself a change in the world: CMS de-duplicated, added and removed record types between releases. Report the counts and the method, not a cause.
 
 ORG_ENDPOINT
 * org_endpoint has one row per (base_url, org_npi, source). source = 'ndh' is the managing organization the NDH Endpoint itself names. source = 'vendor_file' is a claim taken from files EHR vendors publish; it is not CMS data. A URL both sources name appears once per source, so count DISTINCT base_url for endpoints.
 * org_npi is NULL where a vendor file names an organization without an NPI, and some vendor-file NPIs fail the NPI check digit (including the placeholder 1234567890). Exclude org_npi = '1234567890' when ranking organizations.
 * org_endpoint_summary.vendors and .sources are arrays; use array_contains().
+
+MEASURES
+* measures is the AINPI measure series: one row per measure (slug) and release_date, the value as published from a committed finding file. value = numerator / denominator for unit ratio, value = numerator for unit count. comparable_to_previous is a string: true, false (a definition break), unreviewed, or NULL for the first point. Only compare two releases of a measure where comparable_to_previous is true.
+* A missing row means the generator refused to publish that point. It is not a zero; never fill it with one.
 
 ANSWERS
 * State the release and the denominator with every number. This is a research archive: say that numbers should be checked against the source before any decision.
@@ -308,14 +319,17 @@ SELECT
 FROM {P}.org_endpoint
 WHERE release_date = '2026-10-07'
   AND org_npi IS NOT NULL
+  AND org_npi != '1234567890'
   AND vendor IS NOT NULL
 GROUP BY vendor
 ORDER BY organizations DESC
 LIMIT 5""",
-        "expected": ("athenahealth 20,943; Practice Fusion 2,434; Oracle Health 1,299; "
+        "expected": ("athenahealth 20,942; Practice Fusion 2,434; Oracle Health 1,299; "
                      "Epic (User-access Brands) 367; Veradigm 173. Only if the 2026-10-07 "
                      "partition of org_endpoint is loaded from the current CSVs."),
-        "verified": "org_endpoint_table.build() on the published H50/H51 CSVs at release 2026-10-07",
+        "verified": ("org_endpoint_table.build() on the published H50/H51 CSVs at release "
+                     "2026-10-07, counting distinct org_npi per vendor with the placeholder "
+                     "1234567890 excluded (it was one of the 20,943 athenahealth NPIs)"),
     },
     {
         "question": "How many organizations have an endpoint that only the EHR vendor files name, and not the NDH?",
@@ -421,13 +435,16 @@ def _cli(args: list[str], profile: str | None) -> dict:
     return json.loads(r.stdout or "{}")
 
 
-def verify_space(space_id: str, sent: dict, profile: str | None) -> list[str]:
-    """Read the space back and list every way it differs from what was sent.
+def _joined(lines) -> str:
+    return "".join(lines or [])
 
-    An accepted write is not evidence the space holds it.
-    """
-    got = _cli(["genie", "get-space", space_id, "--include-serialized-space"], profile)
-    back = json.loads(got.get("serialized_space") or "{}")
+
+def _by_id(items: list[dict]) -> dict:
+    return {i.get("id"): i for i in items or []}
+
+
+def compare_space(sent: dict, back: dict, spec: dict, got: dict) -> list[str]:
+    """Every way the read-back space differs from what was sent. Pure."""
     problems = []
     want_t = [t["identifier"] for t in sent["data_sources"]["tables"]]
     got_t = sorted(t["identifier"] for t in back.get("data_sources", {}).get("tables", []))
@@ -441,11 +458,52 @@ def verify_space(space_id: str, sent: dict, profile: str | None) -> list[str]:
         n_got = len(back.get(path[0], {}).get(path[1], []))
         if n_got != n_sent:
             problems.append(f"{'.'.join(path)}: sent {n_sent}, got {n_got}")
-    text = "".join(sum((t.get("content", []) for t in
-                        back.get("instructions", {}).get("text_instructions", [])), []))
-    if "_specialty_codes" not in text or "_address" not in text:
+
+    # Per id: the question text and the joined SQL, for examples and benchmarks.
+    got_x = _by_id(back.get("instructions", {}).get("example_question_sqls"))
+    for x in sent["instructions"]["example_question_sqls"]:
+        g = got_x.get(x["id"])
+        if g is None:
+            problems.append(f"example {x['id']}: missing")
+            continue
+        if _joined(g.get("question")) != _joined(x["question"]):
+            problems.append(f"example {x['id']}: question text differs")
+        if _joined(g.get("sql")) != _joined(x["sql"]):
+            problems.append(f"example {x['id']}: sql differs")
+    got_b = _by_id(back.get("benchmarks", {}).get("questions"))
+    for b in sent["benchmarks"]["questions"]:
+        g = got_b.get(b["id"])
+        if g is None:
+            problems.append(f"benchmark {b['id']}: missing")
+            continue
+        if _joined(g.get("question")) != _joined(b["question"]):
+            problems.append(f"benchmark {b['id']}: question text differs")
+        want_sql = "".join(_joined(a.get("content")) for a in b["answer"])
+        got_sql = "".join(_joined(a.get("content")) for a in g.get("answer") or [])
+        if got_sql != want_sql:
+            problems.append(f"benchmark {b['id']}: sql differs")
+
+    text = "".join(_joined(t.get("content")) for t in
+                   back.get("instructions", {}).get("text_instructions", []))
+    if text != spec["instructions"]:
+        problems.append("general instructions differ from the spec")
+    if "_specialty_codes" not in text or "join on _address, never on _id" not in text:
         problems.append("general instructions came back without the join rules")
+    if got.get("title") != spec["title"]:
+        problems.append(f"title: sent {spec['title']!r}, got {got.get('title')!r}")
+    if got.get("warehouse_id") != spec["warehouse_id"]:
+        problems.append(f"warehouse_id: sent {spec['warehouse_id']}, got {got.get('warehouse_id')}")
     return problems
+
+
+def verify_space(space_id: str, sent: dict, profile: str | None) -> list[str]:
+    """Read the space back and list every way it differs from what was sent.
+
+    An accepted write is not evidence the space holds it.
+    """
+    got = _cli(["genie", "get-space", space_id, "--include-serialized-space"], profile)
+    back = json.loads(got.get("serialized_space") or "{}")
+    return compare_space(sent, back, build_space_spec(), got)
 
 
 def create(profile: str | None) -> None:
@@ -477,7 +535,8 @@ def _report(space_id: str, payload: dict, profile: str | None) -> None:
         for p in problems:
             print(f"  - {p}")
         raise SystemExit(1)
-    print("read-back matches: tables, instructions, sample questions, examples, benchmarks")
+    print("read-back matches: title, warehouse, tables, instructions, sample "
+          "questions, examples, benchmarks")
 
 
 def main() -> None:
