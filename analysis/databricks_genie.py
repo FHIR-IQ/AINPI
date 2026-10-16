@@ -135,7 +135,7 @@ MULTI-VALUED COLUMNS (the most common mistake)
 COUNTING
 * Count practitioners with COUNT(DISTINCT ...), never by counting roles: a covered practitioner has about 3.2 active roles in {CURRENT_RELEASE}.
 * Filter practitioner_role._active = true for current roles.
-* Specialty codes are NUCC taxonomy codes (for example 207Q00000X family medicine, 207R00000X internal medicine). The 2026-05-08 release still carried CMS Medicare specialty codes such as '14-50' in practitioner_role, so a NUCC filter on that release returns little and is not a finding.
+* Specialty codes are NUCC taxonomy codes (for example 207Q00000X family medicine, 207R00000X internal medicine). The 2026-05-08 release may still carry CMS Medicare specialty codes such as '14-50' in practitioner_role (the move to NUCC completed by 2026-08-20). Before comparing a specialty across releases, check which code format each release uses; a NUCC filter that returns little on 2026-05-08 is not a finding.
 * organization holds more than provider organizations. _org_type = 'prov' is a provider organization. Rows with NULL _org_type are mostly tax-ID records (get_json_object(resource, '$.type[0].text') = 'ein'). 'pay' is a payer. Use _org_type = 'prov' when counting organizations that deliver care, and say which types were counted.
 * endpoint mixes two kinds of address. _connection_type = 'hl7-fhir-rest' is a callable FHIR API. 'direct-project' is a Direct secure-messaging address, not an API. Any question about FHIR endpoints or APIs uses the hl7-fhir-rest subset as its denominator.
 * practitioner._state is NULL for about 1.17 million practitioners in {CURRENT_RELEASE}. Report them as unknown state rather than dropping them silently.
