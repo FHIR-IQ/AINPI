@@ -10,7 +10,7 @@
   "release_date": "2026-10-07",
   "methodology_version": "0.7.3-draft",
   "commit_sha": "ac0cb9a",
-  "generated_at": "2026-10-17T02:09:39+00:00",
+  "generated_at": "2026-10-17T02:43:22+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -736,6 +736,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -750,6 +751,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -764,6 +766,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -778,6 +781,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -792,6 +796,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -806,6 +811,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -820,6 +826,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -834,6 +841,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -848,6 +856,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -862,6 +871,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -876,6 +886,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -890,6 +901,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -904,6 +916,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -918,6 +931,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -932,6 +946,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -946,6 +961,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -960,6 +976,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -974,6 +991,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -988,6 +1006,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1002,6 +1021,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1016,6 +1036,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1030,6 +1051,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1044,6 +1066,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1058,6 +1081,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1072,6 +1096,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1086,6 +1111,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1100,6 +1126,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1114,6 +1141,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1128,6 +1156,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1142,6 +1171,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1156,6 +1186,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1170,6 +1201,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1184,6 +1216,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1198,6 +1231,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1212,6 +1246,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1226,6 +1261,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1240,6 +1276,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1254,6 +1291,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1268,6 +1306,7 @@
       "connectivity_url": "https://ainpi.dev/api/v1/states/pa-connectivity.json",
       "connectivity_html_url": "https://ainpi.dev/states/pa/connectivity",
       "system_endpoint_gap_url": "https://ainpi.dev/api/v1/states/pa-system-endpoint-gap.json",
+      "reach_same_method_url": "https://ainpi.dev/api/v1/states/pa-reach-same-method.json",
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1282,6 +1321,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1296,6 +1336,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1310,6 +1351,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1324,6 +1366,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1338,6 +1381,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1352,6 +1396,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1366,6 +1411,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1380,6 +1426,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1394,6 +1441,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1408,6 +1456,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1422,6 +1471,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     },
     {
@@ -1436,6 +1486,7 @@
       "connectivity_url": null,
       "connectivity_html_url": null,
       "system_endpoint_gap_url": null,
+      "reach_same_method_url": null,
       "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State"
     }
   ],

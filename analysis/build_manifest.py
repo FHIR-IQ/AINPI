@@ -61,6 +61,10 @@ def main() -> None:
         # Why the ledger's largest systems show zero endpoints (FHI-19).
         # Pinned to CURRENT_RELEASE; regenerated with the ledger at a reload.
         gap = states_dir / f"{code_lower}-system-endpoint-gap.json"
+        # Endpoint reach on two releases by one method, consistent inputs
+        # (analysis/pa_reach_same_method.py). A one-off comparison, not
+        # regenerated at a reload.
+        same_method = states_dir / f"{code_lower}-reach-same-method.json"
         # Per-state cohort CSV — only populated for states with ≥1 critical NPI
         cohort_csv = states_dir / f"{code_lower}-cohort-critical.csv"
         cohort_count = 0
@@ -83,6 +87,7 @@ def main() -> None:
             "connectivity_url": f"{SITE}/api/v1/states/{code_lower}-connectivity.json" if conn.exists() else None,
             "connectivity_html_url": f"{SITE}/states/{code_lower}/connectivity" if conn.exists() else None,
             "system_endpoint_gap_url": f"{SITE}/api/v1/states/{code_lower}-system-endpoint-gap.json" if gap.exists() else None,
+            "reach_same_method_url": f"{SITE}/api/v1/states/{code_lower}-reach-same-method.json" if same_method.exists() else None,
             "schema_ref": "frontend/src/lib/api-v1-types.ts:ApiV1State",
         })
 

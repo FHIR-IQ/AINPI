@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
-import { loadLandscape } from '@/lib/load-api-v1';
+import { loadConnectivityHeadline, loadLandscape } from '@/lib/load-api-v1';
 import { loadHubFeed } from '@/lib/hub-feed';
 import LandscapeExplorer from './landscape/landscape-explorer';
 
@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const payload = loadLandscape();
   const { lead } = loadHubFeed();
+  const pa = loadConnectivityHeadline('pa');
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -110,20 +111,28 @@ export default function HomePage() {
                 Can software actually reach your clinician?
               </Link>
             </h2>
-            <dl className="mb-3 flex flex-wrap gap-x-6 gap-y-2">
-              <div>
-                <dd className="stat text-2xl text-ink">230,837</dd>
-                <dt className="text-xs text-gray-600">PA practitioners traced</dt>
-              </div>
-              <div>
-                <dd className="stat text-2xl text-ink">43.7%</dd>
-                <dt className="text-xs text-gray-600">have an organization</dt>
-              </div>
-              <div>
-                <dd className="stat text-2xl text-ink">18.7%</dd>
-                <dt className="text-xs text-gray-600">reach an endpoint</dt>
-              </div>
-            </dl>
+            {pa && (
+              <dl className="mb-3 flex flex-wrap gap-x-6 gap-y-2">
+                <div>
+                  <dd className="stat text-2xl text-ink">{pa.practitioners}</dd>
+                  <dt className="text-xs text-gray-600">PA practitioners traced</dt>
+                </div>
+                <div>
+                  <dd className="stat text-2xl text-ink">{pa.withRolePct}</dd>
+                  <dt className="text-xs text-gray-600">have an organization</dt>
+                </div>
+                <div>
+                  <dd className="stat text-2xl text-ink">{pa.reachPct}</dd>
+                  <dt className="text-xs text-gray-600">reach an endpoint by any route</dt>
+                </div>
+                {pa.deterministicPct && (
+                  <div>
+                    <dd className="stat text-2xl text-ink">{pa.deterministicPct}</dd>
+                    <dt className="text-xs text-gray-600">by a direct, checkable link</dt>
+                  </div>
+                )}
+              </dl>
+            )}
             <p className="measure mb-4 flex-1 text-sm text-gray-700">
               Pennsylvania traced the whole way through: practitioner to
               organization to location to endpoint to EHR vendor, with a county
