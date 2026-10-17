@@ -1,0 +1,102 @@
+{
+  "state": "PA",
+  "slug": "pa-reach-same-method",
+  "generated_at": "2026-10-17T02:44:56+00:00",
+  "source_commit": "b5aa33a",
+  "run_doc": "https://github.com/FHIR-IQ/AINPI/blob/main/docs/methodology/runs/2026-10-16-pa-reach-same-method.md",
+  "question": "Did Pennsylvania endpoint reach fall between the 2026-08-20 and 2026-10-07 NDH releases when both are measured by the same method on consistent inputs?",
+  "method": "The current connectivity chain (H50, H51, H53, then state_connectivity.py pa --no-geo) was run on each release from the local parquet export, read through DuckDB in place of BigQuery. Vendor endpoint files (2026-10-13 download), the NPPES corporate-parent snapshot, the CMS enrollment crosswalk, the hospital ownership crosswalk and the H47 rural file were held constant, so the difference isolates the change on the NDH side.",
+  "releases": {
+    "2026-08-20": {
+      "practitioners": 230837,
+      "with_role": 100918,
+      "with_role_pct": 43.7,
+      "affiliated_any_source": 101255,
+      "reaches_endpoint": 52802,
+      "reaches_endpoint_pct": 22.9,
+      "reaches_endpoint_pct_of_affiliated": 52.1,
+      "reaches_endpoint_deterministic": 8117,
+      "reaches_endpoint_deterministic_pct": 3.5,
+      "tiers": {
+        "ndh_only": 2461,
+        "vendor_npi": 5656,
+        "vendor_npi_list": 10038,
+        "resolved": 27665,
+        "resolved_alias": 11240,
+        "resolved_name_state": 5884,
+        "resolved_brand_state": 10541,
+        "enrollment_only": 6982,
+        "name_candidate_only": 1808,
+        "affiliated_no_endpoint": 40626,
+        "no_organization": 135601
+      }
+    },
+    "2026-10-07": {
+      "practitioners": 227917,
+      "with_role": 100379,
+      "with_role_pct": 44.0,
+      "affiliated_any_source": 100974,
+      "reaches_endpoint": 50812,
+      "reaches_endpoint_pct": 22.3,
+      "reaches_endpoint_pct_of_affiliated": 50.3,
+      "reaches_endpoint_deterministic": 6555,
+      "reaches_endpoint_deterministic_pct": 2.9,
+      "tiers": {
+        "ndh_only": 1907,
+        "vendor_npi": 4648,
+        "vendor_npi_list": 8967,
+        "resolved": 27214,
+        "resolved_alias": 11393,
+        "resolved_name_state": 5548,
+        "resolved_brand_state": 10273,
+        "enrollment_only": 8076,
+        "name_candidate_only": 1693,
+        "affiliated_no_endpoint": 41588,
+        "no_organization": 133824
+      }
+    }
+  },
+  "change": {
+    "practitioners": -2920,
+    "with_role": -539,
+    "with_role_pct": 0.3,
+    "affiliated_any_source": -281,
+    "reaches_endpoint": -1990,
+    "reaches_endpoint_pct": -0.6,
+    "reaches_endpoint_pct_of_affiliated": -1.8,
+    "reaches_endpoint_deterministic": -1562,
+    "reaches_endpoint_deterministic_pct": -0.6,
+    "tiers": {
+      "ndh_only": -554,
+      "vendor_npi": -1008,
+      "vendor_npi_list": -1071,
+      "resolved": -451,
+      "resolved_alias": 153,
+      "resolved_name_state": -336,
+      "resolved_brand_state": -268,
+      "enrollment_only": 1094,
+      "name_candidate_only": -115,
+      "affiliated_no_endpoint": 962,
+      "no_organization": -1777
+    }
+  },
+  "superseded_comparison": {
+    "note": "The published ledgers read 18.7% (2026-08-20, built 2026-10-13) and 15.8% (2026-10-07, before FHI-73). The August file used H53 organization-resolution and enrollment-endpoint CSVs last written on 2026-08-16, before the 2026-08-20 reload, so its H53 side was computed on the 2026-05-08 release. That pair mixes releases and methods and should not be cited as a change.",
+    "stale_inputs": [
+      {
+        "file": "states/pa-org-endpoint-resolution.csv",
+        "last_written": "0e95ed7"
+      },
+      {
+        "file": "states/pa-enrollment-endpoint.csv",
+        "last_written": "c8b9a28"
+      }
+    ]
+  },
+  "limits": [
+    "Run with --no-geo. The summary, funnel and confidence bands do not depend on the county layer.",
+    "Vendor files were held at one download, so vendor-side change between August and October is excluded by design.",
+    "BigQuery SQL was run through DuckDB with a small set of rewrites. The October run reproduces the committed October summary, funnel, confidence bands and all four intermediate CSVs (as row sets), except vendor_known, which varies by one between runs with row order (49,455 or 49,456; 49,456 committed). It is not part of the reach count.",
+    "Pennsylvania only."
+  ]
+}
