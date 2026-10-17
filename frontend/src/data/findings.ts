@@ -502,7 +502,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Startups + integrators',
         takeaway:
-          'Do not plan on discovering payer directory endpoints from the NDH in this release. They are not there. Endpoint resolution from the NDH gets you EHR patient-data URLs, which answer a different question than "where is this payer’s network directory".',
+          'The 2026-10-07 release carries at least 201 payer provider-directory addresses (25 matched by URL path only, 151 by host only, 25 by both; 144 are CMS Medicare Advantage bulk files and 57 are searchable FHIR APIs), but none is linked to a payer organization or a health plan from either side. You can find a directory in the file, but you cannot get from a payer or plan to its directory through the NDH. Most other endpoints are EHR patient-data URLs, which answer a different question than "where is this payer’s network directory".',
       },
       {
         audience: 'Researchers',
