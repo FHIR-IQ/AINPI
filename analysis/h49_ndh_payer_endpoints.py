@@ -117,6 +117,8 @@ PAYER_HOST_RE = (
 from payer_directory import (  # noqa: E402
     DIRECTORY_RE,
     PATIENT_ACCESS_RE,
+    ClassifierControlFailed,
+    check_controls,
     classify,
     host_of,
     summarize,
@@ -268,6 +270,12 @@ def measure_detail(client: bigquery.Client, payer_orgs: int,
     """)]
     contracts = dict((classification or {}).get("contract_ids_in_addresses") or {})
     hosts_with_contracts = dict((classification or {}).get("contract_hosts") or {})
+    # Same positive control as the NDJSON path: a known directory that stops
+    # classifying, or a known non-directory that starts, refuses the refresh.
+    try:
+        check_controls(contracts, plans_present=bool(classification))
+    except ClassifierControlFailed as exc:
+        raise RefreshRefused(f"payer directory classifier control failed: {exc}") from exc
     by_kind: dict[str, int] = {}
     directory_rows = []
     for a in addresses:
@@ -329,7 +337,13 @@ def measure_detail(client: bigquery.Client, payer_orgs: int,
         "payer_endpoint_status": status_mix,
         "payer_endpoints_with_managing_org": with_org,
         "control_directories": controls,
+        # URL-level: counts control base URLs that answer live and are not in
+        # the index at that address. It says nothing about the same payer's
+        # other directories; see control_directories[].same_payer_directories_in_ndh.
         "live_but_absent_from_ndh": len(live_absent),
+        "live_but_absent_from_ndh_scope": (
+            "control base URL only; the same payer may be indexed at another "
+            "address (control_directories[].same_payer_directories_in_ndh)"),
         # Added fields: which release the detail block was measured against,
         # and the URL-kind split the numerator and denominator come from.
         "endpoint_url_kinds": dict(sorted(by_kind.items(), key=lambda kv: -kv[1])),

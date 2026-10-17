@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T01:45:04+00:00",
+  "generated_at": "2026-10-17T02:09:37+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -371,14 +371,14 @@
         },
         {
           "release": "2026-10-07",
-          "value": 0.0018065954214939914,
-          "numerator": 201,
+          "value": 0.0017436791630340018,
+          "numerator": 194,
           "denominator": 111259,
           "definition_version": 1,
           "source": {
             "file": "frontend/public/api/v1/findings/ndh-payer-endpoint-coverage.json",
             "field": "numerator / denominator",
-            "commit": "b5aa33a",
+            "commit": "ac0cb9a",
             "vendored": false
           },
           "restatements": [
@@ -392,7 +392,7 @@
                 "commit": "b5aa33a",
                 "vendored": true
               },
-              "reason": "First published counting only addresses whose URL path names a directory (50); restated on 2026-10-16 (FHI-71) with the host signal added (CMS contract IDs from the release's InsurancePlan resources, and hand-checked payer directory hosts): 201, of which 25 path only, 151 host only, 25 both."
+              "reason": "First published counting only addresses whose URL path names a directory (50); restated on 2026-10-16 (FHI-71) with the host signal added (CMS contract IDs from the release's InsurancePlan resources, and hand-checked payer directory hosts): 194, of which 25 path only, 144 host only, 25 both."
             }
           ],
           "comparable_to_previous": true

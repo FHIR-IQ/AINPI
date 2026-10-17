@@ -48,7 +48,9 @@ from h49_ndh_payer_endpoints import (  # noqa: E402
     probe,
 )
 from payer_directory import (  # noqa: E402
+    answered,
     check_controls,
+    probe_target,
     classify,
     contract_hosts,
     host_of,
@@ -74,27 +76,98 @@ CORRECTIONS = [
         "release": "2026-10-07",
         "as_published_on": "2026-10-14",
         "as_published_count": 50,
-        "corrected_count": 201,
-        "corrected_by_signal": {"path_only": 25, "host_only": 151, "both": 25},
-        "corrected_bulk_mpf_index": 144,
-        "corrected_searchable_api": 57,
-        "unclassified_same_batch": 79,
+        "corrected_count": 194,
+        "corrected_by_signal": {"path_only": 25, "host_only": 144, "both": 25},
+        "corrected_bulk_mpf_index": 138,
+        "corrected_fhir_api_base": 50,
+        "corrected_placeholder_template": 6,
+        "unclassified_same_batch": 86,
         "what": (
             "The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as "
             "provider-directory addresses. That counted only addresses whose URL "
-            "path names a directory, so it was a floor. Classified by the host as "
-            "well (CMS contract IDs from the release's own InsurancePlan "
-            "resources, and payer directory hosts checked by hand), the "
-            "2026-10-07 release carries 201: 25 by path only, 151 by host only, "
-            "25 by both. 144 of the 201 are CMS Medicare Advantage bulk directory "
-            "files (MPF index.json and similar); 57 are searchable FHIR APIs. "
-            "None of the 201 is linked to a payer organization from either side. "
-            "The count is still a floor: 79 more addresses in the same CMS batch "
-            "match neither signal, and many of them look like payer directories."
+            "names a directory, so it was a floor. Classified by the host as well "
+            "(CMS contract IDs from the release's own InsurancePlan resources, and "
+            "payer directory hosts checked by hand), the 2026-10-07 release "
+            "carries at least 194: 25 by path only, 144 by host only, 25 by both. "
+            "By URL shape, 138 are CMS Medicare Advantage bulk directory files, 50 "
+            "are FHIR API base addresses and 6 are templates with the placeholder "
+            "unfilled. Probed on 2026-10-16 with curl and no credentials, 38 of the "
+            "50 FHIR API base addresses returned a FHIR Bundle to a Practitioner "
+            "search and 117 of the 138 bulk files returned their index; 9 "
+            "addresses, 8 of which answered, sit on QA or UAT hosts. None of the "
+            "194 is linked to a payer "
+            "organization or health plan from either side. The count is still a "
+            "floor: 86 more addresses in the same CMS batch match neither signal, "
+            "and many of them look like payer directories."
         ),
         "since": "2026-10-14 (86c2349), when the 2026-10-07 figure was published",
     },
 ]
+
+
+def probe_directories(rows, workers: int = 8, timeout: int = 30) -> dict:
+    """Fetch every classified non-placeholder address once, unauthenticated,
+    with curl (not urllib: payer WAFs block Python's TLS fingerprint). Returns
+    a dated summary plus per-address results. A failed fetch is recorded as
+    status 0, never dropped."""
+    import concurrent.futures as cf
+    import datetime as dt
+    import tempfile
+
+    def one(r):
+        url = probe_target(r["address"], r["shape"])
+        with tempfile.NamedTemporaryFile() as fh:
+            try:
+                p = subprocess.run(
+                    ["curl", "-sS", "-o", fh.name, "-w", "%{http_code}", "-L",
+                     "--max-time", str(timeout), "-H",
+                     # A static bulk file can answer 406 to a FHIR media type.
+                     "Accept: " + ("application/fhir+json" if r["shape"] == "api"
+                                   else "application/json, */*"),
+                     # Molina's WAF serves an HTML page to a user agent carrying a
+                     # URL; "(ainpi.dev)" still identifies the prober.
+                     "-A", "AINPI-research/1.0 (ainpi.dev)",
+                     url], capture_output=True, text=True, timeout=timeout + 15)
+                code = int((p.stdout or "0").strip() or 0)
+            except Exception:
+                code = 0
+            body = pathlib.Path(fh.name).read_bytes()[:2_000_000]
+        return {"address": r["address"], "probe_url": url, "shape": r["shape"],
+                "test_host": r.get("test_host", False),
+                "http_status": code, "answered": answered(code, body, r["shape"])}
+
+    targets = [r for r in rows if r["shape"] != "placeholder"]
+    with cf.ThreadPoolExecutor(max_workers=workers) as ex:
+        results = sorted(ex.map(one, targets), key=lambda x: x["address"].lower())
+    by_shape = {}
+    for shape in ("api", "bulk"):
+        sub = [x for x in results if x["shape"] == shape]
+        by_shape[shape] = {"probed": len(sub),
+                           "answered": sum(x["answered"] for x in sub)}
+    return {
+        "probed_on": dt.date.today().isoformat(),
+        "method": ("curl, no credentials; API: Practitioner?_count=1 must return "
+                   "200 with a FHIR Bundle; bulk index: 200 with JSON naming files "
+                   "or a FHIR resource"),
+        "by_shape": by_shape,
+        "probed_on_qa_or_uat_host": sum(1 for x in results if x["test_host"]),
+        "answered_on_qa_or_uat_host": sum(1 for x in results
+                                          if x["answered"] and x["test_host"]),
+        "results": results,
+    }
+
+
+def probe_sentence(probes: dict) -> str:
+    api = probes["by_shape"].get("api", {})
+    bulk = probes["by_shape"].get("bulk", {})
+    return (f"Probed on {probes['probed_on']} with curl and no credentials: "
+            f"{api.get('answered', 0):,} of {api.get('probed', 0):,} FHIR API base "
+            f"addresses returned a FHIR Bundle to a Practitioner search, and "
+            f"{bulk.get('answered', 0):,} of {bulk.get('probed', 0):,} bulk files "
+            f"returned their index. {probes['answered_on_qa_or_uat_host']:,} of the "
+            f"addresses that answered sit on QA or UAT hosts "
+            f"({probes['probed_on_qa_or_uat_host']:,} probed). Per-address results "
+            f"are in detail.payer_directory_classification.probe.")
 
 
 def check_correction(release: str, breakdown: dict, residual: int, linked: int) -> None:
@@ -107,7 +180,8 @@ def check_correction(release: str, breakdown: dict, residual: int, linked: int) 
             "corrected_count": breakdown["total"],
             "corrected_by_signal": breakdown["by_signal"],
             "corrected_bulk_mpf_index": breakdown["bulk_mpf_index"],
-            "corrected_searchable_api": breakdown["searchable_api"],
+            "corrected_fhir_api_base": breakdown["fhir_api_base"],
+            "corrected_placeholder_template": breakdown["placeholder_template"],
             "unclassified_same_batch": residual,
         }
         bad = {k: (c[k], v) for k, v in measured.items() if c[k] != v}
@@ -172,6 +246,9 @@ def main():
     ap.add_argument("--dir", required=True)
     ap.add_argument("--release", default=None,
                     help="release date of the files, e.g. 2026-10-07")
+    ap.add_argument("--no-probe", action="store_true",
+                    help="with --write, skip the live probe of classified addresses "
+                         "(the published probe block is then left as it was)")
     ap.add_argument("--write", action="store_true",
                     help="update the published H49 finding JSON with these numbers")
     args = ap.parse_args()
@@ -235,7 +312,7 @@ def main():
         print(f"   {k:22s} {kinds[k]:>9,}")
     print(f"   directory by signal    {breakdown['by_signal']}")
     print(f"   host signal by basis   {breakdown['host_signal_by_basis']}")
-    print(f"   bulk MPF / searchable  {breakdown['bulk_mpf_index']} / {breakdown['searchable_api']}")
+    print(f"   bulk / api / placeholder  {breakdown['bulk_mpf_index']} / {breakdown['fhir_api_base']} / {breakdown['placeholder_template']}; inherited-only {breakdown['inherited_only']}, QA/UAT {breakdown['on_qa_or_uat_host']}")
     print(f"   payer-operated hosts   {len(payer_hosts):>9,}")
     # Residual: the CMS-collected batch arrives named "FHIR API" with no
     # managingOrganization. It is not used to classify (a load artifact, not a
@@ -359,6 +436,14 @@ def main():
         import datetime as dt
         pub = json.loads(PUBLISHED.read_text()) if PUBLISHED.exists() else {}
         bs = breakdown["by_signal"]
+        old_class = (pub.get("detail") or {}).get("payer_directory_classification") or {}
+        if args.no_probe:
+            probes = old_class.get("probe") if old_class.get("release_date") == args.release else None
+        else:
+            print("\nProbing classified addresses ...")
+            probes = probe_directories(classified)
+            print(f"   {probes['by_shape']}, answered on QA/UAT hosts "
+                  f"{probes['answered_on_qa_or_uat_host']}")
         split = (f"{bs['path_only'] + bs['both']:,} by URL path and "
                  f"{bs['host_only']:,} only by host")
         if dirs_to_payer == 0:
@@ -382,7 +467,7 @@ def main():
             f"The {args.release} release names {payer_typed_n:,} payer "
             f"organizations and {plans:,} health plans, and "
             f"{payer_typed_with_ep:,} of those organizations carry an endpoint. "
-            f"{directories:,} of {rest:,} FHIR REST endpoints are payer "
+            f"At least {directories:,} of {rest:,} FHIR REST endpoints are payer "
             f"provider-directory addresses ({split}), {link_clause}; "
             + "; ".join(control_clauses) + "."
         )
@@ -406,11 +491,20 @@ def main():
             f"({len(contracts):,} contract IDs, found on {len(hosts_with_contracts):,} "
             f"hosts), or by a hand-checked list of payer directory hosts. Of the "
             f"{directories:,}: {bs['path_only']:,} path only, {bs['host_only']:,} host "
-            f"only, {bs['both']:,} both. {breakdown['bulk_mpf_index']:,} are CMS "
-            f"Medicare Advantage bulk directory files (MPF index.json and similar) "
-            f"and {breakdown['searchable_api']:,} are searchable FHIR APIs. A host "
-            f"signal never overrides a path that marks a patient-access or other "
-            f"non-directory API.",
+            f"only, {bs['both']:,} both. By URL shape, {breakdown['bulk_mpf_index']:,} "
+            f"are CMS Medicare Advantage bulk directory files (MPF index.json and "
+            f"similar), {breakdown['fhir_api_base']:,} are FHIR API base addresses, "
+            f"and {breakdown['placeholder_template']:,} are template addresses "
+            f"submitted with the placeholder unfilled (such as ppp-cccc-nnn), "
+            f"counted but in neither group. {breakdown['on_qa_or_uat_host']:,} sit on "
+            f"hosts named as QA or UAT. A host signal never overrides a path that "
+            f"marks a patient-access, authorization, member or other non-directory "
+            f"API, and shared or multi-tenant hosts never lend it to a neighbouring "
+            f"address; {breakdown['inherited_only']:,} addresses carry the contract "
+            f"signal only through their host and are listed with the source "
+            f"contract IDs.",
+            (probe_sentence(probes) if probes else
+             "The classified addresses were not probed in this run."),
             f"The count is a floor. {len(fhir_api):,} FHIR REST endpoints in this "
             f"release share the name 'FHIR API' and carry no managingOrganization, "
             f"which marks one CMS collection batch; {len(residual):,} of them match "
@@ -439,8 +533,11 @@ def main():
                        ", which separates 'nothing to index' from 'not indexed yet'.")))
                 for cr in control_results),
         ]
+        # A correction is notes text only for the release it corrects; later
+        # releases keep it in `corrections` without cluttering their notes.
         for c in CORRECTIONS:
-            notes_parts.append(f"Correction ({c['date']}, {c['issue']}): {c['what']}")
+            if c["release"] == args.release:
+                notes_parts.append(f"Correction ({c['date']}, {c['issue']}): {c['what']}")
         notes_parts.append("Reproduce with analysis/h49_recheck_release.py --dir "
                            "<release dir> --release <date>.")
         classification = {
@@ -456,9 +553,17 @@ def main():
             "fhir_api_named_unclassified": residual,
             "addresses": [
                 {k: r[k] for k in ("address", "hostname", "signal", "basis", "payer",
-                                   "owner_org", "owner_name", "contracts", "bulk",
-                                   "managing_org")}
+                                   "owner_org", "owner_name", "contracts", "shape",
+                                   "bulk", "placeholder", "test_host", "managing_org")}
                 for r in sorted(classified, key=lambda r: r["address"].lower())],
+            # Recheck each release: a host lends the contract signal to these,
+            # and a provider base added to the same host later would join them.
+            "inherited_only_addresses": [
+                {"address": r["address"], "signal": r["signal"],
+                 "source_contract_ids": r["inherited_from"]}
+                for r in sorted(classified, key=lambda r: r["address"].lower())
+                if r["inherited_from"]],
+            "probe": probes,
             "linkage": linkage,
             "controls": control_results,
         }

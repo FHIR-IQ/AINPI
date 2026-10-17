@@ -6,11 +6,11 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-17T01:49:10+00:00",
+  "generated_at": "2026-10-17T02:09:30+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "b5aa33a",
-  "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. 201 of 111,259 FHIR REST endpoints are payer provider-directory addresses (50 by URL path and 151 only by host), none of them attached to a payer organization; the Capital BlueCross control directory URL is not in the index, though another Capital BlueCross directory address is.",
-  "numerator": 201,
+  "commit_sha": "ac0cb9a",
+  "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. At least 194 of 111,259 FHIR REST endpoints are payer provider-directory addresses (50 by URL path and 144 only by host), none of them attached to a payer organization; the Capital BlueCross control directory URL is not in the index, though another Capital BlueCross directory address is.",
+  "numerator": 194,
   "denominator": 111259,
   "chart": {
     "type": "bar",
@@ -30,11 +30,11 @@
       },
       {
         "label": "Provider-directory endpoints",
-        "value": 201
+        "value": 194
       }
     ]
   },
-  "notes": "Re-measured against the 2026-10-07 release by streaming the published NDJSON directly, not through BigQuery. Classification rules are imported from analysis/payer_directory.py rather than copied, so this cannot drift from the finding it updates. 997 organizations carry the payer type (pay); 0 of them carry an endpoint and 0 a telecom entry, so no payer directory can be found from the payer organization record itself.\n\nA FHIR REST address counts as a payer provider directory on either of two signals. Path: the URL names a directory (providerdirectory, provider-directory, plan-net, pdex). Host: the address sits on a host that serves a payer's directory, shown either by a CMS contract ID that the release's own InsurancePlan resources carry (962 contract IDs, found on 30 hosts), or by a hand-checked list of payer directory hosts. Of the 201: 25 path only, 151 host only, 25 both. 144 are CMS Medicare Advantage bulk directory files (MPF index.json and similar) and 57 are searchable FHIR APIs. A host signal never overrides a path that marks a patient-access or other non-directory API.\n\nThe count is a floor. 279 FHIR REST endpoints in this release share the name 'FHIR API' and carry no managingOrganization, which marks one CMS collection batch; 79 of them match neither signal, and many of those look like payer directories. Payer name matching is not used to classify: it matches provider EHR servers whose names resemble payers'.\n\nLinkage, both sides: 0 directory addresses name a payer organization as managingOrganization, 0 are listed in a payer organization's endpoint list, and 0 in an InsurancePlan's. 0 are linked to any organization at all. 30 endpoint links run from provider-typed records that carry a payer's exact name; they are listed in detail.payer_directory_classification.linkage and are mostly authenticated member APIs or EHR servers, not directories.\n\nThe control directory Capital BlueCross (https://providerdirectory-api.capbluecross.com/r4) answered 200 to an unauthenticated request and is not in the index at that address; the same payer's directory is, at https://api.capitalbluecrossfhir.com/r4/public-ma/.\n\nCorrection (2026-10-16, FHI-71): The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as provider-directory addresses. That counted only addresses whose URL path names a directory, so it was a floor. Classified by the host as well (CMS contract IDs from the release's own InsurancePlan resources, and payer directory hosts checked by hand), the 2026-10-07 release carries 201: 25 by path only, 151 by host only, 25 by both. 144 of the 201 are CMS Medicare Advantage bulk directory files (MPF index.json and similar); 57 are searchable FHIR APIs. None of the 201 is linked to a payer organization from either side. The count is still a floor: 79 more addresses in the same CMS batch match neither signal, and many of them look like payer directories.\n\nReproduce with analysis/h49_recheck_release.py --dir <release dir> --release <date>.\n\nRelease watch, payer PIN: 0 of the 997 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 997 payer-typed organizations were found, so these counts come from a query that could see them.",
+  "notes": "Re-measured against the 2026-10-07 release by streaming the published NDJSON directly, not through BigQuery. Classification rules are imported from analysis/payer_directory.py rather than copied, so this cannot drift from the finding it updates. 997 organizations carry the payer type (pay); 0 of them carry an endpoint and 0 a telecom entry, so no payer directory can be found from the payer organization record itself.\n\nA FHIR REST address counts as a payer provider directory on either of two signals. Path: the URL names a directory (providerdirectory, provider-directory, plan-net, pdex). Host: the address sits on a host that serves a payer's directory, shown either by a CMS contract ID that the release's own InsurancePlan resources carry (962 contract IDs, found on 26 hosts), or by a hand-checked list of payer directory hosts. Of the 194: 25 path only, 144 host only, 25 both. By URL shape, 138 are CMS Medicare Advantage bulk directory files (MPF index.json and similar), 50 are FHIR API base addresses, and 6 are template addresses submitted with the placeholder unfilled (such as ppp-cccc-nnn), counted but in neither group. 9 sit on hosts named as QA or UAT. A host signal never overrides a path that marks a patient-access, authorization, member or other non-directory API, and shared or multi-tenant hosts never lend it to a neighbouring address; 19 addresses carry the contract signal only through their host and are listed with the source contract IDs.\n\nProbed on 2026-10-16 with curl and no credentials: 38 of 50 FHIR API base addresses returned a FHIR Bundle to a Practitioner search, and 117 of 138 bulk files returned their index. 8 of the addresses that answered sit on QA or UAT hosts (9 probed). Per-address results are in detail.payer_directory_classification.probe.\n\nThe count is a floor. 279 FHIR REST endpoints in this release share the name 'FHIR API' and carry no managingOrganization, which marks one CMS collection batch; 86 of them match neither signal, and many of those look like payer directories. Payer name matching is not used to classify: it matches provider EHR servers whose names resemble payers'.\n\nLinkage, both sides: 0 directory addresses name a payer organization as managingOrganization, 0 are listed in a payer organization's endpoint list, and 0 in an InsurancePlan's. 0 are linked to any organization at all. 30 endpoint links run from provider-typed records that carry a payer's exact name; they are listed in detail.payer_directory_classification.linkage and are mostly authenticated member APIs or EHR servers, not directories.\n\nThe control directory Capital BlueCross (https://providerdirectory-api.capbluecross.com/r4) answered 200 to an unauthenticated request and is not in the index at that address; the same payer's directory is, at https://api.capitalbluecrossfhir.com/r4/public-ma/.\n\nCorrection (2026-10-16, FHI-71): The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as provider-directory addresses. That counted only addresses whose URL names a directory, so it was a floor. Classified by the host as well (CMS contract IDs from the release's own InsurancePlan resources, and payer directory hosts checked by hand), the 2026-10-07 release carries at least 194: 25 by path only, 144 by host only, 25 by both. By URL shape, 138 are CMS Medicare Advantage bulk directory files, 50 are FHIR API base addresses and 6 are templates with the placeholder unfilled. Probed on 2026-10-16 with curl and no credentials, 38 of the 50 FHIR API base addresses returned a FHIR Bundle to a Practitioner search and 117 of the 138 bulk files returned their index; 9 addresses, 8 of which answered, sit on QA or UAT hosts. None of the 194 is linked to a payer organization or health plan from either side. The count is still a floor: 86 more addresses in the same CMS batch match neither signal, and many of them look like payer directories.\n\nReproduce with analysis/h49_recheck_release.py --dir <release dir> --release <date>.\n\nRelease watch, payer PIN: 0 of the 997 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 997 payer-typed organizations were found, so these counts come from a query that could see them.",
   "detail": {
     "organization_type_codings": [
       {
@@ -90,27 +90,30 @@
       "release_date": "2026-10-07"
     },
     "endpoint_url_kinds": {
-      "unlabelled": 111052,
-      "provider-directory": 201,
+      "unlabelled": 111059,
+      "provider-directory": 194,
       "patient-access": 6
     },
     "detail_release_date": "2026-10-07",
     "payer_directory_classification": {
       "release_date": "2026-10-07",
       "rule": "path OR host; see analysis/payer_directory.py",
-      "total": 201,
+      "total": 194,
       "by_signal": {
         "path_only": 25,
-        "host_only": 151,
+        "host_only": 144,
         "both": 25
       },
       "host_signal_by_basis": {
-        "contract": 156,
+        "contract": 149,
         "curated": 10,
         "payer-name": 10
       },
-      "bulk_mpf_index": 144,
-      "searchable_api": 57,
+      "bulk_mpf_index": 138,
+      "fhir_api_base": 50,
+      "placeholder_template": 6,
+      "inherited_only": 19,
+      "on_qa_or_uat_host": 9,
       "contract_ids_in_addresses": {
         "H0413": "Organization-320bb01f-5fd0-4d71-9de2-d472c7a4b3e1",
         "H0504": "Organization-06a5cc2e-16b8-4b68-a346-31b1e1b008f2",
@@ -270,10 +273,6 @@
         "cca.fp-h3727.prd.healixcloud.net": [
           "H3727"
         ],
-        "cdn.mpulse.com": [
-          "H3811",
-          "H5119"
-        ],
         "cloud-api.blueshieldca.com": [
           "H0504",
           "H2819",
@@ -380,18 +379,6 @@
         "provider.bcbst.com": [
           "H3259",
           "H7917"
-        ],
-        "uat120.fhir.edifecsfedcloud.com": [
-          "H8051",
-          "H9623"
-        ],
-        "us120.fhir.edifecsfedcloud.com": [
-          "H9623"
-        ],
-        "us120.fhir.m2.edifecsfedcloud.com": [
-          "H2737",
-          "H4140",
-          "H8578"
         ],
         "vlr.fp-h1119.prd.healixcloud.net": [
           "H1119"
@@ -506,8 +493,15 @@
         "https://sapfhir.prod.healthaxis.net/api/fhir/practitioner",
         "https://totalview.healthos.Wellpoint.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/",
         "https://totalview.healthos.anthem.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/",
+        "https://uat120.fhir.edifecsfedcloud.com/hpsj_pdfhir",
         "https://url.us.m.mimecastprotect.com/s/poWxCXDw2ruNxV8ZuDikfWDtoF?domain=api.ahffhir.com",
         "https://us107.ir4.edifecscloud.com/lac/fhir/pd/R4/Practitioner",
+        "https://us120.fhir.edifecsfedcloud.com/aha_pdfhir",
+        "https://us120.fhir.edifecsfedcloud.com/ccah/fhir/pd/R4/",
+        "https://us120.fhir.edifecsfedcloud.com/sfhp_pdfhir",
+        "https://us120.fhir.m2.edifecsfedcloud.com/cor_pd/practitionerrole",
+        "https://us120.fhir.m2.edifecsfedcloud.com/dhcp_pd",
+        "https://us120.fhir.m2.edifecsfedcloud.com/hne_pd",
         "https://verdahptx.com/fhir-provider-api-2026/",
         "https://www.verdahpaz.com/fhir-provider-api-2026/"
       ],
@@ -521,7 +515,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -535,7 +532,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -551,7 +551,10 @@
           "contracts": [
             "H1993"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -563,7 +566,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -577,7 +583,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -593,7 +602,10 @@
           "contracts": [
             "H9306"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -605,7 +617,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -617,7 +632,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
-          "bulk": true,
+          "shape": "placeholder",
+          "bulk": false,
+          "placeholder": true,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -629,7 +647,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -641,7 +662,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -657,7 +681,10 @@
           "contracts": [
             "H2237"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -671,7 +698,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -683,7 +713,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -697,7 +730,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -713,7 +749,10 @@
           "contracts": [
             "H1365"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -729,7 +768,10 @@
           "contracts": [
             "H5591"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -741,7 +783,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
-          "bulk": true,
+          "shape": "placeholder",
+          "bulk": false,
+          "placeholder": true,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -757,7 +802,10 @@
           "contracts": [
             "H2256"
           ],
-          "bulk": true,
+          "shape": "placeholder",
+          "bulk": false,
+          "placeholder": true,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -773,7 +821,10 @@
           "contracts": [
             "H5314"
           ],
-          "bulk": true,
+          "shape": "placeholder",
+          "bulk": false,
+          "placeholder": true,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -789,7 +840,10 @@
           "contracts": [
             "H8330"
           ],
-          "bulk": true,
+          "shape": "placeholder",
+          "bulk": false,
+          "placeholder": true,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -805,7 +859,10 @@
           "contracts": [
             "H9907"
           ],
-          "bulk": true,
+          "shape": "placeholder",
+          "bulk": false,
+          "placeholder": true,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -819,7 +876,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -835,7 +895,10 @@
           "contracts": [
             "H5015"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -847,7 +910,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -861,7 +927,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -875,7 +944,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -889,7 +961,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -903,7 +978,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -917,7 +995,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -931,7 +1012,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -945,7 +1029,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -959,7 +1046,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -973,7 +1063,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -987,7 +1080,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -1001,7 +1097,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -1015,7 +1114,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -1029,7 +1131,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -1043,7 +1148,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -1055,7 +1163,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1067,7 +1178,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1079,7 +1193,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1095,7 +1212,10 @@
           "contracts": [
             "H1587"
           ],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1111,7 +1231,10 @@
           "contracts": [
             "H3727"
           ],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1123,7 +1246,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1139,7 +1265,10 @@
           "contracts": [
             "H3811"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1155,7 +1284,10 @@
           "contracts": [
             "H5119"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1171,7 +1303,10 @@
           "contracts": [
             "H0504"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1187,7 +1322,10 @@
           "contracts": [
             "H2819"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1203,7 +1341,10 @@
           "contracts": [
             "H5928"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1219,7 +1360,10 @@
           "contracts": [
             "H5433"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1235,7 +1379,10 @@
           "contracts": [
             "H3907"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1251,7 +1398,10 @@
           "contracts": [
             "H4279"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1267,7 +1417,10 @@
           "contracts": [
             "H5533"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1283,7 +1436,10 @@
           "contracts": [
             "H7123"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1297,7 +1453,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1311,7 +1470,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1327,7 +1489,10 @@
           "contracts": [
             "H2320"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1343,7 +1508,10 @@
           "contracts": [
             "H4875"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1359,7 +1527,10 @@
           "contracts": [
             "H8379"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1375,7 +1546,10 @@
           "contracts": [
             "H2320"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1391,7 +1565,10 @@
           "contracts": [
             "H6776"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1407,7 +1584,10 @@
           "contracts": [
             "H2168"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1419,7 +1599,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1433,7 +1616,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1449,7 +1635,10 @@
           "contracts": [
             "H0413"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1465,7 +1654,10 @@
           "contracts": [
             "H1290"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1479,7 +1671,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1495,7 +1690,10 @@
           "contracts": [
             "H2041"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1511,7 +1709,10 @@
           "contracts": [
             "H2526"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1527,7 +1728,10 @@
           "contracts": [
             "H2686"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1543,7 +1747,10 @@
           "contracts": [
             "H2697"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1559,7 +1766,10 @@
           "contracts": [
             "H2845"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1575,7 +1785,10 @@
           "contracts": [
             "H2923"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1591,7 +1804,10 @@
           "contracts": [
             "H3041"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1607,7 +1823,10 @@
           "contracts": [
             "H3080"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1621,7 +1840,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1635,7 +1857,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1651,7 +1876,10 @@
           "contracts": [
             "H4348"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1667,7 +1895,10 @@
           "contracts": [
             "H4473"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1683,7 +1914,10 @@
           "contracts": [
             "H4808"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1697,7 +1931,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1713,7 +1950,10 @@
           "contracts": [
             "H5299"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1727,7 +1967,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1743,7 +1986,10 @@
           "contracts": [
             "H5397"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1759,7 +2005,10 @@
           "contracts": [
             "H5453"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1775,7 +2024,10 @@
           "contracts": [
             "H5718"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1791,7 +2043,10 @@
           "contracts": [
             "H6018"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1807,7 +2062,10 @@
           "contracts": [
             "H6545"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1823,7 +2081,10 @@
           "contracts": [
             "H6586"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1839,7 +2100,10 @@
           "contracts": [
             "H6813"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1855,7 +2119,10 @@
           "contracts": [
             "H6852"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1871,7 +2138,10 @@
           "contracts": [
             "H6994"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1887,7 +2157,10 @@
           "contracts": [
             "H7028"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1903,7 +2176,10 @@
           "contracts": [
             "H7147"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1919,7 +2195,10 @@
           "contracts": [
             "H7151"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1933,7 +2212,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1949,7 +2231,10 @@
           "contracts": [
             "H7199"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1965,7 +2250,10 @@
           "contracts": [
             "H7355"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1981,7 +2269,10 @@
           "contracts": [
             "H7397"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -1997,7 +2288,10 @@
           "contracts": [
             "H7471"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2013,7 +2307,10 @@
           "contracts": [
             "H7605"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2029,7 +2326,10 @@
           "contracts": [
             "H7766"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2045,7 +2345,10 @@
           "contracts": [
             "H7993"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2061,7 +2364,10 @@
           "contracts": [
             "H8173"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2077,7 +2383,10 @@
           "contracts": [
             "H8320"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2093,7 +2402,10 @@
           "contracts": [
             "H8917"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2109,7 +2421,10 @@
           "contracts": [
             "H9231"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2125,7 +2440,10 @@
           "contracts": [
             "H9700"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2141,7 +2459,10 @@
           "contracts": [
             "H9802"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2155,7 +2476,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2171,7 +2495,10 @@
           "contracts": [
             "H9884"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2187,7 +2514,10 @@
           "contracts": [
             "H9888"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2203,7 +2533,10 @@
           "contracts": [
             "H9977"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2217,7 +2550,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2229,7 +2565,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2241,7 +2580,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2253,7 +2595,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2267,7 +2612,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2283,7 +2631,10 @@
           "contracts": [
             "H8879"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2299,7 +2650,10 @@
           "contracts": [
             "H8894"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2313,7 +2667,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2327,7 +2684,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2341,7 +2701,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2353,7 +2716,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2369,7 +2735,10 @@
           "contracts": [
             "H2230"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2385,7 +2754,10 @@
           "contracts": [
             "H2261"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2401,7 +2773,10 @@
           "contracts": [
             "H3404"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2417,7 +2792,10 @@
           "contracts": [
             "H3449"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2433,7 +2811,10 @@
           "contracts": [
             "H9147"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2449,7 +2830,10 @@
           "contracts": [
             "H1372"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2465,7 +2849,10 @@
           "contracts": [
             "H2185"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2481,7 +2868,10 @@
           "contracts": [
             "H3274"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2497,7 +2887,10 @@
           "contracts": [
             "H3291"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2513,7 +2906,10 @@
           "contracts": [
             "H3419"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2529,7 +2925,10 @@
           "contracts": [
             "H3467"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2543,7 +2942,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2559,7 +2961,10 @@
           "contracts": [
             "H4172"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2575,7 +2980,10 @@
           "contracts": [
             "H6345"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2591,7 +2999,10 @@
           "contracts": [
             "H6566"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2607,7 +3018,10 @@
           "contracts": [
             "H6832"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2623,7 +3037,10 @@
           "contracts": [
             "H6959"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2639,7 +3056,10 @@
           "contracts": [
             "H8797"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2655,7 +3075,10 @@
           "contracts": [
             "H9917"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2667,7 +3090,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2683,7 +3109,10 @@
           "contracts": [
             "H1722"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2699,7 +3128,10 @@
           "contracts": [
             "H3359"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2715,7 +3147,10 @@
           "contracts": [
             "H5989"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2731,7 +3166,10 @@
           "contracts": [
             "H9678"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2743,7 +3181,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2755,7 +3196,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2767,7 +3211,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2779,7 +3226,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2791,7 +3241,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2807,7 +3260,10 @@
           "contracts": [
             "H3259"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2823,7 +3279,10 @@
           "contracts": [
             "H7917"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2835,7 +3294,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2849,7 +3311,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2865,7 +3330,10 @@
           "contracts": [
             "H0982"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2881,21 +3349,10 @@
           "contracts": [
             "H9623"
           ],
+          "shape": "bulk",
           "bulk": true,
-          "managing_org": ""
-        },
-        {
-          "address": "https://uat120.fhir.edifecsfedcloud.com/hpsj_pdfhir",
-          "hostname": "uat120.fhir.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -2911,35 +3368,10 @@
           "contracts": [
             "H8051"
           ],
+          "shape": "bulk",
           "bulk": true,
-          "managing_org": ""
-        },
-        {
-          "address": "https://us120.fhir.edifecsfedcloud.com/aha_pdfhir",
-          "hostname": "us120.fhir.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
-          "managing_org": ""
-        },
-        {
-          "address": "https://us120.fhir.edifecsfedcloud.com/ccah/fhir/pd/R4/",
-          "hostname": "us120.fhir.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
+          "placeholder": false,
+          "test_host": true,
           "managing_org": ""
         },
         {
@@ -2955,35 +3387,10 @@
           "contracts": [
             "H9623"
           ],
+          "shape": "bulk",
           "bulk": true,
-          "managing_org": ""
-        },
-        {
-          "address": "https://us120.fhir.edifecsfedcloud.com/sfhp_pdfhir",
-          "hostname": "us120.fhir.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
-          "managing_org": ""
-        },
-        {
-          "address": "https://us120.fhir.m2.edifecsfedcloud.com/cor_pd/practitionerrole",
-          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -2999,21 +3406,10 @@
           "contracts": [
             "H4140"
           ],
+          "shape": "bulk",
           "bulk": true,
-          "managing_org": ""
-        },
-        {
-          "address": "https://us120.fhir.m2.edifecsfedcloud.com/dhcp_pd",
-          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3029,7 +3425,10 @@
           "contracts": [
             "H2737"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3045,21 +3444,10 @@
           "contracts": [
             "H8578"
           ],
+          "shape": "bulk",
           "bulk": true,
-          "managing_org": ""
-        },
-        {
-          "address": "https://us120.fhir.m2.edifecsfedcloud.com/hne_pd",
-          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
-          "signal": "host_only",
-          "basis": [
-            "contract"
-          ],
-          "payer": null,
-          "owner_org": null,
-          "owner_name": null,
-          "contracts": [],
-          "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3075,7 +3463,10 @@
           "contracts": [
             "H1119"
           ],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3091,7 +3482,10 @@
           "contracts": [
             "H2032"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3107,7 +3501,10 @@
           "contracts": [
             "H8142"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3123,7 +3520,10 @@
           "contracts": [
             "H9153"
           ],
+          "shape": "api",
           "bulk": false,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3139,7 +3539,10 @@
           "contracts": [
             "H4931"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3155,7 +3558,10 @@
           "contracts": [
             "H5843"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3171,7 +3577,10 @@
           "contracts": [
             "H1799"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3187,7 +3596,10 @@
           "contracts": [
             "H2224"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3203,7 +3615,10 @@
           "contracts": [
             "H3038"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3219,7 +3634,10 @@
           "contracts": [
             "H3093"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3233,7 +3651,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3249,7 +3670,10 @@
           "contracts": [
             "H4371"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3265,7 +3689,10 @@
           "contracts": [
             "H5209"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3281,7 +3708,10 @@
           "contracts": [
             "H5628"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3297,7 +3727,10 @@
           "contracts": [
             "H5823"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3313,7 +3746,10 @@
           "contracts": [
             "H5926"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3329,7 +3765,10 @@
           "contracts": [
             "H5992"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3345,7 +3784,10 @@
           "contracts": [
             "H6515"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3359,7 +3801,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3373,7 +3818,10 @@
           "owner_org": null,
           "owner_name": null,
           "contracts": [],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3389,7 +3837,10 @@
           "contracts": [
             "H7678"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3405,7 +3856,10 @@
           "contracts": [
             "H8176"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3421,7 +3875,10 @@
           "contracts": [
             "H8845"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3437,7 +3894,10 @@
           "contracts": [
             "H9955"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3453,7 +3913,10 @@
           "contracts": [
             "H3800"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3469,7 +3932,10 @@
           "contracts": [
             "H4054"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3485,7 +3951,10 @@
           "contracts": [
             "H4093"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3501,7 +3970,10 @@
           "contracts": [
             "H4439"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3517,7 +3989,10 @@
           "contracts": [
             "H4444"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         },
         {
@@ -3533,10 +4008,2053 @@
           "contracts": [
             "H9191"
           ],
+          "shape": "bulk",
           "bulk": true,
+          "placeholder": false,
+          "test_host": false,
           "managing_org": ""
         }
       ],
+      "inherited_only_addresses": [
+        {
+          "address": "https://afs.astivahealth.com/fhir",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H1993"
+          ]
+        },
+        {
+          "address": "https://api-atwd-prd.safhir.io/v1/api/provider-directory",
+          "signal": "both",
+          "source_contract_ids": [
+            "H9306"
+          ]
+        },
+        {
+          "address": "https://api-icar-prd.safhir.io/v1/api/provider-directory/metadata",
+          "signal": "both",
+          "source_contract_ids": [
+            "H2237"
+          ]
+        },
+        {
+          "address": "https://api-MPHC-prd.safhir.io/v1/api/provider-directory",
+          "signal": "both",
+          "source_contract_ids": [
+            "H1365",
+            "H5591"
+          ]
+        },
+        {
+          "address": "https://api-tihp-prd.safhir.io/v1/api/provider-directory",
+          "signal": "both",
+          "source_contract_ids": [
+            "H5015"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/fhir",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H1390/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H3515/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H4030/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H5177/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H5334/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H7191/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.devoted.com/H9862/2027",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H0413",
+            "H1290",
+            "H2041",
+            "H2526",
+            "H2686",
+            "H2697",
+            "H2845",
+            "H2923",
+            "H3041",
+            "H3080",
+            "H4348",
+            "H4473",
+            "H4808",
+            "H5299",
+            "H5397",
+            "H5453",
+            "H5718",
+            "H6018",
+            "H6545",
+            "H6586",
+            "H6813",
+            "H6852",
+            "H6994",
+            "H7028",
+            "H7147",
+            "H7151",
+            "H7199",
+            "H7355",
+            "H7397",
+            "H7471",
+            "H7605",
+            "H7766",
+            "H7993",
+            "H8173",
+            "H8320",
+            "H8917",
+            "H9231",
+            "H9700",
+            "H9802",
+            "H9884",
+            "H9888",
+            "H9977"
+          ]
+        },
+        {
+          "address": "https://fhir.healthy-ms.com/plan-net/H1823/",
+          "signal": "both",
+          "source_contract_ids": [
+            "H8879"
+          ]
+        },
+        {
+          "address": "https://fhir.iehp.org/provider-directory/metadata?_format=json",
+          "signal": "both",
+          "source_contract_ids": [
+            "H8894"
+          ]
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H4127/2027/",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H1372",
+            "H2185",
+            "H3274",
+            "H3291",
+            "H3419",
+            "H3467",
+            "H4172",
+            "H6345",
+            "H6566",
+            "H6832",
+            "H6959",
+            "H8797",
+            "H9917"
+          ]
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4367/index.json",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H1799",
+            "H2224",
+            "H3038",
+            "H3093",
+            "H4371",
+            "H5209",
+            "H5628",
+            "H5823",
+            "H5926",
+            "H5992",
+            "H6515",
+            "H7678",
+            "H8176",
+            "H8845",
+            "H9955"
+          ]
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6585/index.json",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H1799",
+            "H2224",
+            "H3038",
+            "H3093",
+            "H4371",
+            "H5209",
+            "H5628",
+            "H5823",
+            "H5926",
+            "H5992",
+            "H6515",
+            "H7678",
+            "H8176",
+            "H8845",
+            "H9955"
+          ]
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7318/index.json",
+          "signal": "host_only",
+          "source_contract_ids": [
+            "H1799",
+            "H2224",
+            "H3038",
+            "H3093",
+            "H4371",
+            "H5209",
+            "H5628",
+            "H5823",
+            "H5926",
+            "H5992",
+            "H6515",
+            "H7678",
+            "H8176",
+            "H8845",
+            "H9955"
+          ]
+        }
+      ],
+      "probe": {
+        "probed_on": "2026-10-16",
+        "method": "curl, no credentials; API: Practitioner?_count=1 must return 200 with a FHIR Bundle; bulk index: 200 with JSON naming files or a FHIR resource",
+        "by_shape": {
+          "api": {
+            "probed": 50,
+            "answered": 38
+          },
+          "bulk": {
+            "probed": 138,
+            "answered": 117
+          }
+        },
+        "probed_on_qa_or_uat_host": 9,
+        "answered_on_qa_or_uat_host": 8,
+        "results": [
+          {
+            "address": "https://achealthdataservices-providerdirectory.fhir.azurehealthcareapis.com/metadata",
+            "probe_url": "https://achealthdataservices-providerdirectory.fhir.azurehealthcareapis.com/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 401,
+            "answered": false
+          },
+          {
+            "address": "https://afs.astivahealth.com/fhir",
+            "probe_url": "https://afs.astivahealth.com/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://afs.astivahealth.com/fhirjson/MPF-Provider-Directory/H1993/2027/index.json",
+            "probe_url": "https://afs.astivahealth.com/fhirjson/MPF-Provider-Directory/H1993/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-ahp-prd.safhir.io/v1/api/provider-directory/metadata",
+            "probe_url": "https://api-ahp-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-atwd-prd.safhir.io/v1/api/provider-directory",
+            "probe_url": "https://api-atwd-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-atwd-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/ATWD-H9306",
+            "probe_url": "https://api-atwd-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/ATWD-H9306",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://api-bcbsal-prd.safhir.io/v1/api/provider-directory",
+            "probe_url": "https://api-bcbsal-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-chgsd-prd.safhir.io/v1/api/provider-directory/",
+            "probe_url": "https://api-chgsd-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-chpiv-prd.safhir.io/v1/api/provider-directory/",
+            "probe_url": "https://api-chpiv-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-icar-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/H2237-007-000",
+            "probe_url": "https://api-icar-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/H2237-007-000",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://api-icar-prd.safhir.io/v1/api/provider-directory/metadata",
+            "probe_url": "https://api-icar-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-medigold-prd.safhir.io/v1/api/provider-directory",
+            "probe_url": "https://api-medigold-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 0,
+            "answered": false
+          },
+          {
+            "address": "https://api-MPHC-prd.safhir.io/v1/api/provider-directory",
+            "probe_url": "https://api-MPHC-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 0,
+            "answered": false
+          },
+          {
+            "address": "https://api-MPHC-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/H1365",
+            "probe_url": "https://api-MPHC-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/H1365",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 0,
+            "answered": false
+          },
+          {
+            "address": "https://api-MPHC-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/H5591",
+            "probe_url": "https://api-MPHC-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/H5591",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 0,
+            "answered": false
+          },
+          {
+            "address": "https://api-tihp-prd.safhir.io/v1/api/provider-directory",
+            "probe_url": "https://api-tihp-prd.safhir.io/v1/api/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api-tihp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/H5015-001-001",
+            "probe_url": "https://api-tihp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/H5015-001-001",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory/metadata",
+            "probe_url": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.capitalbluecrossfhir.com/r4/public-ma/",
+            "probe_url": "https://api.capitalbluecrossfhir.com/r4/public-ma/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.capitalhealthplanfhir.com/r4/public-ma/",
+            "probe_url": "https://api.capitalhealthplanfhir.com/r4/public-ma/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.communitycarefhir.com/r4/public-prod-ma/",
+            "probe_url": "https://api.communitycarefhir.com/r4/public-prod-ma/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.globalhealthfhir.com/r4/public/Practitioner",
+            "probe_url": "https://api.globalhealthfhir.com/r4/public/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.hamaspikfhir.com/r4/public/",
+            "probe_url": "https://api.hamaspikfhir.com/r4/public/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.mmmhealthcarefhir.com/r4/public-ma/Practitioner",
+            "probe_url": "https://api.mmmhealthcarefhir.com/r4/public-ma/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://api.vivahealthfhir.com/r4/public/Practitioner",
+            "probe_url": "https://api.vivahealthfhir.com/r4/public/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/BCBSDE/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/BCBSDE/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HM/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HM/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMDE/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMDE/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMNY/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMNY/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMPAMS/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMPAMS/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMWV/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMWV/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMWVMS/Practitioner",
+            "probe_url": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMWVMS/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://apif.infosyshelix.com/tenant/rangehealth/fhir/v1/providerdirectory",
+            "probe_url": "https://apif.infosyshelix.com/tenant/rangehealth/fhir/v1/providerdirectory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 0,
+            "answered": false
+          },
+          {
+            "address": "https://apif1.aetna.com/fhir/v1/providerdirectorydata/",
+            "probe_url": "https://apif1.aetna.com/fhir/v1/providerdirectorydata/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 401,
+            "answered": false
+          },
+          {
+            "address": "https://apis.upmchp.com/FHIR/R4/Group/Providerdirectory/$export",
+            "probe_url": "https://apis.upmchp.com/FHIR/R4/Group/Providerdirectory/$export",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 202,
+            "answered": false
+          },
+          {
+            "address": "https://assi.fp-h1587.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "probe_url": "https://assi.fp-h1587.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://CCA.fp-h3727.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "probe_url": "https://CCA.fp-h3727.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cchp-fhirapi.mpowered-health.com/provider-directory",
+            "probe_url": "https://cchp-fhirapi.mpowered-health.com/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cdn.mpulse.com/fhir/H3811/2027/index.json",
+            "probe_url": "https://cdn.mpulse.com/fhir/H3811/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cdn.mpulse.com/fhir/H5119/2027/index.json",
+            "probe_url": "https://cdn.mpulse.com/fhir/H5119/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H0504/2027",
+            "probe_url": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H0504/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H2819/2027",
+            "probe_url": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H2819/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H5928/2027",
+            "probe_url": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H5928/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://cms.caloptima.org/MPF/H5433/indexfhir.json",
+            "probe_url": "https://cms.caloptima.org/MPF/H5433/indexfhir.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://content.upmchealthplan.com/fhir/MPF/H3907-CY2027/index.json",
+            "probe_url": "https://content.upmchealthplan.com/fhir/MPF/H3907-CY2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://content.upmchealthplan.com/fhir/MPF/H4279-CY2027/index.json",
+            "probe_url": "https://content.upmchealthplan.com/fhir/MPF/H4279-CY2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://content.upmchealthplan.com/fhir/MPF/H5533-CY2027/index.json",
+            "probe_url": "https://content.upmchealthplan.com/fhir/MPF/H5533-CY2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://content.upmchealthplan.com/fhir/MPF/H7123-CY2027/index.json",
+            "probe_url": "https://content.upmchealthplan.com/fhir/MPF/H7123-CY2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://eapics.amerihealth.com/provider/v1/fhir",
+            "probe_url": "https://eapics.amerihealth.com/provider/v1/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://eapics.ibx.com/provider/v1/fhir",
+            "probe_url": "https://eapics.ibx.com/provider/v1/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H2320_2027/MPF",
+            "probe_url": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H2320_2027/MPF",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H4875_2027/MPF",
+            "probe_url": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H4875_2027/MPF",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H8379_2027/MPF",
+            "probe_url": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H8379_2027/MPF",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/PlanNet/H2320_2027/MPF",
+            "probe_url": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/PlanNet/H2320_2027/MPF",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://fhir-app-portal.elderserve.aidbox.app/mpf-provider-directory/H6776/2027/index.json",
+            "probe_url": "https://fhir-app-portal.elderserve.aidbox.app/mpf-provider-directory/H6776/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir-app-portal.villagecare.aidbox.io/mpf-provider-directory/H2168/2027/index.json",
+            "probe_url": "https://fhir-app-portal.villagecare.aidbox.io/mpf-provider-directory/H2168/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir-developer.bluecrossmn.com/provider-directory",
+            "probe_url": "https://fhir-developer.bluecrossmn.com/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://fhir.devoted.com/fhir",
+            "probe_url": "https://fhir.devoted.com/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H0413/2027",
+            "probe_url": "https://fhir.devoted.com/H0413/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H1290/2027",
+            "probe_url": "https://fhir.devoted.com/H1290/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H1390/2027",
+            "probe_url": "https://fhir.devoted.com/H1390/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H2041/2027",
+            "probe_url": "https://fhir.devoted.com/H2041/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H2526/2027",
+            "probe_url": "https://fhir.devoted.com/H2526/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H2686/2027",
+            "probe_url": "https://fhir.devoted.com/H2686/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H2697/2027",
+            "probe_url": "https://fhir.devoted.com/H2697/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H2845/2027",
+            "probe_url": "https://fhir.devoted.com/H2845/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H2923/2027",
+            "probe_url": "https://fhir.devoted.com/H2923/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H3041/2027",
+            "probe_url": "https://fhir.devoted.com/H3041/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H3080/2027",
+            "probe_url": "https://fhir.devoted.com/H3080/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H3515/2027",
+            "probe_url": "https://fhir.devoted.com/H3515/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H4030/2027",
+            "probe_url": "https://fhir.devoted.com/H4030/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H4348/2027",
+            "probe_url": "https://fhir.devoted.com/H4348/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H4473/2027",
+            "probe_url": "https://fhir.devoted.com/H4473/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H4808/2027",
+            "probe_url": "https://fhir.devoted.com/H4808/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H5177/2027",
+            "probe_url": "https://fhir.devoted.com/H5177/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H5299/2027",
+            "probe_url": "https://fhir.devoted.com/H5299/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H5334/2027",
+            "probe_url": "https://fhir.devoted.com/H5334/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H5397/2027",
+            "probe_url": "https://fhir.devoted.com/H5397/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H5453/2027",
+            "probe_url": "https://fhir.devoted.com/H5453/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H5718/2027",
+            "probe_url": "https://fhir.devoted.com/H5718/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H6018/2027",
+            "probe_url": "https://fhir.devoted.com/H6018/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H6545/2027",
+            "probe_url": "https://fhir.devoted.com/H6545/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H6586/2027",
+            "probe_url": "https://fhir.devoted.com/H6586/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H6813/2027",
+            "probe_url": "https://fhir.devoted.com/H6813/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H6852/2027",
+            "probe_url": "https://fhir.devoted.com/H6852/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H6994/2027",
+            "probe_url": "https://fhir.devoted.com/H6994/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7028/2027",
+            "probe_url": "https://fhir.devoted.com/H7028/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7147/2027",
+            "probe_url": "https://fhir.devoted.com/H7147/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7151/2027",
+            "probe_url": "https://fhir.devoted.com/H7151/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7191/2027",
+            "probe_url": "https://fhir.devoted.com/H7191/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7199/2027",
+            "probe_url": "https://fhir.devoted.com/H7199/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7355/2027",
+            "probe_url": "https://fhir.devoted.com/H7355/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7397/2027",
+            "probe_url": "https://fhir.devoted.com/H7397/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7471/2027",
+            "probe_url": "https://fhir.devoted.com/H7471/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7605/2027",
+            "probe_url": "https://fhir.devoted.com/H7605/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7766/2027",
+            "probe_url": "https://fhir.devoted.com/H7766/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H7993/2027",
+            "probe_url": "https://fhir.devoted.com/H7993/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H8173/2027",
+            "probe_url": "https://fhir.devoted.com/H8173/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H8320/2027",
+            "probe_url": "https://fhir.devoted.com/H8320/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H8917/2027",
+            "probe_url": "https://fhir.devoted.com/H8917/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9231/2027",
+            "probe_url": "https://fhir.devoted.com/H9231/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9700/2027",
+            "probe_url": "https://fhir.devoted.com/H9700/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9802/2027",
+            "probe_url": "https://fhir.devoted.com/H9802/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9862/2027",
+            "probe_url": "https://fhir.devoted.com/H9862/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9884/2027",
+            "probe_url": "https://fhir.devoted.com/H9884/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9888/2027",
+            "probe_url": "https://fhir.devoted.com/H9888/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.devoted.com/H9977/2027",
+            "probe_url": "https://fhir.devoted.com/H9977/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.elderservehealth.org/fhir/metadata",
+            "probe_url": "https://fhir.elderservehealth.org/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.group-health.com/api/plannet",
+            "probe_url": "https://fhir.group-health.com/api/plannet/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://fhir.healthy-ar.com/plan-net/H4086/",
+            "probe_url": "https://fhir.healthy-ar.com/plan-net/H4086/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.healthy-ar.com/plan-net/H7440/",
+            "probe_url": "https://fhir.healthy-ar.com/plan-net/H7440/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.healthy-ms.com/plan-net/H1823/",
+            "probe_url": "https://fhir.healthy-ms.com/plan-net/H1823/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.healthy-ms.com/plan-net/H8879/",
+            "probe_url": "https://fhir.healthy-ms.com/plan-net/H8879/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.iehp.org/mpf/H8894/2027/index.json",
+            "probe_url": "https://fhir.iehp.org/mpf/H8894/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.iehp.org/provider-directory/metadata?_format=json",
+            "probe_url": "https://fhir.iehp.org/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.nativeadvantage.com/data/index.json",
+            "probe_url": "https://fhir.nativeadvantage.com/data/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.nativeadvantage.com/fhir",
+            "probe_url": "https://fhir.nativeadvantage.com/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.netsmartcloud.com/payer/provider-directory/v2/5f6f1d30-6f0c-46e3-9d8a-2b9f88a0f2b8/",
+            "probe_url": "https://fhir.netsmartcloud.com/payer/provider-directory/v2/5f6f1d30-6f0c-46e3-9d8a-2b9f88a0f2b8/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 501,
+            "answered": false
+          },
+          {
+            "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsma/H2230/2027/index.json",
+            "probe_url": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsma/H2230/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsma/H2261/2027/index.json",
+            "probe_url": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsma/H2261/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H3404/2027/index.json",
+            "probe_url": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H3404/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H3449/2027/index.json",
+            "probe_url": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H3449/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H9147/2027/index.json",
+            "probe_url": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H9147/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H1372/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H1372/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H2185/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H2185/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H3274/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H3274/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H3291/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H3291/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H3419/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H3419/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H3467/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H3467/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H4127/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H4127/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H4172/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H4172/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H6345/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H6345/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H6566/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H6566/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H6832/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H6832/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H6959/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H6959/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H8797/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H8797/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://fhirmpf.curanahealth.com/H9917/2027/",
+            "probe_url": "https://fhirmpf.curanahealth.com/H9917/2027/",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://hf-fhir-provider-directory-sys-api-prod.us-e1.cloudhub.io",
+            "probe_url": "https://hf-fhir-provider-directory-sys-api-prod.us-e1.cloudhub.io/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 400,
+            "answered": false
+          },
+          {
+            "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H1722/index.json",
+            "probe_url": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H1722/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H3359/index.json",
+            "probe_url": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H3359/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H5989/index.json",
+            "probe_url": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H5989/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H9678/index.json",
+            "probe_url": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H9678/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://interop.metroplus.org:9443/fhir/r4/providerdirectory",
+            "probe_url": "https://interop.metroplus.org:9443/fhir/r4/providerdirectory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 401,
+            "answered": false
+          },
+          {
+            "address": "https://io-api.hmsa-services.com:9443/fhir/r4/providerdirectory",
+            "probe_url": "https://io-api.hmsa-services.com:9443/fhir/r4/providerdirectory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 413,
+            "answered": false
+          },
+          {
+            "address": "https://iopc-pd.api.centene.com/iopc/pd/fhir/providerdirectory",
+            "probe_url": "https://iopc-pd.api.centene.com/iopc/pd/fhir/providerdirectory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 400,
+            "answered": false
+          },
+          {
+            "address": "https://medicare.peakhealth.org/fhir/provider-directory",
+            "probe_url": "https://medicare.peakhealth.org/fhir/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://orchestrateserver.caresource.careevolution.com/api/fhir/provider-directory/metadata",
+            "probe_url": "https://orchestrateserver.caresource.careevolution.com/api/fhir/provider-directory/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://provider.bcbst.com/cms_assets/fhir/h3259_index.json",
+            "probe_url": "https://provider.bcbst.com/cms_assets/fhir/h3259_index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://provider.bcbst.com/cms_assets/fhir/h7917_index.json",
+            "probe_url": "https://provider.bcbst.com/cms_assets/fhir/h7917_index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://providerdirectory.mcpartnerstx.com/fhir",
+            "probe_url": "https://providerdirectory.mcpartnerstx.com/fhir/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://providerfhirapi.healthpartnersplans.com",
+            "probe_url": "https://providerfhirapi.healthpartnersplans.com/Practitioner?_count=1",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://solisapigwprovider.azurewebsites.net/api/provider-directory/2027/H0982/fhir/index.json",
+            "probe_url": "https://solisapigwprovider.azurewebsites.net/api/provider-directory/2027/H0982/fhir/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://uat120.fhir.edifecsfedcloud.com/gchp_cms/cms-report/H9623/index.json",
+            "probe_url": "https://uat120.fhir.edifecsfedcloud.com/gchp_cms/cms-report/H9623/index.json",
+            "shape": "bulk",
+            "test_host": true,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://uat120.fhir.edifecsfedcloud.com/sfhp_cms/cms-report/H8051/index.json",
+            "probe_url": "https://uat120.fhir.edifecsfedcloud.com/sfhp_cms/cms-report/H8051/index.json",
+            "shape": "bulk",
+            "test_host": true,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://us120.fhir.edifecsfedcloud.com/gchp_cmsreport/H9623/index.json",
+            "probe_url": "https://us120.fhir.edifecsfedcloud.com/gchp_cmsreport/H9623/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://us120.fhir.m2.edifecsfedcloud.com/dhcp_cmsreport/H4140/index.json",
+            "probe_url": "https://us120.fhir.m2.edifecsfedcloud.com/dhcp_cmsreport/H4140/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://us120.fhir.m2.edifecsfedcloud.com/hne_cmsreport/H2737/index.json",
+            "probe_url": "https://us120.fhir.m2.edifecsfedcloud.com/hne_cmsreport/H2737/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://us120.fhir.m2.edifecsfedcloud.com/hne_cmsreport/H8578/index.json",
+            "probe_url": "https://us120.fhir.m2.edifecsfedcloud.com/hne_cmsreport/H8578/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://vlr.fp-h1119.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "probe_url": "https://vlr.fp-h1119.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://wadcdnstorageprod.blob.core.windows.net/bswhp/JSON/BSWHP_CMS_MPF_H2032_2026_Index_FHIR.json",
+            "probe_url": "https://wadcdnstorageprod.blob.core.windows.net/bswhp/JSON/BSWHP_CMS_MPF_H2032_2026_Index_FHIR.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://wadcdnstorageprod.blob.core.windows.net/bswhp/JSON/BSWHP_CMS_MPF_H8142_2026_Index_FHIR.json",
+            "probe_url": "https://wadcdnstorageprod.blob.core.windows.net/bswhp/JSON/BSWHP_CMS_MPF_H8142_2026_Index_FHIR.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://wvsa.fp-h9153.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "probe_url": "https://wvsa.fp-h9153.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+            "shape": "api",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.bannerhealthnetwork.com/CMS_Provider_Directory/H4931/FHIR/2027/index.json",
+            "probe_url": "https://www.bannerhealthnetwork.com/CMS_Provider_Directory/H4931/FHIR/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.bannerhealthnetwork.com/CMS_Provider_Directory/H5843/FHIR/2027/index.json",
+            "probe_url": "https://www.bannerhealthnetwork.com/CMS_Provider_Directory/H5843/FHIR/2027/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 500,
+            "answered": false
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H1799/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H1799/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H2224/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H2224/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H3038/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H3038/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H3093/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H3093/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4367/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4367/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4371/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4371/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5209/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5209/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5628/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5628/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5823/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5823/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5926/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5926/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5992/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5992/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6515/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6515/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6585/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6585/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7318/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7318/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7678/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7678/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H8176/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H8176/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H8845/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H8845/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H9955/index.json",
+            "probe_url": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H9955/index.json",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 200,
+            "answered": true
+          },
+          {
+            "address": "https://www.pphealthplan.com/directory-search/FHIR/H3800/2027",
+            "probe_url": "https://www.pphealthplan.com/directory-search/FHIR/H3800/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://www.pphealthplan.com/directory-search/FHIR/H4054/2027",
+            "probe_url": "https://www.pphealthplan.com/directory-search/FHIR/H4054/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://www.pphealthplan.com/directory-search/FHIR/H4093/2027",
+            "probe_url": "https://www.pphealthplan.com/directory-search/FHIR/H4093/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://www.pphealthplan.com/directory-search/FHIR/H4439/2027",
+            "probe_url": "https://www.pphealthplan.com/directory-search/FHIR/H4439/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://www.pphealthplan.com/directory-search/FHIR/H4444/2027",
+            "probe_url": "https://www.pphealthplan.com/directory-search/FHIR/H4444/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          },
+          {
+            "address": "https://www.pphealthplan.com/directory-search/FHIR/H9191/2027",
+            "probe_url": "https://www.pphealthplan.com/directory-search/FHIR/H9191/2027",
+            "shape": "bulk",
+            "test_host": false,
+            "http_status": 404,
+            "answered": false
+          }
+        ]
+      },
       "linkage": {
         "payer_typed_orgs": 997,
         "payer_typed_orgs_with_endpoint": 0,
@@ -3743,20 +6261,24 @@
       ]
     },
     "directory_signal_breakdown": {
-      "total": 201,
+      "total": 194,
       "by_signal": {
         "path_only": 25,
-        "host_only": 151,
+        "host_only": 144,
         "both": 25
       },
       "host_signal_by_basis": {
-        "contract": 156,
+        "contract": 149,
         "curated": 10,
         "payer-name": 10
       },
-      "bulk_mpf_index": 144,
-      "searchable_api": 57
-    }
+      "bulk_mpf_index": 138,
+      "fhir_api_base": 50,
+      "placeholder_template": 6,
+      "inherited_only": 19,
+      "on_qa_or_uat_host": 9
+    },
+    "live_but_absent_from_ndh_scope": "control base URL only; the same payer may be indexed at another address (control_directories[].same_payer_directories_in_ndh)"
   },
   "corrections": [
     {
@@ -3765,16 +6287,17 @@
       "release": "2026-10-07",
       "as_published_on": "2026-10-14",
       "as_published_count": 50,
-      "corrected_count": 201,
+      "corrected_count": 194,
       "corrected_by_signal": {
         "path_only": 25,
-        "host_only": 151,
+        "host_only": 144,
         "both": 25
       },
-      "corrected_bulk_mpf_index": 144,
-      "corrected_searchable_api": 57,
-      "unclassified_same_batch": 79,
-      "what": "The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as provider-directory addresses. That counted only addresses whose URL path names a directory, so it was a floor. Classified by the host as well (CMS contract IDs from the release's own InsurancePlan resources, and payer directory hosts checked by hand), the 2026-10-07 release carries 201: 25 by path only, 151 by host only, 25 by both. 144 of the 201 are CMS Medicare Advantage bulk directory files (MPF index.json and similar); 57 are searchable FHIR APIs. None of the 201 is linked to a payer organization from either side. The count is still a floor: 79 more addresses in the same CMS batch match neither signal, and many of them look like payer directories.",
+      "corrected_bulk_mpf_index": 138,
+      "corrected_fhir_api_base": 50,
+      "corrected_placeholder_template": 6,
+      "unclassified_same_batch": 86,
+      "what": "The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as provider-directory addresses. That counted only addresses whose URL names a directory, so it was a floor. Classified by the host as well (CMS contract IDs from the release's own InsurancePlan resources, and payer directory hosts checked by hand), the 2026-10-07 release carries at least 194: 25 by path only, 144 by host only, 25 by both. By URL shape, 138 are CMS Medicare Advantage bulk directory files, 50 are FHIR API base addresses and 6 are templates with the placeholder unfilled. Probed on 2026-10-16 with curl and no credentials, 38 of the 50 FHIR API base addresses returned a FHIR Bundle to a Practitioner search and 117 of the 138 bulk files returned their index; 9 addresses, 8 of which answered, sit on QA or UAT hosts. None of the 194 is linked to a payer organization or health plan from either side. The count is still a floor: 86 more addresses in the same CMS batch match neither signal, and many of them look like payer directories.",
       "since": "2026-10-14 (86c2349), when the 2026-10-07 figure was published"
     }
   ]

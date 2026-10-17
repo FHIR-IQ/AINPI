@@ -9,6 +9,8 @@ raise when a known payer directory stops classifying.
 import pytest
 
 from analysis.payer_directory import (
+    answered,
+    probe_target,
     KNOWN_NOT_DIRECTORIES,
     KNOWN_PAYER_DIRECTORIES,
     PAYER_NAMED_DIRECTORIES,
@@ -174,7 +176,9 @@ def test_summarize_splits_by_signal_basis_and_shape():
     assert s["total"] == 4
     assert s["by_signal"] == {"path_only": 1, "host_only": 2, "both": 1}
     assert s["host_signal_by_basis"]["contract"] == 3
-    assert s["bulk_mpf_index"] == 2 and s["searchable_api"] == 2
+    assert s["bulk_mpf_index"] == 2 and s["fhir_api_base"] == 2
+    assert s["placeholder_template"] == 0
+    assert s["inherited_only"] == 1
 
 
 def test_host_of_is_lowercase_and_drops_port_and_dot():
@@ -216,3 +220,76 @@ def test_control_raises_when_a_known_non_directory_classifies(monkeypatch):
                         pd.KNOWN_NOT_DIRECTORIES + ("https://x.example/provider-directory",))
     with pytest.raises(ClassifierControlFailed, match="non-directory classified"):
         pd.check_controls(CONTRACTS)
+
+
+# ---- QA round: auth paths, multi-tenant hosts, placeholders, probes ----
+
+def test_auth_path_on_contract_host_is_not_a_directory():
+    addrs = ["https://provider.bcbst.com/cms_assets/fhir/h7028_index.json",
+             "https://provider.bcbst.com/oauth2/token"]
+    hosts = contract_hosts(addrs, CONTRACTS)
+    assert hosts == {"provider.bcbst.com": ["H7028"]}
+    assert classify(addrs[0], CONTRACTS, hosts)["directory"]
+    for a in ("https://provider.bcbst.com/oauth2/token",
+              "https://provider.bcbst.com/.well-known/smart-configuration",
+              "https://provider.bcbst.com/authorize",
+              "https://provider.bcbst.com/auth/login",
+              "https://provider.bcbst.com/member/fhir/r4"):
+        assert not classify(a, CONTRACTS, hosts)["directory"], a
+
+
+@pytest.mark.parametrize("host", ["us120.fhir.edifecsfedcloud.com", "cdn.mpulse.com",
+                                  "storage.googleapis.com"])
+def test_multi_tenant_hosts_do_not_lend_the_signal(host):
+    own = f"https://{host}/tenant_a/cmsreport/H7028/index.json"
+    other = f"https://{host}/tenant_b_pdfhir"
+    hosts = contract_hosts([own, other], CONTRACTS)
+    assert hosts == {}
+    assert classify(own, CONTRACTS, hosts)["directory"]
+    assert not classify(other, CONTRACTS, hosts)["directory"]
+
+
+def test_inherited_only_records_source_contracts():
+    hosts = {"fhir.devoted.com": ["H7028"]}
+    c = classify("https://fhir.devoted.com/fhir", CONTRACTS, hosts)
+    assert c["inherited_from"] == ["H7028"]
+    own = classify("https://fhir.devoted.com/H7028/2027", CONTRACTS, hosts)
+    assert own["inherited_from"] == []
+
+
+@pytest.mark.parametrize("address", [
+    "https://api-bcwy-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/ppp-cccc-nnn",
+    "https://api-nhp-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/[ppp-cccc-nnn]",
+    "https://api-thp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/thp-h2256-nnn",
+])
+def test_placeholder_templates_are_flagged_not_bulk(address):
+    c = classify(address, CONTRACTS)
+    assert c["directory"] and c["placeholder"]
+    assert c["shape"] == "placeholder" and not c["bulk"]
+
+
+def test_qa_and_uat_hosts_are_flagged():
+    assert classify("https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HM/Practitioner")["test_host"]
+    assert not classify("https://eapics.ibx.com/provider/v1/fhir")["test_host"]
+
+
+@pytest.mark.parametrize("address,shape,expected", [
+    ("https://eapics.ibx.com/provider/v1/fhir", "api",
+     "https://eapics.ibx.com/provider/v1/fhir/Practitioner?_count=1"),
+    ("https://x.example/pd/metadata", "api", "https://x.example/pd/Practitioner?_count=1"),
+    ("https://x.example/pd/metadata?_format=json", "api", "https://x.example/pd/Practitioner?_count=1"),
+    ("https://x.example/fhir/Practitioner", "api", "https://x.example/fhir/Practitioner?_count=1"),
+    ("https://x.example/pd/fhir/Practitioner?_count=10", "api", "https://x.example/pd/fhir/Practitioner?_count=10"),
+    ("https://x.example/H7028/index.json", "bulk", "https://x.example/H7028/index.json"),
+])
+def test_probe_target(address, shape, expected):
+    assert probe_target(address, shape) == expected
+
+
+def test_answered():
+    assert answered(200, b'{"resourceType":"Bundle","type":"searchset"}', "api")
+    assert not answered(200, b'{"resourceType":"OperationOutcome"}', "api")
+    assert not answered(401, b'{"resourceType":"Bundle"}', "api")
+    assert answered(200, b'\xef\xbb\xbf{"provider_urls":["a"]}', "bulk")
+    assert not answered(200, b"<!DOCTYPE html>", "bulk")
+    assert not answered(200, b"", "bulk")

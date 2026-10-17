@@ -4,8 +4,8 @@ H49 first counted a payer directory only when its URL path named itself
 (`providerdirectory`, `plan-net`, `pdex`). That is a floor, and FHI-71 showed
 how low: the 2026-10-07 release carries Highmark, Independence Blue Cross,
 AmeriHealth and Capital BlueCross directories at paths that never say
-"directory", plus about two hundred CMS Medicare Advantage directory files
-(MPF) that name a contract ID instead. The published "50 of 111,259" missed
+"directory", plus 144 CMS Medicare Advantage bulk directory files (MPF)
+that name a contract ID instead. The published "50 of 111,259" missed
 all of them.
 
 An address is now classified by two independent signals, and every address
@@ -74,7 +74,12 @@ PATIENT_ACCESS_RE = r"patientaccess|patient-access"
 # other than a directory. ibx.com serves both /provider/ and /patient/.
 NON_DIRECTORY_RE = (
     r"patientaccess|patient-access|/patient/|patient360|carin-bb|/uscore|"
-    r"pharmacybenefit|formulary"
+    r"pharmacybenefit|formulary|"
+    # Authorization and member-facing paths. A host that serves a payer's
+    # directory also serves its OAuth and member APIs; inheriting the host
+    # signal must not turn a token endpoint into a directory.
+    r"/oauth|/token(?:[/?]|$)|/authorize|\.well-known|/smart(?:[/?-]|$)|"
+    r"/auth(?:[/?]|$)|/login|/member"
 )
 
 # CMS contract identifiers as they appear in InsurancePlan.alias and in MPF
@@ -88,7 +93,19 @@ CONTRACT_ALIAS_RE = re.compile(r"[HRS]\d{4}")
 SHARED_HOST_SUFFIXES = (
     "blob.core.windows.net", "azurewebsites.net", "amazonaws.com",
     "cloudfront.net", "cloudhub.io", "azurehealthcareapis.com",
+    "storage.googleapis.com",
+    # Vendor platforms that host one payer tenant per path. A contract ID on
+    # one tenant's path says nothing about the next tenant on the same host.
+    "edifecsfedcloud.com", "cdn.mpulse.com",
 )
+
+# Template addresses submitted with the placeholder left unfilled
+# (`ppp-cccc-nnn`, `thp-h2256-nnn`). Counted as addresses, flagged, and kept
+# out of both the bulk and the API counts.
+PLACEHOLDER_RE = r"(?:^|[-/\[])(?:ppp|cccc|nnn)(?:$|[-/\]])"
+
+# QA and UAT hosts: published in the NDH as production addresses.
+TEST_HOST_RE = r"qa|uat"
 
 # MPF bulk index shapes, reported separately from searchable APIs.
 BULK_RE = (
@@ -172,6 +189,8 @@ _DIRECTORY = re.compile(DIRECTORY_RE)
 _PATIENT = re.compile(PATIENT_ACCESS_RE)
 _NON_DIRECTORY = re.compile(NON_DIRECTORY_RE)
 _BULK = re.compile(BULK_RE)
+_PLACEHOLDER = re.compile(PLACEHOLDER_RE)
+_TEST_HOST = re.compile(TEST_HOST_RE)
 
 
 class ClassifierControlFailed(RuntimeError):
@@ -245,8 +264,12 @@ def classify(address: str, contracts: Mapping[str, str] = None,
     basis: list[str] = []
     payer = None
     own_ids = contract_ids(address, contracts)
-    if own_ids or host_of(address) in hosts_with_contracts:
+    inherited: list[str] = []
+    if own_ids:
         basis.append("contract")
+    elif host_of(address) in hosts_with_contracts:
+        basis.append("contract")
+        inherited = list(hosts_with_contracts[host_of(address)])
     cur = _listed(address, KNOWN_PAYER_DIRECTORIES)
     if cur:
         basis.append("curated")
@@ -258,7 +281,13 @@ def classify(address: str, contracts: Mapping[str, str] = None,
     host_sig = bool(basis) and not _NON_DIRECTORY.search(low)
     if not host_sig:
         basis = []
+        inherited = []
     directory = path_sig or host_sig
+    placeholder = directory and bool(_PLACEHOLDER.search(path_of(address)))
+    bulk = (directory and not placeholder
+            and bool(CONTRACT_ID_RE.search(path_of(address)) or _BULK.search(low)))
+    shape = (None if not directory else "placeholder" if placeholder
+             else "bulk" if bulk else "api")
     if directory:
         kind = "provider-directory"
     elif _PATIENT.search(low):
@@ -272,8 +301,12 @@ def classify(address: str, contracts: Mapping[str, str] = None,
         "basis": basis,
         "payer": payer,
         "contracts": own_ids,
-        "bulk": directory and bool(CONTRACT_ID_RE.search(path_of(address))
-                                   or _BULK.search(low)),
+        # Contract IDs the host lent this address when it carries none itself.
+        "inherited_from": inherited,
+        "placeholder": placeholder,
+        "bulk": bulk,
+        "shape": shape,
+        "test_host": bool(_TEST_HOST.search(host_of(address).split(".")[0])),
         "url_kind": kind,
     }
 
@@ -297,14 +330,68 @@ def summarize(classified: Iterable[dict]) -> dict:
         by_signal[signal_label(c)] += 1
         for b in c["basis"]:
             by_basis[b] += 1
-    bulk = sum(1 for c in rows if c["bulk"])
+    shapes = {"bulk": 0, "api": 0, "placeholder": 0}
+    for c in rows:
+        shapes[c["shape"]] += 1
     return {
         "total": len(rows),
         "by_signal": by_signal,
         "host_signal_by_basis": by_basis,
-        "bulk_mpf_index": bulk,
-        "searchable_api": len(rows) - bulk,
+        "bulk_mpf_index": shapes["bulk"],
+        # FHIR API base addresses by URL shape. Whether each answers is a
+        # separate, dated probe (probe_target / answered).
+        "fhir_api_base": shapes["api"],
+        "placeholder_template": shapes["placeholder"],
+        "inherited_only": sum(1 for c in rows if c.get("inherited_from")),
+        "on_qa_or_uat_host": sum(1 for c in rows if c.get("test_host")),
     }
+
+
+_RESOURCE_TAIL = re.compile(r"/(practitioner|practitionerrole|organization|location|"
+                            r"healthcareservice|insuranceplan|endpoint)$", re.IGNORECASE)
+
+
+def probe_target(address: str, shape: str) -> str:
+    """The URL a probe fetches for one classified address.
+
+    A bulk index is fetched as published. A FHIR API is asked for one
+    Practitioner with no credentials: a resource-type address or one that
+    already carries a query is used as is, `/metadata` is swapped for a
+    Practitioner search, and a bare base gets `/Practitioner?_count=1`.
+    """
+    a = (address or "").strip()
+    if shape != "api":
+        return a
+    if "?" in a:
+        base, _, query = a.partition("?")
+        if base.rstrip("/").lower().endswith("/metadata"):
+            return base.rstrip("/")[: -len("/metadata")] + "/Practitioner?_count=1"
+        return a
+    b = a.rstrip("/")
+    if b.lower().endswith("/metadata"):
+        return b[: -len("/metadata")] + "/Practitioner?_count=1"
+    if _RESOURCE_TAIL.search(b):
+        return b + "?_count=1"
+    return b + "/Practitioner?_count=1"
+
+
+def answered(status: int, body: bytes, shape: str) -> bool:
+    """True when an unauthenticated probe got directory data back: HTTP 200
+    and a JSON body that is a FHIR Bundle (API) or names provider files or a
+    FHIR resource (bulk index)."""
+    if status != 200 or not body:
+        return False
+    try:
+        import json
+        doc = json.loads(body.decode("utf-8-sig", "replace"))
+    except ValueError:
+        return False
+    if not isinstance(doc, dict):
+        return False
+    if shape == "api":
+        return doc.get("resourceType") == "Bundle"
+    return bool(doc.get("resourceType") or doc.get("provider_urls")
+                or any(k.endswith("_urls") for k in doc))
 
 
 def check_controls(contracts: Mapping[str, str] = None, *, plans_present: bool = False) -> None:

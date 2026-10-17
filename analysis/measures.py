@@ -382,8 +382,8 @@ REGISTRY: tuple = (
                         restatement_reason="First published counting only addresses whose URL path names a "
                                            "directory (50); restated on 2026-10-16 (FHI-71) with the host signal "
                                            "added (CMS contract IDs from the release's InsurancePlan resources, "
-                                           "and hand-checked payer directory hosts): 201, of which 25 path only, "
-                                           "151 host only, 25 both.")),
+                                           "and hand-checked payer directory hosts): 194, of which 25 path only, "
+                                           "144 host only, 25 both.")),
         ordinary_move={"kind": "absolute", "max": 0.01,
                        "why": "Payer directories are a handful of endpoints in a population of about 110,000."},
         notes="Classified by analysis/payer_directory.py: URL path OR host. Re-running that classifier on the "
