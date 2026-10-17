@@ -107,7 +107,8 @@ numbers can be trusted.
 - **The vendored script against the original driver.** The measurement was
   first run with a scratch driver over trimmed parquet extracts, since deleted. The
   vendored script, which reads the full parquet exports, was rerun on both
-  releases on 2026-10-16 and produced identical `summary`, `funnel` and
+  releases on 2026-10-16 from 4ba909a (which differs from b5aa33a only
+  in H49, outside this chain) and produced identical `summary`, `funnel` and
   `confidence` blocks and identical intermediate CSVs (as row sets) for
   August, and the same result for October up to the `vendor_known` artifact
   above.
