@@ -40,6 +40,13 @@ endpoint -> domain, returns nothing in this release: none of the 997
 organizations typed `pay` carries a telecom, an endpoint, an identifier or a
 partOf. That is measured, not assumed (see h49_recheck_release.py).
 
+Known limit of host inheritance: a host earns the contract signal from any
+one address on it, so a later release that adds a provider's own FHIR base to
+that host would classify by host. eppoa.spectrumhealth.org is the live case:
+a health system's host that carries Priority Health's MPF files. Every
+address on it is directory-shaped today; recheck the inherited-only addresses
+(contract on the host, none in the address) each release.
+
 A host signal never classifies an address whose path marks it as something
 else (NON_DIRECTORY_RE: patient access, CARIN Blue Button, US Core, pharmacy
 benefit). The path signal is the H49 rule exactly, so the path-only count

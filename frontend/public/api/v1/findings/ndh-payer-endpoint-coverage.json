@@ -6,7 +6,7 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-17T01:44:13+00:00",
+  "generated_at": "2026-10-17T01:49:10+00:00",
   "methodology_version": "0.7.2-draft",
   "commit_sha": "b5aa33a",
   "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. 201 of 111,259 FHIR REST endpoints are payer provider-directory addresses (50 by URL path and 151 only by host), none of them attached to a payer organization; the Capital BlueCross control directory URL is not in the index, though another Capital BlueCross directory address is.",
@@ -519,6 +519,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -532,6 +533,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -545,6 +547,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-74202321-8719-4261-84b0-90591d52dac7",
+          "owner_name": "ASTIVA HEALTH, INC.",
           "contracts": [
             "H1993"
           ],
@@ -558,6 +561,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -571,6 +575,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -584,6 +589,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-02a534f9-42e3-4a41-9f21-8461d88a4cbc",
+          "owner_name": "ALTERWOOD ADVANTAGE, INC.",
           "contracts": [
             "H9306"
           ],
@@ -597,6 +603,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -608,6 +615,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -619,6 +627,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -630,6 +639,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -643,6 +653,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5195927f-acd0-4f0f-8b7c-f91444095bc3",
+          "owner_name": "INDEPENDENT CARE HEALTH PLAN",
           "contracts": [
             "H2237"
           ],
@@ -658,6 +669,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -669,6 +681,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -682,6 +695,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -695,6 +709,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d15d1aaf-d882-4324-867d-e5e0d0410a16",
+          "owner_name": "MARTIN'S POINT GENERATIONS ADVANTAGE, INC.",
           "contracts": [
             "H1365"
           ],
@@ -710,6 +725,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-19111fc2-5bec-40ca-8a70-d921ca3d4405",
+          "owner_name": "MARTIN'S POINT GENERATIONS ADVANTAGE, INC.",
           "contracts": [
             "H5591"
           ],
@@ -723,6 +739,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -736,6 +753,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5cb5dd74-726e-43eb-aeca-85024504c190",
+          "owner_name": "TUFTS ASSOCIATED HEALTH MAINTENANCE ORGANIZATION",
           "contracts": [
             "H2256"
           ],
@@ -751,6 +769,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-fd9bfed4-8011-4984-a7d7-3de1ad266664",
+          "owner_name": "TUFTS HEALTH PUBLIC PLANS, INC.",
           "contracts": [
             "H5314"
           ],
@@ -766,6 +785,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-9e6e59fa-cb01-45af-abbf-1dd17856a4e5",
+          "owner_name": "TUFTS ASSOCIATED HEALTH MAINTENANCE ORGANIZATION",
           "contracts": [
             "H8330"
           ],
@@ -781,6 +801,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5bc47a10-ebd1-49fc-855e-49ae3cffb3bc",
+          "owner_name": "TUFTS ASSOCIATED HEALTH MAINTENANCE ORGANIZATION",
           "contracts": [
             "H9907"
           ],
@@ -796,6 +817,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -809,6 +831,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-0a7f6cb5-c49a-49a8-b186-65f785af0bb7",
+          "owner_name": "TEXAS INDEPENDENCE HEALTH PLAN, INC.",
           "contracts": [
             "H5015"
           ],
@@ -822,6 +845,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -835,6 +859,7 @@
           ],
           "payer": "Capital BlueCross",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -848,6 +873,7 @@
           ],
           "payer": "CAPITAL HEALTH PLAN",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -861,6 +887,7 @@
           ],
           "payer": "COMMUNITY CARE, INC. (name match)",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -874,6 +901,7 @@
           ],
           "payer": "GLOBALHEALTH, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -887,6 +915,7 @@
           ],
           "payer": "HAMASPIK, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -900,6 +929,7 @@
           ],
           "payer": "MMM HEALTHCARE, LLC",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -913,6 +943,7 @@
           ],
           "payer": "VIVA HEALTH, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -926,6 +957,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -939,6 +971,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -952,6 +985,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -965,6 +999,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -978,6 +1013,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -991,6 +1027,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1004,6 +1041,7 @@
           ],
           "payer": "Highmark",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1015,6 +1053,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1026,6 +1065,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1037,6 +1077,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1050,6 +1091,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c2c0316c-0c63-47b5-8fb5-1a8a7a3a1316",
+          "owner_name": "ARKANSAS SUPERIOR SELECT, INC.",
           "contracts": [
             "H1587"
           ],
@@ -1065,6 +1107,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-eb636209-082a-4115-84d6-2d75d88d2778",
+          "owner_name": "OH CHS SNP INC.",
           "contracts": [
             "H3727"
           ],
@@ -1078,6 +1121,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1091,6 +1135,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-fcfdf421-7ea4-4357-ab5a-4c50610e79d8",
+          "owner_name": "SAMARITAN HEALTH PLANS, INC.",
           "contracts": [
             "H3811"
           ],
@@ -1106,6 +1151,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-6eefb828-b926-4ab3-a129-11cc55bebe17",
+          "owner_name": "CONTRA COSTA COUNTY MEDICAL SERVICE DBA CONTRA COSTA HEALTH PLAN",
           "contracts": [
             "H5119"
           ],
@@ -1121,6 +1167,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-06a5cc2e-16b8-4b68-a346-31b1e1b008f2",
+          "owner_name": "BSC",
           "contracts": [
             "H0504"
           ],
@@ -1136,6 +1183,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ab83c30e-95a5-4916-a0a0-c2fb97ce4271",
+          "owner_name": "BSC",
           "contracts": [
             "H2819"
           ],
@@ -1151,6 +1199,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c5f8052a-88f2-4dea-afae-3c1494b57d64",
+          "owner_name": "BSC",
           "contracts": [
             "H5928"
           ],
@@ -1166,6 +1215,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-179f1e25-97b4-4f70-8f9c-b0632252e88e",
+          "owner_name": "ORANGE COUNTY HEALTH AUTHORITY",
           "contracts": [
             "H5433"
           ],
@@ -1181,6 +1231,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-14409a4c-1c6c-4312-8a97-f5abec59b79c",
+          "owner_name": "UPMC HEALTH PLAN, INC.",
           "contracts": [
             "H3907"
           ],
@@ -1196,6 +1247,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-86ef2159-0776-4132-ac61-20298ef7e6eb",
+          "owner_name": "UPMC FOR YOU, INC",
           "contracts": [
             "H4279"
           ],
@@ -1211,6 +1263,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-bdf30b7d-4c21-45b9-a35b-63acdc24a894",
+          "owner_name": "UPMC HEALTH NETWORK, INC.",
           "contracts": [
             "H5533"
           ],
@@ -1226,6 +1279,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e285117f-c04e-431c-a9e0-e5e34301c338",
+          "owner_name": "UPMC HEALTH COVERAGE, INC.",
           "contracts": [
             "H7123"
           ],
@@ -1241,6 +1295,7 @@
           ],
           "payer": "AmeriHealth",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1254,6 +1309,7 @@
           ],
           "payer": "Independence Blue Cross",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1267,6 +1323,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-af447d04-2b75-4822-ad19-ba477ff1a9c5",
+          "owner_name": "PRIORITY HEALTH",
           "contracts": [
             "H2320"
           ],
@@ -1282,6 +1339,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d14056f5-90e7-4667-8113-18fe39492003",
+          "owner_name": "PRIORITY HEALTH",
           "contracts": [
             "H4875"
           ],
@@ -1297,6 +1355,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-76e7e5dc-bcc7-4b06-8ccc-20dd2160ca6f",
+          "owner_name": "PRIORITY HEALTH CHOICE, INC.",
           "contracts": [
             "H8379"
           ],
@@ -1312,6 +1371,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-af447d04-2b75-4822-ad19-ba477ff1a9c5",
+          "owner_name": "PRIORITY HEALTH",
           "contracts": [
             "H2320"
           ],
@@ -1327,6 +1387,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-0f4cbf38-272c-4e5a-9b5e-bcdb6fbc69da",
+          "owner_name": "ELDERSERVE HEALTH, INC.",
           "contracts": [
             "H6776"
           ],
@@ -1342,6 +1403,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d41c9175-613f-4de0-b388-f8fc53b4c460",
+          "owner_name": "VILLAGE SENIOR SERVICES CORPORATION",
           "contracts": [
             "H2168"
           ],
@@ -1355,6 +1417,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1368,6 +1431,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -1381,6 +1445,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-320bb01f-5fd0-4d71-9de2-d472c7a4b3e1",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H0413"
           ],
@@ -1396,6 +1461,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-984b9968-97aa-463e-8efc-5d8ee2db06ec",
+          "owner_name": "DEVOTED HEALTH PLAN OF FLORIDA, INC.",
           "contracts": [
             "H1290"
           ],
@@ -1411,6 +1477,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1424,6 +1491,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-55041491-0ca1-4f78-87e8-45fd1f409fc5",
+          "owner_name": "DEVOTED HEALTH PLAN OF MISSOURI INC",
           "contracts": [
             "H2041"
           ],
@@ -1439,6 +1507,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e1a38258-c44a-475c-ab3b-2fcb7af9fd67",
+          "owner_name": "DEVOTED HEALTH PLAN OF OHIO INC",
           "contracts": [
             "H2526"
           ],
@@ -1454,6 +1523,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-cbe69132-b331-4ca4-a9db-fc1405fc3a14",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H2686"
           ],
@@ -1469,6 +1539,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-62114dbf-de54-423a-87ac-f8937547000e",
+          "owner_name": "DEVOTED HEALTH PLAN OF OHIO INC",
           "contracts": [
             "H2697"
           ],
@@ -1484,6 +1555,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ba0d1846-8fa6-4ad0-a80d-c5fa3998e2ad",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF OKLAHOMA",
           "contracts": [
             "H2845"
           ],
@@ -1499,6 +1571,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-fc5905a8-16cf-44d9-bed2-8dabac09844f",
+          "owner_name": "DEVOTED HEALTH PLAN OF OREGON INC",
           "contracts": [
             "H2923"
           ],
@@ -1514,6 +1587,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ec72ddfe-5488-43b0-8d72-8088d55dce9d",
+          "owner_name": "DEVOTED HEALTH PLAN OF SOUTH CAROLINA INC",
           "contracts": [
             "H3041"
           ],
@@ -1529,6 +1603,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-4e23c8e5-3eaf-45b0-bf43-115be527da74",
+          "owner_name": "DEVOTED HEALTH PLAN OF ALABAMA INC",
           "contracts": [
             "H3080"
           ],
@@ -1544,6 +1619,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1557,6 +1633,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1570,6 +1647,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5e9dc9b8-6635-4ee6-b8e1-6eb598e8fe43",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF KANSAS",
           "contracts": [
             "H4348"
           ],
@@ -1585,6 +1663,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-73bbfdc3-4982-44f9-a248-9762a2fb1ae0",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H4473"
           ],
@@ -1600,6 +1679,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c24d3fe1-2d27-4fc1-8ce3-7945d7319f2d",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF COLORADO INC",
           "contracts": [
             "H4808"
           ],
@@ -1615,6 +1695,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1628,6 +1709,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e392d833-2ddb-4432-b43e-bd4d122367f3",
+          "owner_name": "DEVOTED HEALTH PLAN OF NORTH CAROLINA INC",
           "contracts": [
             "H5299"
           ],
@@ -1643,6 +1725,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1656,6 +1739,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ba798ee4-76e8-419f-b26d-8c0d64f21485",
+          "owner_name": "DEVOTED HEALTH PLAN OF HAWAII, INC.",
           "contracts": [
             "H5397"
           ],
@@ -1671,6 +1755,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-16be5f68-4b68-49dc-af37-ad2afda57772",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H5453"
           ],
@@ -1686,6 +1771,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-cf428d97-6a2c-470f-8684-6ff9e625e83a",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF KENTUCKY INC",
           "contracts": [
             "H5718"
           ],
@@ -1701,6 +1787,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-02a99743-4ea5-4264-8a81-d992b3ea522c",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H6018"
           ],
@@ -1716,6 +1803,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-20e0bf24-9a24-49d4-9bb7-89b5f81eab31",
+          "owner_name": "Devoted Health Insurance Company of Illinois, Inc.",
           "contracts": [
             "H6545"
           ],
@@ -1731,6 +1819,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e4f35479-9bd1-4b8d-93ee-86c00b136dd0",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF ARIZONA, INC.",
           "contracts": [
             "H6586"
           ],
@@ -1746,6 +1835,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-b910ae06-83dd-49a6-a5be-1a440850b8d1",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H6813"
           ],
@@ -1761,6 +1851,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-8b8d044b-b320-464a-bd94-ebb334344308",
+          "owner_name": "Devoted Health Plan",
           "contracts": [
             "H6852"
           ],
@@ -1776,6 +1867,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d9490269-9b0d-4e9b-a4d9-5301fb2a4c21",
+          "owner_name": "DEVOTED HEALTH PLAN OF VIRGINIA INC",
           "contracts": [
             "H6994"
           ],
@@ -1791,6 +1883,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-242574ec-a550-43f6-80ae-592aa53c17c8",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H7028"
           ],
@@ -1806,6 +1899,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-dfd9ed7b-8da8-47b8-b328-f98fe8407e49",
+          "owner_name": "Devoted Health Plan",
           "contracts": [
             "H7147"
           ],
@@ -1821,6 +1915,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-0928e52d-84f3-400b-896a-0f311dc7b00f",
+          "owner_name": "DEVOTED HEALTH PLAN OF ILLINOIS, INC.",
           "contracts": [
             "H7151"
           ],
@@ -1836,6 +1931,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -1849,6 +1945,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-da97860e-8a2e-40b6-aabc-ca176e94e3f5",
+          "owner_name": "DEVOTED HEALTH  PLAN OF OREGON",
           "contracts": [
             "H7199"
           ],
@@ -1864,6 +1961,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-1f143aa5-a5db-4136-b864-0bf3a8c35649",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF MISSISSIPPI",
           "contracts": [
             "H7355"
           ],
@@ -1879,6 +1977,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d5c43f94-0a5f-4c3c-b97e-c2e9d0189e07",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF ARKANSAS INC",
           "contracts": [
             "H7397"
           ],
@@ -1894,6 +1993,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-95b475d2-7eb1-4d3e-b881-21df485a1761",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF INDIANA",
           "contracts": [
             "H7471"
           ],
@@ -1909,6 +2009,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c21b998b-95ab-4402-a75e-6f00259caa03",
+          "owner_name": "DEVOTED HEALTH PLAN OF TENNESSEE INC",
           "contracts": [
             "H7605"
           ],
@@ -1924,6 +2025,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c47df4bf-eab9-4dea-b788-4a1f9b2d9d50",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H7766"
           ],
@@ -1939,6 +2041,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-8d9882be-e24e-4988-817c-7e8ba8e76d4f",
+          "owner_name": "Devoted Health Plan",
           "contracts": [
             "H7993"
           ],
@@ -1954,6 +2057,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-4c30d5a2-9a45-4a1a-94be-255fb6893915",
+          "owner_name": "Devoted Health Plan",
           "contracts": [
             "H8173"
           ],
@@ -1969,6 +2073,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d7290dcb-cb88-420f-bf00-77013e3547a8",
+          "owner_name": "Devoted of Illinois, Inc.",
           "contracts": [
             "H8320"
           ],
@@ -1984,6 +2089,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5b2315eb-6ed8-4a3d-a0fd-eb64c73660e6",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H8917"
           ],
@@ -1999,6 +2105,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d5e4bfd8-533e-40db-a982-7c9909e4be00",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H9231"
           ],
@@ -2014,6 +2121,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e5482c4f-ee53-4c1c-b8e3-fc9bbb876f83",
+          "owner_name": "DEVOTED HEALTH PLAN OF NORTH CAROLINA INC",
           "contracts": [
             "H9700"
           ],
@@ -2029,6 +2137,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-520b23d5-0a15-4585-bfdf-217a485e1e83",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY OF NEBRASKA",
           "contracts": [
             "H9802"
           ],
@@ -2044,6 +2153,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -2057,6 +2167,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-b091ff27-3ce8-48ab-ac57-87760265d2e0",
+          "owner_name": "DEVOTED HEALTH INSURANCE COMPANY",
           "contracts": [
             "H9884"
           ],
@@ -2072,6 +2183,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ee3750ad-28da-4b4c-9ac1-bb7c20a0bb8c",
+          "owner_name": "Devoted Health Insurance Company",
           "contracts": [
             "H9888"
           ],
@@ -2087,6 +2199,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-dabcfa19-1215-4584-954d-e685b85bff0d",
+          "owner_name": "Devoted Health Plan",
           "contracts": [
             "H9977"
           ],
@@ -2102,6 +2215,7 @@
           ],
           "payer": "ELDERSERVE HEALTH, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2113,6 +2227,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2124,6 +2239,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -2135,6 +2251,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -2148,6 +2265,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -2161,6 +2279,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ab53daa1-8c98-41f6-9a7a-a4a8b2367c49",
+          "owner_name": "HEALTHY MISSISSIPPI, INC.",
           "contracts": [
             "H8879"
           ],
@@ -2176,6 +2295,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-3a717de5-768e-40e0-bb9a-2ccaaca7e854",
+          "owner_name": "Inland Empire Health Plan",
           "contracts": [
             "H8894"
           ],
@@ -2191,6 +2311,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2204,6 +2325,7 @@
           ],
           "payer": "NATIVE ADVANTAGE, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -2217,6 +2339,7 @@
           ],
           "payer": "NATIVE ADVANTAGE, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2228,6 +2351,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2241,6 +2365,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e415e18f-06ec-4db7-ba76-e782ad519065",
+          "owner_name": "BCBS  OF MASSACHUSETTS HMO BLUE, INC.",
           "contracts": [
             "H2230"
           ],
@@ -2256,6 +2381,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-a9e82726-5431-4318-97cc-cd096ff75ca8",
+          "owner_name": "BCBS  OF MASSACHUSETTS HMO BLUE, INC.",
           "contracts": [
             "H2261"
           ],
@@ -2271,6 +2397,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-4c0d774a-25bc-4a8c-8003-8967763b6d8c",
+          "owner_name": "BLUE CROSS AND BLUE SHIELD OF NORTH CAROLINA",
           "contracts": [
             "H3404"
           ],
@@ -2286,6 +2413,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-8f7ccf12-703e-495d-a73d-2c6e34beb2fb",
+          "owner_name": "BLUE CROSS AND BLUE SHIELD OF NORTH CAROLINA",
           "contracts": [
             "H3449"
           ],
@@ -2301,6 +2429,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-82443491-3edb-4e29-a401-bfa6f35fd502",
+          "owner_name": "BLUE CROSS AND BLUE SHIELD OF NORTH CAROLINA",
           "contracts": [
             "H9147"
           ],
@@ -2316,6 +2445,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-42e0ac76-f345-452b-bc15-a8a836e84593",
+          "owner_name": "MARQUIS ADVANTAGE, INC.",
           "contracts": [
             "H1372"
           ],
@@ -2331,6 +2461,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-26fa8846-9433-4d46-b52c-b7de83f690cd",
+          "owner_name": "LIFEWORKS ADVANTAGE, LLC",
           "contracts": [
             "H2185"
           ],
@@ -2346,6 +2477,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-38df2391-8f0d-483e-adf9-62b40c02c59c",
+          "owner_name": "ALIGN SENIOR CARE CALIFORNIA INC.",
           "contracts": [
             "H3274"
           ],
@@ -2361,6 +2493,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-96c68813-f252-4c39-a33c-0d0286d0290e",
+          "owner_name": "PRUITTHEALTH PREMIER, INC.",
           "contracts": [
             "H3291"
           ],
@@ -2376,6 +2509,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c0704360-21a3-485d-af9d-460702d4b4ee",
+          "owner_name": "PERENNIAL ADVANTAGE OF COLORADO, INC.",
           "contracts": [
             "H3419"
           ],
@@ -2391,6 +2525,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-80d312b5-5203-4b83-8c1c-388ec0b412ac",
+          "owner_name": "PROCARE ADVANTAGE, LLC",
           "contracts": [
             "H3467"
           ],
@@ -2406,6 +2541,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -2419,6 +2555,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e35c531c-9974-4e4a-a43a-8480fb53450f",
+          "owner_name": "NHC ADVANTAGE, LLC",
           "contracts": [
             "H4172"
           ],
@@ -2434,6 +2571,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-92fc683e-54ab-4f30-8027-9a1688d880a8",
+          "owner_name": "PRUITTHEALTH PREMIER NORTH CAROLINA, LLC",
           "contracts": [
             "H6345"
           ],
@@ -2449,6 +2587,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-842f09b4-b922-4c02-80c3-057a404e4d3d",
+          "owner_name": "LAGNIAPPE ADVANTAGE INSURANCE COMPANY",
           "contracts": [
             "H6566"
           ],
@@ -2464,6 +2603,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-91f99536-84bd-4878-8707-5869cc6b6bff",
+          "owner_name": "ALIGN SENIOR CARE MI, LLC",
           "contracts": [
             "H6832"
           ],
@@ -2479,6 +2619,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ebe814d3-345b-49b5-acf8-46d9de6e598e",
+          "owner_name": "ISNP VENTURES, LLC",
           "contracts": [
             "H6959"
           ],
@@ -2494,6 +2635,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-0f04e7b7-a4bb-41f1-aee1-88e00ac3495b",
+          "owner_name": "PERENNIAL ADVANTAGE OF OHIO, INC.",
           "contracts": [
             "H8797"
           ],
@@ -2509,6 +2651,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-59285b17-e908-4067-a4dc-8aa6082b2dc6",
+          "owner_name": "ALIGN SENIOR CARE FLORIDA, INC.",
           "contracts": [
             "H9917"
           ],
@@ -2522,6 +2665,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2535,6 +2679,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e1285faa-dff4-48ed-8bf7-da24b042ccd6",
+          "owner_name": "HEALTHFIRST HEALTH PLAN, INC.",
           "contracts": [
             "H1722"
           ],
@@ -2550,6 +2695,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-560cb3d8-035b-4b85-b693-795f495ab5ca",
+          "owner_name": "HEALTHFIRST HEALTH PLAN, INC.",
           "contracts": [
             "H3359"
           ],
@@ -2565,6 +2711,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-d9c1aba4-abf2-4ca2-936d-05658169cbf3",
+          "owner_name": "HEALTHFIRST HEALTH PLAN, INC.",
           "contracts": [
             "H5989"
           ],
@@ -2580,6 +2727,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-c35d4a3a-49e3-46da-92a0-54f10bf74f0b",
+          "owner_name": "HEALTHFIRST INSURANCE COMPANY, INC.",
           "contracts": [
             "H9678"
           ],
@@ -2593,6 +2741,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2604,6 +2753,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2615,6 +2765,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2626,6 +2777,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2637,6 +2789,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2650,6 +2803,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-816dd617-0adc-4b47-9d3a-004b5dd11590",
+          "owner_name": "VOLUNTEER STATE HEALTH PLAN",
           "contracts": [
             "H3259"
           ],
@@ -2665,6 +2819,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-fcb199a8-4aee-4252-849e-c385a2281e07",
+          "owner_name": "BLUECROSS BLUESHIELD OF TENNESSEE, INC.",
           "contracts": [
             "H7917"
           ],
@@ -2678,6 +2833,7 @@
           "basis": [],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2691,6 +2847,7 @@
           ],
           "payer": "HEALTH PARTNERS PLANS, INC.",
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2704,6 +2861,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-9aa5f7a3-6f01-44fd-804a-589dedde6b20",
+          "owner_name": "SOLIS HEALTH PLANS, INC.",
           "contracts": [
             "H0982"
           ],
@@ -2719,6 +2877,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-2b552331-62eb-45e4-9805-9aa92601bf05",
+          "owner_name": "Ventura County Medi-Cal Managed Care Commission",
           "contracts": [
             "H9623"
           ],
@@ -2734,6 +2893,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2747,6 +2907,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-b4b8ed1e-13d3-41a3-8f2f-f9327f2afa75",
+          "owner_name": "SAN FRANCISCO HEALTH AUTHORITY DBA SAN FRANCISCO HEALTH PLAN",
           "contracts": [
             "H8051"
           ],
@@ -2762,6 +2923,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2775,6 +2937,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2788,6 +2951,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-2b552331-62eb-45e4-9805-9aa92601bf05",
+          "owner_name": "Ventura County Medi-Cal Managed Care Commission",
           "contracts": [
             "H9623"
           ],
@@ -2803,6 +2967,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2816,6 +2981,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2829,6 +2995,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-3b78b2b6-a79b-4606-9b76-c207b731161c",
+          "owner_name": "DOCTORS HEALTHCARE PLANS, INC.",
           "contracts": [
             "H4140"
           ],
@@ -2844,6 +3011,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2857,6 +3025,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-3edb0047-61e9-4356-a480-42490d638ea0",
+          "owner_name": "HEALTH NEW ENGLAND, INC.",
           "contracts": [
             "H2737"
           ],
@@ -2872,6 +3041,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-97572d45-7e50-40c4-b110-680f3d87c460",
+          "owner_name": "HEALTH NEW ENGLAND, INC.",
           "contracts": [
             "H8578"
           ],
@@ -2887,6 +3057,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": false,
           "managing_org": ""
@@ -2900,6 +3071,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-710e287c-dea1-480a-8063-ff02064472ff",
+          "owner_name": "TSG GUARD, INC.",
           "contracts": [
             "H1119"
           ],
@@ -2915,6 +3087,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-bd11ad90-c55f-4919-aadb-9962fd580be0",
+          "owner_name": "Baylor Scott & White Insurance Company",
           "contracts": [
             "H2032"
           ],
@@ -2930,6 +3103,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e3afa7cc-381c-45e7-8e50-865d6f70873c",
+          "owner_name": "SCOTT AND WHITE HEALTH PLAN",
           "contracts": [
             "H8142"
           ],
@@ -2945,6 +3119,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-366439dd-5bd0-4832-b41e-d6455cdcf577",
+          "owner_name": "WEST VIRGINIA SENIOR ADVANTAGE, INC.",
           "contracts": [
             "H9153"
           ],
@@ -2960,6 +3135,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-276206bb-935d-4460-909f-511f617228c0",
+          "owner_name": "BANNER - UNIVERSITY CARE ADVANTAGE",
           "contracts": [
             "H4931"
           ],
@@ -2975,6 +3151,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-cd749dfe-93b4-443b-a499-6358205f9588",
+          "owner_name": "BANNER HEALTH PLAN, INC.",
           "contracts": [
             "H5843"
           ],
@@ -2990,6 +3167,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ab7ef6ae-82f0-4a51-b0c9-52f2cb2861db",
+          "owner_name": "MOLINA HEALTHCARE OF KENTUCKY, INC.",
           "contracts": [
             "H1799"
           ],
@@ -3005,6 +3183,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5c649647-ce28-422c-9a45-1d40fbe36ed2",
+          "owner_name": "SENIOR WHOLE HEALTH, LLC",
           "contracts": [
             "H2224"
           ],
@@ -3020,6 +3199,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-df4bf90f-6bab-4083-9940-c70054fe0e77",
+          "owner_name": "MOLINA HEALTHCARE OF CALIFORNIA",
           "contracts": [
             "H3038"
           ],
@@ -3035,6 +3215,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-667ebeed-37ec-41ff-872e-ea64650bb702",
+          "owner_name": "MOLINA HEALTHCARE OF ILLINOIS INC",
           "contracts": [
             "H3093"
           ],
@@ -3050,6 +3231,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -3063,6 +3245,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-f66dc53c-b9a7-4a5f-8b6f-833c9075a4b3",
+          "owner_name": "SENIOR WHOLE HEALTH, LLC",
           "contracts": [
             "H4371"
           ],
@@ -3078,6 +3261,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-610e12bb-d519-489a-8eb3-f4306199878f",
+          "owner_name": "Molina Healthcare of Wisconsin, Inc.",
           "contracts": [
             "H5209"
           ],
@@ -3093,6 +3277,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e8825461-2b5c-480e-a66a-1c34118a9920",
+          "owner_name": "MOLINA HEALTHCARE OF UTAH, INC.",
           "contracts": [
             "H5628"
           ],
@@ -3108,6 +3293,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5b4a98c0-183b-434f-b11d-642a0366a874",
+          "owner_name": "MOLINA HEALTHCARE OF WASHINGTON, INC.",
           "contracts": [
             "H5823"
           ],
@@ -3123,6 +3309,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-a256ce6c-0b37-44ab-ab43-1f130e22f38c",
+          "owner_name": "MOLINA HEALTHCARE OF MICHIGAN, INC.",
           "contracts": [
             "H5926"
           ],
@@ -3138,6 +3325,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-50d1d9f2-b827-4b02-940e-640db3ab789f",
+          "owner_name": "SENIOR WHOLE HEALTH OF NEW YORK, INC.",
           "contracts": [
             "H5992"
           ],
@@ -3153,6 +3341,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-1475b53e-81ad-473f-a695-d05caf2c77ec",
+          "owner_name": "MOLINA HEALTHCARE OF TEXAS, INC.",
           "contracts": [
             "H6515"
           ],
@@ -3168,6 +3357,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -3181,6 +3371,7 @@
           ],
           "payer": null,
           "owner_org": null,
+          "owner_name": null,
           "contracts": [],
           "bulk": true,
           "managing_org": ""
@@ -3194,6 +3385,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-5816ad1d-1d70-4e7c-9a77-f4485d5ff3bc",
+          "owner_name": "MOLINA HEALTHCARE OF TEXAS, INC.",
           "contracts": [
             "H7678"
           ],
@@ -3209,6 +3401,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-0254a5a5-592e-4dd9-9955-13c3985fdada",
+          "owner_name": "MOLINA HEALTHCARE OF SOUTH CAROLINA,INC",
           "contracts": [
             "H8176"
           ],
@@ -3224,6 +3417,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-958920bc-0cfc-4aaa-8680-c30cd122199e",
+          "owner_name": "MOLINA HEALTHCARE OF ARIZONA, INC.",
           "contracts": [
             "H8845"
           ],
@@ -3239,6 +3433,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-e7beeb7f-ab23-4d89-a04b-7e4448f9f572",
+          "owner_name": "MOLINA HEALTHCARE OF OHIO, INC.",
           "contracts": [
             "H9955"
           ],
@@ -3254,6 +3449,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-b0c151a3-c352-4a67-ba15-635f0af08463",
+          "owner_name": "PROVIDER PARTNERS HEALTH PLAN OF ILLINOIS",
           "contracts": [
             "H3800"
           ],
@@ -3269,6 +3465,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-ff3d1f3f-f3b3-44c1-8e3f-c0b6c8f2956d",
+          "owner_name": "PROVIDER PARTNERS HEALTH PLAN OF TEXAS, INC.",
           "contracts": [
             "H4054"
           ],
@@ -3284,6 +3481,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-9c4c768e-46a0-4b59-b003-256294caa999",
+          "owner_name": "PROVIDER PARTNERS HEALTH PLAN OF PENNSYLVANIA, INC",
           "contracts": [
             "H4093"
           ],
@@ -3299,6 +3497,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-7d8300df-0165-4fb9-92d2-f416ceb4ab59",
+          "owner_name": "PROVIDER PARTNERS HEALTH PLAN OF NORTH CAROLINA",
           "contracts": [
             "H4439"
           ],
@@ -3314,6 +3513,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-b5163652-b79a-494b-9676-812e2deb8a4b",
+          "owner_name": "PROVIDER PARTNERS HEALTH PLAN OF INDIANA",
           "contracts": [
             "H4444"
           ],
@@ -3329,6 +3529,7 @@
           ],
           "payer": null,
           "owner_org": "Organization-6c0fff75-9370-4411-8bf7-39eedd4c69b7",
+          "owner_name": "PROVIDER PARTNERS HEALTH PLAN OF MISSOURI, INC.",
           "contracts": [
             "H9191"
           ],

@@ -253,10 +253,14 @@ def main():
     referencing: dict[str, list[str]] = collections.defaultdict(list)
     endpoint_holders = []
     rest_ids = {r["id"] for r in rest_rows}
+    owner_ids = {r["owner_org"] for r in classified if r["owner_org"]}
+    owner_names: dict[str, str] = {}
     orgs = 0
     if org.exists():
         for r in stream(org):
             orgs += 1
+            if r.get("id") in owner_ids:
+                owner_names[r["id"]] = r.get("name")
             if is_payer_typed(r):
                 payer_typed.append(r)
                 payer_names[_norm_name(r.get("name"))] = r.get("name")
@@ -275,6 +279,8 @@ def main():
     for c, n in type_codes.most_common(8):
         print(f"     {str(c):24s} {n:>10,}")
 
+    for r in classified:
+        r["owner_name"] = owner_names.get(r["owner_org"]) if r["owner_org"] else None
     payer_ids = {r.get("id") for r in payer_typed}
     payer_typed_n = len(payer_typed)
     payer_typed_with_ep = sum(1 for r in payer_typed if r.get("endpoint"))
@@ -450,7 +456,8 @@ def main():
             "fhir_api_named_unclassified": residual,
             "addresses": [
                 {k: r[k] for k in ("address", "hostname", "signal", "basis", "payer",
-                                   "owner_org", "contracts", "bulk", "managing_org")}
+                                   "owner_org", "owner_name", "contracts", "bulk",
+                                   "managing_org")}
                 for r in sorted(classified, key=lambda r: r["address"].lower())],
             "linkage": linkage,
             "controls": control_results,
