@@ -109,10 +109,20 @@ PAYER_HOST_RE = (
     r"uhc|unitedhealthcare|kaiser|elevance|highmark|carefirst|wellcare|healthpartners|payer"
 )
 
-# URL-path self-labelling. A server is not obliged to name itself in its path,
-# so this undercounts; it is a floor, and reported as such.
-DIRECTORY_RE = r"providerdirectory|provider-directory|plan-?net|pdex"
-PATIENT_ACCESS_RE = r"patientaccess|patient-access"
+# Payer directory classification (FHI-71) lives in payer_directory.py, which
+# both this script and h49_recheck_release.py import. DIRECTORY_RE is H49's
+# original URL-path rule and is now one of two signals; the host signal
+# (contract IDs from InsurancePlan, hand-checked payer directory hosts) is the
+# other. Re-exported here for callers that imported it from this module.
+from payer_directory import (  # noqa: E402
+    DIRECTORY_RE,
+    PATIENT_ACCESS_RE,
+    ClassifierControlFailed,
+    check_controls,
+    classify,
+    host_of,
+    summarize,
+)
 
 # Payer Provider Directory APIs verified live and unauthenticated by hand.
 # Kept short on purpose: each entry is something checked, not something assumed.
@@ -211,12 +221,15 @@ def git_sha() -> str:
         return "unknown"
 
 
-def measure_detail(client: bigquery.Client, payer_orgs: int) -> tuple[dict, list[dict], list[dict], int]:
+def measure_detail(client: bigquery.Client, payer_orgs: int,
+                   classification: dict | None = None) -> tuple[dict, list[dict], list[dict], int]:
     """Measure every `detail` field from BigQuery for the loaded release.
 
     Returns (detail, org_type_rows, payer_endpoint_rows, bytes_billed).
     `payer_orgs` is the payer PIN watch's count of payer-typed organizations,
-    used as a cross-check on the Organization.type walk. Raises RefreshRefused
+    used as a cross-check on the Organization.type walk. `classification` is
+    the published detail.payer_directory_classification for the same release,
+    which carries the contract hosts. Raises RefreshRefused
     when a positive control fails, so a broken walk cannot publish an empty or
     truncated table.
     """
@@ -244,18 +257,32 @@ def measure_detail(client: bigquery.Client, payer_orgs: int) -> tuple[dict, list
     codings = type_codings_control(org_type_rows, payer_orgs=payer_orgs)
 
     print("2/4  Endpoint classification ...")
-    kinds = run(f"""
-        SELECT CASE
-                 WHEN REGEXP_CONTAINS(LOWER(_address), r'{DIRECTORY_RE}') THEN 'provider-directory'
-                 WHEN REGEXP_CONTAINS(LOWER(_address), r'{PATIENT_ACCESS_RE}') THEN 'patient-access'
-                 ELSE 'unlabelled'
-               END AS url_kind,
-               COUNT(*) AS n
+    # Every FHIR REST address (about 111,000 rows) comes back and is classified
+    # in Python by payer_directory.classify(), the same function the NDJSON
+    # recheck uses, so the two paths cannot disagree about a release. The
+    # contract-ID half of the host signal needs InsurancePlan, which is not in
+    # BigQuery; it is read from the classification the recheck published for
+    # this same release (run_refresh_detail refuses on a release mismatch).
+    addresses = [r["address"] for r in run(f"""
+        SELECT _address AS address
         FROM {ep}
         WHERE _connection_type = 'hl7-fhir-rest'
-        GROUP BY 1 ORDER BY n DESC
-    """)
-    by_kind = {r["url_kind"]: r["n"] for r in kinds}
+    """)]
+    contracts = dict((classification or {}).get("contract_ids_in_addresses") or {})
+    hosts_with_contracts = dict((classification or {}).get("contract_hosts") or {})
+    # Same positive control as the NDJSON path: a known directory that stops
+    # classifying, or a known non-directory that starts, refuses the refresh.
+    try:
+        check_controls(contracts, plans_present=bool(classification))
+    except ClassifierControlFailed as exc:
+        raise RefreshRefused(f"payer directory classifier control failed: {exc}") from exc
+    by_kind: dict[str, int] = {}
+    directory_rows = []
+    for a in addresses:
+        c = classify(a or "", contracts, hosts_with_contracts)
+        by_kind[c["url_kind"]] = by_kind.get(c["url_kind"], 0) + 1
+        if c["directory"]:
+            directory_rows.append({**c, "address": a, "hostname": host_of(a or "")})
 
     print("3/4  Host concentration ...")
     hosts = run(f"""
@@ -284,8 +311,14 @@ def measure_detail(client: bigquery.Client, payer_orgs: int) -> tuple[dict, list
         code, size = probe(c["base"] + c["probe"])
         host = re.sub(r"^https?://([^/]+).*$", r"\1", c["base"]).lower()
         in_ndh = any(h and host in h for h in (r["host"] for r in payer_eps))
+        # The control URL being absent is not the same as the payer's
+        # directory being absent: on 2026-10-07 Capital BlueCross's MA
+        # directory was in the index under another host.
+        same_payer = sorted({r["address"] for r in directory_rows
+                             if r["payer"] == c["payer"] and r["hostname"] != host})
         controls.append({**c, "http_status": code, "bytes": size,
-                         "live_public": code == 200 and size > 0, "present_in_ndh": in_ndh})
+                         "live_public": code == 200 and size > 0, "present_in_ndh": in_ndh,
+                         "same_payer_directories_in_ndh": same_payer})
     live_absent = [c for c in controls if c["live_public"] and not c["present_in_ndh"]]
 
     # Even where a payer endpoint IS carried, it is only usable as an index if
@@ -304,10 +337,17 @@ def measure_detail(client: bigquery.Client, payer_orgs: int) -> tuple[dict, list
         "payer_endpoint_status": status_mix,
         "payer_endpoints_with_managing_org": with_org,
         "control_directories": controls,
+        # URL-level: counts control base URLs that answer live and are not in
+        # the index at that address. It says nothing about the same payer's
+        # other directories; see control_directories[].same_payer_directories_in_ndh.
         "live_but_absent_from_ndh": len(live_absent),
+        "live_but_absent_from_ndh_scope": (
+            "control base URL only; the same payer may be indexed at another "
+            "address (control_directories[].same_payer_directories_in_ndh)"),
         # Added fields: which release the detail block was measured against,
         # and the URL-kind split the numerator and denominator come from.
         "endpoint_url_kinds": dict(sorted(by_kind.items(), key=lambda kv: -kv[1])),
+        "directory_signal_breakdown": summarize(directory_rows),
         "detail_release_date": RELEASE_DATE,
     }
     return detail, org_type_rows, payer_eps, billed
@@ -343,7 +383,13 @@ def run_refresh_detail() -> int:
     client = bigquery.Client(project=PROJECT)
     pin, pin_billed = payer_pin_watch(client)
     try:
-        detail, _, payer_eps, billed = measure_detail(client, pin["payer_orgs"])
+        classification = (pub.get("detail") or {}).get("payer_directory_classification")
+        if not classification or classification.get("release_date") != RELEASE_DATE:
+            print("warning: no payer_directory_classification for this release in the "
+                  "published finding; the contract-ID host signal is off for this run. "
+                  "Run h49_recheck_release.py --write first.")
+            classification = None
+        detail, _, payer_eps, billed = measure_detail(client, pin["payer_orgs"], classification)
     except RefreshRefused as exc:
         print(f"refusing: positive control failed: {exc}")
         return 1
@@ -402,7 +448,12 @@ def main() -> int:
     client = bigquery.Client(project=PROJECT)
     pin, pin_billed = payer_pin_watch(client)
     print(f"     payer PIN watch bytes billed {pin_billed:,}")
-    detail, org_types, payer_eps, billed = measure_detail(client, pin["payer_orgs"])
+    out_path = OUT_DIR / f"{SLUG}.json"
+    prev = json.loads(out_path.read_text()) if out_path.exists() else {}
+    classification = (prev.get("detail") or {}).get("payer_directory_classification")
+    if not classification or classification.get("release_date") != RELEASE_DATE:
+        classification = None
+    detail, org_types, payer_eps, billed = measure_detail(client, pin["payer_orgs"], classification)
     print(f"     detail bytes billed {billed:,}")
     by_kind = detail["endpoint_url_kinds"]
     total_rest = sum(by_kind.values())
@@ -445,10 +496,11 @@ def main() -> int:
         f"{len(payer_eps)} payer-host endpoints found, {with_org} carry a managingOrganization "
         f"reference, so the endpoint cannot be resolved to an organization for the rest. "
         f"Status mix: {', '.join(f'{k}={v}' for k, v in sorted(status_mix.items()))}.\n\n"
-        "The provider-directory count is a floor, not a census: it counts servers that self-label in "
-        "their URL path. A directory hosted at an unlabelled path is not counted, so the true number "
-        "may be higher. The control probe is what makes the gap concrete, by taking a directory "
-        "verified live and unauthenticated and checking whether the index knows it.\n\n"
+        "The provider-directory count is a floor, not a census. An address counts when its URL path "
+        "names a directory or its host is shown to serve a payer's directory (analysis/payer_directory.py); "
+        "a directory that does neither is not counted, so the true number may be higher. The control "
+        "probe takes a directory verified live and unauthenticated and checks whether the index knows "
+        "it, at that address and for the same payer at any other address.\n\n"
         "This measures a release, not compliance. Payer endpoint coverage has been discussed in the "
         "NDH community as intended direction; what is reported here is the distance between that "
         "direction and the shipped file, which is the actionable part."
@@ -474,6 +526,12 @@ def main() -> int:
         "notes": notes,
         "detail": detail,
     }
+    # Keep what the NDJSON recheck owns: the classification it measured for
+    # this release and the dated corrections.
+    if classification:
+        payload["detail"]["payer_directory_classification"] = classification
+    if prev.get("corrections"):
+        payload["corrections"] = prev["corrections"]
     payload = merge_payer_pin_watch(payload, pin)
 
     out = OUT_DIR / f"{SLUG}.json"

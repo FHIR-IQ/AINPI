@@ -482,27 +482,27 @@ export const FINDINGS: Finding[] = [
     hypotheses: ['H49'],
     title: 'NDH payer endpoint and organization coverage',
     summary:
-      'The NDH is discussed in the CMS provider-directory community as the place where payer API endpoints and organization identifiers will live, so a consumer could discover a payer’s public Provider Directory API from one federal index instead of hunting developer portals payer by payer. H49 measures how far the shipped release is from that. Result at 2026-08-20, and half of it changed: CMS added payer organizations. 27 now carry a "pay" type coding and own 233 health plans, where the 2026-05-08 release had no payer type at all across 1,999,818 typed resources. Payer endpoints did not follow. 0 of those 27 organizations carry an endpoint, and 1 of 110,973 FHIR REST endpoints self-labels as a payer provider directory. The endpoint table is overwhelmingly an EHR-vendor patient-data index: athenahealth, eClinicalWorks and Office Ally alone account for 65,338 of the endpoints, and 58 of 2,962 distinct hosts are payer-operated. The 92 payer-host endpoints that are carried are largely unusable as an index anyway: only 7 have a managingOrganization, and 30 are marked status=error. A control directory verified live, public and unauthenticated under CMS-9115-F is absent from the index entirely.',
+      'The NDH is discussed in the CMS provider-directory community as the place where payer API endpoints and organization identifiers will live, so a consumer could discover a payer’s public Provider Directory API from one federal index instead of hunting developer portals payer by payer. H49 measures how far the shipped release is from that. Result at 2026-10-07: 997 organizations carry a "pay" type coding and own 7,575 health plans, but none of the 997 carries an endpoint or a telecom entry. At least 194 of 111,259 FHIR REST endpoints are payer provider-directory addresses (25 matched by URL path only, 144 by host only, 25 by both), and none of them is linked to a payer organization or a health plan from either side. So the file says who the payers are and, separately, lists some of their directories, without connecting the two. The Capital BlueCross control directory URL is not in the index, though the same payer’s Medicare Advantage directory is, at another address. The 2026-10-14 figure of 50 directory addresses counted only URLs that name a directory and was a floor; see the correction in the notes.',
     nullHypothesis:
-      'The NDH carries payer organizations and their public Provider Directory API endpoints, so it can serve as a discovery index for payer directories. Rejected on both halves at 2026-05-08. At 2026-08-20 the first half holds: 27 payer organizations arrived owning 233 health plans. The second half still fails: 0 of the 27 carry an endpoint and 1 of 110,973 FHIR REST endpoints is a payer directory. Identity arrived, reachability did not.',
+      'The NDH carries payer organizations and their public Provider Directory API endpoints, so it can serve as a discovery index for payer directories. Rejected on both halves at 2026-05-08. At 2026-10-07 the first half holds: 997 payer organizations own 7,575 health plans. The second half still fails as an index: at least 194 payer directory addresses are in the file, but none is linked to a payer organization or plan, and no payer organization carries an endpoint.',
     denominator:
-      'The 110,973 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-08-20 NDH release (the Direct Trust HISP addresses, 1,017,196 of them, are messaging endpoints and are excluded per H28). The organization-type denominator is the Organization resources that carry any type coding; roughly half the Organization file carries no type coding at all and is not counted either way.',
+      'The 111,259 Endpoint resources with connectionType.code = hl7-fhir-rest in the pinned 2026-10-07 NDH release (Direct Trust HISP addresses are messaging endpoints and are excluded per H28). The organization-type denominator is the Organization resources that carry any type coding.',
     dataSource:
-      'Three capped BigQuery scans of cms_npd.endpoint plus one of cms_npd.organization (reading the resource JSON column to enumerate every type coding rather than the flattened _org_type, so a payer type could not be hidden by the extractor). Plus one control probe by curl of a payer Provider Directory API verified live and unauthenticated. Compute script: analysis/h49_ndh_payer_endpoints.py. About $0.03 per run.',
+      'The 2026-10-07 NDJSON streamed directly (analysis/h49_recheck_release.py) for the headline, classification and linkage, with directory classification in analysis/payer_directory.py: URL path or host, where the host signal comes from CMS contract IDs in the release’s own InsurancePlan resources and short hand-checked host lists. Capped BigQuery scans of cms_npd.endpoint and cms_npd.organization (analysis/h49_ndh_payer_endpoints.py) refresh the detail block. Each classified address and the control directory are probed by curl with no credentials, and the results are recorded with the probe date.',
     status: 'published',
-    updated: '2026-08-11',
+    updated: '2026-10-16',
     ogTagline:
-      '27 payer organizations arrived. None of them publishes an endpoint.',
+      '997 payer organizations, at least 194 payer directories, no link between them.',
     implications: [
       {
         audience: 'CMS publishing the data',
         takeaway:
-          'Three concrete gaps, all additive rather than breaking. Organization.type has no payer coding, so payer entities cannot be represented or selected today. Of the 92 payer-host endpoints that are carried, only 7 have a managingOrganization, so the endpoint cannot be resolved to an organization for the other 85. And a directory that is live, public and mandated is absent entirely, which means the gap is not "payers have not built these" but "the index does not yet carry them".',
+          'Two concrete gaps, both additive rather than breaking. No payer organization carries an endpoint, and none of the payer directory addresses the file does carry names a managingOrganization or is listed by a payer organization or health plan, so a directory cannot be resolved to the payer it serves. And at least one live, mandated directory is indexed under an address other than the one the payer publishes: the Capital BlueCross control URL is absent while its Medicare Advantage directory is present elsewhere, which means coverage cannot be checked by URL alone.',
       },
       {
         audience: 'Startups + integrators',
         takeaway:
-          'Do not plan on discovering payer directory endpoints from the NDH in this release. They are not there. Endpoint resolution from the NDH gets you EHR patient-data URLs, which answer a different question than "where is this payer’s network directory".',
+          'The 2026-10-07 release carries at least 194 payer provider-directory addresses (25 matched by URL path only, 144 by host only, 25 by both). By URL shape, 138 are CMS Medicare Advantage bulk files, 50 are FHIR API base addresses and 6 are unfilled templates. Probed on 2026-10-16 without credentials, 38 of the 50 API addresses returned data to a Practitioner search and 117 of the 138 bulk files returned their index; 9 sit on QA or UAT hosts. None is linked to a payer organization or a health plan from either side. You can find a directory in the file, but you cannot get from a payer or plan to its directory through the NDH.',
       },
       {
         audience: 'Researchers',
@@ -512,7 +512,7 @@ export const FINDINGS: Finding[] = [
       {
         audience: 'Methodology readers',
         takeaway:
-          'The provider-directory count is a floor, not a census: it counts servers that self-label in their URL path, and a directory at an unlabelled path would be missed. That is why the control probe exists. Without it, a low count could equally mean payers had built nothing, which would not be the index’s fault.',
+          'The directory count is a floor, not a census. An address counts when its URL names a directory or its host is shown to serve a payer’s directory (a CMS contract ID from the release’s InsurancePlan resources, or a short hand-checked list); a directory that does neither is missed, and 86 addresses in the same CMS batch match neither signal. Payer-name matching is not used, because it matches provider EHR servers. The control probe still matters: it separates "payers built nothing" from "the index does not carry it".',
       },
     ],
   },

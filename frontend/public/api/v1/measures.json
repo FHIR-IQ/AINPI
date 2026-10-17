@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T22:42:46+00:00",
+  "generated_at": "2026-10-17T02:09:37+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -371,21 +371,35 @@
         },
         {
           "release": "2026-10-07",
-          "value": 0.000449401846142784,
-          "numerator": 50,
+          "value": 0.0017436791630340018,
+          "numerator": 194,
           "denominator": 111259,
           "definition_version": 1,
           "source": {
             "file": "frontend/public/api/v1/findings/ndh-payer-endpoint-coverage.json",
             "field": "numerator / denominator",
-            "commit": "86c2349",
+            "commit": "ac0cb9a",
             "vendored": false
           },
+          "restatements": [
+            {
+              "as_published_value": 0.000449401846142784,
+              "as_published_numerator": 50,
+              "as_published_denominator": 111259,
+              "source": {
+                "file": "analysis/release-snapshots/published/ndh-payer-endpoint-coverage@b5aa33a.json",
+                "field": "numerator / denominator",
+                "commit": "b5aa33a",
+                "vendored": true
+              },
+              "reason": "First published counting only addresses whose URL path names a directory (50); restated on 2026-10-16 (FHI-71) with the host signal added (CMS contract IDs from the release's InsurancePlan resources, and hand-checked payer directory hosts): 194, of which 25 path only, 144 host only, 25 both."
+            }
+          ],
           "comparable_to_previous": true
         }
       ],
       "omitted": [],
-      "notes": "Payer organizations with an endpoint is not yet a measure: the 2026-05-08 release had no payer organization type, and the 2026-08-20 count of payer organizations carrying an endpoint is stated only in prose."
+      "notes": "Classified by analysis/payer_directory.py: URL path OR host. Re-running that classifier on the 2026-05-08 and 2026-08-20 Endpoint files gives the published 1 for each (no address in either carries a contract ID or sits on a listed host), so the earlier points stand. Every point is a floor. Payer organizations with an endpoint is not yet a measure: the 2026-05-08 release had no payer organization type, and the 2026-08-20 count of payer organizations carrying an endpoint is stated only in prose."
     },
     {
       "slug": "ssn-exposures",
