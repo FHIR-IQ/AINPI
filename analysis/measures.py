@@ -376,12 +376,22 @@ REGISTRY: tuple = (
             "Endpoint resources with connectionType hl7-fhir-rest"),),
         sources=(Source(f"{PUBLISHED}/ndh-payer-endpoint-coverage@c39b178.json", finding_ratio, vendored_from="c39b178"),
                  Source(f"{PUBLISHED}/ndh-payer-endpoint-coverage@6e74041.json", finding_ratio, vendored_from="6e74041"),
-                 Source(f"{FINDINGS}/ndh-payer-endpoint-coverage.json", finding_ratio)),
+                 Source(f"{FINDINGS}/ndh-payer-endpoint-coverage.json", finding_ratio),
+                 Source(f"{PUBLISHED}/ndh-payer-endpoint-coverage@b5aa33a.json", finding_ratio,
+                        vendored_from="b5aa33a", restatement_of="2026-10-07",
+                        restatement_reason="First published counting only addresses whose URL path names a "
+                                           "directory (50); restated on 2026-10-16 (FHI-71) with the host signal "
+                                           "added (CMS contract IDs from the release's InsurancePlan resources, "
+                                           "and hand-checked payer directory hosts): 201, of which 25 path only, "
+                                           "151 host only, 25 both.")),
         ordinary_move={"kind": "absolute", "max": 0.01,
                        "why": "Payer directories are a handful of endpoints in a population of about 110,000."},
-        notes="Payer organizations with an endpoint is not yet a measure: the 2026-05-08 release had no payer "
-              "organization type, and the 2026-08-20 count of payer organizations carrying an endpoint is stated "
-              "only in prose.",
+        notes="Classified by analysis/payer_directory.py: URL path OR host. Re-running that classifier on the "
+              "2026-05-08 and 2026-08-20 Endpoint files gives the published 1 for each (no address in either "
+              "carries a contract ID or sits on a listed host), so the earlier points stand. Every point is a "
+              "floor. Payer organizations with an endpoint is not yet a measure: the 2026-05-08 release had no "
+              "payer organization type, and the 2026-08-20 count of payer organizations carrying an endpoint is "
+              "stated only in prose.",
     ),
     Measure(
         slug="ssn-exposures",

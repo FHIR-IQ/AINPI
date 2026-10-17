@@ -6,11 +6,11 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T03:12:29+00:00",
+  "generated_at": "2026-10-17T01:44:13+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "86c2349",
-  "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. 50 of 111,259 FHIR REST endpoints have a provider-directory address, none of them attached to a payer organization, and a live CMS-9115-F directory is still absent from the index.",
-  "numerator": 50,
+  "commit_sha": "b5aa33a",
+  "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. 201 of 111,259 FHIR REST endpoints are payer provider-directory addresses (50 by URL path and 151 only by host), none of them attached to a payer organization; the Capital BlueCross control directory URL is not in the index, though another Capital BlueCross directory address is.",
+  "numerator": 201,
   "denominator": 111259,
   "chart": {
     "type": "bar",
@@ -30,11 +30,11 @@
       },
       {
         "label": "Provider-directory endpoints",
-        "value": 50
+        "value": 201
       }
     ]
   },
-  "notes": "Re-measured against the 2026-10-07 release by streaming the published NDJSON directly, not through BigQuery, so the check could run the day the release landed rather than after a 45 GB ingest. Classification constants are imported from analysis/h49_ndh_payer_endpoints.py rather than copied, so this cannot drift from the finding it updates. A payer organization type exists. No payer organization carries an endpoint. Provider-directory addresses are classified by URL pattern; none of the 50 is linked to a payer organization from either side. The control directory Capital BlueCross answered 200 to an unauthenticated request and is absent from the index, which separates 'nothing to index' from 'not indexed yet'. Reproduce with analysis/h49_recheck_release.py --dir <release dir>.\n\nRelease watch, payer PIN: 0 of the 997 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 997 payer-typed organizations were found, so these counts come from a query that could see them.",
+  "notes": "Re-measured against the 2026-10-07 release by streaming the published NDJSON directly, not through BigQuery. Classification rules are imported from analysis/payer_directory.py rather than copied, so this cannot drift from the finding it updates. 997 organizations carry the payer type (pay); 0 of them carry an endpoint and 0 a telecom entry, so no payer directory can be found from the payer organization record itself.\n\nA FHIR REST address counts as a payer provider directory on either of two signals. Path: the URL names a directory (providerdirectory, provider-directory, plan-net, pdex). Host: the address sits on a host that serves a payer's directory, shown either by a CMS contract ID that the release's own InsurancePlan resources carry (962 contract IDs, found on 30 hosts), or by a hand-checked list of payer directory hosts. Of the 201: 25 path only, 151 host only, 25 both. 144 are CMS Medicare Advantage bulk directory files (MPF index.json and similar) and 57 are searchable FHIR APIs. A host signal never overrides a path that marks a patient-access or other non-directory API.\n\nThe count is a floor. 279 FHIR REST endpoints in this release share the name 'FHIR API' and carry no managingOrganization, which marks one CMS collection batch; 79 of them match neither signal, and many of those look like payer directories. Payer name matching is not used to classify: it matches provider EHR servers whose names resemble payers'.\n\nLinkage, both sides: 0 directory addresses name a payer organization as managingOrganization, 0 are listed in a payer organization's endpoint list, and 0 in an InsurancePlan's. 0 are linked to any organization at all. 30 endpoint links run from provider-typed records that carry a payer's exact name; they are listed in detail.payer_directory_classification.linkage and are mostly authenticated member APIs or EHR servers, not directories.\n\nThe control directory Capital BlueCross (https://providerdirectory-api.capbluecross.com/r4) answered 200 to an unauthenticated request and is not in the index at that address; the same payer's directory is, at https://api.capitalbluecrossfhir.com/r4/public-ma/.\n\nCorrection (2026-10-16, FHI-71): The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as provider-directory addresses. That counted only addresses whose URL path names a directory, so it was a floor. Classified by the host as well (CMS contract IDs from the release's own InsurancePlan resources, and payer directory hosts checked by hand), the 2026-10-07 release carries 201: 25 by path only, 151 by host only, 25 by both. 144 of the 201 are CMS Medicare Advantage bulk directory files (MPF index.json and similar); 57 are searchable FHIR APIs. None of the 201 is linked to a payer organization from either side. The count is still a floor: 79 more addresses in the same CMS batch match neither signal, and many of them look like payer directories.\n\nReproduce with analysis/h49_recheck_release.py --dir <release dir> --release <date>.\n\nRelease watch, payer PIN: 0 of the 997 organizations typed 'pay' carry an identifier of any kind, and 0 carry a Payer Identification Number (an identifier whose type.coding has code PAYERID, from http://terminology.hl7.org/CodeSystem/v2-0203). The PIN slice is in the HL7 NDH STU2 draft (Jira FHIR-57606) and not in the published STU1 (https://hl7.org/fhir/us/ndh/STU1/), so its absence is not a conformance gap against the current standard. It is watched so the first release that carries it is reported when that release is measured. The match walks identifier[].type.coding[].code under any system in the raw resource JSON; no flattened column is read. The denominator is the positive control: 997 payer-typed organizations were found, so these counts come from a query that could see them.",
   "detail": {
     "organization_type_codings": [
       {
@@ -74,7 +74,10 @@
         "http_status": 200,
         "bytes": 1821,
         "live_public": true,
-        "present_in_ndh": false
+        "present_in_ndh": false,
+        "same_payer_directories_in_ndh": [
+          "https://api.capitalbluecrossfhir.com/r4/public-ma/"
+        ]
       }
     ],
     "live_but_absent_from_ndh": 1,
@@ -87,10 +90,3491 @@
       "release_date": "2026-10-07"
     },
     "endpoint_url_kinds": {
-      "unlabelled": 111203,
-      "provider-directory": 50,
+      "unlabelled": 111052,
+      "provider-directory": 201,
       "patient-access": 6
     },
-    "detail_release_date": "2026-10-07"
-  }
+    "detail_release_date": "2026-10-07",
+    "payer_directory_classification": {
+      "release_date": "2026-10-07",
+      "rule": "path OR host; see analysis/payer_directory.py",
+      "total": 201,
+      "by_signal": {
+        "path_only": 25,
+        "host_only": 151,
+        "both": 25
+      },
+      "host_signal_by_basis": {
+        "contract": 156,
+        "curated": 10,
+        "payer-name": 10
+      },
+      "bulk_mpf_index": 144,
+      "searchable_api": 57,
+      "contract_ids_in_addresses": {
+        "H0413": "Organization-320bb01f-5fd0-4d71-9de2-d472c7a4b3e1",
+        "H0504": "Organization-06a5cc2e-16b8-4b68-a346-31b1e1b008f2",
+        "H0982": "Organization-9aa5f7a3-6f01-44fd-804a-589dedde6b20",
+        "H1119": "Organization-710e287c-dea1-480a-8063-ff02064472ff",
+        "H1290": "Organization-984b9968-97aa-463e-8efc-5d8ee2db06ec",
+        "H1365": "Organization-d15d1aaf-d882-4324-867d-e5e0d0410a16",
+        "H1372": "Organization-42e0ac76-f345-452b-bc15-a8a836e84593",
+        "H1587": "Organization-c2c0316c-0c63-47b5-8fb5-1a8a7a3a1316",
+        "H1722": "Organization-e1285faa-dff4-48ed-8bf7-da24b042ccd6",
+        "H1799": "Organization-ab7ef6ae-82f0-4a51-b0c9-52f2cb2861db",
+        "H1993": "Organization-74202321-8719-4261-84b0-90591d52dac7",
+        "H2032": "Organization-bd11ad90-c55f-4919-aadb-9962fd580be0",
+        "H2041": "Organization-55041491-0ca1-4f78-87e8-45fd1f409fc5",
+        "H2168": "Organization-d41c9175-613f-4de0-b388-f8fc53b4c460",
+        "H2185": "Organization-26fa8846-9433-4d46-b52c-b7de83f690cd",
+        "H2224": "Organization-5c649647-ce28-422c-9a45-1d40fbe36ed2",
+        "H2230": "Organization-e415e18f-06ec-4db7-ba76-e782ad519065",
+        "H2237": "Organization-5195927f-acd0-4f0f-8b7c-f91444095bc3",
+        "H2256": "Organization-5cb5dd74-726e-43eb-aeca-85024504c190",
+        "H2261": "Organization-a9e82726-5431-4318-97cc-cd096ff75ca8",
+        "H2320": "Organization-af447d04-2b75-4822-ad19-ba477ff1a9c5",
+        "H2526": "Organization-e1a38258-c44a-475c-ab3b-2fcb7af9fd67",
+        "H2686": "Organization-cbe69132-b331-4ca4-a9db-fc1405fc3a14",
+        "H2697": "Organization-62114dbf-de54-423a-87ac-f8937547000e",
+        "H2737": "Organization-3edb0047-61e9-4356-a480-42490d638ea0",
+        "H2819": "Organization-ab83c30e-95a5-4916-a0a0-c2fb97ce4271",
+        "H2845": "Organization-ba0d1846-8fa6-4ad0-a80d-c5fa3998e2ad",
+        "H2923": "Organization-fc5905a8-16cf-44d9-bed2-8dabac09844f",
+        "H3038": "Organization-df4bf90f-6bab-4083-9940-c70054fe0e77",
+        "H3041": "Organization-ec72ddfe-5488-43b0-8d72-8088d55dce9d",
+        "H3080": "Organization-4e23c8e5-3eaf-45b0-bf43-115be527da74",
+        "H3093": "Organization-667ebeed-37ec-41ff-872e-ea64650bb702",
+        "H3259": "Organization-816dd617-0adc-4b47-9d3a-004b5dd11590",
+        "H3274": "Organization-38df2391-8f0d-483e-adf9-62b40c02c59c",
+        "H3291": "Organization-96c68813-f252-4c39-a33c-0d0286d0290e",
+        "H3359": "Organization-560cb3d8-035b-4b85-b693-795f495ab5ca",
+        "H3404": "Organization-4c0d774a-25bc-4a8c-8003-8967763b6d8c",
+        "H3419": "Organization-c0704360-21a3-485d-af9d-460702d4b4ee",
+        "H3449": "Organization-8f7ccf12-703e-495d-a73d-2c6e34beb2fb",
+        "H3467": "Organization-80d312b5-5203-4b83-8c1c-388ec0b412ac",
+        "H3727": "Organization-eb636209-082a-4115-84d6-2d75d88d2778",
+        "H3800": "Organization-b0c151a3-c352-4a67-ba15-635f0af08463",
+        "H3811": "Organization-fcfdf421-7ea4-4357-ab5a-4c50610e79d8",
+        "H3907": "Organization-14409a4c-1c6c-4312-8a97-f5abec59b79c",
+        "H4054": "Organization-ff3d1f3f-f3b3-44c1-8e3f-c0b6c8f2956d",
+        "H4093": "Organization-9c4c768e-46a0-4b59-b003-256294caa999",
+        "H4140": "Organization-3b78b2b6-a79b-4606-9b76-c207b731161c",
+        "H4172": "Organization-e35c531c-9974-4e4a-a43a-8480fb53450f",
+        "H4279": "Organization-86ef2159-0776-4132-ac61-20298ef7e6eb",
+        "H4348": "Organization-5e9dc9b8-6635-4ee6-b8e1-6eb598e8fe43",
+        "H4371": "Organization-f66dc53c-b9a7-4a5f-8b6f-833c9075a4b3",
+        "H4439": "Organization-7d8300df-0165-4fb9-92d2-f416ceb4ab59",
+        "H4444": "Organization-b5163652-b79a-494b-9676-812e2deb8a4b",
+        "H4473": "Organization-73bbfdc3-4982-44f9-a248-9762a2fb1ae0",
+        "H4808": "Organization-c24d3fe1-2d27-4fc1-8ce3-7945d7319f2d",
+        "H4875": "Organization-d14056f5-90e7-4667-8113-18fe39492003",
+        "H4931": "Organization-276206bb-935d-4460-909f-511f617228c0",
+        "H5015": "Organization-0a7f6cb5-c49a-49a8-b186-65f785af0bb7",
+        "H5119": "Organization-6eefb828-b926-4ab3-a129-11cc55bebe17",
+        "H5209": "Organization-610e12bb-d519-489a-8eb3-f4306199878f",
+        "H5299": "Organization-e392d833-2ddb-4432-b43e-bd4d122367f3",
+        "H5314": "Organization-fd9bfed4-8011-4984-a7d7-3de1ad266664",
+        "H5397": "Organization-ba798ee4-76e8-419f-b26d-8c0d64f21485",
+        "H5433": "Organization-179f1e25-97b4-4f70-8f9c-b0632252e88e",
+        "H5453": "Organization-16be5f68-4b68-49dc-af37-ad2afda57772",
+        "H5533": "Organization-bdf30b7d-4c21-45b9-a35b-63acdc24a894",
+        "H5591": "Organization-19111fc2-5bec-40ca-8a70-d921ca3d4405",
+        "H5628": "Organization-e8825461-2b5c-480e-a66a-1c34118a9920",
+        "H5718": "Organization-cf428d97-6a2c-470f-8684-6ff9e625e83a",
+        "H5823": "Organization-5b4a98c0-183b-434f-b11d-642a0366a874",
+        "H5843": "Organization-cd749dfe-93b4-443b-a499-6358205f9588",
+        "H5926": "Organization-a256ce6c-0b37-44ab-ab43-1f130e22f38c",
+        "H5928": "Organization-c5f8052a-88f2-4dea-afae-3c1494b57d64",
+        "H5989": "Organization-d9c1aba4-abf2-4ca2-936d-05658169cbf3",
+        "H5992": "Organization-50d1d9f2-b827-4b02-940e-640db3ab789f",
+        "H6018": "Organization-02a99743-4ea5-4264-8a81-d992b3ea522c",
+        "H6345": "Organization-92fc683e-54ab-4f30-8027-9a1688d880a8",
+        "H6515": "Organization-1475b53e-81ad-473f-a695-d05caf2c77ec",
+        "H6545": "Organization-20e0bf24-9a24-49d4-9bb7-89b5f81eab31",
+        "H6566": "Organization-842f09b4-b922-4c02-80c3-057a404e4d3d",
+        "H6586": "Organization-e4f35479-9bd1-4b8d-93ee-86c00b136dd0",
+        "H6776": "Organization-0f4cbf38-272c-4e5a-9b5e-bcdb6fbc69da",
+        "H6813": "Organization-b910ae06-83dd-49a6-a5be-1a440850b8d1",
+        "H6832": "Organization-91f99536-84bd-4878-8707-5869cc6b6bff",
+        "H6852": "Organization-8b8d044b-b320-464a-bd94-ebb334344308",
+        "H6959": "Organization-ebe814d3-345b-49b5-acf8-46d9de6e598e",
+        "H6994": "Organization-d9490269-9b0d-4e9b-a4d9-5301fb2a4c21",
+        "H7028": "Organization-242574ec-a550-43f6-80ae-592aa53c17c8",
+        "H7123": "Organization-e285117f-c04e-431c-a9e0-e5e34301c338",
+        "H7147": "Organization-dfd9ed7b-8da8-47b8-b328-f98fe8407e49",
+        "H7151": "Organization-0928e52d-84f3-400b-896a-0f311dc7b00f",
+        "H7199": "Organization-da97860e-8a2e-40b6-aabc-ca176e94e3f5",
+        "H7355": "Organization-1f143aa5-a5db-4136-b864-0bf3a8c35649",
+        "H7397": "Organization-d5c43f94-0a5f-4c3c-b97e-c2e9d0189e07",
+        "H7471": "Organization-95b475d2-7eb1-4d3e-b881-21df485a1761",
+        "H7605": "Organization-c21b998b-95ab-4402-a75e-6f00259caa03",
+        "H7678": "Organization-5816ad1d-1d70-4e7c-9a77-f4485d5ff3bc",
+        "H7766": "Organization-c47df4bf-eab9-4dea-b788-4a1f9b2d9d50",
+        "H7917": "Organization-fcb199a8-4aee-4252-849e-c385a2281e07",
+        "H7993": "Organization-8d9882be-e24e-4988-817c-7e8ba8e76d4f",
+        "H8051": "Organization-b4b8ed1e-13d3-41a3-8f2f-f9327f2afa75",
+        "H8142": "Organization-e3afa7cc-381c-45e7-8e50-865d6f70873c",
+        "H8173": "Organization-4c30d5a2-9a45-4a1a-94be-255fb6893915",
+        "H8176": "Organization-0254a5a5-592e-4dd9-9955-13c3985fdada",
+        "H8320": "Organization-d7290dcb-cb88-420f-bf00-77013e3547a8",
+        "H8330": "Organization-9e6e59fa-cb01-45af-abbf-1dd17856a4e5",
+        "H8379": "Organization-76e7e5dc-bcc7-4b06-8ccc-20dd2160ca6f",
+        "H8578": "Organization-97572d45-7e50-40c4-b110-680f3d87c460",
+        "H8797": "Organization-0f04e7b7-a4bb-41f1-aee1-88e00ac3495b",
+        "H8845": "Organization-958920bc-0cfc-4aaa-8680-c30cd122199e",
+        "H8879": "Organization-ab53daa1-8c98-41f6-9a7a-a4a8b2367c49",
+        "H8894": "Organization-3a717de5-768e-40e0-bb9a-2ccaaca7e854",
+        "H8917": "Organization-5b2315eb-6ed8-4a3d-a0fd-eb64c73660e6",
+        "H9147": "Organization-82443491-3edb-4e29-a401-bfa6f35fd502",
+        "H9153": "Organization-366439dd-5bd0-4832-b41e-d6455cdcf577",
+        "H9191": "Organization-6c0fff75-9370-4411-8bf7-39eedd4c69b7",
+        "H9231": "Organization-d5e4bfd8-533e-40db-a982-7c9909e4be00",
+        "H9306": "Organization-02a534f9-42e3-4a41-9f21-8461d88a4cbc",
+        "H9623": "Organization-2b552331-62eb-45e4-9805-9aa92601bf05",
+        "H9678": "Organization-c35d4a3a-49e3-46da-92a0-54f10bf74f0b",
+        "H9700": "Organization-e5482c4f-ee53-4c1c-b8e3-fc9bbb876f83",
+        "H9802": "Organization-520b23d5-0a15-4585-bfdf-217a485e1e83",
+        "H9884": "Organization-b091ff27-3ce8-48ab-ac57-87760265d2e0",
+        "H9888": "Organization-ee3750ad-28da-4b4c-9ac1-bb7c20a0bb8c",
+        "H9907": "Organization-5bc47a10-ebd1-49fc-855e-49ae3cffb3bc",
+        "H9917": "Organization-59285b17-e908-4067-a4dc-8aa6082b2dc6",
+        "H9955": "Organization-e7beeb7f-ab23-4d89-a04b-7e4448f9f572",
+        "H9977": "Organization-dabcfa19-1215-4584-954d-e685b85bff0d"
+      },
+      "contract_hosts": {
+        "afs.astivahealth.com": [
+          "H1993"
+        ],
+        "api-atwd-prd.safhir.io": [
+          "H9306"
+        ],
+        "api-icar-prd.safhir.io": [
+          "H2237"
+        ],
+        "api-mphc-prd.safhir.io": [
+          "H1365",
+          "H5591"
+        ],
+        "api-thp-prd.safhir.io": [
+          "H2256",
+          "H5314",
+          "H8330",
+          "H9907"
+        ],
+        "api-tihp-prd.safhir.io": [
+          "H5015"
+        ],
+        "assi.fp-h1587.prd.healixcloud.net": [
+          "H1587"
+        ],
+        "cca.fp-h3727.prd.healixcloud.net": [
+          "H3727"
+        ],
+        "cdn.mpulse.com": [
+          "H3811",
+          "H5119"
+        ],
+        "cloud-api.blueshieldca.com": [
+          "H0504",
+          "H2819",
+          "H5928"
+        ],
+        "cms.caloptima.org": [
+          "H5433"
+        ],
+        "content.upmchealthplan.com": [
+          "H3907",
+          "H4279",
+          "H5533",
+          "H7123"
+        ],
+        "eppoa.spectrumhealth.org": [
+          "H2320",
+          "H4875",
+          "H8379"
+        ],
+        "fhir-app-portal.elderserve.aidbox.app": [
+          "H6776"
+        ],
+        "fhir-app-portal.villagecare.aidbox.io": [
+          "H2168"
+        ],
+        "fhir.devoted.com": [
+          "H0413",
+          "H1290",
+          "H2041",
+          "H2526",
+          "H2686",
+          "H2697",
+          "H2845",
+          "H2923",
+          "H3041",
+          "H3080",
+          "H4348",
+          "H4473",
+          "H4808",
+          "H5299",
+          "H5397",
+          "H5453",
+          "H5718",
+          "H6018",
+          "H6545",
+          "H6586",
+          "H6813",
+          "H6852",
+          "H6994",
+          "H7028",
+          "H7147",
+          "H7151",
+          "H7199",
+          "H7355",
+          "H7397",
+          "H7471",
+          "H7605",
+          "H7766",
+          "H7993",
+          "H8173",
+          "H8320",
+          "H8917",
+          "H9231",
+          "H9700",
+          "H9802",
+          "H9884",
+          "H9888",
+          "H9977"
+        ],
+        "fhir.healthy-ms.com": [
+          "H8879"
+        ],
+        "fhir.iehp.org": [
+          "H8894"
+        ],
+        "fhir.sapphirecareselect.com": [
+          "H2230",
+          "H2261",
+          "H3404",
+          "H3449",
+          "H9147"
+        ],
+        "fhirmpf.curanahealth.com": [
+          "H1372",
+          "H2185",
+          "H3274",
+          "H3291",
+          "H3419",
+          "H3467",
+          "H4172",
+          "H6345",
+          "H6566",
+          "H6832",
+          "H6959",
+          "H8797",
+          "H9917"
+        ],
+        "hf-provider-directory-fhir.healthfirst.org": [
+          "H1722",
+          "H3359",
+          "H5989",
+          "H9678"
+        ],
+        "provider.bcbst.com": [
+          "H3259",
+          "H7917"
+        ],
+        "uat120.fhir.edifecsfedcloud.com": [
+          "H8051",
+          "H9623"
+        ],
+        "us120.fhir.edifecsfedcloud.com": [
+          "H9623"
+        ],
+        "us120.fhir.m2.edifecsfedcloud.com": [
+          "H2737",
+          "H4140",
+          "H8578"
+        ],
+        "vlr.fp-h1119.prd.healixcloud.net": [
+          "H1119"
+        ],
+        "wvsa.fp-h9153.prd.healixcloud.net": [
+          "H9153"
+        ],
+        "www.bannerhealthnetwork.com": [
+          "H4931",
+          "H5843"
+        ],
+        "www.molinahealthcare.com": [
+          "H1799",
+          "H2224",
+          "H3038",
+          "H3093",
+          "H4371",
+          "H5209",
+          "H5628",
+          "H5823",
+          "H5926",
+          "H5992",
+          "H6515",
+          "H7678",
+          "H8176",
+          "H8845",
+          "H9955"
+        ],
+        "www.pphealthplan.com": [
+          "H3800",
+          "H4054",
+          "H4093",
+          "H4439",
+          "H4444",
+          "H9191"
+        ]
+      },
+      "fhir_api_named_rows": 279,
+      "fhir_api_named_unclassified": [
+        "https://adasgateway.ahcusa.com/providerfhir/Practitioner",
+        "https://adasgateway.ahcusa.com/providerfhir/Practitioner1",
+        "https://api-developerportal.healthpartners.com/interop/external/fhir",
+        "https://api.allwayshealthfhir.com/r4/public_dsnp/Practitioner",
+        "https://api.allwayshealthfhir.com/r4/public_mgbhp/Practitioner",
+        "https://api.apim.pacificsource.com/fhir/provider/R4/Practitioner",
+        "https://api.baycarefhir.com/r4/public/Practitioner",
+        "https://api.bcbsnefhir.com/r4/public/",
+        "https://api.coxhealthplanfhir.com/r4/publicProdMa/Practitioner",
+        "https://api.fallonhealthfhir.com/r4/public/",
+        "https://api.hcsc.net/providerfinder/cms_sapphire/fhir/",
+        "https://api.healthteamadvantagefhir.com/r4/public/Practitioner/",
+        "https://api.hpsmfhir.com/r4/public/Practitioner",
+        "https://api.ilshealthfhir.com/r4/publicFC2/",
+        "https://api.insurelytix.com/fhir/r4/tenants/liberty-medicare-advantage.insurelytix.com",
+        "https://api.jhhpfhir.com/r4/public-ma/",
+        "https://api.mclarenfhir.com/r4/public-ma/Practitioner",
+        "https://api.mcsfhir.com/r4/public/Practitioner",
+        "https://api.mnschafhir.com/r4/public/Practitioner",
+        "https://api.mvphealthcare.com/provdirfhirapi/metadata",
+        "https://api.secure.bcbsks.com/bcbsks/fhir-prov-dire/api/v4",
+        "https://api.thehealthplanfhir.com/r4/public/Practitioner",
+        "https://api.uphpfhir.com/r4/public-dsnp/Practitioner",
+        "https://api.vnshealthfhir.com/r4/public/Practitioner",
+        "https://api.zinghealthfhir.com/r4/public/",
+        "https://apif1.aetna.com/fhir/v1/realtimepharmacybenefitcheck/",
+        "https://apif1.aetna.com/fhir/v2/patientaccess/",
+        "https://apif1.aetna.com/fhir/v3/patientaccess/",
+        "https://apigw.bcbsfl.com/interop/interop-developer-portal/emr/api/v1/fhir/",
+        "https://apis.ssctech.com/interop-imc/open/fhir/R4/Organization?_tag=provider&_source=provider",
+        "https://apis.ssctech.com/interop-pw/open/fhir/R4/Organization",
+        "https://arkbluecross.healthsparq.com/api/provider-fhir-service",
+        "https://bcbsnc.sapphirecareselect.com/fhir",
+        "https://cdphpfhir.healthsparq.com/api/provider-fhir-service/v1/fhir/",
+        "https://chpw-prd-prvdr.smilecdr.com/endpoint-fhir-rest",
+        "https://client-api.providerlenz.com/api/publicAPI/LoadFHIRDirectoryProviders/ATRIO",
+        "https://co26fhir.longevityhealthplan.com",
+        "https://developerportal.aetna.com/fhirapiasegregation",
+        "https://dsnp-apix.carefirst.com/extfhirproviderdir/v1",
+        "https://dtbvgvfrj0.execute-api.us-east-1.amazonaws.com/prod/fhir-directory/CA/r4/metadata",
+        "https://dtbvgvfrj0.execute-api.us-east-1.amazonaws.com/prod/fhir-directory/NV/r4/metadata",
+        "https://epicproxy.et1433.epichosted.com/FHIRProxyPRD/api/FHIR/R4/",
+        "https://fdp.edifecsfedcloud.com/#/portal/triple.s/fhir-apis",
+        "https://fhir-prd-a-bcbsma.aws.mdx.med",
+        "https://fhir.align.sanfordhealthplan.com/hspd/r4/",
+        "https://fhir.curanahealth.com/",
+        "https://fhir.edifecscloud.com/khs_meta/pd/R4/Practitioner",
+        "https://fhir.eternalhealth.com/api",
+        "https://fhir.excellusbcbs.com/fhir/api/",
+        "https://fhir.greatplainsmedicareadvantage.com/hspd/r4/",
+        "https://fhir.humana.com/api",
+        "https://fhir.kelseycareadvantage.com/metadata",
+        "https://fhir.myadvocatema.com/hspd/r4/",
+        "https://fhir.phtech.com/ahp/provider/v1/fhir/swagger-ui/",
+        "https://fhir.scfhp.com/providerAPI",
+        "https://fhir.securityhealth.org/hspd/r4/",
+        "https://fhirprovider.medmutual.com/provider/R4",
+        "https://fl26fhir.longevityhealthplan.com",
+        "https://flex.optum.com/fhirpublic",
+        "https://ihfhir.healthsparq.com/api/provider-fhir-service/v1/fhir/metadata",
+        "https://il26fhir.longevityhealthplan.com",
+        "https://mapd-apix.carefirst.com/extfhirproviderdir/v1",
+        "https://medica.healthsparq.com/api/provider-fhir-service/v1/fhir/",
+        "https://mi26fhir.longevityhealthplan.com",
+        "https://nc26fhir.longevityhealthplan.com",
+        "https://nj26fhir.longevityhealthplan.com",
+        "https://ny26fhir.longevityhealthplan.com",
+        "https://opala.tech/provdir/multicare-health-plan/v1/fhir-r4",
+        "https://providers.regence.com/api/provider-fhir-service/v1/fhir",
+        "https://quartzfhir.healthsparq.com/api/provider-fhir-service/v1/fhir/",
+        "https://renown-provider-fhir-api-v1-p2pznb.scqos5-1.usa-w1.cloudhub.io/api/providers/fhir-search",
+        "https://samhp.healthtrioconnect.com/fhirprovdir/metadata",
+        "https://sapfhir.prod.healthaxis.net/api/fhir/practitioner",
+        "https://totalview.healthos.Wellpoint.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/",
+        "https://totalview.healthos.anthem.com/resources/unregistered/api/v1/fhir/cms_mandate/mcd/",
+        "https://url.us.m.mimecastprotect.com/s/poWxCXDw2ruNxV8ZuDikfWDtoF?domain=api.ahffhir.com",
+        "https://us107.ir4.edifecscloud.com/lac/fhir/pd/R4/Practitioner",
+        "https://verdahptx.com/fhir-provider-api-2026/",
+        "https://www.verdahpaz.com/fhir-provider-api-2026/"
+      ],
+      "addresses": [
+        {
+          "address": "https://achealthdataservices-providerdirectory.fhir.azurehealthcareapis.com/metadata",
+          "hostname": "achealthdataservices-providerdirectory.fhir.azurehealthcareapis.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://afs.astivahealth.com/fhir",
+          "hostname": "afs.astivahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://afs.astivahealth.com/fhirjson/MPF-Provider-Directory/H1993/2027/index.json",
+          "hostname": "afs.astivahealth.com",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-74202321-8719-4261-84b0-90591d52dac7",
+          "contracts": [
+            "H1993"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-ahp-prd.safhir.io/v1/api/provider-directory/metadata",
+          "hostname": "api-ahp-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-atwd-prd.safhir.io/v1/api/provider-directory",
+          "hostname": "api-atwd-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-atwd-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/ATWD-H9306",
+          "hostname": "api-atwd-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-02a534f9-42e3-4a41-9f21-8461d88a4cbc",
+          "contracts": [
+            "H9306"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-bcbsal-prd.safhir.io/v1/api/provider-directory",
+          "hostname": "api-bcbsal-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-BCWY-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/ppp-cccc-nnn",
+          "hostname": "api-bcwy-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-chgsd-prd.safhir.io/v1/api/provider-directory/",
+          "hostname": "api-chgsd-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-chpiv-prd.safhir.io/v1/api/provider-directory/",
+          "hostname": "api-chpiv-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-icar-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/H2237-007-000",
+          "hostname": "api-icar-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5195927f-acd0-4f0f-8b7c-f91444095bc3",
+          "contracts": [
+            "H2237"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-icar-prd.safhir.io/v1/api/provider-directory/metadata",
+          "hostname": "api-icar-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-medigold-prd.safhir.io/v1/api/provider-directory",
+          "hostname": "api-medigold-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-MPHC-prd.safhir.io/v1/api/provider-directory",
+          "hostname": "api-mphc-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-MPHC-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/H1365",
+          "hostname": "api-mphc-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d15d1aaf-d882-4324-867d-e5e0d0410a16",
+          "contracts": [
+            "H1365"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-MPHC-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/H5591",
+          "hostname": "api-mphc-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-19111fc2-5bec-40ca-8a70-d921ca3d4405",
+          "contracts": [
+            "H5591"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-nhp-prd.safhir.io/v1/api/providerdirectory/cms-hpms-manifest/[ppp-cccc-nnn]",
+          "hostname": "api-nhp-prd.safhir.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-thp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/thp-h2256-nnn",
+          "hostname": "api-thp-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5cb5dd74-726e-43eb-aeca-85024504c190",
+          "contracts": [
+            "H2256"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-thp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/thp-h5314-nnn",
+          "hostname": "api-thp-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-fd9bfed4-8011-4984-a7d7-3de1ad266664",
+          "contracts": [
+            "H5314"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-thp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/thp-h8330-nnn",
+          "hostname": "api-thp-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-9e6e59fa-cb01-45af-abbf-1dd17856a4e5",
+          "contracts": [
+            "H8330"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-thp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/thp-h9907-nnn",
+          "hostname": "api-thp-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5bc47a10-ebd1-49fc-855e-49ae3cffb3bc",
+          "contracts": [
+            "H9907"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-tihp-prd.safhir.io/v1/api/provider-directory",
+          "hostname": "api-tihp-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api-tihp-prd.safhir.io/v1/api/provider-directory/cms-hpms-manifest/H5015-001-001",
+          "hostname": "api-tihp-prd.safhir.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-0a7f6cb5-c49a-49a8-b186-65f785af0bb7",
+          "contracts": [
+            "H5015"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.blueshieldca.com/bsc/fhir/fhir-server/api/v4/cloud/provider-directory/metadata",
+          "hostname": "api.blueshieldca.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.capitalbluecrossfhir.com/r4/public-ma/",
+          "hostname": "api.capitalbluecrossfhir.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Capital BlueCross",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.capitalhealthplanfhir.com/r4/public-ma/",
+          "hostname": "api.capitalhealthplanfhir.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "CAPITAL HEALTH PLAN",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.communitycarefhir.com/r4/public-prod-ma/",
+          "hostname": "api.communitycarefhir.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "COMMUNITY CARE, INC. (name match)",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.globalhealthfhir.com/r4/public/Practitioner",
+          "hostname": "api.globalhealthfhir.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "GLOBALHEALTH, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.hamaspikfhir.com/r4/public/",
+          "hostname": "api.hamaspikfhir.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "HAMASPIK, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.mmmhealthcarefhir.com/r4/public-ma/Practitioner",
+          "hostname": "api.mmmhealthcarefhir.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "MMM HEALTHCARE, LLC",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://api.vivahealthfhir.com/r4/public/Practitioner",
+          "hostname": "api.vivahealthfhir.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "VIVA HEALTH, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/BCBSDE/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HM/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMDE/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMNY/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMPAMS/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMWV/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apicmsqa.hmhs.com/cms/fhir/v4/providers/HMWVMS/Practitioner",
+          "hostname": "apicmsqa.hmhs.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Highmark",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apif.infosyshelix.com/tenant/rangehealth/fhir/v1/providerdirectory",
+          "hostname": "apif.infosyshelix.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apif1.aetna.com/fhir/v1/providerdirectorydata/",
+          "hostname": "apif1.aetna.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://apis.upmchp.com/FHIR/R4/Group/Providerdirectory/$export",
+          "hostname": "apis.upmchp.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://assi.fp-h1587.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+          "hostname": "assi.fp-h1587.prd.healixcloud.net",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c2c0316c-0c63-47b5-8fb5-1a8a7a3a1316",
+          "contracts": [
+            "H1587"
+          ],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://CCA.fp-h3727.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+          "hostname": "cca.fp-h3727.prd.healixcloud.net",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-eb636209-082a-4115-84d6-2d75d88d2778",
+          "contracts": [
+            "H3727"
+          ],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cchp-fhirapi.mpowered-health.com/provider-directory",
+          "hostname": "cchp-fhirapi.mpowered-health.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cdn.mpulse.com/fhir/H3811/2027/index.json",
+          "hostname": "cdn.mpulse.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-fcfdf421-7ea4-4357-ab5a-4c50610e79d8",
+          "contracts": [
+            "H3811"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cdn.mpulse.com/fhir/H5119/2027/index.json",
+          "hostname": "cdn.mpulse.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-6eefb828-b926-4ab3-a129-11cc55bebe17",
+          "contracts": [
+            "H5119"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H0504/2027",
+          "hostname": "cloud-api.blueshieldca.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-06a5cc2e-16b8-4b68-a346-31b1e1b008f2",
+          "contracts": [
+            "H0504"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H2819/2027",
+          "hostname": "cloud-api.blueshieldca.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ab83c30e-95a5-4916-a0a0-c2fb97ce4271",
+          "contracts": [
+            "H2819"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cloud-api.blueshieldca.com/fhir-cms-client/api/cms-export/H5928/2027",
+          "hostname": "cloud-api.blueshieldca.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c5f8052a-88f2-4dea-afae-3c1494b57d64",
+          "contracts": [
+            "H5928"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://cms.caloptima.org/MPF/H5433/indexfhir.json",
+          "hostname": "cms.caloptima.org",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-179f1e25-97b4-4f70-8f9c-b0632252e88e",
+          "contracts": [
+            "H5433"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://content.upmchealthplan.com/fhir/MPF/H3907-CY2027/index.json",
+          "hostname": "content.upmchealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-14409a4c-1c6c-4312-8a97-f5abec59b79c",
+          "contracts": [
+            "H3907"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://content.upmchealthplan.com/fhir/MPF/H4279-CY2027/index.json",
+          "hostname": "content.upmchealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-86ef2159-0776-4132-ac61-20298ef7e6eb",
+          "contracts": [
+            "H4279"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://content.upmchealthplan.com/fhir/MPF/H5533-CY2027/index.json",
+          "hostname": "content.upmchealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-bdf30b7d-4c21-45b9-a35b-63acdc24a894",
+          "contracts": [
+            "H5533"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://content.upmchealthplan.com/fhir/MPF/H7123-CY2027/index.json",
+          "hostname": "content.upmchealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e285117f-c04e-431c-a9e0-e5e34301c338",
+          "contracts": [
+            "H7123"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://eapics.amerihealth.com/provider/v1/fhir",
+          "hostname": "eapics.amerihealth.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "AmeriHealth",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://eapics.ibx.com/provider/v1/fhir",
+          "hostname": "eapics.ibx.com",
+          "signal": "host_only",
+          "basis": [
+            "curated"
+          ],
+          "payer": "Independence Blue Cross",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H2320_2027/MPF",
+          "hostname": "eppoa.spectrumhealth.org",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-af447d04-2b75-4822-ad19-ba477ff1a9c5",
+          "contracts": [
+            "H2320"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H4875_2027/MPF",
+          "hostname": "eppoa.spectrumhealth.org",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d14056f5-90e7-4667-8113-18fe39492003",
+          "contracts": [
+            "H4875"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/H8379_2027/MPF",
+          "hostname": "eppoa.spectrumhealth.org",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-76e7e5dc-bcc7-4b06-8ccc-20dd2160ca6f",
+          "contracts": [
+            "H8379"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://eppoa.spectrumhealth.org/FHIRProxy/api/FHIR/BulkPublish/Public/PlanNet/H2320_2027/MPF",
+          "hostname": "eppoa.spectrumhealth.org",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-af447d04-2b75-4822-ad19-ba477ff1a9c5",
+          "contracts": [
+            "H2320"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir-app-portal.elderserve.aidbox.app/mpf-provider-directory/H6776/2027/index.json",
+          "hostname": "fhir-app-portal.elderserve.aidbox.app",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-0f4cbf38-272c-4e5a-9b5e-bcdb6fbc69da",
+          "contracts": [
+            "H6776"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir-app-portal.villagecare.aidbox.io/mpf-provider-directory/H2168/2027/index.json",
+          "hostname": "fhir-app-portal.villagecare.aidbox.io",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d41c9175-613f-4de0-b388-f8fc53b4c460",
+          "contracts": [
+            "H2168"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir-developer.bluecrossmn.com/provider-directory",
+          "hostname": "fhir-developer.bluecrossmn.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/fhir",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H0413/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-320bb01f-5fd0-4d71-9de2-d472c7a4b3e1",
+          "contracts": [
+            "H0413"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H1290/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-984b9968-97aa-463e-8efc-5d8ee2db06ec",
+          "contracts": [
+            "H1290"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H1390/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H2041/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-55041491-0ca1-4f78-87e8-45fd1f409fc5",
+          "contracts": [
+            "H2041"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H2526/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e1a38258-c44a-475c-ab3b-2fcb7af9fd67",
+          "contracts": [
+            "H2526"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H2686/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-cbe69132-b331-4ca4-a9db-fc1405fc3a14",
+          "contracts": [
+            "H2686"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H2697/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-62114dbf-de54-423a-87ac-f8937547000e",
+          "contracts": [
+            "H2697"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H2845/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ba0d1846-8fa6-4ad0-a80d-c5fa3998e2ad",
+          "contracts": [
+            "H2845"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H2923/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-fc5905a8-16cf-44d9-bed2-8dabac09844f",
+          "contracts": [
+            "H2923"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H3041/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ec72ddfe-5488-43b0-8d72-8088d55dce9d",
+          "contracts": [
+            "H3041"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H3080/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-4e23c8e5-3eaf-45b0-bf43-115be527da74",
+          "contracts": [
+            "H3080"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H3515/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H4030/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H4348/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5e9dc9b8-6635-4ee6-b8e1-6eb598e8fe43",
+          "contracts": [
+            "H4348"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H4473/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-73bbfdc3-4982-44f9-a248-9762a2fb1ae0",
+          "contracts": [
+            "H4473"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H4808/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c24d3fe1-2d27-4fc1-8ce3-7945d7319f2d",
+          "contracts": [
+            "H4808"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H5177/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H5299/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e392d833-2ddb-4432-b43e-bd4d122367f3",
+          "contracts": [
+            "H5299"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H5334/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H5397/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ba798ee4-76e8-419f-b26d-8c0d64f21485",
+          "contracts": [
+            "H5397"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H5453/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-16be5f68-4b68-49dc-af37-ad2afda57772",
+          "contracts": [
+            "H5453"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H5718/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-cf428d97-6a2c-470f-8684-6ff9e625e83a",
+          "contracts": [
+            "H5718"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H6018/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-02a99743-4ea5-4264-8a81-d992b3ea522c",
+          "contracts": [
+            "H6018"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H6545/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-20e0bf24-9a24-49d4-9bb7-89b5f81eab31",
+          "contracts": [
+            "H6545"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H6586/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e4f35479-9bd1-4b8d-93ee-86c00b136dd0",
+          "contracts": [
+            "H6586"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H6813/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-b910ae06-83dd-49a6-a5be-1a440850b8d1",
+          "contracts": [
+            "H6813"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H6852/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-8b8d044b-b320-464a-bd94-ebb334344308",
+          "contracts": [
+            "H6852"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H6994/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d9490269-9b0d-4e9b-a4d9-5301fb2a4c21",
+          "contracts": [
+            "H6994"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7028/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-242574ec-a550-43f6-80ae-592aa53c17c8",
+          "contracts": [
+            "H7028"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7147/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-dfd9ed7b-8da8-47b8-b328-f98fe8407e49",
+          "contracts": [
+            "H7147"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7151/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-0928e52d-84f3-400b-896a-0f311dc7b00f",
+          "contracts": [
+            "H7151"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7191/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7199/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-da97860e-8a2e-40b6-aabc-ca176e94e3f5",
+          "contracts": [
+            "H7199"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7355/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-1f143aa5-a5db-4136-b864-0bf3a8c35649",
+          "contracts": [
+            "H7355"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7397/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d5c43f94-0a5f-4c3c-b97e-c2e9d0189e07",
+          "contracts": [
+            "H7397"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7471/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-95b475d2-7eb1-4d3e-b881-21df485a1761",
+          "contracts": [
+            "H7471"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7605/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c21b998b-95ab-4402-a75e-6f00259caa03",
+          "contracts": [
+            "H7605"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7766/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c47df4bf-eab9-4dea-b788-4a1f9b2d9d50",
+          "contracts": [
+            "H7766"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H7993/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-8d9882be-e24e-4988-817c-7e8ba8e76d4f",
+          "contracts": [
+            "H7993"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H8173/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-4c30d5a2-9a45-4a1a-94be-255fb6893915",
+          "contracts": [
+            "H8173"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H8320/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d7290dcb-cb88-420f-bf00-77013e3547a8",
+          "contracts": [
+            "H8320"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H8917/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5b2315eb-6ed8-4a3d-a0fd-eb64c73660e6",
+          "contracts": [
+            "H8917"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9231/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d5e4bfd8-533e-40db-a982-7c9909e4be00",
+          "contracts": [
+            "H9231"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9700/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e5482c4f-ee53-4c1c-b8e3-fc9bbb876f83",
+          "contracts": [
+            "H9700"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9802/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-520b23d5-0a15-4585-bfdf-217a485e1e83",
+          "contracts": [
+            "H9802"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9862/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9884/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-b091ff27-3ce8-48ab-ac57-87760265d2e0",
+          "contracts": [
+            "H9884"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9888/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ee3750ad-28da-4b4c-9ac1-bb7c20a0bb8c",
+          "contracts": [
+            "H9888"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.devoted.com/H9977/2027",
+          "hostname": "fhir.devoted.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-dabcfa19-1215-4584-954d-e685b85bff0d",
+          "contracts": [
+            "H9977"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.elderservehealth.org/fhir/metadata",
+          "hostname": "fhir.elderservehealth.org",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "ELDERSERVE HEALTH, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.group-health.com/api/plannet",
+          "hostname": "fhir.group-health.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.healthy-ar.com/plan-net/H4086/",
+          "hostname": "fhir.healthy-ar.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.healthy-ar.com/plan-net/H7440/",
+          "hostname": "fhir.healthy-ar.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.healthy-ms.com/plan-net/H1823/",
+          "hostname": "fhir.healthy-ms.com",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.healthy-ms.com/plan-net/H8879/",
+          "hostname": "fhir.healthy-ms.com",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ab53daa1-8c98-41f6-9a7a-a4a8b2367c49",
+          "contracts": [
+            "H8879"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.iehp.org/mpf/H8894/2027/index.json",
+          "hostname": "fhir.iehp.org",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-3a717de5-768e-40e0-bb9a-2ccaaca7e854",
+          "contracts": [
+            "H8894"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.iehp.org/provider-directory/metadata?_format=json",
+          "hostname": "fhir.iehp.org",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.nativeadvantage.com/data/index.json",
+          "hostname": "fhir.nativeadvantage.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "NATIVE ADVANTAGE, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.nativeadvantage.com/fhir",
+          "hostname": "fhir.nativeadvantage.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "NATIVE ADVANTAGE, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.netsmartcloud.com/payer/provider-directory/v2/5f6f1d30-6f0c-46e3-9d8a-2b9f88a0f2b8/",
+          "hostname": "fhir.netsmartcloud.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsma/H2230/2027/index.json",
+          "hostname": "fhir.sapphirecareselect.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e415e18f-06ec-4db7-ba76-e782ad519065",
+          "contracts": [
+            "H2230"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsma/H2261/2027/index.json",
+          "hostname": "fhir.sapphirecareselect.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-a9e82726-5431-4318-97cc-cd096ff75ca8",
+          "contracts": [
+            "H2261"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H3404/2027/index.json",
+          "hostname": "fhir.sapphirecareselect.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-4c0d774a-25bc-4a8c-8003-8967763b6d8c",
+          "contracts": [
+            "H3404"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H3449/2027/index.json",
+          "hostname": "fhir.sapphirecareselect.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-8f7ccf12-703e-495d-a73d-2c6e34beb2fb",
+          "contracts": [
+            "H3449"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhir.sapphirecareselect.com/fhir/mpf/ma/bcbsnc/H9147/2027/index.json",
+          "hostname": "fhir.sapphirecareselect.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-82443491-3edb-4e29-a401-bfa6f35fd502",
+          "contracts": [
+            "H9147"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H1372/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-42e0ac76-f345-452b-bc15-a8a836e84593",
+          "contracts": [
+            "H1372"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H2185/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-26fa8846-9433-4d46-b52c-b7de83f690cd",
+          "contracts": [
+            "H2185"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H3274/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-38df2391-8f0d-483e-adf9-62b40c02c59c",
+          "contracts": [
+            "H3274"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H3291/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-96c68813-f252-4c39-a33c-0d0286d0290e",
+          "contracts": [
+            "H3291"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H3419/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c0704360-21a3-485d-af9d-460702d4b4ee",
+          "contracts": [
+            "H3419"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H3467/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-80d312b5-5203-4b83-8c1c-388ec0b412ac",
+          "contracts": [
+            "H3467"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H4127/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H4172/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e35c531c-9974-4e4a-a43a-8480fb53450f",
+          "contracts": [
+            "H4172"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H6345/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-92fc683e-54ab-4f30-8027-9a1688d880a8",
+          "contracts": [
+            "H6345"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H6566/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-842f09b4-b922-4c02-80c3-057a404e4d3d",
+          "contracts": [
+            "H6566"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H6832/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-91f99536-84bd-4878-8707-5869cc6b6bff",
+          "contracts": [
+            "H6832"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H6959/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ebe814d3-345b-49b5-acf8-46d9de6e598e",
+          "contracts": [
+            "H6959"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H8797/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-0f04e7b7-a4bb-41f1-aee1-88e00ac3495b",
+          "contracts": [
+            "H8797"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://fhirmpf.curanahealth.com/H9917/2027/",
+          "hostname": "fhirmpf.curanahealth.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-59285b17-e908-4067-a4dc-8aa6082b2dc6",
+          "contracts": [
+            "H9917"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://hf-fhir-provider-directory-sys-api-prod.us-e1.cloudhub.io",
+          "hostname": "hf-fhir-provider-directory-sys-api-prod.us-e1.cloudhub.io",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H1722/index.json",
+          "hostname": "hf-provider-directory-fhir.healthfirst.org",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e1285faa-dff4-48ed-8bf7-da24b042ccd6",
+          "contracts": [
+            "H1722"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H3359/index.json",
+          "hostname": "hf-provider-directory-fhir.healthfirst.org",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-560cb3d8-035b-4b85-b693-795f495ab5ca",
+          "contracts": [
+            "H3359"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H5989/index.json",
+          "hostname": "hf-provider-directory-fhir.healthfirst.org",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-d9c1aba4-abf2-4ca2-936d-05658169cbf3",
+          "contracts": [
+            "H5989"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://hf-provider-directory-fhir.healthfirst.org/cms-mpf/CY2027/H9678/index.json",
+          "hostname": "hf-provider-directory-fhir.healthfirst.org",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-c35d4a3a-49e3-46da-92a0-54f10bf74f0b",
+          "contracts": [
+            "H9678"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://interop.metroplus.org:9443/fhir/r4/providerdirectory",
+          "hostname": "interop.metroplus.org",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://io-api.hmsa-services.com:9443/fhir/r4/providerdirectory",
+          "hostname": "io-api.hmsa-services.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://iopc-pd.api.centene.com/iopc/pd/fhir/providerdirectory",
+          "hostname": "iopc-pd.api.centene.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://medicare.peakhealth.org/fhir/provider-directory",
+          "hostname": "medicare.peakhealth.org",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://orchestrateserver.caresource.careevolution.com/api/fhir/provider-directory/metadata",
+          "hostname": "orchestrateserver.caresource.careevolution.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://provider.bcbst.com/cms_assets/fhir/h3259_index.json",
+          "hostname": "provider.bcbst.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-816dd617-0adc-4b47-9d3a-004b5dd11590",
+          "contracts": [
+            "H3259"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://provider.bcbst.com/cms_assets/fhir/h7917_index.json",
+          "hostname": "provider.bcbst.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-fcb199a8-4aee-4252-849e-c385a2281e07",
+          "contracts": [
+            "H7917"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://providerdirectory.mcpartnerstx.com/fhir",
+          "hostname": "providerdirectory.mcpartnerstx.com",
+          "signal": "path_only",
+          "basis": [],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://providerfhirapi.healthpartnersplans.com",
+          "hostname": "providerfhirapi.healthpartnersplans.com",
+          "signal": "host_only",
+          "basis": [
+            "payer-name"
+          ],
+          "payer": "HEALTH PARTNERS PLANS, INC.",
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://solisapigwprovider.azurewebsites.net/api/provider-directory/2027/H0982/fhir/index.json",
+          "hostname": "solisapigwprovider.azurewebsites.net",
+          "signal": "both",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-9aa5f7a3-6f01-44fd-804a-589dedde6b20",
+          "contracts": [
+            "H0982"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://uat120.fhir.edifecsfedcloud.com/gchp_cms/cms-report/H9623/index.json",
+          "hostname": "uat120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-2b552331-62eb-45e4-9805-9aa92601bf05",
+          "contracts": [
+            "H9623"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://uat120.fhir.edifecsfedcloud.com/hpsj_pdfhir",
+          "hostname": "uat120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://uat120.fhir.edifecsfedcloud.com/sfhp_cms/cms-report/H8051/index.json",
+          "hostname": "uat120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-b4b8ed1e-13d3-41a3-8f2f-f9327f2afa75",
+          "contracts": [
+            "H8051"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.edifecsfedcloud.com/aha_pdfhir",
+          "hostname": "us120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.edifecsfedcloud.com/ccah/fhir/pd/R4/",
+          "hostname": "us120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.edifecsfedcloud.com/gchp_cmsreport/H9623/index.json",
+          "hostname": "us120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-2b552331-62eb-45e4-9805-9aa92601bf05",
+          "contracts": [
+            "H9623"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.edifecsfedcloud.com/sfhp_pdfhir",
+          "hostname": "us120.fhir.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.m2.edifecsfedcloud.com/cor_pd/practitionerrole",
+          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.m2.edifecsfedcloud.com/dhcp_cmsreport/H4140/index.json",
+          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-3b78b2b6-a79b-4606-9b76-c207b731161c",
+          "contracts": [
+            "H4140"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.m2.edifecsfedcloud.com/dhcp_pd",
+          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.m2.edifecsfedcloud.com/hne_cmsreport/H2737/index.json",
+          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-3edb0047-61e9-4356-a480-42490d638ea0",
+          "contracts": [
+            "H2737"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.m2.edifecsfedcloud.com/hne_cmsreport/H8578/index.json",
+          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-97572d45-7e50-40c4-b110-680f3d87c460",
+          "contracts": [
+            "H8578"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://us120.fhir.m2.edifecsfedcloud.com/hne_pd",
+          "hostname": "us120.fhir.m2.edifecsfedcloud.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://vlr.fp-h1119.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+          "hostname": "vlr.fp-h1119.prd.healixcloud.net",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-710e287c-dea1-480a-8063-ff02064472ff",
+          "contracts": [
+            "H1119"
+          ],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://wadcdnstorageprod.blob.core.windows.net/bswhp/JSON/BSWHP_CMS_MPF_H2032_2026_Index_FHIR.json",
+          "hostname": "wadcdnstorageprod.blob.core.windows.net",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-bd11ad90-c55f-4919-aadb-9962fd580be0",
+          "contracts": [
+            "H2032"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://wadcdnstorageprod.blob.core.windows.net/bswhp/JSON/BSWHP_CMS_MPF_H8142_2026_Index_FHIR.json",
+          "hostname": "wadcdnstorageprod.blob.core.windows.net",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e3afa7cc-381c-45e7-8e50-865d6f70873c",
+          "contracts": [
+            "H8142"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://wvsa.fp-h9153.prd.healixcloud.net/pd/fhir/Practitioner?_count=10",
+          "hostname": "wvsa.fp-h9153.prd.healixcloud.net",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-366439dd-5bd0-4832-b41e-d6455cdcf577",
+          "contracts": [
+            "H9153"
+          ],
+          "bulk": false,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.bannerhealthnetwork.com/CMS_Provider_Directory/H4931/FHIR/2027/index.json",
+          "hostname": "www.bannerhealthnetwork.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-276206bb-935d-4460-909f-511f617228c0",
+          "contracts": [
+            "H4931"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.bannerhealthnetwork.com/CMS_Provider_Directory/H5843/FHIR/2027/index.json",
+          "hostname": "www.bannerhealthnetwork.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-cd749dfe-93b4-443b-a499-6358205f9588",
+          "contracts": [
+            "H5843"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H1799/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ab7ef6ae-82f0-4a51-b0c9-52f2cb2861db",
+          "contracts": [
+            "H1799"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H2224/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5c649647-ce28-422c-9a45-1d40fbe36ed2",
+          "contracts": [
+            "H2224"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H3038/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-df4bf90f-6bab-4083-9940-c70054fe0e77",
+          "contracts": [
+            "H3038"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H3093/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-667ebeed-37ec-41ff-872e-ea64650bb702",
+          "contracts": [
+            "H3093"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4367/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H4371/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-f66dc53c-b9a7-4a5f-8b6f-833c9075a4b3",
+          "contracts": [
+            "H4371"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5209/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-610e12bb-d519-489a-8eb3-f4306199878f",
+          "contracts": [
+            "H5209"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5628/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e8825461-2b5c-480e-a66a-1c34118a9920",
+          "contracts": [
+            "H5628"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5823/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5b4a98c0-183b-434f-b11d-642a0366a874",
+          "contracts": [
+            "H5823"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5926/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-a256ce6c-0b37-44ab-ab43-1f130e22f38c",
+          "contracts": [
+            "H5926"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H5992/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-50d1d9f2-b827-4b02-940e-640db3ab789f",
+          "contracts": [
+            "H5992"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6515/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-1475b53e-81ad-473f-a695-d05caf2c77ec",
+          "contracts": [
+            "H6515"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H6585/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7318/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": null,
+          "contracts": [],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H7678/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-5816ad1d-1d70-4e7c-9a77-f4485d5ff3bc",
+          "contracts": [
+            "H7678"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H8176/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-0254a5a5-592e-4dd9-9955-13c3985fdada",
+          "contracts": [
+            "H8176"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H8845/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-958920bc-0cfc-4aaa-8680-c30cd122199e",
+          "contracts": [
+            "H8845"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.molinahealthcare.com/cmsjson/378245/MCareFHIR/H9955/index.json",
+          "hostname": "www.molinahealthcare.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-e7beeb7f-ab23-4d89-a04b-7e4448f9f572",
+          "contracts": [
+            "H9955"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.pphealthplan.com/directory-search/FHIR/H3800/2027",
+          "hostname": "www.pphealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-b0c151a3-c352-4a67-ba15-635f0af08463",
+          "contracts": [
+            "H3800"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.pphealthplan.com/directory-search/FHIR/H4054/2027",
+          "hostname": "www.pphealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-ff3d1f3f-f3b3-44c1-8e3f-c0b6c8f2956d",
+          "contracts": [
+            "H4054"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.pphealthplan.com/directory-search/FHIR/H4093/2027",
+          "hostname": "www.pphealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-9c4c768e-46a0-4b59-b003-256294caa999",
+          "contracts": [
+            "H4093"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.pphealthplan.com/directory-search/FHIR/H4439/2027",
+          "hostname": "www.pphealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-7d8300df-0165-4fb9-92d2-f416ceb4ab59",
+          "contracts": [
+            "H4439"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.pphealthplan.com/directory-search/FHIR/H4444/2027",
+          "hostname": "www.pphealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-b5163652-b79a-494b-9676-812e2deb8a4b",
+          "contracts": [
+            "H4444"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        },
+        {
+          "address": "https://www.pphealthplan.com/directory-search/FHIR/H9191/2027",
+          "hostname": "www.pphealthplan.com",
+          "signal": "host_only",
+          "basis": [
+            "contract"
+          ],
+          "payer": null,
+          "owner_org": "Organization-6c0fff75-9370-4411-8bf7-39eedd4c69b7",
+          "contracts": [
+            "H9191"
+          ],
+          "bulk": true,
+          "managing_org": ""
+        }
+      ],
+      "linkage": {
+        "payer_typed_orgs": 997,
+        "payer_typed_orgs_with_endpoint": 0,
+        "payer_typed_orgs_with_telecom": 0,
+        "directories_managed_by_payer_org": 0,
+        "directories_referenced_by_payer_org": 0,
+        "directories_referenced_by_insurance_plan": 0,
+        "directories_linked_to_any_org": 0,
+        "directories_linked_to_any_org_addresses": [],
+        "provider_typed_records_with_payer_name_and_endpoint": [
+          {
+            "organization": "Organization-1033517024",
+            "name": "AIDS HEALTHCARE FOUNDATION",
+            "address": "https://api.ahffhir.com/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1003380536",
+            "name": "CAPITAL HEALTH PLAN",
+            "address": "https://fhir.nextgen.com/nge/prod/fhir-api-r4/fhir/r4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-c76bff55-9457-4e87-b2af-d78fd37a8f98",
+            "name": "CAPITAL HEALTH PLAN INC",
+            "address": "https://fhir.nextgen.com/nge/prod/fhir-api-r4/fhir/r4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1245371061",
+            "name": "CENTER FOR ELDERS INDEPENDENCE",
+            "address": "https://fhir4.healow.com/fhir/r4/GIGICA",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1093147795",
+            "name": "CENTRA HEALTH",
+            "address": "https://api.platform.athenahealth.com/221/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1093147795",
+            "name": "CENTRA HEALTH",
+            "address": "https://api.platform.athenahealth.com/24656/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1013444660",
+            "name": "CHINATOWN SERVICE CENTER",
+            "address": "https://fhir.nextgen.com/nge/prod/fhir-api-r4/fhir/r4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1184901746",
+            "name": "CHINESE COMMUNITY HEALTH PLAN",
+            "address": "https://api.chinesecommunityhealthplanfhir.com/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1295195162",
+            "name": "COMMONWEALTH CARE ALLIANCE",
+            "address": "https://api.commonwealthcarealliance.org/fhir/patientaccess/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1750742367",
+            "name": "FALLON HEALTH WEINBERG",
+            "address": "https://fhir.nextgen.com/nge/prod/fhir-api-r4/fhir/r4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1477924405",
+            "name": "FREEDOM HEALTH",
+            "address": "https://api.platform.athenahealth.com/24841/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1043536006",
+            "name": "GLOBAL HEALTH",
+            "address": "https://api.coxhealthplanfhir.com/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1962757716",
+            "name": "HAMASPIK",
+            "address": "https://api.hamaspikfhir.com/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1063958627",
+            "name": "HEALTH PARTNERS",
+            "address": "https://api.platform.athenahealth.com/11194/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-c2721fca-0f64-4856-95b3-d00d76efaf8d",
+            "name": "HEALTH PARTNERS INC",
+            "address": "https://api.platform.athenahealth.com/11194/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1699838557",
+            "name": "HEALTHPARTNERS",
+            "address": "https://api.healthpartnersfhir.com/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1699838557",
+            "name": "HEALTHPARTNERS",
+            "address": "https://proxy.healthpartners.com/FHIRProxy/api/FHIR/R4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1457838955",
+            "name": "LA COAST PACE",
+            "address": "https://api.platform.athenahealth.com/17371/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1952708844",
+            "name": "MCLAREN HEALTH PLAN",
+            "address": "https://api.interopstation.com/mhp/fhir",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1023518768",
+            "name": "NEIGHBORHOOD HEALTHCARE",
+            "address": "https://fhir4.healow.com/fhir/r4/CCIHAA",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-8acab296-b4d6-43de-819a-6a2c19303834",
+            "name": "NEIGHBORHOOD HEALTHCARE",
+            "address": "https://fhir4.healow.com/fhir/r4/CCIHAA",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-2457018b-a584-4102-b8f0-3d5712ba57e8",
+            "name": "OSF HEALTHCARE SYSTEM",
+            "address": "https://rp.catholichealth.net/fhir/api/FHIR/R4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1194202697",
+            "name": "PACIFIC PACE",
+            "address": "https://api.platform.athenahealth.com/17371/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1134363864",
+            "name": "REGION VII AREA AGENCY ON AGING",
+            "address": "https://api.platform.athenahealth.com/17464/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1063988384",
+            "name": "SEQUOIA PACE",
+            "address": "https://api.platform.athenahealth.com/17371/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1356830947",
+            "name": "STOCKTON PACE",
+            "address": "https://api.platform.athenahealth.com/17371/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1740164938",
+            "name": "UPMC HEALTH PLAN INC",
+            "address": "https://apis.upmchp.com/FHIR/R4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1013391036",
+            "name": "VISTA COMMUNITY CLINIC",
+            "address": "https://fhir.nextgen.com/nge/prod/fhir-api-r4/fhir/r4/",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1114514924",
+            "name": "VIVA HEALTH",
+            "address": "https://api.platform.athenahealth.com/23243/brand/1/csg/1/fhir/r4",
+            "classified_directory": false
+          },
+          {
+            "organization": "Organization-1689031288",
+            "name": "VIVA HEALTH INC",
+            "address": "https://api.vivahealthfhir.com/r4",
+            "classified_directory": false
+          }
+        ]
+      },
+      "controls": [
+        {
+          "payer": "Capital BlueCross",
+          "base": "https://providerdirectory-api.capbluecross.com/r4",
+          "base_present_in_ndh": false,
+          "same_payer_directories_in_ndh": [
+            "https://api.capitalbluecrossfhir.com/r4/public-ma/"
+          ],
+          "http_status": 200,
+          "bytes": 1821
+        }
+      ]
+    },
+    "directory_signal_breakdown": {
+      "total": 201,
+      "by_signal": {
+        "path_only": 25,
+        "host_only": 151,
+        "both": 25
+      },
+      "host_signal_by_basis": {
+        "contract": 156,
+        "curated": 10,
+        "payer-name": 10
+      },
+      "bulk_mpf_index": 144,
+      "searchable_api": 57
+    }
+  },
+  "corrections": [
+    {
+      "date": "2026-10-16",
+      "issue": "FHI-71",
+      "release": "2026-10-07",
+      "as_published_on": "2026-10-14",
+      "as_published_count": 50,
+      "corrected_count": 201,
+      "corrected_by_signal": {
+        "path_only": 25,
+        "host_only": 151,
+        "both": 25
+      },
+      "corrected_bulk_mpf_index": 144,
+      "corrected_searchable_api": 57,
+      "unclassified_same_batch": 79,
+      "what": "The 2026-10-14 finding counted 50 of 111,259 FHIR REST endpoints as provider-directory addresses. That counted only addresses whose URL path names a directory, so it was a floor. Classified by the host as well (CMS contract IDs from the release's own InsurancePlan resources, and payer directory hosts checked by hand), the 2026-10-07 release carries 201: 25 by path only, 151 by host only, 25 by both. 144 of the 201 are CMS Medicare Advantage bulk directory files (MPF index.json and similar); 57 are searchable FHIR APIs. None of the 201 is linked to a payer organization from either side. The count is still a floor: 79 more addresses in the same CMS batch match neither signal, and many of them look like payer directories.",
+      "since": "2026-10-14 (86c2349), when the 2026-10-07 figure was published"
+    }
+  ]
 }

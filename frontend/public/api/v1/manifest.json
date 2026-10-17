@@ -9,8 +9,8 @@
   },
   "release_date": "2026-10-07",
   "methodology_version": "0.7.3-draft",
-  "commit_sha": "0929ad5",
-  "generated_at": "2026-10-16T23:34:34+00:00",
+  "commit_sha": "b5aa33a",
+  "generated_at": "2026-10-17T01:45:12+00:00",
   "endpoints": {
     "static_contract": [
       {
