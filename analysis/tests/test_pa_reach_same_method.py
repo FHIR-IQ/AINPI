@@ -61,7 +61,7 @@ PUBLISHED = (Path(__file__).resolve().parents[2]
 
 
 def build():
-    return build_side_by_side(AUG, OCT, source_commit="b5aa33a",
+    return build_side_by_side(AUG, OCT, source_commit="b5aa33a", run_commit="4ba909a",
                               generated_at="2026-10-16T00:00:00+00:00")
 
 
@@ -87,18 +87,20 @@ def test_refuses_inconsistent_tiers():
     bad = copy.deepcopy(OCT)
     bad["confidence"]["enrolled"] += 1
     with pytest.raises(ValueError, match="tiers sum"):
-        build_side_by_side(AUG, bad, source_commit="x", generated_at="t")
+        build_side_by_side(AUG, bad, source_commit="x", run_commit="x", generated_at="t")
 
 
 def test_refuses_same_release():
     with pytest.raises(ValueError, match="same release"):
-        build_side_by_side(OCT, OCT, source_commit="x", generated_at="t")
+        build_side_by_side(OCT, OCT, source_commit="x", run_commit="x", generated_at="t")
 
 
 def test_published_file_matches_builder():
     pub = json.loads(PUBLISHED.read_text())
     out = build_side_by_side(AUG, OCT, source_commit=pub["source_commit"],
+                             run_commit=pub["run_commit"],
                              generated_at=pub["generated_at"])
+    assert pub["source_commit"] == "b5aa33a" and pub["run_commit"] == "4ba909a"
     assert pub == out
 
 
@@ -108,3 +110,10 @@ def test_translate_rewrites_and_refuses():
     assert s == "SELECT count_if(x) FROM endpoint WHERE s = $state"
     with pytest.raises(RuntimeError):
         translate("SELECT a[OFFSET(0)] FROM t")
+
+
+def test_name_candidates_are_not_reach():
+    out = build()
+    assert "name_candidate_only" not in out["tier_notes"]["reaching"]
+    t = out["releases"]["2026-08-20"]["tiers"]
+    assert sum(t[k] for k in out["tier_notes"]["reaching"]) == 52802

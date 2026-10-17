@@ -334,6 +334,33 @@ export function loadStateConnectivity(state: string): ConnectivityPayload | null
   }
 }
 
+/**
+ * The four headline numbers for a state's ledger, formatted for display.
+ * Read from the published payload so the homepage and /states cannot drift
+ * from the ledger page (they once read 18.7% after the ledger had moved on).
+ */
+export interface ConnectivityHeadline {
+  practitioners: string;
+  withRolePct: string;
+  reachPct: string;
+  deterministicPct: string | null;
+}
+
+export function loadConnectivityHeadline(state: string): ConnectivityHeadline | null {
+  const p = loadStateConnectivity(state);
+  if (!p) return null;
+  const s = p.summary;
+  return {
+    practitioners: s.practitioners.toLocaleString('en-US'),
+    withRolePct: `${s.with_role_pct.toFixed(1)}%`,
+    reachPct: `${s.reaches_endpoint_pct.toFixed(1)}%`,
+    deterministicPct:
+      s.reaches_endpoint_deterministic_pct == null
+        ? null
+        : `${s.reaches_endpoint_deterministic_pct.toFixed(1)}%`,
+  };
+}
+
 /** Two-letter codes that have a published connectivity ledger. */
 export function allConnectivityStates(): string[] {
   try {

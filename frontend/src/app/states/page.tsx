@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import AuthorByline from '@/components/AuthorByline';
 import { SEED_STATES } from '@/data/states';
-import { loadStateFindings } from '@/lib/load-api-v1';
+import { loadConnectivityHeadline, loadStateFindings } from '@/lib/load-api-v1';
 
 export const dynamic = 'force-static';
 
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function StatesIndex() {
+  const pa = loadConnectivityHeadline('pa');
   const states = SEED_STATES.map((s) => {
     const data = loadStateFindings(s.code);
     return {
@@ -67,10 +68,17 @@ export default function StatesIndex() {
             is behind it. Includes a county map you can zoom, and a named list
             of the organizations nothing public reaches.
           </p>
-          <p className="mb-4 text-sm text-gray-700">
-            230,837 practitioners. 43.7% have an organization at all. 18.7%
-            reach an address software can use.
-          </p>
+          {pa && (
+            <p className="mb-4 text-sm text-gray-700">
+              {pa.practitioners} practitioners. {pa.withRolePct} have an
+              organization at all. {pa.reachPct} reach an address software can
+              use by any route
+              {pa.deterministicPct
+                ? `, and ${pa.deterministicPct} by a direct, checkable link`
+                : ''}
+              .
+            </p>
+          )}
           <Link
             href="/states/pa/connectivity"
             className="inline-block border border-primary-600 bg-primary-600 px-4 py-2 text-sm text-white hover:bg-primary-700"

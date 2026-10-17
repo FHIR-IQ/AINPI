@@ -1,8 +1,23 @@
 {
   "state": "PA",
   "slug": "pa-reach-same-method",
-  "generated_at": "2026-10-17T02:44:56+00:00",
+  "generated_at": "2026-10-17T03:02:45+00:00",
   "source_commit": "b5aa33a",
+  "run_commit": "4ba909a",
+  "commit_note": "source_commit is the pipeline code the measurement ran on; run_commit is the checkout the vendored script was rerun from. They differ only in H49, which is outside this chain.",
+  "units": "Counts are practitioners. Fields ending _pct are percentages, and in `change` their values are differences in percentage points.",
+  "tier_notes": {
+    "reaching": [
+      "ndh_only",
+      "vendor_npi",
+      "vendor_npi_list",
+      "resolved",
+      "enrollment_only"
+    ],
+    "resolved_alias, resolved_name_state, resolved_brand_state": "split of resolved; not added again",
+    "name_candidate_only": "excluded from reach: an endpoint exists under a matching name with nothing deterministic tying it to the organization",
+    "affiliated_no_endpoint, no_organization": "do not reach an endpoint"
+  },
   "run_doc": "https://github.com/FHIR-IQ/AINPI/blob/main/docs/methodology/runs/2026-10-16-pa-reach-same-method.md",
   "question": "Did Pennsylvania endpoint reach fall between the 2026-08-20 and 2026-10-07 NDH releases when both are measured by the same method on consistent inputs?",
   "method": "The current connectivity chain (H50, H51, H53, then state_connectivity.py pa --no-geo) was run on each release from the local parquet export, read through DuckDB in place of BigQuery. Vendor endpoint files (2026-10-13 download), the NPPES corporate-parent snapshot, the CMS enrollment crosswalk, the hospital ownership crosswalk and the H47 rural file were held constant, so the difference isolates the change on the NDH side.",

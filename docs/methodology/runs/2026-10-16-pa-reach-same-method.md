@@ -64,9 +64,10 @@ enforces both and refuses to write otherwise.
 
 What the tiers say: the fall is concentrated in the NDH and vendor-NPI tiers
 (deterministic down 1,562), while the CMS-enrollment tier rose by 1,094 and
-partly offset it. Because the vendor files are the same file in both runs, the
-fall in the vendor-NPI tiers is a change in which NDH organizations carry the
-NPIs the vendors publish, not a change in what the vendors publish.
+partly offset it. The vendor files are the same file in both runs. So the
+fall in the vendor-NPI tiers is a change on the NDH side (which organizations
+practitioners are linked to and which of those carry vendor-published NPIs),
+not in what vendors publish.
 
 ## The published August ledger mixed releases
 
@@ -94,24 +95,24 @@ numbers can be trusted.
 
 - **October against the committed October files.** The October run reproduces
   the committed `states/pa-connectivity.json` (b5aa33a) in `summary`, `funnel`
-  and `confidence`, with one exception: `vendor_known` (the "Endpoint
-  attributed to an EHR vendor" funnel step) reads 49,455 or 49,456 depending
-  on run, against 49,456 committed. It is an array-order artifact and is not
-  part of the reach count. The four intermediate CSVs (H50 crosswalk, H51
+  and `confidence`, with one exception. That exception is `vendor_known`, the
+  "Endpoint attributed to an EHR vendor" funnel step. It reads 49,455 or
+  49,456 depending on run, against 49,456 committed. It is an array-order
+  artifact and is not part of the reach count. The four intermediate CSVs (H50 crosswalk, H51
   attribution, both H53 files) match the committed files as row sets; two of
   them differ in row order only.
 - **August against the committed August file.** The August run matches the
-  August ledger published in #169 on the three numbers that do not depend on
-  H53 or the method change: 230,837 practitioners, role coverage 43.7%, and
-  NDH-only reach 2,461.
+  August ledger published in #169 on three numbers. None of the three depends
+  on H53 or on the method change: 230,837 practitioners, role coverage 43.7%,
+  and NDH-only reach 2,461.
 - **The vendored script against the original driver.** The measurement was
-  first run with a scratch driver over trimmed parquet extracts, since deleted. The
-  vendored script, which reads the full parquet exports, was rerun on both
-  releases on 2026-10-16 from 4ba909a (which differs from b5aa33a only
-  in H49, outside this chain) and produced identical `summary`, `funnel` and
-  `confidence` blocks and identical intermediate CSVs (as row sets) for
-  August, and the same result for October up to the `vendor_known` artifact
-  above.
+  first run with a scratch driver over trimmed parquet extracts, since deleted.
+  The vendored script reads the full parquet exports instead. It was rerun on
+  both releases on 2026-10-16 from 4ba909a, which differs from b5aa33a only in
+  H49, outside this chain. For August it produced identical `summary`,
+  `funnel` and `confidence` blocks and identical intermediate CSVs (as row
+  sets). For October it produced the same result up to the `vendor_known`
+  artifact above.
 
 ## Inputs held constant
 

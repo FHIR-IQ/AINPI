@@ -150,7 +150,7 @@ def _delta(a, b):
 
 
 def build_side_by_side(before: dict, after: dict, *, source_commit: str,
-                       generated_at: str) -> dict:
+                       run_commit: str, generated_at: str) -> dict:
     """Side-by-side payload for two ``pa-connectivity.json`` runs."""
     a, b = release_summary(before), release_summary(after)
     for r in (a, b):
@@ -165,6 +165,26 @@ def build_side_by_side(before: dict, after: dict, *, source_commit: str,
         "slug": "pa-reach-same-method",
         "generated_at": generated_at,
         "source_commit": source_commit,
+        "run_commit": run_commit,
+        "commit_note": (
+            "source_commit is the pipeline code the measurement ran on; "
+            "run_commit is the checkout the vendored script was rerun from. "
+            "They differ only in H49, which is outside this chain."
+        ),
+        "units": (
+            "Counts are practitioners. Fields ending _pct are percentages, and "
+            "in `change` their values are differences in percentage points."
+        ),
+        "tier_notes": {
+            "reaching": ["ndh_only", "vendor_npi", "vendor_npi_list",
+                         "resolved", "enrollment_only"],
+            "resolved_alias, resolved_name_state, resolved_brand_state":
+                "split of resolved; not added again",
+            "name_candidate_only":
+                "excluded from reach: an endpoint exists under a matching "
+                "name with nothing deterministic tying it to the organization",
+            "affiliated_no_endpoint, no_organization": "do not reach an endpoint",
+        },
         "run_doc": f"https://github.com/FHIR-IQ/AINPI/blob/main/{RUN_DOC}",
         "question": (
             "Did Pennsylvania endpoint reach fall between the 2026-08-20 and "
@@ -281,8 +301,8 @@ def install_fake_bigquery(export_dir: pathlib.Path, parent_rows: list, log: list
 
     class QueryJobConfig:
         def __init__(self, **k):
-            self.__dict__.update(k)
             self.query_parameters = []
+            self.__dict__.update(k)
 
     class ScalarQueryParameter:
         def __init__(self, name, typ, value):
@@ -371,6 +391,8 @@ def main(argv=None) -> int:
     s.add_argument("--after", required=True, type=pathlib.Path)
     s.add_argument("--source-commit", default=None,
                    help="commit the pipeline ran at (default: this checkout's HEAD)")
+    s.add_argument("--run-commit", default=None,
+                   help="checkout the script ran from (default: this checkout's HEAD)")
     s.add_argument("--write", type=pathlib.Path)
     args = ap.parse_args(argv)
 
@@ -382,6 +404,7 @@ def main(argv=None) -> int:
     payload = build_side_by_side(
         json.loads(args.before.read_text()), json.loads(args.after.read_text()),
         source_commit=args.source_commit or git_head(),
+        run_commit=args.run_commit or git_head(),
         generated_at=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
     )
     text = json.dumps(payload, indent=2) + "\n"
