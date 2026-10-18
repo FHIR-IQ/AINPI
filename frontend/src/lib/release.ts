@@ -22,6 +22,17 @@ export const CURRENT_RELEASE = '2026-10-07';
 /** Releases this project has ingested, newest first. */
 export const KNOWN_RELEASES = ['2026-10-07', '2026-08-20', '2026-05-08', '2026-04-09'] as const;
 
+/**
+ * Releases ingested once and since dropped from the Databricks archive.
+ * April was retired on 2026-08-23 at the owner's request (see CLAUDE.md).
+ */
+export const RETIRED_RELEASES: readonly string[] = ['2026-04-09'];
+
+/** Releases kept in the Databricks archive, newest first. */
+export const ARCHIVED_RELEASES: readonly string[] = KNOWN_RELEASES.filter(
+  (r) => !RETIRED_RELEASES.includes(r),
+);
+
 /** Human-facing form, e.g. "August 2026". */
 export function releaseLabel(iso: string = CURRENT_RELEASE): string {
   const [y, m] = iso.split('-');

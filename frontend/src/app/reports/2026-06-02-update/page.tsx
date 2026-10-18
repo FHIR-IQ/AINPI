@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   title:
     '2026-06-02 update: landscape becomes the front door, REAL Health audit framework published',
   description:
-    'The provider data landscape replaces the choropleth as the AINPI homepage, a hierarchical treemap that shows the federal directory by structure, mass, and quality in one frame. Paired with a policy brief that maps every § 6220 obligation to the AINPI signal that measures it.',
+    'The provider data landscape replaces the choropleth as the AINPI homepage, a hierarchical treemap that shows the federal directory by structure, mass, and quality in one frame. Paired with a policy brief that maps the § 6220 obligations to the AINPI signals that measure them.',
   openGraph: {
     title:
       'AINPI 2026-06-02: provider data landscape + REAL Health audit framework',
@@ -35,7 +35,7 @@ export default function Update2026Jun02Page() {
         eyebrow="Release update · 2026-06-02"
         headlineA="Landscape becomes the front door."
         headlineB="REAL Health audit framework published."
-        caption="A hierarchical treemap replaces the choropleth as the AINPI homepage: 548 cells, six dimensions, one cell per state × specialty. Paired with a policy brief that maps every § 6220 obligation to the AINPI signal that measures it."
+        caption="A hierarchical treemap replaces the choropleth as the AINPI homepage: 548 cells, six dimensions, one cell per state × specialty. Paired with a policy brief that maps the § 6220 obligations to the AINPI signals that measure them."
         stats={[
           { label: 'Landscape cells', delta: '548', tone: 'gain' },
           { label: 'Audit dimensions', delta: '6', tone: 'gain' },

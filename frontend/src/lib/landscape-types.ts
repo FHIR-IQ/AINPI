@@ -60,7 +60,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'completeness',
     label: 'Completeness',
     description:
-      'Share of provider records carrying name, NPI, address and a contact method. These are the § 6220 fields the NDH schema can actually hold. New-patient acceptance, ADA accessibility and telehealth have no home in the published profile; language has one and is empty, so it is measured separately.',
+      'Share of provider records carrying name, NPI, address and a contact method. Name, address and contact are among the elements § 6220 lists as examples and can be held by the NDH schema; NPI is not one of the eight but identifies the record. New-patient acceptance, ADA accessibility and telehealth have no home in the published profile; language has one and is empty, so it is measured separately.',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },
@@ -76,7 +76,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'currency_days_median',
     label: 'Currency',
     description:
-      'Median days since meta.lastUpdated. The 90-day verification cadence in § 6220 fails above 90.',
+      'Median days since meta.lastUpdated. A proxy only: § 6220 requires plans to verify their own directories at least every 90 days, and the NDH is not a plan directory.',
     invert: true,
     format: (v) => `${Math.round(v)} days`,
   },
@@ -108,7 +108,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'language_coverage',
     label: 'Language recorded',
     description:
-      'Share of practitioners with any spoken language on the record. § 6220 requires it. The 2026-08-20 release carries it for none of the 7,373,232 practitioners, and the word "communication" does not appear in any practitioner resource. A flat zero layer is the finding, not a rendering fault.',
+      'Share of practitioners with any spoken language on the record. § 6220 names "cultural and linguistic capabilities" among the directory information plans must publish. The 2026-08-20 release carries it for none of the 7,373,232 practitioners, and the word "communication" does not appear in any practitioner resource. A flat zero layer is the finding, not a rendering fault.',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },

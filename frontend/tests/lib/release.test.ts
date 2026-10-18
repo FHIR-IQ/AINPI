@@ -2,7 +2,13 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { CURRENT_RELEASE, KNOWN_RELEASES, releaseLabel } from '@/lib/release';
+import {
+  ARCHIVED_RELEASES,
+  CURRENT_RELEASE,
+  KNOWN_RELEASES,
+  RETIRED_RELEASES,
+  releaseLabel,
+} from '@/lib/release';
 
 const REPO_ROOT = join(__dirname, '..', '..', '..');
 
@@ -35,6 +41,14 @@ describe('release constant', () => {
     expect(KNOWN_RELEASES[0]).toBe(CURRENT_RELEASE);
     const sorted = [...KNOWN_RELEASES].sort().reverse();
     expect([...KNOWN_RELEASES]).toEqual(sorted);
+  });
+
+  it('archives the current release and nothing retired', () => {
+    expect(ARCHIVED_RELEASES).toContain(CURRENT_RELEASE);
+    for (const r of RETIRED_RELEASES) {
+      expect(KNOWN_RELEASES as readonly string[]).toContain(r);
+      expect(ARCHIVED_RELEASES).not.toContain(r);
+    }
   });
 
   it('matches the release the published stats.json was built against', () => {
