@@ -156,7 +156,8 @@ WITH pr_state AS (
     p._given_name,
     SAFE.PARSE_TIMESTAMP('%Y-%m-%dT%H:%M:%E*S%Ez',
       JSON_VALUE(p.resource, '$.meta.lastUpdated')) AS last_updated_ts,
-    -- § 6220 required-field presence proxies. We can directly observe:
+    -- Presence proxies for elements § 6220 lists as examples of directory
+    -- information (a "such as" list, not a closed set). We can directly observe:
     -- name (family + given), address (_state + _city + _postal_code),
     -- contact (telecom array length), and indirectly NPI itself. Telehealth,
     -- ADA, language, and new-patient flags require extension parsing.
@@ -204,8 +205,9 @@ agg AS (
     state,
     spec_top,
     COUNT(DISTINCT _npi) AS practitioners,
-    -- Completeness: the § 6220 required fields that the directory is capable
-    -- of carrying, which is name + address + NPI + telecom.
+    -- Completeness: the § 6220 example elements the directory is capable
+    -- of carrying (name, address, contact), plus NPI, which is not one of
+    -- the eight but identifies the record.
     --
     -- `communication` (the languages a clinician speaks, also a § 6220
     -- element) used to be ANDed in here. It is populated for 0 of 7,373,232

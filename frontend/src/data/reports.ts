@@ -152,7 +152,7 @@ export const REPORTS: ReportOption[] = [
     version: '2026-06-02-update',
     title: '2026-06-02 update: landscape becomes the front door, REAL Health audit framework published',
     description:
-      'Two coordinated releases: the homepage swaps to a Karpathy-style hierarchical treemap (548 cells, 6 audit dimensions, one per state × specialty) and a new policy brief maps every § 6220 obligation of the REAL Health Providers Act to the AINPI signal that measures it. The choropleth moves to /map.',
+      'Two coordinated releases: the homepage swaps to a Karpathy-style hierarchical treemap (548 cells, 6 audit dimensions, one per state × specialty) and a new policy brief maps the § 6220 obligations of the REAL Health Providers Act to the AINPI signals that measure them. The choropleth moves to /map.',
     format: 'web',
     url: '/reports/2026-06-02-update',
     length: '~6 min read',

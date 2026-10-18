@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'REAL Health Providers Act: an independent way to measure accuracy',
     description:
-      'Record-level, cross-source provider directory verification mapped to every § 6220 requirement. Public methodology, machine-readable output.',
+      'Record-level, cross-source provider directory verification mapped to the § 6220 obligations. Public methodology, machine-readable output.',
     url: 'https://ainpi.dev/real-health-providers',
     type: 'article',
   },
@@ -35,7 +35,7 @@ export default function RealHealthProvidersPage() {
       <Navbar />
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <p className="text-xs font-semibold uppercase tracking-wider text-primary-600 mb-2">
-          Policy brief · For MA plans, payer ops, and the CMS scoring methodology RFC
+          Policy brief · For MA plans, payer ops, and commenters on CMS-4214-P
         </p>
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
           REAL Health Providers Act: measuring accuracy from outside the plan
@@ -43,9 +43,11 @@ export default function RealHealthProvidersPage() {
         <p className="text-lg text-gray-700 mb-2">
           HR 7148 § 6220, the Requiring Enhanced and Accurate Lists of
           (REAL) Health Providers Act, was signed into law on 2026-02-03 as
-          part of Public Law 119-75. From plan year 2028, network-based
-          Medicare Advantage plans must verify each listed provider&apos;s
-          directory information at least once every 90 days, remove a
+          part of Public Law 119-75. From plan year 2028, network-based and
+          certain private fee-for-service Medicare Advantage plans must
+          verify each listed provider&apos;s directory information at least
+          once every 90 days (up to 12 months for hospitals and other
+          facilities the Secretary designates), remove a
           provider within 5 business days of determining it has left the
           network, and submit an annual accuracy analysis to HHS. For plan
           years beginning on or after January 1, 2029, HHS posts each
@@ -54,19 +56,27 @@ export default function RealHealthProvidersPage() {
           directory.
         </p>
         <p className="text-lg text-gray-700 mb-2">
-          The hard part is not the cadence. It is the measurement methodology:
-          a plan that grades its own homework can score itself 99% by counting
-          field-level confirmations against its own data. A plan measured
-          against external ground truth scores very differently. CMS has not
-          yet defined which approach the 2029 published score will use.
+          The hard part is not the cadence. It is the measurement
+          methodology. A plan that checks its directory against its own
+          records can confirm data that is wrong in both places; a check
+          against outside sources can catch that. On 2026-10-16 CMS proposed
+          a scoring method in{' '}
+          <a href="https://www.federalregister.gov/public-inspection/2026-21420/medicare-program-implementation-of-sections-6219-6220-and-6224-of-the-consolidated-appropriations" target="_blank" rel="noopener" className="underline">
+            CMS-4214-P
+          </a>
+          : a weighted score across directory elements, reported as a
+          letter grade. Comments are due 2026-12-15. It is a proposal, not a
+          final rule.
         </p>
         <p className="text-lg text-gray-700 mb-6">
           AINPI checks provider records against outside sources, one record at a
-          time, and publishes the result so anyone can re-run it. Those are the
-          same measurements § 6220 asks for. This page
-          maps each obligation to the existing AINPI signal that measures it,
-          and provides citation language for plans and submitters to the 2028
-          rulemaking.
+          time, and publishes the result so anyone can re-run it. Plans analyse
+          their own directories; AINPI measures the public federal file, so
+          its signals are an outside reference, not the plan&apos;s analysis.
+          This page maps each § 6220 obligation except the enrollee
+          cost-sharing protection, which AINPI has no signal for, to the
+          closest AINPI signal, and provides citation language for comments
+          on CMS-4214-P.
         </p>
         <p className="text-sm text-gray-500 mb-6 font-mono">
           Compliance window: plan year 2028 · Public scoring: plan year 2029
@@ -173,19 +183,50 @@ export default function RealHealthProvidersPage() {
 
         <section className="mt-6 bg-white border border-gray-200 p-6">
           <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
-            The unresolved measurement question
+            The measurement question
           </h2>
           <p className="text-gray-800 mb-3">
-            CMS has not yet defined how the 2029 published accuracy score is
-            calculated. Three measurement paradigms compete:
+            § 6220 leaves the method to HHS. The Secretary &ldquo;shall
+            specify plan verification methods, such as using telephonic
+            verification or other approaches using data sources maintained by
+            an MA organization or using publicly available data sets&rdquo;
+            (SSA § 1857(e)(6)(B)(i)), and a scoring methodology that takes
+            into account &ldquo;the administrative burden on plans and
+            providers and the relative importance of certain provider
+            directory information on enrollee ability to access care&rdquo;
+            (§ 1857(e)(6)(B)(ii)).
+          </p>
+          <p className="text-gray-800 mb-3">
+            What has happened so far, as checked on 2026-10-18. CMS and ONC
+            held the public stakeholder meeting § 6220(c)(1) requires on
+            2026-06-15, according to the proposed rule. On 2026-10-16 CMS
+            issued{' '}
+            <a href="https://www.federalregister.gov/public-inspection/2026-21420/medicare-program-implementation-of-sections-6219-6220-and-6224-of-the-consolidated-appropriations" target="_blank" rel="noopener" className="underline">
+              CMS-4214-P
+            </a>{' '}
+            (docket CMS-2026-2533, comments due 5 p.m. EST on 2026-12-15). It
+            proposes verification methods (internal plan information,
+            telephonic, e-mail, provider attestations, claims data, data
+            sources maintained by CMS, and others CMS specifies; the preamble
+            also proposes NPPES as one) and a weighted score: network
+            participation 40%, specialty 10%, contact information 20%,
+            office or facility address 20%, accepting new patients 3%,
+            disability accommodations 3.5%, telehealth 3.5%, converted to a
+            letter grade. For scoring, it would limit &ldquo;internal plan
+            information&rdquo; to confirming network participation and
+            specialty. The guidance to plans required by § 6220(c)(2) is due
+            within 18 months of enactment (by 2027-08-03); none was found.
+          </p>
+          <p className="text-gray-800 mb-3">
+            Three measurement paradigms are in play:
           </p>
           <ol className="list-decimal list-inside space-y-2 text-sm text-gray-800">
             <li>
               <strong>Field-level on plan-owned data.</strong> Count fields
               that the plan can confirm internally as correct. Easiest to
-              implement; produces scores in the high-90s. Cannot detect a
-              plan&apos;s own data being wrong because it is the plan&apos;s
-              own definition of correct.
+              implement. Cannot detect a plan&apos;s own data being wrong,
+              because it is the plan&apos;s own definition of correct, so
+              the score it yields is likely to run high.
             </li>
             <li>
               <strong>Phone-audit secret shopper.</strong> The method
@@ -253,8 +294,15 @@ export default function RealHealthProvidersPage() {
                   </a>{' '}
                   shows median{' '}
                   <code>meta.lastUpdated</code> age per state × specialty
-                  cell. A plan whose median freshness exceeds 90 days fails the
-                  cadence test independently of its own attestation.
+                  cell. This is a proxy, not a compliance test: § 6220
+                  requires the plan to verify its own directory, and the NDH
+                  is not a plan directory. In the 2026-10-07 release every
+                  practitioner record carries the same{' '}
+                  <code>meta.lastUpdated</code> value (see{' '}
+                  <a href="/findings/temporal-staleness" className="underline">
+                    H18
+                  </a>
+                  ), so the proxy cannot yet separate records.
                 </td>
               </tr>
               <tr className="align-top">
@@ -424,11 +472,11 @@ export default function RealHealthProvidersPage() {
 
         <section className="mt-6 bg-white border border-gray-200 p-6">
           <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
-            Citation language for the 2028 scoring methodology RFC
+            Citation language for comments on CMS-4214-P
           </h2>
           <p className="text-sm text-gray-700 mb-3">
-            Suggested verbatim text for CMS / HHS rulemaking submissions on
-            how the public accuracy score should be computed:
+            Suggested text for comments on the proposed accuracy scoring
+            methodology (docket CMS-2026-2533, due 2026-12-15):
           </p>
           <blockquote className="border-l-4 border-primary-200 pl-4 italic text-gray-800 text-sm leading-relaxed">
             <p>
@@ -504,12 +552,10 @@ export default function RealHealthProvidersPage() {
 
         <section className="mt-6 bg-white border border-gray-200 p-6">
           <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
-            For MA plan ops, regulators, and CMS scoring methodology
-            submitters
+            For MA plan ops, regulators, and CMS-4214-P commenters
           </h2>
           <p className="text-sm text-gray-700">
-            If you are preparing a comment for the 2028 CMS scoring
-            methodology rulemaking, building a plan accuracy program against
+            If you are preparing a comment on CMS-4214-P, building a plan accuracy program against
             § 6220, or need a state-scoped or plan-scoped accuracy slice run
             against an open methodology, contact{' '}
             <a href="mailto:gene@fhiriq.com" className="underline font-medium">
@@ -548,6 +594,15 @@ export default function RealHealthProvidersPage() {
               className="underline"
             >
               Enrolled bill text
+            </a>
+            {' · '}
+            <a
+              href="https://www.federalregister.gov/public-inspection/2026-21420/medicare-program-implementation-of-sections-6219-6220-and-6224-of-the-consolidated-appropriations"
+              target="_blank"
+              rel="noopener"
+              className="underline"
+            >
+              CMS-4214-P proposed rule
             </a>
             {' · '}
             <a href="/methodology" className="underline">
