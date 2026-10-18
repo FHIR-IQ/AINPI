@@ -108,7 +108,7 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
     key: 'language_coverage',
     label: 'Language recorded',
     description:
-      'Share of practitioners with any spoken language on the record. § 6220 requires it. The 2026-08-20 release carries it for none of the 7,373,232 practitioners, and the word "communication" does not appear in any practitioner resource. A flat zero layer is the finding, not a rendering fault.',
+      'Share of practitioners with any spoken language on the record. § 6220 names "cultural and linguistic capabilities" among the directory information plans must publish. The 2026-08-20 release carries it for none of the 7,373,232 practitioners, and the word "communication" does not appear in any practitioner resource. A flat zero layer is the finding, not a rendering fault.',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },

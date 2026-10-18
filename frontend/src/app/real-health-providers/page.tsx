@@ -29,13 +29,17 @@ export default function RealHealthProvidersPage() {
           REAL Health Providers Act: measuring accuracy from outside the plan
         </h1>
         <p className="text-lg text-gray-700 mb-2">
-          HR 7148 § 6220, the Requiring Enhanced &amp; Accurate Lists of
-          Health Providers Act, was signed into law on 2026-02-03. Medicare
-          Advantage plans must verify every provider record every 90 days,
-          remove departed providers within 5 business days, and submit an
-          annual accuracy analysis to HHS. Starting with plan year 2029, CMS
-          will publish each plan&apos;s accuracy score in a machine-readable
-          format on cms.gov.
+          HR 7148 § 6220, the Requiring Enhanced and Accurate Lists of
+          (REAL) Health Providers Act, was signed into law on 2026-02-03 as
+          part of Public Law 119-75. From plan year 2028, network-based
+          Medicare Advantage plans must verify each listed provider&apos;s
+          directory information at least once every 90 days, remove a
+          provider within 5 business days of determining it has left the
+          network, and submit an annual accuracy analysis to HHS. For plan
+          years beginning on or after January 1, 2029, HHS posts each
+          plan&apos;s accuracy score in a machine-readable file on a CMS
+          website, and the plan lists the score prominently on its own
+          directory.
         </p>
         <p className="text-lg text-gray-700 mb-2">
           The hard part is not the cadence. It is the measurement methodology:
@@ -56,7 +60,7 @@ export default function RealHealthProvidersPage() {
           Compliance window: plan year 2028 · Public scoring: plan year 2029
         </p>
 
-        <AuthorByline lastReviewed="2026-06-02" />
+        <AuthorByline lastReviewed="2026-10-18" />
 
         <section className="mt-8 bg-white border border-gray-200 p-6">
           <h2 className="eyebrow border-b border-gray-300 pb-2 mb-4 block">
@@ -73,49 +77,85 @@ export default function RealHealthProvidersPage() {
               <tr className="align-top">
                 <td className="py-2 px-3 font-medium">Verification cadence</td>
                 <td className="py-2 px-3 text-gray-700">
-                  Every 90 days for individual providers. Every 12 months for
-                  hospitals and facilities. Unverified providers must be
-                  explicitly flagged in the directory.
+                  &ldquo;Not less frequently than once every 90 days&rdquo; for
+                  each provider listed. For &ldquo;a hospital or any other
+                  facility determined appropriate by the Secretary,&rdquo; at
+                  &ldquo;a lesser frequency specified by the Secretary but in
+                  no case less frequently than once every 12 months.&rdquo; If
+                  the plan cannot verify a provider, the directory must carry
+                  &ldquo;an indication that the information of such provider
+                  may not be up to date.&rdquo;
                 </td>
               </tr>
               <tr className="align-top">
                 <td className="py-2 px-3 font-medium">Removal timeline</td>
                 <td className="py-2 px-3 text-gray-700">
-                  Within 5 business days of determining a provider is no longer
-                  in network. Applies to both online and printed directories.
+                  Remove a provider &ldquo;within 5 business days if the
+                  organization determines that the provider is no longer a
+                  provider participating in the network.&rdquo; The duty
+                  attaches to the directory the plan must maintain &ldquo;on a
+                  publicly available internet website.&rdquo;
                 </td>
               </tr>
               <tr className="align-top">
-                <td className="py-2 px-3 font-medium">Required fields</td>
+                <td className="py-2 px-3 font-medium">Directory information</td>
                 <td className="py-2 px-3 text-gray-700">
-                  Name, specialty, contact information, primary
-                  office/facility address, new-patient acceptance, disability
-                  accommodations, cultural and linguistic capabilities,
-                  telehealth capabilities.
+                  &ldquo;Information enrollees may need to access covered
+                  benefits,&rdquo; with eight elements named as examples
+                  (&ldquo;such as&rdquo;): name, specialty, contact
+                  information, primary office or facility addresses,
+                  whether the provider is accepting new patients,
+                  accommodations for people with disabilities, cultural and
+                  linguistic capabilities, telehealth capabilities.
                 </td>
               </tr>
               <tr className="align-top">
                 <td className="py-2 px-3 font-medium">Annual accuracy analysis</td>
                 <td className="py-2 px-3 text-gray-700">
-                  Random sample of providers. Oversampling of high-error
-                  specialties (mental health, substance use disorder). Findings
-                  and accuracy score reported to HHS.
+                  From plan years beginning on or after January 1, 2028, an
+                  annual analysis on a random sample of the directory. The
+                  sample must include a random sample of each specialty with
+                  a high inaccuracy rate &ldquo;as determined by the
+                  Secretary&rdquo;; the statute says one such specialty
+                  &ldquo;may be&rdquo; mental health or substance use disorder
+                  treatment. The report to HHS includes an accuracy score
+                  computed with a verification method HHS specifies.
                 </td>
               </tr>
               <tr className="align-top">
                 <td className="py-2 px-3 font-medium">Public scoring (2029)</td>
                 <td className="py-2 px-3 text-gray-700">
-                  Each plan&apos;s accuracy score must be displayed prominently
-                  in its directory. HHS will publish scores in
-                  machine-readable format on cms.gov.
+                  For plan years beginning on or after January 1, 2029, HHS
+                  posts accuracy scores &ldquo;in a machine readable file, on
+                  an internet website maintained by the Centers for Medicare
+                  &amp; Medicaid Services,&rdquo; and each plan&apos;s score
+                  is &ldquo;listed prominently on the plan&apos;s provider
+                  directory.&rdquo;
+                </td>
+              </tr>
+              <tr className="align-top">
+                <td className="py-2 px-3 font-medium">
+                  Cost-sharing protection (2028)
+                </td>
+                <td className="py-2 px-3 text-gray-700">
+                  If an enrollee receives a covered item or service from a
+                  provider that is not in network but was listed in the
+                  plan&apos;s directory on the date the appointment was made,
+                  the enrollee pays no more than the in-network cost sharing. Plans must tell enrollees about
+                  this protection before the annual election period (to the
+                  extent practicable), in the directory, and in the first
+                  explanation of benefits each plan year.
                 </td>
               </tr>
             </tbody>
           </table>
           <p className="text-xs text-gray-500 mt-3">
-            Source: HR 7148, Consolidated Appropriations Act 2026 § 6220.
-            Compliance begins plan year 2028. Public scoring begins plan year
-            2029.
+            Source: HR 7148 (119th Congress), Consolidated Appropriations
+            Act, 2026, Public Law 119-75, Division J, Title II, § 6220,
+            amending sections 1851, 1852 and 1857 of the Social Security Act.
+            Quotations are from the enrolled bill text. Compliance begins plan
+            year 2028. Public scoring begins with plan years on or after
+            January 1, 2029.
           </p>
         </section>
 
@@ -153,8 +193,8 @@ export default function RealHealthProvidersPage() {
           <p className="text-gray-800 mt-3">
             Decomposed cross-source scoring is the only approach a plan
             cannot grade itself on. It is what AINPI implements. It is also
-            what § 6220&apos;s eight required fields: taken together: most
-            naturally map to.
+            what the eight directory elements § 6220 names, taken together,
+            most naturally map to.
           </p>
         </section>
 
@@ -205,7 +245,7 @@ export default function RealHealthProvidersPage() {
               </tr>
               <tr className="align-top">
                 <td className="py-3 px-3 font-medium">
-                  Required-field completeness (8 fields)
+                  Directory-information completeness (8 named elements)
                 </td>
                 <td className="py-3 px-3 text-gray-700">
                   AINPI&apos;s{' '}
@@ -240,7 +280,7 @@ export default function RealHealthProvidersPage() {
               </tr>
               <tr className="align-top">
                 <td className="py-3 px-3 font-medium">
-                  MH / SUD oversampling
+                  High-inaccuracy specialty samples (MH / SUD may be one)
                 </td>
                 <td className="py-3 px-3 text-gray-700">
                   The H29-H36 claims-side cross-audit already filters by
@@ -291,7 +331,7 @@ export default function RealHealthProvidersPage() {
               <tr className="align-top">
                 <td className="py-2 px-3 font-medium">Completeness</td>
                 <td className="py-2 px-3 text-gray-700">
-                  All 8 required fields present on the record
+                  All 8 directory elements § 6220 names present on the record
                 </td>
                 <td className="py-2 px-3 text-gray-600">NDH bulk file</td>
               </tr>
@@ -464,12 +504,21 @@ export default function RealHealthProvidersPage() {
           <p>
             Source documents:{' '}
             <a
-              href="https://www.congress.gov/bill/118th-congress/house-bill/7148"
+              href="https://www.congress.gov/bill/119th-congress/house-bill/7148"
               target="_blank"
               rel="noopener"
               className="underline"
             >
               HR 7148 § 6220 (REAL Health Providers Act)
+            </a>
+            {' · '}
+            <a
+              href="https://www.congress.gov/119/bills/hr7148/BILLS-119hr7148enr.htm"
+              target="_blank"
+              rel="noopener"
+              className="underline"
+            >
+              Enrolled bill text
             </a>
             {' · '}
             <a href="/methodology" className="underline">
