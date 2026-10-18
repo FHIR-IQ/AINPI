@@ -1,6 +1,18 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import AuthorByline from '@/components/AuthorByline';
+import {
+  ARCHIVED_RELEASES,
+  CURRENT_RELEASE,
+  RETIRED_RELEASES,
+} from '@/lib/release';
+
+/** "a, b and c" from a list of release dates, oldest first. */
+function listReleases(releases: readonly string[]): string {
+  const asc = [...releases].sort();
+  if (asc.length <= 1) return asc.join('');
+  return `${asc.slice(0, -1).join(', ')} and ${asc[asc.length - 1]}`;
+}
 
 export const dynamic = 'force-static';
 
@@ -176,9 +188,22 @@ export default function RealHealthProvidersPage() {
               own definition of correct.
             </li>
             <li>
-              <strong>Phone-audit secret shopper.</strong> The methodology
-              behind the Senate Finance Committee&apos;s May 2023 finding of
-              80%+ ghost networks in mental health. Catches real patient
+              <strong>Phone-audit secret shopper.</strong> The method
+              behind the Senate Finance Committee majority staff&apos;s{' '}
+              <a
+                href="https://www.finance.senate.gov/imo/media/doc/050323%20Ghost%20Network%20Hearing%20-%20Secret%20Shopper%20Study%20Report.pdf"
+                target="_blank"
+                rel="noopener"
+                className="underline"
+              >
+                May 2023 study
+              </a>
+              , which called 120 mental health listings across 12 Medicare
+              Advantage plans in 6 states and found &ldquo;more than
+              80%&rdquo; were &ldquo;ghosts,&rdquo; meaning &ldquo;either
+              unreachable, not accepting new patients, or not
+              in-network.&rdquo; Appointments could be made for 18%.
+              Catches real patient
               access failures but creates administrative burden, scales
               poorly, and lags reality by months.
             </li>
@@ -215,9 +240,13 @@ export default function RealHealthProvidersPage() {
                   90-day verification cadence
                 </td>
                 <td className="py-3 px-3 text-gray-700">
-                  AINPI ingests every public NDH release (2026-04-09,
-                  2026-05-08 and 2026-08-20 archived to date) and computes
-                  per-NPI delta. The
+                  AINPI ingests every public NDH release and computes
+                  per-NPI delta. The warehouse holds {CURRENT_RELEASE}; the
+                  archive keeps {listReleases(ARCHIVED_RELEASES)}
+                  {RETIRED_RELEASES.length > 0
+                    ? ` (${listReleases(RETIRED_RELEASES)} retired)`
+                    : ''}
+                  . The
                   in-development{' '}
                   <a href="/" className="underline">
                     landscape view
@@ -267,7 +296,7 @@ export default function RealHealthProvidersPage() {
                   Annual accuracy analysis
                 </td>
                 <td className="py-3 px-3 text-gray-700">
-                  AINPI&apos;s pre-registered H1-H42 hypothesis catalog is
+                  AINPI&apos;s pre-registered hypothesis catalog is
                   already a structured, reproducible accuracy analysis. Each
                   finding carries{' '}
                   <code>methodology_version</code>,{' '}
