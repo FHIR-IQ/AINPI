@@ -7,7 +7,7 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T01:20:38+00:00",
+  "generated_at": "2026-10-19T16:22:36+00:00",
   "methodology_version": "0.1.0-draft",
   "commit_sha": "pending",
   "headline": "Practitioner dedup is clean: 0 excess rows across 7,481,907 NPIs (H14). Organization multiplicity looks far worse than it is. 3.4% of the 1,976,702 unique Org NPIs map to more than one Organization resource, but 99.9% of that excess is one provider record paired with one `ein` tax record under the same NPI, which is how CMS models the file rather than a duplication defect. Strip those and 7 of 1,976,702 Org NPIs are genuinely repeated. Any count of organizations in this directory has to say which record type it counted.",

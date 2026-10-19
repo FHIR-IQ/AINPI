@@ -10,7 +10,7 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T01:20:02+00:00",
+  "generated_at": "2026-10-19T16:21:39+00:00",
   "methodology_version": "0.6.0-draft",
   "commit_sha": "pending",
   "headline": "95.11% of 9.5M NDH NPIs clear NPPES (4.67% not enumerated, 0.20% deactivated). Practitioner name agreement: 89.9% exact \u2192 90.4% normalized \u2192 96.6% Jaro-Winkler \u22650.85. Organization name: 46.1% exact \u2192 75.7% normalized \u2192 86.5% Jaro-Winkler \u22650.85. Both taxonomy fields now speak NUCC: Practitioner.qualification is 99.84% valid against NUCC v17.0, and PractitionerRole.specialty, which carried CMS Medicare specialty codes through 2026-05-08, is 99.95% valid NUCC and 0.00% valid Medicare. They agree with each other on 97.8% of 3.2M Practitioner\u2194Role pairs. The NDH carries the NPPES taxonomy set, not a choice from it: 99.1% of practitioners hold a qualification matching NPPES's switch='Y' TRUE primary somewhere in the array. Position does not encode primacy, though. Reading qualification[0] alone, the earlier method here, matches the true primary for only 89.9% and any slot for 97.1%. On the NPPES side the same trap: slot_1 is not the true primary in 15.05% of rows. Neither file says which taxonomy is primary by where it sits.",

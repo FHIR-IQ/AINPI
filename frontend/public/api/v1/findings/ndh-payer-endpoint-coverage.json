@@ -6,9 +6,9 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-17T02:09:30+00:00",
+  "generated_at": "2026-10-19T16:49:33+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "ac0cb9a",
+  "commit_sha": "3c03bd8",
   "headline": "The 2026-10-07 release names 997 payer organizations and 7,575 health plans, and 0 of those organizations carry an endpoint. At least 194 of 111,259 FHIR REST endpoints are payer provider-directory addresses (50 by URL path and 144 only by host), none of them attached to a payer organization; the Capital BlueCross control directory URL is not in the index, though another Capital BlueCross directory address is.",
   "numerator": 194,
   "denominator": 111259,
@@ -71,16 +71,16 @@
         "state": "PA",
         "base": "https://providerdirectory-api.capbluecross.com/r4",
         "probe": "/Practitioner?family=Smith&_count=1",
-        "http_status": 200,
-        "bytes": 1821,
-        "live_public": true,
+        "http_status": 503,
+        "bytes": 62,
+        "live_public": false,
         "present_in_ndh": false,
         "same_payer_directories_in_ndh": [
           "https://api.capitalbluecrossfhir.com/r4/public-ma/"
         ]
       }
     ],
-    "live_but_absent_from_ndh": 1,
+    "live_but_absent_from_ndh": 0,
     "payer_pin_watch": {
       "control_passed": true,
       "payer_orgs": 997,
