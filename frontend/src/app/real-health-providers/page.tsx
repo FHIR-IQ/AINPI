@@ -204,7 +204,13 @@ export default function RealHealthProvidersPage() {
             <a href="https://www.federalregister.gov/public-inspection/2026-21420/medicare-program-implementation-of-sections-6219-6220-and-6224-of-the-consolidated-appropriations" target="_blank" rel="noopener" className="underline">
               CMS-4214-P
             </a>{' '}
-            (docket CMS-2026-2533, comments due 5 p.m. EST on 2026-12-15). It
+            (file code CMS-4214-P, regulations.gov docket{' '}
+            <a href="https://www.regulations.gov/commenton/CMS-2026-3533-0002" target="_blank" rel="noopener" className="underline">
+              CMS-2026-3533
+            </a>
+            , comments due 5 p.m. EST on 2026-12-15; the Federal Register text
+            prints the docket as CMS-2026-2533, which does not resolve on
+            regulations.gov). It
             proposes verification methods (internal plan information,
             telephonic, e-mail, provider attestations, claims data, data
             sources maintained by CMS, and others CMS specifies; the preamble
@@ -476,7 +482,11 @@ export default function RealHealthProvidersPage() {
           </h2>
           <p className="text-sm text-gray-700 mb-3">
             Suggested text for comments on the proposed accuracy scoring
-            methodology (docket CMS-2026-2533, due 2026-12-15):
+            methodology (file code CMS-4214-P,{' '}
+            <a href="https://www.regulations.gov/commenton/CMS-2026-3533-0002" target="_blank" rel="noopener" className="underline">
+              docket CMS-2026-3533
+            </a>
+            , due 5 p.m. EST on 2026-12-15):
           </p>
           <blockquote className="border-l-4 border-primary-200 pl-4 italic text-gray-800 text-sm leading-relaxed">
             <p>
