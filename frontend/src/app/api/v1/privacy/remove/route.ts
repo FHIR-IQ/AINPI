@@ -24,9 +24,7 @@ export const dynamic = 'force-dynamic';
 // NPPES lookup (8 s) and page check (5 s) run inside the request.
 export const maxDuration = 30;
 
-const REMOVAL_ACCEPTED_MESSAGE =
-  'Request received. If this NPI has a page or rows on ainpi.dev, they will be removed ' +
-  'within 7 days, and we will email you when it is done.';
+const REMOVAL_ACCEPTED_MESSAGE = 'Request received.';
 
 export async function POST(req: NextRequest) {
   // Its own limiter, apart from the BigQuery quota (src/lib/removal-limit.ts).

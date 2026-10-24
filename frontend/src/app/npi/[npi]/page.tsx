@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import InlineSubscribe from '@/components/InlineSubscribe';
+import RemovalRequestLink from '@/components/RemovalRequestLink';
 import {
   getPublishedCohortRow,
   publishedCohortNpis,
@@ -253,6 +254,7 @@ export default async function NpiReportCardPage({ params }: { params: { npi: str
             </Link>
             .
           </p>
+          <RemovalRequestLink npi={row.npi} />
         </footer>
       </main>
     </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import RemovalForm from './RemovalForm';
@@ -27,14 +28,17 @@ export default function RemovalPage() {
             rows in our downloadable files and API, and AINPI&apos;s search results.
           </p>
           <p>
-            It does not change aggregate counts, which still include the record, and
-            it does not change the CMS source data or any other service. Requests are
-            processed automatically within 7 days, and we email you when removal is
-            complete.
+            It does not change published aggregate counts, which still include the
+            record, and it does not change the CMS source data or any other service.
+            Requests are processed automatically: usually within 6 hours, always within
+            7 days, and we email you when removal is complete.
           </p>
         </div>
         <section className="bg-white border border-gray-200 p-6">
-          <RemovalForm />
+          {/* useSearchParams (the ?npi= prefill) needs a boundary on a static page. */}
+          <Suspense fallback={null}>
+            <RemovalForm />
+          </Suspense>
         </section>
         <p className="text-xs text-gray-500 mt-6">
           See the <Link href="/privacy" className="underline">privacy policy</Link> for

@@ -77,10 +77,15 @@ Contact: [gene@fhiriq.com](mailto:gene@fhiriq.com).
 
 If you are the provider identified by an individual NPI, or authorized to act
 for them, you can ask for that NPI to be removed from ainpi.dev using the form at
-[/privacy/remove](/privacy/remove). Requests are processed automatically, within
-7 days, and stay in effect for every later data release. A request that we cannot
-match to an individual provider in the NPPES registry, or that arrives on a day
-with an unusual number of requests, is reviewed by a person first.
+[/privacy/remove](/privacy/remove). Every provider page links to it with the NPI
+already filled in. Requests are processed automatically, with no manual step:
+search stops showing the NPI within minutes, the page and files are updated
+within 6 hours, and the whole removal is complete within 7 days at the latest.
+Removals stay in effect for every later data release.
+
+The process covers individual providers. If the NPPES registry lists the NPI
+as an organization's, nothing is removed and we send an automated reply saying
+so: organization records come from public CMS data.
 
 Removal covers, on ainpi.dev:
 

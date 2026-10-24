@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   assertSuppressionVisible,
   createSuppressionLoader,
+  isActiveSuppression,
   extractNpis,
   filterSuppressed,
   isValidNpi,
@@ -13,6 +14,7 @@ import {
   parseRemovalEmail,
   recordSuppression,
   senderRequestsToday,
+  DECLINED_REPLY,
   type EnumerationType,
   type IntakeDb,
   type IntakeDeps,
@@ -21,7 +23,9 @@ import {
   buildRemovalConfirmation,
   isRemovedLive,
   runConfirmations,
+  runOverdueCheck,
   type ConfirmDb,
+  type OverdueDb,
 } from '@/lib/suppression-confirm';
 
 // Synthetic NPIs with valid check digits. None is meant to be a real provider.
@@ -149,12 +153,13 @@ interface Row {
   requesterEmail: string | null;
   source: string;
   status: string;
-  heldReason: string | null;
+  basis: string | null;
   hadPage: boolean | null;
+  notBefore: Date | null;
   requestedAt: Date;
 }
 
-function intakeDb(existing: Row[] = []) {
+function intakeDb(existing: Row[] = [], now: () => Date = () => NOW) {
   const rows: Row[] = [...existing];
   const db: IntakeDb = {
     npiSuppression: {
@@ -163,7 +168,7 @@ function intakeDb(existing: Row[] = []) {
         return r ? { id: r.npi, status: r.status } : null;
       },
       create: async ({ data }) => {
-        rows.push({ ...data, requestedAt: NOW });
+        rows.push({ ...data, requestedAt: now() });
         return data;
       },
       count: async ({ where }) =>
@@ -171,7 +176,8 @@ function intakeDb(existing: Row[] = []) {
           if (where.requestedAt && r.requestedAt < where.requestedAt.gte) return false;
           if (typeof where.status === 'string' && r.status !== where.status) return false;
           if (typeof where.status === 'object' && r.status === where.status.not) return false;
-          if (where.heldReason && r.heldReason !== where.heldReason) return false;
+          if (where.notBefore === null && r.notBefore !== null) return false;
+          if (where.notBefore && r.notBefore === null) return false;
           if (where.requesterEmail && r.requesterEmail !== where.requesterEmail) return false;
           if (where.source && r.source !== where.source) return false;
           return true;
@@ -183,13 +189,20 @@ function intakeDb(existing: Row[] = []) {
 
 const NOW = new Date('2026-10-24T12:00:00Z');
 
-function deps(db: IntakeDb, type: EnumerationType = 'individual', over: Partial<IntakeDeps> = {}) {
+function deps(
+  db: IntakeDb,
+  type: EnumerationType = 'individual',
+  over: Partial<IntakeDeps> = {},
+) {
   const alert = vi.fn(async () => {});
+  const sendDeclined = vi.fn(async () => {});
   return {
     alert,
+    sendDeclined,
     d: {
       db,
       alert,
+      sendDeclined,
       lookupType: async () => type,
       hasPage: async () => true,
       cap: 2,
@@ -200,15 +213,16 @@ function deps(db: IntakeDb, type: EnumerationType = 'individual', over: Partial<
 }
 
 describe('recordSuppression', () => {
-  it('records an individual NPI as pending, once, with one alert', async () => {
+  it('accepts an NPPES individual at once, once, with one notice', async () => {
     const { db, rows } = intakeDb();
     const { d, alert } = deps(db);
-    expect(await recordSuppression(A, 'Doc <Doc@Example.org>', 'form', d)).toEqual({
+    expect(await recordSuppression(A, 'Doc <Doc@Example.org>', 'form', d)).toMatchObject({
       created: true,
       status: 'pending',
+      notBefore: null,
     });
     expect(rows[0]).toMatchObject({
-      npi: A, requesterEmail: 'doc@example.org', source: 'form', status: 'pending', hadPage: true,
+      npi: A, requesterEmail: 'doc@example.org', source: 'form', status: 'pending', basis: 'nppes', hadPage: true,
     });
     expect(await recordSuppression(A, 'x@example.org', 'email', d)).toEqual({
       created: false,
@@ -217,29 +231,51 @@ describe('recordSuppression', () => {
     expect(alert).toHaveBeenCalledTimes(1);
   });
 
-  it('holds organization NPIs and failed lookups', async () => {
+  it('accepts an NPI NPPES does not return (404, deactivated) when AINPI has its page', async () => {
     const { db, rows } = intakeDb();
-    await recordSuppression(A, 'a@example.org', 'form', deps(db, 'organization').d);
-    await recordSuppression(B, 'b@example.org', 'form', deps(db, 'unknown').d);
-    expect(rows.map((r) => [r.status, r.heldReason])).toEqual([
-      ['held', 'organization_npi'],
-      ['held', 'nppes_lookup_failed'],
-    ]);
+    await recordSuppression(A, 'a@example.org', 'form', deps(db, 'unknown', { hasPage: async () => true }).d);
+    expect(rows[0]).toMatchObject({ status: 'pending', basis: 'ainpi_files', notBefore: null });
   });
 
-  it('holds past the daily cap and alerts once for the cap', async () => {
+  it('still records an unclassified NPI that is in none of our files', async () => {
+    const { db, rows } = intakeDb();
+    await recordSuppression(A, 'a@example.org', 'form', deps(db, 'unknown', { hasPage: async () => false }).d);
+    expect(rows[0]).toMatchObject({ status: 'pending', basis: 'unverified' });
+  });
+
+  it('declines an organization NPI with the automated reply and no admin alert', async () => {
+    const { db, rows } = intakeDb();
+    const { d, alert, sendDeclined } = deps(db, 'organization');
+    expect(await recordSuppression(A, 'org@example.org', 'form', d)).toEqual({ created: true, status: 'declined' });
+    expect(rows[0].status).toBe('declined');
+    expect(sendDeclined).toHaveBeenCalledWith('org@example.org', A);
+    expect(alert).not.toHaveBeenCalled();
+    expect(DECLINED_REPLY.text).toContain('belongs to an organization');
+    expect(DECLINED_REPLY.text).toContain('replies are not read');
+  });
+
+  it('queues past the daily cap to the next UTC day, alerts once, and it takes effect then', async () => {
     const { db, rows } = intakeDb();
     const { d, alert } = deps(db);
     for (const npi of [A, B, C, '9999999995']) await recordSuppression(npi, null, 'form', d);
-    expect(rows.map((r) => r.status)).toEqual(['pending', 'pending', 'held', 'held']);
-    // two pending alerts + one cap alert
+    expect(rows.map((r) => r.notBefore?.toISOString() ?? null)).toEqual([
+      null,
+      null,
+      '2026-10-25T00:00:00.000Z',
+      '2026-10-25T00:00:00.000Z',
+    ]);
+    // two accepted notices + one cap-reached notice
     expect(alert).toHaveBeenCalledTimes(3);
+    const queued = rows[2];
+    expect(isActiveSuppression(queued, NOW)).toBe(false);
+    expect(isActiveSuppression(queued, new Date('2026-10-25T00:00:01Z'))).toBe(true);
+    expect(isActiveSuppression({ status: 'declined', notBefore: null }, NOW)).toBe(false);
   });
 
-  it('lets a reviewed manual request skip the checks', async () => {
+  it('lets the manual script record at once without the checks', async () => {
     const { db, rows } = intakeDb();
-    await recordSuppression(A, null, 'manual', deps(db, 'unknown').d, { force: true });
-    expect(rows[0].status).toBe('pending');
+    await recordSuppression(A, null, 'manual', deps(db, 'organization').d, { force: true });
+    expect(rows[0]).toMatchObject({ status: 'pending', basis: 'manual' });
   });
 
   it('counts one sender\'s emailed requests today', async () => {
@@ -256,10 +292,39 @@ describe('recordSuppression', () => {
   });
 
   it('reads the NPPES enumeration type', async () => {
-    const reply = (body: unknown) => async () => new Response(JSON.stringify(body), { status: 200 });
+    const reply = (body: unknown, status = 200) => async () => new Response(JSON.stringify(body), { status });
     expect(await nppesEnumerationType(A, reply({ results: [{ enumeration_type: 'NPI-1' }] }))).toBe('individual');
     expect(await nppesEnumerationType(A, reply({ results: [{ enumeration_type: 'NPI-2' }] }))).toBe('organization');
     expect(await nppesEnumerationType(A, reply({ result_count: 0, results: [] }))).toBe('unknown');
+    expect(await nppesEnumerationType(A, reply({}, 404))).toBe('unknown');
+  });
+});
+
+describe('overdue backstop', () => {
+  it('alerts once for requests older than 5 days and not confirmed', async () => {
+    const rows = [
+      { npi: A, status: 'applied', requestedAt: new Date('2026-10-18T00:00:00Z'), overdueAlertedAt: null as Date | null },
+      { npi: B, status: 'pending', requestedAt: new Date('2026-10-23T00:00:00Z'), overdueAlertedAt: null as Date | null },
+      { npi: C, status: 'confirmed', requestedAt: new Date('2026-10-01T00:00:00Z'), overdueAlertedAt: null as Date | null },
+    ];
+    const db: OverdueDb = {
+      npiSuppression: {
+        findMany: async ({ where }) =>
+          rows
+            .filter((r) => where.status.in.includes(r.status) && r.requestedAt < where.requestedAt.lt && r.overdueAlertedAt === null)
+            .map(({ npi, status, requestedAt }) => ({ npi, status, requestedAt })),
+        updateMany: async ({ where, data }) => {
+          let n = 0;
+          for (const r of rows) if (where.npi.in.includes(r.npi) && r.overdueAlertedAt === null) { r.overdueAlertedAt = data.overdueAlertedAt; n++; }
+          return { count: n };
+        },
+      },
+    };
+    const alert = vi.fn(async () => {});
+    expect(await runOverdueCheck({ db, alert, now: () => NOW })).toBe(1);
+    expect(alert).toHaveBeenCalledWith([expect.objectContaining({ npi: A })]);
+    expect(await runOverdueCheck({ db, alert, now: () => NOW })).toBe(0);
+    expect(alert).toHaveBeenCalledTimes(1);
   });
 });
 

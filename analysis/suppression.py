@@ -12,9 +12,10 @@ reconciles with its totals. If a later regeneration reads a filtered file (for
 example a vendor file with a row removed), a few derived counts can shift by a
 handful of practitioners.
 
-Scope is individual (Type 1) NPIs: intake processes only NPPES `NPI-1`
-records automatically and holds everything else. A suppressed NPI is
-therefore an individual's identifier wherever it appears, so it is removed
+Scope is individual (Type 1) NPIs: intake declines an NPI only when NPPES
+positively says it is an organization's (NPI-2), and accepts the rest. A
+suppressed NPI is therefore an individual's identifier (or one NPPES could
+not classify) wherever it appears, so it is removed
 from every NPI-valued column or key (any name containing "npi"), in
 organization files too: a vendor that lists a clinician's own NPI as an
 `org_npi` has published that person, and the row (with its `org_name`, which
@@ -24,7 +25,8 @@ THE LIST NEVER ENTERS GIT. It is read from, and merged across:
 
   * the `npi_suppressions` table in Supabase (the source of truth) through
     SUPPRESSION_READER_URL (select on npi only) or SUPPRESSION_APPLY_URL,
-    with psycopg installed. Row-level security hides `held` rows from both;
+    with psycopg installed. Row-level security shows both roles only rows in
+    force (accepted, and not queued for a later day);
   * SUPPRESSED_NPIS (comma or whitespace separated 10-digit NPIs), a second
     layer that also covers offline runs.
 
@@ -182,7 +184,7 @@ def _psycopg():
 
 def load_from_db(url: str) -> set[str]:
     # Only `npi` is selected: the reader role has no other column, and RLS
-    # already hides rows held for review.
+    # already hides declined rows and rows queued for a later day.
     psycopg = _psycopg()
     with psycopg.connect(url, connect_timeout=20) as conn:
         with conn.cursor() as cur:

@@ -345,52 +345,67 @@ export interface SuppressionAlertArgs {
   npi: string;
   source: 'form' | 'email' | 'manual';
   requesterEmail: string | null;
-  status: 'pending' | 'held';
-  heldReason: 'organization_npi' | 'nppes_lookup_failed' | 'daily_cap' | null;
+  basis: 'nppes' | 'ainpi_files' | 'unverified' | 'manual';
+  notBefore: Date | null;
+  capReached: boolean;
 }
 
-const HELD_TEXT: Record<string, string> = {
-  organization_npi: 'NPPES lists this NPI as an organization (NPI-2). Removal covers individuals only.',
-  nppes_lookup_failed: 'The NPPES registry lookup did not confirm an individual (NPI-1) record.',
-  daily_cap:
-    'The daily cap on automatically processed requests was reached. This is the first held ' +
-    'request today; later ones today are held without another alert.',
+const BASIS_TEXT: Record<string, string> = {
+  nppes: 'NPPES lists it as an individual (NPI-1).',
+  ainpi_files: 'NPPES did not answer for it (deactivated, or the API was down); it is in AINPI\'s individual-level data, so it was accepted as an individual.',
+  unverified: 'NPPES did not answer for it and it is in none of AINPI\'s files, so there is nothing to remove. Recorded anyway; the confirmation follows as usual.',
+  manual: 'Recorded by hand with scripts/suppress-npi.ts --force.',
 };
 
 /**
- * Fires once per new removal request (src/lib/suppression-intake.ts). A
- * pending request is already recorded and filtered from search: notice, not a
- * to-do. A held request is not filtered and the requester hears nothing until
- * a person sets its status to 'pending' (or records it with
- * scripts/suppress-npi.ts --force). Admin mailbox only.
+ * Notice of an accepted removal request (src/lib/suppression-intake.ts).
+ * Nothing to do: search already filters it (or will at the next UTC day if
+ * queued), the files follow within 6 hours, and the requester is emailed when
+ * it is live. Declined (organization) requests send no alert. Admin only.
  */
 export async function sendSuppressionAlert(args: SuppressionAlertArgs): Promise<void> {
-  const { npi, source, requesterEmail, status, heldReason } = args;
-  const held = status === 'held';
-  const subject = held
-    ? `[AINPI admin] NPI removal request HELD (${heldReason})`
+  const { npi, source, requesterEmail, basis, notBefore, capReached } = args;
+  const subject = capReached
+    ? '[AINPI admin] NPI removal daily cap reached; later requests queued'
     : `[AINPI admin] NPI removal request (${source})`;
   const lines = [
-    held
-      ? 'A removal request was recorded but HELD for review. Nothing is filtered and the requester gets no automated email.'
-      : 'New NPI removal request on AINPI. Recorded; search already filters it.',
-    held ? HELD_TEXT[heldReason ?? ''] ?? '' : '',
+    capReached
+      ? `The daily cap on removal requests was reached. This and later requests today are queued to ${notBefore?.toISOString().slice(0, 10)} and processed then, automatically. No action needed unless this is abuse; raise SUPPRESSION_DAILY_CAP in Vercel if it is genuine demand.`
+      : 'New NPI removal request. Recorded and already filtered from search. No action needed.',
     '',
     `NPI:       ${npi}`,
     `Source:    ${source}`,
     `Requester: ${requesterEmail ?? '(none given)'}`,
-    `Status:    ${status}${heldReason ? ` (${heldReason})` : ''}`,
-    '',
-    held
-      ? "To process it: set status = 'pending' on its npi_suppressions row in the Supabase table editor."
-      : 'Static files are removed by the next suppression-apply run (every 6 hours); the requester is emailed automatically once the page returns 404.',
-  ].filter((l, i) => l !== '' || i > 1);
+    `Basis:     ${BASIS_TEXT[basis] ?? basis}`,
+    notBefore ? `Queued to: ${notBefore.toISOString()}` : '',
+  ].filter((l, i) => l !== '' || i === 1);
   const text = lines.join('\n');
   await sendOnce({
     subject,
     text,
     html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:pre-wrap;">${esc(text)}</pre>`,
     tag: 'suppression',
+  });
+}
+
+/** Removal requests older than 5 days and not yet confirmed (sent once per row). */
+export async function sendSuppressionOverdueAlert(
+  rows: { npi: string; status: string; requestedAt: Date }[],
+): Promise<void> {
+  const text = [
+    `${rows.length} NPI removal request(s) are more than 5 days old and not yet confirmed. The privacy`,
+    'policy promises 7 days. Everything retries automatically; this alert is sent once per request.',
+    '',
+    ...rows.map((r) => `  ${r.npi}  ${r.status.padEnd(9)}  requested ${r.requestedAt.toISOString().slice(0, 10)}`),
+    '',
+    'Usual causes: suppression-apply.yml failing (check its runs), a deploy not going out, or the',
+    'page still cached. The suppression-confirm cron re-checks daily.',
+  ].join('\n');
+  await sendOnce({
+    subject: `[AINPI admin] ${rows.length} NPI removal request(s) near the 7-day limit`,
+    text,
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;">${esc(text)}</pre>`,
+    tag: 'suppression-overdue',
   });
 }
 

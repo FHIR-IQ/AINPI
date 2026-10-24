@@ -513,40 +513,46 @@ model UsageLedger {
   @@map("usage_ledger")
 }
 
-// One row per individual (Type 1) NPI whose AINPI page and per-NPI rows were
-// removed on request (docs/privacy.md, /privacy/remove). This table is the
-// list: it never goes into git.
+// One row per NPI removal request (docs/privacy.md, /privacy/remove). This
+// table is the list: it never goes into git.
 //
 // DO NOT create or change this table with `prisma db push` or a migration.
 // It is created by prisma/sql/npi_suppressions.sql, which also enables
-// row-level security and creates the two restricted roles the workflows use;
-// db push would not create either and could drop the policies' assumptions.
+// row-level security and creates the two restricted roles the workflows use.
 // Keep this model and that file in sync by hand.
 //
 //   source: form | email | manual
-//   status: pending   recorded; runtime search filters it at once
-//           applied   suppression-apply.yml has pushed the static-file removal
+//   status: pending   recorded; active once notBefore has passed (null =
+//                     at once): search filters it, suppression-apply
+//                     removes it from the published files
+//           applied   suppression-apply has pushed the static-file removal
 //           confirmed the cron saw the page 404 and the NPI gone from the
 //                     published cohort file, and emailed the requester
-//           held      not processed automatically (organization NPI, NPPES
-//                     lookup failed, or the daily cap was reached); admin
-//                     alerted, requester gets nothing automated, and nothing
-//                     is filtered until a person sets it to pending
+//           declined  NPPES says the NPI is an organization's (NPI-2);
+//                     the requester got an automated reply, nothing removed
+//   basis:  why an accepted NPI was treated as an individual's: nppes (NPI-1),
+//           ainpi_files (NPPES silent, but it is in our individual-level
+//           data), unverified (NPPES silent and not in our data: nothing to
+//           remove, recorded anyway), manual (scripts/suppress-npi.ts --force)
+//   notBefore: set when the daily cap was reached; the request is queued to
+//           the next UTC day and then processed like any other
 model NpiSuppression {
   id               String    @id @default(uuid())
   npi              String    @unique
   requesterEmail   String?   @map("requester_email")
   source           String
   status           String    @default("pending")
-  heldReason       String?   @map("held_reason")
+  basis            String?
   // Whether ainpi.dev/npi/<npi> existed when the request arrived: the
   // weekly digest counts requests that hit the high-risk cohort.
   hadPage          Boolean?  @map("had_page")
   requestedAt      DateTime  @default(now()) @map("requested_at")
+  notBefore        DateTime? @map("not_before")
   appliedAt        DateTime? @map("applied_at")
   confirmCheckedAt DateTime? @map("confirm_checked_at")
   confirmClaimedAt DateTime? @map("confirm_claimed_at")
   confirmedAt      DateTime? @map("confirmed_at")
+  overdueAlertedAt DateTime? @map("overdue_alerted_at")
 
   @@index([status])
   @@map("npi_suppressions")

@@ -11,16 +11,20 @@
  *
  * A repeat request for an NPI already on the list changes nothing and alerts
  * nothing new; callers return the same response either way, so the form does
- * not reveal whether an NPI is listed, held, or has a page.
+ * not reveal whether an NPI is listed, declined, queued, or has a page.
  */
 import { extractNpis, isNpiShape, invalidateSuppressionCache } from '@/lib/suppression';
 
 export type IntakeSource = 'form' | 'email' | 'manual';
-export type IntakeStatus = 'pending' | 'held';
-export type HeldReason = 'organization_npi' | 'nppes_lookup_failed' | 'daily_cap';
+/** pending: in force (at once, or from notBefore when queued); declined: NPI-2. */
+export type IntakeStatus = 'pending' | 'declined';
+export type IntakeBasis = 'nppes' | 'ainpi_files' | 'unverified' | 'manual';
 export type EnumerationType = 'individual' | 'organization' | 'unknown';
 
-/** New requests processed automatically per UTC day before the rest are held. */
+/**
+ * New requests put in force per UTC day. Past it a request is not refused or
+ * held: it is queued (notBefore = the next UTC day) and processed then.
+ */
 export const DEFAULT_DAILY_CAP = 10;
 /** Emailed requests one sender may file per UTC day. */
 export const EMAIL_SENDER_DAILY_CAP = 3;
@@ -34,6 +38,10 @@ export function startOfUtcDay(d: Date): Date {
   return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
 }
 
+export function nextUtcDay(d: Date): Date {
+  return new Date(startOfUtcDay(d).getTime() + 86_400_000);
+}
+
 export interface IntakeDb {
   npiSuppression: {
     findUnique(args: { where: { npi: string } }): Promise<{ id: string; status: string } | null>;
@@ -43,15 +51,16 @@ export interface IntakeDb {
         requesterEmail: string | null;
         source: string;
         status: string;
-        heldReason: string | null;
+        basis: string | null;
         hadPage: boolean | null;
+        notBefore: Date | null;
       };
     }): Promise<unknown>;
     count(args: {
       where: {
         requestedAt?: { gte: Date };
         status?: { not: string } | string;
-        heldReason?: string;
+        notBefore?: null | { not: null };
         requesterEmail?: string;
         source?: string;
       };
@@ -63,17 +72,23 @@ export interface IntakeAlert {
   npi: string;
   source: IntakeSource;
   requesterEmail: string | null;
-  status: IntakeStatus;
-  heldReason: HeldReason | null;
+  basis: IntakeBasis;
+  /** Set when the request was queued past the daily cap. */
+  notBefore: Date | null;
+  /** True on the first queued request of the day: the cap was just reached. */
+  capReached: boolean;
 }
 
 export interface IntakeDeps {
   db: IntakeDb;
+  /** Admin notice for an accepted request. Not sent for declined ones. */
   alert: (a: IntakeAlert) => Promise<void>;
   /** NPPES enumeration type: NPI-1 individual, NPI-2 organization. */
   lookupType: (npi: string) => Promise<EnumerationType>;
   /** Whether ainpi.dev/npi/<npi> exists now (null when unknown). */
   hasPage: (npi: string) => Promise<boolean | null>;
+  /** Automated reply to the requester of an organization NPI. */
+  sendDeclined: (to: string, npi: string) => Promise<void>;
   cap?: number;
   now?: () => Date;
 }
@@ -108,11 +123,20 @@ export function normalizeEmail(raw: string | null | undefined): string | null {
 }
 
 /**
- * Record one request. Only individual (Type 1) NPIs confirmed by the NPPES
- * registry are processed automatically, and at most `cap` a day; anything
- * else is stored as `held` and alerted, with nothing automated for the
- * requester. `force` (the manual script only) skips both checks, for a
- * request a person has already reviewed.
+ * Record one request. Nothing here waits on a person:
+ *
+ *   NPPES says NPI-1                  -> pending, basis nppes
+ *   NPPES says NPI-2                  -> declined, automated reply, no admin alert
+ *   NPPES silent (404, deactivated, API down)
+ *     and the NPI has an AINPI page   -> pending, basis ainpi_files
+ *     and it does not                 -> pending, basis unverified (there is
+ *                                        nothing to remove; the filter and the
+ *                                        confirmation cron handle it as usual)
+ *   past the daily cap                -> pending with notBefore = next UTC day
+ *                                        (one admin alert when the cap is hit)
+ *
+ * `force` (the manual script only) records pending with basis manual and no
+ * lookup or cap.
  */
 export async function recordSuppression(
   npi: string,
@@ -120,7 +144,7 @@ export async function recordSuppression(
   source: IntakeSource,
   deps?: IntakeDeps,
   opts: { force?: boolean } = {},
-): Promise<{ created: boolean; status: string }> {
+): Promise<{ created: boolean; status: string; notBefore?: Date | null }> {
   if (!isNpiShape(npi)) throw new Error('recordSuppression: not a 10-digit NPI');
   const d = deps ?? (await defaultDeps());
   const now = (d.now ?? (() => new Date()))();
@@ -129,48 +153,89 @@ export async function recordSuppression(
   const existing = await d.db.npiSuppression.findUnique({ where: { npi } });
   if (existing) return { created: false, status: existing.status };
 
-  let status: IntakeStatus = 'pending';
-  let heldReason: HeldReason | null = null;
-  let alertThis = true;
+  const hadPage = await d.hasPage(npi).catch(() => null);
 
-  if (!(source === 'manual' && opts.force)) {
-    const type = await d.lookupType(npi).catch((): EnumerationType => 'unknown');
-    if (type === 'organization') {
-      status = 'held';
-      heldReason = 'organization_npi';
-    } else if (type !== 'individual') {
-      status = 'held';
-      heldReason = 'nppes_lookup_failed';
-    } else {
-      const today = startOfUtcDay(now);
-      const auto = await d.db.npiSuppression.count({
-        where: { requestedAt: { gte: today }, status: { not: 'held' } },
-      });
-      if (auto >= (d.cap ?? dailyCap())) {
-        status = 'held';
-        heldReason = 'daily_cap';
-        // One alert when the cap is first reached each day, not one per row.
-        const already = await d.db.npiSuppression.count({
-          where: { requestedAt: { gte: today }, heldReason: 'daily_cap' },
-        });
-        alertThis = already === 0;
-      }
-    }
+  if (source === 'manual' && opts.force) {
+    return create(d, { npi, requesterEmail, source, basis: 'manual', hadPage, notBefore: null, capReached: false });
   }
 
-  const hadPage = await d.hasPage(npi).catch(() => null);
+  const type = await d.lookupType(npi).catch((): EnumerationType => 'unknown');
+  if (type === 'organization') {
+    try {
+      await d.db.npiSuppression.create({
+        data: { npi, requesterEmail, source, status: 'declined', basis: null, hadPage, notBefore: null },
+      });
+    } catch (err) {
+      if ((err as { code?: string })?.code === 'P2002') return { created: false, status: 'declined' };
+      throw err;
+    }
+    if (requesterEmail) await d.sendDeclined(requesterEmail, npi).catch(() => {});
+    return { created: true, status: 'declined' };
+  }
+  const basis: IntakeBasis =
+    type === 'individual' ? 'nppes' : hadPage ? 'ainpi_files' : 'unverified';
+
+  const today = startOfUtcDay(now);
+  const inForceToday = await d.db.npiSuppression.count({
+    where: { requestedAt: { gte: today }, status: { not: 'declined' }, notBefore: null },
+  });
+  let notBefore: Date | null = null;
+  let capReached = false;
+  if (inForceToday >= (d.cap ?? dailyCap())) {
+    notBefore = nextUtcDay(now);
+    const queuedToday = await d.db.npiSuppression.count({
+      where: { requestedAt: { gte: today }, notBefore: { not: null } },
+    });
+    capReached = queuedToday === 0;
+  }
+  return create(d, { npi, requesterEmail, source, basis, hadPage, notBefore, capReached });
+}
+
+async function create(
+  d: IntakeDeps,
+  r: {
+    npi: string;
+    requesterEmail: string | null;
+    source: IntakeSource;
+    basis: IntakeBasis;
+    hadPage: boolean | null;
+    notBefore: Date | null;
+    capReached: boolean;
+  },
+): Promise<{ created: boolean; status: string; notBefore: Date | null }> {
   try {
     await d.db.npiSuppression.create({
-      data: { npi, requesterEmail, source, status, heldReason, hadPage },
+      data: {
+        npi: r.npi,
+        requesterEmail: r.requesterEmail,
+        source: r.source,
+        status: 'pending',
+        basis: r.basis,
+        hadPage: r.hadPage,
+        notBefore: r.notBefore,
+      },
     });
   } catch (err) {
     // Lost a race with a concurrent request for the same NPI: same outcome.
-    if ((err as { code?: string })?.code === 'P2002') return { created: false, status: 'pending' };
+    if ((err as { code?: string })?.code === 'P2002') return { created: false, status: 'pending', notBefore: null };
     throw err;
   }
-  if (status === 'pending') invalidateSuppressionCache();
-  if (alertThis) await d.alert({ npi, source, requesterEmail, status, heldReason }).catch(() => {});
-  return { created: true, status };
+  if (!r.notBefore) invalidateSuppressionCache();
+  // Every accepted request is a notice to the admin, never a to-do. Queued
+  // ones after the first of the day add nothing new, so only the first alerts.
+  if (!r.notBefore || r.capReached) {
+    await d
+      .alert({
+        npi: r.npi,
+        source: r.source,
+        requesterEmail: r.requesterEmail,
+        basis: r.basis,
+        notBefore: r.notBefore,
+        capReached: r.capReached,
+      })
+      .catch(() => {});
+  }
+  return { created: true, status: 'pending', notBefore: r.notBefore };
 }
 
 /** Emailed requests from one sender today (the per-sender cap). */
@@ -213,6 +278,14 @@ export async function npiPageExists(
   return null;
 }
 
+export const DECLINED_REPLY = {
+  subject: 'About your AINPI removal request',
+  text:
+    'The NPI you submitted belongs to an organization. AINPI\'s removal process covers pages ' +
+    'about individual providers. Organization records come from public CMS data and are not ' +
+    'removed. This mailbox is not monitored, and replies are not read.',
+};
+
 async function defaultDeps(): Promise<IntakeDeps> {
   const { prisma } = await import('@/lib/prisma');
   const { sendSuppressionAlert } = await import('@/lib/admin-email');
@@ -221,7 +294,23 @@ async function defaultDeps(): Promise<IntakeDeps> {
     alert: sendSuppressionAlert,
     lookupType: (npi) => nppesEnumerationType(npi),
     hasPage: (npi) => npiPageExists(npi),
+    sendDeclined: sendDeclinedReply,
   };
+}
+
+/** Plain text, from the no-reply address, no Reply-To. */
+export async function sendDeclinedReply(to: string): Promise<void> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return;
+  const { Resend } = await import('resend');
+  const from = process.env.REMOVAL_FROM_ADDRESS || 'AINPI <no-reply@ainpi.dev>';
+  const r = await new Resend(key).emails.send({
+    from,
+    to,
+    subject: DECLINED_REPLY.subject,
+    text: DECLINED_REPLY.text,
+  });
+  if (r.error) console.error('[suppression-intake] declined reply failed:', r.error.message);
 }
 
 export async function defaultIntakeDeps(): Promise<IntakeDeps> {

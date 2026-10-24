@@ -6,8 +6,8 @@
  * workflow has pushed the static-file removal) AND the live site shows the
  * removal: https://ainpi.dev/npi/<npi> returns 404 and the published cohort
  * CSV no longer contains the NPI. An NPI that never had a page passes both
- * checks as soon as it is applied, so it is confirmed too. Held rows are
- * never `applied`, so they never get an email.
+ * checks as soon as it is applied, so it is confirmed too. Declined rows
+ * (organization NPIs) are never `applied`; they got their own reply at intake.
  *
  * Fairness: candidates are taken least-recently-checked first
  * (confirmCheckedAt, nulls first) and every check stamps the row, so a row
@@ -187,4 +187,60 @@ export async function runConfirmations(deps: ConfirmDeps): Promise<ConfirmSummar
     }
   }
   return s;
+}
+
+export const OVERDUE_AFTER_MS = 5 * 86_400_000;
+
+export interface OverdueRow {
+  npi: string;
+  status: string;
+  requestedAt: Date;
+}
+
+export interface OverdueDb {
+  npiSuppression: {
+    findMany(args: {
+      where: {
+        status: { in: string[] };
+        requestedAt: { lt: Date };
+        overdueAlertedAt: null;
+      };
+      select: { npi: true; status: true; requestedAt: true };
+      take: number;
+    }): Promise<OverdueRow[]>;
+    updateMany(args: {
+      where: { npi: { in: string[] }; overdueAlertedAt: null };
+      data: { overdueAlertedAt: Date };
+    }): Promise<{ count: number }>;
+  };
+}
+
+/**
+ * One admin alert for requests more than 5 days old and still not confirmed,
+ * two days before the 7-day promise. Each row alerts once (overdueAlertedAt).
+ * Nothing in normal operation waits on a person; this is the backstop for a
+ * failure that automatic retries have not cleared.
+ */
+export async function runOverdueCheck(deps: {
+  db: OverdueDb;
+  alert: (rows: OverdueRow[]) => Promise<void>;
+  now?: () => Date;
+}): Promise<number> {
+  const now = (deps.now ?? (() => new Date()))();
+  const rows = await deps.db.npiSuppression.findMany({
+    where: {
+      status: { in: ['pending', 'applied'] },
+      requestedAt: { lt: new Date(now.getTime() - OVERDUE_AFTER_MS) },
+      overdueAlertedAt: null,
+    },
+    select: { npi: true, status: true, requestedAt: true },
+    take: 200,
+  });
+  if (rows.length === 0) return 0;
+  await deps.alert(rows);
+  await deps.db.npiSuppression.updateMany({
+    where: { npi: { in: rows.map((r) => r.npi) }, overdueAlertedAt: null },
+    data: { overdueAlertedAt: now },
+  });
+  return rows.length;
 }

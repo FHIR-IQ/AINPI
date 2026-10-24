@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 /**
  * Removal-request form. Posts to /api/v1/privacy/remove, which answers the
@@ -8,7 +9,9 @@ import { useState } from 'react';
  * success message for every accepted request.
  */
 export default function RemovalForm() {
-  const [npi, setNpi] = useState('');
+  // /npi/<npi> pages link here with ?npi= so the NPI is already filled in.
+  const prefill = (useSearchParams()?.get('npi') ?? '').replace(/\D/g, '').slice(0, 10);
+  const [npi, setNpi] = useState(prefill);
   const [email, setEmail] = useState('');
   const [attest, setAttest] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -49,9 +52,16 @@ export default function RemovalForm() {
 
   if (done) {
     return (
-      <p role="status" className="text-sm text-ink border-l-2 border-primary-600 pl-3">
-        {done}
-      </p>
+      <div role="status" className="text-sm text-ink border-l-2 border-primary-600 pl-3 space-y-2">
+        <p className="font-medium">{done}</p>
+        <p>What happens next, with no further step from you:</p>
+        <ul className="list-disc pl-5 space-y-1">
+          <li>Search on ainpi.dev stops showing the NPI within minutes.</li>
+          <li>The page and the NPI&apos;s rows in our files are removed within 6 hours.</li>
+          <li>We email you once the removal is live, and in any case within 7 days.</li>
+          <li>If the NPI belongs to an organization rather than a person, we email you to say so instead.</li>
+        </ul>
+      </div>
     );
   }
 

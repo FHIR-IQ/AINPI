@@ -7,6 +7,9 @@
  * the requester the automated completion email and marks the row
  * `confirmed`. See src/lib/suppression-confirm.ts.
  *
+ * It also sends one admin alert for any request more than 5 days old and not
+ * yet confirmed (once per request), two days ahead of the 7-day promise.
+ *
  * Sent from REMOVAL_FROM_ADDRESS (default "AINPI <no-reply@ainpi.dev>") with
  * no Reply-To; the body says replies are not read. At most
  * DEFAULT_CONFIRM_CAP per run; the rest wait for the next day.
@@ -18,7 +21,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-import { runConfirmations, type ConfirmDb } from '@/lib/suppression-confirm';
+import {
+  runConfirmations,
+  runOverdueCheck,
+  type ConfirmDb,
+  type OverdueDb,
+} from '@/lib/suppression-confirm';
+import { sendSuppressionOverdueAlert } from '@/lib/admin-email';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -33,8 +42,20 @@ export async function GET(req: NextRequest) {
   if (!authorize(req)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
+  // The overdue backstop runs first and regardless of Resend, so a missing
+  // mail key cannot also silence the alert about requests going unconfirmed.
+  let overdue = 0;
+  try {
+    overdue = await runOverdueCheck({
+      db: prisma as unknown as OverdueDb,
+      alert: sendSuppressionOverdueAlert,
+    });
+  } catch (err) {
+    console.error('[suppression-confirm] overdue check failed:', err instanceof Error ? err.message : err);
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return NextResponse.json({ ok: true, skipped: 'RESEND_API_KEY unset' });
+  if (!apiKey) return NextResponse.json({ ok: true, overdue, skipped: 'RESEND_API_KEY unset' });
   const resend = new Resend(apiKey);
   const from = process.env.REMOVAL_FROM_ADDRESS || 'AINPI <no-reply@ainpi.dev>';
 
@@ -48,7 +69,7 @@ export async function GET(req: NextRequest) {
         return sent.error ? { ok: false, error: sent.error.message } : { ok: true };
       },
     });
-    return NextResponse.json({ ok: true, ...summary });
+    return NextResponse.json({ ok: true, overdue, ...summary });
   } catch (err) {
     // Most likely the table does not exist yet (prisma/sql/npi_suppressions.sql not run).
     console.error('[suppression-confirm]', err instanceof Error ? err.message : err);

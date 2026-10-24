@@ -103,6 +103,13 @@ export default async function NpiIndexPage() {
             </a>
             .
           </p>
+          <p className="mt-3">
+            Are you one of these providers? You can{' '}
+            <Link href="/privacy/remove" className="underline">
+              request removal of your page
+            </Link>
+            ; it is processed automatically.
+          </p>
         </section>
 
         <InlineSubscribe

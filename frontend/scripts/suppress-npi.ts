@@ -13,10 +13,10 @@
  * Required env (from frontend/.env.local, copied to .env): POSTGRES_PRISMA_URL,
  * and RESEND_API_KEY for the admin alert.
  *
- * Like the other paths, it checks the NPPES registry and the daily cap, and
- * records anything that is not a confirmed individual NPI as `held`. Pass
- * --force to skip both, for a request a person has already reviewed (it is
- * then recorded as `pending`).
+ * Like the other paths, it checks the NPPES registry and the daily cap: an
+ * organization NPI is declined with the automated reply, and past the cap the
+ * request is queued to the next UTC day. --force skips both and records it
+ * as pending at once (basis manual).
  *
  * Usage from frontend/:
  *   npx tsx scripts/suppress-npi.ts <npi> <requester-email>                     # dry run
@@ -30,6 +30,7 @@ import {
   npiPageExists,
   nppesEnumerationType,
   recordSuppression,
+  sendDeclinedReply,
   type IntakeDb,
 } from '../src/lib/suppression-intake';
 import { sendSuppressionAlert } from '../src/lib/admin-email';
@@ -75,11 +76,12 @@ async function main() {
         alert: sendSuppressionAlert,
         lookupType: (n) => nppesEnumerationType(n),
         hasPage: (n) => npiPageExists(n),
+        sendDeclined: sendDeclinedReply,
       },
       { force },
     );
     console.log(
-      created ? `Recorded (status ${status}).` : `Already on the list (status ${status}); nothing changed.`,
+      created ? `Recorded (status ${status}).` : `Already recorded (status ${status}); nothing changed.`,
     );
   } finally {
     await prisma.$disconnect();

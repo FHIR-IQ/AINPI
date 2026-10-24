@@ -74,11 +74,37 @@ export function parseSuppressedNpis(raw: string | undefined | null): Set<string>
 
 export type SuppressionSource = () => Promise<string[]>;
 
-/** Reads every NPI in the table except rows held for review. */
+/** Statuses whose NPI is suppressed (declined requests are not). */
+export const ACTIVE_STATUSES = ['pending', 'applied', 'confirmed'] as const;
+
+/**
+ * Whether a row is in force at `now`: an accepted status, and not queued for
+ * a later day. The RLS policies in prisma/sql/npi_suppressions.sql apply the
+ * same rule to the workflow roles.
+ */
+export function isActiveSuppression(
+  row: { status: string; notBefore: Date | null },
+  now: Date = new Date(),
+): boolean {
+  return (
+    (ACTIVE_STATUSES as readonly string[]).includes(row.status) &&
+    (row.notBefore === null || row.notBefore.getTime() <= now.getTime())
+  );
+}
+
+/** Prisma filter for isActiveSuppression(). */
+export function activeSuppressionWhere(now: Date = new Date()) {
+  return {
+    status: { in: [...ACTIVE_STATUSES] },
+    OR: [{ notBefore: null }, { notBefore: { lte: now } }],
+  };
+}
+
+/** Reads every NPI whose removal is in force now. */
 export const prismaSuppressionSource: SuppressionSource = async () => {
   const { prisma } = await import('@/lib/prisma');
   const rows = await prisma.npiSuppression.findMany({
-    where: { status: { not: 'held' } },
+    where: activeSuppressionWhere(),
     select: { npi: true },
   });
   return rows.map((r) => r.npi);

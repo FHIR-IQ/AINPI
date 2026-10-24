@@ -13,8 +13,10 @@
 --                               UPDATE (status, applied_at). suppression-apply.yml.
 --   * anon / authenticated / service_role (PostgREST): no privileges, and
 --     RLS has no policy for them, so the REST API returns nothing.
---   * Rows with status 'held' are invisible to both restricted roles, so a
---     held request is not filtered until a person sets it to 'pending'.
+--   * Both restricted roles see only ACTIVE rows: status pending, applied or
+--     confirmed, and not_before empty or past (a request queued over the
+--     daily cap becomes visible at the next UTC day). Declined requests
+--     (organization NPIs) are invisible to them.
 --
 -- Before running: replace both REPLACE_..._PASSWORD values with long random
 -- passwords (e.g. `openssl rand -base64 32`), and do not save the edited
@@ -30,17 +32,20 @@ create table if not exists public.npi_suppressions (
   requester_email    text,
   source             text         not null,
   status             text         not null default 'pending',
-  held_reason        text,
+  basis              text,
   had_page           boolean,
   requested_at       timestamp(3) not null default current_timestamp,
+  not_before         timestamp(3),
   applied_at         timestamp(3),
   confirm_checked_at timestamp(3),
   confirm_claimed_at timestamp(3),
   confirmed_at       timestamp(3),
+  overdue_alerted_at timestamp(3),
   constraint npi_suppressions_pkey primary key (id),
   constraint npi_suppressions_npi_format check (npi ~ '^[0-9]{10}$'),
   constraint npi_suppressions_source_check check (source in ('form', 'email', 'manual')),
-  constraint npi_suppressions_status_check check (status in ('pending', 'applied', 'confirmed', 'held'))
+  constraint npi_suppressions_status_check check (status in ('pending', 'applied', 'confirmed', 'declined')),
+  constraint npi_suppressions_basis_check check (basis is null or basis in ('nppes', 'ainpi_files', 'unverified', 'manual'))
 );
 create unique index if not exists npi_suppressions_npi_key on public.npi_suppressions (npi);
 create index if not exists npi_suppressions_status_idx on public.npi_suppressions (status);
@@ -71,18 +76,21 @@ grant update (status, applied_at) on public.npi_suppressions to ainpi_suppressio
 drop policy if exists npi_suppressions_reader_select on public.npi_suppressions;
 create policy npi_suppressions_reader_select on public.npi_suppressions
   for select to ainpi_suppression_reader
-  using (status <> 'held');
+  using (status in ('pending', 'applied', 'confirmed')
+         and (not_before is null or not_before <= (now() at time zone 'utc')));
 
 drop policy if exists npi_suppressions_apply_select on public.npi_suppressions;
 create policy npi_suppressions_apply_select on public.npi_suppressions
   for select to ainpi_suppression_apply
-  using (status <> 'held');
+  using (status in ('pending', 'applied', 'confirmed')
+         and (not_before is null or not_before <= (now() at time zone 'utc')));
 
--- The apply role can only move pending -> applied.
+-- The apply role can only move an active pending row to applied.
 drop policy if exists npi_suppressions_apply_update on public.npi_suppressions;
 create policy npi_suppressions_apply_update on public.npi_suppressions
   for update to ainpi_suppression_apply
-  using (status = 'pending')
+  using (status = 'pending'
+         and (not_before is null or not_before <= (now() at time zone 'utc')))
   with check (status = 'applied');
 
 commit;
