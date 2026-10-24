@@ -43,11 +43,22 @@ import {
   sendSuppressionWebhookUnconfiguredAlert,
 } from '@/lib/admin-email';
 
+// Fallback de-duplication when the bucket table is unreachable: one alert
+// per sender per UTC day per warm instance, instead of one per request.
+const alertedWhileDbDown = new Set<string>();
+
 /** 200, nothing recorded, one admin alert per sender per UTC day. */
 async function overflow(sender: string, reason: string) {
   const day = Math.floor(Date.now() / 86_400_000);
-  const n = await bump(`remove:mail-alert:${sender}:d:${day}`, 1, 172_800_000);
-  if (n === null || n === 1) void sendRemovalSenderOverflowAlert(sender, reason);
+  const key = `remove:mail-alert:${sender}:d:${day}`;
+  const n = await bump(key, 1, 172_800_000);
+  let alert = n === 1;
+  if (n === null && !alertedWhileDbDown.has(key)) {
+    if (alertedWhileDbDown.size > 1000) alertedWhileDbDown.clear();
+    alertedWhileDbDown.add(key);
+    alert = true;
+  }
+  if (alert) void sendRemovalSenderOverflowAlert(sender, reason);
   return NextResponse.json({ ok: true, ignored: 'over limit' });
 }
 

@@ -149,6 +149,8 @@ def test_check_counts_flags_a_drop_below_head(tmp_path, monkeypatch):
     assert sp.check_counts() == []
     payload.write_text(json.dumps({"suppressed_rows": 1}, indent=2) + "\n")
     assert len(sp.check_counts()) == 1
+    # Informational only: a lower count after regeneration is normal.
+    assert sp.main(["--check-counts"]) == 0
 
 def test_json_scrub_drops_records_and_counts():
     doc = {

@@ -67,9 +67,7 @@ jobs:
 
       - name: Guard - no suppressed NPI left in published files
         id: guard
-        run: |
-          python analysis/suppression.py --check --report-file "$RUNNER_TEMP/guard.md"
-          python analysis/suppression.py --check-counts
+        run: python analysis/suppression.py --check --report-file "$RUNNER_TEMP/guard.md"
 
       - name: Report guard failures and warnings in an issue
         # Paths and counts only. One open issue, appended to on later runs.

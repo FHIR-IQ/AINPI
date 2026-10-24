@@ -19,7 +19,9 @@ import { enforceRateLimit, recordSpend, NON_WAREHOUSE_SHAPES } from '@/lib/rate-
 import {
   REMOVAL_PER_DAY,
   REMOVAL_PER_MINUTE,
+  checkRemovalCeiling,
   checkRemovalLimit,
+  checkRemovalSubject,
   type Bump,
 } from '@/lib/removal-limit';
 
@@ -74,6 +76,16 @@ describe('removal limiter', () => {
       }
     }
     expect(refused).toBe(true);
+  });
+
+  it('charges the per-IP bucket, not the global ceiling, before validation', async () => {
+    const { m, bump } = store();
+    const deps = { bump, alertCeiling: async () => {}, ceiling: 1, now: () => 1_800_000_000_000 };
+    // Ten malformed posts: per-IP only, so a valid request still gets through.
+    for (let i = 0; i < 10; i++) await checkRemovalSubject(`ip:10.1.0.${i}`, deps);
+    expect([...m.keys()].some((k) => k.startsWith('remove:global'))).toBe(false);
+    expect((await checkRemovalCeiling(deps)).ok).toBe(true);
+    expect((await checkRemovalCeiling(deps)).ok).toBe(false);
   });
 
   it('applies a global daily ceiling with exactly one alert', async () => {

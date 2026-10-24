@@ -5,9 +5,12 @@ frontend/public/api/v1.
 A provider can ask for their individual page and per-NPI rows to be removed
 (/privacy/remove, docs/privacy.md). This module is the one place the
 analysis side learns which NPIs are suppressed and removes them from the
-published files. Aggregate numbers are not touched: a suppressed record still
-counts toward every total, and a payload whose rows were removed carries a
-count-only `suppressed_rows` field so its row count reconciles with its totals.
+published files. Applying a request does not change any published aggregate:
+a suppressed record still counts toward every total, and a payload whose rows
+were removed carries a count-only `suppressed_rows` field so its row count
+reconciles with its totals. If a later regeneration reads a filtered file (for
+example a vendor file with a row removed), a few derived counts can shift by a
+handful of practitioners.
 
 Scope is individual (Type 1) NPIs: intake processes only NPPES `NPI-1`
 records automatically and holds everything else. A suppressed NPI is
@@ -51,9 +54,11 @@ Modes:
       and passes.
 
   python3 analysis/suppression.py --check-counts
-      Exit 1 if any payload's `suppressed_rows` is below the value committed
-      at HEAD (or the payload disappeared). Weekly refresh runs this after
-      regenerating, so a regeneration cannot quietly republish a removed row.
+      Optional, manual, informational. Lists payloads whose `suppressed_rows`
+      is below the value committed at HEAD. A lower value after regeneration
+      is normal (a suppressed NPI can leave the top-10,000 cohort through LEIE
+      reinstatement, SAM churn or a tie at the boundary), so no workflow runs
+      it; --check is what proves a removed row did not come back.
 
   python3 analysis/suppression.py --mark-applied [--before ISO_TIME]
       Mark pending rows (requested at or before ISO_TIME) as applied, through
@@ -66,7 +71,8 @@ Modes:
 Every removal also keeps the unfiltered file under analysis/data/unsuppressed/
 (gitignored), keyed by a hash of the filtered public file. Scripts that read a
 published file as an input to another computation call `input_path()` and get
-the unfiltered copy while it still matches, so derived aggregates do not move.
+the unfiltered copy while it still matches, so their derived counts do not
+shift; a script that reads a filtered file without it can differ by a handful.
 """
 from __future__ import annotations
 
@@ -671,13 +677,12 @@ def main(argv: Sequence[str] | None = None) -> int:
     if args.check_counts:
         problems = check_counts()
         for p in problems:
-            print(f"::error::{p}")
+            print(f"  {p}")
         if problems:
-            print("A regeneration lowered suppressed_rows: a removed row may be back. "
-                  "Run --apply and check the list is configured. If the drop is genuine "
-                  "(the record left that file), commit it by hand after review.")
-            return 1
-        print("OK: no payload's suppressed_rows fell below its committed value.")
+            print("Informational: a lower suppressed_rows is normal when a removed record "
+                  "left that file. --check is what proves no removed row came back.")
+        else:
+            print("No payload's suppressed_rows fell below its committed value.")
         return 0
 
     if args.check and not db_url(os.environ) and not os.environ.get(ENV_VAR):

@@ -11,7 +11,12 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { clientIp } from '@/lib/rate-limit';
-import { checkRemovalLimit, defaultRemovalLimitDeps } from '@/lib/removal-limit';
+import {
+  checkRemovalCeiling,
+  checkRemovalSubject,
+  defaultRemovalLimitDeps,
+  type RemovalLimitResult,
+} from '@/lib/removal-limit';
 import { isValidNpi } from '@/lib/suppression';
 import { normalizeEmail, recordSuppression } from '@/lib/suppression-intake';
 
@@ -25,13 +30,16 @@ const REMOVAL_ACCEPTED_MESSAGE =
 
 export async function POST(req: NextRequest) {
   // Its own limiter, apart from the BigQuery quota (src/lib/removal-limit.ts).
-  const rl = await checkRemovalLimit(`ip:${clientIp(req)}`, await defaultRemovalLimitDeps());
-  if (!rl.ok) {
-    return NextResponse.json(
+  // The per-IP bucket is charged for every post; the global ceiling only
+  // after validation, so malformed posts cannot use it up.
+  const limitDeps = await defaultRemovalLimitDeps();
+  const tooMany = (rl: Extract<RemovalLimitResult, { ok: false }>) =>
+    NextResponse.json(
       { error: 'Too many removal requests right now. Please try again later.' },
       { status: 429, headers: { 'retry-after': String(rl.retryAfterSec), 'cache-control': 'no-store' } },
     );
-  }
+  const perIp = await checkRemovalSubject(`ip:${clientIp(req)}`, limitDeps);
+  if (!perIp.ok) return tooMany(perIp);
 
   let body: { npi?: unknown; email?: unknown; attest?: unknown };
   try {
@@ -57,6 +65,9 @@ export async function POST(req: NextRequest) {
       { status: 400 },
     );
   }
+
+  const ceiling = await checkRemovalCeiling(limitDeps);
+  if (!ceiling.ok) return tooMany(ceiling);
 
   try {
     await recordSuppression(npi, email, 'form');

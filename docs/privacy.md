@@ -88,9 +88,11 @@ Removal covers, on ainpi.dev:
 - the NPI's rows in our downloadable files and in the `/api/v1/` files;
 - AINPI's search results, including the AI-agent (MCP) tools.
 
-Aggregate counts do not change. A removed record still counts toward every total,
-and a file that lost rows says how many in a `suppressed_rows` field, without
-saying which.
+Applying a request does not change published aggregate counts. A removed record
+still counts toward every total, and a file that lost rows says how many in a
+`suppressed_rows` field, without saying which. When the data is later
+regenerated from files that had rows removed, a few derived counts can shift by
+a handful of providers.
 
 Removal covers ainpi.dev pages, files and search only, not the CMS source data
 or other services. The site's source and data files are published as a public

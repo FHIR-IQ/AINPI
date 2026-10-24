@@ -11,6 +11,12 @@
  *   refuses only removal requests, with one admin alert the moment it is
  *   reached (the counter is atomic, so exactly one request sees ceiling + 1).
  *
+ * Two calls, in this order: checkRemovalSubject() first (a malformed request
+ * still counts against its own IP or sender), then validate the request, then
+ * checkRemovalCeiling() only for a valid one, so junk cannot use up the
+ * global ceiling. checkRemovalLimit() runs both, for callers that have
+ * already validated.
+ *
  * Counters live in the existing rate_limit_buckets table. If it cannot be
  * reached the request is allowed, as elsewhere: intake itself caps what is
  * processed automatically (SUPPRESSION_DAILY_CAP).
@@ -38,14 +44,13 @@ export type RemovalLimitResult =
   | { ok: true }
   | { ok: false; reason: 'per-minute' | 'per-day' | 'global-ceiling'; retryAfterSec: number };
 
-export async function checkRemovalLimit(
+export async function checkRemovalSubject(
   subject: string,
   deps: RemovalLimitDeps,
 ): Promise<RemovalLimitResult> {
   const now = (deps.now ?? Date.now)();
   const minute = Math.floor(now / 60_000);
   const day = Math.floor(now / 86_400_000);
-  const ceiling = deps.ceiling ?? removalDailyCeiling();
   const key = `remove:${subject}`;
 
   const m = await deps.bump(`${key}:m:${minute}`, 1, 120_000);
@@ -56,12 +61,29 @@ export async function checkRemovalLimit(
   if (d !== null && d > REMOVAL_PER_DAY) {
     return { ok: false, reason: 'per-day', retryAfterSec: 3600 };
   }
+  return { ok: true };
+}
+
+/** The global daily ceiling. Call only for a request that passed validation. */
+export async function checkRemovalCeiling(deps: RemovalLimitDeps): Promise<RemovalLimitResult> {
+  const day = Math.floor((deps.now ?? Date.now)() / 86_400_000);
+  const ceiling = deps.ceiling ?? removalDailyCeiling();
   const g = await deps.bump(`remove:global:d:${day}`, 1, 172_800_000);
   if (g !== null && g > ceiling) {
     if (g === ceiling + 1) await deps.alertCeiling(ceiling).catch(() => {});
     return { ok: false, reason: 'global-ceiling', retryAfterSec: 3600 };
   }
   return { ok: true };
+}
+
+/** Both checks, for a caller that has already validated the request. */
+export async function checkRemovalLimit(
+  subject: string,
+  deps: RemovalLimitDeps,
+): Promise<RemovalLimitResult> {
+  const s = await checkRemovalSubject(subject, deps);
+  if (!s.ok) return s;
+  return checkRemovalCeiling(deps);
 }
 
 /** Production wiring: the shared bucket table, the admin alert. */

@@ -240,7 +240,6 @@ jobs:
         run: |
           python analysis/suppression.py --apply
           python analysis/suppression.py --check
-          python analysis/suppression.py --check-counts
 
       - name: Detect changes
         id: diff
