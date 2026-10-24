@@ -345,38 +345,67 @@ export interface SuppressionAlertArgs {
   npi: string;
   source: 'form' | 'email' | 'manual';
   requesterEmail: string | null;
+  status: 'pending' | 'held';
+  heldReason: 'organization_npi' | 'nppes_lookup_failed' | 'daily_cap' | null;
 }
 
+const HELD_TEXT: Record<string, string> = {
+  organization_npi: 'NPPES lists this NPI as an organization (NPI-2). Removal covers individuals only.',
+  nppes_lookup_failed: 'The NPPES registry lookup did not confirm an individual (NPI-1) record.',
+  daily_cap:
+    'The daily cap on automatically processed requests was reached. This is the first held ' +
+    'request today; later ones today are held without another alert.',
+};
+
 /**
- * Fires once per new removal request (src/lib/suppression-intake.ts). The
- * request is already recorded and live search already filters it; this is
- * notice, not a to-do. Admin mailbox only: the NPI never goes anywhere public.
+ * Fires once per new removal request (src/lib/suppression-intake.ts). A
+ * pending request is already recorded and filtered from search: notice, not a
+ * to-do. A held request is not filtered and the requester hears nothing until
+ * a person sets its status to 'pending' (or records it with
+ * scripts/suppress-npi.ts --force). Admin mailbox only.
  */
 export async function sendSuppressionAlert(args: SuppressionAlertArgs): Promise<void> {
-  const { npi, source, requesterEmail } = args;
-  const subject = `[AINPI admin] NPI removal request (${source})`;
+  const { npi, source, requesterEmail, status, heldReason } = args;
+  const held = status === 'held';
+  const subject = held
+    ? `[AINPI admin] NPI removal request HELD (${heldReason})`
+    : `[AINPI admin] NPI removal request (${source})`;
   const lines = [
-    'New NPI removal request on AINPI. Recorded; search already filters it.',
+    held
+      ? 'A removal request was recorded but HELD for review. Nothing is filtered and the requester gets no automated email.'
+      : 'New NPI removal request on AINPI. Recorded; search already filters it.',
+    held ? HELD_TEXT[heldReason ?? ''] ?? '' : '',
     '',
     `NPI:       ${npi}`,
     `Source:    ${source}`,
     `Requester: ${requesterEmail ?? '(none given)'}`,
+    `Status:    ${status}${heldReason ? ` (${heldReason})` : ''}`,
     '',
-    'Static files are removed by the next suppression-apply workflow run (every 6 hours);',
-    'the requester is emailed automatically once the page returns 404.',
-  ];
-  const html = `
-    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;color:#1f2937;line-height:1.5;">
-      <h1 style="margin:0 0 12px 0;font-size:18px;">NPI removal request</h1>
-      <table role="presentation" style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:18px;">
-        <tr><td style="padding:6px 0;color:#6b7280;">NPI</td><td style="padding:6px 0;text-align:right;font-family:ui-monospace,Menlo,monospace;">${esc(npi)}</td></tr>
-        <tr><td style="padding:6px 0;color:#6b7280;">Source</td><td style="padding:6px 0;text-align:right;">${esc(source)}</td></tr>
-        <tr><td style="padding:6px 0;color:#6b7280;">Requester</td><td style="padding:6px 0;text-align:right;">${esc(requesterEmail ?? '(none given)')}</td></tr>
-      </table>
-      <p style="margin:0;font-size:12px;color:#6b7280;">Recorded; search already filters it. Static files follow on the next suppression-apply run, and the requester is emailed automatically once the page returns 404.</p>
-    </div>
-  `.trim();
-  await sendOnce({ subject, text: lines.join('\n'), html, tag: 'suppression' });
+    held
+      ? "To process it: set status = 'pending' on its npi_suppressions row in the Supabase table editor."
+      : 'Static files are removed by the next suppression-apply run (every 6 hours); the requester is emailed automatically once the page returns 404.',
+  ].filter((l, i) => l !== '' || i > 1);
+  const text = lines.join('\n');
+  await sendOnce({
+    subject,
+    text,
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:pre-wrap;">${esc(text)}</pre>`,
+    tag: 'suppression',
+  });
+}
+
+/** The removal inbox webhook was called but no signing secret is configured. */
+export async function sendSuppressionWebhookUnconfiguredAlert(): Promise<void> {
+  const text =
+    'An email reached /api/v1/privacy/remove-inbound, but neither RESEND_REMOVAL_WEBHOOK_SECRET ' +
+    'nor RESEND_WEBHOOK_SECRET is set in Vercel, so it could not be verified and nothing was ' +
+    'recorded. Resend will retry. Add the secret: vercel env add RESEND_REMOVAL_WEBHOOK_SECRET production';
+  await sendOnce({
+    subject: '[AINPI admin] Removal inbox webhook is not configured',
+    text,
+    html: `<p>${esc(text)}</p>`,
+    tag: 'suppression-webhook',
+  });
 }
 
 /** An email reached the removal inbox but named no valid NPI. */

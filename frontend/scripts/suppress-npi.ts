@@ -13,18 +13,31 @@
  * Required env (from frontend/.env.local, copied to .env): POSTGRES_PRISMA_URL,
  * and RESEND_API_KEY for the admin alert.
  *
+ * Like the other paths, it checks the NPPES registry and the daily cap, and
+ * records anything that is not a confirmed individual NPI as `held`. Pass
+ * --force to skip both, for a request a person has already reviewed (it is
+ * then recorded as `pending`).
+ *
  * Usage from frontend/:
- *   npx tsx scripts/suppress-npi.ts <npi> <requester-email>             # dry run
- *   npx tsx scripts/suppress-npi.ts <npi> <requester-email> --confirm   # write
+ *   npx tsx scripts/suppress-npi.ts <npi> <requester-email>                     # dry run
+ *   npx tsx scripts/suppress-npi.ts <npi> <requester-email> --confirm           # write
+ *   npx tsx scripts/suppress-npi.ts <npi> <requester-email> --confirm --force   # reviewed: skip checks
  */
 import { PrismaClient } from '@prisma/client';
 import { isNpiShape, isValidNpi } from '../src/lib/suppression';
-import { normalizeEmail, recordSuppression, type IntakeDb } from '../src/lib/suppression-intake';
+import {
+  normalizeEmail,
+  npiPageExists,
+  nppesEnumerationType,
+  recordSuppression,
+  type IntakeDb,
+} from '../src/lib/suppression-intake';
 import { sendSuppressionAlert } from '../src/lib/admin-email';
 
 async function main() {
   const argv = process.argv.slice(2);
   const confirm = argv.includes('--confirm');
+  const force = argv.includes('--force');
   const [npi, email] = argv.filter((a) => !a.startsWith('--'));
 
   if (!isNpiShape(npi)) {
@@ -50,11 +63,21 @@ async function main() {
 
   const prisma = new PrismaClient();
   try {
-    const { created } = await recordSuppression(npi, requester, 'manual', {
-      db: prisma as unknown as IntakeDb,
-      alert: sendSuppressionAlert,
-    });
-    console.log(created ? 'Recorded (status pending).' : 'Already on the list; nothing changed.');
+    const { created, status } = await recordSuppression(
+      npi,
+      requester,
+      'manual',
+      {
+        db: prisma as unknown as IntakeDb,
+        alert: sendSuppressionAlert,
+        lookupType: (n) => nppesEnumerationType(n),
+        hasPage: (n) => npiPageExists(n),
+      },
+      { force },
+    );
+    console.log(
+      created ? `Recorded (status ${status}).` : `Already on the list (status ${status}); nothing changed.`,
+    );
   } finally {
     await prisma.$disconnect();
   }

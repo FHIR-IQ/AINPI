@@ -75,10 +75,12 @@ Contact: [gene@fhiriq.com](mailto:gene@fhiriq.com).
 
 ## Removal requests
 
-If you are the provider identified by an NPI, or authorized to act for them, you
-can ask for that NPI to be removed from ainpi.dev using the form at
+If you are the provider identified by an individual NPI, or authorized to act
+for them, you can ask for that NPI to be removed from ainpi.dev using the form at
 [/privacy/remove](/privacy/remove). Requests are processed automatically, within
-7 days, and stay in effect for every later data release.
+7 days, and stay in effect for every later data release. A request that we cannot
+match to an individual provider in the NPPES registry, or that arrives on a day
+with an unusual number of requests, is reviewed by a person first.
 
 Removal covers, on ainpi.dev:
 
@@ -91,7 +93,9 @@ and a file that lost rows says how many in a `suppressed_rows` field, without
 saying which.
 
 Removal covers ainpi.dev pages, files and search only, not the CMS source data
-or other services.
+or other services. The site's source and data files are published as a public
+project on GitHub, and earlier versions of those files remain in the project's
+history.
 
 When removal is complete, we send one automated email to the address you gave.
 It comes from an unmonitored address and replies are not read. Search engines

@@ -5,17 +5,17 @@ name: Apply NPI removal requests
 # from every per-NPI file under frontend/public/api/v1, commits straight to
 # main the way weekly-refresh does, and marks those rows applied. The daily
 # Vercel cron /api/v1/admin/suppression-confirm then checks the live site and
-# emails each requester. See the "NPI removal requests" runbook in CLAUDE.md.
+# emails each requester. See "NPI removal requests" in CLAUDE.md.
 #
-# The list never enters git, and this workflow prints no NPI: logs carry file
-# paths and counts only.
+# The list never enters git, and this workflow prints no NPI: logs, the
+# commit and any issue carry file paths and counts only.
 #
 # Required secret:
-#   SUPPRESSION_DATABASE_URL  Postgres URL for a role that can SELECT and
-#                             UPDATE npi_suppressions (direct connection,
-#                             port 5432). Without it the run is a no-op.
-# Optional secret:
-#   SUPPRESSED_NPIS           extra NPIs merged with the table.
+#   SUPPRESSION_APPLY_URL  ainpi_suppression_apply on the Supabase session
+#                          pooler: postgresql://ainpi_suppression_apply.hspqvcoinujtfodreqaf:<pw>@aws-1-us-east-2.pooler.supabase.com:5432/postgres
+#                          SELECT (npi, status, requested_at), UPDATE (status,
+#                          applied_at), RLS-limited (frontend/prisma/sql/npi_suppressions.sql).
+# Also read: SUPPRESSED_NPIS, merged with the table as a second layer.
 
 on:
   schedule:
@@ -24,9 +24,11 @@ on:
 
 permissions:
   contents: write
+  issues: write   # only to report a guard failure or a warning
 
+# Shared with weekly-refresh.yml: both commit to frontend/public/api/v1.
 concurrency:
-  group: suppression-apply
+  group: published-data
   cancel-in-progress: false
 
 jobs:
@@ -35,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      SUPPRESSION_DATABASE_URL: ${{ secrets.SUPPRESSION_DATABASE_URL }}
+      SUPPRESSION_APPLY_URL: ${{ secrets.SUPPRESSION_APPLY_URL }}
       SUPPRESSED_NPIS: ${{ secrets.SUPPRESSED_NPIS }}
     steps:
       - uses: actions/checkout@v6
@@ -43,6 +45,13 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+
+      - name: Require the removal list
+        run: |
+          if [ -z "$SUPPRESSION_APPLY_URL" ]; then
+            echo "::error::Set the SUPPRESSION_APPLY_URL secret."
+            exit 1
+          fi
 
       - name: Install deps
         run: pip install "psycopg[binary]>=3.1,<4"
@@ -57,7 +66,25 @@ jobs:
         run: python analysis/suppression.py --apply
 
       - name: Guard - no suppressed NPI left in published files
-        run: python analysis/suppression.py --check
+        id: guard
+        run: python analysis/suppression.py --check --report-file "$RUNNER_TEMP/guard.md"
+
+      - name: Report guard failures and warnings in an issue
+        # Paths and counts only. One open issue, appended to on later runs.
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          [ -s "$RUNNER_TEMP/guard.md" ] || exit 0  # guard never ran, or wrote nothing
+          grep -q "occurrence" "$RUNNER_TEMP/guard.md" || exit 0
+          TITLE="Suppression guard: a removed NPI is still present in a file"
+          NUM=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          BODY="Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"$'\n\n'"$(cat "$RUNNER_TEMP/guard.md")"
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --body "$BODY"
+          else
+            gh issue create --title "$TITLE" --body "$BODY"
+          fi
 
       - name: Commit + push directly to main
         run: |
@@ -69,7 +96,7 @@ jobs:
           git config user.name "ainpi-weekly-refresh"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add frontend/public/api/v1/
-          git commit -m "Apply individual NPI removal requests to published files"
+          git commit -m "Update published data files"
           for i in 1 2 3; do
             git pull --rebase origin main && git push origin main && exit 0
             sleep 15

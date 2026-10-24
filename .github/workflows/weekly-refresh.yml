@@ -12,11 +12,14 @@ name: Weekly refresh
 #   GCP_SERVICE_ACCOUNT_KEY  — JSON service account with BigQuery jobUser +
 #                              dataViewer on the ndh dataset AND dataViewer
 #                              on bigquery-public-data.nppes
-#   SUPPRESSION_DATABASE_URL — read access to the npi_suppressions table
-#                              (individual NPI removal requests). Optional
-#                              SUPPRESSED_NPIS is merged with it. Set it: a
-#                              refresh without it republishes removed rows,
-#                              and the guard step can only catch what it sees.
+#   SUPPRESSION_READER_URL   — ainpi_suppression_reader on the Supabase session
+#                              pooler (aws-1-us-east-2.pooler.supabase.com:5432,
+#                              user ainpi_suppression_reader.hspqvcoinujtfodreqaf):
+#                              SELECT (npi) on npi_suppressions only.
+#   SUPPRESSED_NPIS          — the same list as a second layer. The run fails
+#                              when neither is set, and analysis/suppression.py
+#                              fails when committed files record removals the
+#                              list cannot account for.
 
 on:
   schedule:
@@ -27,8 +30,9 @@ permissions:
   contents: write
   issues: write   # only for the measure-series failure issue below
 
+# Shared with suppression-apply.yml: both commit to frontend/public/api/v1.
 concurrency:
-  group: weekly-refresh
+  group: published-data
   cancel-in-progress: false
 
 jobs:
@@ -39,7 +43,7 @@ jobs:
     env:
       # Individual NPI removal requests (analysis/suppression.py). Every
       # generator and the apply/guard steps below read these.
-      SUPPRESSION_DATABASE_URL: ${{ secrets.SUPPRESSION_DATABASE_URL }}
+      SUPPRESSION_READER_URL: ${{ secrets.SUPPRESSION_READER_URL }}
       SUPPRESSED_NPIS: ${{ secrets.SUPPRESSED_NPIS }}
     steps:
       - uses: actions/checkout@v6
@@ -54,8 +58,8 @@ jobs:
         # republish rows removed on request, and the apply/guard steps would
         # pass with nothing to check. Fail closed instead.
         run: |
-          if [ -z "$SUPPRESSION_DATABASE_URL" ] && [ -z "$SUPPRESSED_NPIS" ]; then
-            echo "::error::Set the SUPPRESSION_DATABASE_URL secret (or SUPPRESSED_NPIS) before refreshing."
+          if [ -z "$SUPPRESSION_READER_URL" ] && [ -z "$SUPPRESSED_NPIS" ]; then
+            echo "::error::Set the SUPPRESSION_READER_URL secret (and SUPPRESSED_NPIS) before refreshing."
             exit 1
           fi
 
@@ -231,7 +235,11 @@ jobs:
           python analysis/validate_contract.py
 
       - name: Guard - no suppressed NPI in published files
-        run: python analysis/suppression.py --check
+        # --apply again immediately before the check, so nothing written by
+        # the stats/measures/manifest steps in between slips through.
+        run: |
+          python analysis/suppression.py --apply
+          python analysis/suppression.py --check
 
       - name: Detect changes
         id: diff
@@ -257,7 +265,11 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add frontend/public/api/v1/
           git commit -m "Weekly refresh: regenerate /api/v1/*.json from latest BQ analyses"
-          git push origin main
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin main && exit 0
+            sleep 15
+          done
+          exit 1
 
       # A measures.py failure leaves measures.json stale while every other
       # step reports success, which is the silent-failure shape this repo keeps

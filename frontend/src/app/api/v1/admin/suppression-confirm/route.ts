@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
     });
     return NextResponse.json({ ok: true, ...summary });
   } catch (err) {
-    // Most likely the table does not exist yet (prisma db push pending).
+    // Most likely the table does not exist yet (prisma/sql/npi_suppressions.sql not run).
     console.error('[suppression-confirm]', err instanceof Error ? err.message : err);
     return NextResponse.json({ ok: false, error: 'confirmation run failed' }, { status: 500 });
   }

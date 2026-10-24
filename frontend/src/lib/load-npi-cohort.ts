@@ -17,12 +17,30 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { getSuppressedNpis, parseSuppressedNpis } from '@/lib/suppression';
+import {
+  assertSuppressionVisible,
+  getSuppressionState,
+  parseSuppressedNpis,
+} from '@/lib/suppression';
 
 const EXPORT_CSV = path.join(
   process.cwd(),
   'public', 'api', 'v1', 'findings', 'high-risk-cohort-export.csv',
 );
+const COHORT_JSON = path.join(
+  process.cwd(),
+  'public', 'api', 'v1', 'findings', 'high-risk-cohort.json',
+);
+
+/** `suppressed_rows` recorded in the committed cohort payload (0 if absent). */
+export function committedSuppressedRows(file: string = COHORT_JSON): number {
+  try {
+    const n = Number(JSON.parse(fs.readFileSync(file, 'utf8'))?.suppressed_rows ?? 0);
+    return Number.isFinite(n) ? n : 0;
+  } catch {
+    return 0;
+  }
+}
 
 export interface NpiCohortRow {
   npi: string;
@@ -111,15 +129,26 @@ export function cohortSize(): number {
   return load().size;
 }
 
+/**
+ * The suppression list for a build, after the positive control: throws
+ * (failing the build) when committed files record removals the list cannot
+ * account for.
+ */
+async function buildSuppressedSet(): Promise<Set<string>> {
+  const state = await getSuppressionState();
+  assertSuppressionVisible(state, committedSuppressedRows());
+  return state.set;
+}
+
 /** Cohort NPIs that may have a page: the CSV minus the suppression table. */
 export async function publishedCohortNpis(): Promise<string[]> {
-  const suppressed = await getSuppressedNpis();
+  const suppressed = await buildSuppressedSet();
   return allCohortNpis().filter((npi) => !suppressed.has(npi));
 }
 
 /** The cohort row for a page, or null when absent or suppressed. */
 export async function getPublishedCohortRow(npi: string): Promise<NpiCohortRow | null> {
-  const suppressed = await getSuppressedNpis();
+  const suppressed = await buildSuppressedSet();
   if (suppressed.has(npi)) return null;
   return getCohortRow(npi);
 }

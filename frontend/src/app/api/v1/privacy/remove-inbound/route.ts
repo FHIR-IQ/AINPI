@@ -9,22 +9,52 @@
  * acknowledged and ignored, because one Resend account delivers all inbound
  * mail to every webhook. Mail naming no NPI alerts the admin.
  *
+ * Limits: the shared rate limiter (shape `privacy/remove`; every webhook
+ * call comes from Resend, so this is a global ceiling on the inbox), and at
+ * most EMAIL_SENDER_DAILY_CAP requests per sender per UTC day. Past either,
+ * the mail is acknowledged and nothing is recorded. recordSuppression()
+ * applies the Type 1 check and the global daily cap.
+ *
+ * A missing signing secret alerts the admin (once per warm instance) and
+ * answers 503 so Resend retries, rather than failing silently with 401.
+ *
  * Env: RESEND_API_KEY, RESEND_REMOVAL_WEBHOOK_SECRET (falls back to
  * RESEND_WEBHOOK_SECRET), optional REMOVAL_INBOX.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { verifyResendWebhook } from '@/lib/resend-webhook';
+import { enforceRateLimit } from '@/lib/rate-limit';
 import {
   DEFAULT_REMOVAL_INBOX,
+  EMAIL_SENDER_DAILY_CAP,
+  defaultIntakeDeps,
   parseRemovalEmail,
   recordSuppression,
+  senderRequestsToday,
 } from '@/lib/suppression-intake';
-import { sendSuppressionUnparsedAlert } from '@/lib/admin-email';
+import {
+  sendSuppressionUnparsedAlert,
+  sendSuppressionWebhookUnconfiguredAlert,
+} from '@/lib/admin-email';
+
+let unconfiguredAlerted = false;
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+  const secret = process.env.RESEND_REMOVAL_WEBHOOK_SECRET || process.env.RESEND_WEBHOOK_SECRET;
+  if (!secret) {
+    if (!unconfiguredAlerted) {
+      unconfiguredAlerted = true;
+      void sendSuppressionWebhookUnconfiguredAlert();
+    }
+    return NextResponse.json({ error: 'webhook not configured' }, { status: 503 });
+  }
+
+  const rl = await enforceRateLimit(req, { shape: 'privacy/remove' });
+  if (!rl.ok) return rl.response!;
+
   const raw = await req.text();
   const ok = verifyResendWebhook(
     raw,
@@ -33,7 +63,7 @@ export async function POST(req: NextRequest) {
       timestamp: req.headers.get('svix-timestamp'),
       signature: req.headers.get('svix-signature'),
     },
-    process.env.RESEND_REMOVAL_WEBHOOK_SECRET || process.env.RESEND_WEBHOOK_SECRET,
+    secret,
   );
   if (!ok) return NextResponse.json({ error: 'bad signature' }, { status: 401 });
 
@@ -74,11 +104,20 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    for (const npi of parsed.npis) await recordSuppression(npi, parsed.sender, 'email');
+    const deps = await defaultIntakeDeps();
+    let npis = parsed.npis;
+    if (parsed.sender) {
+      const already = await senderRequestsToday(deps.db, parsed.sender);
+      npis = npis.slice(0, Math.max(0, EMAIL_SENDER_DAILY_CAP - already));
+      if (npis.length === 0) {
+        return NextResponse.json({ ok: true, ignored: 'sender daily cap reached' });
+      }
+    }
+    for (const npi of npis) await recordSuppression(npi, parsed.sender, 'email', deps);
   } catch (err) {
     console.error('[privacy/remove-inbound] record failed:', err instanceof Error ? err.message : err);
     // 5xx so Resend retries; recordSuppression is idempotent per NPI.
     return NextResponse.json({ error: 'record failed' }, { status: 503 });
   }
-  return NextResponse.json({ ok: true, recorded: parsed.npis.length });
+  return NextResponse.json({ ok: true });
 }

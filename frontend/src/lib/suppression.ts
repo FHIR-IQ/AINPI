@@ -10,12 +10,16 @@
  * tools, the /npi pages and the sitemap. It is cached in module scope for a
  * few minutes so search does not hit Postgres on every request.
  *
- * Failure behaviour: if the table cannot be read, the last good list is kept;
- * with none, the env override alone is used and the failure is logged. At
- * build time the cohort CSV is already filtered by the analysis side
- * (analysis/suppression.py), so a database outage there still publishes no
- * suppressed page. A malformed env entry throws: a list that silently drops
- * an entry publishes the record it was meant to remove.
+ * Scope: individual (Type 1) NPIs only. Callers filter practitioner and
+ * individual NPI fields, never organization NPI fields.
+ *
+ * Failure behaviour: if the table cannot be read, the last good list is kept
+ * (never replaced by an empty one) and the read is retried after 30 s; with
+ * no good read yet, the env override alone is used and the failure logged.
+ * SUPPRESSED_NPIS is set in Vercel as that second layer. At build time,
+ * assertSuppressionVisible() fails the build rather than publish when the
+ * list cannot be seen. A malformed env entry throws: a list that silently
+ * drops an entry publishes the record it was meant to remove.
  */
 
 export const SUPPRESSION_CACHE_MS = 5 * 60 * 1000;
@@ -63,17 +67,30 @@ export function parseSuppressedNpis(raw: string | undefined | null): Set<string>
 
 export type SuppressionSource = () => Promise<string[]>;
 
-/** Reads every NPI in the table, whatever its status. */
+/** Reads every NPI in the table except rows held for review. */
 export const prismaSuppressionSource: SuppressionSource = async () => {
   const { prisma } = await import('@/lib/prisma');
-  const rows = await prisma.npiSuppression.findMany({ select: { npi: true } });
+  const rows = await prisma.npiSuppression.findMany({
+    where: { status: { not: 'held' } },
+    select: { npi: true },
+  });
   return rows.map((r) => r.npi);
 };
 
+export interface SuppressionState {
+  set: Set<string>;
+  /** Rows read from the table, or null when it could not be read. */
+  dbRows: number | null;
+}
+
 export interface SuppressionLoader {
   get(): Promise<Set<string>>;
+  state(): Promise<SuppressionState>;
   invalidate(): void;
 }
+
+/** After a failed table read, wait this long before trying again. */
+export const SUPPRESSION_ERROR_RETRY_MS = 30 * 1000;
 
 export function createSuppressionLoader(opts: {
   source: SuppressionSource;
@@ -84,25 +101,47 @@ export function createSuppressionLoader(opts: {
   const ttl = opts.ttlMs ?? SUPPRESSION_CACHE_MS;
   const now = opts.now ?? Date.now;
   const env = opts.env ?? (() => process.env.SUPPRESSED_NPIS);
-  let cached: { at: number; set: Set<string> } | null = null;
-  let lastGoodDb: string[] | null = null;
+  // Only a successful table read is cached for the full TTL. A failure keeps
+  // serving the last good list (never an empty one in its place) and is
+  // retried after a short backoff.
+  let good: { at: number; npis: string[] } | null = null;
+  let failedAt: number | null = null;
+
+  async function state(): Promise<SuppressionState> {
+    const set = parseSuppressedNpis(env());
+    const fresh = good && now() - good.at < ttl;
+    const backingOff = failedAt !== null && now() - failedAt < SUPPRESSION_ERROR_RETRY_MS;
+    let dbRows: number | null = good ? good.npis.length : null;
+    if (!fresh && !backingOff) {
+      try {
+        const npis = await opts.source();
+        good = { at: now(), npis };
+        failedAt = null;
+        dbRows = npis.length;
+      } catch (err) {
+        failedAt = now();
+        dbRows = null;
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error(
+          `[suppression] table unreadable; using ${good ? 'the last good list' : 'SUPPRESSED_NPIS only'}:`,
+          msg,
+        );
+      }
+    } else if (backingOff && !fresh) {
+      dbRows = null;
+    }
+    for (const npi of good?.npis ?? []) if (isNpiShape(npi)) set.add(npi);
+    return { set, dbRows };
+  }
 
   return {
     async get() {
-      if (cached && now() - cached.at < ttl) return cached.set;
-      const set = parseSuppressedNpis(env());
-      try {
-        lastGoodDb = await opts.source();
-      } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err);
-        console.error('[suppression] table unreadable, using last good list:', msg);
-      }
-      for (const npi of lastGoodDb ?? []) if (isNpiShape(npi)) set.add(npi);
-      cached = { at: now(), set };
-      return set;
+      return (await state()).set;
     },
+    state,
     invalidate() {
-      cached = null;
+      good = null;
+      failedAt = null;
     },
   };
 }
@@ -113,9 +152,35 @@ export function getSuppressedNpis(): Promise<Set<string>> {
   return defaultLoader.get();
 }
 
+export function getSuppressionState(): Promise<SuppressionState> {
+  return defaultLoader.state();
+}
+
 /** Drop the cache, e.g. right after recording a new request. */
 export function invalidateSuppressionCache(): void {
   defaultLoader.invalidate();
+}
+
+/**
+ * Positive control for build-time exclusion. If committed payloads record
+ * removed rows, the list must not be empty and a readable table must not be
+ * empty: either means this build cannot see removals already made, and would
+ * publish them again. Throws to fail the build.
+ */
+export function assertSuppressionVisible(state: SuppressionState, committedSuppressedRows: number): void {
+  if (committedSuppressedRows <= 0) return;
+  if (state.dbRows === 0) {
+    throw new Error(
+      `[suppression] the table returned zero rows but committed files record ${committedSuppressedRows} ` +
+        'removed row(s). Refusing to build.',
+    );
+  }
+  if (state.set.size === 0) {
+    throw new Error(
+      `[suppression] no suppression list is visible (table unreadable and SUPPRESSED_NPIS empty) but ` +
+        `committed files record ${committedSuppressedRows} removed row(s). Refusing to build.`,
+    );
+  }
 }
 
 export async function isSuppressed(npi: string | null | undefined): Promise<boolean> {

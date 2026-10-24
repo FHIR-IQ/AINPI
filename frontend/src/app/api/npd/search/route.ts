@@ -282,8 +282,9 @@ export async function GET(req: NextRequest) {
     // search path below. This is the branch the MCP lookup_npi tool uses and
     // the one an agent will hit hardest, so it needs the headers too: without
     // them a client has no way to see its remaining budget before a 429.
-    // NPIs removed on request (docs/privacy.md) answer exactly as an NPI
-    // that is not in the directory, and are dropped from every result list.
+    // Individual NPIs removed on request (docs/privacy.md) answer exactly as
+    // an NPI that is not in the directory, and are dropped from practitioner
+    // results.
     const suppressed = await getSuppressedNpis();
 
     if (params.npi && params.type === 'all') {
@@ -303,9 +304,8 @@ export async function GET(req: NextRequest) {
     if (params.type === 'all' || params.type === 'practitioner') {
       results.practitioners = filterSuppressed(await searchPractitioners(params), suppressed);
     }
-    if (params.type === 'all' || params.type === 'organization') {
-      results.organizations = filterSuppressed(await searchOrganizations(params), suppressed);
-    }
+    // Organization NPIs are never suppressed: removal covers individuals only.
+    if (params.type === 'all' || params.type === 'organization') results.organizations = await searchOrganizations(params);
     if (params.type === 'all' || params.type === 'location') results.locations = await searchLocations(params);
     if (params.type === 'all' || params.type === 'endpoint') results.endpoints = await searchEndpoints(params);
 

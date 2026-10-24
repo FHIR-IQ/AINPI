@@ -94,7 +94,7 @@ python3 -m pytest analysis/tests/            # pure-function unit tests
 
 # Supabase/Prisma
 npm run db:generate           # prisma generate
-npm run db:push               # prisma db push (no migration files)
+npm run db:push               # prisma db push (no migration files). Never for npi_suppressions: that table comes from prisma/sql/npi_suppressions.sql
 npm run db:migrate            # prisma migrate dev
 npm run db:studio             # Prisma Studio GUI
 npm run db:seed               # tsx prisma/seed.ts
@@ -158,7 +158,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 /api/npd/search              GET  — Search NPD by NPI, name, org, state, city
 /api/npd/data-quality        GET  — Summary, state/specialty/endpoint breakdowns (defaults to ?release=2026-05-08)
 /api/npd/state-detail        GET  — Drill-down: cities, top orgs/specialties within a state
-/api/npd/relationships       GET  — Top-N org network overview + relationship stats
+/api/npd/relationships       GET  — Top-N org network overview + relationship stats; view=org lists one org's practitioners (removed NPIs filtered)
 /api/npd/org-analysis        GET  — Interactive variance tool data (used by /insights)
 /api/npd/validation          GET  — Source-file vs BigQuery counts, NPI/URL validity, orphan refs
 
@@ -562,29 +562,53 @@ Earlier source-side schema changes that still bite: the NPI identifier system UR
 
 ## NPI removal requests (operator runbook)
 
-A provider can have their individual page (`/npi/<npi>`), their per-NPI rows in the published files and API, and their search results removed from ainpi.dev. Aggregates never change: a removed record still counts toward every total, and a payload that lost rows carries a count-only `suppressed_rows`. The promise is in `docs/privacy.md` (7 days). Scope is ainpi.dev pages, files and search only.
+A provider can have their individual page (`/npi/<npi>`), their per-NPI rows in the published files and API, and their search results removed from ainpi.dev. Aggregates never change: a removed record still counts toward every total, and a payload that lost rows carries a count-only `suppressed_rows`. The promise is in `docs/privacy.md` (7 days). Scope is ainpi.dev pages, files and search, for **individual (Type 1) NPIs only**; organization NPI fields are never filtered.
 
-**The list never enters git.** Not in code, tests (they use synthetic check-digit-valid NPIs such as `1234567893`), commit messages, PR text, docs or logs. The scripts print counts and file paths, never an NPI. The source of truth is the Supabase table `npi_suppressions` (Prisma `NpiSuppression`: npi, requesterEmail, source `form|email|manual`, status `pending|applied|confirmed`, requestedAt/appliedAt/confirmedAt). `SUPPRESSED_NPIS` (comma-separated) is an optional override merged on top, for offline runs.
+**The list never enters git.** Not in code, tests (synthetic check-digit-valid NPIs such as `1234567893`), commit messages, PR text, docs or logs. Scripts print counts and file paths, never an NPI. Automated commits say "Update published data files".
 
-Three intake paths, one function (`recordSuppression()` in `src/lib/suppression-intake.ts`), each firing `sendSuppressionAlert()` to ADMIN_EMAIL:
+**Storage and access.** The table is `npi_suppressions` (Prisma `NpiSuppression`), created by `frontend/prisma/sql/npi_suppressions.sql` in the Supabase SQL editor, **never by `prisma db push`** (which would not enable RLS or create the roles). Keep the model and the SQL in sync by hand. RLS is on; the API roles (`anon`, `authenticated`, `service_role`) have no privileges. The app's Prisma connection (`postgres`, the owner) does intake and confirmation and is the only role that reads `requester_email`. Two login roles, both through the **session pooler** `aws-1-us-east-2.pooler.supabase.com:5432` with user `<role>.hspqvcoinujtfodreqaf` (IPv4, so GitHub runners can reach it):
 
-1. **Form** at `/privacy/remove` → `POST /api/v1/privacy/remove`. NPI must pass the check digit, attestation required, shared rate limiter (`privacy/remove`, 100 units). Same response whether or not the NPI is anywhere on the site.
-2. **Email** to `remove@ainpi.dev` (`REMOVAL_INBOX`) → Resend `email.received` webhook → `POST /api/v1/privacy/remove-inbound`. Records up to 3 check-digit-valid NPIs with the sender as requester; mail naming none alerts the admin. Resend delivers all inbound mail to every webhook, so the route ignores mail not addressed to the removal inbox.
-3. **By hand**, for a request that reached a person: from `frontend/`, `npx tsx scripts/suppress-npi.ts <npi> <requester-email>` (dry run), then add `--confirm`. NPI and email from argv only.
+- `ainpi_suppression_reader`: SELECT (npi). Secret `SUPPRESSION_READER_URL`, used by CI and weekly-refresh.
+- `ainpi_suppression_apply`: SELECT (npi, status, requested_at), UPDATE (status, applied_at), and RLS only lets it move `pending` to `applied`. Secret `SUPPRESSION_APPLY_URL`, used by suppression-apply.yml.
 
-After intake, nothing is manual:
+Both RLS policies hide `held` rows. `SUPPRESSED_NPIS` (comma-separated) is set in Vercel and GitHub as a second layer and is merged with the table everywhere.
 
-- **Immediately:** `/api/npd/search`, `/api/provider-search` (every source), and the MCP tools `check_npi_cohort`, `lookup_npi`, `lookup_organization` answer a suppressed NPI as not found, through `getSuppressedNpis()` in `src/lib/suppression.ts` (module cache, 5 minutes). `/api/npd/geo-search` and `/api/npd/state-detail` return organizations and counts, not practitioners, and are not filtered.
-- **Within 6 hours:** `.github/workflows/suppression-apply.yml` runs `python analysis/suppression.py --apply` over `frontend/public/api/v1`, guards with `--check`, pushes to main as the weekly-refresh bot, and marks the rows `applied`. The push redeploys; at build `/npi/[npi]`, the `/npi` index and `sitemap.ts` read the table too (`publishedCohortNpis()`), so the page becomes a static 404. If the database is unreachable at build, the env override and the already-filtered CSV still apply.
-- **Daily 15:41 UTC:** the Vercel cron `/api/v1/admin/suppression-confirm` checks each `applied` row against the live site (page 404, NPI absent from the published cohort CSV), then sends the plain-text completion email from `REMOVAL_FROM_ADDRESS` (default `AINPI <no-reply@ainpi.dev>`, no Reply-To; it says replies are not read) and marks the row `confirmed`. Claim-then-send on `confirmedAt`, 20 per run.
+**Positive control (fail closed).** Committed payloads record `suppressed_rows`. If any is above zero, `analysis/suppression.py` raises when the list is empty, or when a configured table returns zero rows; the frontend build does the same (`assertSuppressionVisible()`, read through `publishedCohortNpis()`) and fails rather than publish. Weekly refresh also refuses to start without `SUPPRESSION_READER_URL` or `SUPPRESSED_NPIS`. So a local `next build` needs the Prisma URL or `SUPPRESSED_NPIS` once anything has been removed.
 
-**How `--apply` works.** CSV: drops only lines whose `*npi*` column holds a suppressed NPI; every other byte is kept. JSON: drops list records whose `*npi*` field matches, keys equal to the NPI and bare NPI list entries, then rewrites with the file's own indent and adds `suppressed_rows`. `high-risk-cohort-export.csv` reconciles through `suppressed_rows` in `high-risk-cohort.json` (`COUNT_SIDECARS`). The unfiltered file is kept under the gitignored `analysis/data/unsuppressed/`, and scripts that read a published file as input (`h26`, `build_state_cohort`, `build_va_briefing`, `claims_sources/_cohorts.py`) go through `input_path()`, so derived aggregates do not move while that copy matches. On a fresh clone without it, the claims-side audits (H29–H40) read the filtered state cohort CSVs and would count a suppressed NPI that has a state one fewer. `high_risk_cohort.py` filters after the top-10,000 slice, so the next NPI is not promoted. `state_findings.py` over-fetches its five LEIE verify samples by the list size.
+**Intake: three paths, one function** (`recordSuppression()`, `src/lib/suppression-intake.ts`), each alerting ADMIN_EMAIL:
 
-**Coverage.** Writers that filter at write time: `high_risk_cohort.py`, `build_state_cohort.py`, `build_va_briefing.py`, `h26_mco_exposure_va.py`, `state_findings.py`. Every other per-NPI writer (h24/h25 detail sidecars, h37–h39, `claims_sources/*` H29–H42 and their per-state CSVs, `ingest_pecos_affiliations.py`, `h53`, `h54`, `state_connectivity.py`, `pa_system_endpoint_gap.py`, `explore_specialty_context.py`, `ingest_cms_ownership.py`, h50/h51 org crosswalks) is covered by the `--apply` step: weekly-refresh runs it after the last generator, and **anyone running a generator by hand must run `python3 analysis/suppression.py --apply` before committing**. CI runs `--check` on every push and PR and fails if a suppressed NPI appears anywhere under `frontend/public/api/v1`, `docs/` or `analysis/release-snapshots/`.
+1. **Form** `/privacy/remove` → `POST /api/v1/privacy/remove`. Check digit, required attestation, shared rate limiter (`privacy/remove`, 100 units). Same response whatever happens.
+2. **Email** to `remove@ainpi.dev` (`REMOVAL_INBOX`) → Resend `email.received` webhook → `POST /api/v1/privacy/remove-inbound`. Up to 3 NPIs per mail, at most 3 requests per sender per UTC day, plus the shared rate limiter (all calls come from Resend, so it is a global ceiling). Mail with no valid NPI alerts the admin. A missing `RESEND_REMOVAL_WEBHOOK_SECRET` (and `RESEND_WEBHOOK_SECRET`) alerts the admin and returns 503 so Resend retries.
+3. **By hand** for a request that reached a person: from `frontend/`, `npx tsx scripts/suppress-npi.ts <npi> <requester-email>` (dry run), then `--confirm`. `--force` skips the checks below for a request already reviewed.
 
-**Secrets.** GitHub: `SUPPRESSION_DATABASE_URL` (used by suppression-apply, weekly-refresh and CI; a role limited to `npi_suppressions`), optional `SUPPRESSED_NPIS`. Vercel: `RESEND_REMOVAL_WEBHOOK_SECRET` (else `RESEND_WEBHOOK_SECRET` is used), optional `REMOVAL_INBOX`, `REMOVAL_FROM_ADDRESS`, `SUPPRESSED_NPIS`; the cron reuses `CRON_SECRET`, `RESEND_API_KEY` and the Prisma URLs.
+Every request is checked against the free NPPES registry API: only `NPI-1` (individual) is processed automatically. Organization NPIs, failed lookups, and anything past the global daily cap (`SUPPRESSION_DAILY_CAP`, default 10 per UTC day; one alert when reached) are stored as **`held`**: not filtered anywhere, no automated email, admin alerted. To release one, set its `status` to `pending` in the Supabase table editor. The weekly digest shows count-only totals: requests in the last 7 days, how many had a high-risk-cohort page (`had_page`), held, awaiting and confirmed.
 
-**Optional after a request:** Search Console → Removals for `sc-domain:ainpi.dev` speeds Google dropping the cached page. The confirmation email does not claim this was done.
+**After intake, nothing is manual:**
+
+- **Immediately:** live routes answer a suppressed NPI as not found, through `getSuppressedNpis()` (`src/lib/suppression.ts`, 5-minute cache; on a database error it keeps the last good list and retries after 30 s, never caching an empty list).
+- **Within 6 hours:** `suppression-apply.yml` runs `--apply` over `frontend/public/api/v1`, then `--check`; a guard failure or warning opens or appends one GitHub issue (paths and counts only). It pushes to main (pull --rebase, three tries) and marks the rows `applied`. The push redeploys, and the build excludes the table's NPIs from `/npi/[npi]` (static 404), the `/npi` index and the sitemap.
+- **Daily 15:41 UTC:** the cron `/api/v1/admin/suppression-confirm` checks `applied` rows least-recently-checked first (so a stuck row cannot block newer ones), and when the page is 404 and the NPI is gone from the published cohort CSV, sends this exact plain-text email from `AINPI <no-reply@ainpi.dev>` with no Reply-To, then marks the row `confirmed`: "Your removal request for NPI [npi] is complete. If this NPI had a page on ainpi.dev, that page has been removed, and the NPI no longer appears in search results, downloadable files or the API on ainpi.dev. Search engines remove an old page when they next crawl it. This mailbox is not monitored, and replies are not read." The send is claimed on `confirm_claimed_at`; a claim older than 15 minutes can be re-claimed, so a crash mid-send can cause one duplicate rather than a stuck row. At most 20 sends and 100 checks per run.
+
+**Routes audited for practitioner rows.**
+
+| Route | Returns individuals? | Filtered |
+| --- | --- | --- |
+| `/api/npd/search` | yes: practitioner search and the NPI profile | yes (practitioners; organizations never) |
+| `/api/npd/relationships?view=org` | yes: an organization's practitioners | yes (`_npi`) |
+| `/api/provider-search` | yes, from NDH, NPPES and four payer directories | yes, every source |
+| `/api/mcp` `check_npi_cohort`, `lookup_npi` | yes | yes |
+| `/api/mcp` `lookup_organization`, `get_state_audit`, `get_finding` | organizations; static files | no / via the files |
+| `/api/npd/geo-search`, `/api/npd/state-detail`, `/api/npd/org`, `/api/npd/org-analysis`, `/api/npd/data-quality`, `/api/npd/validation`, `relationships?view=overview` | organizations, locations and counts | no |
+| `/api/magic-scanner` | a live NPPES and LLM proxy for whatever is typed | **out of scope**: AINPI does not hold that data |
+| `/api/providers`, `/api/practitioners/me`, `/api/practitioner-roles`, `/api/demo/*`, `/api/auth/*` | user-entered or mock data, not the NDH | out of scope |
+
+**How `--apply` works.** It reads only individual-NPI fields (`INDIVIDUAL_NPI_KEYS`: `npi`, `_npi`, `practitioner_npi` and similar) and skips the organization files in `ORG_FILES` (connectivity, system endpoint gap, org endpoint resolution, hospital ownership, endpoint-org crosswalk, vendor attribution). CSV: drops only matching lines and keeps every other byte. JSON: whatever identifies the person is **removed, never blanked or retyped**: matching list records and bare NPI list entries are dropped, keys equal to the NPI are deleted, and a matching record or scalar NPI field held under a key is deleted with its key; then the file is rewritten with its own indent and gains `suppressed_rows`. `high-risk-cohort-export.csv` reconciles through `suppressed_rows` in `high-risk-cohort.json`. The unfiltered file is kept under the gitignored `analysis/data/unsuppressed/`; `h26`, `build_state_cohort`, `build_va_briefing` and `claims_sources/_cohorts.py` read it through `input_path()` so derived aggregates do not move (on a fresh clone without it, the claims audits H29–H40 would count a suppressed NPI that has a state one fewer). `high_risk_cohort.py` filters after the top-10,000 slice; `state_findings.py` over-fetches its LEIE verify samples.
+
+**Writer coverage.** Filtered at write time: `high_risk_cohort.py`, `build_state_cohort.py`, `build_va_briefing.py`, `h26_mco_exposure_va.py`, `state_findings.py`. Every other per-NPI writer (h24/h25 detail sidecars, h37–h39, `claims_sources/*` H29–H42 and per-state CSVs, `ingest_pecos_affiliations.py`, h53, h54, `explore_specialty_context.py`) is covered by `--apply`: weekly-refresh runs it after the last generator and again right before the guard, and **anyone running a generator by hand runs `python3 analysis/suppression.py --apply` before committing**. `--check` fails CI only for `frontend/public/api/v1`; hits in `docs/` and `analysis/release-snapshots/` are warnings for a person to edit.
+
+**Processing an emailed request (to gene@fhiriq.com).** Run the manual script with the NPI and the sender's address, `--confirm` (add `--force` only after checking it is an individual). Nothing else: the workflow, deploy and confirmation follow. Optionally, Search Console → Removals for `sc-domain:ainpi.dev` speeds Google dropping the cached page; the email does not claim this was done.
+
+**Secrets.** GitHub: `SUPPRESSION_READER_URL`, `SUPPRESSION_APPLY_URL`, `SUPPRESSED_NPIS`. Vercel (production and preview): `SUPPRESSED_NPIS`, `RESEND_REMOVAL_WEBHOOK_SECRET`; optional `REMOVAL_INBOX`, `REMOVAL_FROM_ADDRESS`, `SUPPRESSION_DAILY_CAP`. The cron reuses `CRON_SECRET`, `RESEND_API_KEY` and the Prisma URLs. Probe after setup: `npx tsx scripts/probe-suppression-rls.ts` must report no rows through the public REST API.
 
 ## Supabase Prisma Schema (app database)
 

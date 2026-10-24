@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
 import { enforceRateLimit } from '@/lib/rate-limit';
 import { env } from '@/lib/env';
+import { filterSuppressed, getSuppressedNpis } from '@/lib/suppression';
 
 // Trimmed via lib/env: both carry a trailing newline in production, which is
 // invisible until the value lands inside a quoted BigQuery identifier.
@@ -41,7 +42,11 @@ async function getOrgRelationships(orgName: string) {
     'LEFT JOIN ' + tbl('practitioner') + ' p ON CONCAT("Practitioner/", p._id) = pr._practitioner_id ' +
     'WHERE pr._org_id = @orgId AND pr._active = true LIMIT 200',
     { orgId }
-  ) as Array<Record<string, unknown>>;
+  ).then(async (rows) =>
+    // Practitioners whose NPI was removed on request (docs/privacy.md) are
+    // dropped, along with the locations only they would have contributed.
+    filterSuppressed(rows as Array<Record<string, unknown>>, await getSuppressedNpis(), ['_npi'])
+  );
 
   // Get endpoints
   const endpoints = await runQuery(
