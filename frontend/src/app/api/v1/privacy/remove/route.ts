@@ -3,13 +3,15 @@
  *
  * The /privacy/remove form. Body: { npi, email, attest: true }.
  *
- * Validates shape and check digit, charges the shared rate limiter, records
+ * Validates shape and check digit, applies the removal limiter (its own
+ * buckets, never the search quota or the warehouse breaker), records
  * the request through recordSuppression(), and returns one fixed response
  * whether or not the NPI has a page, is already listed, or is anywhere in
  * AINPI at all, so the form cannot be used to probe the list.
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { enforceRateLimit } from '@/lib/rate-limit';
+import { clientIp } from '@/lib/rate-limit';
+import { checkRemovalLimit, defaultRemovalLimitDeps } from '@/lib/removal-limit';
 import { isValidNpi } from '@/lib/suppression';
 import { normalizeEmail, recordSuppression } from '@/lib/suppression-intake';
 
@@ -22,8 +24,14 @@ const REMOVAL_ACCEPTED_MESSAGE =
   'within 7 days, and we will email you when it is done.';
 
 export async function POST(req: NextRequest) {
-  const rl = await enforceRateLimit(req, { shape: 'privacy/remove' });
-  if (!rl.ok) return rl.response!;
+  // Its own limiter, apart from the BigQuery quota (src/lib/removal-limit.ts).
+  const rl = await checkRemovalLimit(`ip:${clientIp(req)}`, await defaultRemovalLimitDeps());
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'Too many removal requests right now. Please try again later.' },
+      { status: 429, headers: { 'retry-after': String(rl.retryAfterSec), 'cache-control': 'no-store' } },
+    );
+  }
 
   let body: { npi?: unknown; email?: unknown; attest?: unknown };
   try {

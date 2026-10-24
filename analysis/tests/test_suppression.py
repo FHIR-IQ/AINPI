@@ -77,23 +77,78 @@ def test_csv_scrub_removes_only_the_matching_line_bytes():
     assert out == text.replace(f'{A},"ROE, RICHARD",\r\n', "")
 
 
-def test_csv_scrub_ignores_non_npi_and_org_columns():
-    # A suppressed value in a phone or organization-NPI column is not a match.
-    text = f"npi,phone,org_npi\n{B},{A},{A}\n"
+def test_parse_rejects_a_bad_check_digit():
+    with pytest.raises(sp.SuppressionError, match="check digit"):
+        sp.parse_npis("1234567890")
+
+
+def test_csv_scrub_matches_npi_columns_by_exact_value_only():
+    # A phone column holding the digits is not an NPI field.
+    text = f"npi,phone\n{B},{A}\n"
+    assert sp.scrub_csv_text(text, {A}) == (text, 0)
+    # Any NPI-valued column counts, organization ones included.
+    text = f"url,org_name,org_npi,npis_on_url\nhttps://x,Dr Somebody,{A},1\nhttps://y,Clinic,{B},3\n"
+    out, n = sp.scrub_csv_text(text, {A})
+    assert n == 1 and "Somebody" not in out and B in out
+    # A longer number containing the digits is not a match.
+    text = f"npi,pac_id\n{B},{A}12\n"
     assert sp.scrub_csv_text(text, {A}) == (text, 0)
 
 
-def test_org_files_are_never_filtered(tmp_path, monkeypatch):
-    public = tmp_path / "public"
+def _tree(tmp_path, monkeypatch):
+    public = tmp_path / "frontend" / "public" / "api" / "v1"
     (public / "findings").mkdir(parents=True)
     monkeypatch.setattr(sp, "PUBLIC_ROOT", public)
     monkeypatch.setattr(sp, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(sp, "MIRROR_ROOT", tmp_path / "mirror")
-    f = public / "findings" / "hospital-ownership-crosswalk.csv"
-    f.write_text(f"npi,ccn\n{A},1\n")
-    assert sp.scrub_file(f, {A}) == 0
-    assert A in f.read_text()
+    monkeypatch.setattr(sp, "WARN_ROOTS", ())
+    return public
 
+
+def test_npi_in_cohort_and_vendor_file_is_fully_scrubbed(tmp_path, monkeypatch):
+    public = _tree(tmp_path, monkeypatch)
+    f = public / "findings"
+    (f / "high-risk-cohort-export.csv").write_text(f'npi,name\n{A},"ROE, R"\n{B},"DOE, J"\n')
+    (f / "high-risk-cohort.json").write_text(json.dumps({"numerator": 2}, indent=2) + "\n")
+    (f / "vendor-endpoint-attribution.csv").write_text(
+        f"url,org_name,org_npi,vendor,in_ndh,ndh_has_owner,npis_on_url\n"
+        f"https://a,R Roe MD,{A},v,1,0,1\nhttps://b,Clinic,{B},v,1,0,4\n"
+    )
+    (f / "vendor-endpoint-attribution.json").write_text(json.dumps({"numerator": 9}, indent=2) + "\n")
+    removed = sp.apply([public], {A})
+    assert sum(removed.values()) == 2
+    vendor = (f / "vendor-endpoint-attribution.csv").read_text()
+    assert A not in vendor and "R Roe MD" not in vendor
+    # Aggregates unchanged; each payload reconciles its CSV.
+    assert json.loads((f / "vendor-endpoint-attribution.json").read_text()) == {"numerator": 9, "suppressed_rows": 1}
+    assert json.loads((f / "high-risk-cohort.json").read_text()) == {"numerator": 2, "suppressed_rows": 1}
+    assert sp.check([public], {A}) == ({}, {})
+    monkeypatch.setenv("SUPPRESSED_NPIS", A)
+    monkeypatch.delenv("SUPPRESSION_READER_URL", raising=False)
+    monkeypatch.delenv("SUPPRESSION_APPLY_URL", raising=False)
+    assert sp.main(["--check"]) == 0
+
+
+def test_a_longer_number_never_trips_check(tmp_path, monkeypatch):
+    public = _tree(tmp_path, monkeypatch)
+    (public / "findings" / "x.csv").write_text(f"npi,phone,pac_id\n{B},1{A}9,{A}12\n")
+    (public / "findings" / "y.json").write_text(json.dumps({"rows": [{"npi": B, "pac": f"{A}12"}]}))
+    assert sp.check([public], {A}) == ({}, {})
+
+
+def test_check_counts_flags_a_drop_below_head(tmp_path, monkeypatch):
+    import subprocess
+    public = _tree(tmp_path, monkeypatch)
+    payload = public / "findings" / "p.json"
+    payload.write_text(json.dumps({"suppressed_rows": 2}, indent=2) + "\n")
+    def run(*a):
+        subprocess.run(a, cwd=tmp_path, check=True, capture_output=True)
+    run("git", "init", "-q")
+    run("git", "add", "-A")
+    run("git", "-c", "user.email=t@example.org", "-c", "user.name=t", "commit", "-qm", "x")
+    assert sp.check_counts() == []
+    payload.write_text(json.dumps({"suppressed_rows": 1}, indent=2) + "\n")
+    assert len(sp.check_counts()) == 1
 
 def test_json_scrub_drops_records_and_counts():
     doc = {
@@ -101,22 +156,23 @@ def test_json_scrub_drops_records_and_counts():
         "rows": [{"npi": A, "name": "R"}, {"npi": B, "name": "J"}],
         "featured": {"npi": A, "name": "R"},
         "single": {"npi": A},
-        "owner": {"org_npi": A, "name": "Org"},
+        "owner": {"org_npi": B, "name": "Org"},
+        "listed_as_org": {"org_npi": A, "name": "R as an org"},
         "ids": [A, B],
         "by_npi": {A: 1, B: 2},
     }
     text = json.dumps(doc, indent=2) + "\n"
     out, n = sp.scrub_json_text(text, {A})
     got = json.loads(out)
-    assert n == 5
+    assert n == 6
     assert got["rows"] == [{"npi": B, "name": "J"}]
-    # Matching records held under a key are removed, not blanked.
-    assert "featured" not in got and "single" not in got
-    # Organization NPI fields are never touched.
-    assert got["owner"] == {"org_npi": A, "name": "Org"}
+    # Matching records held under a key are removed, not blanked, whichever
+    # NPI-valued key holds the value.
+    assert "featured" not in got and "single" not in got and "listed_as_org" not in got
+    assert got["owner"] == {"org_npi": B, "name": "Org"}
     assert got["ids"] == [B]
     assert got["by_npi"] == {B: 2}
-    assert got["suppressed_rows"] == 5
+    assert got["suppressed_rows"] == 6
     assert out.endswith("\n") and out.split("\n")[1].startswith("  ")
 
 
@@ -148,9 +204,12 @@ def test_scrub_file_keeps_mirror_and_bumps_sidecar(tmp_path, monkeypatch):
 def test_check_reports_files_not_values(tmp_path, capsys):
     (tmp_path / "a.json").write_text(json.dumps({"npi": A}))
     (tmp_path / "b.csv").write_text(f"npi\n{B}\n")
-    hits = sp.check([tmp_path], {A})
-    assert list(hits.values()) == [1] and list(hits)[0].endswith("a.json")
-    assert sp.check([tmp_path], set()) == {}
+    fails, warns = sp.check([tmp_path], {A})
+    assert list(fails.values()) == [1] and list(fails)[0].endswith("a.json")
+    (tmp_path / "c.md").write_text(f"see {A}.")
+    fails, warns = sp.check([tmp_path], {A})
+    assert list(warns) == [str(sp._rel(tmp_path / "c.md"))]
+    assert sp.check([tmp_path], set()) == ({}, {})
 
 
 def test_main_check_passes_with_no_list(monkeypatch, tmp_path):

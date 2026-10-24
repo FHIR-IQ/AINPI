@@ -45,7 +45,10 @@ async function main() {
     process.exit(2);
   }
   if (!isValidNpi(npi)) {
-    console.warn('Warning: the NPI fails its check digit. Recording it anyway, as given.');
+    // Every loader rejects an invalid entry, so recording one would stop the
+    // build and the workflows. Paste the NPI rather than retyping it.
+    console.error('The NPI fails its check digit. Paste it from the request rather than retyping it.');
+    process.exit(2);
   }
   const requester = normalizeEmail(email);
   if (email && !requester) {

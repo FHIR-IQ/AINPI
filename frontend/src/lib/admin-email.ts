@@ -397,9 +397,9 @@ export async function sendSuppressionAlert(args: SuppressionAlertArgs): Promise<
 /** The removal inbox webhook was called but no signing secret is configured. */
 export async function sendSuppressionWebhookUnconfiguredAlert(): Promise<void> {
   const text =
-    'An email reached /api/v1/privacy/remove-inbound, but neither RESEND_REMOVAL_WEBHOOK_SECRET ' +
-    'nor RESEND_WEBHOOK_SECRET is set in Vercel, so it could not be verified and nothing was ' +
-    'recorded. Resend will retry. Add the secret: vercel env add RESEND_REMOVAL_WEBHOOK_SECRET production';
+    'An email reached /api/v1/privacy/remove-inbound, but RESEND_REMOVAL_WEBHOOK_SECRET is not set ' +
+    'in Vercel, so it could not be verified and nothing was recorded. Resend will retry. Add the ' +
+    "removal webhook's signing secret: vercel env add RESEND_REMOVAL_WEBHOOK_SECRET production (and preview).";
   await sendOnce({
     subject: '[AINPI admin] Removal inbox webhook is not configured',
     text,
@@ -426,5 +426,33 @@ export async function sendSuppressionUnparsedAlert(args: {
     text,
     html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;">${esc(text)}</pre>`,
     tag: 'suppression-unparsed',
+  });
+}
+
+/** The global daily ceiling on removal requests was reached (sent once a day). */
+export async function sendRemovalCeilingAlert(ceiling: number): Promise<void> {
+  const text =
+    `The daily ceiling on NPI removal requests (${ceiling}, REMOVAL_DAILY_CEILING) was reached. ` +
+    'Further form posts and removal emails are refused until 00:00 UTC. Search and the rest of ' +
+    'the site are unaffected. If this is genuine demand rather than abuse, raise the ceiling in Vercel.';
+  await sendOnce({
+    subject: '[AINPI admin] Removal request daily ceiling reached',
+    text,
+    html: `<p>${esc(text)}</p>`,
+    tag: 'removal-ceiling',
+  });
+}
+
+/** One sender went over the removal inbox limits (sent once per sender per day). */
+export async function sendRemovalSenderOverflowAlert(sender: string, reason: string): Promise<void> {
+  const text =
+    `Removal email from ${sender} was not recorded: ${reason}. Resend was told 200 so it will not ` +
+    'retry. Later mail from this sender today is dropped without another alert. If it is a real ' +
+    'request, record it with frontend/scripts/suppress-npi.ts.';
+  await sendOnce({
+    subject: '[AINPI admin] Removal email over limit',
+    text,
+    html: `<p>${esc(text)}</p>`,
+    tag: 'removal-sender-overflow',
   });
 }

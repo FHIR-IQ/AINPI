@@ -253,8 +253,13 @@ const handler = createMcpHandler(
       async ({ npi }) => {
         try {
           const { index, stale } = await loadOrgIndex();
-          // Organization NPIs are never suppressed: removal covers individuals only.
-          return text(JSON.stringify(lookupOrganization(index, npi, { stale }), null, 1));
+          // A suppressed NPI is an individual's (intake holds organization
+          // NPIs), even where a vendor file lists it as an organization: it
+          // gets the ordinary not-found result.
+          const view = (await getSuppressedNpis()).has(npi)
+            ? { ...index, ndhByNpi: new Map(), vendorByNpi: new Map() }
+            : index;
+          return text(JSON.stringify(lookupOrganization(view, npi, { stale }), null, 1));
         } catch (err) {
           // Never answer "not found" when the sources could not be read: an
           // empty index would make every NPI look like it has no endpoint.

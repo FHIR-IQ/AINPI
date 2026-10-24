@@ -9,9 +9,13 @@ published files. Aggregate numbers are not touched: a suppressed record still
 counts toward every total, and a payload whose rows were removed carries a
 count-only `suppressed_rows` field so its row count reconciles with its totals.
 
-Scope is individual (Type 1) NPIs. Intake admits only those, and filtering
-reads only individual NPI fields (`INDIVIDUAL_NPI_KEYS`), never organization
-NPI fields, and skips the organization files in `ORG_FILES` entirely.
+Scope is individual (Type 1) NPIs: intake processes only NPPES `NPI-1`
+records automatically and holds everything else. A suppressed NPI is
+therefore an individual's identifier wherever it appears, so it is removed
+from every NPI-valued column or key (any name containing "npi"), in
+organization files too: a vendor that lists a clinician's own NPI as an
+`org_npi` has published that person, and the row (with its `org_name`, which
+may be their name) goes. Matching is on the exact value, never a substring.
 
 THE LIST NEVER ENTERS GIT. It is read from, and merged across:
 
@@ -37,11 +41,19 @@ Modes:
       are not rewritten, and a CSV keeps its bytes except the removed lines.
 
   python3 analysis/suppression.py --check [--report-file F]
-      Exit 1 if any suppressed NPI appears in a file under
-      frontend/public/api/v1. Hits in docs/ and analysis/release-snapshots/
-      are warnings (editorial text is handled by hand). Prints file paths and
-      counts only, never an NPI; --report-file writes the same as Markdown for
-      an issue. With no list configured at all (forks) it warns and passes.
+      Exit 1 if a file under frontend/public/api/v1 still holds a suppressed
+      NPI as the exact value of an NPI-valued CSV column or JSON key (the same
+      test --apply uses). A digit-bounded occurrence anywhere else in those
+      files, and any in docs/ or analysis/release-snapshots/, is a warning: a
+      PAC ID, phone number or longer number containing the digits never trips
+      it. Prints paths and counts only, never an NPI; --report-file writes the
+      same as Markdown for an issue. With no list configured (forks) it warns
+      and passes.
+
+  python3 analysis/suppression.py --check-counts
+      Exit 1 if any payload's `suppressed_rows` is below the value committed
+      at HEAD (or the payload disappeared). Weekly refresh runs this after
+      regenerating, so a regeneration cannot quietly republish a removed row.
 
   python3 analysis/suppression.py --mark-applied [--before ISO_TIME]
       Mark pending rows (requested at or before ISO_TIME) as applied, through
@@ -85,31 +97,29 @@ TABLE = "npi_suppressions"
 
 NPI_RE = re.compile(r"^\d{10}$")
 
-# Field names that hold an individual's NPI. Organization NPI fields
-# (org_npi, manager_npi, organization_npi, ...) are deliberately absent.
-INDIVIDUAL_NPI_KEYS = frozenset({
-    "npi", "_npi", "practitioner_npi", "individual_npi", "provider_npi",
-    "rndrng_npi", "prscrbr_npi",
-})
-
-# Files whose `npi` field is an organization's NPI. Never filtered.
-ORG_FILES = (
-    "states/*-connectivity.json",
-    "states/*-system-endpoint-gap.json",
-    "states/*-org-endpoint-resolution.csv",
-    "findings/hospital-ownership-crosswalk.csv",
-    "findings/endpoint-org-crosswalk.csv",
-    "findings/vendor-endpoint-attribution.csv",
+# A CSV whose removed rows are reconciled in a payload JSON: that JSON's
+# `suppressed_rows` grows by the number of rows removed from the CSV. Patterns
+# are tried in order; `{x}` is the CSV stem, `{st}` the state directory.
+# Without an explicit entry, `findings/X.csv` reconciles in `findings/X.json`,
+# then in `findings/X-without-detail.json`.
+COUNT_SIDECARS = (
+    ("findings/high-risk-cohort-export.csv", "findings/high-risk-cohort.json"),
+    ("findings/endpoint-org-crosswalk.csv", "findings/endpoint-org-linkage.json"),
+    ("findings/pecos-org-crosswalk-*.csv", "findings/pecos-affiliation-coverage.json"),
+    ("findings/role-gap-composition-*.csv", "findings/role-gap-composition.json"),
+    ("states/*-cohort-critical.csv", "states/{prefix}.json"),
+    ("states/*/*.csv", "states/{st}.json"),
+    ("states/pa-enrollment-endpoint.csv", "states/pa-connectivity.json"),
+    ("states/pa-org-endpoint-resolution.csv", "states/pa-connectivity.json"),
 )
-
-# A CSV whose removed rows are reconciled in a sibling finding JSON. The
-# JSON's `suppressed_rows` grows by the number of rows removed from the CSV.
-COUNT_SIDECARS = {
-    "findings/high-risk-cohort-export.csv": "findings/high-risk-cohort.json",
-}
 
 TEXT_SUFFIXES = {".csv", ".json"}
 SUPPRESSED_ROWS_RE = re.compile(r'"suppressed_rows"\s*:\s*(\d+)')
+
+FAIL_CLOSED_ACTION = (
+    "Set SUPPRESSED_NPIS in Vercel production and preview, or run "
+    "frontend/prisma/sql/npi_suppressions.sql and record the rows with scripts/suppress-npi.ts."
+)
 
 
 class SuppressionError(ValueError):
@@ -120,19 +130,34 @@ class SuppressionError(ValueError):
 # Loading
 # --------------------------------------------------------------------------
 
+def npi_check_digit_ok(npi: str) -> bool:
+    """CMS NPI check digit: Luhn over "80840" + the ten digits."""
+    total = 0
+    for i, ch in enumerate(reversed("80840" + npi)):
+        d = int(ch)
+        if i % 2 == 1:
+            d *= 2
+            if d > 9:
+                d -= 9
+        total += d
+    return total % 10 == 0
+
+
 def parse_npis(raw: str | None) -> set[str]:
     """Parse a comma/whitespace separated list. Blanks are ignored; anything
-    that is not exactly ten digits raises."""
+    that is not a ten-digit NPI with a valid check digit raises (a mistyped
+    entry would otherwise suppress nothing, silently)."""
     if not raw:
         return set()
     out: set[str] = set()
     for i, tok in enumerate(re.split(r"[\s,;]+", raw.strip())):
         if not tok:
             continue
-        if not NPI_RE.match(tok):
+        if not NPI_RE.match(tok) or not npi_check_digit_ok(tok):
             # Position only: the token itself may be a mistyped NPI.
             raise SuppressionError(
-                f"{ENV_VAR} entry #{i + 1} is not a 10-digit NPI"
+                f"suppression list entry #{i + 1} is not a valid 10-digit NPI "
+                f"(check digit). Paste the value rather than retyping it."
             )
         out.add(tok)
     return out
@@ -204,14 +229,13 @@ def load_suppressed(
         if committed > 0 and db_rows is not None and not db_rows:
             raise SuppressionError(
                 f"the suppression table returned zero rows, but committed payloads "
-                f"record {committed} suppressed row(s). Refusing to run: the table "
-                f"is empty, unreadable under RLS, or the wrong database."
+                f"record {committed} suppressed row(s). Refusing to run. {FAIL_CLOSED_ACTION}"
             )
         if committed > 0 and not npis:
             raise SuppressionError(
                 f"no suppression list is configured ({READER_URL_VAR} or {ENV_VAR}), "
-                f"but committed payloads record {committed} suppressed row(s). "
-                f"Refusing to run: this would republish removed rows."
+                f"but committed payloads record {committed} suppressed row(s), and "
+                f"running would republish them. {FAIL_CLOSED_ACTION}"
             )
     return npis
 
@@ -221,11 +245,17 @@ def load_suppressed(
 # --------------------------------------------------------------------------
 
 def _is_npi_key(key: str) -> bool:
-    return key.lower() in INDIVIDUAL_NPI_KEYS
+    """Any NPI-valued column or key: npi, _npi, org_npi, manager_npi, ...
+    Count columns such as npis_on_url also match the name, but their values
+    are small integers and can never equal a 10-digit NPI exactly."""
+    return "npi" in key.lower()
 
 
-def _is_org_file(rel: str) -> bool:
-    return any(fnmatch.fnmatch(rel, pat) for pat in ORG_FILES)
+def _digit_bounded_count(text: str, suppressed: set[str]) -> int:
+    """Occurrences not embedded in a longer run of digits."""
+    return sum(
+        len(re.findall(rf"(?<!\d){re.escape(n)}(?!\d)", text)) for n in suppressed
+    )
 
 
 def filter_rows(
@@ -300,13 +330,13 @@ def scrub_csv_text(text: str, suppressed: set[str]) -> tuple[str, int]:
 #
 # One rule, applied the same way everywhere: whatever identifies the person
 # is REMOVED, never blanked or retyped.
-#   * a record in a list whose individual-NPI field matches: dropped from the
+#   * a record in a list whose NPI-valued field matches: dropped from the
 #     list;
 #   * a bare NPI string/number in a list: dropped from the list;
 #   * an object key equal to the NPI: the key is deleted;
-#   * an object held directly under a key whose individual-NPI field matches:
+#   * an object held directly under a key whose NPI-valued field matches:
 #     the key is deleted;
-#   * a scalar individual-NPI field on an object that stays: the field is
+#   * a scalar NPI-valued field on an object that stays: the field is
 #     deleted.
 # Consumers therefore see a shorter list or an absent key, which is what
 # they already see for a record that was never there.
@@ -441,8 +471,6 @@ def scrub_file(
     if not suppressed or path.suffix not in TEXT_SUFFIXES:
         return 0
     rel = _public_rel(path)
-    if rel and _is_org_file(rel):
-        return 0
     text = path.read_text(encoding="utf-8")
     if path.suffix == ".csv":
         new, removed = scrub_csv_text(text, suppressed)
@@ -455,9 +483,35 @@ def scrub_file(
     mirror.write_text(text, encoding="utf-8")
     path.write_text(new, encoding="utf-8")
     stamp.write_text(_sha256(new) + "\n")
-    if update_sidecar and rel in COUNT_SIDECARS:
-        _bump_sidecar(PUBLIC_ROOT / COUNT_SIDECARS[rel], removed)
+    if update_sidecar and path.suffix == ".csv" and rel:
+        sidecar = sidecar_for(rel)
+        if sidecar is not None:
+            _bump_sidecar(sidecar, removed)
+        else:
+            print(f"  note: no payload JSON reconciles {rel}; {removed} row(s) removed")
     return removed
+
+
+def sidecar_for(rel: str, public_root: Path | None = None) -> Path | None:
+    """The payload JSON whose `suppressed_rows` reconciles a published CSV."""
+    root = public_root or PUBLIC_ROOT
+    stem = Path(rel).stem
+    parts = rel.split("/")
+    for pattern, target in COUNT_SIDECARS:
+        if fnmatch.fnmatch(rel, pattern) and rel.count("/") == pattern.count("/"):
+            cand = root / target.format(
+                prefix=stem.split("-cohort-critical")[0],
+                st=parts[1] if len(parts) > 2 else "",
+            )
+            if cand.exists():
+                return cand
+    if rel.startswith("findings/"):
+        for name in (f"{stem}.json", f"{stem.removesuffix('-detail')}.json"):
+            cand = root / "findings" / name
+            # The -detail.json twin is itself per-NPI; prefer the headline.
+            if cand.exists() and not (name.endswith("-detail.json") and stem.endswith("-detail")):
+                return cand
+    return None
 
 
 def _walk(paths: Sequence[Path]) -> Iterable[Path]:
@@ -479,20 +533,82 @@ def apply(paths: Sequence[Path], suppressed: set[str]) -> dict[str, int]:
     return removed
 
 
-def check(paths: Sequence[Path], suppressed: set[str]) -> dict[str, int]:
-    """Files that still contain a suppressed NPI anywhere, with counts."""
-    hits: dict[str, int] = {}
+def check(
+    paths: Sequence[Path], suppressed: set[str]
+) -> tuple[dict[str, int], dict[str, int]]:
+    """(failures, warnings) per file, as counts.
+
+    A failure is a CSV row or JSON record still holding a suppressed NPI as
+    the exact value of an NPI-valued column or key: exactly what --apply
+    removes. A warning is any other digit-bounded occurrence (free text, a
+    URL, a file type --apply does not handle). A longer number that merely
+    contains the digits is neither.
+    """
+    fails: dict[str, int] = {}
+    warns: dict[str, int] = {}
     if not suppressed:
-        return hits
+        return fails, warns
     for f in _walk(paths):
         try:
             text = f.read_text(encoding="utf-8", errors="ignore")
         except OSError:
             continue
-        n = sum(text.count(npi) for npi in suppressed)
-        if n:
-            hits[str(_rel(f))] = n
-    return hits
+        if not _contains_any(text, suppressed):
+            continue
+        bounded = _digit_bounded_count(text, suppressed)
+        if bounded == 0:
+            continue
+        keyed = 0
+        if f.suffix == ".csv":
+            keyed = scrub_csv_text(text, suppressed)[1]
+        elif f.suffix == ".json":
+            try:
+                keyed = _scrub_json(json.loads(text), suppressed)[1]
+            except ValueError:
+                keyed = 0
+        rel = str(_rel(f))
+        if keyed:
+            fails[rel] = keyed
+        else:
+            warns[rel] = bounded
+    return fails, warns
+
+
+def committed_counts_at_head(public_root: Path | None = None) -> dict[str, int]:
+    """`suppressed_rows` per payload as committed at HEAD (git grep)."""
+    import subprocess
+
+    root = public_root or PUBLIC_ROOT
+    rel_root = _rel(root).as_posix()
+    out = subprocess.run(
+        ["git", "grep", "-n", "-E", r'"suppressed_rows"[[:space:]]*:[[:space:]]*[0-9]+', "HEAD", "--", rel_root],
+        cwd=REPO_ROOT, capture_output=True, text=True,
+    )
+    counts: dict[str, int] = {}
+    for line in out.stdout.splitlines():
+        # HEAD:<path>:<line>:<text>
+        try:
+            _, path, _, rest = line.split(":", 3)
+        except ValueError:
+            continue
+        m = SUPPRESSED_ROWS_RE.search(rest)
+        if m:
+            counts[path] = counts.get(path, 0) + int(m.group(1))
+    return counts
+
+
+def check_counts(public_root: Path | None = None) -> list[str]:
+    """Payloads whose suppressed_rows fell below the committed value."""
+    problems = []
+    for path, committed in sorted(committed_counts_at_head(public_root).items()):
+        f = REPO_ROOT / path
+        if not f.exists():
+            problems.append(f"{path}: committed suppressed_rows={committed}, file is gone")
+            continue
+        now = sum(int(m) for m in SUPPRESSED_ROWS_RE.findall(f.read_text(encoding="utf-8")))
+        if now < committed:
+            problems.append(f"{path}: suppressed_rows {now} < committed {committed}")
+    return problems
 
 
 def mark_applied(url: str, before: str | None = None) -> int:
@@ -519,10 +635,10 @@ def _write_report(path: str | None, public: dict[str, int], other: dict[str, int
         return
     lines = []
     if public:
-        lines.append("Published files that still contain a removed NPI (the guard failed):")
+        lines.append("Published files that still hold a removed NPI in an NPI field (the guard failed):")
         lines += [f"- `{f}`: {n} occurrence(s)" for f, n in sorted(public.items())]
     if other:
-        lines.append("Editorial or snapshot files that contain a removed NPI (handle by hand):")
+        lines.append("Files where a removed NPI appears outside an NPI field, or in docs/snapshots (handle by hand):")
         lines += [f"- `{f}`: {n} occurrence(s)" for f, n in sorted(other.items())]
     lines.append("")
     lines.append("Fix with `python3 analysis/suppression.py --apply` for published files; "
@@ -538,6 +654,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     mode.add_argument("--check", action="store_true")
     mode.add_argument("--mark-applied", action="store_true")
     mode.add_argument("--report", action="store_true")
+    mode.add_argument("--check-counts", action="store_true")
     ap.add_argument("--before", help="with --mark-applied: only rows requested at or before this UTC ISO time")
     ap.add_argument("--report-file", help="with --check: write a Markdown summary (paths and counts only)")
     ap.add_argument("paths", nargs="*", type=Path)
@@ -549,6 +666,18 @@ def main(argv: Sequence[str] | None = None) -> int:
             print(f"{APPLY_URL_VAR} not set; nothing to mark.")
             return 0
         print(f"Marked {mark_applied(url, args.before)} pending suppression(s) applied.")
+        return 0
+
+    if args.check_counts:
+        problems = check_counts()
+        for p in problems:
+            print(f"::error::{p}")
+        if problems:
+            print("A regeneration lowered suppressed_rows: a removed row may be back. "
+                  "Run --apply and check the list is configured. If the drop is genuine "
+                  "(the record left that file), commit it by hand after review.")
+            return 1
+        print("OK: no payload's suppressed_rows fell below its committed value.")
         return 0
 
     if args.check and not db_url(os.environ) and not os.environ.get(ENV_VAR):
@@ -576,11 +705,14 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 0
 
     public_paths = args.paths or [PUBLIC_ROOT]
-    public = check(public_paths, suppressed)
-    other = {} if args.paths else check([p for p in WARN_ROOTS if p.exists()], suppressed)
+    public, other = check(public_paths, suppressed)
+    if not args.paths:
+        f2, w2 = check([p for p in WARN_ROOTS if p.exists()], suppressed)
+        for k, v in {**f2, **w2}.items():
+            other[k] = other.get(k, 0) + v
     _write_report(args.report_file, public, other)
     for f, n in sorted(other.items()):
-        print(f"::warning file={f}::contains a removed NPI ({n} occurrence(s)); edit by hand")
+        print(f"::warning file={f}::a removed NPI appears outside an NPI field ({n} occurrence(s)); look by hand")
     if public:
         print(f"FAIL: a suppressed NPI appears in {len(public)} published file(s):")
         for f, n in sorted(public.items()):

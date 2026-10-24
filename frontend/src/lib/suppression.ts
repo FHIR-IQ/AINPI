@@ -48,7 +48,11 @@ export function isValidNpi(s: unknown): s is string {
   return sum % 10 === 0;
 }
 
-/** Parse the env override. Blanks are ignored; anything else must be 10 digits. */
+/**
+ * Parse the env override. Blanks are ignored; anything else must be a
+ * 10-digit NPI with a valid check digit, so a mistyped entry fails loudly
+ * instead of suppressing nothing. Paste values; do not retype them.
+ */
 export function parseSuppressedNpis(raw: string | undefined | null): Set<string> {
   const out = new Set<string>();
   if (!raw) return out;
@@ -56,9 +60,12 @@ export function parseSuppressedNpis(raw: string | undefined | null): Set<string>
     .split(/[\s,;]+/)
     .filter((t) => t.length > 0)
     .forEach((tok, i) => {
-      if (!isNpiShape(tok)) {
+      if (!isValidNpi(tok)) {
         // Position only: the token may be a mistyped real NPI.
-        throw new Error(`SUPPRESSED_NPIS entry #${i + 1} is not a 10-digit NPI`);
+        throw new Error(
+          `SUPPRESSED_NPIS entry #${i + 1} is not a valid 10-digit NPI (check digit). ` +
+            'Paste the value rather than retyping it.',
+        );
       }
       out.add(tok);
     });
@@ -167,18 +174,23 @@ export function invalidateSuppressionCache(): void {
  * empty: either means this build cannot see removals already made, and would
  * publish them again. Throws to fail the build.
  */
+export const FAIL_CLOSED_ACTION =
+  'Set SUPPRESSED_NPIS in Vercel production and preview, or run ' +
+  'frontend/prisma/sql/npi_suppressions.sql and record the rows with scripts/suppress-npi.ts.';
+
 export function assertSuppressionVisible(state: SuppressionState, committedSuppressedRows: number): void {
   if (committedSuppressedRows <= 0) return;
   if (state.dbRows === 0) {
     throw new Error(
-      `[suppression] the table returned zero rows but committed files record ${committedSuppressedRows} ` +
-        'removed row(s). Refusing to build.',
+      `[suppression] Refusing to build: the table returned zero rows but committed files record ` +
+        `${committedSuppressedRows} removed row(s). ${FAIL_CLOSED_ACTION}`,
     );
   }
   if (state.set.size === 0) {
     throw new Error(
-      `[suppression] no suppression list is visible (table unreadable and SUPPRESSED_NPIS empty) but ` +
-        `committed files record ${committedSuppressedRows} removed row(s). Refusing to build.`,
+      `[suppression] Refusing to build: no suppression list is visible (table unreadable and ` +
+        `SUPPRESSED_NPIS empty) but committed files record ${committedSuppressedRows} removed row(s). ` +
+        FAIL_CLOSED_ACTION,
     );
   }
 }

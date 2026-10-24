@@ -80,11 +80,19 @@ export const ROUTE_COST: Record<string, number> = {
   'magic-scanner': 500, //       LLM calls; priced well above scan cost
   'mcp:static': 0, //            CDN-served JSON, costs nothing
   'mcp:lookup': 2,
-  // Removal-request form. No query cost; priced so one address can file
-  // about twenty a day, which no honest requester needs to exceed.
+  // Removal requests. No query cost. The form and the removal inbox use their
+  // own limiter (src/lib/removal-limit.ts); this entry exists so the shape is
+  // priced if anything ever passes it here, and it is in NON_WAREHOUSE_SHAPES.
   'privacy/remove': 100,
   default: 25,
 };
+
+/**
+ * Shapes that cost no BigQuery or LLM spend. They are still rate-limited per
+ * caller, but never add to the global usage_ledger, so traffic on them cannot
+ * trip the daily breaker that protects the warehouse.
+ */
+export const NON_WAREHOUSE_SHAPES: ReadonlySet<string> = new Set(['privacy/remove', 'mcp:static']);
 
 // ---------------------------------------------------------------------------
 // Tiers
@@ -172,7 +180,7 @@ export interface Caller {
   dailyUnitCap: number;
 }
 
-function clientIp(req: NextRequest): string {
+export function clientIp(req: NextRequest): string {
   // Vercel sets x-forwarded-for; take the first hop, which is the client.
   const fwd = req.headers.get('x-forwarded-for');
   if (fwd) return fwd.split(',')[0].trim();
@@ -238,7 +246,7 @@ function windowIds(subject: string) {
 }
 
 /** Atomic increment-and-read. One round trip; the returned total is the decision. */
-async function bump(id: string, units: number, ttlMs: number): Promise<number | null> {
+export async function bump(id: string, units: number, ttlMs: number): Promise<number | null> {
   try {
     const expiresAt = new Date(Date.now() + ttlMs);
     const rows = await prisma.$queryRaw<{ units: number }[]>`
@@ -254,7 +262,13 @@ async function bump(id: string, units: number, ttlMs: number): Promise<number | 
   }
 }
 
-async function recordSpend(utcDay: string, units: number): Promise<number | null> {
+export async function recordSpend(
+  utcDay: string,
+  units: number,
+  shape: string = 'default',
+): Promise<number | null> {
+  // Per-shape flag: spend that is not warehouse spend never reaches the ledger.
+  if (NON_WAREHOUSE_SHAPES.has(shape)) return null;
   try {
     const usd = units * USD_PER_UNIT;
     const rows = await prisma.$queryRaw<{ units: number }[]>`
@@ -372,7 +386,7 @@ export async function enforceRateLimit(
   }
 
   // Layer 3
-  const globalUnits = await recordSpend(w.utcDay, units);
+  const globalUnits = await recordSpend(w.utcDay, units, opts.shape ?? 'default');
   if (
     globalUnits !== null &&
     globalUnits > DAILY_BREAKER_UNITS &&

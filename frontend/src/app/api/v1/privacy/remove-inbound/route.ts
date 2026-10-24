@@ -9,22 +9,26 @@
  * acknowledged and ignored, because one Resend account delivers all inbound
  * mail to every webhook. Mail naming no NPI alerts the admin.
  *
- * Limits: the shared rate limiter (shape `privacy/remove`; every webhook
- * call comes from Resend, so this is a global ceiling on the inbox), and at
- * most EMAIL_SENDER_DAILY_CAP requests per sender per UTC day. Past either,
- * the mail is acknowledged and nothing is recorded. recordSuppression()
- * applies the Type 1 check and the global daily cap.
+ * Limits, applied only to signed mail addressed to the removal inbox: the
+ * removal limiter keyed on the sender (`remove:mail:<sender>`, its own
+ * buckets plus the global removal ceiling, never the search quota or the
+ * warehouse breaker; src/lib/removal-limit.ts), and at most
+ * EMAIL_SENDER_DAILY_CAP recorded requests per sender per UTC day. Past
+ * either, the route answers 200 so Resend stops retrying, records nothing,
+ * and alerts the admin once per sender per UTC day. recordSuppression()
+ * then applies the Type 1 check and the daily processing cap.
  *
- * A missing signing secret alerts the admin (once per warm instance) and
- * answers 503 so Resend retries, rather than failing silently with 401.
+ * A missing RESEND_REMOVAL_WEBHOOK_SECRET alerts the admin (once per warm
+ * instance) and answers 503. There is deliberately no fallback to the
+ * Marketplace webhook's secret.
  *
- * Env: RESEND_API_KEY, RESEND_REMOVAL_WEBHOOK_SECRET (falls back to
- * RESEND_WEBHOOK_SECRET), optional REMOVAL_INBOX.
+ * Env: RESEND_API_KEY, RESEND_REMOVAL_WEBHOOK_SECRET, optional REMOVAL_INBOX.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { verifyResendWebhook } from '@/lib/resend-webhook';
-import { enforceRateLimit } from '@/lib/rate-limit';
+import { bump } from '@/lib/rate-limit';
+import { checkRemovalLimit, defaultRemovalLimitDeps } from '@/lib/removal-limit';
 import {
   DEFAULT_REMOVAL_INBOX,
   EMAIL_SENDER_DAILY_CAP,
@@ -34,9 +38,18 @@ import {
   senderRequestsToday,
 } from '@/lib/suppression-intake';
 import {
+  sendRemovalSenderOverflowAlert,
   sendSuppressionUnparsedAlert,
   sendSuppressionWebhookUnconfiguredAlert,
 } from '@/lib/admin-email';
+
+/** 200, nothing recorded, one admin alert per sender per UTC day. */
+async function overflow(sender: string, reason: string) {
+  const day = Math.floor(Date.now() / 86_400_000);
+  const n = await bump(`remove:mail-alert:${sender}:d:${day}`, 1, 172_800_000);
+  if (n === null || n === 1) void sendRemovalSenderOverflowAlert(sender, reason);
+  return NextResponse.json({ ok: true, ignored: 'over limit' });
+}
 
 let unconfiguredAlerted = false;
 
@@ -45,7 +58,7 @@ export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
-  const secret = process.env.RESEND_REMOVAL_WEBHOOK_SECRET || process.env.RESEND_WEBHOOK_SECRET;
+  const secret = process.env.RESEND_REMOVAL_WEBHOOK_SECRET;
   if (!secret) {
     if (!unconfiguredAlerted) {
       unconfiguredAlerted = true;
@@ -82,11 +95,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, ignored: 'not addressed to the removal inbox' });
   }
 
-  // Charged only for mail that is signed and addressed to the removal inbox,
-  // so other inbound mail on the account cannot use up the budget.
-  const rl = await enforceRateLimit(req, { shape: 'privacy/remove' });
-  if (!rl.ok) return rl.response!;
-
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return NextResponse.json({ error: 'RESEND_API_KEY unset' }, { status: 503 });
   const got = await new Resend(apiKey).emails.receiving.get(evt.data.email_id);
@@ -107,15 +115,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, ignored: 'no NPI found' });
   }
 
+  const sender = parsed.sender ?? 'unknown-sender';
+  // Charged only for signed mail addressed to the removal inbox, so other
+  // inbound mail on the account cannot use up the budget.
+  const rl = await checkRemovalLimit(`mail:${sender}`, await defaultRemovalLimitDeps());
+  if (!rl.ok) return overflow(sender, `removal limiter (${rl.reason})`);
+
   try {
     const deps = await defaultIntakeDeps();
     let npis = parsed.npis;
     if (parsed.sender) {
       const already = await senderRequestsToday(deps.db, parsed.sender);
       npis = npis.slice(0, Math.max(0, EMAIL_SENDER_DAILY_CAP - already));
-      if (npis.length === 0) {
-        return NextResponse.json({ ok: true, ignored: 'sender daily cap reached' });
-      }
+      if (npis.length === 0) return overflow(sender, `more than ${EMAIL_SENDER_DAILY_CAP} requests today`);
     }
     for (const npi of npis) await recordSuppression(npi, parsed.sender, 'email', deps);
   } catch (err) {

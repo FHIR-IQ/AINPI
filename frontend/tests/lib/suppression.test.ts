@@ -43,6 +43,16 @@ describe('NPI validation and parsing', () => {
     expect(parseSuppressedNpis(undefined).size).toBe(0);
   });
 
+  it('rejects an entry with a bad check digit', () => {
+    expect(() => parseSuppressedNpis(BAD_CHECK)).toThrow(/check digit/);
+  });
+
+  it('names the fix in the fail-closed error', () => {
+    expect(() => assertSuppressionVisible({ set: new Set(), dbRows: null }, 1)).toThrow(
+      /Set SUPPRESSED_NPIS in Vercel production and preview, or run frontend\/prisma\/sql\/npi_suppressions\.sql/,
+    );
+  });
+
   it('throws on a malformed entry without echoing it', () => {
     expect(() => parseSuppressedNpis(`${A},98765`)).toThrow(/entry #2/);
     expect(() => parseSuppressedNpis(`${A},98765`)).not.toThrow(/98765/);

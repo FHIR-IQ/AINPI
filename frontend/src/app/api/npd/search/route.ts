@@ -304,8 +304,11 @@ export async function GET(req: NextRequest) {
     if (params.type === 'all' || params.type === 'practitioner') {
       results.practitioners = filterSuppressed(await searchPractitioners(params), suppressed);
     }
-    // Organization NPIs are never suppressed: removal covers individuals only.
-    if (params.type === 'all' || params.type === 'organization') results.organizations = await searchOrganizations(params);
+    // Intake suppresses only individual NPIs, so a match here is an
+    // individual's NPI on an organization record: dropped the same way.
+    if (params.type === 'all' || params.type === 'organization') {
+      results.organizations = filterSuppressed(await searchOrganizations(params), suppressed);
+    }
     if (params.type === 'all' || params.type === 'location') results.locations = await searchLocations(params);
     if (params.type === 'all' || params.type === 'endpoint') results.endpoints = await searchEndpoints(params);
 
