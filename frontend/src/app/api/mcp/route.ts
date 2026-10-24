@@ -24,7 +24,7 @@ import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
 import { createOrgIndexLoader, lookupOrganization } from '@/lib/org-lookup';
-import { getSuppressedNpis } from '@/lib/suppression';
+import { getOrgSuppressedNpis, getSuppressedNpis } from '@/lib/suppression';
 
 const BASE = 'https://ainpi.dev';
 
@@ -253,10 +253,10 @@ const handler = createMcpHandler(
       async ({ npi }) => {
         try {
           const { index, stale } = await loadOrgIndex();
-          // A suppressed NPI is an individual's (intake holds organization
-          // NPIs), even where a vendor file lists it as an organization: it
-          // gets the ordinary not-found result.
-          const view = (await getSuppressedNpis()).has(npi)
+          // Full scope only: a confirmed individual's NPI, even where a vendor
+          // file lists it as an organization, gets the ordinary not-found
+          // result. An unverified NPI never hides organization data.
+          const view = (await getOrgSuppressedNpis()).has(npi)
             ? { ...index, ndhByNpi: new Map(), vendorByNpi: new Map() }
             : index;
           return text(JSON.stringify(lookupOrganization(view, npi, { stale }), null, 1));

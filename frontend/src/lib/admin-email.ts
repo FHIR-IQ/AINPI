@@ -353,7 +353,7 @@ export interface SuppressionAlertArgs {
 const BASIS_TEXT: Record<string, string> = {
   nppes: 'NPPES lists it as an individual (NPI-1).',
   ainpi_files: 'NPPES did not answer for it (deactivated, or the API was down); it is in AINPI\'s individual-level data, so it was accepted as an individual.',
-  unverified: 'NPPES did not answer for it and it is in none of AINPI\'s files, so there is nothing to remove. Recorded anyway; the confirmation follows as usual.',
+  unverified: 'NPPES did not answer for it and it is in none of AINPI\'s files. Until NPPES confirms its type it filters practitioner search only and never organization data; the confirm cron re-checks NPPES daily.',
   manual: 'Recorded by hand with scripts/suppress-npi.ts --force.',
 };
 

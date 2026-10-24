@@ -27,6 +27,8 @@ export type RemovalCounts =
       confirmed: number;
       /** Any age: more than 5 days old and not yet confirmed. */
       overdue: number;
+      /** Any age: NPI type still unconfirmed (practitioner-only, re-checked daily). */
+      unverified: number;
     }
   | { status: 'unavailable'; reason: string };
 
@@ -34,7 +36,7 @@ export async function loadRemovalCounts(db: RemovalCountsDb, since: Date, now: D
   try {
     const t = db.npiSuppression;
     const recent = { requestedAt: { gte: since } };
-    const [received, autoAccepted, queued, declined, hadPage, confirmed, overdue] = await Promise.all([
+    const [received, autoAccepted, queued, declined, hadPage, confirmed, overdue, unverified] = await Promise.all([
       t.count({ where: recent }),
       t.count({ where: { ...recent, status: { not: 'declined' }, notBefore: null } }),
       t.count({ where: { ...recent, notBefore: { not: null } } }),
@@ -47,8 +49,9 @@ export async function loadRemovalCounts(db: RemovalCountsDb, since: Date, now: D
           requestedAt: { lt: new Date(now.getTime() - 5 * 86_400_000) },
         },
       }),
+      t.count({ where: { status: 'pending', basis: 'unverified' } }),
     ]);
-    return { status: 'ok', received, autoAccepted, queued, declined, hadPage, confirmed, overdue };
+    return { status: 'ok', received, autoAccepted, queued, declined, hadPage, confirmed, overdue, unverified };
   } catch (err) {
     return { status: 'unavailable', reason: err instanceof Error ? err.message.slice(0, 120) : String(err) };
   }
@@ -65,6 +68,7 @@ export function renderRemovalText(c: RemovalCounts): string {
     `  Had a high-risk page:      ${c.hadPage}`,
     `  Confirmed:                 ${c.confirmed}`,
     `  Overdue (>5 days, any age): ${c.overdue}`,
+    `  Type unverified (any age): ${c.unverified}`,
   ].join('\n');
 }
 
@@ -81,5 +85,6 @@ export function renderRemovalHtml(c: RemovalCounts): string {
     row('Had a high-risk-cohort page', c.hadPage),
     row('Confirmed', c.confirmed),
     row('Overdue: more than 5 days, not confirmed (any age)', c.overdue),
+    row('NPI type unverified, re-checked daily (any age)', c.unverified),
   ].join('')}</table>`;
 }

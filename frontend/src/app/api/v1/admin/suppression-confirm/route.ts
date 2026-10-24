@@ -7,6 +7,10 @@
  * the requester the automated completion email and marks the row
  * `confirmed`. See src/lib/suppression-confirm.ts.
  *
+ * First it re-checks NPPES for requests whose NPI type was unknown at intake
+ * (basis 'unverified'): NPI-1 moves to full force, NPI-2 is declined with the
+ * organization reply, still-unknown waits for tomorrow.
+ *
  * It also sends one admin alert for any request more than 5 days old and not
  * yet confirmed (once per request), two days ahead of the 7-day promise.
  *
@@ -24,9 +28,17 @@ import { prisma } from '@/lib/prisma';
 import {
   runConfirmations,
   runOverdueCheck,
+  runReclassify,
   type ConfirmDb,
   type OverdueDb,
+  type ReclassifyDb,
 } from '@/lib/suppression-confirm';
+import {
+  mailtoAllowed,
+  nppesEnumerationType,
+  sendDeclinedReply,
+} from '@/lib/suppression-intake';
+import { invalidateSuppressionCache } from '@/lib/suppression';
 import { sendSuppressionOverdueAlert } from '@/lib/admin-email';
 
 export const dynamic = 'force-dynamic';
@@ -54,8 +66,21 @@ export async function GET(req: NextRequest) {
     console.error('[suppression-confirm] overdue check failed:', err instanceof Error ? err.message : err);
   }
 
+  let reclassified = null;
+  try {
+    reclassified = await runReclassify({
+      db: prisma as unknown as ReclassifyDb,
+      lookupType: (npi) => nppesEnumerationType(npi),
+      sendDeclined: sendDeclinedReply,
+      mailAllowed: (to) => mailtoAllowed(to),
+    });
+    if (reclassified.confirmedIndividual > 0) invalidateSuppressionCache();
+  } catch (err) {
+    console.error('[suppression-confirm] reclassify failed:', err instanceof Error ? err.message : err);
+  }
+
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return NextResponse.json({ ok: true, overdue, skipped: 'RESEND_API_KEY unset' });
+  if (!apiKey) return NextResponse.json({ ok: true, overdue, reclassified, skipped: 'RESEND_API_KEY unset' });
   const resend = new Resend(apiKey);
   const from = process.env.REMOVAL_FROM_ADDRESS || 'AINPI <no-reply@ainpi.dev>';
 
@@ -64,12 +89,13 @@ export async function GET(req: NextRequest) {
       db: prisma as unknown as ConfirmDb,
       fetchFn: (url, init) => fetch(url, init),
       base: process.env.SITE_URL || 'https://ainpi.dev',
+      mailAllowed: (to) => mailtoAllowed(to),
       send: async (to, msg) => {
         const sent = await resend.emails.send({ from, to, subject: msg.subject, text: msg.text });
         return sent.error ? { ok: false, error: sent.error.message } : { ok: true };
       },
     });
-    return NextResponse.json({ ok: true, overdue, ...summary });
+    return NextResponse.json({ ok: true, overdue, reclassified, ...summary });
   } catch (err) {
     // Most likely the table does not exist yet (prisma/sql/npi_suppressions.sql not run).
     console.error('[suppression-confirm]', err instanceof Error ? err.message : err);

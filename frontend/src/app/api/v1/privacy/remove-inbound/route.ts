@@ -28,10 +28,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { verifyResendWebhook } from '@/lib/resend-webhook';
 import { bump } from '@/lib/rate-limit';
-import { checkRemovalLimit, defaultRemovalLimitDeps } from '@/lib/removal-limit';
+import { checkRemovalCeiling, checkRemovalSubject, defaultRemovalLimitDeps } from '@/lib/removal-limit';
 import {
   DEFAULT_REMOVAL_INBOX,
   EMAIL_SENDER_DAILY_CAP,
+  RemovalCeilingError,
   defaultIntakeDeps,
   parseRemovalEmail,
   recordSuppression,
@@ -129,7 +130,8 @@ export async function POST(req: NextRequest) {
   const sender = parsed.sender ?? 'unknown-sender';
   // Charged only for signed mail addressed to the removal inbox, so other
   // inbound mail on the account cannot use up the budget.
-  const rl = await checkRemovalLimit(`mail:${sender}`, await defaultRemovalLimitDeps());
+  const limitDeps = await defaultRemovalLimitDeps();
+  const rl = await checkRemovalSubject(`mail:${sender}`, limitDeps);
   if (!rl.ok) return overflow(sender, `removal limiter (${rl.reason})`);
 
   try {
@@ -140,8 +142,15 @@ export async function POST(req: NextRequest) {
       npis = npis.slice(0, Math.max(0, EMAIL_SENDER_DAILY_CAP - already));
       if (npis.length === 0) return overflow(sender, `more than ${EMAIL_SENDER_DAILY_CAP} requests today`);
     }
-    for (const npi of npis) await recordSuppression(npi, parsed.sender, 'email', deps);
+    // The global ceiling is charged per accepted NPI inside recordSuppression;
+    // a declined (organization) NPI never charges it.
+    const admitted = {
+      ...deps,
+      admit: async () => (await checkRemovalCeiling(limitDeps)).ok,
+    };
+    for (const npi of npis) await recordSuppression(npi, parsed.sender, 'email', admitted);
   } catch (err) {
+    if (err instanceof RemovalCeilingError) return overflow(sender, 'global daily removal ceiling');
     console.error('[privacy/remove-inbound] record failed:', err instanceof Error ? err.message : err);
     // 5xx so Resend retries; recordSuppression is idempotent per NPI.
     return NextResponse.json({ error: 'record failed' }, { status: 503 });

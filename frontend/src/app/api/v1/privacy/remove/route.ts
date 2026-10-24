@@ -18,7 +18,12 @@ import {
   type RemovalLimitResult,
 } from '@/lib/removal-limit';
 import { isValidNpi } from '@/lib/suppression';
-import { normalizeEmail, recordSuppression } from '@/lib/suppression-intake';
+import {
+  RemovalCeilingError,
+  defaultIntakeDeps,
+  normalizeEmail,
+  recordSuppression,
+} from '@/lib/suppression-intake';
 
 export const dynamic = 'force-dynamic';
 // NPPES lookup (8 s) and page check (5 s) run inside the request.
@@ -28,8 +33,10 @@ const REMOVAL_ACCEPTED_MESSAGE = 'Request received.';
 
 export async function POST(req: NextRequest) {
   // Its own limiter, apart from the BigQuery quota (src/lib/removal-limit.ts).
-  // The per-IP bucket is charged for every post; the global ceiling only
-  // after validation, so malformed posts cannot use it up.
+  // The per-IP bucket is charged for every post. The global ceiling is
+  // charged inside recordSuppression, only once a request is known to be
+  // valid and acceptable: malformed posts and declined (organization) NPIs
+  // count against the caller's own IP only.
   const limitDeps = await defaultRemovalLimitDeps();
   const tooMany = (rl: Extract<RemovalLimitResult, { ok: false }>) =>
     NextResponse.json(
@@ -64,12 +71,21 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const ceiling = await checkRemovalCeiling(limitDeps);
-  if (!ceiling.ok) return tooMany(ceiling);
-
+  let ceilingRefusal: RemovalLimitResult | null = null;
   try {
-    await recordSuppression(npi, email, 'form');
+    const deps = await defaultIntakeDeps();
+    await recordSuppression(npi, email, 'form', {
+      ...deps,
+      admit: async () => {
+        const r = await checkRemovalCeiling(limitDeps);
+        if (!r.ok) ceilingRefusal = r;
+        return r.ok;
+      },
+    });
   } catch (err) {
+    if (err instanceof RemovalCeilingError && ceilingRefusal) {
+      return tooMany(ceilingRefusal as Extract<RemovalLimitResult, { ok: false }>);
+    }
     console.error('[privacy/remove] record failed:', err instanceof Error ? err.message : err);
     return NextResponse.json(
       { error: 'The removal service is unavailable. Please try again later.' },

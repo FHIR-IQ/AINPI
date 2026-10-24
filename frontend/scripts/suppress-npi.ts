@@ -30,6 +30,7 @@ import {
   npiPageExists,
   nppesEnumerationType,
   recordSuppression,
+  mailtoAllowed,
   sendDeclinedReply,
   type IntakeDb,
 } from '../src/lib/suppression-intake';
@@ -77,6 +78,7 @@ async function main() {
         lookupType: (n) => nppesEnumerationType(n),
         hasPage: (n) => npiPageExists(n),
         sendDeclined: sendDeclinedReply,
+        mailAllowed: (to) => mailtoAllowed(to),
       },
       { force },
     );

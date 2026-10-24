@@ -13,7 +13,7 @@ name: Apply NPI removal requests
 # Required secret:
 #   SUPPRESSION_APPLY_URL  ainpi_suppression_apply on the Supabase session
 #                          pooler: postgresql://ainpi_suppression_apply.hspqvcoinujtfodreqaf:<pw>@aws-1-us-east-2.pooler.supabase.com:5432/postgres
-#                          SELECT (npi, status, requested_at), UPDATE (status,
+#                          SELECT (npi, status, requested_at, not_before), UPDATE (status,
 #                          applied_at), RLS-limited (frontend/prisma/sql/npi_suppressions.sql).
 # Also read: SUPPRESSED_NPIS, merged with the table as a second layer.
 

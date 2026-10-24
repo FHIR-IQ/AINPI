@@ -72,27 +72,49 @@ export function parseSuppressedNpis(raw: string | undefined | null): Set<string>
   return out;
 }
 
-export type SuppressionSource = () => Promise<string[]>;
+/**
+ * A row in force, from the table. `practitionerOnly` is true while the NPI's
+ * type is unconfirmed (basis 'unverified'): it then filters practitioner and
+ * individual results only, never organization data, and the file scrub does
+ * not see it (RLS). A bare string is a full-scope NPI (tests, env).
+ */
+export type SourceRow = string | { npi: string; practitionerOnly: boolean };
+export type SuppressionSource = () => Promise<SourceRow[]>;
 
 /** Statuses whose NPI is suppressed (declined requests are not). */
 export const ACTIVE_STATUSES = ['pending', 'applied', 'confirmed'] as const;
 
+export type SuppressionScope = 'none' | 'practitioner' | 'full';
+
 /**
- * Whether a row is in force at `now`: an accepted status, and not queued for
- * a later day. The RLS policies in prisma/sql/npi_suppressions.sql apply the
- * same rule to the workflow roles.
+ * How far a row reaches at `now`:
+ *   none          declined, or queued for a later day
+ *   practitioner  in force, NPI type unconfirmed (basis 'unverified'):
+ *                 practitioner and individual results only
+ *   full          in force everywhere, organization data and files included
+ * The RLS policies in prisma/sql/npi_suppressions.sql show the workflow roles
+ * (and so analysis/suppression.py) exactly the `full` rows.
  */
-export function isActiveSuppression(
-  row: { status: string; notBefore: Date | null },
+export function suppressionScope(
+  row: { status: string; notBefore: Date | null; basis?: string | null },
   now: Date = new Date(),
-): boolean {
-  return (
+): SuppressionScope {
+  const active =
     (ACTIVE_STATUSES as readonly string[]).includes(row.status) &&
-    (row.notBefore === null || row.notBefore.getTime() <= now.getTime())
-  );
+    (row.notBefore === null || row.notBefore.getTime() <= now.getTime());
+  if (!active) return 'none';
+  return row.basis === 'unverified' ? 'practitioner' : 'full';
 }
 
-/** Prisma filter for isActiveSuppression(). */
+/** In force at all (either scope). */
+export function isActiveSuppression(
+  row: { status: string; notBefore: Date | null; basis?: string | null },
+  now: Date = new Date(),
+): boolean {
+  return suppressionScope(row, now) !== 'none';
+}
+
+/** Prisma filter for rows in force at `now` (either scope). */
 export function activeSuppressionWhere(now: Date = new Date()) {
   return {
     status: { in: [...ACTIVE_STATUSES] },
@@ -100,19 +122,22 @@ export function activeSuppressionWhere(now: Date = new Date()) {
   };
 }
 
-/** Reads every NPI whose removal is in force now. */
+/** Reads every NPI whose removal is in force now, with its scope. */
 export const prismaSuppressionSource: SuppressionSource = async () => {
   const { prisma } = await import('@/lib/prisma');
   const rows = await prisma.npiSuppression.findMany({
     where: activeSuppressionWhere(),
-    select: { npi: true },
+    select: { npi: true, basis: true },
   });
-  return rows.map((r) => r.npi);
+  return rows.map((r) => ({ npi: r.npi, practitionerOnly: r.basis === 'unverified' }));
 };
 
 export interface SuppressionState {
+  /** Practitioner scope: every NPI in force. Use for individual results. */
   set: Set<string>;
-  /** Rows read from the table, or null when it could not be read. */
+  /** Full scope only. Use for organization data. */
+  orgSet: Set<string>;
+  /** Full-scope rows read from the table, or null when it could not be read. */
   dbRows: number | null;
 }
 
@@ -124,6 +149,10 @@ export interface SuppressionLoader {
 
 /** After a failed table read, wait this long before trying again. */
 export const SUPPRESSION_ERROR_RETRY_MS = 30 * 1000;
+
+function normalizeRow(r: SourceRow): { npi: string; practitionerOnly: boolean } {
+  return typeof r === 'string' ? { npi: r, practitionerOnly: false } : r;
+}
 
 export function createSuppressionLoader(opts: {
   source: SuppressionSource;
@@ -137,34 +166,42 @@ export function createSuppressionLoader(opts: {
   // Only a successful table read is cached for the full TTL. A failure keeps
   // serving the last good list (never an empty one in its place) and is
   // retried after a short backoff.
-  let good: { at: number; npis: string[] } | null = null;
+  let good: { at: number; rows: { npi: string; practitionerOnly: boolean }[] } | null = null;
   let failedAt: number | null = null;
 
   async function state(): Promise<SuppressionState> {
-    const set = parseSuppressedNpis(env());
+    const fromEnv = parseSuppressedNpis(env());
+    const set = new Set(fromEnv);
+    const orgSet = new Set(fromEnv);
     const fresh = good && now() - good.at < ttl;
     const backingOff = failedAt !== null && now() - failedAt < SUPPRESSION_ERROR_RETRY_MS;
-    let dbRows: number | null = good ? good.npis.length : null;
+    let ok = good !== null && !(backingOff && !fresh);
     if (!fresh && !backingOff) {
       try {
-        const npis = await opts.source();
-        good = { at: now(), npis };
+        const rows = (await opts.source()).map(normalizeRow);
+        good = { at: now(), rows };
         failedAt = null;
-        dbRows = npis.length;
+        ok = true;
       } catch (err) {
         failedAt = now();
-        dbRows = null;
+        ok = false;
         const msg = err instanceof Error ? err.message : String(err);
         console.error(
           `[suppression] table unreadable; using ${good ? 'the last good list' : 'SUPPRESSED_NPIS only'}:`,
           msg,
         );
       }
-    } else if (backingOff && !fresh) {
-      dbRows = null;
     }
-    for (const npi of good?.npis ?? []) if (isNpiShape(npi)) set.add(npi);
-    return { set, dbRows };
+    let full = 0;
+    for (const r of good?.rows ?? []) {
+      if (!isNpiShape(r.npi)) continue;
+      set.add(r.npi);
+      if (!r.practitionerOnly) {
+        orgSet.add(r.npi);
+        full++;
+      }
+    }
+    return { set, orgSet, dbRows: ok ? full : null };
   }
 
   return {
@@ -181,8 +218,14 @@ export function createSuppressionLoader(opts: {
 
 const defaultLoader = createSuppressionLoader({ source: prismaSuppressionSource });
 
+/** Practitioner scope: filter individual and practitioner results with this. */
 export function getSuppressedNpis(): Promise<Set<string>> {
   return defaultLoader.get();
+}
+
+/** Full scope only: filter organization data with this, never getSuppressedNpis(). */
+export async function getOrgSuppressedNpis(): Promise<Set<string>> {
+  return (await defaultLoader.state()).orgSet;
 }
 
 export function getSuppressionState(): Promise<SuppressionState> {
@@ -212,7 +255,7 @@ export function assertSuppressionVisible(state: SuppressionState, committedSuppr
         `${committedSuppressedRows} removed row(s). ${FAIL_CLOSED_ACTION}`,
     );
   }
-  if (state.set.size === 0) {
+  if (state.orgSet.size === 0) {
     throw new Error(
       `[suppression] Refusing to build: no suppression list is visible (table unreadable and ` +
         `SUPPRESSED_NPIS empty) but committed files record ${committedSuppressedRows} removed row(s). ` +

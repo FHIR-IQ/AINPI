@@ -237,3 +237,55 @@ def test_main_check_fails_only_on_published_files(monkeypatch, tmp_path):
     assert "docs/note.md" in report.read_text() and A not in report.read_text()
     (public / "x.json").write_text(json.dumps({"npi": A}))
     assert sp.main(["--check"]) == 1
+
+
+def test_unverified_npi_never_touches_org_data_until_confirmed(tmp_path, monkeypatch):
+    """RLS hides basis='unverified' rows from the workflow roles, so the file
+    scrub's list (load_suppressed) does not contain them: an organization row
+    carrying the NPI stays. Once the cron reclassifies it as NPPES NPI-1, the
+    row becomes visible and the scrub removes it fully."""
+    public = _tree(tmp_path, monkeypatch)
+    xwalk = public / "findings" / "endpoint-org-crosswalk.csv"
+    original = f"endpoint_id,base_url,host,status,org_id,org_npi,org_name,org_state\ne1,https://a,a,active,o1,{A},Some Org,PA\n"
+    xwalk.write_text(original)
+    env = {"SUPPRESSION_READER_URL": "postgresql://x"}
+
+    # Unverified: the table holds A, but the reader role does not see it.
+    monkeypatch.setattr(sp, "load_from_db", lambda url: {B})
+    listed = sp.load_suppressed(env, public_root=public)
+    sp.apply([public], listed)
+    assert xwalk.read_text() == original
+
+    # Reclassified to NPI-1 (basis 'nppes'): now visible, now scrubbed.
+    monkeypatch.setattr(sp, "load_from_db", lambda url: {A, B})
+    listed = sp.load_suppressed(env, public_root=public)
+    sp.apply([public], listed)
+    assert A not in xwalk.read_text() and "Some Org" not in xwalk.read_text()
+    assert sp.check([public], listed) == ({}, {})
+
+
+def test_mark_applied_skips_rows_that_became_due_mid_run(monkeypatch):
+    seen = {}
+
+    class Cur:
+        rowcount = 0
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def execute(self, sql, params):
+            seen["sql"], seen["params"] = sql, params
+
+    class Conn:
+        def __enter__(self): return self
+        def __exit__(self, *a): return False
+        def cursor(self): return Cur()
+        def commit(self): pass
+
+    class FakePsycopg:
+        @staticmethod
+        def connect(url, connect_timeout=20): return Conn()
+
+    monkeypatch.setattr(sp, "_psycopg", lambda: FakePsycopg)
+    sp.mark_applied("postgresql://x", "2026-10-24T12:00:00")
+    assert "coalesce(not_before, requested_at) <= %s::timestamp" in seen["sql"]
+    assert "requested_at <= %s::timestamp" in seen["sql"]
+    assert seen["params"] == ("2026-10-24T12:00:00", "2026-10-24T12:00:00")

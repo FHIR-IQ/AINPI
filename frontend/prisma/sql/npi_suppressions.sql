@@ -9,14 +9,22 @@
 --     records requests and sends confirmations. As owner it is not subject
 --     to RLS, and it is the only role that can read requester_email.
 --   * ainpi_suppression_reader  SELECT (npi) only. CI and weekly-refresh.
---   * ainpi_suppression_apply   SELECT (npi, status, requested_at),
+--   * ainpi_suppression_apply   SELECT (npi, status, requested_at, not_before),
 --                               UPDATE (status, applied_at). suppression-apply.yml.
 --   * anon / authenticated / service_role (PostgREST): no privileges, and
 --     RLS has no policy for them, so the REST API returns nothing.
---   * Both restricted roles see only ACTIVE rows: status pending, applied or
---     confirmed, and not_before empty or past (a request queued over the
---     daily cap becomes visible at the next UTC day). Declined requests
---     (organization NPIs) are invisible to them.
+--   * Both restricted roles see only rows in FULL force: status pending,
+--     applied or confirmed; not_before empty or past (a request queued over
+--     the daily cap becomes visible on its day); and basis not 'unverified'.
+--     An unverified row (NPPES could not say whether the NPI is a person's
+--     and it is in none of our files) filters practitioner search results at
+--     runtime only, and must never touch organization data in the published
+--     files, so the file scrub must not see it. The confirm cron re-checks
+--     NPPES daily and moves it to 'nppes' (full force) or 'declined'.
+--     Declined requests (organization NPIs) are invisible to both roles.
+--
+-- Safe to re-run, and safe over the earlier draft of this file (which was
+-- never run in production; the upgrade statements below are defensive only).
 --
 -- Before running: replace both REPLACE_..._PASSWORD values with long random
 -- passwords (e.g. `openssl rand -base64 32`), and do not save the edited
@@ -47,6 +55,18 @@ create table if not exists public.npi_suppressions (
   constraint npi_suppressions_status_check check (status in ('pending', 'applied', 'confirmed', 'declined')),
   constraint npi_suppressions_basis_check check (basis is null or basis in ('nppes', 'ainpi_files', 'unverified', 'manual'))
 );
+-- Upgrade an earlier draft in place (defensive; see the header).
+alter table public.npi_suppressions add column if not exists basis text;
+alter table public.npi_suppressions add column if not exists not_before timestamp(3);
+alter table public.npi_suppressions add column if not exists overdue_alerted_at timestamp(3);
+alter table public.npi_suppressions drop column if exists held_reason;
+alter table public.npi_suppressions drop constraint if exists npi_suppressions_status_check;
+alter table public.npi_suppressions add constraint npi_suppressions_status_check
+  check (status in ('pending', 'applied', 'confirmed', 'declined'));
+alter table public.npi_suppressions drop constraint if exists npi_suppressions_basis_check;
+alter table public.npi_suppressions add constraint npi_suppressions_basis_check
+  check (basis is null or basis in ('nppes', 'ainpi_files', 'unverified', 'manual'));
+
 create unique index if not exists npi_suppressions_npi_key on public.npi_suppressions (npi);
 create index if not exists npi_suppressions_status_idx on public.npi_suppressions (status);
 
@@ -70,27 +90,30 @@ grant usage on schema public to ainpi_suppression_reader, ainpi_suppression_appl
 
 -- Column-level grants: neither role can read requester_email or any other column.
 grant select (npi) on public.npi_suppressions to ainpi_suppression_reader;
-grant select (npi, status, requested_at) on public.npi_suppressions to ainpi_suppression_apply;
+grant select (npi, status, requested_at, not_before) on public.npi_suppressions to ainpi_suppression_apply;
 grant update (status, applied_at) on public.npi_suppressions to ainpi_suppression_apply;
 
 drop policy if exists npi_suppressions_reader_select on public.npi_suppressions;
 create policy npi_suppressions_reader_select on public.npi_suppressions
   for select to ainpi_suppression_reader
   using (status in ('pending', 'applied', 'confirmed')
-         and (not_before is null or not_before <= (now() at time zone 'utc')));
+         and (not_before is null or not_before <= (now() at time zone 'utc'))
+         and basis is distinct from 'unverified');
 
 drop policy if exists npi_suppressions_apply_select on public.npi_suppressions;
 create policy npi_suppressions_apply_select on public.npi_suppressions
   for select to ainpi_suppression_apply
   using (status in ('pending', 'applied', 'confirmed')
-         and (not_before is null or not_before <= (now() at time zone 'utc')));
+         and (not_before is null or not_before <= (now() at time zone 'utc'))
+         and basis is distinct from 'unverified');
 
 -- The apply role can only move an active pending row to applied.
 drop policy if exists npi_suppressions_apply_update on public.npi_suppressions;
 create policy npi_suppressions_apply_update on public.npi_suppressions
   for update to ainpi_suppression_apply
   using (status = 'pending'
-         and (not_before is null or not_before <= (now() at time zone 'utc')))
+         and (not_before is null or not_before <= (now() at time zone 'utc'))
+         and basis is distinct from 'unverified')
   with check (status = 'applied');
 
 commit;

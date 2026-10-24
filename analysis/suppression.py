@@ -26,7 +26,10 @@ THE LIST NEVER ENTERS GIT. It is read from, and merged across:
   * the `npi_suppressions` table in Supabase (the source of truth) through
     SUPPRESSION_READER_URL (select on npi only) or SUPPRESSION_APPLY_URL,
     with psycopg installed. Row-level security shows both roles only rows in
-    force (accepted, and not queued for a later day);
+    full force: accepted, not queued for a later day, and of a confirmed
+    type. A row whose NPI type NPPES could not confirm (basis 'unverified')
+    filters practitioner search at runtime only and is invisible here, so
+    the file scrub never touches organization data on its account;
   * SUPPRESSED_NPIS (comma or whitespace separated 10-digit NPIs), a second
     layer that also covers offline runs.
 
@@ -628,8 +631,13 @@ def mark_applied(url: str, before: str | None = None) -> int:
            "WHERE status = 'pending'")
     params: tuple = ()
     if before:
-        sql += " AND requested_at <= %s::timestamp"
-        params = (before,)
+        # Both bounds: requested before the run started, AND due (a queued
+        # row's not_before) before it started. A row that becomes due while
+        # the run is going was not loaded by --apply, so it must not be
+        # marked applied until the next run has scrubbed it.
+        sql += (" AND requested_at <= %s::timestamp"
+                " AND coalesce(not_before, requested_at) <= %s::timestamp")
+        params = (before, before)
     with psycopg.connect(url, connect_timeout=20) as conn:
         with conn.cursor() as cur:
             cur.execute(sql, params)

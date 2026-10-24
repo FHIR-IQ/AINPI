@@ -96,6 +96,11 @@ export interface ConfirmDeps {
   db: ConfirmDb;
   fetchFn: FetchLike;
   send: (to: string, msg: { subject: string; text: string }) => Promise<SendResult>;
+  /**
+   * One automated email per address per UTC day (src/lib/suppression-intake
+   * mailtoAllowed). False defers this confirmation to a later run.
+   */
+  mailAllowed?: (to: string) => Promise<boolean>;
   base?: string;
   cap?: number;
   checkLimit?: number;
@@ -104,6 +109,8 @@ export interface ConfirmDeps {
 
 export interface ConfirmSummary {
   checked: number;
+  /** Live, but the address already had its one email today: next run. */
+  deferred: number;
   notYetLive: number;
   sent: number;
   confirmedWithoutEmail: number;
@@ -116,7 +123,7 @@ export async function runConfirmations(deps: ConfirmDeps): Promise<ConfirmSummar
   const cap = deps.cap ?? DEFAULT_CONFIRM_CAP;
   const db = deps.db.npiSuppression;
   const s: ConfirmSummary = {
-    checked: 0, notYetLive: 0, sent: 0, confirmedWithoutEmail: 0, alreadyClaimed: 0, failed: 0,
+    checked: 0, deferred: 0, notYetLive: 0, sent: 0, confirmedWithoutEmail: 0, alreadyClaimed: 0, failed: 0,
   };
   const rows = await db.findMany({
     where: { status: 'applied', confirmedAt: null },
@@ -137,6 +144,11 @@ export async function runConfirmations(deps: ConfirmDeps): Promise<ConfirmSummar
     await db.updateMany({ where: { npi: row.npi }, data: { confirmCheckedAt: now() } });
     if (!live) {
       s.notYetLive++;
+      continue;
+    }
+
+    if (row.requesterEmail && deps.mailAllowed && !(await deps.mailAllowed(row.requesterEmail).catch(() => false))) {
+      s.deferred++;
       continue;
     }
 
@@ -243,4 +255,80 @@ export async function runOverdueCheck(deps: {
     data: { overdueAlertedAt: now },
   });
   return rows.length;
+}
+
+export type EnumerationType = 'individual' | 'organization' | 'unknown';
+
+export interface ReclassifyDb {
+  npiSuppression: {
+    findMany(args: {
+      where: { basis: 'unverified'; status: 'pending' };
+      select: { npi: true; requesterEmail: true };
+      take: number;
+    }): Promise<ConfirmRow[]>;
+    updateMany(args: {
+      where: { npi: string; basis: 'unverified'; status: 'pending' };
+      data: { basis?: string; status?: string };
+    }): Promise<{ count: number }>;
+  };
+}
+
+export interface ReclassifySummary {
+  checked: number;
+  /** NPPES now says NPI-1: basis 'nppes', full force from here. */
+  confirmedIndividual: number;
+  /** NPPES now says NPI-2: declined, organization reply sent. */
+  declined: number;
+  /** NPPES still silent: practitioner-only filtering, retried tomorrow. */
+  stillUnknown: number;
+  /** NPI-2 whose requester already had today's email: retried tomorrow. */
+  deferred: number;
+}
+
+/**
+ * Daily re-check of rows whose NPI type NPPES could not confirm at intake
+ * (basis 'unverified', practitioner-only scope). NPI-1 moves to full force
+ * (the next suppression-apply run then scrubs it from every file); NPI-2 is
+ * declined with the organization reply, sent once (the status change is
+ * conditional, so only one run can win it); still unknown stays as it is and
+ * is retried the next day, counting toward the 5-day overdue alert.
+ */
+export async function runReclassify(deps: {
+  db: ReclassifyDb;
+  lookupType: (npi: string) => Promise<EnumerationType>;
+  sendDeclined: (to: string, npi: string) => Promise<void>;
+  mailAllowed: (to: string) => Promise<boolean>;
+  limit?: number;
+}): Promise<ReclassifySummary> {
+  const s: ReclassifySummary = { checked: 0, confirmedIndividual: 0, declined: 0, stillUnknown: 0, deferred: 0 };
+  const db = deps.db.npiSuppression;
+  const rows = await db.findMany({
+    where: { basis: 'unverified', status: 'pending' },
+    select: { npi: true, requesterEmail: true },
+    take: deps.limit ?? 100,
+  });
+  for (const row of rows) {
+    s.checked++;
+    const type = await deps.lookupType(row.npi).catch((): EnumerationType => 'unknown');
+    const key = { npi: row.npi, basis: 'unverified' as const, status: 'pending' as const };
+    if (type === 'individual') {
+      const r = await db.updateMany({ where: key, data: { basis: 'nppes' } });
+      if (r.count === 1) s.confirmedIndividual++;
+    } else if (type === 'organization') {
+      // Take the address's daily email token first; without it, wait a day
+      // rather than decline silently.
+      if (row.requesterEmail && !(await deps.mailAllowed(row.requesterEmail).catch(() => false))) {
+        s.deferred++;
+        continue;
+      }
+      const r = await db.updateMany({ where: key, data: { status: 'declined' } });
+      if (r.count === 1) {
+        s.declined++;
+        if (row.requesterEmail) await deps.sendDeclined(row.requesterEmail, row.npi).catch(() => {});
+      }
+    } else {
+      s.stillUnknown++;
+    }
+  }
+  return s;
 }

@@ -4,7 +4,7 @@ import { parseNameQuery, groupRolesBySpecialty, type RoleRow } from '@/lib/npd-s
 import { enforceRateLimit, withRateLimitHeaders } from '@/lib/rate-limit';
 import { CURRENT_RELEASE } from '@/lib/release';
 import { env } from '@/lib/env';
-import { filterSuppressed, getSuppressedNpis } from '@/lib/suppression';
+import { filterSuppressed, getOrgSuppressedNpis, getSuppressedNpis } from '@/lib/suppression';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -304,10 +304,12 @@ export async function GET(req: NextRequest) {
     if (params.type === 'all' || params.type === 'practitioner') {
       results.practitioners = filterSuppressed(await searchPractitioners(params), suppressed);
     }
-    // Intake suppresses only individual NPIs, so a match here is an
-    // individual's NPI on an organization record: dropped the same way.
+    // Organization results use the full-scope list only: an NPI whose type
+    // is still unconfirmed (basis 'unverified') never touches organization
+    // data. A full-scope match here is an individual's NPI on an
+    // organization record, dropped the same way.
     if (params.type === 'all' || params.type === 'organization') {
-      results.organizations = filterSuppressed(await searchOrganizations(params), suppressed);
+      results.organizations = filterSuppressed(await searchOrganizations(params), await getOrgSuppressedNpis());
     }
     if (params.type === 'all' || params.type === 'location') results.locations = await searchLocations(params);
     if (params.type === 'all' || params.type === 'endpoint') results.endpoints = await searchEndpoints(params);

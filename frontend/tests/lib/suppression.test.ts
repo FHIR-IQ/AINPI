@@ -3,6 +3,7 @@ import {
   assertSuppressionVisible,
   createSuppressionLoader,
   isActiveSuppression,
+  suppressionScope,
   extractNpis,
   filterSuppressed,
   isValidNpi,
@@ -15,6 +16,8 @@ import {
   recordSuppression,
   senderRequestsToday,
   DECLINED_REPLY,
+  RemovalCeilingError,
+  type IntakeCountWhere,
   type EnumerationType,
   type IntakeDb,
   type IntakeDeps,
@@ -24,8 +27,10 @@ import {
   isRemovedLive,
   runConfirmations,
   runOverdueCheck,
+  runReclassify,
   type ConfirmDb,
   type OverdueDb,
+  type ReclassifyDb,
 } from '@/lib/suppression-confirm';
 
 // Synthetic NPIs with valid check digits. None is meant to be a real provider.
@@ -33,6 +38,8 @@ const A = '1234567893';
 const B = '1111111112';
 const C = '2222222228';
 const BAD_CHECK = '1234567890';
+const D = '3333333334';
+const E = '4444444440';
 
 describe('NPI validation and parsing', () => {
   it('checks the NPI check digit', () => {
@@ -52,7 +59,7 @@ describe('NPI validation and parsing', () => {
   });
 
   it('names the fix in the fail-closed error', () => {
-    expect(() => assertSuppressionVisible({ set: new Set(), dbRows: null }, 1)).toThrow(
+    expect(() => assertSuppressionVisible({ set: new Set(), orgSet: new Set(), dbRows: null }, 1)).toThrow(
       /Set SUPPRESSED_NPIS in Vercel production and preview, or run frontend\/prisma\/sql\/npi_suppressions\.sql/,
     );
   });
@@ -117,22 +124,42 @@ describe('suppression loader', () => {
     });
     const err = vi.spyOn(console, 'error').mockImplementation(() => {});
     const loader = createSuppressionLoader({ source, env: () => A, now: () => t });
-    expect(await loader.state()).toEqual({ set: new Set([A]), dbRows: null });
+    expect(await loader.state()).toEqual({ set: new Set([A]), orgSet: new Set([A]), dbRows: null });
     t = 1000; // inside the 30 s backoff: no new attempt
     await loader.get();
     expect(source).toHaveBeenCalledTimes(1);
     fail = false;
     t = 31_000;
-    expect(await loader.state()).toEqual({ set: new Set([A, B]), dbRows: 1 });
+    expect(await loader.state()).toEqual({ set: new Set([A, B]), orgSet: new Set([A, B]), dbRows: 1 });
     err.mockRestore();
   });
 
+  it('keeps an unverified NPI out of organization scope', async () => {
+    const loader = createSuppressionLoader({
+      source: async () => [{ npi: A, practitionerOnly: true }, { npi: B, practitionerOnly: false }],
+      env: () => undefined,
+    });
+    const st = await loader.state();
+    // Practitioner results (search, provider-search, lookup_npi, pages) drop A ...
+    expect(st.set).toEqual(new Set([A, B]));
+    // ... organization results (search organizations, lookup_organization) keep it.
+    expect(st.orgSet).toEqual(new Set([B]));
+    expect(st.dbRows).toBe(1);
+    expect(suppressionScope({ status: 'pending', notBefore: null, basis: 'unverified' })).toBe('practitioner');
+    expect(suppressionScope({ status: 'pending', notBefore: null, basis: 'nppes' })).toBe('full');
+    expect(suppressionScope({ status: 'declined', notBefore: null, basis: null })).toBe('none');
+    // An unverified NPI listed as an organization stays in search and lookup_organization.
+    const orgs = [{ npi: A, name: 'Some Org' }, { npi: C, name: 'Other' }];
+    expect(filterSuppressed(orgs, st.orgSet)).toEqual(orgs);
+    expect(filterSuppressed([{ npi: A }], st.set)).toEqual([]);
+  });
+
   it('fails the build when committed removals cannot be seen', () => {
-    expect(() => assertSuppressionVisible({ set: new Set(), dbRows: null }, 1)).toThrow(/Refusing to build/);
-    expect(() => assertSuppressionVisible({ set: new Set([A]), dbRows: 0 }, 1)).toThrow(/zero rows/);
-    expect(() => assertSuppressionVisible({ set: new Set([A]), dbRows: null }, 1)).not.toThrow();
-    expect(() => assertSuppressionVisible({ set: new Set([A]), dbRows: 1 }, 1)).not.toThrow();
-    expect(() => assertSuppressionVisible({ set: new Set(), dbRows: 0 }, 0)).not.toThrow();
+    expect(() => assertSuppressionVisible({ set: new Set(), orgSet: new Set(), dbRows: null }, 1)).toThrow(/Refusing to build/);
+    expect(() => assertSuppressionVisible({ set: new Set([A]), orgSet: new Set([A]), dbRows: 0 }, 1)).toThrow(/zero rows/);
+    expect(() => assertSuppressionVisible({ set: new Set([A]), orgSet: new Set([A]), dbRows: null }, 1)).not.toThrow();
+    expect(() => assertSuppressionVisible({ set: new Set([A]), orgSet: new Set([A]), dbRows: 1 }, 1)).not.toThrow();
+    expect(() => assertSuppressionVisible({ set: new Set(), orgSet: new Set(), dbRows: 0 }, 0)).not.toThrow();
   });
 
   it('falls back to env alone when the table was never readable', async () => {
@@ -159,6 +186,25 @@ interface Row {
   requestedAt: Date;
 }
 
+function matchWhere(r: Row, w: IntakeCountWhere): boolean {
+  if (w.requestedAt) {
+    if (r.requestedAt < w.requestedAt.gte) return false;
+    if (w.requestedAt.lt && r.requestedAt >= w.requestedAt.lt) return false;
+  }
+  if (typeof w.status === 'string' && r.status !== w.status) return false;
+  if (typeof w.status === 'object' && r.status === w.status.not) return false;
+  if (w.notBefore === null && r.notBefore !== null) return false;
+  if (w.notBefore && 'not' in w.notBefore && r.notBefore === null) return false;
+  if (w.notBefore && 'gte' in w.notBefore) {
+    if (!r.notBefore || r.notBefore < w.notBefore.gte || r.notBefore >= w.notBefore.lt) return false;
+  }
+  if (w.requesterEmail && r.requesterEmail !== w.requesterEmail) return false;
+  if (typeof w.source === 'string' && r.source !== w.source) return false;
+  if (typeof w.source === 'object' && r.source === w.source.not) return false;
+  if (w.OR && !w.OR.some((c) => matchWhere(r, c))) return false;
+  return true;
+}
+
 function intakeDb(existing: Row[] = [], now: () => Date = () => NOW) {
   const rows: Row[] = [...existing];
   const db: IntakeDb = {
@@ -171,17 +217,7 @@ function intakeDb(existing: Row[] = [], now: () => Date = () => NOW) {
         rows.push({ ...data, requestedAt: now() });
         return data;
       },
-      count: async ({ where }) =>
-        rows.filter((r) => {
-          if (where.requestedAt && r.requestedAt < where.requestedAt.gte) return false;
-          if (typeof where.status === 'string' && r.status !== where.status) return false;
-          if (typeof where.status === 'object' && r.status === where.status.not) return false;
-          if (where.notBefore === null && r.notBefore !== null) return false;
-          if (where.notBefore && r.notBefore === null) return false;
-          if (where.requesterEmail && r.requesterEmail !== where.requesterEmail) return false;
-          if (where.source && r.source !== where.source) return false;
-          return true;
-        }).length,
+      count: async ({ where }) => rows.filter((r) => matchWhere(r, where)).length,
     },
   };
   return { db, rows };
@@ -196,13 +232,21 @@ function deps(
 ) {
   const alert = vi.fn(async () => {});
   const sendDeclined = vi.fn(async () => {});
+  const tokens = new Set<string>();
+  const mailAllowed = vi.fn(async (to: string) => {
+    if (tokens.has(to)) return false;
+    tokens.add(to);
+    return true;
+  });
   return {
     alert,
     sendDeclined,
+    mailAllowed,
     d: {
       db,
       alert,
       sendDeclined,
+      mailAllowed,
       lookupType: async () => type,
       hasPage: async () => true,
       cap: 2,
@@ -254,15 +298,17 @@ describe('recordSuppression', () => {
     expect(DECLINED_REPLY.text).toContain('replies are not read');
   });
 
-  it('queues past the daily cap to the next UTC day, alerts once, and it takes effect then', async () => {
+  it('queues past the cap to the first UTC day with room, alerts once, and it takes effect then', async () => {
     const { db, rows } = intakeDb();
     const { d, alert } = deps(db);
-    for (const npi of [A, B, C, '9999999995']) await recordSuppression(npi, null, 'form', d);
+    // cap is 2 a day: 2 in force today, 2 queued to the 25th, the 5th to the 26th
+    for (const npi of [A, B, C, D, E]) await recordSuppression(npi, null, 'form', d);
     expect(rows.map((r) => r.notBefore?.toISOString() ?? null)).toEqual([
       null,
       null,
       '2026-10-25T00:00:00.000Z',
       '2026-10-25T00:00:00.000Z',
+      '2026-10-26T00:00:00.000Z',
     ]);
     // two accepted notices + one cap-reached notice
     expect(alert).toHaveBeenCalledTimes(3);
@@ -270,6 +316,39 @@ describe('recordSuppression', () => {
     expect(isActiveSuppression(queued, NOW)).toBe(false);
     expect(isActiveSuppression(queued, new Date('2026-10-25T00:00:01Z'))).toBe(true);
     expect(isActiveSuppression({ status: 'declined', notBefore: null }, NOW)).toBe(false);
+  });
+
+  it('records but never mails an address past three requests in a day', async () => {
+    const { db, rows } = intakeDb();
+    const { d } = deps(db);
+    for (const npi of [A, B, C, D]) await recordSuppression(npi, 'x@example.org', 'form', d);
+    expect(rows.map((r) => r.requesterEmail)).toEqual([
+      'x@example.org', 'x@example.org', 'x@example.org', null,
+    ]);
+    expect(rows[3].status).toBe('pending');
+  });
+
+  it('sends at most one automated email per address per day', async () => {
+    const { db } = intakeDb();
+    const { d, sendDeclined } = deps(db, 'organization');
+    await recordSuppression(A, 'o@example.org', 'form', d);
+    await recordSuppression(B, 'o@example.org', 'form', d);
+    expect(sendDeclined).toHaveBeenCalledTimes(1);
+  });
+
+  it('charges the global ceiling for accepted requests only, never for declined ones', async () => {
+    const admit = vi.fn(async () => true);
+    const org = intakeDb();
+    await recordSuppression(A, 'o@example.org', 'form', { ...deps(org.db, 'organization').d, admit });
+    expect(admit).not.toHaveBeenCalled();
+    const ind = intakeDb();
+    await recordSuppression(A, 'p@example.org', 'form', { ...deps(ind.db).d, admit });
+    expect(admit).toHaveBeenCalledTimes(1);
+    const refused = intakeDb();
+    await expect(
+      recordSuppression(A, null, 'form', { ...deps(refused.db).d, admit: async () => false }),
+    ).rejects.toBeInstanceOf(RemovalCeilingError);
+    expect(refused.rows).toHaveLength(0);
   });
 
   it('lets the manual script record at once without the checks', async () => {
@@ -460,6 +539,18 @@ describe('confirmation', () => {
     expect(rows.map((r) => r.status)).toEqual(['applied', 'confirmed', 'confirmed']);
   });
 
+  it('defers a confirmation when the address already had its email today', async () => {
+    const rows = [row(A, 'a@example.org')];
+    const db = confirmDb(rows);
+    const send = vi.fn(async () => ({ ok: true as const }));
+    const s1 = await runConfirmations({ db, fetchFn: liveExcept([]), send, mailAllowed: async () => false });
+    expect(s1.deferred).toBe(1);
+    expect(send).not.toHaveBeenCalled();
+    expect(rows[0]).toMatchObject({ status: 'applied', confirmClaimedAt: null });
+    await runConfirmations({ db, fetchFn: liveExcept([]), send, mailAllowed: async () => true });
+    expect(send).toHaveBeenCalledTimes(1);
+  });
+
   it('releases the claim when the send fails', async () => {
     const rows = [row(A, 'a@example.org')];
     const db = confirmDb(rows);
@@ -495,5 +586,71 @@ describe('confirmation', () => {
     expect(s.confirmedWithoutEmail).toBe(1);
     expect(send).not.toHaveBeenCalled();
     expect(rows[0].status).toBe('confirmed');
+  });
+});
+
+describe('daily NPPES re-check of unverified rows', () => {
+  function reDb(rows: { npi: string; requesterEmail: string | null; basis: string; status: string }[]) {
+    const db: ReclassifyDb = {
+      npiSuppression: {
+        findMany: async ({ where, take }) =>
+          rows
+            .filter((r) => r.basis === where.basis && r.status === where.status)
+            .slice(0, take)
+            .map(({ npi, requesterEmail }) => ({ npi, requesterEmail })),
+        updateMany: async ({ where, data }) => {
+          const r = rows.find((x) => x.npi === where.npi && x.basis === where.basis && x.status === where.status);
+          if (!r) return { count: 0 };
+          Object.assign(r, data);
+          return { count: 1 };
+        },
+      },
+    };
+    return db;
+  }
+
+  it('declines an NPI-2 and sends the reply once', async () => {
+    const rows = [{ npi: A, requesterEmail: 'o@example.org', basis: 'unverified', status: 'pending' }];
+    const sendDeclined = vi.fn(async () => {});
+    const run = () =>
+      runReclassify({
+        db: reDb(rows),
+        lookupType: async () => 'organization',
+        sendDeclined,
+        mailAllowed: async () => true,
+      });
+    expect((await run()).declined).toBe(1);
+    expect(rows[0].status).toBe('declined');
+    await run();
+    expect(sendDeclined).toHaveBeenCalledTimes(1);
+  });
+
+  it('moves an NPI-1 to full scope, which the loader then applies to organization data', async () => {
+    const rows = [{ npi: A, requesterEmail: null, basis: 'unverified', status: 'pending' }];
+    const r = await runReclassify({
+      db: reDb(rows),
+      lookupType: async () => 'individual',
+      sendDeclined: async () => {},
+      mailAllowed: async () => true,
+    });
+    expect(r.confirmedIndividual).toBe(1);
+    expect(rows[0].basis).toBe('nppes');
+    const loader = createSuppressionLoader({
+      source: async () => rows.map((x) => ({ npi: x.npi, practitionerOnly: x.basis === 'unverified' })),
+      env: () => undefined,
+    });
+    expect((await loader.state()).orgSet.has(A)).toBe(true);
+  });
+
+  it('leaves a still-unknown NPI unverified for tomorrow', async () => {
+    const rows = [{ npi: A, requesterEmail: null, basis: 'unverified', status: 'pending' }];
+    const r = await runReclassify({
+      db: reDb(rows),
+      lookupType: async () => 'unknown',
+      sendDeclined: async () => {},
+      mailAllowed: async () => true,
+    });
+    expect(r.stillUnknown).toBe(1);
+    expect(rows[0]).toMatchObject({ basis: 'unverified', status: 'pending' });
   });
 });

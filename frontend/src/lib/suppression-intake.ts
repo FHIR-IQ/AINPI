@@ -42,6 +42,15 @@ export function nextUtcDay(d: Date): Date {
   return new Date(startOfUtcDay(d).getTime() + 86_400_000);
 }
 
+export interface IntakeCountWhere {
+  requestedAt?: { gte: Date; lt?: Date };
+  status?: { not: string } | string;
+  notBefore?: null | { not: null } | { gte: Date; lt: Date };
+  requesterEmail?: string;
+  source?: string | { not: string };
+  OR?: IntakeCountWhere[];
+}
+
 export interface IntakeDb {
   npiSuppression: {
     findUnique(args: { where: { npi: string } }): Promise<{ id: string; status: string } | null>;
@@ -56,15 +65,7 @@ export interface IntakeDb {
         notBefore: Date | null;
       };
     }): Promise<unknown>;
-    count(args: {
-      where: {
-        requestedAt?: { gte: Date };
-        status?: { not: string } | string;
-        notBefore?: null | { not: null };
-        requesterEmail?: string;
-        source?: string;
-      };
-    }): Promise<number>;
+    count(args: { where: IntakeCountWhere }): Promise<number>;
   };
 }
 
@@ -89,9 +90,33 @@ export interface IntakeDeps {
   hasPage: (npi: string) => Promise<boolean | null>;
   /** Automated reply to the requester of an organization NPI. */
   sendDeclined: (to: string, npi: string) => Promise<void>;
+  /**
+   * One automated email per address per UTC day, across every kind
+   * (declined reply, confirmation). True takes the day's token.
+   */
+  mailAllowed: (to: string) => Promise<boolean>;
+  /**
+   * Charge the global daily ceiling on removal requests. Called only for a
+   * request that will be accepted, never for a declined (organization) one,
+   * which counts against the caller's own limit only. False refuses it.
+   */
+  admit?: () => Promise<boolean>;
   cap?: number;
   now?: () => Date;
 }
+
+/** Same address, same UTC day: past this many requests, record but send nothing. */
+export const REQUESTER_DAILY_MAIL_LIMIT = 3;
+
+/** Thrown when the global removal ceiling refuses an acceptable request. */
+export class RemovalCeilingError extends Error {
+  constructor() {
+    super('removal ceiling reached');
+  }
+}
+
+/** How many days ahead the cap may queue a request before giving up and using the last. */
+const MAX_QUEUE_DAYS = 60;
 
 const MAX_EMAIL_INPUT = 512;
 
@@ -129,11 +154,19 @@ export function normalizeEmail(raw: string | null | undefined): string | null {
  *   NPPES says NPI-2                  -> declined, automated reply, no admin alert
  *   NPPES silent (404, deactivated, API down)
  *     and the NPI has an AINPI page   -> pending, basis ainpi_files
- *     and it does not                 -> pending, basis unverified (there is
- *                                        nothing to remove; the filter and the
- *                                        confirmation cron handle it as usual)
- *   past the daily cap                -> pending with notBefore = next UTC day
- *                                        (one admin alert when the cap is hit)
+ *     and it does not                 -> pending, basis unverified: filters
+ *                                        practitioner search only, never
+ *                                        organization data or files, until the
+ *                                        daily cron re-checks NPPES (NPI-1 ->
+ *                                        nppes, NPI-2 -> declined)
+ *   past the daily cap                -> pending with notBefore = the first
+ *                                        UTC day that still has room under the
+ *                                        cap (one admin alert when it is hit)
+ *
+ * Over REQUESTER_DAILY_MAIL_LIMIT requests from one address in a UTC day, the
+ * request is still recorded and filtered, but stored without the address, so
+ * nothing is ever sent to it. Every automated email also takes the address's
+ * one-per-day token (mailAllowed).
  *
  * `force` (the manual script only) records pending with basis manual and no
  * lookup or cap.
@@ -148,10 +181,18 @@ export async function recordSuppression(
   if (!isNpiShape(npi)) throw new Error('recordSuppression: not a 10-digit NPI');
   const d = deps ?? (await defaultDeps());
   const now = (d.now ?? (() => new Date()))();
-  const requesterEmail = normalizeEmail(email);
+  let requesterEmail = normalizeEmail(email);
 
   const existing = await d.db.npiSuppression.findUnique({ where: { npi } });
   if (existing) return { created: false, status: existing.status };
+
+  const today = startOfUtcDay(now);
+  if (requesterEmail && source !== 'manual') {
+    const fromAddress = await d.db.npiSuppression.count({
+      where: { requesterEmail, requestedAt: { gte: today } },
+    });
+    if (fromAddress >= REQUESTER_DAILY_MAIL_LIMIT) requesterEmail = null;
+  }
 
   const hadPage = await d.hasPage(npi).catch(() => null);
 
@@ -169,20 +210,37 @@ export async function recordSuppression(
       if ((err as { code?: string })?.code === 'P2002') return { created: false, status: 'declined' };
       throw err;
     }
-    if (requesterEmail) await d.sendDeclined(requesterEmail, npi).catch(() => {});
+    if (requesterEmail && (await d.mailAllowed(requesterEmail).catch(() => false))) {
+      await d.sendDeclined(requesterEmail, npi).catch(() => {});
+    }
     return { created: true, status: 'declined' };
   }
+  if (d.admit && !(await d.admit())) throw new RemovalCeilingError();
   const basis: IntakeBasis =
     type === 'individual' ? 'nppes' : hadPage ? 'ainpi_files' : 'unverified';
 
-  const today = startOfUtcDay(now);
-  const inForceToday = await d.db.npiSuppression.count({
-    where: { requestedAt: { gte: today }, status: { not: 'declined' }, notBefore: null },
-  });
-  let notBefore: Date | null = null;
+  // The first UTC day, from today, with room under the cap. A row's day is
+  // its notBefore when queued, else the day it was requested.
+  const cap = d.cap ?? dailyCap();
+  let day = today;
+  for (let i = 0; i < MAX_QUEUE_DAYS; i++) {
+    const next = new Date(day.getTime() + 86_400_000);
+    const onDay = await d.db.npiSuppression.count({
+      where: {
+        status: { not: 'declined' },
+        source: { not: 'manual' },
+        OR: [
+          { notBefore: null, requestedAt: { gte: day, lt: next } },
+          { notBefore: { gte: day, lt: next } },
+        ],
+      },
+    });
+    if (onDay < cap) break;
+    day = next;
+  }
+  const notBefore: Date | null = day.getTime() === today.getTime() ? null : day;
   let capReached = false;
-  if (inForceToday >= (d.cap ?? dailyCap())) {
-    notBefore = nextUtcDay(now);
+  if (notBefore) {
     const queuedToday = await d.db.npiSuppression.count({
       where: { requestedAt: { gte: today }, notBefore: { not: null } },
     });
@@ -295,7 +353,20 @@ async function defaultDeps(): Promise<IntakeDeps> {
     lookupType: (npi) => nppesEnumerationType(npi),
     hasPage: (npi) => npiPageExists(npi),
     sendDeclined: sendDeclinedReply,
+    mailAllowed: mailtoAllowed,
   };
+}
+
+/**
+ * One automated email per address per UTC day, whatever the kind. Uses the
+ * shared bucket table (`remove:mailto:<addr>:d:<day>`); true takes the token.
+ * If the table cannot be reached, nothing is sent (the confirmation retries
+ * the next day; a declined reply is skipped).
+ */
+export async function mailtoAllowed(to: string, now: number = Date.now()): Promise<boolean> {
+  const { bump } = await import('@/lib/rate-limit');
+  const n = await bump(`remove:mailto:${to}:d:${Math.floor(now / 86_400_000)}`, 1, 172_800_000);
+  return n === 1;
 }
 
 /** Plain text, from the no-reply address, no Reply-To. */
