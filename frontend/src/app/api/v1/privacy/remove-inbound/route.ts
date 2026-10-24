@@ -41,6 +41,8 @@ import {
 let unconfiguredAlerted = false;
 
 export const dynamic = 'force-dynamic';
+// NPPES lookup (8 s) and page check (5 s) run inside the request.
+export const maxDuration = 30;
 
 export async function POST(req: NextRequest) {
   const secret = process.env.RESEND_REMOVAL_WEBHOOK_SECRET || process.env.RESEND_WEBHOOK_SECRET;
@@ -51,9 +53,6 @@ export async function POST(req: NextRequest) {
     }
     return NextResponse.json({ error: 'webhook not configured' }, { status: 503 });
   }
-
-  const rl = await enforceRateLimit(req, { shape: 'privacy/remove' });
-  if (!rl.ok) return rl.response!;
 
   const raw = await req.text();
   const ok = verifyResendWebhook(
@@ -82,6 +81,11 @@ export async function POST(req: NextRequest) {
   if (evt.data.to && !parseRemovalEmail({ to: evt.data.to, from: null, subject: null, text: null, html: null }, inbox).forUs) {
     return NextResponse.json({ ok: true, ignored: 'not addressed to the removal inbox' });
   }
+
+  // Charged only for mail that is signed and addressed to the removal inbox,
+  // so other inbound mail on the account cannot use up the budget.
+  const rl = await enforceRateLimit(req, { shape: 'privacy/remove' });
+  if (!rl.ok) return rl.response!;
 
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey) return NextResponse.json({ error: 'RESEND_API_KEY unset' }, { status: 503 });

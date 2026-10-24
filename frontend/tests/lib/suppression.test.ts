@@ -256,6 +256,10 @@ describe('recordSuppression', () => {
 describe('inbound removal email', () => {
   it('reads recipient, sender and NPIs', () => {
     expect(normalizeEmail('Someone <A@B.org>')).toBe('a@b.org');
+    expect(normalizeEmail('no-at-sign')).toBeNull();
+    expect(normalizeEmail('a@b@c.org')).toBeNull();
+    expect(normalizeEmail('<' + '<='.repeat(5000))).toBeNull();
+    expect(normalizeEmail('!@!.' + '!.'.repeat(5000))).toBeNull();
     const got = parseRemovalEmail({
       to: ['AINPI <remove@ainpi.dev>'],
       from: 'Dr X <x@example.org>',

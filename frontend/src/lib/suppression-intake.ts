@@ -78,14 +78,33 @@ export interface IntakeDeps {
   now?: () => Date;
 }
 
-const EMAIL_RE = /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/;
+const MAX_EMAIL_INPUT = 512;
 
+/**
+ * Parse "Name <a@b.c>" or a bare address into a lower-case address, or null.
+ * Written without regular expressions over the input, which arrives from the
+ * public form and from inbound mail (no backtracking on hostile strings).
+ */
 export function normalizeEmail(raw: string | null | undefined): string | null {
-  if (!raw) return null;
-  // Accept "Name <a@b.c>" as well as a bare address.
-  const m = raw.match(/<([^>]+)>/);
-  const addr = (m ? m[1] : raw).trim().toLowerCase();
-  return EMAIL_RE.test(addr) ? addr : null;
+  if (!raw || raw.length > MAX_EMAIL_INPUT) return null;
+  let addr = raw;
+  const open = raw.lastIndexOf('<');
+  if (open !== -1) {
+    const close = raw.indexOf('>', open);
+    if (close === -1) return null;
+    addr = raw.slice(open + 1, close);
+  }
+  addr = addr.trim().toLowerCase();
+  if (addr.length === 0 || addr.length > 254) return null;
+  for (const ch of addr) {
+    if (ch === '<' || ch === '>' || ch.trim() === '') return null;
+  }
+  const at = addr.indexOf('@');
+  if (at <= 0 || at !== addr.lastIndexOf('@')) return null;
+  const domain = addr.slice(at + 1);
+  const dot = domain.lastIndexOf('.');
+  if (dot <= 0 || dot === domain.length - 1) return null;
+  return addr;
 }
 
 /**

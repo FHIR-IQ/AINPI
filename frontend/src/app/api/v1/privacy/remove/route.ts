@@ -14,6 +14,8 @@ import { isValidNpi } from '@/lib/suppression';
 import { normalizeEmail, recordSuppression } from '@/lib/suppression-intake';
 
 export const dynamic = 'force-dynamic';
+// NPPES lookup (8 s) and page check (5 s) run inside the request.
+export const maxDuration = 30;
 
 const REMOVAL_ACCEPTED_MESSAGE =
   'Request received. If this NPI has a page or rows on ainpi.dev, they will be removed ' +
