@@ -49,6 +49,16 @@ jobs:
           python-version: "3.12"
           cache: pip
 
+      - name: Require the removal-request list
+        # Without it, high_risk_cohort.py and the other generators would
+        # republish rows removed on request, and the apply/guard steps would
+        # pass with nothing to check. Fail closed instead.
+        run: |
+          if [ -z "$SUPPRESSION_DATABASE_URL" ] && [ -z "$SUPPRESSED_NPIS" ]; then
+            echo "::error::Set the SUPPRESSION_DATABASE_URL secret (or SUPPRESSED_NPIS) before refreshing."
+            exit 1
+          fi
+
       - name: Install deps
         run: |
           python -m pip install --upgrade pip
