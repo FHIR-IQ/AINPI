@@ -1,0 +1,107 @@
+name: Apply NPI removal requests
+
+# Removes individual NPIs recorded in the npi_suppressions table (the
+# /privacy/remove form, the removal inbox, frontend/scripts/suppress-npi.ts)
+# from every per-NPI file under frontend/public/api/v1, commits straight to
+# main the way weekly-refresh does, and marks those rows applied. The daily
+# Vercel cron /api/v1/admin/suppression-confirm then checks the live site and
+# emails each requester. See "NPI removal requests" in CLAUDE.md.
+#
+# The list never enters git, and this workflow prints no NPI: logs, the
+# commit and any issue carry file paths and counts only.
+#
+# Required secret:
+#   SUPPRESSION_APPLY_URL  ainpi_suppression_apply on the Supabase session
+#                          pooler: postgresql://ainpi_suppression_apply.hspqvcoinujtfodreqaf:<pw>@aws-1-us-east-2.pooler.supabase.com:5432/postgres
+#                          SELECT (npi, status, requested_at, not_before), UPDATE (status,
+#                          applied_at), RLS-limited (frontend/prisma/sql/npi_suppressions.sql).
+# Also read: SUPPRESSED_NPIS, merged with the table as a second layer.
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write   # only to report a guard failure or a warning
+
+# Shared with weekly-refresh.yml: both commit to frontend/public/api/v1.
+concurrency:
+  group: published-data
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    name: Remove suppressed NPIs from published files
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPPRESSION_APPLY_URL: ${{ secrets.SUPPRESSION_APPLY_URL }}
+      SUPPRESSED_NPIS: ${{ secrets.SUPPRESSED_NPIS }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Require the removal list
+        run: |
+          if [ -z "$SUPPRESSION_APPLY_URL" ]; then
+            echo "::error::Set the SUPPRESSION_APPLY_URL secret."
+            exit 1
+          fi
+
+      - name: Install deps
+        run: pip install "psycopg[binary]>=3.1,<4"
+
+      - name: Note the start time
+        id: start
+        # Rows requested after this moment wait for the next run, so nothing
+        # is marked applied that this run did not see.
+        run: echo "at=$(date -u +%Y-%m-%dT%H:%M:%S)" >> "$GITHUB_OUTPUT"
+
+      - name: Apply suppressions
+        run: python analysis/suppression.py --apply
+
+      - name: Guard - no suppressed NPI left in published files
+        id: guard
+        run: python analysis/suppression.py --check --report-file "$RUNNER_TEMP/guard.md"
+
+      - name: Report guard failures and warnings in an issue
+        # Paths and counts only. One open issue, appended to on later runs.
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          [ -s "$RUNNER_TEMP/guard.md" ] || exit 0  # guard never ran, or wrote nothing
+          grep -q "occurrence" "$RUNNER_TEMP/guard.md" || exit 0
+          TITLE="Suppression guard: a removed NPI is still present in a file"
+          NUM=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          BODY="Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"$'\n\n'"$(cat "$RUNNER_TEMP/guard.md")"
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --body "$BODY"
+          else
+            gh issue create --title "$TITLE" --body "$BODY"
+          fi
+
+      - name: Commit + push directly to main
+        run: |
+          if git diff --quiet frontend/public/api/v1/; then
+            echo "No published file changed."
+            exit 0
+          fi
+          git --no-pager diff --stat frontend/public/api/v1/
+          git config user.name "ainpi-weekly-refresh"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/api/v1/
+          git commit -m "Update published data files"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin main && exit 0
+            sleep 15
+          done
+          exit 1
+
+      - name: Mark rows applied
+        run: python analysis/suppression.py --mark-applied --before "${{ steps.start.outputs.at }}"

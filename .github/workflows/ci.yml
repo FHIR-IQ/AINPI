@@ -65,6 +65,19 @@ jobs:
       - name: pytest analysis/tests
         run: python -m pytest analysis/tests/ -q
 
+      # Fails if an NPI removed on request (analysis/suppression.py) appears
+      # in frontend/public/api/v1; docs/ and release snapshots only warn.
+      # Prints file paths and counts only. Uses the read-only reader role
+      # (SELECT npi). Passes with a warning when no list is configured, which
+      # is the case on forks, where secrets are empty.
+      - name: Suppressed NPIs are absent from published files
+        env:
+          SUPPRESSION_READER_URL: ${{ secrets.SUPPRESSION_READER_URL }}
+          SUPPRESSED_NPIS: ${{ secrets.SUPPRESSED_NPIS }}
+        run: |
+          if [ -n "$SUPPRESSION_READER_URL" ]; then pip install "psycopg[binary]>=3.1,<4" >/dev/null; fi
+          python analysis/suppression.py --check
+
   contract:
     name: Public contract validation
     runs-on: ubuntu-latest

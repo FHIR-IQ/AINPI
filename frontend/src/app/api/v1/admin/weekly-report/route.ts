@@ -50,6 +50,7 @@ import {
   renderFunnelText,
   type FunnelSection,
 } from '@/lib/marketplace-funnel';
+import { loadRemovalCounts, renderRemovalHtml, renderRemovalText, type RemovalCountsDb } from '@/lib/suppression-digest';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -151,6 +152,7 @@ export async function GET(req: NextRequest) {
     };
   }
   const funnel = await funnelPromise;
+  const removals = await loadRemovalCounts(prisma as unknown as RemovalCountsDb, sevenDaysAgo);
   if (funnel.status === 'unavailable') {
     console.error('[weekly-report] marketplace funnel unavailable:', funnel.reason);
   }
@@ -184,6 +186,8 @@ export async function GET(req: NextRequest) {
     `  Last 7 days:       ${recentDownloads.length}`,
     ``,
     renderFunnelText(funnel),
+    ``,
+    renderRemovalText(removals),
     ``,
     `RECENT DOWNLOADS (last 7 days, up to 50)`,
     ...recentDownloads.map(
@@ -289,6 +293,7 @@ export async function GET(req: NextRequest) {
       }
 
       ${renderFunnelHtml(funnel)}
+      ${renderRemovalHtml(removals)}
 
       <h2 style="font-size: 14px; margin: 24px 0 8px 0; text-transform: uppercase; letter-spacing: 0.05em; color: #374151;">Subscriber list (${subscribers.length})</h2>
       <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px;">

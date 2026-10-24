@@ -1,0 +1,414 @@
+/**
+ * suppression-confirm: the automated "your removal is complete" email,
+ * sent by the daily cron /api/v1/admin/suppression-confirm.
+ *
+ * A row is confirmed only when it is `applied` (the suppression-apply
+ * workflow has pushed the static-file removal) AND the live site shows the
+ * removal: https://ainpi.dev/npi/<npi> returns 404 and the published cohort
+ * CSV no longer contains the NPI. An NPI that never had a page passes both
+ * checks as soon as it is applied, so it is confirmed too. Declined rows
+ * (organization NPIs) are never `applied`; they got their own reply at intake.
+ *
+ * Fairness: candidates are taken least-recently-checked first
+ * (confirmCheckedAt, nulls first) and every check stamps the row, so a row
+ * whose page is slow to go cannot hold up newer ones. Up to CHECK_LIMIT
+ * checks and `cap` sends per run.
+ *
+ * Exactly-once, as far as a mail API allows: the send is claimed first with
+ * one conditional write on confirmClaimedAt. Success sets status=confirmed
+ * and confirmedAt in one write keyed on that claim; a failed send releases
+ * it. A claim older than CLAIM_EXPIRY_MS (a run that died mid-send) can be
+ * claimed again, so a crash between send and write can cause one duplicate
+ * email rather than leaving the row stuck forever.
+ */
+
+export const DEFAULT_CONFIRM_CAP = 20;
+export const CHECK_LIMIT = 100;
+export const CLAIM_EXPIRY_MS = 15 * 60 * 1000;
+export const DEFAULT_SITE = 'https://ainpi.dev';
+export const COHORT_CSV_PATH = '/api/v1/findings/high-risk-cohort-export.csv';
+
+export function buildRemovalConfirmation(npi: string): { subject: string; text: string } {
+  return {
+    subject: 'Your AINPI removal request is complete',
+    text:
+      `Your removal request for NPI ${npi} is complete. If this NPI had a page on ainpi.dev, ` +
+      `that page has been removed, and the NPI no longer appears in search results, ` +
+      `downloadable files or the API on ainpi.dev. Search engines remove an old page when ` +
+      `they next crawl it. This mailbox is not monitored, and replies are not read.`,
+  };
+}
+
+export type FetchLike = (url: string, init?: RequestInit) => Promise<Response>;
+
+/** True when the live site no longer shows the NPI's page or cohort row. */
+export async function isRemovedLive(
+  npi: string,
+  fetchFn: FetchLike,
+  base: string = DEFAULT_SITE,
+  bust: string = String(Date.now()),
+): Promise<boolean> {
+  const page = await fetchFn(`${base}/npi/${npi}?v=${bust}`, {
+    redirect: 'manual',
+    cache: 'no-store',
+  });
+  if (page.status !== 404) return false;
+  const csv = await fetchFn(`${base}${COHORT_CSV_PATH}?v=${bust}`, { cache: 'no-store' });
+  if (!csv.ok) return false; // cannot prove absence, so do not claim it
+  const body = await csv.text();
+  if (!body.startsWith('npi,')) return false;
+  return !body.includes(npi);
+}
+
+export interface ConfirmRow {
+  npi: string;
+  requesterEmail: string | null;
+}
+
+export interface ConfirmDb {
+  npiSuppression: {
+    findMany(args: {
+      where: { status: 'applied'; confirmedAt: null };
+      select: { npi: true; requesterEmail: true };
+      orderBy: { confirmCheckedAt: { sort: 'asc'; nulls: 'first' } }[];
+      take: number;
+    }): Promise<ConfirmRow[]>;
+    updateMany(args: {
+      where: {
+        npi: string;
+        status?: string;
+        confirmClaimedAt?: Date | null;
+        OR?: ({ confirmClaimedAt: null } | { confirmClaimedAt: { lt: Date } })[];
+      };
+      data: {
+        confirmCheckedAt?: Date;
+        confirmClaimedAt?: Date | null;
+        confirmedAt?: Date;
+        status?: string;
+      };
+    }): Promise<{ count: number }>;
+  };
+}
+
+export type SendResult = { ok: true } | { ok: false; error: string };
+
+export interface ConfirmDeps {
+  db: ConfirmDb;
+  fetchFn: FetchLike;
+  send: (to: string, msg: { subject: string; text: string }) => Promise<SendResult>;
+  /**
+   * One automated email per address per UTC day (src/lib/suppression-intake
+   * mailtoAllowed). False defers this confirmation to a later run.
+   */
+  mailAllowed?: (to: string) => Promise<boolean>;
+  base?: string;
+  cap?: number;
+  checkLimit?: number;
+  now?: () => Date;
+}
+
+export interface ConfirmSummary {
+  checked: number;
+  /** Live, but the address already had its one email today: next run. */
+  deferred: number;
+  notYetLive: number;
+  sent: number;
+  confirmedWithoutEmail: number;
+  alreadyClaimed: number;
+  failed: number;
+}
+
+export async function runConfirmations(deps: ConfirmDeps): Promise<ConfirmSummary> {
+  const now = deps.now ?? (() => new Date());
+  const cap = deps.cap ?? DEFAULT_CONFIRM_CAP;
+  const db = deps.db.npiSuppression;
+  const s: ConfirmSummary = {
+    checked: 0, deferred: 0, notYetLive: 0, sent: 0, confirmedWithoutEmail: 0, alreadyClaimed: 0, failed: 0,
+  };
+  const rows = await db.findMany({
+    where: { status: 'applied', confirmedAt: null },
+    select: { npi: true, requesterEmail: true },
+    orderBy: [{ confirmCheckedAt: { sort: 'asc', nulls: 'first' } }],
+    take: deps.checkLimit ?? CHECK_LIMIT,
+  });
+
+  for (const row of rows) {
+    if (s.sent >= cap) break;
+    s.checked++;
+    let live = false;
+    try {
+      live = await isRemovedLive(row.npi, deps.fetchFn, deps.base);
+    } catch {
+      live = false;
+    }
+    await db.updateMany({ where: { npi: row.npi }, data: { confirmCheckedAt: now() } });
+    if (!live) {
+      s.notYetLive++;
+      continue;
+    }
+
+    if (row.requesterEmail && deps.mailAllowed && !(await deps.mailAllowed(row.requesterEmail).catch(() => false))) {
+      s.deferred++;
+      continue;
+    }
+
+    const at = now();
+    const claim = await db.updateMany({
+      where: {
+        npi: row.npi,
+        status: 'applied',
+        OR: [
+          { confirmClaimedAt: null },
+          { confirmClaimedAt: { lt: new Date(at.getTime() - CLAIM_EXPIRY_MS) } },
+        ],
+      },
+      data: { confirmClaimedAt: at },
+    });
+    if (claim.count !== 1) {
+      s.alreadyClaimed++;
+      continue;
+    }
+
+    if (!row.requesterEmail) {
+      await db.updateMany({
+        where: { npi: row.npi, confirmClaimedAt: at },
+        data: { status: 'confirmed', confirmedAt: now() },
+      });
+      s.confirmedWithoutEmail++;
+      continue;
+    }
+
+    let result: SendResult;
+    try {
+      result = await deps.send(row.requesterEmail, buildRemovalConfirmation(row.npi));
+    } catch (err) {
+      result = { ok: false, error: err instanceof Error ? err.message : String(err) };
+    }
+    if (result.ok) {
+      await db.updateMany({
+        where: { npi: row.npi, confirmClaimedAt: at },
+        data: { status: 'confirmed', confirmedAt: now() },
+      });
+      s.sent++;
+    } else {
+      await db.updateMany({
+        where: { npi: row.npi, confirmClaimedAt: at },
+        data: { confirmClaimedAt: null },
+      });
+      s.failed++;
+    }
+  }
+  return s;
+}
+
+export const OVERDUE_AFTER_MS = 5 * 86_400_000;
+
+export interface OverdueRow {
+  npi: string;
+  status: string;
+  requestedAt: Date;
+}
+
+export interface OverdueDb {
+  npiSuppression: {
+    findMany(args: {
+      where: {
+        status: { in: string[] };
+        requestedAt: { lt: Date };
+        overdueAlertedAt: null;
+      };
+      select: { npi: true; status: true; requestedAt: true };
+      take: number;
+    }): Promise<OverdueRow[]>;
+    updateMany(args: {
+      where: { npi: { in: string[] }; overdueAlertedAt: null };
+      data: { overdueAlertedAt: Date };
+    }): Promise<{ count: number }>;
+  };
+}
+
+/**
+ * One admin alert for requests more than 5 days old and still not confirmed,
+ * two days before the 7-day promise. Each row alerts once (overdueAlertedAt).
+ * Nothing in normal operation waits on a person; this is the backstop for a
+ * failure that automatic retries have not cleared.
+ */
+export async function runOverdueCheck(deps: {
+  db: OverdueDb;
+  alert: (rows: OverdueRow[]) => Promise<void>;
+  now?: () => Date;
+}): Promise<number> {
+  const now = (deps.now ?? (() => new Date()))();
+  const rows = await deps.db.npiSuppression.findMany({
+    where: {
+      status: { in: ['pending', 'applied'] },
+      requestedAt: { lt: new Date(now.getTime() - OVERDUE_AFTER_MS) },
+      overdueAlertedAt: null,
+    },
+    select: { npi: true, status: true, requestedAt: true },
+    take: 200,
+  });
+  if (rows.length === 0) return 0;
+  await deps.alert(rows);
+  await deps.db.npiSuppression.updateMany({
+    where: { npi: { in: rows.map((r) => r.npi) }, overdueAlertedAt: null },
+    data: { overdueAlertedAt: now },
+  });
+  return rows.length;
+}
+
+export type EnumerationType = 'individual' | 'organization' | 'unknown';
+
+export interface ReclassifyDb {
+  npiSuppression: {
+    findMany(args: {
+      where: { basis: 'unverified'; status: 'pending' };
+      select: { npi: true; requesterEmail: true };
+      orderBy: { reclassifyCheckedAt: { sort: 'asc'; nulls: 'first' } }[];
+      take: number;
+    }): Promise<ConfirmRow[]>;
+    updateMany(args: {
+      where: { npi: string; basis?: 'unverified'; status?: 'pending' };
+      data: { basis?: string; status?: string; reclassifyCheckedAt?: Date };
+    }): Promise<{ count: number }>;
+  };
+}
+
+export interface ReclassifySummary {
+  checked: number;
+  /** NPPES now says NPI-1: basis 'nppes', full force from here. */
+  confirmedIndividual: number;
+  /** NPPES now says NPI-2: declined, organization reply sent. */
+  declined: number;
+  /** NPPES still silent: practitioner-only filtering, retried tomorrow. */
+  stillUnknown: number;
+  /** NPI-2 whose requester already had today's email: retried tomorrow. */
+  deferred: number;
+  /** Stopped at the wall-clock deadline; the rest wait for the next run. */
+  stoppedAtDeadline: boolean;
+}
+
+/** Rows re-checked per run, least recently checked first. */
+export const RECLASSIFY_LIMIT = 10;
+/** Wall-clock budget for the re-check, well inside the route's maxDuration. */
+export const RECLASSIFY_DEADLINE_MS = 20_000;
+
+/**
+ * Daily re-check of rows whose NPI type NPPES could not confirm at intake
+ * (basis 'unverified', practitioner-only scope). NPI-1 moves to full force
+ * (the next suppression-apply run then scrubs it from every file); NPI-2 is
+ * declined with the organization reply, sent once (the status change is
+ * conditional, so only one run can win it); still unknown stays as it is and
+ * is retried the next day, counting toward the 5-day overdue alert.
+ *
+ * Progress: rows are taken least-recently-checked first
+ * (reclassifyCheckedAt, nulls first) and every check stamps the row, so all
+ * of them are reached over successive runs however many there are. It runs
+ * last in the cron and stops cleanly at its deadline (a hung NPPES call
+ * included), so it can never starve the confirmations.
+ */
+export async function runReclassify(deps: {
+  db: ReclassifyDb;
+  lookupType: (npi: string) => Promise<EnumerationType>;
+  sendDeclined: (to: string, npi: string) => Promise<void>;
+  mailAllowed: (to: string) => Promise<boolean>;
+  limit?: number;
+  deadlineMs?: number;
+  clock?: () => number;
+  now?: () => Date;
+}): Promise<ReclassifySummary> {
+  const clock = deps.clock ?? Date.now;
+  const now = deps.now ?? (() => new Date());
+  const deadline = clock() + (deps.deadlineMs ?? RECLASSIFY_DEADLINE_MS);
+  const s: ReclassifySummary = {
+    checked: 0, confirmedIndividual: 0, declined: 0, stillUnknown: 0, deferred: 0, stoppedAtDeadline: false,
+  };
+  const db = deps.db.npiSuppression;
+  const rows = await db.findMany({
+    where: { basis: 'unverified', status: 'pending' },
+    select: { npi: true, requesterEmail: true },
+    orderBy: [{ reclassifyCheckedAt: { sort: 'asc', nulls: 'first' } }],
+    take: deps.limit ?? RECLASSIFY_LIMIT,
+  });
+
+  for (const row of rows) {
+    const remaining = deadline - clock();
+    if (remaining <= 0) {
+      s.stoppedAtDeadline = true;
+      break;
+    }
+    // A lookup that outlives the deadline counts as unknown and ends the run.
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timedOut = new Promise<'timeout'>((resolve) => {
+      timer = setTimeout(() => resolve('timeout'), remaining);
+    });
+    const type = await Promise.race([
+      deps.lookupType(row.npi).catch((): EnumerationType => 'unknown'),
+      timedOut,
+    ]);
+    clearTimeout(timer);
+    s.checked++;
+    await db.updateMany({ where: { npi: row.npi }, data: { reclassifyCheckedAt: now() } });
+    if (type === 'timeout') {
+      s.stillUnknown++;
+      s.stoppedAtDeadline = true;
+      break;
+    }
+
+    const key = { npi: row.npi, basis: 'unverified' as const, status: 'pending' as const };
+    if (type === 'individual') {
+      const r = await db.updateMany({ where: key, data: { basis: 'nppes' } });
+      if (r.count === 1) s.confirmedIndividual++;
+    } else if (type === 'organization') {
+      // Take the address's daily email token first; without it, wait a day
+      // rather than decline silently.
+      if (row.requesterEmail && !(await deps.mailAllowed(row.requesterEmail).catch(() => false))) {
+        s.deferred++;
+        continue;
+      }
+      const r = await db.updateMany({ where: key, data: { status: 'declined' } });
+      if (r.count === 1) {
+        s.declined++;
+        if (row.requesterEmail) await deps.sendDeclined(row.requesterEmail, row.npi).catch(() => {});
+      }
+    } else {
+      s.stillUnknown++;
+    }
+  }
+  return s;
+}
+
+/**
+ * The cron's whole run, in the order that protects what matters most:
+ * the overdue backstop, then confirmations, then the NPPES re-check last
+ * (bounded by its own deadline). Each step's failure is logged and does not
+ * stop the next.
+ */
+export async function runConfirmCron(steps: {
+  overdue: () => Promise<number>;
+  confirm: (() => Promise<ConfirmSummary>) | null;
+  reclassify: () => Promise<ReclassifySummary>;
+  log?: (msg: string) => void;
+}): Promise<{
+  overdue: number | null;
+  confirmations: ConfirmSummary | null;
+  reclassified: ReclassifySummary | null;
+  errors: string[];
+}> {
+  const log = steps.log ?? ((m: string) => console.error(m));
+  const errors: string[] = [];
+  const attempt = async <T,>(name: string, fn: () => Promise<T>): Promise<T | null> => {
+    try {
+      return await fn();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      log(`[suppression-confirm] ${name} failed: ${msg}`);
+      errors.push(name);
+      return null;
+    }
+  };
+  const overdue = await attempt('overdue', steps.overdue);
+  const confirmations = steps.confirm ? await attempt('confirm', steps.confirm) : null;
+  const reclassified = await attempt('reclassify', steps.reclassify);
+  return { overdue, confirmations, reclassified, errors };
+}

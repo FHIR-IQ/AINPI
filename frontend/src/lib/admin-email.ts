@@ -340,3 +340,134 @@ export async function sendInstallPollAlert(message: string): Promise<void> {
   });
 }
 
+
+export interface SuppressionAlertArgs {
+  npi: string;
+  source: 'form' | 'email' | 'manual';
+  requesterEmail: string | null;
+  basis: 'nppes' | 'ainpi_files' | 'unverified' | 'manual';
+  notBefore: Date | null;
+  capReached: boolean;
+}
+
+const BASIS_TEXT: Record<string, string> = {
+  nppes: 'NPPES lists it as an individual (NPI-1).',
+  ainpi_files: 'NPPES did not answer for it (deactivated, or the API was down); it is in AINPI\'s individual-level data, so it was accepted as an individual.',
+  unverified: 'NPPES did not answer for it and it is in none of AINPI\'s files. Until NPPES confirms its type it filters practitioner search only and never organization data; the confirm cron re-checks NPPES daily.',
+  manual: 'Recorded by hand with scripts/suppress-npi.ts --force.',
+};
+
+/**
+ * Notice of an accepted removal request (src/lib/suppression-intake.ts).
+ * Nothing to do: search already filters it (or will at the next UTC day if
+ * queued), the files follow within 6 hours, and the requester is emailed when
+ * it is live. Declined (organization) requests send no alert. Admin only.
+ */
+export async function sendSuppressionAlert(args: SuppressionAlertArgs): Promise<void> {
+  const { npi, source, requesterEmail, basis, notBefore, capReached } = args;
+  const subject = capReached
+    ? '[AINPI admin] NPI removal daily cap reached; later requests queued'
+    : `[AINPI admin] NPI removal request (${source})`;
+  const lines = [
+    capReached
+      ? `The daily cap on removal requests was reached. This and later requests today are queued to ${notBefore?.toISOString().slice(0, 10)} and processed then, automatically. No action needed unless this is abuse; raise SUPPRESSION_DAILY_CAP in Vercel if it is genuine demand.`
+      : 'New NPI removal request. Recorded and already filtered from search. No action needed.',
+    '',
+    `NPI:       ${npi}`,
+    `Source:    ${source}`,
+    `Requester: ${requesterEmail ?? '(none given)'}`,
+    `Basis:     ${BASIS_TEXT[basis] ?? basis}`,
+    notBefore ? `Queued to: ${notBefore.toISOString()}` : '',
+  ].filter((l, i) => l !== '' || i === 1);
+  const text = lines.join('\n');
+  await sendOnce({
+    subject,
+    text,
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;white-space:pre-wrap;">${esc(text)}</pre>`,
+    tag: 'suppression',
+  });
+}
+
+/** Removal requests older than 5 days and not yet confirmed (sent once per row). */
+export async function sendSuppressionOverdueAlert(
+  rows: { npi: string; status: string; requestedAt: Date }[],
+): Promise<void> {
+  const text = [
+    `${rows.length} NPI removal request(s) are more than 5 days old and not yet confirmed. The privacy`,
+    'policy promises 7 days. Everything retries automatically; this alert is sent once per request.',
+    '',
+    ...rows.map((r) => `  ${r.npi}  ${r.status.padEnd(9)}  requested ${r.requestedAt.toISOString().slice(0, 10)}`),
+    '',
+    'Usual causes: suppression-apply.yml failing (check its runs), a deploy not going out, or the',
+    'page still cached. The suppression-confirm cron re-checks daily.',
+  ].join('\n');
+  await sendOnce({
+    subject: `[AINPI admin] ${rows.length} NPI removal request(s) near the 7-day limit`,
+    text,
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;">${esc(text)}</pre>`,
+    tag: 'suppression-overdue',
+  });
+}
+
+/** The removal inbox webhook was called but no signing secret is configured. */
+export async function sendSuppressionWebhookUnconfiguredAlert(): Promise<void> {
+  const text =
+    'An email reached /api/v1/privacy/remove-inbound, but RESEND_REMOVAL_WEBHOOK_SECRET is not set ' +
+    'in Vercel, so it could not be verified and nothing was recorded. Resend will retry. Add the ' +
+    "removal webhook's signing secret: vercel env add RESEND_REMOVAL_WEBHOOK_SECRET production (and preview).";
+  await sendOnce({
+    subject: '[AINPI admin] Removal inbox webhook is not configured',
+    text,
+    html: `<p>${esc(text)}</p>`,
+    tag: 'suppression-webhook',
+  });
+}
+
+/** An email reached the removal inbox but named no valid NPI. */
+export async function sendSuppressionUnparsedAlert(args: {
+  sender: string | null;
+  subject: string;
+}): Promise<void> {
+  const text = [
+    'An email to the AINPI removal inbox named no valid 10-digit NPI, so nothing was recorded.',
+    '',
+    `From:    ${args.sender ?? '(unparseable sender)'}`,
+    `Subject: ${args.subject}`,
+    '',
+    'If it is a real request, record it with frontend/scripts/suppress-npi.ts.',
+  ].join('\n');
+  await sendOnce({
+    subject: '[AINPI admin] Removal email with no NPI',
+    text,
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;">${esc(text)}</pre>`,
+    tag: 'suppression-unparsed',
+  });
+}
+
+/** The global daily ceiling on removal requests was reached (sent once a day). */
+export async function sendRemovalCeilingAlert(ceiling: number): Promise<void> {
+  const text =
+    `The daily ceiling on NPI removal requests (${ceiling}, REMOVAL_DAILY_CEILING) was reached. ` +
+    'Further form posts and removal emails are refused until 00:00 UTC. Search and the rest of ' +
+    'the site are unaffected. If this is genuine demand rather than abuse, raise the ceiling in Vercel.';
+  await sendOnce({
+    subject: '[AINPI admin] Removal request daily ceiling reached',
+    text,
+    html: `<p>${esc(text)}</p>`,
+    tag: 'removal-ceiling',
+  });
+}
+
+/** One sender went over the removal inbox limits (sent once per sender per day). */
+export async function sendRemovalSenderOverflowAlert(sender: string, reason: string): Promise<void> {
+  const text =
+    `Removal email from ${sender} was not recorded: ${reason}. Resend was told 200 so it will not ` +
+    'retry. Later mail from this sender today is dropped without another alert. If it is a real ' +
+    'request, record it with frontend/scripts/suppress-npi.ts.';
+  await sendOnce({
+    subject: '[AINPI admin] Removal email over limit',
+    text,
+    html: `<p>${esc(text)}</p>`,
+    tag: 'removal-sender-overflow',
+  });
+}

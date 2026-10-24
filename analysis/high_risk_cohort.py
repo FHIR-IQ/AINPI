@@ -59,6 +59,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config  # noqa: E402
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
+from suppression import load_suppressed, scrub_file  # noqa: E402
 METHODOLOGY_VERSION = "0.4.0"
 CRITICAL_RISK_THRESHOLD = 1.5
 HIGH_RISK_THRESHOLD = 1.0
@@ -325,7 +326,14 @@ def run() -> None:
                 "sam_active_date": c["sam_active_date"],
                 "nppes_deactivation_date": c["nppes_deactivation_date"],
             })
-    print(f"\nWrote {csv_path} ({min(len(cohort), EXPORT_TOP_N):,} rows)")
+    # Individual removal requests (docs/privacy.md). Filtered after the
+    # top-N slice so the next NPI is not promoted: the file holds
+    # EXPORT_TOP_N - suppressed_rows rows, and every aggregate below still
+    # counts the suppressed records. The unfiltered copy stays under the
+    # gitignored analysis/data/unsuppressed/ for downstream inputs.
+    suppressed_rows = scrub_file(csv_path, load_suppressed(), update_sidecar=False)
+    print(f"\nWrote {csv_path} ({min(len(cohort), EXPORT_TOP_N) - suppressed_rows:,} rows; "
+          f"{suppressed_rows} suppressed on request)")
 
     flagged_n = crit_n + high_n
     stale_note = ""
@@ -386,6 +394,9 @@ def run() -> None:
             f"SSA-DMF checks. Composite score is a data-quality flag, NOT a fraud "
             f"determination — each NPI carries reason codes for transparent triage."
         ),
+        # Rows withheld from high-risk-cohort-export.csv on an individual's
+        # removal request. A count only; the records still count above.
+        "suppressed_rows": suppressed_rows,
     }
 
     out = FINDINGS_DIR / "high-risk-cohort.json"

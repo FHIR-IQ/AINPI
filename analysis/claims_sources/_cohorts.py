@@ -70,6 +70,15 @@ def load_state_cohort(state: str) -> dict[str, dict]:
     path = STATES_DIR / f"{state.lower()}-cohort-critical.csv"
     if not path.exists():
         return {}
+    # Prefer the unfiltered copy kept by analysis/suppression.py, so a
+    # removal request does not move the claims-side aggregates.
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
+        from suppression import input_path
+        path = input_path(path)
+    except ImportError:
+        pass
     with open(path, newline="", encoding="utf-8") as fh:
         return {
             row["npi"]: row

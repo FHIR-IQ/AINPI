@@ -22,6 +22,10 @@ from collections import Counter
 from datetime import datetime, timezone
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+import sys  # noqa: E402
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from suppression import input_path, load_suppressed, scrub_file  # noqa: E402
+
 COHORT_CSV = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings" / "high-risk-cohort-export.csv"
 VA_JSON = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "states" / "va.json"
 MCO_JSON = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings" / "mco-exposure-va.json"
@@ -32,7 +36,7 @@ OUT_SUMMARY = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "states" / "va-
 
 
 def main() -> None:
-    with open(COHORT_CSV, newline="", encoding="utf-8") as fh:
+    with open(input_path(COHORT_CSV), newline="", encoding="utf-8") as fh:
         cohort = list(csv.DictReader(fh))
 
     va_critical = [
@@ -64,7 +68,9 @@ def main() -> None:
                 "https://sam.gov/search/?index=ex",
                 f"https://npiregistry.cms.hhs.gov/provider-view/{r['npi']}",
             ])
-    print(f"Wrote {OUT_CSV} ({len(va_critical)} rows)")
+    suppressed = load_suppressed()
+    scrub_file(OUT_CSV, suppressed)
+    print(f"Wrote {OUT_CSV} ({len(va_critical)} rows before any suppression)")
 
     # 2. Reason-combo distribution.
     combos: Counter[tuple[str, ...]] = Counter()
@@ -162,6 +168,7 @@ def main() -> None:
         ],
     }
     OUT_SUMMARY.write_text(json.dumps(summary, indent=2) + "\n")
+    scrub_file(OUT_SUMMARY, suppressed)
     print(f"Wrote {OUT_SUMMARY}")
     print(f"  total_critical: {len(va_critical)}")
     print(f"  reason combos:  {len(combo_breakdown)}")
