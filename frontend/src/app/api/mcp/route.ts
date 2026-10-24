@@ -24,6 +24,7 @@ import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
 import { createOrgIndexLoader, lookupOrganization } from '@/lib/org-lookup';
+import { getSuppressedNpis } from '@/lib/suppression';
 
 const BASE = 'https://ainpi.dev';
 
@@ -166,8 +167,11 @@ const handler = createMcpHandler(
         DISCLAIMER,
       { npi: z.string().regex(/^\d{10}$/).describe('10-digit NPI') },
       async ({ npi }) => {
+        // A suppressed NPI (removal request) answers exactly as one that is
+        // not in the cohort, even if a stale CDN copy of the CSV still has it.
+        const suppressed = await getSuppressedNpis();
         const cohort = await loadCohort();
-        const row = cohort.get(npi);
+        const row = suppressed.has(npi) ? undefined : cohort.get(npi);
         if (!row) {
           return text(
             JSON.stringify(
@@ -213,6 +217,22 @@ const handler = createMcpHandler(
         '(name, state, city, active flag, roles). Wraps the public /api/npd/search route.',
       { npi: z.string().regex(/^\d{10}$/).describe('10-digit NPI') },
       async ({ npi }) => {
+        if ((await getSuppressedNpis()).has(npi)) {
+          // Same body /api/npd/search returns for an NPI not in the directory.
+          const { CURRENT_RELEASE } = await import('@/lib/release');
+          return text(
+            JSON.stringify(
+              {
+                type: 'provider_profile',
+                data: { practitioner: null, roles: [], endpoints: [], specialties: [] },
+                source: 'cms_npd',
+                release_date: CURRENT_RELEASE,
+              },
+              null,
+              1,
+            ),
+          );
+        }
         const data = await fetchJson(`${BASE}/api/npd/search?npi=${npi}`);
         return text(JSON.stringify(data, null, 1));
       },
@@ -233,7 +253,11 @@ const handler = createMcpHandler(
       async ({ npi }) => {
         try {
           const { index, stale } = await loadOrgIndex();
-          return text(JSON.stringify(lookupOrganization(index, npi, { stale }), null, 1));
+          // Suppressed NPIs get the ordinary not-found result.
+          const view = (await getSuppressedNpis()).has(npi)
+            ? { ...index, ndhByNpi: new Map(), vendorByNpi: new Map() }
+            : index;
+          return text(JSON.stringify(lookupOrganization(view, npi, { stale }), null, 1));
         } catch (err) {
           // Never answer "not found" when the sources could not be read: an
           // empty index would make every NPI look like it has no endpoint.

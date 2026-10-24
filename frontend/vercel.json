@@ -18,6 +18,10 @@
     {
       "path": "/api/v1/admin/marketplace-installs-poll",
       "schedule": "17 14 * * *"
+    },
+    {
+      "path": "/api/v1/admin/suppression-confirm",
+      "schedule": "41 15 * * *"
     }
   ]
 }

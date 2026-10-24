@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import InlineSubscribe from '@/components/InlineSubscribe';
-import { cohortSize } from '@/lib/load-npi-cohort';
+import { publishedCohortSize } from '@/lib/load-npi-cohort';
 import NpiLookupForm from './NpiLookupForm';
 
 export const dynamic = 'force-static';
@@ -20,8 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NpiIndexPage() {
-  const n = cohortSize();
+export default async function NpiIndexPage() {
+  const n = await publishedCohortSize();
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -3,19 +3,25 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Navbar from '@/components/Navbar';
 import InlineSubscribe from '@/components/InlineSubscribe';
-import { allCohortNpis, getCohortRow, type NpiCohortRow } from '@/lib/load-npi-cohort';
+import {
+  getPublishedCohortRow,
+  publishedCohortNpis,
+  type NpiCohortRow,
+} from '@/lib/load-npi-cohort';
 
 export const dynamic = 'force-static';
 // COST CONTRACT: unknown NPIs 404 statically. No runtime data reads, no
 // live BigQuery. See load-npi-cohort.ts.
 export const dynamicParams = false;
 
-export function generateStaticParams(): { npi: string }[] {
-  return allCohortNpis().map((npi) => ({ npi }));
+// A suppressed NPI (removal request, docs/privacy.md) gets no params, so
+// with dynamicParams = false its URL is a static 404.
+export async function generateStaticParams(): Promise<{ npi: string }[]> {
+  return (await publishedCohortNpis()).map((npi) => ({ npi }));
 }
 
-export function generateMetadata({ params }: { params: { npi: string } }): Metadata {
-  const row = getCohortRow(params.npi);
+export async function generateMetadata({ params }: { params: { npi: string } }): Promise<Metadata> {
+  const row = await getPublishedCohortRow(params.npi);
   if (!row) return { title: 'NPI report card' };
   const title = `${row.name} (NPI ${row.npi}): federal directory data-quality report: AINPI`;
   const description =
@@ -96,8 +102,8 @@ const SIGNALS: SignalDef[] = [
   },
 ];
 
-export default function NpiReportCardPage({ params }: { params: { npi: string } }) {
-  const row = getCohortRow(params.npi);
+export default async function NpiReportCardPage({ params }: { params: { npi: string } }) {
+  const row = await getPublishedCohortRow(params.npi);
   if (!row) notFound();
 
   const active = SIGNALS.filter((s) => row.reasons.includes(s.code));

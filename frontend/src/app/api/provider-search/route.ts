@@ -26,6 +26,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBigQueryClient } from '@/lib/bigquery';
 import { enforceRateLimit } from '@/lib/rate-limit';
+import { getSuppressedNpis } from '@/lib/suppression';
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 30;
@@ -486,6 +487,19 @@ async function querySource(meta: SourceMeta, query: NormalizedQuery): Promise<So
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     result = { practitioners: [], status: 'error', errorMessage: /aborted/i.test(msg) ? 'timed out' : msg.slice(0, 200) };
+  }
+  // NPIs removed on request (docs/privacy.md) are dropped from every
+  // source's results, and a source left with none reads as not found.
+  const suppressed = await getSuppressedNpis();
+  if (suppressed.size > 0 && result.practitioners.length > 0) {
+    const kept = result.practitioners.filter((p) => !(p.npi && suppressed.has(p.npi)));
+    if (kept.length !== result.practitioners.length) {
+      result = {
+        ...result,
+        practitioners: kept,
+        status: kept.length === 0 && result.status === 'matched' ? 'not_found' : result.status,
+      };
+    }
   }
   return {
     sourceId: meta.id,

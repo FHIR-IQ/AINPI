@@ -4,6 +4,7 @@ import { parseNameQuery, groupRolesBySpecialty, type RoleRow } from '@/lib/npd-s
 import { enforceRateLimit, withRateLimitHeaders } from '@/lib/rate-limit';
 import { CURRENT_RELEASE } from '@/lib/release';
 import { env } from '@/lib/env';
+import { filterSuppressed, getSuppressedNpis } from '@/lib/suppression';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -281,8 +282,14 @@ export async function GET(req: NextRequest) {
     // search path below. This is the branch the MCP lookup_npi tool uses and
     // the one an agent will hit hardest, so it needs the headers too: without
     // them a client has no way to see its remaining budget before a 429.
+    // NPIs removed on request (docs/privacy.md) answer exactly as an NPI
+    // that is not in the directory, and are dropped from every result list.
+    const suppressed = await getSuppressedNpis();
+
     if (params.npi && params.type === 'all') {
-      const profile = await getProviderProfile(params.npi);
+      const profile = suppressed.has(params.npi)
+        ? { practitioner: null, roles: [], endpoints: [], specialties: [] }
+        : await getProviderProfile(params.npi);
       const profileRes = NextResponse.json({
         type: 'provider_profile',
         data: profile,
@@ -293,8 +300,12 @@ export async function GET(req: NextRequest) {
     }
 
     const results: Record<string, unknown[]> = {};
-    if (params.type === 'all' || params.type === 'practitioner') results.practitioners = await searchPractitioners(params);
-    if (params.type === 'all' || params.type === 'organization') results.organizations = await searchOrganizations(params);
+    if (params.type === 'all' || params.type === 'practitioner') {
+      results.practitioners = filterSuppressed(await searchPractitioners(params), suppressed);
+    }
+    if (params.type === 'all' || params.type === 'organization') {
+      results.organizations = filterSuppressed(await searchOrganizations(params), suppressed);
+    }
     if (params.type === 'all' || params.type === 'location') results.locations = await searchLocations(params);
     if (params.type === 'all' || params.type === 'endpoint') results.endpoints = await searchEndpoints(params);
 

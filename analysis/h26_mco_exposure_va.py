@@ -29,6 +29,7 @@ from datetime import datetime, timezone
 from typing import Iterable, Literal
 
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
+from suppression import input_path, load_suppressed, scrub_file  # noqa: E402
 METHODOLOGY_VERSION = "0.5.0"
 USER_AGENT = (
     "AINPI-DirectoryQualityBot/1.0 "
@@ -309,7 +310,9 @@ def _read_cohort_csv(path: pathlib.Path) -> list[dict]:
 
 def run(state: str = "VA") -> None:
     started = datetime.now(timezone.utc)
-    cohort_rows = _read_cohort_csv(COHORT_CSV)
+    # The unfiltered cohort when it is on disk, so a removal request does
+    # not change the match counts (analysis/suppression.py).
+    cohort_rows = _read_cohort_csv(input_path(COHORT_CSV))
     queue = filter_cohort(cohort_rows, state=state)
     print(f"Cohort source: {COHORT_CSV}")
     print(f"NPIs to query: {len(queue):,} ({state} critical, federally excluded)")
@@ -441,6 +444,7 @@ def run(state: str = "VA") -> None:
     out_detail = FINDINGS_DIR / "mco-exposure-va-detail.json"
     out_public.write_text(json.dumps(public_payload, indent=2) + "\n")
     out_detail.write_text(json.dumps(detail_payload, indent=2) + "\n")
+    scrub_file(out_detail, load_suppressed())
     print(f"\nWrote {out_public}")
     print(f"Wrote {out_detail}")
     print(

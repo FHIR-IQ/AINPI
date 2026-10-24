@@ -1,0 +1,80 @@
+name: Apply NPI removal requests
+
+# Removes individual NPIs recorded in the npi_suppressions table (the
+# /privacy/remove form, the removal inbox, frontend/scripts/suppress-npi.ts)
+# from every per-NPI file under frontend/public/api/v1, commits straight to
+# main the way weekly-refresh does, and marks those rows applied. The daily
+# Vercel cron /api/v1/admin/suppression-confirm then checks the live site and
+# emails each requester. See the "NPI removal requests" runbook in CLAUDE.md.
+#
+# The list never enters git, and this workflow prints no NPI: logs carry file
+# paths and counts only.
+#
+# Required secret:
+#   SUPPRESSION_DATABASE_URL  Postgres URL for a role that can SELECT and
+#                             UPDATE npi_suppressions (direct connection,
+#                             port 5432). Without it the run is a no-op.
+# Optional secret:
+#   SUPPRESSED_NPIS           extra NPIs merged with the table.
+
+on:
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: suppression-apply
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    name: Remove suppressed NPIs from published files
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      SUPPRESSION_DATABASE_URL: ${{ secrets.SUPPRESSION_DATABASE_URL }}
+      SUPPRESSED_NPIS: ${{ secrets.SUPPRESSED_NPIS }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install "psycopg[binary]>=3.1,<4"
+
+      - name: Note the start time
+        id: start
+        # Rows requested after this moment wait for the next run, so nothing
+        # is marked applied that this run did not see.
+        run: echo "at=$(date -u +%Y-%m-%dT%H:%M:%S)" >> "$GITHUB_OUTPUT"
+
+      - name: Apply suppressions
+        run: python analysis/suppression.py --apply
+
+      - name: Guard - no suppressed NPI left in published files
+        run: python analysis/suppression.py --check
+
+      - name: Commit + push directly to main
+        run: |
+          if git diff --quiet frontend/public/api/v1/; then
+            echo "No published file changed."
+            exit 0
+          fi
+          git --no-pager diff --stat frontend/public/api/v1/
+          git config user.name "ainpi-weekly-refresh"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/api/v1/
+          git commit -m "Apply individual NPI removal requests to published files"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push origin main && exit 0
+            sleep 15
+          done
+          exit 1
+
+      - name: Mark rows applied
+        run: python analysis/suppression.py --mark-applied --before "${{ steps.start.outputs.at }}"

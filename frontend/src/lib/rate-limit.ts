@@ -80,6 +80,9 @@ export const ROUTE_COST: Record<string, number> = {
   'magic-scanner': 500, //       LLM calls; priced well above scan cost
   'mcp:static': 0, //            CDN-served JSON, costs nothing
   'mcp:lookup': 2,
+  // Removal-request form. No query cost; priced so one address can file
+  // about twenty a day, which no honest requester needs to exceed.
+  'privacy/remove': 100,
   default: 25,
 };
 

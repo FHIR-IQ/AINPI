@@ -73,6 +73,7 @@ import sys
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config  # noqa: E402
 from release import CURRENT_RELEASE as RELEASE_DATE  # noqa: E402
+from suppression import filter_rows, load_suppressed  # noqa: E402
 METHODOLOGY_VERSION = "0.2.0"
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -301,6 +302,7 @@ def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) ->
     sample: it spends an analyst's afternoon and teaches them the list is
     noise.
     """
+    suppressed = load_suppressed()
     sql = f"""
     SELECT
       sp._npi,
@@ -328,7 +330,9 @@ def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) ->
         sql,
         job_config=capped([
             bigquery.ScalarQueryParameter("state", "STRING", state),
-            bigquery.ScalarQueryParameter("lim", "INT64", limit),
+            # Over-fetch by the suppression list's size so a removal request
+            # does not shrink the sample below `limit`.
+            bigquery.ScalarQueryParameter("lim", "INT64", limit + len(suppressed)),
         ]),
     )
     out = []
@@ -353,7 +357,8 @@ def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) ->
                 "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
             }
         )
-    return out
+    out, _ = filter_rows(out, "npi", suppressed)
+    return out[:limit]
 
 
 def run_for_state(state_code: str) -> None:

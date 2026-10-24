@@ -512,3 +512,26 @@ model UsageLedger {
 
   @@map("usage_ledger")
 }
+
+// One row per individual NPI whose AINPI page and per-NPI rows were removed
+// on request (docs/privacy.md, /privacy/remove). This table is the list: it
+// never goes into git, and nothing public reads it except as a filter.
+//   source: form | email | manual
+//   status: pending   recorded; runtime search filters it at once
+//           applied   the suppression-apply workflow has pushed the static
+//                     file removal to main
+//           confirmed the cron saw the page 404 and the NPI gone from the
+//                     published cohort file, and emailed the requester
+model NpiSuppression {
+  id             String    @id @default(uuid())
+  npi            String    @unique
+  requesterEmail String?   @map("requester_email")
+  source         String
+  status         String    @default("pending")
+  requestedAt    DateTime  @default(now()) @map("requested_at")
+  appliedAt      DateTime? @map("applied_at")
+  confirmedAt    DateTime? @map("confirmed_at")
+
+  @@index([status])
+  @@map("npi_suppressions")
+}

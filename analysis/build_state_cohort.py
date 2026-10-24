@@ -30,6 +30,9 @@ import sys
 from collections import defaultdict
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from suppression import input_path, load_suppressed, scrub_file  # noqa: E402
+
 COHORT_CSV = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "findings" / "high-risk-cohort-export.csv"
 STATES_DIR = REPO_ROOT / "frontend" / "public" / "api" / "v1" / "states"
 
@@ -79,6 +82,7 @@ def write_state_csv(state: str, rows: list[dict]) -> pathlib.Path:
                 "https://sam.gov/search/?index=ex",
                 f"https://npiregistry.cms.hhs.gov/provider-view/{r['npi']}",
             ])
+    scrub_file(out_path, load_suppressed())
     return out_path
 
 
@@ -92,7 +96,7 @@ def main() -> None:
     if not args.states and not args.all:
         ap.error("provide one or more state codes, or --all")
 
-    with open(COHORT_CSV, newline="", encoding="utf-8") as fh:
+    with open(input_path(COHORT_CSV), newline="", encoding="utf-8") as fh:
         cohort = list(csv.DictReader(fh))
 
     if args.all:

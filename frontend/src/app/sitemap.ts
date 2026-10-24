@@ -5,7 +5,7 @@ import { allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
 import { allConnectivityStates } from '@/lib/load-api-v1';
 import { REPORTS } from '@/data/reports';
-import { allCohortNpis } from '@/lib/load-npi-cohort';
+import { publishedCohortNpis } from '@/lib/load-npi-cohort';
 
 const BASE = 'https://ainpi.dev';
 
@@ -29,7 +29,7 @@ function articleSlugs(): string[] {
  * listed; auth-gated and app-utility routes are deliberately absent (they
  * are also disallowed in robots.ts).
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
   const staticPages: { path: string; priority: number }[] = [
@@ -139,7 +139,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }
   }
 
-  for (const npi of allCohortNpis()) {
+  // Suppressed NPIs (removal requests) are excluded, same list as the pages.
+  for (const npi of await publishedCohortNpis()) {
     entries.push({
       url: `${BASE}/npi/${npi}`,
       lastModified: now,

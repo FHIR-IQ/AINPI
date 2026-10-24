@@ -142,6 +142,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 - `/briefings/va` — Markdown-rendered Virginia case study (most-developed of the per-state worked examples). Sourced from `docs/briefings/2026-05-04-virginia-state-medicaid.md` via `loadMarkdown` + `MarkdownPage` (same pattern as `/faq`). Pulls together the § 455.436 framework, VA-specific data quality numbers, the 125-NPI federally-excluded cohort, the H26 4-payer cross-reference, and Stage B roadmap. **Public-good research framing — never represented as produced for, prepared for, or guided by any state agency.**
 - `/smd-revalidation` — Citable methodology landing page mapping AINPI to the 5 elements of the CMS State Medicaid Director letter. Anchored in 42 CFR § 455.436 federal database checks (NPPES + LEIE + SAM + SSA-DMF). Includes copy-paste citation language for state response submissions.
 - `/faq`, `/privacy`, `/security` — Policy pages sourced from `docs/*.md` via `next/mdx`-style markdown reads.
+- `/privacy/remove` — NPI removal request form (see "NPI removal requests"). `noindex`.
 - `/subscribe` — Resend-backed email signup; POST to `/api/v1/subscribe`. Fires a realtime admin alert on every new signup (see Admin notifications).
 - `/download`, `/report` — Report picker (4 reports today) with email gate → `/api/v1/download-report` streams a Playwright-generated PDF of `/report` (or redirects to a web report). Fires a realtime admin alert on every download.
 - `/provider-search` — Real-time cross-source merged search: NDH (BigQuery) + NPPES NPI Registry + 4 payer FHIR directories (Humana, Cigna, UHC via Optum FLEX, Molina via Sapphire360). Returns per-source results so disagreements are visible side-by-side.
@@ -167,6 +168,9 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 
 /api/v1/subscribe            POST — Email signup. Fires sendSubscriptionAlert() to ADMIN_EMAIL.
 /api/v1/download-report      POST — Report-download capture + redirect. Fires sendDownloadAlert().
+/api/v1/privacy/remove       POST — NPI removal request form. Same response whether or not the NPI is on the site.
+/api/v1/privacy/remove-inbound POST — Resend `email.received` webhook for remove@ainpi.dev.
+/api/v1/admin/suppression-confirm GET — Daily cron (15:41 UTC). Bearer ${CRON_SECRET}. Emails requesters once their removal is live.
 /api/v1/subscribers/count    GET  — Public subscriber count for the Footer / hero ticker
 /api/v1/marketplace-install  POST — Resend `email.received` webhook for installs@ainpi.dev. Parses a forwarded Databricks Marketplace install notice, records it once per address, sends the welcome. Svix-signed; RESEND_WEBHOOK_SECRET.
 /api/v1/admin/weekly-report  GET  — Cron-only digest. Authorization: Bearer ${CRON_SECRET}. Subscriber/download stats, Vercel project dashboard links, and a Databricks Marketplace funnel section: per-listing VIEW_LISTING (listing_funnel_events) / REQUEST_DATA / GET_DATA (listing_access_events) event counts, last 7 days vs prior 7, one SQL statement through the poller's runStatement (`src/lib/marketplace-funnel.ts`). Counts only, no consumer names or emails. Reads "not configured" without the DATABRICKS_* vars and "funnel unavailable: <reason>" on a Databricks error; the digest sends either way.
@@ -556,12 +560,39 @@ Earlier source-side schema changes that still bite: the NPI identifier system UR
 
 **Reference data can be staler than the release, and that turns a check into a false alarm.** `bigquery-public-data.nppes.npi_raw` is a static snapshot whose newest enumeration is **2026-02-07**. Against the 2026-08-20 release, every provider enumerated in between reads as absent from NPPES: 245,374 of them. Eight sampled at random were all real, active providers in the live registry. `high_risk_cohort.py` now measures the snapshot's as-of date and scores `not_in_nppes` at zero while it predates the release, bucketing those rows `needs-review`; `state_findings.py` draws its per-state verification sample from the OIG LEIE instead, because the deactivated-in-NPPES signal fails the same way in the other direction (three sampled were all reactivated after the snapshot). **Before trusting any NPPES-derived signal, check `MAX(provider_enumeration_date)` against the release date.** An NPI-range test suggested the ghosts were genuine and was wrong, because CMS does not issue NPIs in one ascending sequence; only the primary-source lookup settled it.
 
+## NPI removal requests (operator runbook)
+
+A provider can have their individual page (`/npi/<npi>`), their per-NPI rows in the published files and API, and their search results removed from ainpi.dev. Aggregates never change: a removed record still counts toward every total, and a payload that lost rows carries a count-only `suppressed_rows`. The promise is in `docs/privacy.md` (7 days). Scope is ainpi.dev pages, files and search only.
+
+**The list never enters git.** Not in code, tests (they use synthetic check-digit-valid NPIs such as `1234567893`), commit messages, PR text, docs or logs. The scripts print counts and file paths, never an NPI. The source of truth is the Supabase table `npi_suppressions` (Prisma `NpiSuppression`: npi, requesterEmail, source `form|email|manual`, status `pending|applied|confirmed`, requestedAt/appliedAt/confirmedAt). `SUPPRESSED_NPIS` (comma-separated) is an optional override merged on top, for offline runs.
+
+Three intake paths, one function (`recordSuppression()` in `src/lib/suppression-intake.ts`), each firing `sendSuppressionAlert()` to ADMIN_EMAIL:
+
+1. **Form** at `/privacy/remove` → `POST /api/v1/privacy/remove`. NPI must pass the check digit, attestation required, shared rate limiter (`privacy/remove`, 100 units). Same response whether or not the NPI is anywhere on the site.
+2. **Email** to `remove@ainpi.dev` (`REMOVAL_INBOX`) → Resend `email.received` webhook → `POST /api/v1/privacy/remove-inbound`. Records up to 3 check-digit-valid NPIs with the sender as requester; mail naming none alerts the admin. Resend delivers all inbound mail to every webhook, so the route ignores mail not addressed to the removal inbox.
+3. **By hand**, for a request that reached a person: from `frontend/`, `npx tsx scripts/suppress-npi.ts <npi> <requester-email>` (dry run), then add `--confirm`. NPI and email from argv only.
+
+After intake, nothing is manual:
+
+- **Immediately:** `/api/npd/search`, `/api/provider-search` (every source), and the MCP tools `check_npi_cohort`, `lookup_npi`, `lookup_organization` answer a suppressed NPI as not found, through `getSuppressedNpis()` in `src/lib/suppression.ts` (module cache, 5 minutes). `/api/npd/geo-search` and `/api/npd/state-detail` return organizations and counts, not practitioners, and are not filtered.
+- **Within 6 hours:** `.github/workflows/suppression-apply.yml` runs `python analysis/suppression.py --apply` over `frontend/public/api/v1`, guards with `--check`, pushes to main as the weekly-refresh bot, and marks the rows `applied`. The push redeploys; at build `/npi/[npi]`, the `/npi` index and `sitemap.ts` read the table too (`publishedCohortNpis()`), so the page becomes a static 404. If the database is unreachable at build, the env override and the already-filtered CSV still apply.
+- **Daily 15:41 UTC:** the Vercel cron `/api/v1/admin/suppression-confirm` checks each `applied` row against the live site (page 404, NPI absent from the published cohort CSV), then sends the plain-text completion email from `REMOVAL_FROM_ADDRESS` (default `AINPI <no-reply@ainpi.dev>`, no Reply-To; it says replies are not read) and marks the row `confirmed`. Claim-then-send on `confirmedAt`, 20 per run.
+
+**How `--apply` works.** CSV: drops only lines whose `*npi*` column holds a suppressed NPI; every other byte is kept. JSON: drops list records whose `*npi*` field matches, keys equal to the NPI and bare NPI list entries, then rewrites with the file's own indent and adds `suppressed_rows`. `high-risk-cohort-export.csv` reconciles through `suppressed_rows` in `high-risk-cohort.json` (`COUNT_SIDECARS`). The unfiltered file is kept under the gitignored `analysis/data/unsuppressed/`, and scripts that read a published file as input (`h26`, `build_state_cohort`, `build_va_briefing`, `claims_sources/_cohorts.py`) go through `input_path()`, so derived aggregates do not move while that copy matches. On a fresh clone without it, the claims-side audits (H29–H40) read the filtered state cohort CSVs and would count a suppressed NPI that has a state one fewer. `high_risk_cohort.py` filters after the top-10,000 slice, so the next NPI is not promoted. `state_findings.py` over-fetches its five LEIE verify samples by the list size.
+
+**Coverage.** Writers that filter at write time: `high_risk_cohort.py`, `build_state_cohort.py`, `build_va_briefing.py`, `h26_mco_exposure_va.py`, `state_findings.py`. Every other per-NPI writer (h24/h25 detail sidecars, h37–h39, `claims_sources/*` H29–H42 and their per-state CSVs, `ingest_pecos_affiliations.py`, `h53`, `h54`, `state_connectivity.py`, `pa_system_endpoint_gap.py`, `explore_specialty_context.py`, `ingest_cms_ownership.py`, h50/h51 org crosswalks) is covered by the `--apply` step: weekly-refresh runs it after the last generator, and **anyone running a generator by hand must run `python3 analysis/suppression.py --apply` before committing**. CI runs `--check` on every push and PR and fails if a suppressed NPI appears anywhere under `frontend/public/api/v1`, `docs/` or `analysis/release-snapshots/`.
+
+**Secrets.** GitHub: `SUPPRESSION_DATABASE_URL` (used by suppression-apply, weekly-refresh and CI; a role limited to `npi_suppressions`), optional `SUPPRESSED_NPIS`. Vercel: `RESEND_REMOVAL_WEBHOOK_SECRET` (else `RESEND_WEBHOOK_SECRET` is used), optional `REMOVAL_INBOX`, `REMOVAL_FROM_ADDRESS`, `SUPPRESSED_NPIS`; the cron reuses `CRON_SECRET`, `RESEND_API_KEY` and the Prisma URLs.
+
+**Optional after a request:** Search Console → Removals for `sc-domain:ainpi.dev` speeds Google dropping the cached page. The confirmation email does not claim this was done.
+
 ## Supabase Prisma Schema (app database)
 
 Key models (`frontend/prisma/schema.prisma`):
 
 - **User-facing**: `Practitioner`, `PractitionerRole`, `SyncLog`, `Consent`
 - **Provider directory discovery**: `ProviderDirectoryAPI`, `MagicScanResult`
+- **Removal requests**: `NpiSuppression` (`npi_suppressions`), see the NPI removal runbook above
 - **NPD metrics (synced from BigQuery)**: `NpdDataQualitySummary`, `NpdStateMetrics`, `NpdSpecialtyMetrics`, `NpdEndpointMetrics`, `NpdIngestionLog`
 
 ## Authentication

@@ -8,9 +8,16 @@
  * outputFileTracingExcludes in next.config.js). Unknown NPIs 404 statically.
  * There is deliberately NO live-BigQuery fallback: a crawler walking the
  * NPI space must never trigger paid queries.
+ *
+ * SUPPRESSION: an NPI removed on request (docs/privacy.md) is already absent
+ * from the published CSV (analysis/suppression.py). As a second layer, the
+ * loader skips SUPPRESSED_NPIS, and the `published*` helpers below also skip
+ * every NPI in the suppression table. Pages, generateStaticParams and the
+ * sitemap must use the `published*` helpers.
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { getSuppressedNpis, parseSuppressedNpis } from '@/lib/suppression';
 
 const EXPORT_CSV = path.join(
   process.cwd(),
@@ -68,6 +75,7 @@ function load(): Map<string, NpiCohortRow> {
   const lines = raw.split('\n').filter((l) => l.length > 0);
   if (lines.length < 2) return cache;
   const header = parseCsvLine(lines[0]);
+  const envSuppressed = parseSuppressedNpis(process.env.SUPPRESSED_NPIS);
   for (const line of lines.slice(1)) {
     const cols = parseCsvLine(line);
     const rec: Record<string, string> = {};
@@ -75,6 +83,7 @@ function load(): Map<string, NpiCohortRow> {
       rec[k] = cols[i] ?? '';
     });
     if (!/^\d{10}$/.test(rec.npi ?? '')) continue;
+    if (envSuppressed.has(rec.npi)) continue;
     cache.set(rec.npi, {
       npi: rec.npi,
       name: rec.name ?? '',
@@ -100,4 +109,21 @@ export function getCohortRow(npi: string): NpiCohortRow | null {
 
 export function cohortSize(): number {
   return load().size;
+}
+
+/** Cohort NPIs that may have a page: the CSV minus the suppression table. */
+export async function publishedCohortNpis(): Promise<string[]> {
+  const suppressed = await getSuppressedNpis();
+  return allCohortNpis().filter((npi) => !suppressed.has(npi));
+}
+
+/** The cohort row for a page, or null when absent or suppressed. */
+export async function getPublishedCohortRow(npi: string): Promise<NpiCohortRow | null> {
+  const suppressed = await getSuppressedNpis();
+  if (suppressed.has(npi)) return null;
+  return getCohortRow(npi);
+}
+
+export async function publishedCohortSize(): Promise<number> {
+  return (await publishedCohortNpis()).length;
 }

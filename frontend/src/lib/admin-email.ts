@@ -340,3 +340,62 @@ export async function sendInstallPollAlert(message: string): Promise<void> {
   });
 }
 
+
+export interface SuppressionAlertArgs {
+  npi: string;
+  source: 'form' | 'email' | 'manual';
+  requesterEmail: string | null;
+}
+
+/**
+ * Fires once per new removal request (src/lib/suppression-intake.ts). The
+ * request is already recorded and live search already filters it; this is
+ * notice, not a to-do. Admin mailbox only: the NPI never goes anywhere public.
+ */
+export async function sendSuppressionAlert(args: SuppressionAlertArgs): Promise<void> {
+  const { npi, source, requesterEmail } = args;
+  const subject = `[AINPI admin] NPI removal request (${source})`;
+  const lines = [
+    'New NPI removal request on AINPI. Recorded; search already filters it.',
+    '',
+    `NPI:       ${npi}`,
+    `Source:    ${source}`,
+    `Requester: ${requesterEmail ?? '(none given)'}`,
+    '',
+    'Static files are removed by the next suppression-apply workflow run (every 6 hours);',
+    'the requester is emailed automatically once the page returns 404.',
+  ];
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:560px;margin:0 auto;color:#1f2937;line-height:1.5;">
+      <h1 style="margin:0 0 12px 0;font-size:18px;">NPI removal request</h1>
+      <table role="presentation" style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:18px;">
+        <tr><td style="padding:6px 0;color:#6b7280;">NPI</td><td style="padding:6px 0;text-align:right;font-family:ui-monospace,Menlo,monospace;">${esc(npi)}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;">Source</td><td style="padding:6px 0;text-align:right;">${esc(source)}</td></tr>
+        <tr><td style="padding:6px 0;color:#6b7280;">Requester</td><td style="padding:6px 0;text-align:right;">${esc(requesterEmail ?? '(none given)')}</td></tr>
+      </table>
+      <p style="margin:0;font-size:12px;color:#6b7280;">Recorded; search already filters it. Static files follow on the next suppression-apply run, and the requester is emailed automatically once the page returns 404.</p>
+    </div>
+  `.trim();
+  await sendOnce({ subject, text: lines.join('\n'), html, tag: 'suppression' });
+}
+
+/** An email reached the removal inbox but named no valid NPI. */
+export async function sendSuppressionUnparsedAlert(args: {
+  sender: string | null;
+  subject: string;
+}): Promise<void> {
+  const text = [
+    'An email to the AINPI removal inbox named no valid 10-digit NPI, so nothing was recorded.',
+    '',
+    `From:    ${args.sender ?? '(unparseable sender)'}`,
+    `Subject: ${args.subject}`,
+    '',
+    'If it is a real request, record it with frontend/scripts/suppress-npi.ts.',
+  ].join('\n');
+  await sendOnce({
+    subject: '[AINPI admin] Removal email with no NPI',
+    text,
+    html: `<pre style="font-family:ui-monospace,Menlo,monospace;font-size:13px;">${esc(text)}</pre>`,
+    tag: 'suppression-unparsed',
+  });
+}
