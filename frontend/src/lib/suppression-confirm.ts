@@ -264,11 +264,12 @@ export interface ReclassifyDb {
     findMany(args: {
       where: { basis: 'unverified'; status: 'pending' };
       select: { npi: true; requesterEmail: true };
+      orderBy: { reclassifyCheckedAt: { sort: 'asc'; nulls: 'first' } }[];
       take: number;
     }): Promise<ConfirmRow[]>;
     updateMany(args: {
-      where: { npi: string; basis: 'unverified'; status: 'pending' };
-      data: { basis?: string; status?: string };
+      where: { npi: string; basis?: 'unverified'; status?: 'pending' };
+      data: { basis?: string; status?: string; reclassifyCheckedAt?: Date };
     }): Promise<{ count: number }>;
   };
 }
@@ -283,7 +284,14 @@ export interface ReclassifySummary {
   stillUnknown: number;
   /** NPI-2 whose requester already had today's email: retried tomorrow. */
   deferred: number;
+  /** Stopped at the wall-clock deadline; the rest wait for the next run. */
+  stoppedAtDeadline: boolean;
 }
+
+/** Rows re-checked per run, least recently checked first. */
+export const RECLASSIFY_LIMIT = 10;
+/** Wall-clock budget for the re-check, well inside the route's maxDuration. */
+export const RECLASSIFY_DEADLINE_MS = 20_000;
 
 /**
  * Daily re-check of rows whose NPI type NPPES could not confirm at intake
@@ -292,6 +300,12 @@ export interface ReclassifySummary {
  * declined with the organization reply, sent once (the status change is
  * conditional, so only one run can win it); still unknown stays as it is and
  * is retried the next day, counting toward the 5-day overdue alert.
+ *
+ * Progress: rows are taken least-recently-checked first
+ * (reclassifyCheckedAt, nulls first) and every check stamps the row, so all
+ * of them are reached over successive runs however many there are. It runs
+ * last in the cron and stops cleanly at its deadline (a hung NPPES call
+ * included), so it can never starve the confirmations.
  */
 export async function runReclassify(deps: {
   db: ReclassifyDb;
@@ -299,17 +313,48 @@ export async function runReclassify(deps: {
   sendDeclined: (to: string, npi: string) => Promise<void>;
   mailAllowed: (to: string) => Promise<boolean>;
   limit?: number;
+  deadlineMs?: number;
+  clock?: () => number;
+  now?: () => Date;
 }): Promise<ReclassifySummary> {
-  const s: ReclassifySummary = { checked: 0, confirmedIndividual: 0, declined: 0, stillUnknown: 0, deferred: 0 };
+  const clock = deps.clock ?? Date.now;
+  const now = deps.now ?? (() => new Date());
+  const deadline = clock() + (deps.deadlineMs ?? RECLASSIFY_DEADLINE_MS);
+  const s: ReclassifySummary = {
+    checked: 0, confirmedIndividual: 0, declined: 0, stillUnknown: 0, deferred: 0, stoppedAtDeadline: false,
+  };
   const db = deps.db.npiSuppression;
   const rows = await db.findMany({
     where: { basis: 'unverified', status: 'pending' },
     select: { npi: true, requesterEmail: true },
-    take: deps.limit ?? 100,
+    orderBy: [{ reclassifyCheckedAt: { sort: 'asc', nulls: 'first' } }],
+    take: deps.limit ?? RECLASSIFY_LIMIT,
   });
+
   for (const row of rows) {
+    const remaining = deadline - clock();
+    if (remaining <= 0) {
+      s.stoppedAtDeadline = true;
+      break;
+    }
+    // A lookup that outlives the deadline counts as unknown and ends the run.
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timedOut = new Promise<'timeout'>((resolve) => {
+      timer = setTimeout(() => resolve('timeout'), remaining);
+    });
+    const type = await Promise.race([
+      deps.lookupType(row.npi).catch((): EnumerationType => 'unknown'),
+      timedOut,
+    ]);
+    clearTimeout(timer);
     s.checked++;
-    const type = await deps.lookupType(row.npi).catch((): EnumerationType => 'unknown');
+    await db.updateMany({ where: { npi: row.npi }, data: { reclassifyCheckedAt: now() } });
+    if (type === 'timeout') {
+      s.stillUnknown++;
+      s.stoppedAtDeadline = true;
+      break;
+    }
+
     const key = { npi: row.npi, basis: 'unverified' as const, status: 'pending' as const };
     if (type === 'individual') {
       const r = await db.updateMany({ where: key, data: { basis: 'nppes' } });
@@ -331,4 +376,39 @@ export async function runReclassify(deps: {
     }
   }
   return s;
+}
+
+/**
+ * The cron's whole run, in the order that protects what matters most:
+ * the overdue backstop, then confirmations, then the NPPES re-check last
+ * (bounded by its own deadline). Each step's failure is logged and does not
+ * stop the next.
+ */
+export async function runConfirmCron(steps: {
+  overdue: () => Promise<number>;
+  confirm: (() => Promise<ConfirmSummary>) | null;
+  reclassify: () => Promise<ReclassifySummary>;
+  log?: (msg: string) => void;
+}): Promise<{
+  overdue: number | null;
+  confirmations: ConfirmSummary | null;
+  reclassified: ReclassifySummary | null;
+  errors: string[];
+}> {
+  const log = steps.log ?? ((m: string) => console.error(m));
+  const errors: string[] = [];
+  const attempt = async <T,>(name: string, fn: () => Promise<T>): Promise<T | null> => {
+    try {
+      return await fn();
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      log(`[suppression-confirm] ${name} failed: ${msg}`);
+      errors.push(name);
+      return null;
+    }
+  };
+  const overdue = await attempt('overdue', steps.overdue);
+  const confirmations = steps.confirm ? await attempt('confirm', steps.confirm) : null;
+  const reclassified = await attempt('reclassify', steps.reclassify);
+  return { overdue, confirmations, reclassified, errors };
 }

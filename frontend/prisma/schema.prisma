@@ -537,22 +537,25 @@ model UsageLedger {
 //   notBefore: set when the daily cap was reached; the request is queued to
 //           the next UTC day and then processed like any other
 model NpiSuppression {
-  id               String    @id @default(uuid())
-  npi              String    @unique
-  requesterEmail   String?   @map("requester_email")
-  source           String
-  status           String    @default("pending")
-  basis            String?
+  id                  String    @id @default(uuid())
+  npi                 String    @unique
+  requesterEmail      String?   @map("requester_email")
+  source              String
+  status              String    @default("pending")
+  basis               String?
   // Whether ainpi.dev/npi/<npi> existed when the request arrived: the
   // weekly digest counts requests that hit the high-risk cohort.
-  hadPage          Boolean?  @map("had_page")
-  requestedAt      DateTime  @default(now()) @map("requested_at")
-  notBefore        DateTime? @map("not_before")
-  appliedAt        DateTime? @map("applied_at")
-  confirmCheckedAt DateTime? @map("confirm_checked_at")
-  confirmClaimedAt DateTime? @map("confirm_claimed_at")
-  confirmedAt      DateTime? @map("confirmed_at")
-  overdueAlertedAt DateTime? @map("overdue_alerted_at")
+  hadPage             Boolean?  @map("had_page")
+  requestedAt         DateTime  @default(now()) @map("requested_at")
+  notBefore           DateTime? @map("not_before")
+  appliedAt           DateTime? @map("applied_at")
+  confirmCheckedAt    DateTime? @map("confirm_checked_at")
+  confirmClaimedAt    DateTime? @map("confirm_claimed_at")
+  confirmedAt         DateTime? @map("confirmed_at")
+  overdueAlertedAt    DateTime? @map("overdue_alerted_at")
+  // Last daily NPPES re-check of an 'unverified' row; the re-check takes the
+  // least recently checked first so every row is reached over time.
+  reclassifyCheckedAt DateTime? @map("reclassify_checked_at")
 
   @@index([status])
   @@map("npi_suppressions")

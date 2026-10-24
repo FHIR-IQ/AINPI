@@ -7,11 +7,13 @@
  * the requester the automated completion email and marks the row
  * `confirmed`. See src/lib/suppression-confirm.ts.
  *
- * First it re-checks NPPES for requests whose NPI type was unknown at intake
- * (basis 'unverified'): NPI-1 moves to full force, NPI-2 is declined with the
- * organization reply, still-unknown waits for tomorrow.
+ * Order: the overdue backstop, then confirmations, then (last, under a 20 s
+ * deadline, 10 rows least-recently-checked first) the NPPES re-check of
+ * requests whose NPI type was unknown at intake (basis 'unverified'): NPI-1
+ * moves to full force, NPI-2 is declined with the organization reply,
+ * still-unknown waits for tomorrow.
  *
- * It also sends one admin alert for any request more than 5 days old and not
+ * The overdue step sends one admin alert for any request more than 5 days old and not
  * yet confirmed (once per request), two days ahead of the 7-day promise.
  *
  * Sent from REMOVAL_FROM_ADDRESS (default "AINPI <no-reply@ainpi.dev>") with
@@ -26,6 +28,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 import {
+  runConfirmCron,
   runConfirmations,
   runOverdueCheck,
   runReclassify,
@@ -54,51 +57,49 @@ export async function GET(req: NextRequest) {
   if (!authorize(req)) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
-  // The overdue backstop runs first and regardless of Resend, so a missing
-  // mail key cannot also silence the alert about requests going unconfirmed.
-  let overdue = 0;
-  try {
-    overdue = await runOverdueCheck({
-      db: prisma as unknown as OverdueDb,
-      alert: sendSuppressionOverdueAlert,
-    });
-  } catch (err) {
-    console.error('[suppression-confirm] overdue check failed:', err instanceof Error ? err.message : err);
-  }
-
-  let reclassified = null;
-  try {
-    reclassified = await runReclassify({
-      db: prisma as unknown as ReclassifyDb,
-      lookupType: (npi) => nppesEnumerationType(npi),
-      sendDeclined: sendDeclinedReply,
-      mailAllowed: (to) => mailtoAllowed(to),
-    });
-    if (reclassified.confirmedIndividual > 0) invalidateSuppressionCache();
-  } catch (err) {
-    console.error('[suppression-confirm] reclassify failed:', err instanceof Error ? err.message : err);
-  }
-
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return NextResponse.json({ ok: true, overdue, reclassified, skipped: 'RESEND_API_KEY unset' });
-  const resend = new Resend(apiKey);
+  const resend = apiKey ? new Resend(apiKey) : null;
   const from = process.env.REMOVAL_FROM_ADDRESS || 'AINPI <no-reply@ainpi.dev>';
 
-  try {
-    const summary = await runConfirmations({
-      db: prisma as unknown as ConfirmDb,
-      fetchFn: (url, init) => fetch(url, init),
-      base: process.env.SITE_URL || 'https://ainpi.dev',
-      mailAllowed: (to) => mailtoAllowed(to),
-      send: async (to, msg) => {
-        const sent = await resend.emails.send({ from, to, subject: msg.subject, text: msg.text });
-        return sent.error ? { ok: false, error: sent.error.message } : { ok: true };
-      },
-    });
-    return NextResponse.json({ ok: true, overdue, reclassified, ...summary });
-  } catch (err) {
-    // Most likely the table does not exist yet (prisma/sql/npi_suppressions.sql not run).
-    console.error('[suppression-confirm]', err instanceof Error ? err.message : err);
-    return NextResponse.json({ ok: false, error: 'confirmation run failed' }, { status: 500 });
-  }
+  // Order matters: the overdue backstop first (it does not depend on Resend),
+  // then confirmations, then the NPPES re-check last and under its own 20 s
+  // deadline, so a slow NPPES can never starve a confirmation.
+  const result = await runConfirmCron({
+    overdue: () =>
+      runOverdueCheck({ db: prisma as unknown as OverdueDb, alert: sendSuppressionOverdueAlert }),
+    confirm: resend
+      ? () =>
+          runConfirmations({
+            db: prisma as unknown as ConfirmDb,
+            fetchFn: (url, init) => fetch(url, init),
+            base: process.env.SITE_URL || 'https://ainpi.dev',
+            mailAllowed: (to) => mailtoAllowed(to),
+            send: async (to, msg) => {
+              const sent = await resend.emails.send({ from, to, subject: msg.subject, text: msg.text });
+              return sent.error ? { ok: false, error: sent.error.message } : { ok: true };
+            },
+          })
+      : null,
+    reclassify: async () => {
+      const r = await runReclassify({
+        db: prisma as unknown as ReclassifyDb,
+        lookupType: (npi) => nppesEnumerationType(npi),
+        sendDeclined: sendDeclinedReply,
+        mailAllowed: (to) => mailtoAllowed(to),
+      });
+      if (r.confirmedIndividual > 0) invalidateSuppressionCache();
+      return r;
+    },
+  });
+
+  return NextResponse.json(
+    {
+      ok: result.errors.length === 0,
+      ...result,
+      ...(resend ? {} : { skipped: 'RESEND_API_KEY unset: confirmations not sent' }),
+    },
+    // A failing step (most likely the table not created yet) is a 500 so the
+    // cron dashboard shows it; the other steps still ran.
+    { status: result.errors.length === 0 ? 200 : 500 },
+  );
 }

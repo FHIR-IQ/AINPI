@@ -49,6 +49,7 @@ create table if not exists public.npi_suppressions (
   confirm_claimed_at timestamp(3),
   confirmed_at       timestamp(3),
   overdue_alerted_at timestamp(3),
+  reclassify_checked_at timestamp(3),
   constraint npi_suppressions_pkey primary key (id),
   constraint npi_suppressions_npi_format check (npi ~ '^[0-9]{10}$'),
   constraint npi_suppressions_source_check check (source in ('form', 'email', 'manual')),
@@ -59,6 +60,9 @@ create table if not exists public.npi_suppressions (
 alter table public.npi_suppressions add column if not exists basis text;
 alter table public.npi_suppressions add column if not exists not_before timestamp(3);
 alter table public.npi_suppressions add column if not exists overdue_alerted_at timestamp(3);
+-- Read and written only by the app's own connection (the confirm cron); the
+-- restricted roles get no grant on it.
+alter table public.npi_suppressions add column if not exists reclassify_checked_at timestamp(3);
 alter table public.npi_suppressions drop column if exists held_reason;
 alter table public.npi_suppressions drop constraint if exists npi_suppressions_status_check;
 alter table public.npi_suppressions add constraint npi_suppressions_status_check

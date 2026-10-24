@@ -28,6 +28,9 @@ import {
   runConfirmations,
   runOverdueCheck,
   runReclassify,
+  runConfirmCron,
+  RECLASSIFY_DEADLINE_MS,
+  RECLASSIFY_LIMIT,
   type ConfirmDb,
   type OverdueDb,
   type ReclassifyDb,
@@ -590,16 +593,23 @@ describe('confirmation', () => {
 });
 
 describe('daily NPPES re-check of unverified rows', () => {
-  function reDb(rows: { npi: string; requesterEmail: string | null; basis: string; status: string }[]) {
+  type RRow = { npi: string; requesterEmail: string | null; basis: string; status: string; reclassifyCheckedAt?: Date | null };
+  function reDb(rows: RRow[]) {
     const db: ReclassifyDb = {
       npiSuppression: {
         findMany: async ({ where, take }) =>
           rows
             .filter((r) => r.basis === where.basis && r.status === where.status)
+            .sort((a, b) => (a.reclassifyCheckedAt?.getTime() ?? -1) - (b.reclassifyCheckedAt?.getTime() ?? -1))
             .slice(0, take)
             .map(({ npi, requesterEmail }) => ({ npi, requesterEmail })),
         updateMany: async ({ where, data }) => {
-          const r = rows.find((x) => x.npi === where.npi && x.basis === where.basis && x.status === where.status);
+          const r = rows.find(
+            (x) =>
+              x.npi === where.npi &&
+              (where.basis === undefined || x.basis === where.basis) &&
+              (where.status === undefined || x.status === where.status),
+          );
           if (!r) return { count: 0 };
           Object.assign(r, data);
           return { count: 1 };
@@ -608,6 +618,42 @@ describe('daily NPPES re-check of unverified rows', () => {
     };
     return db;
   }
+
+  it('reaches every unverified row over successive runs, more rows than the per-run limit', async () => {
+    const npis = [A, B, C, D, E, '5555555551', '9999999995'];
+    const rows: RRow[] = npis.map((npi) => ({ npi, requesterEmail: null, basis: 'unverified', status: 'pending', reclassifyCheckedAt: null }));
+    const seen = new Set<string>();
+    let t = 1_800_000_000_000;
+    for (let run = 0; run < 3; run++) {
+      await runReclassify({
+        db: reDb(rows),
+        lookupType: async (npi) => {
+          seen.add(npi);
+          return 'unknown';
+        },
+        sendDeclined: async () => {},
+        mailAllowed: async () => true,
+        limit: 3,
+        now: () => new Date(t++),
+      });
+    }
+    expect(seen).toEqual(new Set(npis));
+  });
+
+  it('stops at its deadline when NPPES hangs', async () => {
+    const rows: RRow[] = [A, B].map((npi) => ({ npi, requesterEmail: null, basis: 'unverified', status: 'pending' }));
+    const started = Date.now();
+    const r = await runReclassify({
+      db: reDb(rows),
+      lookupType: () => new Promise(() => {}),
+      sendDeclined: async () => {},
+      mailAllowed: async () => true,
+      deadlineMs: 50,
+    });
+    expect(r.stoppedAtDeadline).toBe(true);
+    expect(r.checked).toBe(1);
+    expect(Date.now() - started).toBeLessThan(1000);
+  });
 
   it('declines an NPI-2 and sends the reply once', async () => {
     const rows = [{ npi: A, requesterEmail: 'o@example.org', basis: 'unverified', status: 'pending' }];
@@ -652,5 +698,69 @@ describe('daily NPPES re-check of unverified rows', () => {
     });
     expect(r.stillUnknown).toBe(1);
     expect(rows[0]).toMatchObject({ basis: 'unverified', status: 'pending' });
+  });
+});
+
+describe('confirm cron ordering', () => {
+  it('sends confirmations even when the NPPES re-check hangs, and returns within its deadline', async () => {
+    const order: string[] = [];
+    const confirmRows = [{
+      npi: A, requesterEmail: 'a@example.org', status: 'applied',
+      confirmCheckedAt: null as Date | null, confirmClaimedAt: null as Date | null, confirmedAt: null as Date | null,
+    }];
+    const send = vi.fn(async () => ({ ok: true as const }));
+    const db: ConfirmDb = {
+      npiSuppression: {
+        findMany: async () => confirmRows.filter((r) => r.status === 'applied').map((r) => ({ npi: r.npi, requesterEmail: r.requesterEmail })),
+        updateMany: async ({ where, data }) => {
+          const r = confirmRows.find((x) => x.npi === where.npi);
+          if (!r) return { count: 0 };
+          if (where.status && r.status !== where.status) return { count: 0 };
+          if ('confirmClaimedAt' in where && where.confirmClaimedAt?.getTime() !== r.confirmClaimedAt?.getTime()) return { count: 0 };
+          Object.assign(r, data);
+          return { count: 1 };
+        },
+      },
+    };
+    const unverified = [{ npi: B, requesterEmail: null }];
+    const reDb: ReclassifyDb = {
+      npiSuppression: {
+        findMany: async () => unverified,
+        updateMany: async () => ({ count: 1 }),
+      },
+    };
+    const started = Date.now();
+    const result = await runConfirmCron({
+      overdue: async () => {
+        order.push('overdue');
+        return 0;
+      },
+      confirm: async () => {
+        order.push('confirm');
+        return runConfirmations({
+          db,
+          send,
+          fetchFn: async (url) => (url.includes('/npi/') ? res(404) : res(200, 'npi,name\n')),
+        });
+      },
+      reclassify: async () => {
+        order.push('reclassify');
+        return runReclassify({
+          db: reDb,
+          lookupType: () => new Promise(() => {}), // NPPES hangs
+          sendDeclined: async () => {},
+          mailAllowed: async () => true,
+          deadlineMs: 100,
+        });
+      },
+    });
+    expect(order).toEqual(['overdue', 'confirm', 'reclassify']);
+    expect(send).toHaveBeenCalledTimes(1);
+    expect(result.confirmations?.sent).toBe(1);
+    expect(result.reclassified?.stoppedAtDeadline).toBe(true);
+    expect(Date.now() - started).toBeLessThan(2000);
+    // The production deadline leaves room inside the route's maxDuration (60 s).
+    expect(RECLASSIFY_DEADLINE_MS).toBeLessThan(60_000 / 2);
+    expect(RECLASSIFY_LIMIT).toBe(10);
   });
 });
