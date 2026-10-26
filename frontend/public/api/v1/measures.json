@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-19T16:49:54+00:00",
+  "generated_at": "2026-10-26T16:25:05+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -378,7 +378,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/ndh-payer-endpoint-coverage.json",
             "field": "numerator / denominator",
-            "commit": "3c03bd8",
+            "commit": "56dbb04",
             "vendored": false
           },
           "restatements": [
@@ -466,7 +466,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/pii-exposure-ndh.json",
             "field": "numerator / denominator",
-            "commit": "3c03bd8",
+            "commit": "56dbb04",
             "vendored": false
           },
           "zero_control": "asserted in source notes, not yet a structured field: The zero is checked, not assumed: 7,451,577 of 7,481,907 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field",
@@ -705,7 +705,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/practitioner-phone-reachability.json",
             "field": "numerator / denominator",
-            "commit": "3c03bd8",
+            "commit": "56dbb04",
             "vendored": false
           },
           "comparable_to_previous": "unreviewed",

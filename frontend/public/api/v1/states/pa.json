@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-19T16:23:03+00:00",
+  "generated_at": "2026-10-26T16:01:49+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "3c03bd8",
+  "commit_sha": "56dbb04",
   "denominators": {
     "practitioner": 227917,
     "organization": 62704,
