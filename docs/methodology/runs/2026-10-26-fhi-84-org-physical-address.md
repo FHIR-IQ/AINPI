@@ -217,7 +217,17 @@ every organization in this release is active).
 - Clustering is still `[_npi]`. A filter on `_npi = '1548282270'` processed
   1.98 MB after the update against 4.44 MB before, so pruning works.
 - The flattener and the SQL agree on 6,000 of 6,000 sampled multi-address
-  records.
+  records (a one-off check, not a test).
+- The UPDATE also recomputes `_phone` and `_telecom` from the resource JSON,
+  as this backfill always has, and those two columns were not in the backup.
+  Organization `_phone` coverage reads 97.42% after the update, the same as
+  the 2026-10-07 `ndh-column-coverage.json` (97.42%), and `_address_line`
+  coverage is 81.74% before and after. That is consistent with no change but
+  does not prove it row by row.
+- The weekly refresh on Monday 2026-11-02 09:00 UTC reruns H15 and the VA,
+  PA and OH slices against the changed warehouse. The FHI-84 notes in
+  `h14_h15_duplicates.py` and `state_findings.py` reach those files only if
+  this change is merged first.
 
 To revert: `UPDATE cms_npd.organization o SET _state = b._state, _city =
 b._city, _address_line = b._address_line FROM

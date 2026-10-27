@@ -766,6 +766,8 @@ PUBLISHED_BEFORE_FHI84 = {
         "reaches_endpoint_pct": 22.3,
         "reaches_endpoint_pct_of_affiliated": 50.3,
         "affiliation_graph_edges": 6507,
+        "orgs_moved_out": 4322,
+        "orgs_moved_in": 1996,
     },
 }
 
@@ -789,8 +791,9 @@ def fhi84_correction(state, summary):
             "Organization state and city were read from the first address on "
             "each Organization record, which the NDH often fills with the "
             "postal billing address; 63,194 of 2,058,500 organizations were "
-            "placed in the wrong state, 4,322 of them out of "
-            f"{name} and 1,996 into it. They now come from the physical "
+            f"placed in the wrong state, {before['orgs_moved_out']:,} of them "
+            f"out of {name} and {before['orgs_moved_in']:,} into it. They now "
+            "come from the physical "
             "address. The practitioner count is unchanged. Practitioners "
             "reaching an endpoint by any route moved from "
             f"{before['reaches_endpoint']:,} ({before['reaches_endpoint_pct']}%, "

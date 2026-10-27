@@ -94,8 +94,8 @@ const ORGANIZATION_SCHEMA = [
   { name: 'endpoint', type: 'JSON' },
   // Extracted fields
   { name: '_npi', type: 'STRING' },
-  { name: '_state', type: 'STRING' },
-  { name: '_city', type: 'STRING' },
+  { name: '_state', type: 'STRING', description: 'State from the physical address (type physical/both, else use work, else first); FHI-84' },
+  { name: '_city', type: 'STRING', description: 'City from the same address as _state; FHI-84' },
   { name: '_org_type', type: 'STRING' },
 ];
 
