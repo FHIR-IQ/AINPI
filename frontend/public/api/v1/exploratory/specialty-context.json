@@ -4,9 +4,9 @@
   "status": "exploratory",
   "not_preregistered": "The question came from the CMS NDH community Slack and this analysis followed it. AINPI findings register a hypothesis before the numbers exist; this did not, so it is published as exploratory rather than as a finding.",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:06:08.684000+00:00",
+  "generated_at": "2026-10-27T14:14:31.311852+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "6e7404180d8092bf31d3c799acacb1d7fcd4bd09",
+  "commit_sha": "adb6d00c8befd9b85e432ebdce7aed271096b933",
   "headline": "76,539 practitioners carry a different specialty at differently-named organizations, out of 418,268 the directory places at two or more (18.3%). Counting organization records instead of names, which the directory duplicates, it is 82,598. The field that carries any of this is empty on 8,093,993 of 11,056,751 role records (73.2%).",
   "source": {
     "ndh": "cms_npd.practitioner_role and cms_npd.practitioner, release 2026-10-07",

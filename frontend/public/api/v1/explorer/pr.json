@@ -1,11 +1,11 @@
 {
  "state": "PR",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-27T02:54:10+00:00",
+ "generated_at": "2026-10-27T14:13:54+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
-  "practitioners": 19791,
-  "with_role": 6151,
+  "practitioners": 19802,
+  "with_role": 6157,
   "orgs_provider": 8134,
   "orgs_ein": 443,
   "orgs_other": 1,
@@ -16,15 +16,15 @@
  "by_category": [
   {
    "category": "physician",
-   "practitioners": 7486,
-   "with_role": 3808,
-   "role_pct": 50.9
+   "practitioners": 7494,
+   "with_role": 3810,
+   "role_pct": 50.8
   },
   {
    "category": "behavioral-health",
-   "practitioners": 2556,
-   "with_role": 607,
-   "role_pct": 23.7
+   "practitioners": 2557,
+   "with_role": 608,
+   "role_pct": 23.8
   },
   {
    "category": "pharmacy",
@@ -34,21 +34,21 @@
   },
   {
    "category": "student",
-   "practitioners": 1299,
-   "with_role": 25,
+   "practitioners": 1295,
+   "with_role": 24,
    "role_pct": 1.9
   },
   {
    "category": "dental",
    "practitioners": 1127,
-   "with_role": 171,
-   "role_pct": 15.2
+   "with_role": 170,
+   "role_pct": 15.1
   },
   {
    "category": "rehab-therapy",
-   "practitioners": 1060,
-   "with_role": 281,
-   "role_pct": 26.5
+   "practitioners": 1061,
+   "with_role": 282,
+   "role_pct": 26.6
   },
   {
    "category": "emergency-medical",
@@ -64,20 +64,20 @@
   },
   {
    "category": "eye-vision",
-   "practitioners": 468,
-   "with_role": 191,
-   "role_pct": 40.8
+   "practitioners": 469,
+   "with_role": 192,
+   "role_pct": 40.9
   },
   {
    "category": "group",
-   "practitioners": 402,
+   "practitioners": 401,
    "with_role": 219,
-   "role_pct": 54.5
+   "role_pct": 54.6
   },
   {
    "category": "chiropractic",
-   "practitioners": 379,
-   "with_role": 226,
+   "practitioners": 381,
+   "with_role": 227,
    "role_pct": 59.6
   },
   {
@@ -88,15 +88,15 @@
   },
   {
    "category": "nursing",
-   "practitioners": 286,
-   "with_role": 19,
-   "role_pct": 6.6
+   "practitioners": 285,
+   "with_role": 18,
+   "role_pct": 6.3
   },
   {
    "category": "advanced-practice",
-   "practitioners": 211,
-   "with_role": 23,
-   "role_pct": 10.9
+   "practitioners": 214,
+   "with_role": 26,
+   "role_pct": 12.1
   },
   {
    "category": "support",
@@ -106,9 +106,9 @@
   },
   {
    "category": "no-taxonomy",
-   "practitioners": 103,
+   "practitioners": 104,
    "with_role": 7,
-   "role_pct": 6.8
+   "role_pct": 6.7
   },
   {
    "category": "facility",
@@ -152,79 +152,79 @@
    "county_fips": "72127",
    "county": "San Juan Municipio",
    "zip_count": 17,
-   "practitioners": 5370,
-   "with_role": 1501,
-   "role_pct": 28.0,
+   "practitioners": 5342,
+   "with_role": 1479,
+   "role_pct": 27.7,
    "orgs_provider": 2208,
    "orgs_ein": 116,
    "by_category": {
-    "physician": 2040,
+    "physician": 2010,
     "behavioral-health": 865,
-    "pharmacy": 566,
-    "student": 339,
-    "rehab-therapy": 335,
+    "pharmacy": 565,
+    "student": 345,
+    "rehab-therapy": 338,
     "dental": 307,
-    "other-clinical": 177,
-    "chiropractic": 138
+    "other-clinical": 176,
+    "chiropractic": 136
    }
   },
   {
    "county_fips": "72113",
    "county": "Ponce Municipio",
    "zip_count": 7,
-   "practitioners": 2452,
-   "with_role": 614,
-   "role_pct": 25.0,
+   "practitioners": 2460,
+   "with_role": 617,
+   "role_pct": 25.1,
    "orgs_provider": 614,
    "orgs_ein": 37,
    "by_category": {
-    "student": 790,
-    "physician": 679,
-    "behavioral-health": 273,
+    "student": 792,
+    "physician": 680,
+    "behavioral-health": 274,
     "pharmacy": 142,
-    "dental": 88,
-    "rehab-therapy": 81,
+    "dental": 87,
+    "rehab-therapy": 82,
     "other-clinical": 77,
-    "no-taxonomy": 71
+    "no-taxonomy": 72
    }
   },
   {
    "county_fips": "72061",
    "county": "Guaynabo Municipio",
    "zip_count": 5,
-   "practitioners": 1458,
-   "with_role": 251,
-   "role_pct": 17.2,
+   "practitioners": 1419,
+   "with_role": 226,
+   "role_pct": 15.9,
    "orgs_provider": 369,
    "orgs_ein": 21,
    "by_category": {
-    "emergency-medical": 759,
-    "physician": 230,
-    "behavioral-health": 124,
-    "pharmacy": 116,
-    "dental": 61,
-    "rehab-therapy": 30,
+    "emergency-medical": 758,
+    "physician": 199,
+    "behavioral-health": 122,
+    "pharmacy": 118,
+    "dental": 62,
+    "rehab-therapy": 28,
     "other-clinical": 26,
-    "chiropractic": 25
+    "chiropractic": 24
    }
   },
   {
    "county_fips": "72021",
    "county": "Bayam\u00c3\u00b3n Municipio",
    "zip_count": 4,
-   "practitioners": 1405,
-   "with_role": 461,
-   "role_pct": 32.8,
+   "practitioners": 1418,
+   "with_role": 469,
+   "role_pct": 33.1,
    "orgs_provider": 606,
    "orgs_ein": 28,
    "by_category": {
-    "physician": 580,
+    "physician": 590,
     "pharmacy": 162,
-    "behavioral-health": 153,
-    "rehab-therapy": 106,
+    "behavioral-health": 157,
+    "rehab-therapy": 105,
     "dental": 98,
     "other-clinical": 78,
-    "eye-vision": 44,
+    "eye-vision": 45,
     "chiropractic": 32
    }
   },
@@ -232,19 +232,19 @@
    "county_fips": "72025",
    "county": "Caguas Municipio",
    "zip_count": 2,
-   "practitioners": 1216,
-   "with_role": 710,
-   "role_pct": 58.4,
+   "practitioners": 1221,
+   "with_role": 714,
+   "role_pct": 58.5,
    "orgs_provider": 446,
    "orgs_ein": 17,
    "by_category": {
-    "physician": 728,
+    "physician": 736,
     "behavioral-health": 101,
     "rehab-therapy": 74,
     "pharmacy": 68,
-    "dental": 52,
+    "dental": 50,
     "other-clinical": 45,
-    "group": 36,
+    "group": 35,
     "eye-vision": 26
    }
   },
@@ -252,34 +252,34 @@
    "county_fips": "72097",
    "county": "Mayag\u00c3\u00bcez Municipio",
    "zip_count": 2,
-   "practitioners": 909,
-   "with_role": 320,
-   "role_pct": 35.2,
+   "practitioners": 923,
+   "with_role": 329,
+   "role_pct": 35.6,
    "orgs_provider": 380,
    "orgs_ein": 17,
    "by_category": {
-    "physician": 416,
+    "physician": 425,
     "behavioral-health": 155,
-    "pharmacy": 60,
+    "pharmacy": 63,
     "other-clinical": 52,
     "dental": 41,
     "rehab-therapy": 36,
     "nursing": 25,
-    "student": 23
+    "student": 25
    }
   },
   {
    "county_fips": null,
    "county": "(county unknown)",
    "zip_count": 16,
-   "practitioners": 470,
-   "with_role": 169,
-   "role_pct": 36.0,
+   "practitioners": 482,
+   "with_role": 174,
+   "role_pct": 36.1,
    "orgs_provider": 82,
    "orgs_ein": 6,
    "by_category": {
-    "physician": 312,
-    "student": 62,
+    "physician": 322,
+    "student": 63,
     "group": 21,
     "dental": 14,
     "nursing": 10,
@@ -292,34 +292,34 @@
    "county_fips": "72069",
    "county": "Humacao Municipio",
    "zip_count": 2,
-   "practitioners": 454,
-   "with_role": 126,
-   "role_pct": 27.8,
+   "practitioners": 458,
+   "with_role": 128,
+   "role_pct": 27.9,
    "orgs_provider": 225,
    "orgs_ein": 20,
    "by_category": {
-    "physician": 229,
+    "physician": 231,
     "behavioral-health": 50,
     "pharmacy": 45,
     "dental": 21,
     "other-clinical": 20,
-    "rehab-therapy": 17,
+    "dietary": 18,
     "eye-vision": 17,
-    "dietary": 16
+    "rehab-therapy": 17
    }
   },
   {
    "county_fips": "72013",
    "county": "Arecibo Municipio",
    "zip_count": 2,
-   "practitioners": 364,
-   "with_role": 107,
-   "role_pct": 29.4,
+   "practitioners": 369,
+   "with_role": 111,
+   "role_pct": 30.1,
    "orgs_provider": 214,
    "orgs_ein": 9,
    "by_category": {
-    "physician": 162,
-    "behavioral-health": 67,
+    "physician": 169,
+    "behavioral-health": 66,
     "pharmacy": 32,
     "dental": 31,
     "rehab-therapy": 13,
@@ -332,33 +332,33 @@
    "county_fips": "72031",
    "county": "Carolina Municipio",
    "zip_count": 5,
-   "practitioners": 362,
-   "with_role": 114,
+   "practitioners": 365,
+   "with_role": 115,
    "role_pct": 31.5,
    "orgs_provider": 173,
    "orgs_ein": 8,
    "by_category": {
-    "physician": 106,
+    "physician": 109,
     "pharmacy": 71,
     "behavioral-health": 51,
-    "dental": 32,
+    "dental": 31,
     "rehab-therapy": 23,
     "eye-vision": 21,
-    "chiropractic": 13,
-    "other-clinical": 13
+    "other-clinical": 14,
+    "chiropractic": 13
    }
   },
   {
    "county_fips": "72053",
    "county": "Fajardo Municipio",
    "zip_count": 1,
-   "practitioners": 240,
-   "with_role": 75,
-   "role_pct": 31.2,
+   "practitioners": 245,
+   "with_role": 80,
+   "role_pct": 32.7,
    "orgs_provider": 136,
    "orgs_ein": 9,
    "by_category": {
-    "physician": 98,
+    "physician": 103,
     "behavioral-health": 31,
     "pharmacy": 27,
     "nursing": 17,
@@ -372,20 +372,20 @@
    "county_fips": "72091",
    "county": "Manat\u00c3\u00ad Municipio",
    "zip_count": 1,
-   "practitioners": 234,
-   "with_role": 77,
-   "role_pct": 32.9,
+   "practitioners": 237,
+   "with_role": 79,
+   "role_pct": 33.3,
    "orgs_provider": 151,
    "orgs_ein": 11,
    "by_category": {
-    "physician": 110,
+    "physician": 113,
     "pharmacy": 22,
     "behavioral-health": 19,
     "dental": 17,
     "other-clinical": 16,
     "rehab-therapy": 14,
     "eye-vision": 8,
-    "chiropractic": 6
+    "advanced-practice": 6
    }
   },
   {
@@ -393,8 +393,8 @@
    "county": "San Sebasti\u00c3\u00a1n Municipio",
    "zip_count": 1,
    "practitioners": 206,
-   "with_role": 65,
-   "role_pct": 31.6,
+   "with_role": 66,
+   "role_pct": 32.0,
    "orgs_provider": 87,
    "orgs_ein": 5,
    "by_category": {
@@ -409,123 +409,123 @@
    }
   },
   {
+   "county_fips": "72071",
+   "county": "Isabela Municipio",
+   "zip_count": 1,
+   "practitioners": 195,
+   "with_role": 70,
+   "role_pct": 35.9,
+   "orgs_provider": 84,
+   "orgs_ein": 3,
+   "by_category": {
+    "pharmacy": 42,
+    "behavioral-health": 39,
+    "physician": 31,
+    "rehab-therapy": 31,
+    "dental": 12,
+    "eye-vision": 10,
+    "advanced-practice": 6,
+    "facility": 5
+   }
+  },
+  {
    "county_fips": "72051",
    "county": "Dorado Municipio",
    "zip_count": 1,
-   "practitioners": 196,
-   "with_role": 71,
-   "role_pct": 36.2,
+   "practitioners": 194,
+   "with_role": 69,
+   "role_pct": 35.6,
    "orgs_provider": 105,
    "orgs_ein": 7,
    "by_category": {
-    "physician": 99,
+    "physician": 97,
     "pharmacy": 25,
     "behavioral-health": 18,
     "rehab-therapy": 13,
     "dental": 12,
     "group": 7,
     "advanced-practice": 5,
-    "other-clinical": 4
-   }
-  },
-  {
-   "county_fips": "72071",
-   "county": "Isabela Municipio",
-   "zip_count": 1,
-   "practitioners": 196,
-   "with_role": 73,
-   "role_pct": 37.2,
-   "orgs_provider": 84,
-   "orgs_ein": 3,
-   "by_category": {
-    "pharmacy": 43,
-    "behavioral-health": 38,
-    "rehab-therapy": 31,
-    "physician": 31,
-    "dental": 12,
-    "eye-vision": 11,
-    "advanced-practice": 6,
-    "other-clinical": 5
-   }
-  },
-  {
-   "county_fips": "72003",
-   "county": "Aguada Municipio",
-   "zip_count": 1,
-   "practitioners": 175,
-   "with_role": 75,
-   "role_pct": 42.9,
-   "orgs_provider": 71,
-   "orgs_ein": 1,
-   "by_category": {
-    "physician": 72,
-    "pharmacy": 34,
-    "behavioral-health": 29,
-    "dental": 6,
-    "dietary": 6,
-    "rehab-therapy": 6,
-    "eye-vision": 5,
-    "chiropractic": 4
+    "eye-vision": 4
    }
   },
   {
    "county_fips": "72035",
    "county": "Cayey Municipio",
    "zip_count": 1,
-   "practitioners": 172,
-   "with_role": 60,
-   "role_pct": 34.9,
+   "practitioners": 175,
+   "with_role": 62,
+   "role_pct": 35.4,
    "orgs_provider": 89,
    "orgs_ein": 5,
    "by_category": {
-    "physician": 68,
+    "physician": 71,
     "pharmacy": 21,
     "behavioral-health": 18,
     "rehab-therapy": 16,
     "dental": 15,
     "other-clinical": 7,
-    "dietary": 5,
-    "eye-vision": 5
+    "eye-vision": 5,
+    "dietary": 5
+   }
+  },
+  {
+   "county_fips": "72003",
+   "county": "Aguada Municipio",
+   "zip_count": 1,
+   "practitioners": 173,
+   "with_role": 75,
+   "role_pct": 43.4,
+   "orgs_provider": 71,
+   "orgs_ein": 1,
+   "by_category": {
+    "physician": 71,
+    "pharmacy": 33,
+    "behavioral-health": 29,
+    "dental": 6,
+    "rehab-therapy": 6,
+    "dietary": 6,
+    "eye-vision": 5,
+    "chiropractic": 4
    }
   },
   {
    "county_fips": "72125",
    "county": "San Germ\u00c3\u00a1n Municipio",
    "zip_count": 1,
-   "practitioners": 156,
-   "with_role": 51,
-   "role_pct": 32.7,
+   "practitioners": 157,
+   "with_role": 53,
+   "role_pct": 33.8,
    "orgs_provider": 91,
    "orgs_ein": 6,
    "by_category": {
-    "physician": 84,
+    "physician": 85,
     "behavioral-health": 11,
-    "dental": 11,
     "pharmacy": 11,
+    "dental": 10,
     "rehab-therapy": 9,
     "eye-vision": 9,
     "other-clinical": 6,
-    "supplier": 3
+    "dietary": 3
    }
   },
   {
    "county_fips": "72005",
    "county": "Aguadilla Municipio",
    "zip_count": 2,
-   "practitioners": 153,
-   "with_role": 53,
-   "role_pct": 34.6,
+   "practitioners": 152,
+   "with_role": 51,
+   "role_pct": 33.6,
    "orgs_provider": 87,
    "orgs_ein": 4,
    "by_category": {
-    "physician": 60,
-    "behavioral-health": 24,
+    "physician": 61,
+    "behavioral-health": 23,
     "dental": 20,
     "pharmacy": 12,
-    "chiropractic": 7,
     "other-clinical": 7,
+    "chiropractic": 7,
     "dietary": 4,
-    "rehab-therapy": 3
+    "support": 3
    }
   },
   {
@@ -533,18 +533,18 @@
    "county": "Barranquitas Municipio",
    "zip_count": 1,
    "practitioners": 148,
-   "with_role": 85,
-   "role_pct": 57.4,
+   "with_role": 86,
+   "role_pct": 58.1,
    "orgs_provider": 29,
    "orgs_ein": 2,
    "by_category": {
-    "physician": 80,
+    "physician": 81,
     "pharmacy": 23,
     "behavioral-health": 14,
     "dental": 8,
     "group": 5,
     "dietary": 5,
-    "facility": 2,
+    "chiropractic": 2,
     "rehab-therapy": 2
    }
   },
@@ -552,69 +552,69 @@
    "county_fips": "72137",
    "county": "Toa Baja Municipio",
    "zip_count": 2,
-   "practitioners": 144,
+   "practitioners": 145,
    "with_role": 41,
-   "role_pct": 28.5,
+   "role_pct": 28.3,
    "orgs_provider": 76,
    "orgs_ein": 5,
    "by_category": {
     "physician": 47,
     "behavioral-health": 34,
     "pharmacy": 28,
-    "dental": 9,
+    "dental": 10,
+    "chiropractic": 6,
     "support": 5,
-    "chiropractic": 5,
     "dietary": 4,
-    "other-clinical": 3
-   }
-  },
-  {
-   "county_fips": "72153",
-   "county": "Yauco Municipio",
-   "zip_count": 1,
-   "practitioners": 137,
-   "with_role": 44,
-   "role_pct": 32.1,
-   "orgs_provider": 78,
-   "orgs_ein": 3,
-   "by_category": {
-    "physician": 53,
-    "behavioral-health": 30,
-    "pharmacy": 15,
-    "dental": 12,
-    "rehab-therapy": 8,
-    "eye-vision": 6,
-    "chiropractic": 4,
-    "group": 2
+    "rehab-therapy": 3
    }
   },
   {
    "county_fips": "72077",
    "county": "Juncos Municipio",
    "zip_count": 1,
-   "practitioners": 137,
-   "with_role": 39,
-   "role_pct": 28.5,
+   "practitioners": 140,
+   "with_role": 40,
+   "role_pct": 28.6,
    "orgs_provider": 37,
    "orgs_ein": 3,
    "by_category": {
-    "physician": 64,
+    "physician": 67,
     "pharmacy": 15,
     "dental": 13,
     "advanced-practice": 9,
     "behavioral-health": 7,
-    "other-clinical": 5,
     "nursing": 5,
+    "group": 5,
     "rehab-therapy": 5
+   }
+  },
+  {
+   "county_fips": "72153",
+   "county": "Yauco Municipio",
+   "zip_count": 1,
+   "practitioners": 139,
+   "with_role": 46,
+   "role_pct": 33.1,
+   "orgs_provider": 78,
+   "orgs_ein": 3,
+   "by_category": {
+    "physician": 54,
+    "behavioral-health": 30,
+    "pharmacy": 15,
+    "dental": 12,
+    "rehab-therapy": 8,
+    "eye-vision": 7,
+    "chiropractic": 4,
+    "facility": 2
    }
   },
   {
    "county_fips": "72057",
    "county": "Guayama Municipio",
    "zip_count": 1,
-   "practitioners": 136,
+   "practitioners": 134,
    "with_role": 43,
-   "role_pct": 31.6,
+   "role_pct": 32.1,
    "orgs_provider": 55,
    "orgs_ein": 5,
    "by_category": {
@@ -625,7 +625,7 @@
     "rehab-therapy": 9,
     "group": 4,
     "other-clinical": 3,
-    "advanced-practice": 2
+    "podiatry": 2
    }
   },
   {
@@ -642,30 +642,30 @@
     "behavioral-health": 28,
     "pharmacy": 15,
     "eye-vision": 4,
-    "dental": 3,
     "rehab-therapy": 3,
+    "chiropractic": 3,
     "dietary": 3,
-    "chiropractic": 3
+    "dental": 3
    }
   },
   {
    "county_fips": "72139",
    "county": "Trujillo Alto Municipio",
    "zip_count": 1,
-   "practitioners": 118,
+   "practitioners": 120,
    "with_role": 57,
-   "role_pct": 48.3,
+   "role_pct": 47.5,
    "orgs_provider": 50,
    "orgs_ein": 2,
    "by_category": {
     "physician": 52,
-    "pharmacy": 17,
+    "pharmacy": 18,
     "behavioral-health": 17,
     "dental": 10,
     "group": 4,
     "eye-vision": 4,
-    "rehab-therapy": 3,
-    "dietary": 2
+    "chiropractic": 3,
+    "rehab-therapy": 3
    }
   },
   {
@@ -692,20 +692,20 @@
    "county_fips": "72041",
    "county": "Cidra Municipio",
    "zip_count": 1,
-   "practitioners": 105,
-   "with_role": 60,
-   "role_pct": 57.1,
+   "practitioners": 106,
+   "with_role": 61,
+   "role_pct": 57.5,
    "orgs_provider": 35,
    "orgs_ein": 2,
    "by_category": {
-    "physician": 51,
+    "physician": 52,
     "behavioral-health": 21,
     "dental": 11,
     "eye-vision": 7,
     "dietary": 5,
+    "rehab-therapy": 2,
     "other-clinical": 2,
-    "nursing": 2,
-    "rehab-therapy": 2
+    "nursing": 2
    }
   },
   {
@@ -724,41 +724,21 @@
     "dental": 10,
     "eye-vision": 8,
     "rehab-therapy": 4,
-    "chiropractic": 3,
-    "other-clinical": 3
-   }
-  },
-  {
-   "county_fips": "72023",
-   "county": "Cabo Rojo Municipio",
-   "zip_count": 1,
-   "practitioners": 98,
-   "with_role": 19,
-   "role_pct": 19.4,
-   "orgs_provider": 51,
-   "orgs_ein": 3,
-   "by_category": {
-    "physician": 39,
-    "pharmacy": 19,
-    "behavioral-health": 10,
-    "support": 6,
-    "eye-vision": 6,
-    "other-clinical": 5,
-    "dental": 5,
-    "group": 3
+    "other-clinical": 3,
+    "dietary": 3
    }
   },
   {
    "county_fips": "72017",
    "county": "Barceloneta Municipio",
    "zip_count": 1,
-   "practitioners": 97,
-   "with_role": 26,
-   "role_pct": 26.8,
+   "practitioners": 98,
+   "with_role": 27,
+   "role_pct": 27.6,
    "orgs_provider": 42,
    "orgs_ein": 3,
    "by_category": {
-    "pharmacy": 32,
+    "pharmacy": 33,
     "rehab-therapy": 24,
     "physician": 15,
     "behavioral-health": 7,
@@ -769,23 +749,23 @@
    }
   },
   {
-   "county_fips": "72009",
-   "county": "Aibonito Municipio",
+   "county_fips": "72023",
+   "county": "Cabo Rojo Municipio",
    "zip_count": 1,
-   "practitioners": 97,
-   "with_role": 27,
-   "role_pct": 27.8,
-   "orgs_provider": 48,
-   "orgs_ein": 2,
+   "practitioners": 98,
+   "with_role": 20,
+   "role_pct": 20.4,
+   "orgs_provider": 51,
+   "orgs_ein": 3,
    "by_category": {
-    "physician": 29,
+    "physician": 40,
     "pharmacy": 19,
-    "behavioral-health": 14,
-    "rehab-therapy": 9,
-    "dental": 9,
-    "student": 4,
-    "other-clinical": 4,
-    "dietary": 3
+    "behavioral-health": 9,
+    "eye-vision": 6,
+    "dental": 6,
+    "support": 6,
+    "other-clinical": 5,
+    "group": 3
    }
   },
   {
@@ -804,8 +784,28 @@
     "dental": 5,
     "chiropractic": 4,
     "rehab-therapy": 2,
-    "nursing": 1,
-    "other-clinical": 1
+    "support": 1,
+    "nursing": 1
+   }
+  },
+  {
+   "county_fips": "72009",
+   "county": "Aibonito Municipio",
+   "zip_count": 1,
+   "practitioners": 95,
+   "with_role": 27,
+   "role_pct": 28.4,
+   "orgs_provider": 48,
+   "orgs_ein": 2,
+   "by_category": {
+    "physician": 29,
+    "pharmacy": 19,
+    "behavioral-health": 14,
+    "rehab-therapy": 9,
+    "dental": 9,
+    "other-clinical": 4,
+    "dietary": 3,
+    "advanced-practice": 2
    }
   },
   {
@@ -819,13 +819,53 @@
    "orgs_ein": 0,
    "by_category": {
     "physician": 22,
-    "rehab-therapy": 17,
     "pharmacy": 17,
+    "rehab-therapy": 17,
     "behavioral-health": 13,
     "group": 7,
     "dental": 4,
-    "dietary": 2,
+    "other-clinical": 2,
     "eye-vision": 2
+   }
+  },
+  {
+   "county_fips": "72129",
+   "county": "San Lorenzo Municipio",
+   "zip_count": 1,
+   "practitioners": 82,
+   "with_role": 35,
+   "role_pct": 42.7,
+   "orgs_provider": 38,
+   "orgs_ein": 6,
+   "by_category": {
+    "physician": 31,
+    "pharmacy": 16,
+    "behavioral-health": 11,
+    "dental": 9,
+    "eye-vision": 4,
+    "rehab-therapy": 3,
+    "dietary": 2,
+    "other-clinical": 2
+   }
+  },
+  {
+   "county_fips": "72075",
+   "county": "Juana D\u00c3\u00adaz Municipio",
+   "zip_count": 1,
+   "practitioners": 82,
+   "with_role": 35,
+   "role_pct": 42.7,
+   "orgs_provider": 57,
+   "orgs_ein": 3,
+   "by_category": {
+    "physician": 36,
+    "rehab-therapy": 9,
+    "dental": 6,
+    "behavioral-health": 6,
+    "dietary": 5,
+    "pharmacy": 5,
+    "chiropractic": 4,
+    "other-clinical": 3
    }
   },
   {
@@ -842,59 +882,19 @@
     "behavioral-health": 16,
     "pharmacy": 11,
     "dental": 6,
-    "support": 3,
     "other-clinical": 3,
+    "support": 3,
     "dietary": 2,
     "emergency-medical": 2
-   }
-  },
-  {
-   "county_fips": "72075",
-   "county": "Juana D\u00c3\u00adaz Municipio",
-   "zip_count": 1,
-   "practitioners": 81,
-   "with_role": 34,
-   "role_pct": 42.0,
-   "orgs_provider": 57,
-   "orgs_ein": 3,
-   "by_category": {
-    "physician": 35,
-    "rehab-therapy": 9,
-    "behavioral-health": 6,
-    "dental": 6,
-    "pharmacy": 5,
-    "dietary": 5,
-    "chiropractic": 4,
-    "other-clinical": 3
-   }
-  },
-  {
-   "county_fips": "72129",
-   "county": "San Lorenzo Municipio",
-   "zip_count": 1,
-   "practitioners": 80,
-   "with_role": 33,
-   "role_pct": 41.2,
-   "orgs_provider": 38,
-   "orgs_ein": 6,
-   "by_category": {
-    "physician": 31,
-    "pharmacy": 16,
-    "behavioral-health": 11,
-    "dental": 9,
-    "rehab-therapy": 3,
-    "eye-vision": 3,
-    "other-clinical": 2,
-    "group": 1
    }
   },
   {
    "county_fips": "72151",
    "county": "Yabucoa Municipio",
    "zip_count": 1,
-   "practitioners": 75,
-   "with_role": 13,
-   "role_pct": 17.3,
+   "practitioners": 74,
+   "with_role": 12,
+   "role_pct": 16.2,
    "orgs_provider": 35,
    "orgs_ein": 0,
    "by_category": {
@@ -905,47 +905,47 @@
     "rehab-therapy": 4,
     "support": 3,
     "group": 2,
-    "dietary": 2
+    "nursing": 2
    }
   },
   {
    "county_fips": "72143",
    "county": "Vega Alta Municipio",
    "zip_count": 1,
-   "practitioners": 73,
-   "with_role": 21,
-   "role_pct": 28.8,
+   "practitioners": 72,
+   "with_role": 20,
+   "role_pct": 27.8,
    "orgs_provider": 43,
    "orgs_ein": 3,
    "by_category": {
-    "physician": 25,
+    "physician": 26,
     "pharmacy": 15,
-    "dental": 9,
-    "behavioral-health": 6,
+    "dental": 8,
     "rehab-therapy": 6,
-    "eye-vision": 3,
+    "behavioral-health": 6,
+    "advanced-practice": 2,
     "other-clinical": 2,
-    "advanced-practice": 2
+    "eye-vision": 2
    }
   },
   {
    "county_fips": "72047",
    "county": "Corozal Municipio",
    "zip_count": 1,
-   "practitioners": 73,
-   "with_role": 18,
-   "role_pct": 24.7,
+   "practitioners": 72,
+   "with_role": 17,
+   "role_pct": 23.6,
    "orgs_provider": 36,
    "orgs_ein": 2,
    "by_category": {
-    "physician": 32,
+    "physician": 31,
     "pharmacy": 17,
     "dental": 9,
     "eye-vision": 4,
-    "behavioral-health": 3,
     "other-clinical": 3,
+    "behavioral-health": 3,
     "rehab-therapy": 2,
-    "nursing": 1
+    "group": 1
    }
   },
   {
@@ -964,7 +964,7 @@
     "behavioral-health": 9,
     "rehab-therapy": 3,
     "dental": 2,
-    "nursing": 2,
+    "facility": 2,
     "group": 2
    }
   },
@@ -982,9 +982,9 @@
     "rehab-therapy": 15,
     "behavioral-health": 11,
     "physician": 10,
-    "dental": 2,
     "eye-vision": 2,
-    "facility": 1,
+    "dental": 2,
+    "chiropractic": 1,
     "group": 1
    }
   },
@@ -1003,9 +1003,29 @@
     "rehab-therapy": 7,
     "behavioral-health": 6,
     "dental": 4,
-    "group": 3,
     "eye-vision": 3,
+    "group": 3,
     "other-clinical": 2
+   }
+  },
+  {
+   "county_fips": "72123",
+   "county": "Salinas Municipio",
+   "zip_count": 1,
+   "practitioners": 65,
+   "with_role": 30,
+   "role_pct": 46.2,
+   "orgs_provider": 45,
+   "orgs_ein": 2,
+   "by_category": {
+    "physician": 26,
+    "behavioral-health": 12,
+    "pharmacy": 11,
+    "eye-vision": 5,
+    "chiropractic": 4,
+    "dental": 2,
+    "group": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1019,51 +1039,31 @@
    "orgs_ein": 1,
    "by_category": {
     "physician": 24,
-    "behavioral-health": 10,
     "pharmacy": 10,
-    "dental": 5,
+    "behavioral-health": 10,
     "nursing": 5,
+    "dental": 5,
     "facility": 3,
     "rehab-therapy": 3,
     "chiropractic": 2
    }
   },
   {
-   "county_fips": "72123",
-   "county": "Salinas Municipio",
-   "zip_count": 1,
-   "practitioners": 64,
-   "with_role": 29,
-   "role_pct": 45.3,
-   "orgs_provider": 45,
-   "orgs_ein": 2,
-   "by_category": {
-    "physician": 26,
-    "behavioral-health": 12,
-    "pharmacy": 11,
-    "eye-vision": 4,
-    "chiropractic": 4,
-    "dental": 2,
-    "other-clinical": 1,
-    "group": 1
-   }
-  },
-  {
    "county_fips": "72105",
    "county": "Naranjito Municipio",
    "zip_count": 1,
-   "practitioners": 60,
-   "with_role": 13,
-   "role_pct": 21.7,
+   "practitioners": 59,
+   "with_role": 14,
+   "role_pct": 23.7,
    "orgs_provider": 38,
    "orgs_ein": 3,
    "by_category": {
-    "physician": 16,
     "pharmacy": 16,
-    "behavioral-health": 9,
+    "physician": 16,
+    "behavioral-health": 8,
     "dental": 6,
     "rehab-therapy": 5,
-    "chiropractic": 3,
+    "chiropractic": 4,
     "eye-vision": 2,
     "dietary": 1
    }
@@ -1072,34 +1072,34 @@
    "county_fips": "72119",
    "county": "R\u00c3\u00ado Grande Municipio",
    "zip_count": 1,
-   "practitioners": 55,
+   "practitioners": 54,
    "with_role": 12,
-   "role_pct": 21.8,
+   "role_pct": 22.2,
    "orgs_provider": 29,
    "orgs_ein": 3,
    "by_category": {
     "physician": 23,
     "behavioral-health": 7,
     "dental": 6,
-    "pharmacy": 5,
     "rehab-therapy": 5,
+    "pharmacy": 4,
     "eye-vision": 2,
-    "advanced-practice": 1,
-    "supplier": 1
+    "emergency-medical": 1,
+    "advanced-practice": 1
    }
   },
   {
    "county_fips": "72063",
    "county": "Gurabo Municipio",
    "zip_count": 1,
-   "practitioners": 53,
-   "with_role": 7,
-   "role_pct": 13.2,
+   "practitioners": 54,
+   "with_role": 8,
+   "role_pct": 14.8,
    "orgs_provider": 21,
    "orgs_ein": 1,
    "by_category": {
-    "pharmacy": 15,
     "physician": 15,
+    "pharmacy": 15,
     "behavioral-health": 12,
     "dental": 5,
     "eye-vision": 2,
@@ -1109,43 +1109,43 @@
    }
   },
   {
-   "county_fips": "72081",
-   "county": "Lares Municipio",
-   "zip_count": 1,
-   "practitioners": 51,
-   "with_role": 12,
-   "role_pct": 23.5,
-   "orgs_provider": 20,
-   "orgs_ein": 1,
-   "by_category": {
-    "pharmacy": 26,
-    "physician": 10,
-    "behavioral-health": 5,
-    "eye-vision": 2,
-    "support": 2,
-    "dental": 2,
-    "supplier": 2,
-    "rehab-therapy": 1
-   }
-  },
-  {
    "county_fips": "72033",
    "county": "Cata\u00c3\u00b1o Municipio",
    "zip_count": 1,
-   "practitioners": 49,
-   "with_role": 9,
-   "role_pct": 18.4,
+   "practitioners": 51,
+   "with_role": 10,
+   "role_pct": 19.6,
    "orgs_provider": 31,
    "orgs_ein": 3,
    "by_category": {
     "rehab-therapy": 19,
     "behavioral-health": 13,
-    "physician": 6,
+    "physician": 7,
+    "dental": 4,
     "pharmacy": 4,
-    "dental": 3,
     "other-clinical": 2,
-    "supplier": 1,
-    "group": 1
+    "group": 1,
+    "supplier": 1
+   }
+  },
+  {
+   "county_fips": "72081",
+   "county": "Lares Municipio",
+   "zip_count": 1,
+   "practitioners": 49,
+   "with_role": 11,
+   "role_pct": 22.4,
+   "orgs_provider": 20,
+   "orgs_ein": 1,
+   "by_category": {
+    "pharmacy": 25,
+    "physician": 9,
+    "behavioral-health": 5,
+    "support": 2,
+    "dental": 2,
+    "eye-vision": 2,
+    "supplier": 2,
+    "chiropractic": 1
    }
   },
   {
@@ -1163,9 +1163,9 @@
     "student": 5,
     "behavioral-health": 3,
     "dental": 3,
-    "group": 1,
-    "advanced-practice": 1,
-    "other-clinical": 1
+    "nursing": 1,
+    "other-clinical": 1,
+    "group": 1
    }
   },
   {
@@ -1184,8 +1184,28 @@
     "rehab-therapy": 4,
     "dental": 3,
     "facility": 2,
-    "advanced-practice": 1,
-    "dietary": 1
+    "dietary": 1,
+    "advanced-practice": 1
+   }
+  },
+  {
+   "county_fips": "72149",
+   "county": "Villalba Municipio",
+   "zip_count": 1,
+   "practitioners": 45,
+   "with_role": 10,
+   "role_pct": 22.2,
+   "orgs_provider": 29,
+   "orgs_ein": 1,
+   "by_category": {
+    "pharmacy": 13,
+    "behavioral-health": 10,
+    "physician": 10,
+    "eye-vision": 5,
+    "dental": 2,
+    "group": 1,
+    "support": 1,
+    "nursing": 1
    }
   },
   {
@@ -1201,31 +1221,11 @@
     "physician": 26,
     "pharmacy": 9,
     "dental": 2,
-    "chiropractic": 1,
+    "support": 1,
+    "emergency-medical": 1,
     "rehab-therapy": 1,
     "group": 1,
-    "emergency-medical": 1,
-    "support": 1
-   }
-  },
-  {
-   "county_fips": "72149",
-   "county": "Villalba Municipio",
-   "zip_count": 1,
-   "practitioners": 44,
-   "with_role": 9,
-   "role_pct": 20.5,
-   "orgs_provider": 29,
-   "orgs_ein": 1,
-   "by_category": {
-    "pharmacy": 13,
-    "behavioral-health": 10,
-    "physician": 9,
-    "eye-vision": 5,
-    "dental": 2,
-    "support": 1,
-    "group": 1,
-    "other-clinical": 1
+    "chiropractic": 1
    }
   },
   {
@@ -1243,8 +1243,8 @@
     "dental": 4,
     "eye-vision": 2,
     "facility": 2,
+    "group": 1,
     "chiropractic": 1,
-    "behavioral-health": 1,
     "dietary": 1
    }
   },
@@ -1260,12 +1260,12 @@
    "by_category": {
     "pharmacy": 19,
     "physician": 12,
+    "dental": 2,
     "behavioral-health": 2,
     "other-clinical": 2,
-    "dental": 2,
+    "rehab-therapy": 1,
     "eye-vision": 1,
-    "nursing": 1,
-    "rehab-therapy": 1
+    "nursing": 1
    }
   },
   {
@@ -1285,7 +1285,7 @@
     "group": 3,
     "behavioral-health": 3,
     "emergency-medical": 2,
-    "support": 1
+    "chiropractic": 1
    }
   },
   {
@@ -1301,29 +1301,46 @@
     "physician": 12,
     "pharmacy": 9,
     "dental": 5,
-    "behavioral-health": 2,
     "chiropractic": 2,
+    "behavioral-health": 2,
     "eye-vision": 2,
-    "nursing": 1,
-    "transport": 1
+    "facility": 1,
+    "nursing": 1
+   }
+  },
+  {
+   "county_fips": "72007",
+   "county": "Aguas Buenas Municipio",
+   "zip_count": 1,
+   "practitioners": 36,
+   "with_role": 11,
+   "role_pct": 30.6,
+   "orgs_provider": 22,
+   "orgs_ein": 0,
+   "by_category": {
+    "physician": 17,
+    "pharmacy": 7,
+    "dental": 6,
+    "behavioral-health": 3,
+    "eye-vision": 2,
+    "group": 1
    }
   },
   {
    "county_fips": "72111",
    "county": "Pe\u00c3\u00b1uelas Municipio",
    "zip_count": 1,
-   "practitioners": 36,
+   "practitioners": 35,
    "with_role": 9,
-   "role_pct": 25.0,
+   "role_pct": 25.7,
    "orgs_provider": 24,
    "orgs_ein": 0,
    "by_category": {
     "pharmacy": 16,
     "physician": 10,
     "dental": 3,
-    "support": 2,
     "behavioral-health": 2,
-    "student": 1,
+    "support": 2,
     "transport": 1,
     "eye-vision": 1
    }
@@ -1339,30 +1356,12 @@
    "orgs_ein": 2,
    "by_category": {
     "physician": 15,
-    "pharmacy": 10,
-    "dental": 3,
+    "pharmacy": 9,
     "eye-vision": 3,
-    "behavioral-health": 2,
+    "behavioral-health": 3,
+    "dental": 3,
     "dietary": 1,
     "support": 1
-   }
-  },
-  {
-   "county_fips": "72007",
-   "county": "Aguas Buenas Municipio",
-   "zip_count": 1,
-   "practitioners": 35,
-   "with_role": 11,
-   "role_pct": 31.4,
-   "orgs_provider": 22,
-   "orgs_ein": 0,
-   "by_category": {
-    "physician": 17,
-    "pharmacy": 7,
-    "dental": 5,
-    "behavioral-health": 3,
-    "eye-vision": 2,
-    "group": 1
    }
   },
   {
@@ -1378,10 +1377,10 @@
     "pharmacy": 13,
     "physician": 8,
     "nursing": 3,
-    "dental": 2,
     "rehab-therapy": 2,
-    "advanced-practice": 1,
+    "dental": 2,
     "behavioral-health": 1,
+    "advanced-practice": 1,
     "other-clinical": 1
    }
   },
@@ -1399,8 +1398,8 @@
     "pharmacy": 9,
     "behavioral-health": 3,
     "rehab-therapy": 2,
-    "eye-vision": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -1416,28 +1415,28 @@
     "physician": 15,
     "pharmacy": 9,
     "behavioral-health": 3,
-    "dental": 2,
-    "group": 2
+    "group": 2,
+    "dental": 2
    }
   },
   {
    "county_fips": "72067",
    "county": "Hormigueros Municipio",
    "zip_count": 1,
-   "practitioners": 28,
+   "practitioners": 29,
    "with_role": 8,
-   "role_pct": 28.6,
+   "role_pct": 27.6,
    "orgs_provider": 29,
    "orgs_ein": 2,
    "by_category": {
     "physician": 16,
-    "dental": 3,
+    "dental": 4,
     "rehab-therapy": 3,
+    "behavioral-health": 1,
     "pharmacy": 1,
-    "emergency-medical": 1,
     "other-clinical": 1,
     "dietary": 1,
-    "facility": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -1452,30 +1451,30 @@
    "by_category": {
     "physician": 16,
     "pharmacy": 3,
-    "other-clinical": 2,
     "dental": 2,
     "behavioral-health": 2,
-    "advanced-practice": 1,
-    "facility": 1
+    "other-clinical": 2,
+    "facility": 1,
+    "advanced-practice": 1
    }
   },
   {
    "county_fips": "72054",
    "county": "Florida Municipio",
    "zip_count": 1,
-   "practitioners": 26,
-   "with_role": 16,
-   "role_pct": 61.5,
+   "practitioners": 27,
+   "with_role": 17,
+   "role_pct": 63.0,
    "orgs_provider": 28,
    "orgs_ein": 3,
    "by_category": {
     "physician": 12,
     "pharmacy": 3,
     "behavioral-health": 2,
-    "group": 2,
     "eye-vision": 2,
+    "other-clinical": 2,
     "rehab-therapy": 2,
-    "other-clinical": 1,
+    "group": 2,
     "facility": 1
    }
   },
@@ -1493,9 +1492,9 @@
     "physician": 4,
     "dental": 3,
     "behavioral-health": 2,
+    "advanced-practice": 1,
     "facility": 1,
-    "supplier": 1,
-    "advanced-practice": 1
+    "supplier": 1
    }
   },
   {
@@ -1513,9 +1512,9 @@
     "other-clinical": 3,
     "group": 2,
     "rehab-therapy": 2,
+    "agency": 1,
     "facility": 1,
-    "advanced-practice": 1,
-    "support": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -1529,12 +1528,12 @@
    "orgs_ein": 1,
    "by_category": {
     "physician": 7,
-    "eye-vision": 3,
     "dental": 3,
+    "eye-vision": 3,
     "pharmacy": 3,
-    "other-clinical": 2,
     "behavioral-health": 2,
-    "rehab-therapy": 1,
+    "other-clinical": 2,
+    "chiropractic": 1,
     "transport": 1
    }
   },
@@ -1550,10 +1549,10 @@
    "by_category": {
     "physician": 14,
     "behavioral-health": 4,
-    "dental": 1,
     "rehab-therapy": 1,
-    "support": 1,
-    "dietary": 1
+    "dental": 1,
+    "dietary": 1,
+    "support": 1
    }
   },
   {
@@ -1583,13 +1582,13 @@
    "orgs_provider": 16,
    "orgs_ein": 0,
    "by_category": {
-    "physician": 5,
     "behavioral-health": 5,
+    "physician": 5,
     "pharmacy": 3,
-    "group": 2,
     "eye-vision": 2,
-    "emergency-medical": 1,
-    "support": 1
+    "group": 2,
+    "support": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1606,26 +1605,26 @@
     "behavioral-health": 3,
     "pharmacy": 2,
     "dental": 2,
+    "support": 1,
     "other-clinical": 1,
-    "eye-vision": 1,
-    "support": 1
+    "eye-vision": 1
    }
   },
   {
    "county_fips": "72083",
    "county": "Las Mar\u00c3\u00adas Municipio",
    "zip_count": 1,
-   "practitioners": 13,
+   "practitioners": 12,
    "with_role": 5,
-   "role_pct": 38.5,
+   "role_pct": 41.7,
    "orgs_provider": 5,
    "orgs_ein": 0,
    "by_category": {
-    "pharmacy": 8,
+    "pharmacy": 7,
     "physician": 2,
-    "support": 1,
+    "dental": 1,
     "rehab-therapy": 1,
-    "dental": 1
+    "support": 1
    }
   },
   {
@@ -1701,18 +1700,18 @@
    "by_category": {
     "physician": 16,
     "pharmacy": 3,
-    "other-clinical": 2,
     "dental": 2,
     "behavioral-health": 2,
-    "advanced-practice": 1,
-    "facility": 1
+    "other-clinical": 2,
+    "facility": 1,
+    "advanced-practice": 1
    }
   },
   {
    "zip": "00602",
    "county_fips": "72003",
    "county": "Aguada Municipio",
-   "practitioners": 175,
+   "practitioners": 173,
    "with_role": 75,
    "orgs_provider": 71,
    "orgs_ein": 1,
@@ -1720,20 +1719,20 @@
    "lat": 18.3803,
    "lng": -67.18689,
    "by_category": {
-    "physician": 72,
-    "pharmacy": 34,
+    "physician": 71,
+    "pharmacy": 33,
     "behavioral-health": 29,
     "dental": 6,
-    "dietary": 6,
     "rehab-therapy": 6,
+    "dietary": 6,
     "eye-vision": 5,
     "chiropractic": 4,
-    "student": 3,
     "group": 3,
+    "student": 3,
     "other-clinical": 2,
     "facility": 1,
-    "support": 1,
     "advanced-practice": 1,
+    "support": 1,
     "nursing": 1,
     "emergency-medical": 1
    }
@@ -1743,15 +1742,15 @@
    "county_fips": "72005",
    "county": "Aguadilla Municipio",
    "practitioners": 141,
-   "with_role": 50,
+   "with_role": 48,
    "orgs_provider": 79,
    "orgs_ein": 4,
    "locations": 177,
    "lat": 18.44303,
    "lng": -67.14972,
    "by_category": {
-    "physician": 58,
-    "behavioral-health": 23,
+    "physician": 59,
+    "behavioral-health": 22,
     "dental": 16,
     "pharmacy": 10,
     "chiropractic": 7,
@@ -1760,13 +1759,13 @@
     "rehab-therapy": 3,
     "eye-vision": 3,
     "facility": 2,
-    "support": 2,
     "emergency-medical": 2,
-    "payer": 1,
-    "no-taxonomy": 1,
-    "group": 1,
+    "support": 2,
+    "nursing": 1,
     "transport": 1,
-    "nursing": 1
+    "payer": 1,
+    "group": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -1801,13 +1800,13 @@
     "physician": 12,
     "pharmacy": 9,
     "dental": 5,
-    "behavioral-health": 2,
     "chiropractic": 2,
+    "behavioral-health": 2,
     "eye-vision": 2,
+    "facility": 1,
     "nursing": 1,
     "transport": 1,
     "rehab-therapy": 1,
-    "facility": 1,
     "advanced-practice": 1
    }
   },
@@ -1815,15 +1814,15 @@
    "zip": "00612",
    "county_fips": "72013",
    "county": "Arecibo Municipio",
-   "practitioners": 362,
-   "with_role": 107,
+   "practitioners": 368,
+   "with_role": 111,
    "orgs_provider": 214,
    "orgs_ein": 9,
    "locations": 333,
    "lat": 18.46997,
    "lng": -66.72693,
    "by_category": {
-    "physician": 162,
+    "physician": 169,
     "behavioral-health": 66,
     "pharmacy": 32,
     "dental": 31,
@@ -1832,12 +1831,12 @@
     "eye-vision": 9,
     "advanced-practice": 7,
     "chiropractic": 6,
-    "dietary": 5,
     "nursing": 5,
+    "dietary": 5,
     "support": 4,
     "group": 3,
-    "student": 3,
     "emergency-medical": 2,
+    "student": 2,
     "no-taxonomy": 1,
     "facility": 1
    }
@@ -1861,15 +1860,15 @@
    "zip": "00617",
    "county_fips": "72017",
    "county": "Barceloneta Municipio",
-   "practitioners": 97,
-   "with_role": 26,
+   "practitioners": 98,
+   "with_role": 27,
    "orgs_provider": 42,
    "orgs_ein": 3,
    "locations": 58,
    "lat": 18.44918,
    "lng": -66.53989,
    "by_category": {
-    "pharmacy": 32,
+    "pharmacy": 33,
     "rehab-therapy": 24,
     "physician": 15,
     "behavioral-health": 7,
@@ -1885,24 +1884,24 @@
    "county_fips": "72023",
    "county": "Cabo Rojo Municipio",
    "practitioners": 98,
-   "with_role": 19,
+   "with_role": 20,
    "orgs_provider": 51,
    "orgs_ein": 3,
    "locations": 111,
    "lat": 18.08645,
    "lng": -67.14879,
    "by_category": {
-    "physician": 39,
+    "physician": 40,
     "pharmacy": 19,
-    "behavioral-health": 10,
-    "support": 6,
+    "behavioral-health": 9,
     "eye-vision": 6,
+    "dental": 6,
+    "support": 6,
     "other-clinical": 5,
-    "dental": 5,
     "group": 3,
-    "student": 2,
-    "rehab-therapy": 1,
+    "student": 1,
     "chiropractic": 1,
+    "rehab-therapy": 1,
     "emergency-medical": 1
    }
   },
@@ -1910,7 +1909,7 @@
    "zip": "00624",
    "county_fips": "72111",
    "county": "Pe\u00c3\u00b1uelas Municipio",
-   "practitioners": 36,
+   "practitioners": 35,
    "with_role": 9,
    "orgs_provider": 24,
    "orgs_ein": 0,
@@ -1921,9 +1920,8 @@
     "pharmacy": 16,
     "physician": 10,
     "dental": 3,
-    "support": 2,
     "behavioral-health": 2,
-    "student": 1,
+    "support": 2,
     "transport": 1,
     "eye-vision": 1
    }
@@ -1946,15 +1944,15 @@
     "dental": 5,
     "chiropractic": 4,
     "rehab-therapy": 2,
-    "nursing": 1,
-    "other-clinical": 1,
-    "dietary": 1,
-    "emergency-medical": 1,
-    "supplier": 1,
-    "eye-vision": 1,
-    "advanced-practice": 1,
     "support": 1,
-    "student": 1
+    "nursing": 1,
+    "eye-vision": 1,
+    "supplier": 1,
+    "other-clinical": 1,
+    "emergency-medical": 1,
+    "student": 1,
+    "dietary": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -1970,10 +1968,10 @@
    "lng": -66.96076,
    "by_category": {
     "physician": 24,
-    "behavioral-health": 10,
     "pharmacy": 10,
-    "dental": 5,
+    "behavioral-health": 10,
     "nursing": 5,
+    "dental": 5,
     "facility": 3,
     "rehab-therapy": 3,
     "chiropractic": 2,
@@ -1997,11 +1995,11 @@
     "rehab-therapy": 15,
     "behavioral-health": 11,
     "physician": 10,
-    "dental": 2,
     "eye-vision": 2,
-    "facility": 1,
+    "dental": 2,
+    "chiropractic": 1,
     "group": 1,
-    "chiropractic": 1
+    "facility": 1
    }
   },
   {
@@ -2022,38 +2020,38 @@
     "behavioral-health": 9,
     "rehab-therapy": 3,
     "dental": 2,
-    "nursing": 2,
-    "group": 2,
     "facility": 2,
-    "eye-vision": 1,
+    "group": 2,
+    "nursing": 2,
+    "student": 1,
     "transport": 1,
-    "student": 1
+    "eye-vision": 1
    }
   },
   {
    "zip": "00646",
    "county_fips": "72051",
    "county": "Dorado Municipio",
-   "practitioners": 196,
-   "with_role": 71,
+   "practitioners": 194,
+   "with_role": 69,
    "orgs_provider": 105,
    "orgs_ein": 7,
    "locations": 120,
    "lat": 18.45622,
    "lng": -66.27239,
    "by_category": {
-    "physician": 99,
+    "physician": 97,
     "pharmacy": 25,
     "behavioral-health": 18,
     "rehab-therapy": 13,
     "dental": 12,
     "group": 7,
     "advanced-practice": 5,
-    "other-clinical": 4,
     "eye-vision": 4,
+    "other-clinical": 4,
     "chiropractic": 3,
-    "support": 2,
     "dietary": 2,
+    "support": 2,
     "student": 1,
     "podiatry": 1
    }
@@ -2077,8 +2075,8 @@
    "zip": "00650",
    "county_fips": "72054",
    "county": "Florida Municipio",
-   "practitioners": 26,
-   "with_role": 16,
+   "practitioners": 27,
+   "with_role": 17,
    "orgs_provider": 28,
    "orgs_ein": 3,
    "locations": 20,
@@ -2088,10 +2086,10 @@
     "physician": 12,
     "pharmacy": 3,
     "behavioral-health": 2,
-    "group": 2,
     "eye-vision": 2,
+    "other-clinical": 2,
     "rehab-therapy": 2,
-    "other-clinical": 1,
+    "group": 2,
     "facility": 1,
     "dietary": 1
    }
@@ -2111,9 +2109,9 @@
     "physician": 8,
     "behavioral-health": 3,
     "dental": 2,
+    "support": 1,
     "other-clinical": 1,
     "eye-vision": 1,
-    "support": 1,
     "pharmacy": 1
    }
   },
@@ -2133,8 +2131,8 @@
     "pharmacy": 9,
     "behavioral-health": 3,
     "rehab-therapy": 2,
-    "eye-vision": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2153,23 +2151,23 @@
     "behavioral-health": 28,
     "pharmacy": 15,
     "eye-vision": 4,
-    "dental": 3,
     "rehab-therapy": 3,
-    "dietary": 3,
     "chiropractic": 3,
-    "group": 2,
-    "support": 2,
+    "dietary": 3,
+    "dental": 3,
     "student": 2,
+    "support": 2,
     "other-clinical": 2,
-    "emergency-medical": 1,
-    "facility": 1
+    "group": 2,
+    "facility": 1,
+    "emergency-medical": 1
    }
   },
   {
    "zip": "00660",
    "county_fips": "72067",
    "county": "Hormigueros Municipio",
-   "practitioners": 28,
+   "practitioners": 29,
    "with_role": 8,
    "orgs_provider": 29,
    "orgs_ein": 2,
@@ -2178,44 +2176,44 @@
    "lng": -67.12768,
    "by_category": {
     "physician": 16,
-    "dental": 3,
+    "dental": 4,
     "rehab-therapy": 3,
+    "behavioral-health": 1,
     "pharmacy": 1,
-    "emergency-medical": 1,
     "other-clinical": 1,
     "dietary": 1,
-    "facility": 1,
-    "behavioral-health": 1
+    "emergency-medical": 1,
+    "facility": 1
    }
   },
   {
    "zip": "00662",
    "county_fips": "72071",
    "county": "Isabela Municipio",
-   "practitioners": 196,
-   "with_role": 73,
+   "practitioners": 195,
+   "with_role": 70,
    "orgs_provider": 84,
    "orgs_ein": 3,
    "locations": 142,
    "lat": 18.49252,
    "lng": -67.02402,
    "by_category": {
-    "pharmacy": 43,
-    "behavioral-health": 38,
-    "rehab-therapy": 31,
+    "pharmacy": 42,
+    "behavioral-health": 39,
     "physician": 31,
+    "rehab-therapy": 31,
     "dental": 12,
-    "eye-vision": 11,
+    "eye-vision": 10,
     "advanced-practice": 6,
-    "other-clinical": 5,
     "facility": 5,
+    "other-clinical": 5,
     "group": 5,
-    "dietary": 2,
     "chiropractic": 2,
-    "no-taxonomy": 1,
-    "supplier": 1,
-    "emergency-medical": 1,
+    "dietary": 2,
     "nursing": 1,
+    "supplier": 1,
+    "no-taxonomy": 1,
+    "emergency-medical": 1,
     "support": 1
    }
   },
@@ -2233,10 +2231,10 @@
    "by_category": {
     "physician": 14,
     "behavioral-health": 4,
-    "dental": 1,
     "rehab-therapy": 1,
-    "support": 1,
-    "dietary": 1
+    "dental": 1,
+    "dietary": 1,
+    "support": 1
    }
   },
   {
@@ -2252,10 +2250,10 @@
    "lng": -67.05959,
    "by_category": {
     "physician": 15,
-    "pharmacy": 10,
-    "dental": 3,
+    "pharmacy": 9,
     "eye-vision": 3,
-    "behavioral-health": 2,
+    "behavioral-health": 3,
+    "dental": 3,
     "dietary": 1,
     "support": 1
    }
@@ -2264,30 +2262,30 @@
    "zip": "00669",
    "county_fips": "72081",
    "county": "Lares Municipio",
-   "practitioners": 51,
-   "with_role": 12,
+   "practitioners": 49,
+   "with_role": 11,
    "orgs_provider": 20,
    "orgs_ein": 1,
    "locations": 44,
    "lat": 18.2942,
    "lng": -66.88089,
    "by_category": {
-    "pharmacy": 26,
-    "physician": 10,
+    "pharmacy": 25,
+    "physician": 9,
     "behavioral-health": 5,
-    "eye-vision": 2,
     "support": 2,
     "dental": 2,
+    "eye-vision": 2,
     "supplier": 2,
-    "rehab-therapy": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "rehab-therapy": 1
    }
   },
   {
    "zip": "00670",
    "county_fips": "72083",
    "county": "Las Mar\u00c3\u00adas Municipio",
-   "practitioners": 13,
+   "practitioners": 12,
    "with_role": 5,
    "orgs_provider": 5,
    "orgs_ein": 0,
@@ -2295,41 +2293,41 @@
    "lat": 18.25197,
    "lng": -66.99083,
    "by_category": {
-    "pharmacy": 8,
+    "pharmacy": 7,
     "physician": 2,
-    "support": 1,
+    "dental": 1,
     "rehab-therapy": 1,
-    "dental": 1
+    "support": 1
    }
   },
   {
    "zip": "00674",
    "county_fips": "72091",
    "county": "Manat\u00c3\u00ad Municipio",
-   "practitioners": 234,
-   "with_role": 77,
+   "practitioners": 237,
+   "with_role": 79,
    "orgs_provider": 151,
    "orgs_ein": 11,
    "locations": 247,
    "lat": 18.43315,
    "lng": -66.48436,
    "by_category": {
-    "physician": 110,
+    "physician": 113,
     "pharmacy": 22,
     "behavioral-health": 19,
     "dental": 17,
     "other-clinical": 16,
     "rehab-therapy": 14,
     "eye-vision": 8,
-    "chiropractic": 6,
     "advanced-practice": 6,
+    "chiropractic": 6,
     "group": 5,
     "dietary": 4,
     "nursing": 3,
     "student": 1,
     "facility": 1,
-    "supplier": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "supplier": 1
    }
   },
   {
@@ -2345,19 +2343,19 @@
    "lng": -67.10936,
    "by_category": {
     "physician": 22,
-    "rehab-therapy": 17,
     "pharmacy": 17,
+    "rehab-therapy": 17,
     "behavioral-health": 13,
     "group": 7,
     "dental": 4,
-    "dietary": 2,
-    "eye-vision": 2,
     "other-clinical": 2,
-    "nursing": 1,
+    "eye-vision": 2,
+    "dietary": 2,
+    "facility": 1,
+    "support": 1,
     "chiropractic": 1,
     "transport": 1,
-    "facility": 1,
-    "support": 1
+    "nursing": 1
    }
   },
   {
@@ -2377,10 +2375,10 @@
     "student": 5,
     "behavioral-health": 3,
     "dental": 3,
-    "group": 1,
-    "advanced-practice": 1,
+    "nursing": 1,
     "other-clinical": 1,
-    "nursing": 1
+    "group": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -2402,9 +2400,9 @@
     "group": 3,
     "behavioral-health": 3,
     "emergency-medical": 2,
-    "support": 1,
-    "eye-vision": 1,
     "chiropractic": 1,
+    "eye-vision": 1,
+    "support": 1,
     "facility": 1
    }
   },
@@ -2412,16 +2410,16 @@
    "zip": "00680",
    "county_fips": "72097",
    "county": "Mayag\u00c3\u00bcez Municipio",
-   "practitioners": 630,
-   "with_role": 265,
+   "practitioners": 637,
+   "with_role": 271,
    "orgs_provider": 289,
    "orgs_ein": 12,
    "locations": 462,
    "lat": 18.20153,
    "lng": -67.14395,
    "by_category": {
-    "physician": 351,
-    "behavioral-health": 79,
+    "physician": 357,
+    "behavioral-health": 80,
     "dental": 33,
     "other-clinical": 32,
     "pharmacy": 31,
@@ -2429,10 +2427,10 @@
     "group": 16,
     "eye-vision": 14,
     "dietary": 12,
-    "chiropractic": 8,
     "support": 8,
-    "emergency-medical": 6,
+    "chiropractic": 8,
     "advanced-practice": 6,
+    "emergency-medical": 6,
     "student": 5,
     "facility": 3,
     "nursing": 3,
@@ -2457,63 +2455,63 @@
    "zip": "00682",
    "county_fips": "72097",
    "county": "Mayag\u00c3\u00bcez Municipio",
-   "practitioners": 279,
-   "with_role": 55,
+   "practitioners": 286,
+   "with_role": 58,
    "orgs_provider": 91,
    "orgs_ein": 5,
    "locations": 120,
    "lat": 18.20581,
    "lng": -67.15055,
    "by_category": {
-    "behavioral-health": 76,
-    "physician": 65,
-    "pharmacy": 29,
+    "behavioral-health": 75,
+    "physician": 68,
+    "pharmacy": 32,
     "nursing": 22,
+    "student": 20,
     "other-clinical": 20,
-    "student": 18,
     "rehab-therapy": 17,
     "dental": 8,
     "chiropractic": 5,
-    "support": 3,
     "facility": 3,
-    "group": 2,
-    "advanced-practice": 2,
+    "support": 3,
     "eye-vision": 2,
+    "advanced-practice": 2,
     "dietary": 2,
+    "group": 2,
+    "transport": 1,
     "podiatry": 1,
-    "supplier": 1,
-    "no-taxonomy": 1,
     "agency": 1,
-    "transport": 1
+    "no-taxonomy": 1,
+    "supplier": 1
    }
   },
   {
    "zip": "00683",
    "county_fips": "72125",
    "county": "San Germ\u00c3\u00a1n Municipio",
-   "practitioners": 156,
-   "with_role": 51,
+   "practitioners": 157,
+   "with_role": 53,
    "orgs_provider": 91,
    "orgs_ein": 6,
    "locations": 143,
    "lat": 18.07991,
    "lng": -67.03592,
    "by_category": {
-    "physician": 84,
+    "physician": 85,
     "behavioral-health": 11,
-    "dental": 11,
     "pharmacy": 11,
+    "dental": 10,
     "rehab-therapy": 9,
     "eye-vision": 9,
     "other-clinical": 6,
-    "supplier": 3,
     "dietary": 3,
+    "supplier": 3,
+    "group": 3,
     "chiropractic": 2,
-    "group": 2,
     "facility": 2,
+    "emergency-medical": 1,
     "nursing": 1,
-    "support": 1,
-    "emergency-medical": 1
+    "support": 1
    }
   },
   {
@@ -2521,7 +2519,7 @@
    "county_fips": "72131",
    "county": "San Sebasti\u00c3\u00a1n Municipio",
    "practitioners": 206,
-   "with_role": 65,
+   "with_role": 66,
    "orgs_provider": 87,
    "orgs_ein": 5,
    "locations": 142,
@@ -2536,9 +2534,9 @@
     "dental": 9,
     "group": 5,
     "other-clinical": 4,
+    "support": 3,
     "advanced-practice": 3,
     "nursing": 3,
-    "support": 3,
     "facility": 2,
     "chiropractic": 2,
     "dietary": 1,
@@ -2561,21 +2559,21 @@
     "behavioral-health": 16,
     "pharmacy": 11,
     "dental": 6,
-    "support": 3,
     "other-clinical": 3,
+    "support": 3,
     "dietary": 2,
     "emergency-medical": 2,
+    "group": 1,
     "student": 1,
-    "eye-vision": 1,
     "transport": 1,
-    "group": 1
+    "eye-vision": 1
    }
   },
   {
    "zip": "00688",
    "county_fips": "72013",
    "county": "Arecibo Municipio",
-   "practitioners": 2,
+   "practitioners": 1,
    "with_role": 0,
    "orgs_provider": 0,
    "orgs_ein": 0,
@@ -2583,15 +2581,14 @@
    "lat": 18.42224,
    "lng": -66.61247,
    "by_category": {
-    "rehab-therapy": 1,
-    "behavioral-health": 1
+    "rehab-therapy": 1
    }
   },
   {
    "zip": "00690",
    "county_fips": "72005",
    "county": "Aguadilla Municipio",
-   "practitioners": 12,
+   "practitioners": 11,
    "with_role": 3,
    "orgs_provider": 8,
    "orgs_ein": 0,
@@ -2600,39 +2597,38 @@
    "lng": -67.09806,
    "by_category": {
     "dental": 4,
-    "physician": 2,
     "pharmacy": 2,
-    "support": 1,
+    "physician": 2,
+    "other-clinical": 1,
     "behavioral-health": 1,
-    "student": 1,
-    "other-clinical": 1
+    "support": 1
    }
   },
   {
    "zip": "00692",
    "county_fips": "72143",
    "county": "Vega Alta Municipio",
-   "practitioners": 73,
-   "with_role": 21,
+   "practitioners": 72,
+   "with_role": 20,
    "orgs_provider": 43,
    "orgs_ein": 3,
    "locations": 79,
    "lat": 18.41466,
    "lng": -66.32937,
    "by_category": {
-    "physician": 25,
+    "physician": 26,
     "pharmacy": 15,
-    "dental": 9,
-    "behavioral-health": 6,
+    "dental": 8,
     "rehab-therapy": 6,
-    "eye-vision": 3,
-    "other-clinical": 2,
+    "behavioral-health": 6,
     "advanced-practice": 2,
-    "facility": 1,
-    "supplier": 1,
+    "other-clinical": 2,
+    "eye-vision": 2,
     "group": 1,
+    "podiatry": 1,
     "dietary": 1,
-    "podiatry": 1
+    "facility": 1,
+    "supplier": 1
    }
   },
   {
@@ -2653,12 +2649,12 @@
     "dental": 10,
     "eye-vision": 8,
     "rehab-therapy": 4,
-    "chiropractic": 3,
     "other-clinical": 3,
     "dietary": 3,
-    "support": 1,
+    "chiropractic": 3,
+    "group": 1,
     "transport": 1,
-    "group": 1
+    "support": 1
    }
   },
   {
@@ -2678,34 +2674,34 @@
    "zip": "00698",
    "county_fips": "72153",
    "county": "Yauco Municipio",
-   "practitioners": 137,
-   "with_role": 44,
+   "practitioners": 139,
+   "with_role": 46,
    "orgs_provider": 78,
    "orgs_ein": 3,
    "locations": 121,
    "lat": 18.02695,
    "lng": -66.85209,
    "by_category": {
-    "physician": 53,
+    "physician": 54,
     "behavioral-health": 30,
     "pharmacy": 15,
     "dental": 12,
     "rehab-therapy": 8,
-    "eye-vision": 6,
+    "eye-vision": 7,
     "chiropractic": 4,
-    "group": 2,
     "facility": 2,
     "dietary": 2,
+    "group": 2,
     "support": 1,
-    "podiatry": 1,
-    "nursing": 1
+    "nursing": 1,
+    "podiatry": 1
    }
   },
   {
    "zip": "00703",
    "county_fips": "72007",
    "county": "Aguas Buenas Municipio",
-   "practitioners": 35,
+   "practitioners": 36,
    "with_role": 11,
    "orgs_provider": 22,
    "orgs_ein": 0,
@@ -2715,7 +2711,7 @@
    "by_category": {
     "physician": 17,
     "pharmacy": 7,
-    "dental": 5,
+    "dental": 6,
     "behavioral-health": 3,
     "eye-vision": 2,
     "group": 1
@@ -2725,7 +2721,7 @@
    "zip": "00705",
    "county_fips": "72009",
    "county": "Aibonito Municipio",
-   "practitioners": 97,
+   "practitioners": 95,
    "with_role": 27,
    "orgs_provider": 48,
    "orgs_ein": 2,
@@ -2738,13 +2734,13 @@
     "behavioral-health": 14,
     "rehab-therapy": 9,
     "dental": 9,
-    "student": 4,
     "other-clinical": 4,
     "dietary": 3,
-    "eye-vision": 2,
     "advanced-practice": 2,
-    "supplier": 1,
-    "group": 1
+    "student": 2,
+    "eye-vision": 2,
+    "group": 1,
+    "supplier": 1
    }
   },
   {
@@ -2781,13 +2777,13 @@
     "physician": 26,
     "pharmacy": 9,
     "dental": 2,
-    "chiropractic": 1,
+    "support": 1,
+    "emergency-medical": 1,
     "rehab-therapy": 1,
     "group": 1,
-    "emergency-medical": 1,
-    "support": 1,
-    "dietary": 1,
-    "behavioral-health": 1
+    "chiropractic": 1,
+    "behavioral-health": 1,
+    "dietary": 1
    }
   },
   {
@@ -2811,52 +2807,52 @@
    "zip": "00716",
    "county_fips": "72113",
    "county": "Ponce Municipio",
-   "practitioners": 1521,
-   "with_role": 286,
+   "practitioners": 1532,
+   "with_role": 292,
    "orgs_provider": 210,
    "orgs_ein": 9,
    "locations": 291,
    "lat": 18.01396,
    "lng": -66.60385,
    "by_category": {
-    "student": 771,
-    "physician": 339,
+    "student": 773,
+    "physician": 344,
     "behavioral-health": 100,
-    "no-taxonomy": 64,
+    "no-taxonomy": 65,
     "pharmacy": 58,
-    "rehab-therapy": 30,
-    "group": 29,
-    "eye-vision": 29,
-    "dental": 28,
-    "other-clinical": 21,
-    "chiropractic": 13,
+    "rehab-therapy": 31,
+    "eye-vision": 30,
+    "group": 30,
+    "dental": 26,
+    "other-clinical": 22,
+    "chiropractic": 14,
     "dietary": 9,
     "nursing": 9,
     "advanced-practice": 8,
     "facility": 5,
     "support": 4,
     "podiatry": 2,
-    "emergency-medical": 1,
-    "agency": 1
+    "agency": 1,
+    "emergency-medical": 1
    }
   },
   {
    "zip": "00717",
    "county_fips": "72113",
    "county": "Ponce Municipio",
-   "practitioners": 658,
-   "with_role": 239,
+   "practitioners": 654,
+   "with_role": 236,
    "orgs_provider": 275,
    "orgs_ein": 20,
    "locations": 439,
    "lat": 18.00773,
    "lng": -66.60308,
    "by_category": {
-    "physician": 270,
-    "behavioral-health": 95,
-    "other-clinical": 52,
+    "physician": 265,
+    "behavioral-health": 96,
+    "other-clinical": 51,
+    "dental": 47,
     "rehab-therapy": 47,
-    "dental": 46,
     "pharmacy": 28,
     "nursing": 23,
     "support": 22,
@@ -2864,8 +2860,8 @@
     "dietary": 12,
     "chiropractic": 12,
     "group": 10,
-    "eye-vision": 6,
     "agency": 6,
+    "eye-vision": 6,
     "facility": 5,
     "advanced-practice": 4,
     "no-taxonomy": 2,
@@ -2887,10 +2883,10 @@
     "pharmacy": 13,
     "physician": 8,
     "nursing": 3,
-    "dental": 2,
     "rehab-therapy": 2,
-    "advanced-practice": 1,
+    "dental": 2,
     "behavioral-health": 1,
+    "advanced-practice": 1,
     "other-clinical": 1,
     "eye-vision": 1
    }
@@ -2899,24 +2895,23 @@
    "zip": "00719",
    "county_fips": "72105",
    "county": "Naranjito Municipio",
-   "practitioners": 60,
-   "with_role": 13,
+   "practitioners": 59,
+   "with_role": 14,
    "orgs_provider": 38,
    "orgs_ein": 3,
    "locations": 56,
    "lat": 18.30071,
    "lng": -66.24395,
    "by_category": {
-    "physician": 16,
     "pharmacy": 16,
-    "behavioral-health": 9,
+    "physician": 16,
+    "behavioral-health": 8,
     "dental": 6,
     "rehab-therapy": 5,
-    "chiropractic": 3,
+    "chiropractic": 4,
     "eye-vision": 2,
     "dietary": 1,
-    "student": 1,
-    "other-clinical": 1
+    "student": 1
    }
   },
   {
@@ -2932,14 +2927,14 @@
    "lng": -66.39041,
    "by_category": {
     "physician": 7,
-    "eye-vision": 3,
     "dental": 3,
+    "eye-vision": 3,
     "pharmacy": 3,
-    "other-clinical": 2,
     "behavioral-health": 2,
-    "rehab-therapy": 1,
+    "other-clinical": 2,
+    "chiropractic": 1,
     "transport": 1,
-    "chiropractic": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -2958,40 +2953,40 @@
     "physician": 4,
     "dental": 3,
     "behavioral-health": 2,
+    "advanced-practice": 1,
     "facility": 1,
-    "supplier": 1,
-    "advanced-practice": 1
+    "supplier": 1
    }
   },
   {
    "zip": "00725",
    "county_fips": "72025",
    "county": "Caguas Municipio",
-   "practitioners": 1159,
-   "with_role": 693,
+   "practitioners": 1164,
+   "with_role": 696,
    "orgs_provider": 422,
    "orgs_ein": 17,
    "locations": 607,
    "lat": 18.2303,
    "lng": -66.03576,
    "by_category": {
-    "physician": 709,
+    "physician": 717,
     "behavioral-health": 98,
     "rehab-therapy": 67,
     "pharmacy": 59,
-    "dental": 48,
+    "dental": 46,
     "other-clinical": 44,
-    "group": 34,
+    "group": 33,
     "eye-vision": 23,
     "chiropractic": 20,
     "dietary": 18,
     "advanced-practice": 12,
     "emergency-medical": 9,
     "student": 7,
-    "podiatry": 3,
     "facility": 3,
-    "support": 2,
+    "podiatry": 3,
     "nursing": 2,
+    "support": 2,
     "transport": 1
    }
   },
@@ -3015,7 +3010,7 @@
    "county_fips": "72025",
    "county": "Caguas Municipio",
    "practitioners": 57,
-   "with_role": 17,
+   "with_role": 18,
    "orgs_provider": 24,
    "orgs_ein": 0,
    "locations": 53,
@@ -3029,20 +3024,20 @@
     "chiropractic": 4,
     "eye-vision": 3,
     "behavioral-health": 3,
-    "nursing": 2,
     "group": 2,
-    "no-taxonomy": 1,
+    "nursing": 2,
+    "support": 1,
     "supplier": 1,
     "other-clinical": 1,
-    "support": 1
+    "no-taxonomy": 1
    }
   },
   {
    "zip": "00728",
    "county_fips": "72113",
    "county": "Ponce Municipio",
-   "practitioners": 56,
-   "with_role": 11,
+   "practitioners": 55,
+   "with_role": 10,
    "orgs_provider": 12,
    "orgs_ein": 1,
    "locations": 44,
@@ -3051,14 +3046,14 @@
    "by_category": {
     "pharmacy": 35,
     "physician": 8,
-    "behavioral-health": 3,
     "dental": 3,
     "nursing": 2,
-    "rehab-therapy": 1,
-    "eye-vision": 1,
-    "podiatry": 1,
+    "behavioral-health": 2,
     "support": 1,
-    "other-clinical": 1
+    "rehab-therapy": 1,
+    "other-clinical": 1,
+    "podiatry": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -3078,18 +3073,18 @@
     "rehab-therapy": 7,
     "behavioral-health": 6,
     "dental": 4,
-    "group": 3,
     "eye-vision": 3,
+    "group": 3,
     "other-clinical": 2,
-    "advanced-practice": 1,
-    "supplier": 1
+    "supplier": 1,
+    "advanced-practice": 1
    }
   },
   {
    "zip": "00730",
    "county_fips": "72113",
    "county": "Ponce Municipio",
-   "practitioners": 144,
+   "practitioners": 145,
    "with_role": 46,
    "orgs_provider": 77,
    "orgs_ein": 5,
@@ -3097,7 +3092,7 @@
    "lat": 18.01363,
    "lng": -66.61465,
    "by_category": {
-    "behavioral-health": 60,
+    "behavioral-health": 61,
     "physician": 25,
     "pharmacy": 16,
     "nursing": 10,
@@ -3105,14 +3100,14 @@
     "dental": 6,
     "no-taxonomy": 5,
     "dietary": 3,
-    "group": 2,
     "chiropractic": 2,
+    "group": 2,
     "emergency-medical": 2,
     "rehab-therapy": 2,
     "support": 1,
-    "other-clinical": 1,
+    "student": 1,
     "facility": 1,
-    "student": 1
+    "other-clinical": 1
    }
   },
   {
@@ -3145,55 +3140,55 @@
     "other-clinical": 3,
     "group": 2,
     "rehab-therapy": 2,
+    "agency": 1,
     "facility": 1,
-    "advanced-practice": 1,
-    "support": 1,
     "emergency-medical": 1,
-    "agency": 1
+    "support": 1,
+    "advanced-practice": 1
    }
   },
   {
    "zip": "00736",
    "county_fips": "72035",
    "county": "Cayey Municipio",
-   "practitioners": 172,
-   "with_role": 60,
+   "practitioners": 175,
+   "with_role": 62,
    "orgs_provider": 89,
    "orgs_ein": 5,
    "locations": 134,
    "lat": 18.1144,
    "lng": -66.16602,
    "by_category": {
-    "physician": 68,
+    "physician": 71,
     "pharmacy": 21,
     "behavioral-health": 18,
     "rehab-therapy": 16,
     "dental": 15,
     "other-clinical": 7,
-    "dietary": 5,
     "eye-vision": 5,
+    "dietary": 5,
     "nursing": 4,
     "chiropractic": 4,
-    "group": 3,
     "facility": 3,
+    "group": 3,
     "support": 1,
-    "podiatry": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "podiatry": 1
    }
   },
   {
    "zip": "00738",
    "county_fips": "72053",
    "county": "Fajardo Municipio",
-   "practitioners": 240,
-   "with_role": 75,
+   "practitioners": 245,
+   "with_role": 80,
    "orgs_provider": 136,
    "orgs_ein": 9,
    "locations": 241,
    "lat": 18.32627,
    "lng": -65.65485,
    "by_category": {
-    "physician": 98,
+    "physician": 103,
     "behavioral-health": 31,
     "pharmacy": 27,
     "nursing": 17,
@@ -3203,37 +3198,37 @@
     "other-clinical": 9,
     "group": 7,
     "chiropractic": 4,
-    "advanced-practice": 2,
     "dietary": 2,
+    "advanced-practice": 2,
+    "podiatry": 1,
     "facility": 1,
-    "supplier": 1,
     "student": 1,
-    "podiatry": 1
+    "supplier": 1
    }
   },
   {
    "zip": "00739",
    "county_fips": "72041",
    "county": "Cidra Municipio",
-   "practitioners": 105,
-   "with_role": 60,
+   "practitioners": 106,
+   "with_role": 61,
    "orgs_provider": 35,
    "orgs_ein": 2,
    "locations": 61,
    "lat": 18.17183,
    "lng": -66.15792,
    "by_category": {
-    "physician": 51,
+    "physician": 52,
     "behavioral-health": 21,
     "dental": 11,
     "eye-vision": 7,
     "dietary": 5,
+    "rehab-therapy": 2,
     "other-clinical": 2,
     "nursing": 2,
-    "rehab-therapy": 2,
-    "chiropractic": 1,
-    "facility": 1,
     "podiatry": 1,
+    "facility": 1,
+    "chiropractic": 1,
     "pharmacy": 1
    }
   },
@@ -3256,7 +3251,7 @@
    "zip": "00745",
    "county_fips": "72119",
    "county": "R\u00c3\u00ado Grande Municipio",
-   "practitioners": 55,
+   "practitioners": 54,
    "with_role": 12,
    "orgs_provider": 29,
    "orgs_ein": 3,
@@ -3267,24 +3262,24 @@
     "physician": 23,
     "behavioral-health": 7,
     "dental": 6,
-    "pharmacy": 5,
     "rehab-therapy": 5,
+    "pharmacy": 4,
     "eye-vision": 2,
+    "emergency-medical": 1,
     "advanced-practice": 1,
-    "supplier": 1,
+    "chiropractic": 1,
+    "nursing": 1,
     "dietary": 1,
     "other-clinical": 1,
-    "nursing": 1,
-    "chiropractic": 1,
-    "emergency-medical": 1
+    "supplier": 1
    }
   },
   {
    "zip": "00751",
    "county_fips": "72123",
    "county": "Salinas Municipio",
-   "practitioners": 64,
-   "with_role": 29,
+   "practitioners": 65,
+   "with_role": 30,
    "orgs_provider": 45,
    "orgs_ein": 2,
    "locations": 45,
@@ -3294,13 +3289,13 @@
     "physician": 26,
     "behavioral-health": 12,
     "pharmacy": 11,
-    "eye-vision": 4,
+    "eye-vision": 5,
     "chiropractic": 4,
     "dental": 2,
-    "other-clinical": 1,
     "group": 1,
-    "advanced-practice": 1,
+    "other-clinical": 1,
     "emergency-medical": 1,
+    "advanced-practice": 1,
     "dietary": 1
    }
   },
@@ -3308,8 +3303,8 @@
    "zip": "00754",
    "county_fips": "72129",
    "county": "San Lorenzo Municipio",
-   "practitioners": 80,
-   "with_role": 33,
+   "practitioners": 82,
+   "with_role": 35,
    "orgs_provider": 38,
    "orgs_ein": 6,
    "locations": 60,
@@ -3320,14 +3315,14 @@
     "pharmacy": 16,
     "behavioral-health": 11,
     "dental": 9,
+    "eye-vision": 4,
     "rehab-therapy": 3,
-    "eye-vision": 3,
+    "dietary": 2,
     "other-clinical": 2,
-    "group": 1,
-    "emergency-medical": 1,
-    "dietary": 1,
     "support": 1,
-    "no-taxonomy": 1
+    "emergency-medical": 1,
+    "no-taxonomy": 1,
+    "group": 1
    }
   },
   {
@@ -3344,12 +3339,12 @@
    "by_category": {
     "pharmacy": 19,
     "physician": 12,
+    "dental": 2,
     "behavioral-health": 2,
     "other-clinical": 2,
-    "dental": 2,
+    "rehab-therapy": 1,
     "eye-vision": 1,
-    "nursing": 1,
-    "rehab-therapy": 1
+    "nursing": 1
    }
   },
   {
@@ -3372,8 +3367,8 @@
    "zip": "00766",
    "county_fips": "72149",
    "county": "Villalba Municipio",
-   "practitioners": 44,
-   "with_role": 9,
+   "practitioners": 45,
+   "with_role": 10,
    "orgs_provider": 29,
    "orgs_ein": 1,
    "locations": 31,
@@ -3382,22 +3377,22 @@
    "by_category": {
     "pharmacy": 13,
     "behavioral-health": 10,
-    "physician": 9,
+    "physician": 10,
     "eye-vision": 5,
     "dental": 2,
-    "support": 1,
     "group": 1,
-    "other-clinical": 1,
+    "support": 1,
     "nursing": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "other-clinical": 1
    }
   },
   {
    "zip": "00767",
    "county_fips": "72151",
    "county": "Yabucoa Municipio",
-   "practitioners": 75,
-   "with_role": 13,
+   "practitioners": 74,
+   "with_role": 12,
    "orgs_provider": 35,
    "orgs_ein": 0,
    "locations": 57,
@@ -3411,8 +3406,8 @@
     "rehab-therapy": 4,
     "support": 3,
     "group": 2,
-    "dietary": 2,
     "nursing": 2,
+    "dietary": 1,
     "eye-vision": 1,
     "other-clinical": 1
    }
@@ -3437,13 +3432,13 @@
     "chiropractic": 6,
     "other-clinical": 5,
     "dietary": 4,
-    "group": 3,
     "eye-vision": 3,
-    "student": 1,
-    "transport": 1,
-    "support": 1,
+    "group": 3,
     "emergency-medical": 1,
-    "advanced-practice": 1
+    "support": 1,
+    "advanced-practice": 1,
+    "student": 1,
+    "transport": 1
    }
   },
   {
@@ -3464,8 +3459,8 @@
     "rehab-therapy": 4,
     "dental": 3,
     "facility": 2,
-    "advanced-practice": 1,
     "dietary": 1,
+    "advanced-practice": 1,
     "student": 1,
     "eye-vision": 1
    }
@@ -3502,81 +3497,82 @@
     "physician": 15,
     "pharmacy": 9,
     "behavioral-health": 3,
-    "dental": 2,
-    "group": 2
+    "group": 2,
+    "dental": 2
    }
   },
   {
    "zip": "00777",
    "county_fips": "72077",
    "county": "Juncos Municipio",
-   "practitioners": 137,
-   "with_role": 39,
+   "practitioners": 140,
+   "with_role": 40,
    "orgs_provider": 37,
    "orgs_ein": 3,
    "locations": 80,
    "lat": 18.23437,
    "lng": -65.92329,
    "by_category": {
-    "physician": 64,
+    "physician": 67,
     "pharmacy": 15,
     "dental": 13,
     "advanced-practice": 9,
     "behavioral-health": 7,
-    "other-clinical": 5,
     "nursing": 5,
-    "rehab-therapy": 5,
     "group": 5,
+    "rehab-therapy": 5,
+    "other-clinical": 5,
+    "eye-vision": 3,
     "emergency-medical": 3,
-    "chiropractic": 3,
-    "eye-vision": 3
+    "chiropractic": 3
    }
   },
   {
    "zip": "00778",
    "county_fips": "72063",
    "county": "Gurabo Municipio",
-   "practitioners": 53,
-   "with_role": 7,
+   "practitioners": 54,
+   "with_role": 8,
    "orgs_provider": 21,
    "orgs_ein": 1,
    "locations": 42,
    "lat": 18.25651,
    "lng": -65.96963,
    "by_category": {
-    "pharmacy": 15,
     "physician": 15,
+    "pharmacy": 15,
     "behavioral-health": 12,
     "dental": 5,
     "eye-vision": 2,
     "student": 1,
     "no-taxonomy": 1,
     "nursing": 1,
-    "support": 1
+    "support": 1,
+    "chiropractic": 1
    }
   },
   {
    "zip": "00780",
    "county_fips": "72113",
    "county": "Ponce Municipio",
-   "practitioners": 68,
-   "with_role": 32,
+   "practitioners": 69,
+   "with_role": 33,
    "orgs_provider": 37,
    "orgs_ein": 1,
    "locations": 67,
    "lat": 18.03998,
    "lng": -66.54696,
    "by_category": {
-    "physician": 35,
+    "physician": 36,
     "behavioral-health": 13,
-    "dental": 5,
     "pharmacy": 5,
+    "dental": 5,
     "eye-vision": 4,
     "other-clinical": 2,
-    "chiropractic": 1,
-    "advanced-practice": 1,
+    "rehab-therapy": 1,
     "group": 1,
-    "rehab-therapy": 1
+    "advanced-practice": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -3591,36 +3587,36 @@
    "lat": 18.22309,
    "lng": -66.2229,
    "by_category": {
-    "physician": 5,
     "behavioral-health": 5,
+    "physician": 5,
     "pharmacy": 3,
-    "group": 2,
     "eye-vision": 2,
-    "emergency-medical": 1,
-    "support": 1
+    "group": 2,
+    "support": 1,
+    "emergency-medical": 1
    }
   },
   {
    "zip": "00783",
    "county_fips": "72047",
    "county": "Corozal Municipio",
-   "practitioners": 73,
-   "with_role": 18,
+   "practitioners": 72,
+   "with_role": 17,
    "orgs_provider": 36,
    "orgs_ein": 2,
    "locations": 68,
    "lat": 18.33757,
    "lng": -66.32296,
    "by_category": {
-    "physician": 32,
+    "physician": 31,
     "pharmacy": 17,
     "dental": 9,
     "eye-vision": 4,
-    "behavioral-health": 3,
     "other-clinical": 3,
+    "behavioral-health": 3,
     "rehab-therapy": 2,
-    "nursing": 1,
     "group": 1,
+    "nursing": 1,
     "advanced-practice": 1
    }
   },
@@ -3628,7 +3624,7 @@
    "zip": "00784",
    "county_fips": "72057",
    "county": "Guayama Municipio",
-   "practitioners": 136,
+   "practitioners": 134,
    "with_role": 43,
    "orgs_provider": 55,
    "orgs_ein": 5,
@@ -3643,14 +3639,13 @@
     "rehab-therapy": 9,
     "group": 4,
     "other-clinical": 3,
+    "podiatry": 2,
     "advanced-practice": 2,
     "eye-vision": 2,
-    "podiatry": 2,
-    "student": 2,
-    "nursing": 1,
+    "chiropractic": 1,
     "dietary": 1,
-    "emergency-medical": 1,
-    "chiropractic": 1
+    "nursing": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -3670,22 +3665,22 @@
    "zip": "00791",
    "county_fips": "72069",
    "county": "Humacao Municipio",
-   "practitioners": 453,
-   "with_role": 126,
+   "practitioners": 457,
+   "with_role": 128,
    "orgs_provider": 225,
    "orgs_ein": 20,
    "locations": 351,
    "lat": 18.15091,
    "lng": -65.82953,
    "by_category": {
-    "physician": 229,
+    "physician": 231,
     "behavioral-health": 50,
     "pharmacy": 45,
     "other-clinical": 20,
     "dental": 20,
-    "rehab-therapy": 17,
+    "dietary": 18,
     "eye-vision": 17,
-    "dietary": 16,
+    "rehab-therapy": 17,
     "group": 12,
     "nursing": 11,
     "chiropractic": 5,
@@ -3693,9 +3688,9 @@
     "support": 2,
     "student": 2,
     "transport": 1,
-    "emergency-medical": 1,
+    "supplier": 1,
     "podiatry": 1,
-    "supplier": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -3718,65 +3713,64 @@
    "county_fips": "72019",
    "county": "Barranquitas Municipio",
    "practitioners": 148,
-   "with_role": 85,
+   "with_role": 86,
    "orgs_provider": 29,
    "orgs_ein": 2,
    "locations": 53,
    "lat": 18.1856,
    "lng": -66.30799,
    "by_category": {
-    "physician": 80,
+    "physician": 81,
     "pharmacy": 23,
     "behavioral-health": 14,
     "dental": 8,
     "group": 5,
     "dietary": 5,
-    "facility": 2,
-    "rehab-therapy": 2,
     "chiropractic": 2,
-    "other-clinical": 1,
-    "nursing": 1,
-    "student": 1,
-    "podiatry": 1,
-    "eye-vision": 1,
+    "rehab-therapy": 2,
+    "facility": 2,
     "advanced-practice": 1,
-    "support": 1
+    "nursing": 1,
+    "podiatry": 1,
+    "support": 1,
+    "eye-vision": 1,
+    "other-clinical": 1
    }
   },
   {
    "zip": "00795",
    "county_fips": "72075",
    "county": "Juana D\u00c3\u00adaz Municipio",
-   "practitioners": 81,
-   "with_role": 34,
+   "practitioners": 82,
+   "with_role": 35,
    "orgs_provider": 57,
    "orgs_ein": 3,
    "locations": 74,
    "lat": 18.05544,
    "lng": -66.50464,
    "by_category": {
-    "physician": 35,
+    "physician": 36,
     "rehab-therapy": 9,
-    "behavioral-health": 6,
     "dental": 6,
-    "pharmacy": 5,
+    "behavioral-health": 6,
     "dietary": 5,
+    "pharmacy": 5,
     "chiropractic": 4,
     "other-clinical": 3,
     "eye-vision": 3,
+    "transport": 1,
+    "podiatry": 1,
     "group": 1,
     "advanced-practice": 1,
-    "nursing": 1,
-    "podiatry": 1,
-    "transport": 1
+    "nursing": 1
    }
   },
   {
    "zip": "00901",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 61,
-   "with_role": 12,
+   "practitioners": 58,
+   "with_role": 11,
    "orgs_provider": 44,
    "orgs_ein": 3,
    "locations": 55,
@@ -3785,20 +3779,20 @@
    "by_category": {
     "behavioral-health": 20,
     "student": 17,
-    "physician": 10,
+    "physician": 9,
     "chiropractic": 4,
-    "pharmacy": 4,
+    "pharmacy": 3,
     "nursing": 2,
-    "rehab-therapy": 2,
     "advanced-practice": 1,
-    "dietary": 1
+    "dietary": 1,
+    "rehab-therapy": 1
    }
   },
   {
    "zip": "00907",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 355,
+   "practitioners": 354,
    "with_role": 112,
    "orgs_provider": 162,
    "orgs_ein": 6,
@@ -3806,52 +3800,52 @@
    "lat": 18.4532,
    "lng": -66.07485,
    "by_category": {
-    "physician": 160,
-    "behavioral-health": 76,
-    "pharmacy": 24,
+    "physician": 158,
+    "behavioral-health": 75,
+    "pharmacy": 25,
     "dental": 18,
-    "other-clinical": 16,
+    "other-clinical": 17,
     "group": 10,
     "eye-vision": 10,
+    "rehab-therapy": 10,
     "nursing": 9,
-    "rehab-therapy": 9,
-    "dietary": 7,
-    "support": 3,
+    "dietary": 6,
     "advanced-practice": 3,
-    "chiropractic": 2,
+    "support": 3,
     "facility": 2,
+    "chiropractic": 2,
     "student": 2,
-    "agency": 1,
+    "emergency-medical": 1,
     "podiatry": 1,
     "supplier": 1,
-    "emergency-medical": 1
+    "agency": 1
    }
   },
   {
    "zip": "00909",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 568,
-   "with_role": 196,
+   "practitioners": 571,
+   "with_role": 194,
    "orgs_provider": 266,
    "orgs_ein": 12,
    "locations": 422,
    "lat": 18.44511,
    "lng": -66.06839,
    "by_category": {
-    "physician": 288,
-    "behavioral-health": 81,
-    "rehab-therapy": 67,
-    "other-clinical": 37,
+    "physician": 287,
+    "behavioral-health": 82,
+    "rehab-therapy": 68,
+    "other-clinical": 38,
     "pharmacy": 14,
-    "group": 12,
     "nursing": 12,
-    "chiropractic": 12,
     "dietary": 12,
+    "group": 12,
+    "chiropractic": 12,
     "dental": 10,
     "support": 7,
+    "advanced-practice": 5,
     "podiatry": 5,
-    "advanced-practice": 4,
     "facility": 4,
     "eye-vision": 2,
     "student": 1
@@ -3861,7 +3855,7 @@
    "zip": "00911",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 71,
+   "practitioners": 72,
    "with_role": 12,
    "orgs_provider": 22,
    "orgs_ein": 1,
@@ -3873,12 +3867,12 @@
     "physician": 14,
     "dental": 7,
     "chiropractic": 6,
-    "rehab-therapy": 3,
     "behavioral-health": 3,
-    "nursing": 2,
+    "nursing": 3,
+    "rehab-therapy": 3,
     "facility": 2,
-    "eye-vision": 1,
     "emergency-medical": 1,
+    "eye-vision": 1,
     "group": 1,
     "support": 1
    }
@@ -3887,15 +3881,15 @@
    "zip": "00912",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 94,
-   "with_role": 55,
+   "practitioners": 93,
+   "with_role": 54,
    "orgs_provider": 42,
    "orgs_ein": 4,
    "locations": 73,
    "lat": 18.44621,
    "lng": -66.06365,
    "by_category": {
-    "physician": 50,
+    "physician": 49,
     "behavioral-health": 14,
     "other-clinical": 7,
     "rehab-therapy": 6,
@@ -3903,9 +3897,9 @@
     "pharmacy": 3,
     "dental": 3,
     "chiropractic": 3,
-    "dietary": 1,
+    "eye-vision": 1,
     "student": 1,
-    "eye-vision": 1
+    "dietary": 1
    }
   },
   {
@@ -3941,7 +3935,7 @@
    "zip": "00915",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 97,
+   "practitioners": 98,
    "with_role": 56,
    "orgs_provider": 23,
    "orgs_ein": 1,
@@ -3952,8 +3946,8 @@
     "physician": 51,
     "pharmacy": 15,
     "behavioral-health": 14,
+    "dental": 5,
     "dietary": 5,
-    "dental": 4,
     "other-clinical": 4,
     "eye-vision": 3,
     "support": 1
@@ -3963,59 +3957,59 @@
    "zip": "00917",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 493,
-   "with_role": 185,
+   "practitioners": 514,
+   "with_role": 196,
    "orgs_provider": 231,
    "orgs_ein": 15,
    "locations": 291,
    "lat": 18.41734,
    "lng": -66.05165,
    "by_category": {
-    "physician": 230,
+    "physician": 246,
     "behavioral-health": 52,
-    "rehab-therapy": 50,
+    "rehab-therapy": 51,
     "pharmacy": 49,
     "dietary": 29,
-    "student": 23,
-    "dental": 16,
-    "other-clinical": 14,
-    "group": 12,
+    "student": 24,
+    "dental": 18,
+    "other-clinical": 15,
+    "group": 13,
     "advanced-practice": 6,
     "eye-vision": 4,
     "no-taxonomy": 3,
-    "nursing": 3,
-    "chiropractic": 1,
-    "facility": 1
+    "nursing": 2,
+    "facility": 1,
+    "chiropractic": 1
    }
   },
   {
    "zip": "00918",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 946,
-   "with_role": 311,
+   "practitioners": 968,
+   "with_role": 326,
    "orgs_provider": 496,
    "orgs_ein": 22,
    "locations": 817,
    "lat": 18.41506,
    "lng": -66.06388,
    "by_category": {
-    "physician": 389,
-    "behavioral-health": 204,
-    "dental": 94,
-    "pharmacy": 76,
+    "physician": 407,
+    "behavioral-health": 207,
+    "dental": 95,
+    "pharmacy": 75,
     "chiropractic": 33,
-    "other-clinical": 32,
-    "dietary": 20,
+    "other-clinical": 31,
     "eye-vision": 20,
-    "group": 16,
+    "dietary": 20,
+    "group": 17,
+    "advanced-practice": 13,
     "nursing": 13,
-    "advanced-practice": 12,
     "rehab-therapy": 11,
     "student": 11,
     "podiatry": 5,
-    "support": 3,
     "facility": 3,
+    "support": 3,
     "emergency-medical": 2,
     "no-taxonomy": 1,
     "agency": 1
@@ -4038,8 +4032,8 @@
    "zip": "00920",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 226,
-   "with_role": 60,
+   "practitioners": 224,
+   "with_role": 59,
    "orgs_provider": 107,
    "orgs_ein": 4,
    "locations": 222,
@@ -4047,19 +4041,19 @@
    "lng": -66.0898,
    "by_category": {
     "behavioral-health": 53,
-    "physician": 47,
+    "physician": 46,
     "dental": 25,
     "chiropractic": 23,
     "pharmacy": 21,
     "rehab-therapy": 18,
-    "nursing": 10,
     "other-clinical": 10,
+    "nursing": 10,
     "group": 4,
     "support": 3,
-    "dietary": 3,
     "eye-vision": 3,
     "facility": 2,
     "podiatry": 2,
+    "dietary": 2,
     "advanced-practice": 1,
     "supplier": 1
    }
@@ -4068,7 +4062,7 @@
    "zip": "00921",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 1293,
+   "practitioners": 1291,
    "with_role": 220,
    "orgs_provider": 228,
    "orgs_ein": 15,
@@ -4076,7 +4070,7 @@
    "lat": 18.3936,
    "lng": -66.08926,
    "by_category": {
-    "physician": 434,
+    "physician": 432,
     "pharmacy": 162,
     "student": 160,
     "behavioral-health": 152,
@@ -4115,26 +4109,26 @@
    "zip": "00923",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 79,
-   "with_role": 27,
+   "practitioners": 82,
+   "with_role": 31,
    "orgs_provider": 53,
    "orgs_ein": 3,
    "locations": 93,
    "lat": 18.40185,
    "lng": -66.03558,
    "by_category": {
-    "physician": 52,
+    "physician": 55,
+    "dental": 5,
     "behavioral-health": 5,
     "other-clinical": 5,
-    "dental": 5,
     "pharmacy": 4,
     "group": 2,
-    "eye-vision": 1,
-    "transport": 1,
-    "dietary": 1,
-    "emergency-medical": 1,
+    "advanced-practice": 1,
     "chiropractic": 1,
-    "advanced-practice": 1
+    "dietary": 1,
+    "transport": 1,
+    "eye-vision": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -4142,7 +4136,7 @@
    "county_fips": "72127",
    "county": "San Juan Municipio",
    "practitioners": 139,
-   "with_role": 24,
+   "with_role": 23,
    "orgs_provider": 75,
    "orgs_ein": 7,
    "locations": 125,
@@ -4150,29 +4144,29 @@
    "lng": -66.01387,
    "by_category": {
     "pharmacy": 39,
-    "behavioral-health": 23,
-    "physician": 21,
+    "behavioral-health": 24,
+    "physician": 20,
     "dental": 15,
-    "other-clinical": 9,
     "rehab-therapy": 9,
+    "other-clinical": 9,
     "chiropractic": 5,
     "eye-vision": 4,
     "group": 3,
-    "dietary": 2,
-    "student": 2,
     "advanced-practice": 2,
+    "dietary": 2,
     "podiatry": 2,
-    "support": 1,
+    "student": 2,
     "nursing": 1,
-    "facility": 1
+    "facility": 1,
+    "support": 1
    }
   },
   {
    "zip": "00925",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 136,
-   "with_role": 32,
+   "practitioners": 138,
+   "with_role": 33,
    "orgs_provider": 62,
    "orgs_ein": 5,
    "locations": 135,
@@ -4180,50 +4174,49 @@
    "lng": -66.05147,
    "by_category": {
     "physician": 44,
-    "behavioral-health": 37,
+    "behavioral-health": 38,
     "pharmacy": 13,
     "dental": 12,
-    "other-clinical": 7,
+    "other-clinical": 8,
     "eye-vision": 7,
     "dietary": 6,
     "rehab-therapy": 3,
-    "nursing": 2,
     "facility": 2,
-    "group": 1,
+    "nursing": 2,
+    "emergency-medical": 1,
     "support": 1,
-    "emergency-medical": 1
+    "group": 1
    }
   },
   {
    "zip": "00926",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 667,
-   "with_role": 152,
+   "practitioners": 594,
+   "with_role": 105,
    "orgs_provider": 315,
    "orgs_ein": 15,
    "locations": 416,
    "lat": 18.37135,
    "lng": -66.05654,
    "by_category": {
-    "physician": 198,
-    "student": 122,
-    "behavioral-health": 100,
+    "physician": 141,
+    "student": 127,
     "pharmacy": 98,
-    "dental": 39,
-    "rehab-therapy": 35,
-    "chiropractic": 15,
-    "other-clinical": 12,
-    "dietary": 11,
+    "behavioral-health": 95,
+    "dental": 35,
+    "rehab-therapy": 34,
+    "chiropractic": 13,
+    "dietary": 10,
     "eye-vision": 10,
-    "nursing": 7,
-    "group": 7,
+    "other-clinical": 8,
+    "nursing": 6,
     "advanced-practice": 6,
+    "group": 5,
     "facility": 2,
     "agency": 2,
     "podiatry": 1,
-    "emergency-medical": 1,
-    "support": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -4238,17 +4231,17 @@
    "lat": 18.39087,
    "lng": -66.06938,
    "by_category": {
-    "physician": 51,
-    "behavioral-health": 31,
-    "dental": 14,
+    "physician": 50,
+    "behavioral-health": 30,
     "pharmacy": 14,
-    "rehab-therapy": 9,
+    "dental": 14,
+    "rehab-therapy": 11,
     "chiropractic": 7,
     "nursing": 6,
     "eye-vision": 5,
     "other-clinical": 3,
-    "dietary": 1,
-    "facility": 1
+    "facility": 1,
+    "dietary": 1
    }
   },
   {
@@ -4280,44 +4273,45 @@
    "by_category": {
     "physician": 3,
     "behavioral-health": 3,
-    "dental": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "dental": 1
    }
   },
   {
    "zip": "00935",
    "county_fips": null,
    "county": null,
-   "practitioners": 456,
-   "with_role": 165,
+   "practitioners": 469,
+   "with_role": 170,
    "orgs_provider": 80,
    "orgs_ein": 5,
    "locations": 529,
    "lat": 18.41046,
    "lng": -66.06053,
    "by_category": {
-    "physician": 307,
-    "student": 61,
-    "group": 20,
+    "physician": 317,
+    "student": 62,
+    "group": 21,
     "dental": 14,
     "pharmacy": 9,
     "nursing": 9,
     "no-taxonomy": 8,
-    "dietary": 6,
     "rehab-therapy": 6,
-    "other-clinical": 5,
+    "dietary": 6,
     "behavioral-health": 5,
+    "other-clinical": 5,
     "advanced-practice": 2,
     "facility": 2,
     "support": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "emergency-medical": 1
    }
   },
   {
    "zip": "00936",
    "county_fips": "72127",
    "county": "San Juan Municipio",
-   "practitioners": 1,
+   "practitioners": 2,
    "with_role": 0,
    "orgs_provider": 0,
    "orgs_ein": 0,
@@ -4325,14 +4319,15 @@
    "lat": 18.41816,
    "lng": -66.07673,
    "by_category": {
-    "other-clinical": 1
+    "other-clinical": 1,
+    "behavioral-health": 1
    }
   },
   {
    "zip": "00939",
    "county_fips": null,
    "county": null,
-   "practitioners": 3,
+   "practitioners": 2,
    "with_role": 1,
    "orgs_provider": 1,
    "orgs_ein": 1,
@@ -4341,7 +4336,6 @@
    "lng": -66.06053,
    "by_category": {
     "other-clinical": 1,
-    "group": 1,
     "physician": 1
    }
   },
@@ -4349,7 +4343,7 @@
    "zip": "00949",
    "county_fips": "72137",
    "county": "Toa Baja Municipio",
-   "practitioners": 142,
+   "practitioners": 143,
    "with_role": 40,
    "orgs_provider": 76,
    "orgs_ein": 5,
@@ -4360,15 +4354,15 @@
     "physician": 47,
     "behavioral-health": 34,
     "pharmacy": 28,
-    "dental": 9,
-    "chiropractic": 5,
+    "dental": 10,
+    "chiropractic": 6,
     "dietary": 4,
+    "rehab-therapy": 3,
     "other-clinical": 3,
     "support": 3,
-    "rehab-therapy": 3,
+    "group": 2,
     "advanced-practice": 2,
-    "student": 2,
-    "group": 2
+    "student": 1
    }
   },
   {
@@ -4403,11 +4397,11 @@
     "dental": 4,
     "eye-vision": 2,
     "facility": 2,
+    "group": 1,
     "chiropractic": 1,
-    "behavioral-health": 1,
     "dietary": 1,
-    "emergency-medical": 1,
-    "group": 1
+    "behavioral-health": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -4429,39 +4423,39 @@
    "zip": "00956",
    "county_fips": "72021",
    "county": "Bayam\u00c3\u00b3n Municipio",
-   "practitioners": 356,
-   "with_role": 68,
+   "practitioners": 351,
+   "with_role": 65,
    "orgs_provider": 143,
    "orgs_ein": 2,
    "locations": 204,
    "lat": 18.3724,
    "lng": -66.15744,
    "by_category": {
-    "physician": 97,
-    "behavioral-health": 52,
+    "physician": 94,
+    "behavioral-health": 53,
     "pharmacy": 47,
     "rehab-therapy": 44,
     "dental": 28,
-    "student": 25,
+    "student": 23,
     "other-clinical": 15,
     "nursing": 10,
     "group": 8,
-    "eye-vision": 8,
     "support": 7,
+    "eye-vision": 7,
     "chiropractic": 6,
     "facility": 3,
-    "supplier": 2,
     "dietary": 2,
-    "podiatry": 1,
-    "no-taxonomy": 1
+    "supplier": 2,
+    "no-taxonomy": 1,
+    "podiatry": 1
    }
   },
   {
    "zip": "00957",
    "county_fips": "72021",
    "county": "Bayam\u00c3\u00b3n Municipio",
-   "practitioners": 71,
-   "with_role": 14,
+   "practitioners": 72,
+   "with_role": 15,
    "orgs_provider": 36,
    "orgs_ein": 2,
    "locations": 71,
@@ -4472,43 +4466,43 @@
     "physician": 14,
     "dental": 11,
     "rehab-therapy": 9,
+    "eye-vision": 7,
     "behavioral-health": 6,
-    "eye-vision": 6,
+    "dietary": 1,
+    "support": 1,
     "nursing": 1,
     "chiropractic": 1,
-    "support": 1,
-    "group": 1,
     "transport": 1,
-    "dietary": 1
+    "group": 1
    }
   },
   {
    "zip": "00959",
    "county_fips": "72021",
    "county": "Bayam\u00c3\u00b3n Municipio",
-   "practitioners": 445,
-   "with_role": 200,
+   "practitioners": 450,
+   "with_role": 203,
    "orgs_provider": 160,
    "orgs_ein": 7,
    "locations": 293,
    "lat": 18.39136,
    "lng": -66.15124,
    "by_category": {
-    "physician": 208,
+    "physician": 210,
     "pharmacy": 56,
-    "behavioral-health": 45,
+    "behavioral-health": 47,
     "dental": 28,
     "rehab-therapy": 21,
-    "other-clinical": 20,
     "chiropractic": 20,
-    "eye-vision": 14,
+    "other-clinical": 20,
+    "eye-vision": 15,
     "dietary": 11,
     "group": 7,
     "advanced-practice": 5,
     "facility": 3,
-    "nursing": 2,
-    "podiatry": 2,
     "emergency-medical": 2,
+    "podiatry": 2,
+    "nursing": 2,
     "supplier": 1
    }
   },
@@ -4516,39 +4510,39 @@
    "zip": "00961",
    "county_fips": "72021",
    "county": "Bayam\u00c3\u00b3n Municipio",
-   "practitioners": 533,
-   "with_role": 179,
+   "practitioners": 545,
+   "with_role": 186,
    "orgs_provider": 267,
    "orgs_ein": 17,
    "locations": 405,
    "lat": 18.40161,
    "lng": -66.14969,
    "by_category": {
-    "physician": 261,
-    "behavioral-health": 50,
+    "physician": 272,
+    "behavioral-health": 51,
     "other-clinical": 43,
     "pharmacy": 40,
-    "rehab-therapy": 32,
+    "rehab-therapy": 31,
     "dental": 31,
     "eye-vision": 16,
     "dietary": 15,
+    "advanced-practice": 11,
     "group": 11,
-    "advanced-practice": 10,
-    "nursing": 6,
     "podiatry": 6,
+    "nursing": 5,
     "chiropractic": 5,
     "student": 4,
-    "emergency-medical": 1,
+    "support": 2,
     "facility": 1,
-    "support": 1
+    "emergency-medical": 1
    }
   },
   {
    "zip": "00962",
    "county_fips": "72033",
    "county": "Cata\u00c3\u00b1o Municipio",
-   "practitioners": 49,
-   "with_role": 9,
+   "practitioners": 51,
+   "with_role": 10,
    "orgs_provider": 31,
    "orgs_ein": 3,
    "locations": 36,
@@ -4557,12 +4551,12 @@
    "by_category": {
     "rehab-therapy": 19,
     "behavioral-health": 13,
-    "physician": 6,
+    "physician": 7,
+    "dental": 4,
     "pharmacy": 4,
-    "dental": 3,
     "other-clinical": 2,
-    "supplier": 1,
-    "group": 1
+    "group": 1,
+    "supplier": 1
    }
   },
   {
@@ -4588,25 +4582,25 @@
    "zip": "00966",
    "county_fips": "72061",
    "county": "Guaynabo Municipio",
-   "practitioners": 150,
-   "with_role": 60,
+   "practitioners": 122,
+   "with_role": 43,
    "orgs_provider": 74,
    "orgs_ein": 3,
    "locations": 87,
    "lat": 18.39751,
    "lng": -66.11489,
    "by_category": {
-    "physician": 46,
-    "behavioral-health": 28,
+    "behavioral-health": 25,
+    "physician": 24,
     "pharmacy": 23,
     "dental": 14,
     "chiropractic": 10,
-    "rehab-therapy": 6,
+    "rehab-therapy": 5,
     "dietary": 5,
-    "student": 5,
-    "group": 5,
+    "group": 4,
     "eye-vision": 4,
-    "other-clinical": 2,
+    "other-clinical": 3,
+    "student": 3,
     "facility": 2
    }
   },
@@ -4615,7 +4609,7 @@
    "county_fips": "72061",
    "county": "Guaynabo Municipio",
    "practitioners": 899,
-   "with_role": 66,
+   "with_role": 64,
    "orgs_provider": 90,
    "orgs_ein": 4,
    "locations": 144,
@@ -4623,9 +4617,9 @@
    "lng": -66.10251,
    "by_category": {
     "emergency-medical": 758,
-    "physician": 60,
-    "behavioral-health": 15,
-    "pharmacy": 15,
+    "physician": 58,
+    "behavioral-health": 16,
+    "pharmacy": 16,
     "dental": 12,
     "rehab-therapy": 9,
     "other-clinical": 7,
@@ -4635,40 +4629,39 @@
     "dietary": 2,
     "student": 2,
     "advanced-practice": 2,
+    "nursing": 1,
     "transport": 1,
-    "support": 1,
-    "nursing": 1
+    "support": 1
    }
   },
   {
    "zip": "00969",
    "county_fips": "72061",
    "county": "Guaynabo Municipio",
-   "practitioners": 383,
-   "with_role": 119,
+   "practitioners": 372,
+   "with_role": 113,
    "orgs_provider": 197,
    "orgs_ein": 13,
    "locations": 251,
    "lat": 18.36512,
    "lng": -66.10743,
    "by_category": {
-    "physician": 117,
+    "physician": 110,
     "behavioral-health": 74,
-    "pharmacy": 69,
-    "dental": 33,
-    "other-clinical": 17,
-    "rehab-therapy": 15,
-    "dietary": 12,
-    "chiropractic": 10,
-    "group": 9,
-    "eye-vision": 6,
-    "nursing": 6,
-    "student": 4,
+    "pharmacy": 70,
+    "dental": 34,
+    "other-clinical": 16,
+    "rehab-therapy": 14,
+    "dietary": 13,
+    "chiropractic": 9,
+    "group": 8,
+    "nursing": 7,
+    "eye-vision": 4,
     "advanced-practice": 3,
     "support": 3,
+    "student": 3,
     "podiatry": 2,
-    "facility": 2,
-    "emergency-medical": 1
+    "facility": 2
    }
   },
   {
@@ -4683,8 +4676,8 @@
    "lat": 18.35914,
    "lng": -66.11229,
    "by_category": {
-    "advanced-practice": 1,
     "rehab-therapy": 1,
+    "advanced-practice": 1,
     "pharmacy": 1
    }
   },
@@ -4707,7 +4700,7 @@
    "zip": "00976",
    "county_fips": "72139",
    "county": "Trujillo Alto Municipio",
-   "practitioners": 118,
+   "practitioners": 120,
    "with_role": 57,
    "orgs_provider": 50,
    "orgs_ein": 2,
@@ -4716,19 +4709,19 @@
    "lng": -66.01708,
    "by_category": {
     "physician": 52,
-    "pharmacy": 17,
+    "pharmacy": 18,
     "behavioral-health": 17,
     "dental": 10,
     "group": 4,
     "eye-vision": 4,
+    "chiropractic": 3,
     "rehab-therapy": 3,
-    "dietary": 2,
-    "chiropractic": 2,
     "emergency-medical": 2,
+    "dietary": 2,
     "other-clinical": 2,
-    "transport": 1,
     "support": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "transport": 1
    }
   },
   {
@@ -4760,8 +4753,8 @@
     "physician": 13,
     "dental": 7,
     "behavioral-health": 4,
-    "chiropractic": 3,
     "rehab-therapy": 3,
+    "chiropractic": 3,
     "support": 1,
     "nursing": 1
    }
@@ -4770,7 +4763,7 @@
    "zip": "00982",
    "county_fips": "72031",
    "county": "Carolina Municipio",
-   "practitioners": 42,
+   "practitioners": 43,
    "with_role": 12,
    "orgs_provider": 34,
    "orgs_ein": 2,
@@ -4783,34 +4776,35 @@
     "dental": 4,
     "support": 3,
     "pharmacy": 3,
-    "eye-vision": 2,
     "rehab-therapy": 2,
+    "eye-vision": 2,
     "dietary": 2,
     "nursing": 1,
-    "group": 1,
-    "facility": 1
+    "other-clinical": 1,
+    "facility": 1,
+    "group": 1
    }
   },
   {
    "zip": "00983",
    "county_fips": "72031",
    "county": "Carolina Municipio",
-   "practitioners": 60,
-   "with_role": 23,
+   "practitioners": 61,
+   "with_role": 24,
    "orgs_provider": 32,
    "orgs_ein": 1,
    "locations": 72,
    "lat": 18.4059,
    "lng": -65.97623,
    "by_category": {
-    "physician": 23,
+    "physician": 24,
     "eye-vision": 9,
     "dental": 8,
     "other-clinical": 5,
     "behavioral-health": 5,
-    "pharmacy": 3,
     "dietary": 3,
     "chiropractic": 3,
+    "pharmacy": 3,
     "podiatry": 1
    }
   },
@@ -4818,7 +4812,7 @@
    "zip": "00985",
    "county_fips": "72031",
    "county": "Carolina Municipio",
-   "practitioners": 133,
+   "practitioners": 132,
    "with_role": 31,
    "orgs_provider": 56,
    "orgs_ein": 3,
@@ -4830,23 +4824,23 @@
     "physician": 32,
     "pharmacy": 18,
     "rehab-therapy": 16,
-    "dental": 11,
-    "group": 4,
+    "dental": 10,
     "other-clinical": 4,
     "eye-vision": 4,
-    "chiropractic": 3,
+    "group": 4,
     "dietary": 3,
+    "chiropractic": 3,
     "supplier": 2,
     "emergency-medical": 1,
-    "support": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "support": 1
    }
   },
   {
    "zip": "00987",
    "county_fips": "72031",
    "county": "Carolina Municipio",
-   "practitioners": 81,
+   "practitioners": 83,
    "with_role": 33,
    "orgs_provider": 29,
    "orgs_ein": 2,
@@ -4855,19 +4849,19 @@
    "lng": -65.96445,
    "by_category": {
     "pharmacy": 33,
-    "physician": 21,
+    "physician": 23,
     "eye-vision": 6,
     "other-clinical": 4,
     "chiropractic": 4,
     "behavioral-health": 3,
     "group": 2,
-    "dental": 2,
-    "supplier": 2,
     "rehab-therapy": 2,
-    "dietary": 1,
-    "support": 1
+    "supplier": 2,
+    "dental": 2,
+    "support": 1,
+    "dietary": 1
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner and organization geography use the physical address: the first entry typed physical (or both), else the first with use work, else the first. A practitioner listing physical addresses in more than one state is counted once, in the first of them. Until 2026-10-26 (organizations) and 2026-10-27 (practitioners) both used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations and 119,906 of 7,481,907 practitioners in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

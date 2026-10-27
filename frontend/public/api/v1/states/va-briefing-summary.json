@@ -4,57 +4,57 @@
   "medicaid_program": "Cardinal Care",
   "agency": "Department of Medical Assistance Services (DMAS)",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:52:27+00:00",
+  "generated_at": "2026-10-27T14:17:42+00:00",
   "methodology_version": "0.2.0",
   "denominators": {
-    "practitioner": 129075,
-    "organization": 37133,
+    "practitioner": 132116,
+    "organization": 38517,
     "location": 62083
   },
   "findings": {
     "npi-taxonomy-correctness": {
-      "headline": "124,260 of 129,075 VA practitioner NPIs (96.2696%) match NPPES; 286 are flagged deactivated in NPPES while still active in the federal NDH.",
-      "state_pct": 96.2696,
-      "state_numerator": 124260,
-      "state_denominator": 129075
+      "headline": "127,038 of 132,116 VA practitioner NPIs (96.1564%) match NPPES; 290 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_pct": 96.1564,
+      "state_numerator": 127038,
+      "state_denominator": 132116
     },
     "duplicate-detection": {
-      "headline": "VA has 37,133 Organization resources covering 35,903 unique NPIs \u2014 1,230 excess resources (3.3124%) appear duplicated.",
-      "state_pct": 3.3124,
-      "state_numerator": 1230,
-      "state_denominator": 37133
+      "headline": "VA has 38,517 Organization resources covering 37,264 unique NPIs \u2014 1,253 excess resources (3.2531%) appear duplicated.",
+      "state_pct": 3.2531,
+      "state_numerator": 1253,
+      "state_denominator": 38517
     },
     "temporal-staleness": {
-      "headline": "228,291 of 228,291 VA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "headline": "232,716 of 232,716 VA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "state_pct": 100.0,
-      "state_numerator": 228291,
-      "state_denominator": 228291
+      "state_numerator": 232716,
+      "state_denominator": 232716
     }
   },
   "federally_excluded_cohort": {
-    "total_critical": 108,
+    "total_critical": 110,
     "reason_breakdown": [
       {
         "reasons": [
           "oig_excluded"
         ],
-        "count": 55,
-        "pct_of_critical": 50.93
+        "count": 58,
+        "pct_of_critical": 52.73
       },
       {
         "reasons": [
           "oig_excluded",
           "sam_excluded"
         ],
-        "count": 51,
-        "pct_of_critical": 47.22
+        "count": 50,
+        "pct_of_critical": 45.45
       },
       {
         "reasons": [
           "sam_excluded"
         ],
         "count": 2,
-        "pct_of_critical": 1.85
+        "pct_of_critical": 1.82
       }
     ],
     "top_samples": [
@@ -105,18 +105,6 @@
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1033277322"
-      },
-      {
-        "npi": "1053360966",
-        "name": "FUENTES, EDWIN",
-        "score": 3.0,
-        "reason_codes": [
-          "oig_excluded",
-          "sam_excluded"
-        ],
-        "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-        "sam_lookup_url": "https://sam.gov/search/?index=ex",
-        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1053360966"
       },
       {
         "npi": "1073557047",
@@ -177,6 +165,18 @@
         "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
         "sam_lookup_url": "https://sam.gov/search/?index=ex",
         "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144277765"
+      },
+      {
+        "npi": "1164482980",
+        "name": "SIMON, DERRON",
+        "score": 3.0,
+        "reason_codes": [
+          "oig_excluded",
+          "sam_excluded"
+        ],
+        "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+        "sam_lookup_url": "https://sam.gov/search/?index=ex",
+        "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1164482980"
       }
     ],
     "all_npis_csv": "/api/v1/states/va-cohort-critical.csv"

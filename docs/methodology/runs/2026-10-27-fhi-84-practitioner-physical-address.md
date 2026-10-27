@@ -63,7 +63,8 @@ and `--check`.
 | Explorer | PA 227,917 practitioners, 44.0% with a role | 225,413, 43.4%. Organization figures unchanged |
 | High-risk cohort | | 9,999 rows, same NPIs; 112 change state. VA critical 108 to 110 |
 | H24, H25 state charts | | small moves per state; the largest LEIE move is Texas, 380 to 374. Headlines count practitioners nationally and do not move |
-| `states/<st>-cohort-critical.csv`, VA briefing, H26 | | regenerated from the new cohort |
+| `states/<st>-cohort-critical.csv` (52 files, behind `/for-state-medicaid/<state>`) | 51 of 52 did not match the published national cohort: they had last been built on 2026-10-12, before the 2026-10-07 reload | rebuilt from the current cohort; 36 differ from what a rebuild before this change would have produced |
+| VA briefing, H26 `mco-exposure-va.json` | 5 of 108 critical VA providers in at least one of 4 payer directories (all Cigna) | 5 of 110 (all Cigna); payer directories probed live on 2026-10-27 |
 | `pa-reach-same-method.json` | 2026-08-20 22.9% (52.1% of affiliated), 3.5% deterministic; 2026-10-07 22.3% (50.3%), 2.9% | 2026-08-20 23.0% (52.8%), 3.5%; 2026-10-07 22.2% (50.8%), 2.8%. Both releases rerun on the physical address from re-exported parquet |
 
 ### The same-method pair

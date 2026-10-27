@@ -3,11 +3,11 @@
   "state_name": "New Jersey",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:40:54+00:00",
+  "generated_at": "2026-10-27T14:07:57+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 144824,
+    "practitioner": 144065,
     "organization": 54770,
     "location": 74026
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 139720,
-      "state_denominator": 144824,
-      "state_pct": 96.4757,
+      "state_numerator": 139292,
+      "state_denominator": 144065,
+      "state_pct": 96.6869,
       "national_pct": 97.7651,
-      "state_headline": "139,720 of 144,824 NJ practitioner NPIs (96.4757%) match NPPES; 377 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "139,292 of 144,065 NJ practitioner NPIs (96.6869%) match NPPES; 376 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 273619,
-      "state_denominator": 273619,
+      "state_numerator": 272860,
+      "state_denominator": 272860,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "273,619 of 273,619 NJ-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "272,860 of 272,860 NJ-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -118,6 +118,14 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
+      "npi": "1134270903",
+      "display_name": "POET, ALBERT",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2008-05-20 (exclusion type 1128a3)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1134270903",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
       "npi": "1053443705",
       "display_name": "MELKER, NEIL",
       "flagged_by": "oig-leie-exclusions",
@@ -140,15 +148,7 @@
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-11-19 (exclusion type 1128a1)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1093835308",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
-      "npi": "1972681674",
-      "display_name": "EATOUGH, PHILIP",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128a4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1972681674",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NJ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five NJ practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

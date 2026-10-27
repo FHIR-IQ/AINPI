@@ -2,10 +2,10 @@
   "state": "PA",
   "slug": "pa-system-endpoint-gap",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-16T23:34:31+00:00",
+  "generated_at": "2026-10-27T14:16:26+00:00",
   "methodology_version": "0.7.3-draft",
   "question": "How do the largest health systems in the connectivity ledger reach their endpoints, and why did the system table show zero endpoints for them before FHI-73?",
-  "answer": "The zero the system table showed before FHI-73 was not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the system's own Epic brand lists none of its member organizations' NPIs. The systems hold 21,963 distinct clinicians. The system rollup now counts every tier the practitioner funnel counts, each labelled. Through a member organization or CMS enrollment, 21,460 of them reach an endpoint: 0 through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs (the deterministic tiers), 524 through a vendor NPI on a practice-wide or brand-wide list, 18,583 through alias, name or brand resolution (H53) and 2,353 through CMS enrollment (any enrolled group; the ledger counts enrollment only when it lands on the system's own endpoint).",
+  "answer": "The zero the system table showed before FHI-73 was not an absence. 6 of 6 systems publish a FHIR endpoint in Epic's brand file, and the NDH itself carries that endpoint for 5. For 5 of those 5, every copy has either no managingOrganization or one holding no practitioner roles in the state. In 6 of 6 no member organization carries partOf, and in 6 of 6 the system's own Epic brand lists none of its member organizations' NPIs. The systems hold 21,937 distinct clinicians. The system rollup now counts every tier the practitioner funnel counts, each labelled. Through a member organization or CMS enrollment, 21,432 of them reach an endpoint: 0 through the NDH or a vendor NPI on a URL listing 10 or fewer NPIs (the deterministic tiers), 524 through a vendor NPI on a practice-wide or brand-wide list, 18,537 through alias, name or brand resolution (H53) and 2,371 through CMS enrollment (any enrolled group; the ledger counts enrollment only when it lands on the system's own endpoint).",
   "sources": {
     "systems": "/api/v1/states/pa-connectivity.json (grouping rebuilt with analysis/org_systems.build_systems)",
     "organizations": "/api/v1/states/pa-org-endpoint-resolution.csv (H53)",
@@ -13,13 +13,13 @@
     "vendor_attribution": "/api/v1/findings/vendor-endpoint-attribution.csv (H51)",
     "epic_brands": {
       "url": "https://open.epic.com/Endpoints/Brands",
-      "fetched": "2026-10-14"
+      "fetched": "2026-10-27"
     },
     "warehouse": "cms_npd 2026-10-07: practitioner, practitioner_role, organization, endpoint; bigquery-public-data.nppes.npi_raw (parent_organization_lbn only)"
   },
   "positive_control": {
     "note": "The run refuses to write unless every check below holds, so a zero in this file is a measured absence.",
-    "epic_brands_parsed": 1282,
+    "epic_brands_parsed": 1290,
     "epic_brands_floor": 500,
     "vendor_hosts_looked_up": [
       "epicent-prd-rp.upmc.com",
@@ -46,8 +46,8 @@
       "label": "UNIVERSITY OF PITTSBURGH",
       "basis": "brand-name",
       "organizations": 34,
-      "practitioner_org_links": 17882,
-      "practitioners_distinct": 6793,
+      "practitioner_org_links": 17619,
+      "practitioners_distinct": 6695,
       "ledger_endpoint_count": 1,
       "chain": {
         "member_organizations": 34,
@@ -69,17 +69,17 @@
         "members_with_vendor_published_npi": 0
       },
       "reach": {
-        "practitioners": 6793,
+        "practitioners": 6695,
         "strict": 0,
         "vendor_list": 0,
-        "resolution": 6751,
+        "resolution": 6653,
         "enrollment": 5,
         "none": 37,
-        "reaches_any": 6756,
-        "reaches_systems_own_endpoint": 6756,
-        "resolution_on_own_domain": 6751,
+        "reaches_any": 6658,
+        "reaches_systems_own_endpoint": 6658,
+        "resolution_on_own_domain": 6653,
         "enrollment_on_own_domain": 5,
-        "reaches_any_pct": 99.5
+        "reaches_any_pct": 99.4
       },
       "vendor_brands": [
         {
@@ -188,8 +188,8 @@
       "label": "GEISINGER",
       "basis": "brand-name",
       "organizations": 120,
-      "practitioner_org_links": 16799,
-      "practitioners_distinct": 5199,
+      "practitioner_org_links": 16842,
+      "practitioners_distinct": 5200,
       "ledger_endpoint_count": 1,
       "chain": {
         "member_organizations": 120,
@@ -209,15 +209,15 @@
         "members_with_vendor_published_npi": 0
       },
       "reach": {
-        "practitioners": 5199,
+        "practitioners": 5200,
         "strict": 0,
         "vendor_list": 0,
-        "resolution": 5199,
+        "resolution": 5200,
         "enrollment": 0,
         "none": 0,
-        "reaches_any": 5199,
-        "reaches_systems_own_endpoint": 5199,
-        "resolution_on_own_domain": 5199,
+        "reaches_any": 5200,
+        "reaches_systems_own_endpoint": 5200,
+        "resolution_on_own_domain": 5200,
         "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
@@ -237,27 +237,27 @@
             {
               "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATIO",
               "npi": "1205928967",
-              "practitioners": 309
+              "practitioners": 295
             },
             {
               "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
               "npi": "1083412084",
-              "practitioners": 272
+              "practitioners": 258
             },
             {
               "name": "CARING COMMUNITY HEALTH CENTER",
               "npi": "1679038293",
-              "practitioners": 95
+              "practitioners": 97
             },
             {
               "name": "EVANGELICAL MEDICAL SERVICES FOUNDATION",
               "npi": "1295834984",
-              "practitioners": 89
+              "practitioners": 85
             },
             {
               "name": "EVANGELICAL MEDICAL SERVICES ORGANIZATION",
               "npi": "1942227632",
-              "practitioners": 59
+              "practitioners": 56
             }
           ],
           "npis_h51_csv_keeps_for_these_urls": [
@@ -333,14 +333,14 @@
       "system_key": "brand:ST LUKE",
       "label": "ST LUKE",
       "basis": "brand-name",
-      "organizations": 257,
-      "practitioner_org_links": 8651,
-      "practitioners_distinct": 3029,
+      "organizations": 258,
+      "practitioner_org_links": 8757,
+      "practitioners_distinct": 3061,
       "ledger_endpoint_count": 2,
       "chain": {
-        "member_organizations": 257,
-        "members_with_npi": 257,
-        "members_found_in_warehouse": 257,
+        "member_organizations": 258,
+        "members_with_npi": 258,
+        "members_found_in_warehouse": 258,
         "members_with_organization_endpoint_reference": 0,
         "member_endpoint_references_by_type": {},
         "member_referenced_fhir_hosts": {},
@@ -349,23 +349,23 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
-          "brand-state": 226,
-          "name-state": 26,
+          "brand-state": 227,
           "npi-list": 2,
+          "name-state": 26,
           "unresolved": 3
         },
         "members_with_vendor_published_npi": 2
       },
       "reach": {
-        "practitioners": 3029,
+        "practitioners": 3061,
         "strict": 0,
-        "vendor_list": 99,
-        "resolution": 2929,
+        "vendor_list": 98,
+        "resolution": 2962,
         "enrollment": 1,
         "none": 0,
-        "reaches_any": 3029,
-        "reaches_systems_own_endpoint": 3027,
-        "resolution_on_own_domain": 2929,
+        "reaches_any": 3061,
+        "reaches_systems_own_endpoint": 3059,
+        "resolution_on_own_domain": 2962,
         "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
@@ -390,7 +390,7 @@
             {
               "name": "GASTROENTEROLOGY ASSOCIATES LTD",
               "npi": "1518959360",
-              "practitioners": 7
+              "practitioners": 6
             },
             {
               "name": "ST LUKE'S HOSPITAL",
@@ -493,8 +493,8 @@
       "label": "AHN",
       "basis": "brand-name",
       "organizations": 59,
-      "practitioner_org_links": 6472,
-      "practitioners_distinct": 3215,
+      "practitioner_org_links": 6548,
+      "practitioners_distinct": 3256,
       "ledger_endpoint_count": 2,
       "chain": {
         "member_organizations": 59,
@@ -516,17 +516,17 @@
         "members_with_vendor_published_npi": 11
       },
       "reach": {
-        "practitioners": 3215,
+        "practitioners": 3256,
         "strict": 0,
-        "vendor_list": 310,
+        "vendor_list": 312,
         "resolution": 0,
-        "enrollment": 2702,
-        "none": 203,
-        "reaches_any": 3012,
-        "reaches_systems_own_endpoint": 2673,
+        "enrollment": 2731,
+        "none": 213,
+        "reaches_any": 3043,
+        "reaches_systems_own_endpoint": 2701,
         "resolution_on_own_domain": 0,
-        "enrollment_on_own_domain": 2650,
-        "reaches_any_pct": 93.7
+        "enrollment_on_own_domain": 2678,
+        "reaches_any_pct": 93.5
       },
       "vendor_brands": [
         {
@@ -640,14 +640,14 @@
       "system_key": "brand:PINNACLE",
       "label": "PINNACLE",
       "basis": "brand-name",
-      "organizations": 213,
-      "practitioner_org_links": 5904,
-      "practitioners_distinct": 2382,
+      "organizations": 212,
+      "practitioner_org_links": 5936,
+      "practitioners_distinct": 2390,
       "ledger_endpoint_count": 2,
       "chain": {
-        "member_organizations": 213,
-        "members_with_npi": 213,
-        "members_found_in_warehouse": 213,
+        "member_organizations": 212,
+        "members_with_npi": 212,
+        "members_found_in_warehouse": 212,
         "members_with_organization_endpoint_reference": 1,
         "member_endpoint_references_by_type": {
           "hl7-fhir-rest": 1
@@ -660,24 +660,24 @@
         "members_with_partof_to_endpoint_holder": 0,
         "partof_targets": [],
         "members_by_h53_tier": {
+          "unresolved": 33,
           "alias": 167,
-          "npi-list": 12,
-          "unresolved": 34
+          "npi-list": 12
         },
         "members_with_vendor_published_npi": 12
       },
       "reach": {
-        "practitioners": 2382,
+        "practitioners": 2390,
         "strict": 0,
-        "vendor_list": 161,
-        "resolution": 1782,
-        "enrollment": 117,
-        "none": 322,
-        "reaches_any": 2060,
-        "reaches_systems_own_endpoint": 1817,
-        "resolution_on_own_domain": 1782,
-        "enrollment_on_own_domain": 33,
-        "reaches_any_pct": 86.5
+        "vendor_list": 162,
+        "resolution": 1796,
+        "enrollment": 115,
+        "none": 317,
+        "reaches_any": 2073,
+        "reaches_systems_own_endpoint": 1830,
+        "resolution_on_own_domain": 1796,
+        "enrollment_on_own_domain": 32,
+        "reaches_any_pct": 86.7
       },
       "vendor_brands": [
         {
@@ -786,8 +786,8 @@
       "label": "WELLSPAN",
       "basis": "brand-name",
       "organizations": 144,
-      "practitioner_org_links": 5147,
-      "practitioners_distinct": 2956,
+      "practitioner_org_links": 5173,
+      "practitioners_distinct": 2968,
       "ledger_endpoint_count": 2,
       "chain": {
         "member_organizations": 144,
@@ -807,15 +807,15 @@
         "members_with_vendor_published_npi": 0
       },
       "reach": {
-        "practitioners": 2956,
+        "practitioners": 2968,
         "strict": 0,
         "vendor_list": 0,
-        "resolution": 2956,
+        "resolution": 2968,
         "enrollment": 0,
         "none": 0,
-        "reaches_any": 2956,
-        "reaches_systems_own_endpoint": 2956,
-        "resolution_on_own_domain": 2955,
+        "reaches_any": 2968,
+        "reaches_systems_own_endpoint": 2968,
+        "resolution_on_own_domain": 2967,
         "enrollment_on_own_domain": 0,
         "reaches_any_pct": 100.0
       },
@@ -827,7 +827,7 @@
           "urls": [
             "https://interconnect.wellspan.org/interconnect-prd-oauth2/api/fhir/r4"
           ],
-          "care_sites": 774,
+          "care_sites": 776,
           "npis_published": 1,
           "npis_matching_members": [],
           "npis_matching_any_ndh_org_in_state": 1,
@@ -835,7 +835,7 @@
             {
               "name": "HANOVER FAMILY PRACTICE",
               "npi": "1235197104",
-              "practitioners": 18
+              "practitioners": 16
             }
           ],
           "npis_h51_csv_keeps_for_these_urls": [
@@ -892,8 +892,8 @@
     "system_practitioners_were_link_sums": {
       "status": "fixed in FHI-73",
       "note": "Before FHI-73 the ledger's per-system `practitioners` was the sum of each member organization's practitioner count, so a clinician with roles at several member organizations counted once per organization. It now counts distinct clinicians; the old sum is kept as practitioner_org_links.",
-      "practitioner_org_links_in_these_systems": 60855,
-      "distinct_practitioners_in_these_systems": 21963,
+      "practitioner_org_links_in_these_systems": 60875,
+      "distinct_practitioners_in_these_systems": 21937,
       "where": "fixed in analysis/org_systems.py build_systems(), which collects distinct practitioner NPIs per system (practitioners_by_org)."
     },
     "rollup_omits_h53_tier": {
@@ -908,8 +908,8 @@
         "brand:UNIVERSITY OF PITTSBURGH": 5,
         "brand:GEISINGER": 0,
         "brand:ST LUKE": 0,
-        "brand:AHN": 2650,
-        "brand:PINNACLE": 33,
+        "brand:AHN": 2678,
+        "brand:PINNACLE": 32,
         "brand:WELLSPAN": 0
       },
       "threshold": "raised when more than half of a system's enrollment-tier reach lands on its own domain",
@@ -1015,15 +1015,15 @@
     },
     {
       "query": "pairs",
-      "bytes_billed": 0,
-      "cached": true,
-      "bq_result_cache_hit": true
+      "bytes_billed": 1164967936,
+      "cached": false,
+      "bq_result_cache_hit": false
     },
     {
       "query": "members",
-      "bytes_billed": 0,
-      "cached": true,
-      "bq_result_cache_hit": true
+      "bytes_billed": 96468992,
+      "cached": false,
+      "bq_result_cache_hit": false
     },
     {
       "query": "endpoints",
@@ -1039,13 +1039,13 @@
   ],
   "all_analysed_systems": {
     "note": "Distinct practitioners across the analysed systems, each counted once at the strongest tier any member reaches.",
-    "practitioners": 21963,
+    "practitioners": 21937,
     "strict": 0,
     "vendor_list": 524,
-    "resolution": 18583,
-    "enrollment": 2353,
-    "none": 503,
-    "reaches_any": 21460
+    "resolution": 18537,
+    "enrollment": 2371,
+    "none": 505,
+    "reaches_any": 21432
   },
   "pairwise_overlap": {
     "note": "Distinct practitioners holding roles in member organizations of both systems, and in either. Only pairs sharing at least one practitioner are listed.",
@@ -1053,95 +1053,95 @@
       {
         "a": "brand:UNIVERSITY OF PITTSBURGH",
         "b": "brand:AHN",
-        "both": 434,
-        "either": 9574
+        "both": 444,
+        "either": 9507
       },
       {
         "a": "brand:GEISINGER",
         "b": "brand:ST LUKE",
         "both": 291,
-        "either": 7937
+        "either": 7970
       },
       {
         "a": "brand:PINNACLE",
         "b": "brand:WELLSPAN",
-        "both": 174,
-        "either": 5164
+        "both": 176,
+        "either": 5182
       },
       {
         "a": "brand:UNIVERSITY OF PITTSBURGH",
         "b": "brand:PINNACLE",
-        "both": 173,
-        "either": 9002
+        "both": 169,
+        "either": 8916
       },
       {
         "a": "brand:GEISINGER",
         "b": "brand:WELLSPAN",
-        "both": 157,
-        "either": 7998
+        "both": 158,
+        "either": 8010
       },
       {
         "a": "brand:UNIVERSITY OF PITTSBURGH",
         "b": "brand:GEISINGER",
-        "both": 139,
-        "either": 11853
+        "both": 143,
+        "either": 11752
       },
       {
         "a": "brand:GEISINGER",
         "b": "brand:PINNACLE",
         "both": 90,
-        "either": 7491
+        "either": 7500
       },
       {
         "a": "brand:UNIVERSITY OF PITTSBURGH",
         "b": "brand:WELLSPAN",
-        "both": 48,
-        "either": 9701
+        "both": 51,
+        "either": 9612
       },
       {
         "a": "brand:ST LUKE",
         "b": "brand:PINNACLE",
-        "both": 42,
-        "either": 5369
+        "both": 43,
+        "either": 5408
       },
       {
         "a": "brand:GEISINGER",
         "b": "brand:AHN",
-        "both": 34,
-        "either": 8380
+        "both": 35,
+        "either": 8421
       },
       {
         "a": "brand:ST LUKE",
         "b": "brand:WELLSPAN",
-        "both": 29,
-        "either": 5956
+        "both": 31,
+        "either": 5998
       },
       {
         "a": "brand:AHN",
         "b": "brand:PINNACLE",
-        "both": 28,
-        "either": 5569
+        "both": 29,
+        "either": 5617
       },
       {
         "a": "brand:UNIVERSITY OF PITTSBURGH",
         "b": "brand:ST LUKE",
-        "both": 26,
-        "either": 9796
+        "both": 27,
+        "either": 9729
       },
       {
         "a": "brand:AHN",
         "b": "brand:WELLSPAN",
         "both": 20,
-        "either": 6151
+        "either": 6204
       },
       {
         "a": "brand:ST LUKE",
         "b": "brand:AHN",
-        "both": 12,
-        "either": 6232
+        "both": 14,
+        "either": 6303
       }
     ],
-    "sum_of_system_counts": 23574,
-    "union": 21963
+    "sum_of_system_counts": 23570,
+    "union": 21937
   }
 }

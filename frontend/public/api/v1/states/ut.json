@@ -3,11 +3,11 @@
   "state_name": "Utah",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:43:03+00:00",
+  "generated_at": "2026-10-27T14:10:45+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 68984,
+    "practitioner": 70648,
     "organization": 14370,
     "location": 22800
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 66026,
-      "state_denominator": 68984,
-      "state_pct": 95.712,
+      "state_numerator": 67381,
+      "state_denominator": 70648,
+      "state_pct": 95.3757,
       "national_pct": 97.7651,
-      "state_headline": "66,026 of 68,984 UT practitioner NPIs (95.712%) match NPPES; 92 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "67,381 of 70,648 UT practitioner NPIs (95.3757%) match NPPES; 99 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 106154,
-      "state_denominator": 106154,
+      "state_numerator": 107818,
+      "state_denominator": 107818,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "106,154 of 106,154 UT-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "107,818 of 107,818 UT-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five UT-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five UT practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

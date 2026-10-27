@@ -3,11 +3,11 @@
   "state_name": "Oklahoma",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:41:47+00:00",
+  "generated_at": "2026-10-27T14:09:01+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 80564,
+    "practitioner": 80606,
     "organization": 21690,
     "location": 31354
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 77433,
-      "state_denominator": 80564,
-      "state_pct": 96.1136,
+      "state_numerator": 77489,
+      "state_denominator": 80606,
+      "state_pct": 96.133,
       "national_pct": 97.7651,
-      "state_headline": "77,433 of 80,564 OK practitioner NPIs (96.1136%) match NPPES; 136 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "77,489 of 80,606 OK practitioner NPIs (96.133%) match NPPES; 139 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 133608,
-      "state_denominator": 133608,
+      "state_numerator": 133650,
+      "state_denominator": 133650,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "133,608 of 133,608 OK-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "133,650 of 133,650 OK-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OK-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five OK practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

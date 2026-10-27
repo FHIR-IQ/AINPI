@@ -3,7 +3,6 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1023003266,"SYKES, MATTHEW",VA,3.0,critical,oig_excluded|sam_excluded,2019-01-20,2019-01-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1023003266
 1023441318,"AVERY, SHARONDA",VA,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1023441318
 1033277322,"ZAREI, MARYAM",VA,3.0,critical,oig_excluded|sam_excluded,2018-09-20,2018-09-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033277322
-1053360966,"FUENTES, EDWIN",VA,3.0,critical,oig_excluded|sam_excluded,2018-05-20,2018-05-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1053360966
 1073557047,"YATES, JONATHAN",VA,3.0,critical,oig_excluded|sam_excluded,2021-08-19,2021-08-19,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1073557047
 1093969412,"NIAZI, SAIFULLAH",VA,3.0,critical,oig_excluded|sam_excluded,2014-09-18,2014-09-18,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1093969412
 1104801117,"VU, TUAN",VA,3.0,critical,oig_excluded|sam_excluded,2013-08-20,2013-08-20,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1104801117
@@ -53,6 +52,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1033550207,"ABDELMAGID, SAMIA",VA,1.5,critical,oig_excluded,2023-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1033550207
 1043353774,"MANDEVILLE, ADRIENNE",VA,1.5,critical,oig_excluded,2025-01-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1043353774
 1063438885,"POLLOCK, MICHAEL",VA,1.5,critical,oig_excluded,2023-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1063438885
+1083617260,"BLATSTEIN, MARC",VA,1.5,critical,oig_excluded,2006-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1083617260
 1083654669,"SAMUELS, GARFIELD",VA,1.5,critical,oig_excluded,2023-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1083654669
 1114063849,"CHEEK, LINDA",VA,1.5,critical,oig_excluded,2014-06-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114063849
 1114918752,"DIXON, DUANE",VA,1.5,critical,oig_excluded,2025-10-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1114918752
@@ -81,6 +81,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1467474882,"FEOLA, JOHN",VA,1.5,critical,oig_excluded,2018-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1467474882
 1487165973,"EWETUSA, OLUDARE",VA,1.5,critical,oig_excluded,2026-08-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1487165973
 1508503301,"LOUIS, FE'LEE",VA,1.5,critical,oig_excluded,2026-01-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1508503301
+1518969138,"METHA, SANJAY",VA,1.5,critical,oig_excluded,2026-07-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1518969138
 1538229497,"ALLIGHAM, DAVID",VA,1.5,critical,oig_excluded,2026-01-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1538229497
 1588611610,"PERWAIZ, JAVAID",VA,1.5,critical,oig_excluded,2022-06-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1588611610
 1598134173,"VAN AUKEN, JESSICA",VA,1.5,critical,oig_excluded,2025-09-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1598134173
@@ -102,6 +103,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1821019308,"COLLEY, TRACI",VA,1.5,critical,oig_excluded,2018-12-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1821019308
 1831248731,"MONTILLA, LINO",VA,1.5,critical,oig_excluded,2025-01-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1831248731
 1841215225,"MOORE, R",VA,1.5,critical,oig_excluded,2022-02-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1841215225
+1871360743,"LEPAK, ANGELA",VA,1.5,critical,oig_excluded,2025-09-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1871360743
 1891383485,"NEPAL, GANGA",VA,1.5,critical,oig_excluded,2024-01-18,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1891383485
 1902856065,"RANDALL, WENDELL",VA,1.5,critical,oig_excluded,2024-10-20,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1902856065
 1952305989,"ROBERTO, PAUL",VA,1.5,critical,oig_excluded,2024-09-19,,,https://exclusions.oig.hhs.gov/,https://sam.gov/search/?index=ex,https://npiregistry.cms.hhs.gov/provider-view/1952305989

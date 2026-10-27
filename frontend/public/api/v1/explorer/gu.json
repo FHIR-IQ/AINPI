@@ -1,11 +1,11 @@
 {
  "state": "GU",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-27T02:54:10+00:00",
+ "generated_at": "2026-10-27T14:13:54+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
-  "practitioners": 698,
-  "with_role": 303,
+  "practitioners": 707,
+  "with_role": 310,
   "orgs_provider": 233,
   "orgs_ein": 13,
   "orgs_other": 0,
@@ -16,9 +16,9 @@
  "by_category": [
   {
    "category": "physician",
-   "practitioners": 244,
-   "with_role": 184,
-   "role_pct": 75.4
+   "practitioners": 250,
+   "with_role": 189,
+   "role_pct": 75.6
   },
   {
    "category": "behavioral-health",
@@ -29,20 +29,20 @@
   {
    "category": "nursing",
    "practitioners": 71,
-   "with_role": 16,
-   "role_pct": 22.5
+   "with_role": 17,
+   "role_pct": 23.9
   },
   {
    "category": "rehab-therapy",
-   "practitioners": 62,
+   "practitioners": 63,
    "with_role": 14,
-   "role_pct": 22.6
+   "role_pct": 22.2
   },
   {
    "category": "advanced-practice",
-   "practitioners": 56,
+   "practitioners": 57,
    "with_role": 32,
-   "role_pct": 57.1
+   "role_pct": 56.1
   },
   {
    "category": "pharmacy",
@@ -111,6 +111,12 @@
    "role_pct": 100.0
   },
   {
+   "category": "no-taxonomy",
+   "practitioners": 1,
+   "with_role": 1,
+   "role_pct": 100.0
+  },
+  {
    "category": "student",
    "practitioners": 1,
    "with_role": 0,
@@ -122,17 +128,17 @@
    "county_fips": null,
    "county": "(county unknown)",
    "zip_count": 7,
-   "practitioners": 698,
-   "with_role": 303,
-   "role_pct": 43.4,
+   "practitioners": 707,
+   "with_role": 310,
+   "role_pct": 43.8,
    "orgs_provider": 233,
    "orgs_ein": 13,
    "by_category": {
-    "physician": 244,
+    "physician": 250,
     "behavioral-health": 78,
     "nursing": 71,
-    "rehab-therapy": 62,
-    "advanced-practice": 56,
+    "rehab-therapy": 63,
+    "advanced-practice": 57,
     "pharmacy": 52,
     "dental": 41,
     "other-clinical": 31
@@ -144,7 +150,7 @@
    "zip": "96910",
    "county_fips": null,
    "county": null,
-   "practitioners": 87,
+   "practitioners": 89,
    "with_role": 9,
    "orgs_provider": 26,
    "orgs_ein": 2,
@@ -152,18 +158,18 @@
    "lat": 13.47511,
    "lng": 144.75092,
    "by_category": {
-    "behavioral-health": 30,
-    "nursing": 17,
+    "behavioral-health": 29,
+    "nursing": 19,
     "dental": 9,
     "physician": 6,
     "rehab-therapy": 5,
-    "chiropractic": 5,
     "advanced-practice": 5,
-    "pharmacy": 3,
+    "chiropractic": 5,
+    "pharmacy": 4,
     "dietary": 3,
     "other-clinical": 2,
-    "eye-vision": 1,
-    "agency": 1
+    "agency": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -184,27 +190,28 @@
    "county_fips": null,
    "county": null,
    "practitioners": 338,
-   "with_role": 107,
+   "with_role": 106,
    "orgs_provider": 168,
    "orgs_ein": 8,
    "locations": 315,
    "lat": 13.47817,
    "lng": 144.80902,
    "by_category": {
-    "physician": 96,
-    "behavioral-health": 38,
-    "nursing": 37,
-    "pharmacy": 33,
+    "physician": 97,
+    "behavioral-health": 39,
+    "nursing": 36,
     "rehab-therapy": 32,
-    "advanced-practice": 27,
+    "pharmacy": 31,
+    "advanced-practice": 28,
     "dental": 19,
     "other-clinical": 18,
     "group": 9,
-    "eye-vision": 7,
     "dietary": 7,
-    "chiropractic": 6,
+    "eye-vision": 7,
     "support": 6,
+    "chiropractic": 5,
     "facility": 2,
+    "no-taxonomy": 1,
     "agency": 1
    }
   },
@@ -242,28 +249,28 @@
    "zip": "96929",
    "county_fips": null,
    "county": null,
-   "practitioners": 271,
-   "with_role": 185,
+   "practitioners": 278,
+   "with_role": 193,
    "orgs_provider": 39,
    "orgs_ein": 3,
    "locations": 55,
    "lat": 13.53794,
    "lng": 144.89849,
    "by_category": {
-    "physician": 142,
-    "rehab-therapy": 24,
+    "physician": 147,
+    "rehab-therapy": 25,
     "advanced-practice": 23,
-    "nursing": 17,
-    "pharmacy": 16,
+    "pharmacy": 17,
+    "nursing": 16,
     "dental": 13,
     "other-clinical": 11,
     "behavioral-health": 10,
     "group": 6,
-    "chiropractic": 3,
+    "chiropractic": 4,
     "podiatry": 3,
+    "agency": 1,
     "student": 1,
-    "dietary": 1,
-    "agency": 1
+    "dietary": 1
    }
   },
   {
@@ -280,5 +287,5 @@
    "by_category": {}
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner and organization geography use the physical address: the first entry typed physical (or both), else the first with use work, else the first. A practitioner listing physical addresses in more than one state is counted once, in the first of them. Until 2026-10-26 (organizations) and 2026-10-27 (practitioners) both used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations and 119,906 of 7,481,907 practitioners in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

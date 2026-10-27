@@ -3,11 +3,11 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:41:38+00:00",
+  "generated_at": "2026-10-27T14:08:49+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 264318,
+    "practitioner": 266565,
     "organization": 55747,
     "location": 90127
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 251940,
-      "state_denominator": 264318,
-      "state_pct": 95.317,
+      "state_numerator": 254153,
+      "state_denominator": 266565,
+      "state_pct": 95.3437,
       "national_pct": 97.7651,
-      "state_headline": "251,940 of 264,318 OH practitioner NPIs (95.317%) match NPPES; 464 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "254,153 of 266,565 OH practitioner NPIs (95.3437%) match NPPES; 472 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 410191,
-      "state_denominator": 410191,
+      "state_numerator": 412438,
+      "state_denominator": 412438,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "410,191 of 410,191 OH-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "412,438 of 412,438 OH-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -121,7 +121,7 @@
       "npi": "1326021098",
       "display_name": "BEHRENS, DANIEL",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2007-12-20 (exclusion type 1128b4)",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2007-12-20 (exclusion type 1128a4)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1326021098",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five OH practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

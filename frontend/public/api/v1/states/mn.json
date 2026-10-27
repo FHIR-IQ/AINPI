@@ -3,11 +3,11 @@
   "state_name": "Minnesota",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:39:20+00:00",
+  "generated_at": "2026-10-27T14:06:10+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 125598,
+    "practitioner": 125057,
     "organization": 36332,
     "location": 37568
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 119067,
-      "state_denominator": 125598,
-      "state_pct": 94.8001,
+      "state_numerator": 118514,
+      "state_denominator": 125057,
+      "state_pct": 94.768,
       "national_pct": 97.7651,
-      "state_headline": "119,067 of 125,598 MN practitioner NPIs (94.8001%) match NPPES; 179 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "118,514 of 125,057 MN practitioner NPIs (94.768%) match NPPES; 177 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 199497,
-      "state_denominator": 199497,
+      "state_numerator": 198956,
+      "state_denominator": 198956,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "199,497 of 199,497 MN-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "198,956 of 198,956 MN-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five MN-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five MN practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

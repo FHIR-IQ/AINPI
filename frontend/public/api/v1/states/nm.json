@@ -3,11 +3,11 @@
   "state_name": "New Mexico",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:41:06+00:00",
+  "generated_at": "2026-10-27T14:08:12+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 48663,
+    "practitioner": 49267,
     "organization": 10124,
     "location": 15971
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 46392,
-      "state_denominator": 48663,
-      "state_pct": 95.3332,
+      "state_numerator": 46970,
+      "state_denominator": 49267,
+      "state_pct": 95.3376,
       "national_pct": 97.7651,
-      "state_headline": "46,392 of 48,663 NM practitioner NPIs (95.3332%) match NPPES; 131 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "46,970 of 49,267 NM practitioner NPIs (95.3376%) match NPPES; 132 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 74758,
-      "state_denominator": 74758,
+      "state_numerator": 75362,
+      "state_denominator": 75362,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "74,758 of 74,758 NM-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "75,362 of 75,362 NM-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NM-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five NM practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

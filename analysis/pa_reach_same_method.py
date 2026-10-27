@@ -208,7 +208,8 @@ def build_side_by_side(before: dict, after: dict, *, source_commit: str,
         "commit_note": (
             "source_commit is the pipeline code the measurement ran on; "
             "run_commit is the checkout the vendored script was rerun from. "
-            "They differ only in H49, which is outside this chain."
+            + ("They are the same commit." if source_commit == run_commit else
+               "They differ only in H49, which is outside this chain.")
         ),
         "units": (
             "Counts are practitioners. Fields ending _pct are percentages, and "

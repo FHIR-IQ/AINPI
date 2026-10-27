@@ -3,11 +3,11 @@
   "state_name": "Idaho",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:37:22+00:00",
+  "generated_at": "2026-10-27T14:03:55+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 29315,
+    "practitioner": 29439,
     "organization": 10576,
     "location": 14279
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 28060,
-      "state_denominator": 29315,
-      "state_pct": 95.7189,
+      "state_numerator": 28177,
+      "state_denominator": 29439,
+      "state_pct": 95.7132,
       "national_pct": 97.7651,
-      "state_headline": "28,060 of 29,315 ID practitioner NPIs (95.7189%) match NPPES; 47 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "28,177 of 29,439 ID practitioner NPIs (95.7132%) match NPPES; 47 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 54170,
-      "state_denominator": 54170,
+      "state_numerator": 54294,
+      "state_denominator": 54294,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "54,170 of 54,170 ID-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "54,294 of 54,294 ID-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -142,13 +142,13 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1245377357",
-      "display_name": "GOODWIN, COLEEN",
+      "npi": "1134279920",
+      "display_name": "SKOUMAL, STEVE",
       "flagged_by": "oig-leie-exclusions",
       "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2013-08-20 (exclusion type 1128b4)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1245377357",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1134279920",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five ID-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five ID practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

@@ -3,11 +3,11 @@
   "state_name": "Texas",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:42:52+00:00",
+  "generated_at": "2026-10-27T14:10:34+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 369538,
+    "practitioner": 372429,
     "organization": 138917,
     "location": 214776
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 353777,
-      "state_denominator": 369538,
-      "state_pct": 95.7349,
+      "state_numerator": 356367,
+      "state_denominator": 372429,
+      "state_pct": 95.6872,
       "national_pct": 97.7651,
-      "state_headline": "353,777 of 369,538 TX practitioner NPIs (95.7349%) match NPPES; 951 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "356,367 of 372,429 TX practitioner NPIs (95.6872%) match NPPES; 965 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 723231,
-      "state_denominator": 723231,
+      "state_numerator": 726122,
+      "state_denominator": 726122,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "723,231 of 723,231 TX-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "726,122 of 726,122 TX-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five TX-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five TX practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

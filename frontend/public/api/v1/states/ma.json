@@ -3,11 +3,11 @@
   "state_name": "Massachusetts",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:38:31+00:00",
+  "generated_at": "2026-10-27T14:05:18+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 189579,
+    "practitioner": 191605,
     "organization": 31272,
     "location": 59558
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 183396,
-      "state_denominator": 189579,
-      "state_pct": 96.7386,
+      "state_numerator": 184866,
+      "state_denominator": 191605,
+      "state_pct": 96.4829,
       "national_pct": 97.7651,
-      "state_headline": "183,396 of 189,579 MA practitioner NPIs (96.7386%) match NPPES; 395 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "184,866 of 191,605 MA practitioner NPIs (96.4829%) match NPPES; 407 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 280409,
-      "state_denominator": 280409,
+      "state_numerator": 282435,
+      "state_denominator": 282435,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "280,409 of 280,409 MA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "282,435 of 282,435 MA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five MA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five MA practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }
