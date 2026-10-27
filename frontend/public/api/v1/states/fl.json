@@ -3,12 +3,12 @@
   "state_name": "Florida",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:47:29+00:00",
+  "generated_at": "2026-10-27T03:36:31+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "6e74041",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 379343,
-    "organization": 143293,
+    "organization": 144724,
     "location": 193729
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 4341,
-      "state_denominator": 143293,
-      "state_pct": 3.0295,
+      "state_numerator": 4363,
+      "state_denominator": 144724,
+      "state_pct": 3.0147,
       "national_pct": 1.4362,
-      "state_headline": "FL has 143,293 Organization resources covering 138,952 unique NPIs \u2014 4,341 excess resources (3.0295%) appear duplicated.",
+      "state_headline": "FL has 144,724 Organization resources covering 140,361 unique NPIs \u2014 4,363 excess resources (3.0147%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 716365,
-      "state_denominator": 716365,
+      "state_numerator": 717796,
+      "state_denominator": 717796,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "716,365 of 716,365 FL-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "717,796 of 717,796 FL-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five FL-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five FL-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }

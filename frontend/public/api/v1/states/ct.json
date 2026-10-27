@@ -3,12 +3,12 @@
   "state_name": "Connecticut",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:47:07+00:00",
+  "generated_at": "2026-10-27T03:35:56+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "6e74041",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 73459,
-    "organization": 16570,
+    "organization": 17139,
     "location": 28167
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 481,
-      "state_denominator": 16570,
-      "state_pct": 2.9028,
+      "state_numerator": 493,
+      "state_denominator": 17139,
+      "state_pct": 2.8765,
       "national_pct": 1.4362,
-      "state_headline": "CT has 16,570 Organization resources covering 16,089 unique NPIs \u2014 481 excess resources (2.9028%) appear duplicated.",
+      "state_headline": "CT has 17,139 Organization resources covering 16,646 unique NPIs \u2014 493 excess resources (2.8765%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 118196,
-      "state_denominator": 118196,
+      "state_numerator": 118765,
+      "state_denominator": 118765,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "118,196 of 118,196 CT-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "118,765 of 118,765 CT-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five CT-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five CT-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }

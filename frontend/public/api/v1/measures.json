@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-26T16:25:05+00:00",
+  "generated_at": "2026-10-27T03:46:54+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -219,7 +219,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/endpoint-org-linkage.json",
             "field": "numerator / denominator",
-            "commit": "6e74041",
+            "commit": "8fcfade",
             "vendored": false
           },
           "comparable_to_previous": true

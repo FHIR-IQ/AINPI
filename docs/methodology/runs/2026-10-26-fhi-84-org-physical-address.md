@@ -128,18 +128,18 @@ the warehouse at request time and changed when the backfill landed.
 
 | Consumer | Uses | Before | After | Status |
 |---|---|---|---|---|
-| State slices `states/<st>.json`, `denominators.organization` | org `_state` | PA 62,704; VA 37,133; OH 55,299 | PA 60,378; VA 38,517; OH 55,747 | Not regenerated here (per-NPI verify samples; no suppression list locally). VA, PA, OH restate at the next weekly refresh with an FHI-84 note from `state_findings.py`; the other 48 stay as published until rerun. Full table below. |
+| State slices `states/<st>.json`, `denominators.organization` | org `_state` | PA 62,704; VA 37,133; OH 55,299 | PA 60,378; VA 38,517; OH 55,747 | Regenerated 2026-10-27 for all 51 (see Regeneration below). Full table below. |
 | State slices, H14/H15 state duplicate rate | org `_state` | PA 1,979 / 62,704 (3.1561%) | PA 1,913 / 60,378 (3.1684%) | As above |
 | State slices, H18 organization staleness | org `_state` | 100% on release day | 100% (denominator moves with the org count) | As above |
 | H15 `duplicate-detection.json` (national, name+state+city) | org `_state`, `_city` | 127,322 of 1,383,429 keys (9.2034%), excess 298,875, max 7,527 | 131,685 of 1,415,597 (9.3024%), excess 266,769, max 9,520 | Restates at the next weekly refresh; the FHI-84 correction is in the `h14_h15_duplicates.py` notes |
 | H24 `oig-leie-exclusions-detail.json`, organization `ndh_state` | org `_state` | 598 LEIE-matched organizations | 5 change state | Restates weekly. The headline and the state chart count practitioners only and do not move |
-| H50 `endpoint-org-crosswalk.csv`, `org_state` | org `_state` | 16,247 rows | 105 rows (104 orgs) change `org_state`; PA rows 400 to 398 | Not regenerated (per-NPI). No H50 number depends on state |
-| H53 PA resolution (`pa-org-endpoint-resolution.csv`) | `org_state` in name-state / brand-state tiers | name-state 887 orgs / 13,576 slots; brand-state 1,559 / 43,828; resolved 113,550 of 309,311 | name-state 891 / 13,684; brand-state 1,559 / 43,825; resolved 113,655 | Not regenerated (per-NPI) |
-| PA connectivity ledger `pa-connectivity.json` | org `_state`/`_city` via H53, system rollup, affiliation graph | any route 50,812 (22.3%, 50.3% of affiliated); deterministic 6,555 (2.9%) | any route 50,880 (22.3%, 50.4%); deterministic 6,555 (2.9%) | Not regenerated (per-NPI). Old run reproduces the published file exactly. FHI-84 correction added to `state_connectivity.py` for the next run |
+| H50 `endpoint-org-crosswalk.csv`, `org_state` | org `_state` | 16,247 rows | 105 rows (104 orgs) change `org_state`; PA rows 400 to 398 | Regenerated 2026-10-27. No H50 number depends on state |
+| H53 PA resolution (`pa-org-endpoint-resolution.csv`) | `org_state` in name-state / brand-state tiers | name-state 887 orgs / 13,576 slots; brand-state 1,559 / 43,828; resolved 113,550 of 309,311 | name-state 891 / 13,684; brand-state 1,559 / 43,825; resolved 113,655 | Regenerated 2026-10-27 |
+| PA connectivity ledger `pa-connectivity.json` | org `_state`/`_city` via H53, system rollup, affiliation graph | any route 50,812 (22.3%, 50.3% of affiliated); deterministic 6,555 (2.9%) | any route 50,880 (22.3%, 50.4%); deterministic 6,555 (2.9%) | Regenerated 2026-10-27, with the FHI-84 entry in `corrections`. Old run reproduces the published file exactly |
 | Ledger `confidence` | same | resolved 27,214 (name-state 5,548, brand-state 10,273); enrolled 8,076 | resolved 27,285 (5,627, 10,265); enrolled 8,073 | as above |
 | Ledger affiliation graph (orgs filtered by `_state`) | org `_state` | 6,507 edges, 7,173 orgs | 5,612 edges, 6,583 orgs | as above |
 | Ledger systems | member `org_state` | 433 systems reach an endpoint (250 deterministic); 22,751 practitioners in a deterministically reaching system | 431 (248); 22,963 | Two of 60 system rows change: PENNSYLVANIA 73 to 116 reached, DIGESTIVE 319 to 343. UPMC, Geisinger, St. Luke's, AHN, Pinnacle, WellSpan, Jefferson unchanged |
-| `pa-reach-same-method.json` | ledger chain | 10-07 side 50.3% of affiliated | would read 50.4% | Not rerun: its 08-20 side reads the Databricks archive, out of scope |
+| `pa-reach-same-method.json` | ledger chain | 10-07 side 50.3% of affiliated | would read 50.4% | Not rerun, deliberately; see Regeneration below |
 | Explorer `explorer/*.json` | org `_state`, ZIP | PA provider orgs 60,584 | 58,344 | **Regenerated in this PR** (aggregates only, no NPIs). The ZIP now comes from the same physical address. Practitioner figures identical before and after |
 | `/api/npd/search` organizations, `/api/npd/state-detail`, `/api/npd/org`, `/api/npd/data-quality`, `/api/npd/geo-search`, views `v_org_by_state`, `v_data_quality_summary` | org `_state`/`_city` | as the per-state table | as the per-state table | Live; changed with the backfill. Null-state count unchanged, so `address_completeness_pct` does not move |
 | `NpdStateMetrics.org_count` (Supabase, `scripts/sync-bq-to-supabase.ts`) | org `_state` | as the per-state table | not synced | Follow-up: needs a Supabase write |
@@ -252,9 +252,56 @@ To revert: `UPDATE cms_npd.organization o SET _state = b._state, _city =
 b._city, _address_line = b._address_line FROM
 cms_npd.organization_addr_backup_20261026 b WHERE o._id = b._id`.
 
+## Regeneration (2026-10-27)
+
+Follow-up 1, run with the removal list set in the environment and
+`analysis/suppression.py --apply` then `--check` before commit (no row
+removed, `--check` clean). Every regenerated value matches the "After"
+column above.
+
+| Artifact | Result |
+|---|---|
+| H50 `endpoint-org-linkage.json`, `endpoint-org-crosswalk.csv` | 105 rows (104 organizations) change `org_state` and nothing else; PA rows 400 to 398; 16,247 rows; every H50 number unchanged |
+| H53 `pa-org-endpoint-resolution.csv` | name-state 885 / 13,572 to 891 / 13,684 organizations / slots; brand-state 1,559 / 43,828 to 1,559 / 43,825; resolved slots 113,546 to 113,655. `pa-enrollment-endpoint.csv` unchanged |
+| `pa-connectivity.json` | any route 50,812 to 50,880 (22.3%; 50.3% to 50.4% of affiliated); deterministic 6,555 unchanged; resolved 27,214 to 27,285 (name-state 5,548 to 5,627, brand-state 10,273 to 10,265); enrolled 8,076 to 8,073; affiliation graph 6,507 to 5,612 edges, 7,173 to 6,583 organizations; systems reaching 433 (250) to 431 (248); practitioners in a deterministically reaching system 22,751 to 22,963. The FHI-84 `corrections` entry is present |
+| 51 state slices | `denominators.organization` and the H14/H15 state rate equal the table above for every state; H18 moves with the organization count (PA 391,001 to 388,674). Checked by script against this document |
+| `stats.json`, `manifest.json` | timestamp and commit only |
+| `measures.json` | `measures.py --check` passes; unchanged |
+
+The published H53 file had name-state at 885 / 13,572 rather than the 887 /
+13,576 measured as "before" above. The after value matches exactly, so the
+small before difference is in that earlier measurement, not in this run.
+
+Not regenerated, and why:
+
+- H51 (`vendor-endpoint-attribution`). It reads no organization address. The
+  only vendor cache available is a 2026-10-26 download, and rerunning on it
+  moves H51 for vendor reasons (61,161 to 61,115 fillable, 69.6% to 69.5%),
+  which would mix a vendor refresh into this change. The ledger reads the
+  published H51 CSV, which is what the after values above were measured on.
+- `pa-system-endpoint-gap.json`. Rerun; every headline count was unchanged.
+  The diff was the newer Epic brand file (1,282 to 1,290 brands), key order
+  and query-cache metadata, so the published file was kept.
+- `pa-reach-same-method.json`. Both of its sides ran on parquet exports
+  written with the `address[0]` rule, so the pair is consistent as published.
+  Rerunning consistently needs both organization exports rewritten with the
+  current flattener and the 2026-10-13 vendor download, which no longer
+  exists locally. Note added to its run doc.
+- In 12 state slices (CA, GA, HI, IA, IN, MD, MI, ND, OR, TX, VA, WA) the
+  rerun picked different verify samples. Every change was a tie on the
+  exclusion date or `ANY_VALUE(EXCLTYPE)` choosing another type, since
+  `query_verify_samples` orders by `EXCLDATE` alone. The published samples
+  were kept. Follow-up: add a tiebreaker (`_npi`) to that `ORDER BY` so a
+  rerun is deterministic.
+
+Cost: 51.97 GB billed across 481 capped query jobs (about $0.30), measured
+from `INFORMATION_SCHEMA.JOBS_BY_USER`; about 1 GB per state slice, 1.5 GB
+for the system-gap rerun.
+
 ## Follow-ups
 
-1. Regenerate, with the suppression list available, the per-NPI artifacts
+1. Done 2026-10-27 (see Regeneration above), except `pa-reach-same-method.json`.
+   Was: regenerate, with the suppression list available, the per-NPI artifacts
    listed above as not regenerated: the PA ledger chain (H53 then
    `state_connectivity.py pa`), the H50 crosswalk, the 48 state slices the
    weekly refresh does not cover, and `pa-reach-same-method.json`.

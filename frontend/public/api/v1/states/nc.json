@@ -3,12 +3,12 @@
   "state_name": "North Carolina",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:50:20+00:00",
+  "generated_at": "2026-10-27T03:40:07+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "6e74041",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 171740,
-    "organization": 57423,
+    "organization": 59236,
     "location": 77001
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 1595,
-      "state_denominator": 57423,
-      "state_pct": 2.7776,
+      "state_numerator": 1632,
+      "state_denominator": 59236,
+      "state_pct": 2.7551,
       "national_pct": 1.4362,
-      "state_headline": "NC has 57,423 Organization resources covering 55,828 unique NPIs \u2014 1,595 excess resources (2.7776%) appear duplicated.",
+      "state_headline": "NC has 59,236 Organization resources covering 57,604 unique NPIs \u2014 1,632 excess resources (2.7551%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 306164,
-      "state_denominator": 306164,
+      "state_numerator": 307977,
+      "state_denominator": 307977,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "306,164 of 306,164 NC-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "307,977 of 307,977 NC-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NC-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NC-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }

@@ -3,12 +3,12 @@
   "state_name": "Kentucky",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:48:27+00:00",
+  "generated_at": "2026-10-27T03:38:07+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "6e74041",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 78675,
-    "organization": 22253,
+    "organization": 22343,
     "location": 31456
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 903,
-      "state_denominator": 22253,
-      "state_pct": 4.0579,
+      "state_numerator": 880,
+      "state_denominator": 22343,
+      "state_pct": 3.9386,
       "national_pct": 1.4362,
-      "state_headline": "KY has 22,253 Organization resources covering 21,350 unique NPIs \u2014 903 excess resources (4.0579%) appear duplicated.",
+      "state_headline": "KY has 22,343 Organization resources covering 21,463 unique NPIs \u2014 880 excess resources (3.9386%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 132384,
-      "state_denominator": 132384,
+      "state_numerator": 132474,
+      "state_denominator": 132474,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "132,384 of 132,384 KY-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "132,474 of 132,474 KY-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five KY-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five KY-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }
