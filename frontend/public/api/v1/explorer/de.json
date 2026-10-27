@@ -1,13 +1,13 @@
 {
  "state": "DE",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 17740,
   "with_role": 7025,
-  "orgs_provider": 4936,
-  "orgs_ein": 177,
+  "orgs_provider": 5121,
+  "orgs_ein": 189,
   "orgs_other": 0,
   "locations": 8157,
   "with_coords": 8033
@@ -149,8 +149,8 @@
    "practitioners": 10408,
    "with_role": 4084,
    "role_pct": 39.2,
-   "orgs_provider": 3022,
-   "orgs_ein": 103,
+   "orgs_provider": 3063,
+   "orgs_ein": 107,
    "by_category": {
     "behavioral-health": 2437,
     "physician": 1994,
@@ -169,8 +169,8 @@
    "practitioners": 4346,
    "with_role": 1837,
    "role_pct": 42.3,
-   "orgs_provider": 1069,
-   "orgs_ein": 50,
+   "orgs_provider": 1161,
+   "orgs_ein": 54,
    "by_category": {
     "nursing": 1063,
     "physician": 860,
@@ -189,8 +189,8 @@
    "practitioners": 2448,
    "with_role": 1056,
    "role_pct": 43.1,
-   "orgs_provider": 825,
-   "orgs_ein": 24,
+   "orgs_provider": 861,
+   "orgs_ein": 28,
    "by_category": {
     "behavioral-health": 577,
     "rehab-therapy": 511,
@@ -209,7 +209,7 @@
    "practitioners": 538,
    "with_role": 48,
    "role_pct": 8.9,
-   "orgs_provider": 20,
+   "orgs_provider": 36,
    "orgs_ein": 0,
    "by_category": {
     "student": 257,
@@ -243,8 +243,8 @@
    "county": "New Castle County",
    "practitioners": 384,
    "with_role": 129,
-   "orgs_provider": 171,
-   "orgs_ein": 4,
+   "orgs_provider": 172,
+   "orgs_ein": 5,
    "locations": 143,
    "lat": 39.61679,
    "lng": -75.6883,
@@ -252,8 +252,8 @@
     "rehab-therapy": 153,
     "behavioral-health": 47,
     "advanced-practice": 36,
-    "pharmacy": 32,
     "nursing": 32,
+    "pharmacy": 32,
     "physician": 30,
     "eye-vision": 23,
     "chiropractic": 9,
@@ -270,8 +270,8 @@
    "county": "New Castle County",
    "practitioners": 501,
    "with_role": 215,
-   "orgs_provider": 264,
-   "orgs_ein": 9,
+   "orgs_provider": 253,
+   "orgs_ein": 6,
    "locations": 375,
    "lat": 39.63905,
    "lng": -75.70464,
@@ -282,17 +282,17 @@
     "rehab-therapy": 47,
     "dental": 38,
     "pharmacy": 34,
-    "nursing": 16,
     "chiropractic": 16,
+    "nursing": 16,
     "other-clinical": 12,
     "dietary": 3,
-    "no-taxonomy": 1,
-    "facility": 1,
-    "podiatry": 1,
-    "eye-vision": 1,
+    "student": 1,
     "transport": 1,
+    "no-taxonomy": 1,
+    "podiatry": 1,
     "group": 1,
-    "student": 1
+    "eye-vision": 1,
+    "facility": 1
    }
   },
   {
@@ -301,7 +301,7 @@
    "county": "New Castle County",
    "practitioners": 192,
    "with_role": 30,
-   "orgs_provider": 60,
+   "orgs_provider": 54,
    "orgs_ein": 2,
    "locations": 78,
    "lat": 39.80291,
@@ -315,13 +315,13 @@
     "physician": 6,
     "other-clinical": 5,
     "chiropractic": 3,
-    "support": 2,
     "dental": 2,
-    "podiatry": 1,
-    "eye-vision": 1,
+    "support": 2,
+    "student": 1,
     "dietary": 1,
+    "podiatry": 1,
     "group": 1,
-    "student": 1
+    "eye-vision": 1
    }
   },
   {
@@ -343,7 +343,7 @@
    "county": "New Castle County",
    "practitioners": 142,
    "with_role": 33,
-   "orgs_provider": 60,
+   "orgs_provider": 68,
    "orgs_ein": 1,
    "locations": 129,
    "lat": 39.78152,
@@ -353,13 +353,13 @@
     "behavioral-health": 27,
     "advanced-practice": 15,
     "dental": 11,
-    "pharmacy": 9,
     "physician": 9,
+    "pharmacy": 9,
     "chiropractic": 6,
     "other-clinical": 4,
     "group": 3,
-    "nursing": 2,
     "dietary": 2,
+    "nursing": 2,
     "eye-vision": 1
    }
   },
@@ -369,8 +369,8 @@
    "county": "New Castle County",
    "practitioners": 502,
    "with_role": 200,
-   "orgs_provider": 215,
-   "orgs_ein": 8,
+   "orgs_provider": 223,
+   "orgs_ein": 6,
    "locations": 330,
    "lat": 39.45776,
    "lng": -75.71729,
@@ -396,8 +396,8 @@
    "county": "New Castle County",
    "practitioners": 586,
    "with_role": 152,
-   "orgs_provider": 162,
-   "orgs_ein": 6,
+   "orgs_provider": 167,
+   "orgs_ein": 5,
    "locations": 272,
    "lat": 39.69052,
    "lng": -75.73114,
@@ -413,9 +413,9 @@
     "other-clinical": 8,
     "eye-vision": 7,
     "group": 5,
-    "dietary": 1,
     "student": 1,
-    "facility": 1
+    "facility": 1,
+    "dietary": 1
    }
   },
   {
@@ -437,8 +437,8 @@
    "county": "New Castle County",
    "practitioners": 1347,
    "with_role": 698,
-   "orgs_provider": 400,
-   "orgs_ein": 14,
+   "orgs_provider": 374,
+   "orgs_ein": 15,
    "locations": 719,
    "lat": 39.6848,
    "lng": -75.6831,
@@ -458,8 +458,8 @@
     "eye-vision": 5,
     "podiatry": 4,
     "no-taxonomy": 3,
-    "facility": 2,
     "student": 2,
+    "facility": 2,
     "agency": 1
    }
   },
@@ -495,9 +495,9 @@
     "student": 5,
     "advanced-practice": 4,
     "group": 3,
-    "nursing": 1,
+    "other-clinical": 1,
     "behavioral-health": 1,
-    "other-clinical": 1
+    "nursing": 1
    }
   },
   {
@@ -519,7 +519,7 @@
    "county": null,
    "practitioners": 530,
    "with_role": 47,
-   "orgs_provider": 19,
+   "orgs_provider": 35,
    "orgs_ein": 0,
    "locations": 261,
    "lat": 39.56449,
@@ -533,10 +533,10 @@
     "nursing": 25,
     "rehab-therapy": 8,
     "group": 5,
-    "dental": 5,
     "other-clinical": 5,
-    "support": 2,
+    "dental": 5,
     "dietary": 2,
+    "support": 2,
     "podiatry": 1,
     "behavioral-health": 1
    }
@@ -559,12 +559,12 @@
     "physician": 91,
     "nursing": 86,
     "pharmacy": 46,
-    "other-clinical": 9,
     "dental": 9,
+    "other-clinical": 9,
     "student": 8,
+    "eye-vision": 4,
     "group": 4,
     "chiropractic": 4,
-    "eye-vision": 4,
     "dietary": 3,
     "support": 1
    }
@@ -606,7 +606,7 @@
    "county": "New Castle County",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 1,
    "lat": 39.79593,
@@ -639,8 +639,8 @@
    "lng": -75.66065,
    "by_category": {
     "pharmacy": 6,
-    "other-clinical": 1,
     "rehab-therapy": 1,
+    "other-clinical": 1,
     "nursing": 1
    }
   },
@@ -650,8 +650,8 @@
    "county": "New Castle County",
    "practitioners": 630,
    "with_role": 241,
-   "orgs_provider": 234,
-   "orgs_ein": 9,
+   "orgs_provider": 255,
+   "orgs_ein": 12,
    "locations": 344,
    "lat": 39.7451,
    "lng": -75.55041,
@@ -680,18 +680,18 @@
    "county": "New Castle County",
    "practitioners": 150,
    "with_role": 52,
-   "orgs_provider": 94,
-   "orgs_ein": 3,
+   "orgs_provider": 101,
+   "orgs_ein": 4,
    "locations": 143,
    "lat": 39.75843,
    "lng": -75.53507,
    "by_category": {
     "rehab-therapy": 43,
     "behavioral-health": 30,
-    "physician": 12,
     "dietary": 12,
-    "pharmacy": 11,
+    "physician": 12,
     "nursing": 11,
+    "pharmacy": 11,
     "chiropractic": 10,
     "advanced-practice": 9,
     "dental": 8,
@@ -706,7 +706,7 @@
    "county": "New Castle County",
    "practitioners": 2136,
    "with_role": 1298,
-   "orgs_provider": 171,
+   "orgs_provider": 187,
    "orgs_ein": 4,
    "locations": 351,
    "lat": 39.79214,
@@ -727,8 +727,8 @@
     "eye-vision": 10,
     "chiropractic": 7,
     "podiatry": 3,
-    "facility": 2,
-    "agency": 2
+    "agency": 2,
+    "facility": 2
    }
   },
   {
@@ -737,7 +737,7 @@
    "county": "New Castle County",
    "practitioners": 124,
    "with_role": 22,
-   "orgs_provider": 64,
+   "orgs_provider": 71,
    "orgs_ein": 6,
    "locations": 125,
    "lat": 39.71945,
@@ -750,9 +750,9 @@
     "advanced-practice": 8,
     "dental": 6,
     "physician": 2,
+    "student": 1,
     "chiropractic": 1,
     "supplier": 1,
-    "student": 1,
     "group": 1,
     "support": 1
    }
@@ -763,8 +763,8 @@
    "county": "New Castle County",
    "practitioners": 1070,
    "with_role": 221,
-   "orgs_provider": 178,
-   "orgs_ein": 7,
+   "orgs_provider": 192,
+   "orgs_ein": 6,
    "locations": 321,
    "lat": 39.74838,
    "lng": -75.58277,
@@ -784,11 +784,11 @@
     "group": 9,
     "chiropractic": 8,
     "support": 6,
-    "no-taxonomy": 3,
     "agency": 3,
+    "no-taxonomy": 3,
     "facility": 3,
-    "supplier": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "supplier": 1
    }
   },
   {
@@ -797,7 +797,7 @@
    "county": "New Castle County",
    "practitioners": 288,
    "with_role": 100,
-   "orgs_provider": 147,
+   "orgs_provider": 153,
    "orgs_ein": 4,
    "locations": 234,
    "lat": 39.75717,
@@ -810,8 +810,8 @@
     "advanced-practice": 10,
     "chiropractic": 7,
     "nursing": 7,
-    "pharmacy": 6,
     "other-clinical": 6,
+    "pharmacy": 6,
     "eye-vision": 5,
     "podiatry": 3,
     "dietary": 2,
@@ -824,7 +824,7 @@
    "county": "New Castle County",
    "practitioners": 137,
    "with_role": 14,
-   "orgs_provider": 26,
+   "orgs_provider": 28,
    "orgs_ein": 0,
    "locations": 66,
    "lat": 39.779,
@@ -836,11 +836,11 @@
     "rehab-therapy": 10,
     "advanced-practice": 5,
     "nursing": 3,
-    "pharmacy": 2,
     "dental": 2,
+    "pharmacy": 2,
     "student": 2,
-    "eye-vision": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -849,8 +849,8 @@
    "county": "New Castle County",
    "practitioners": 736,
    "with_role": 312,
-   "orgs_provider": 358,
-   "orgs_ein": 7,
+   "orgs_provider": 336,
+   "orgs_ein": 9,
    "locations": 534,
    "lat": 39.72779,
    "lng": -75.66456,
@@ -860,8 +860,8 @@
     "physician": 122,
     "advanced-practice": 94,
     "dental": 66,
-    "pharmacy": 32,
     "nursing": 32,
+    "pharmacy": 32,
     "eye-vision": 20,
     "other-clinical": 16,
     "chiropractic": 11,
@@ -877,7 +877,7 @@
    "county": "New Castle County",
    "practitioners": 261,
    "with_role": 53,
-   "orgs_provider": 76,
+   "orgs_provider": 78,
    "orgs_ein": 3,
    "locations": 132,
    "lat": 39.7784,
@@ -887,17 +887,17 @@
     "rehab-therapy": 49,
     "nursing": 32,
     "physician": 12,
-    "pharmacy": 10,
     "advanced-practice": 10,
+    "pharmacy": 10,
     "other-clinical": 7,
     "chiropractic": 4,
     "facility": 4,
-    "dietary": 1,
+    "support": 1,
     "eye-vision": 1,
     "podiatry": 1,
-    "agency": 1,
     "group": 1,
-    "support": 1
+    "dietary": 1,
+    "agency": 1
    }
   },
   {
@@ -906,8 +906,8 @@
    "county": "New Castle County",
    "practitioners": 387,
    "with_role": 121,
-   "orgs_provider": 170,
-   "orgs_ein": 5,
+   "orgs_provider": 178,
+   "orgs_ein": 8,
    "locations": 329,
    "lat": 39.8095,
    "lng": -75.52659,
@@ -921,8 +921,8 @@
     "chiropractic": 16,
     "student": 11,
     "other-clinical": 9,
-    "podiatry": 6,
     "dietary": 6,
+    "podiatry": 6,
     "nursing": 5,
     "group": 4,
     "eye-vision": 3
@@ -955,9 +955,9 @@
    "by_category": {
     "pharmacy": 2,
     "rehab-therapy": 1,
+    "advanced-practice": 1,
     "other-clinical": 1,
-    "physician": 1,
-    "advanced-practice": 1
+    "physician": 1
    }
   },
   {
@@ -994,7 +994,7 @@
    "county": "Kent County",
    "practitioners": 715,
    "with_role": 235,
-   "orgs_provider": 255,
+   "orgs_provider": 269,
    "orgs_ein": 7,
    "locations": 389,
    "lat": 39.14865,
@@ -1011,15 +1011,15 @@
     "dietary": 12,
     "other-clinical": 10,
     "group": 10,
-    "facility": 4,
     "chiropractic": 4,
+    "facility": 4,
     "podiatry": 3,
-    "support": 2,
     "agency": 2,
-    "supplier": 1,
-    "eye-vision": 1,
+    "support": 2,
     "transport": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "eye-vision": 1,
+    "supplier": 1
    }
   },
   {
@@ -1028,8 +1028,8 @@
    "county": "Kent County",
    "practitioners": 1031,
    "with_role": 454,
-   "orgs_provider": 379,
-   "orgs_ein": 12,
+   "orgs_provider": 389,
+   "orgs_ein": 14,
    "locations": 508,
    "lat": 39.1555,
    "lng": -75.53646,
@@ -1049,9 +1049,9 @@
     "student": 5,
     "support": 3,
     "dietary": 2,
-    "agency": 1,
+    "no-taxonomy": 1,
     "facility": 1,
-    "no-taxonomy": 1
+    "agency": 1
    }
   },
   {
@@ -1060,7 +1060,7 @@
    "county": "Sussex County",
    "practitioners": 17,
    "with_role": 8,
-   "orgs_provider": 4,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 38.53226,
@@ -1069,9 +1069,9 @@
     "pharmacy": 7,
     "rehab-therapy": 4,
     "advanced-practice": 2,
+    "nursing": 1,
     "dental": 1,
     "other-clinical": 1,
-    "nursing": 1,
     "physician": 1
    }
   },
@@ -1081,7 +1081,7 @@
    "county": "Sussex County",
    "practitioners": 29,
    "with_role": 5,
-   "orgs_provider": 11,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 27,
    "lat": 38.73757,
@@ -1091,9 +1091,9 @@
     "rehab-therapy": 6,
     "behavioral-health": 5,
     "pharmacy": 3,
-    "other-clinical": 1,
     "support": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1102,7 +1102,7 @@
    "county": "Kent County",
    "practitioners": 102,
    "with_role": 15,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 1,
    "locations": 62,
    "lat": 39.11188,
@@ -1113,12 +1113,12 @@
     "behavioral-health": 20,
     "pharmacy": 9,
     "chiropractic": 5,
+    "dietary": 2,
     "dental": 2,
     "other-clinical": 2,
-    "dietary": 2,
-    "physician": 1,
+    "advanced-practice": 1,
     "group": 1,
-    "advanced-practice": 1
+    "physician": 1
    }
   },
   {
@@ -1133,8 +1133,8 @@
    "lat": 39.28601,
    "lng": -75.63815,
    "by_category": {
-    "rehab-therapy": 7,
     "nursing": 7,
+    "rehab-therapy": 7,
     "behavioral-health": 3
    }
   },
@@ -1144,17 +1144,17 @@
    "county": "Sussex County",
    "practitioners": 8,
    "with_role": 1,
-   "orgs_provider": 7,
+   "orgs_provider": 9,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 38.55509,
    "lng": -75.23091,
    "by_category": {
     "dental": 4,
-    "physician": 1,
+    "other-clinical": 1,
     "facility": 1,
-    "advanced-practice": 1,
-    "other-clinical": 1
+    "physician": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -1163,7 +1163,7 @@
    "county": "Sussex County",
    "practitioners": 34,
    "with_role": 8,
-   "orgs_provider": 16,
+   "orgs_provider": 18,
    "orgs_ein": 1,
    "locations": 21,
    "lat": 38.45977,
@@ -1171,13 +1171,13 @@
    "by_category": {
     "rehab-therapy": 9,
     "pharmacy": 8,
-    "advanced-practice": 3,
-    "behavioral-health": 3,
-    "physician": 3,
-    "nursing": 3,
     "chiropractic": 3,
-    "other-clinical": 1,
-    "podiatry": 1
+    "physician": 3,
+    "behavioral-health": 3,
+    "advanced-practice": 3,
+    "nursing": 3,
+    "podiatry": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1186,7 +1186,7 @@
    "county": "Sussex County",
    "practitioners": 28,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 38.80067,
@@ -1267,7 +1267,7 @@
    "county": "Sussex County",
    "practitioners": 301,
    "with_role": 86,
-   "orgs_provider": 94,
+   "orgs_provider": 108,
    "orgs_ein": 5,
    "locations": 177,
    "lat": 38.68721,
@@ -1284,9 +1284,9 @@
     "pharmacy": 6,
     "facility": 2,
     "chiropractic": 2,
-    "podiatry": 1,
+    "group": 1,
     "eye-vision": 1,
-    "group": 1
+    "podiatry": 1
    }
   },
   {
@@ -1301,8 +1301,8 @@
    "lat": 38.79767,
    "lng": -75.63129,
    "by_category": {
-    "rehab-therapy": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1347,7 +1347,7 @@
    "county": "Kent County",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 1,
    "lat": 38.91817,
@@ -1360,7 +1360,7 @@
    "county": "Sussex County",
    "practitioners": 63,
    "with_role": 22,
-   "orgs_provider": 22,
+   "orgs_provider": 23,
    "orgs_ein": 0,
    "locations": 39,
    "lat": 38.56311,
@@ -1372,10 +1372,10 @@
     "physician": 9,
     "rehab-therapy": 8,
     "advanced-practice": 4,
-    "dental": 1,
     "group": 1,
-    "dietary": 1,
-    "agency": 1
+    "dental": 1,
+    "agency": 1,
+    "dietary": 1
    }
   },
   {
@@ -1384,8 +1384,8 @@
    "county": "Sussex County",
    "practitioners": 1656,
    "with_role": 504,
-   "orgs_provider": 271,
-   "orgs_ein": 10,
+   "orgs_provider": 267,
+   "orgs_ein": 11,
    "locations": 378,
    "lat": 38.75517,
    "lng": -75.16059,
@@ -1404,8 +1404,8 @@
     "dental": 11,
     "podiatry": 9,
     "eye-vision": 8,
-    "student": 7,
     "dietary": 7,
+    "student": 7,
     "no-taxonomy": 3,
     "agency": 2,
     "emergency-medical": 1
@@ -1449,8 +1449,8 @@
    "county": "Sussex County",
    "practitioners": 1174,
    "with_role": 795,
-   "orgs_provider": 222,
-   "orgs_ein": 9,
+   "orgs_provider": 242,
+   "orgs_ein": 11,
    "locations": 303,
    "lat": 38.91819,
    "lng": -75.4347,
@@ -1479,8 +1479,8 @@
    "county": "Sussex County",
    "practitioners": 162,
    "with_role": 51,
-   "orgs_provider": 71,
-   "orgs_ein": 3,
+   "orgs_provider": 89,
+   "orgs_ein": 2,
    "locations": 170,
    "lat": 38.59709,
    "lng": -75.2554,
@@ -1492,12 +1492,12 @@
     "advanced-practice": 10,
     "physician": 9,
     "dietary": 7,
-    "no-taxonomy": 4,
-    "dental": 4,
     "student": 4,
-    "eye-vision": 2,
+    "dental": 4,
+    "no-taxonomy": 4,
     "podiatry": 2,
     "chiropractic": 2,
+    "eye-vision": 2,
     "group": 1,
     "support": 1,
     "agency": 1
@@ -1509,7 +1509,7 @@
    "county": "Sussex County",
    "practitioners": 30,
    "with_role": 14,
-   "orgs_provider": 19,
+   "orgs_provider": 24,
    "orgs_ein": 0,
    "locations": 42,
    "lat": 38.54664,
@@ -1542,8 +1542,8 @@
     "pharmacy": 4,
     "rehab-therapy": 3,
     "eye-vision": 3,
-    "nursing": 2,
     "other-clinical": 2,
+    "nursing": 2,
     "dental": 2,
     "dietary": 1,
     "chiropractic": 1
@@ -1555,7 +1555,7 @@
    "county": "Sussex County",
    "practitioners": 26,
    "with_role": 17,
-   "orgs_provider": 15,
+   "orgs_provider": 18,
    "orgs_ein": 0,
    "locations": 35,
    "lat": 38.54477,
@@ -1563,13 +1563,13 @@
    "by_category": {
     "rehab-therapy": 14,
     "pharmacy": 5,
-    "behavioral-health": 1,
-    "chiropractic": 1,
-    "other-clinical": 1,
+    "podiatry": 1,
     "physician": 1,
+    "behavioral-health": 1,
     "advanced-practice": 1,
+    "chiropractic": 1,
     "dental": 1,
-    "podiatry": 1
+    "other-clinical": 1
    }
   },
   {
@@ -1579,7 +1579,7 @@
    "practitioners": 241,
    "with_role": 126,
    "orgs_provider": 86,
-   "orgs_ein": 3,
+   "orgs_ein": 5,
    "locations": 162,
    "lat": 38.72391,
    "lng": -75.12366,
@@ -1605,7 +1605,7 @@
    "county": "Sussex County",
    "practitioners": 407,
    "with_role": 173,
-   "orgs_provider": 171,
+   "orgs_provider": 196,
    "orgs_ein": 15,
    "locations": 246,
    "lat": 38.64847,
@@ -1619,8 +1619,8 @@
     "pharmacy": 16,
     "dietary": 6,
     "chiropractic": 6,
-    "eye-vision": 5,
     "other-clinical": 5,
+    "eye-vision": 5,
     "group": 4,
     "dental": 3,
     "podiatry": 1,
@@ -1634,7 +1634,7 @@
    "county": "Sussex County",
    "practitioners": 82,
    "with_role": 7,
-   "orgs_provider": 20,
+   "orgs_provider": 25,
    "orgs_ein": 2,
    "locations": 39,
    "lat": 38.46198,
@@ -1654,8 +1654,8 @@
    "county": "Kent County",
    "practitioners": 471,
    "with_role": 322,
-   "orgs_provider": 118,
-   "orgs_ein": 4,
+   "orgs_provider": 128,
+   "orgs_ein": 6,
    "locations": 161,
    "lat": 39.29569,
    "lng": -75.60607,
@@ -1670,8 +1670,8 @@
     "dental": 10,
     "group": 9,
     "chiropractic": 3,
-    "podiatry": 2,
     "other-clinical": 2,
+    "podiatry": 2,
     "dietary": 1,
     "support": 1
    }
@@ -1718,5 +1718,5 @@
    "by_category": {}
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

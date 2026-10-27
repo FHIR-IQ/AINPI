@@ -1,13 +1,13 @@
 {
  "state": "AZ",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 111525,
   "with_role": 45378,
-  "orgs_provider": 37086,
-  "orgs_ein": 1272,
+  "orgs_provider": 37493,
+  "orgs_ein": 1295,
   "orgs_other": 0,
   "locations": 58648,
   "with_coords": 57506
@@ -155,8 +155,8 @@
    "practitioners": 77018,
    "with_role": 30572,
    "role_pct": 39.7,
-   "orgs_provider": 26722,
-   "orgs_ein": 839,
+   "orgs_provider": 26533,
+   "orgs_ein": 832,
    "by_category": {
     "behavioral-health": 17095,
     "physician": 15180,
@@ -175,8 +175,8 @@
    "practitioners": 16514,
    "with_role": 6059,
    "role_pct": 36.7,
-   "orgs_provider": 4174,
-   "orgs_ein": 138,
+   "orgs_provider": 4468,
+   "orgs_ein": 150,
    "by_category": {
     "physician": 4427,
     "behavioral-health": 3243,
@@ -195,7 +195,7 @@
    "practitioners": 3467,
    "with_role": 2168,
    "role_pct": 62.5,
-   "orgs_provider": 583,
+   "orgs_provider": 606,
    "orgs_ein": 23,
    "by_category": {
     "advanced-practice": 1006,
@@ -215,8 +215,8 @@
    "practitioners": 3011,
    "with_role": 1124,
    "role_pct": 37.3,
-   "orgs_provider": 1308,
-   "orgs_ein": 54,
+   "orgs_provider": 1385,
+   "orgs_ein": 65,
    "by_category": {
     "physician": 631,
     "rehab-therapy": 524,
@@ -235,8 +235,8 @@
    "practitioners": 2193,
    "with_role": 869,
    "role_pct": 39.6,
-   "orgs_provider": 871,
-   "orgs_ein": 41,
+   "orgs_provider": 945,
+   "orgs_ein": 43,
    "by_category": {
     "physician": 413,
     "advanced-practice": 348,
@@ -255,8 +255,8 @@
    "practitioners": 2130,
    "with_role": 1094,
    "role_pct": 51.4,
-   "orgs_provider": 943,
-   "orgs_ein": 52,
+   "orgs_provider": 988,
+   "orgs_ein": 53,
    "by_category": {
     "physician": 681,
     "advanced-practice": 367,
@@ -275,8 +275,8 @@
    "practitioners": 1774,
    "with_role": 797,
    "role_pct": 44.9,
-   "orgs_provider": 711,
-   "orgs_ein": 35,
+   "orgs_provider": 732,
+   "orgs_ein": 36,
    "by_category": {
     "physician": 393,
     "behavioral-health": 311,
@@ -295,8 +295,8 @@
    "practitioners": 1343,
    "with_role": 592,
    "role_pct": 44.1,
-   "orgs_provider": 480,
-   "orgs_ein": 21,
+   "orgs_provider": 511,
+   "orgs_ein": 23,
    "by_category": {
     "physician": 391,
     "advanced-practice": 190,
@@ -315,7 +315,7 @@
    "practitioners": 897,
    "with_role": 405,
    "role_pct": 45.2,
-   "orgs_provider": 267,
+   "orgs_provider": 253,
    "orgs_ein": 14,
    "by_category": {
     "behavioral-health": 195,
@@ -335,7 +335,7 @@
    "practitioners": 846,
    "with_role": 322,
    "role_pct": 38.1,
-   "orgs_provider": 388,
+   "orgs_provider": 407,
    "orgs_ein": 19,
    "by_category": {
     "physician": 166,
@@ -355,8 +355,8 @@
    "practitioners": 625,
    "with_role": 425,
    "role_pct": 68.0,
-   "orgs_provider": 138,
-   "orgs_ein": 9,
+   "orgs_provider": 144,
+   "orgs_ein": 10,
    "by_category": {
     "physician": 242,
     "advanced-practice": 127,
@@ -375,7 +375,7 @@
    "practitioners": 613,
    "with_role": 382,
    "role_pct": 62.3,
-   "orgs_provider": 265,
+   "orgs_provider": 277,
    "orgs_ein": 10,
    "by_category": {
     "advanced-practice": 202,
@@ -385,7 +385,7 @@
     "pharmacy": 30,
     "behavioral-health": 21,
     "nursing": 14,
-    "group": 12
+    "chiropractic": 12
    }
   },
   {
@@ -395,7 +395,7 @@
    "practitioners": 507,
    "with_role": 188,
    "role_pct": 37.1,
-   "orgs_provider": 84,
+   "orgs_provider": 89,
    "orgs_ein": 4,
    "by_category": {
     "physician": 155,
@@ -415,15 +415,15 @@
    "practitioners": 473,
    "with_role": 311,
    "role_pct": 65.8,
-   "orgs_provider": 104,
+   "orgs_provider": 106,
    "orgs_ein": 5,
    "by_category": {
     "physician": 231,
     "advanced-practice": 48,
     "rehab-therapy": 44,
     "dental": 29,
-    "pharmacy": 24,
     "behavioral-health": 24,
+    "pharmacy": 24,
     "nursing": 23,
     "agency": 14
    }
@@ -444,8 +444,8 @@
     "pharmacy": 6,
     "behavioral-health": 5,
     "rehab-therapy": 3,
-    "chiropractic": 2,
-    "dental": 2
+    "dental": 2,
+    "chiropractic": 2
    }
   },
   {
@@ -455,7 +455,7 @@
    "practitioners": 43,
    "with_role": 34,
    "role_pct": 79.1,
-   "orgs_provider": 12,
+   "orgs_provider": 13,
    "orgs_ein": 3,
    "by_category": {
     "advanced-practice": 20,
@@ -475,7 +475,7 @@
    "county": null,
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 1,
    "lat": 32.27351,
@@ -488,8 +488,8 @@
    "county": null,
    "practitioners": 4,
    "with_role": 4,
-   "orgs_provider": 5,
-   "orgs_ein": 1,
+   "orgs_provider": 2,
+   "orgs_ein": 0,
    "locations": 3,
    "lat": 33.45372,
    "lng": -112.07392,
@@ -505,17 +505,17 @@
    "county": "Maricopa County",
    "practitioners": 167,
    "with_role": 49,
-   "orgs_provider": 79,
-   "orgs_ein": 6,
+   "orgs_provider": 84,
+   "orgs_ein": 4,
    "locations": 112,
    "lat": 33.45023,
    "lng": -112.07817,
    "by_category": {
     "behavioral-health": 68,
     "advanced-practice": 20,
+    "dental": 12,
     "rehab-therapy": 12,
     "nursing": 12,
-    "dental": 12,
     "other-clinical": 11,
     "chiropractic": 10,
     "eye-vision": 6,
@@ -532,7 +532,7 @@
    "county": "Maricopa County",
    "practitioners": 1682,
    "with_role": 606,
-   "orgs_provider": 293,
+   "orgs_provider": 308,
    "orgs_ein": 13,
    "locations": 539,
    "lat": 33.46542,
@@ -553,9 +553,9 @@
     "chiropractic": 9,
     "agency": 3,
     "support": 3,
-    "transport": 1,
     "no-taxonomy": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "transport": 1
    }
   },
   {
@@ -564,8 +564,8 @@
    "county": "Maricopa County",
    "practitioners": 3891,
    "with_role": 2397,
-   "orgs_provider": 708,
-   "orgs_ein": 23,
+   "orgs_provider": 568,
+   "orgs_ein": 22,
    "locations": 583,
    "lat": 33.4653,
    "lng": -112.05455,
@@ -598,8 +598,8 @@
    "county": "Maricopa County",
    "practitioners": 342,
    "with_role": 175,
-   "orgs_provider": 123,
-   "orgs_ein": 5,
+   "orgs_provider": 110,
+   "orgs_ein": 4,
    "locations": 146,
    "lat": 33.44747,
    "lng": -112.08841,
@@ -610,16 +610,16 @@
     "rehab-therapy": 43,
     "dental": 26,
     "nursing": 21,
-    "group": 5,
     "other-clinical": 5,
+    "group": 5,
     "dietary": 4,
     "supplier": 2,
+    "support": 1,
     "emergency-medical": 1,
     "no-taxonomy": 1,
-    "agency": 1,
-    "support": 1,
     "podiatry": 1,
-    "student": 1
+    "student": 1,
+    "agency": 1
    }
   },
   {
@@ -628,7 +628,7 @@
    "county": "Maricopa County",
    "practitioners": 1149,
    "with_role": 418,
-   "orgs_provider": 398,
+   "orgs_provider": 301,
    "orgs_ein": 13,
    "locations": 357,
    "lat": 33.46422,
@@ -651,8 +651,8 @@
     "podiatry": 6,
     "transport": 4,
     "chiropractic": 2,
-    "supplier": 1,
-    "support": 1
+    "support": 1,
+    "supplier": 1
    }
   },
   {
@@ -661,7 +661,7 @@
    "county": "Maricopa County",
    "practitioners": 130,
    "with_role": 33,
-   "orgs_provider": 45,
+   "orgs_provider": 53,
    "orgs_ein": 0,
    "locations": 114,
    "lat": 33.45565,
@@ -675,9 +675,9 @@
     "physician": 8,
     "dental": 6,
     "group": 2,
-    "no-taxonomy": 1,
     "other-clinical": 1,
-    "transport": 1
+    "transport": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -699,8 +699,8 @@
    "county": "Maricopa County",
    "practitioners": 2233,
    "with_role": 472,
-   "orgs_provider": 731,
-   "orgs_ein": 20,
+   "orgs_provider": 519,
+   "orgs_ein": 11,
    "locations": 632,
    "lat": 33.49351,
    "lng": -112.07134,
@@ -718,8 +718,8 @@
     "facility": 14,
     "support": 13,
     "group": 11,
-    "chiropractic": 9,
     "eye-vision": 9,
+    "chiropractic": 9,
     "podiatry": 8,
     "agency": 3,
     "no-taxonomy": 3,
@@ -756,8 +756,8 @@
     "facility": 2,
     "supplier": 2,
     "chiropractic": 2,
-    "transport": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "transport": 1
    }
   },
   {
@@ -766,8 +766,8 @@
    "county": "Maricopa County",
    "practitioners": 1085,
    "with_role": 322,
-   "orgs_provider": 344,
-   "orgs_ein": 12,
+   "orgs_provider": 334,
+   "orgs_ein": 11,
    "locations": 526,
    "lat": 33.50971,
    "lng": -112.05885,
@@ -787,9 +787,9 @@
     "eye-vision": 6,
     "dietary": 5,
     "agency": 2,
-    "podiatry": 2,
-    "no-taxonomy": 2,
     "facility": 2,
+    "no-taxonomy": 2,
+    "podiatry": 2,
     "student": 1
    }
   },
@@ -799,7 +799,7 @@
    "county": "Maricopa County",
    "practitioners": 532,
    "with_role": 176,
-   "orgs_provider": 307,
+   "orgs_provider": 330,
    "orgs_ein": 7,
    "locations": 540,
    "lat": 33.513,
@@ -820,9 +820,9 @@
     "facility": 3,
     "agency": 3,
     "no-taxonomy": 3,
-    "support": 2,
     "podiatry": 2,
     "transport": 2,
+    "support": 2,
     "dietary": 1
    }
   },
@@ -832,8 +832,8 @@
    "county": "Maricopa County",
    "practitioners": 3251,
    "with_role": 1216,
-   "orgs_provider": 957,
-   "orgs_ein": 30,
+   "orgs_provider": 929,
+   "orgs_ein": 32,
    "locations": 1221,
    "lat": 33.49946,
    "lng": -112.03475,
@@ -866,7 +866,7 @@
    "county": "Maricopa County",
    "practitioners": 212,
    "with_role": 23,
-   "orgs_provider": 106,
+   "orgs_provider": 108,
    "orgs_ein": 4,
    "locations": 164,
    "lat": 33.50517,
@@ -885,10 +885,10 @@
     "transport": 3,
     "group": 2,
     "podiatry": 1,
-    "support": 1,
-    "eye-vision": 1,
     "no-taxonomy": 1,
-    "dietary": 1
+    "dietary": 1,
+    "eye-vision": 1,
+    "support": 1
    }
   },
   {
@@ -897,8 +897,8 @@
    "county": "Maricopa County",
    "practitioners": 500,
    "with_role": 102,
-   "orgs_provider": 337,
-   "orgs_ein": 18,
+   "orgs_provider": 322,
+   "orgs_ein": 15,
    "locations": 750,
    "lat": 33.49816,
    "lng": -111.99584,
@@ -925,7 +925,7 @@
    "county": "Maricopa County",
    "practitioners": 125,
    "with_role": 10,
-   "orgs_provider": 24,
+   "orgs_provider": 27,
    "orgs_ein": 0,
    "locations": 52,
    "lat": 33.50436,
@@ -951,7 +951,7 @@
    "county": "Maricopa County",
    "practitioners": 531,
    "with_role": 157,
-   "orgs_provider": 283,
+   "orgs_provider": 301,
    "orgs_ein": 12,
    "locations": 533,
    "lat": 33.55611,
@@ -981,8 +981,8 @@
    "county": "Maricopa County",
    "practitioners": 912,
    "with_role": 162,
-   "orgs_provider": 313,
-   "orgs_ein": 13,
+   "orgs_provider": 320,
+   "orgs_ein": 12,
    "locations": 486,
    "lat": 33.55629,
    "lng": -112.10305,
@@ -1012,7 +1012,7 @@
    "county": "Maricopa County",
    "practitioners": 430,
    "with_role": 165,
-   "orgs_provider": 212,
+   "orgs_provider": 222,
    "orgs_ein": 3,
    "locations": 311,
    "lat": 33.62269,
@@ -1022,12 +1022,12 @@
     "pharmacy": 50,
     "rehab-therapy": 49,
     "dental": 45,
-    "advanced-practice": 40,
     "chiropractic": 40,
+    "advanced-practice": 40,
     "physician": 36,
     "other-clinical": 13,
-    "dietary": 10,
     "nursing": 10,
+    "dietary": 10,
     "group": 7,
     "eye-vision": 6,
     "agency": 3,
@@ -1040,8 +1040,8 @@
    "county": "Maricopa County",
    "practitioners": 170,
    "with_role": 40,
-   "orgs_provider": 121,
-   "orgs_ein": 4,
+   "orgs_provider": 96,
+   "orgs_ein": 2,
    "locations": 136,
    "lat": 33.63536,
    "lng": -112.10513,
@@ -1057,9 +1057,9 @@
     "other-clinical": 6,
     "support": 4,
     "podiatry": 3,
+    "eye-vision": 1,
     "group": 1,
-    "agency": 1,
-    "eye-vision": 1
+    "agency": 1
    }
   },
   {
@@ -1068,8 +1068,8 @@
    "county": "Maricopa County",
    "practitioners": 266,
    "with_role": 90,
-   "orgs_provider": 108,
-   "orgs_ein": 8,
+   "orgs_provider": 91,
+   "orgs_ein": 5,
    "locations": 134,
    "lat": 33.67129,
    "lng": -112.04253,
@@ -1086,10 +1086,10 @@
     "group": 7,
     "physician": 6,
     "nursing": 2,
+    "no-taxonomy": 1,
     "agency": 1,
-    "facility": 1,
     "support": 1,
-    "no-taxonomy": 1
+    "facility": 1
    }
   },
   {
@@ -1111,8 +1111,8 @@
    "county": "Maricopa County",
    "practitioners": 1187,
    "with_role": 408,
-   "orgs_provider": 611,
-   "orgs_ein": 16,
+   "orgs_provider": 437,
+   "orgs_ein": 14,
    "locations": 505,
    "lat": 33.67331,
    "lng": -112.10674,
@@ -1140,8 +1140,8 @@
    "county": "Maricopa County",
    "practitioners": 897,
    "with_role": 461,
-   "orgs_provider": 375,
-   "orgs_ein": 6,
+   "orgs_provider": 344,
+   "orgs_ein": 5,
    "locations": 420,
    "lat": 33.58447,
    "lng": -111.99252,
@@ -1161,8 +1161,8 @@
     "support": 7,
     "eye-vision": 6,
     "agency": 2,
-    "no-taxonomy": 1,
     "supplier": 1,
+    "no-taxonomy": 1,
     "transport": 1
    }
   },
@@ -1172,7 +1172,7 @@
    "county": "Maricopa County",
    "practitioners": 708,
    "with_role": 294,
-   "orgs_provider": 427,
+   "orgs_provider": 414,
    "orgs_ein": 14,
    "locations": 621,
    "lat": 33.58904,
@@ -1191,10 +1191,10 @@
     "group": 7,
     "agency": 6,
     "dietary": 5,
-    "support": 3,
     "facility": 3,
-    "supplier": 2,
+    "support": 3,
     "eye-vision": 2,
+    "supplier": 2,
     "student": 1
    }
   },
@@ -1204,8 +1204,8 @@
    "county": "Maricopa County",
    "practitioners": 140,
    "with_role": 9,
-   "orgs_provider": 93,
-   "orgs_ein": 4,
+   "orgs_provider": 111,
+   "orgs_ein": 5,
    "locations": 222,
    "lat": 33.49734,
    "lng": -112.16585,
@@ -1234,8 +1234,8 @@
    "county": "Maricopa County",
    "practitioners": 1227,
    "with_role": 355,
-   "orgs_provider": 598,
-   "orgs_ein": 16,
+   "orgs_provider": 627,
+   "orgs_ein": 15,
    "locations": 854,
    "lat": 33.62796,
    "lng": -111.99884,
@@ -1253,10 +1253,10 @@
     "group": 21,
     "support": 10,
     "dietary": 9,
-    "facility": 2,
-    "podiatry": 2,
-    "supplier": 2,
     "student": 2,
+    "facility": 2,
+    "supplier": 2,
+    "podiatry": 2,
     "agency": 1
    }
   },
@@ -1266,7 +1266,7 @@
    "county": "Maricopa County",
    "practitioners": 123,
    "with_role": 11,
-   "orgs_provider": 55,
+   "orgs_provider": 73,
    "orgs_ein": 1,
    "locations": 155,
    "lat": 33.4901,
@@ -1282,8 +1282,8 @@
     "advanced-practice": 4,
     "other-clinical": 4,
     "eye-vision": 2,
-    "group": 1,
     "dietary": 1,
+    "group": 1,
     "agency": 1
    }
   },
@@ -1293,7 +1293,7 @@
    "county": "Maricopa County",
    "practitioners": 567,
    "with_role": 158,
-   "orgs_provider": 210,
+   "orgs_provider": 213,
    "orgs_ein": 8,
    "locations": 296,
    "lat": 33.43603,
@@ -1303,18 +1303,18 @@
     "dietary": 109,
     "advanced-practice": 59,
     "pharmacy": 44,
-    "physician": 38,
     "rehab-therapy": 38,
+    "physician": 38,
     "nursing": 18,
     "support": 4,
     "other-clinical": 3,
     "transport": 3,
     "group": 2,
     "no-taxonomy": 2,
-    "agency": 1,
-    "facility": 1,
     "dental": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "agency": 1,
+    "facility": 1
    }
   },
   {
@@ -1323,8 +1323,8 @@
    "county": "Maricopa County",
    "practitioners": 80,
    "with_role": 8,
-   "orgs_provider": 42,
-   "orgs_ein": 0,
+   "orgs_provider": 50,
+   "orgs_ein": 1,
    "locations": 77,
    "lat": 33.47018,
    "lng": -112.19462,
@@ -1348,8 +1348,8 @@
    "county": "Maricopa County",
    "practitioners": 723,
    "with_role": 297,
-   "orgs_provider": 159,
-   "orgs_ein": 6,
+   "orgs_provider": 208,
+   "orgs_ein": 9,
    "locations": 325,
    "lat": 33.48607,
    "lng": -112.26427,
@@ -1391,8 +1391,8 @@
    "county": "Maricopa County",
    "practitioners": 146,
    "with_role": 12,
-   "orgs_provider": 93,
-   "orgs_ein": 3,
+   "orgs_provider": 109,
+   "orgs_ein": 4,
    "locations": 216,
    "lat": 33.40385,
    "lng": -112.01079,
@@ -1405,13 +1405,13 @@
     "support": 16,
     "advanced-practice": 4,
     "student": 3,
-    "dental": 2,
-    "chiropractic": 2,
     "other-clinical": 2,
-    "group": 1,
+    "chiropractic": 2,
+    "dental": 2,
+    "facility": 1,
     "dietary": 1,
-    "eye-vision": 1,
-    "facility": 1
+    "group": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -1420,8 +1420,8 @@
    "county": "Maricopa County",
    "practitioners": 55,
    "with_role": 19,
-   "orgs_provider": 42,
-   "orgs_ein": 0,
+   "orgs_provider": 49,
+   "orgs_ein": 1,
    "locations": 76,
    "lat": 33.38528,
    "lng": -112.1076,
@@ -1429,14 +1429,14 @@
     "pharmacy": 15,
     "behavioral-health": 10,
     "nursing": 8,
-    "dental": 5,
     "physician": 5,
+    "dental": 5,
     "eye-vision": 4,
     "advanced-practice": 3,
     "rehab-therapy": 2,
     "other-clinical": 1,
-    "dietary": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "dietary": 1
    }
   },
   {
@@ -1445,15 +1445,15 @@
    "county": "Maricopa County",
    "practitioners": 212,
    "with_role": 22,
-   "orgs_provider": 92,
-   "orgs_ein": 2,
+   "orgs_provider": 112,
+   "orgs_ein": 1,
    "locations": 178,
    "lat": 33.38031,
    "lng": -112.04916,
    "by_category": {
     "pharmacy": 58,
-    "rehab-therapy": 38,
     "nursing": 38,
+    "rehab-therapy": 38,
     "behavioral-health": 30,
     "dental": 11,
     "physician": 9,
@@ -1463,10 +1463,10 @@
     "eye-vision": 4,
     "chiropractic": 3,
     "no-taxonomy": 2,
+    "agency": 1,
     "facility": 1,
     "student": 1,
-    "supplier": 1,
-    "agency": 1
+    "supplier": 1
    }
   },
   {
@@ -1475,7 +1475,7 @@
    "county": "Maricopa County",
    "practitioners": 79,
    "with_role": 14,
-   "orgs_provider": 19,
+   "orgs_provider": 26,
    "orgs_ein": 0,
    "locations": 83,
    "lat": 33.43595,
@@ -1486,13 +1486,13 @@
     "dental": 7,
     "eye-vision": 5,
     "nursing": 5,
-    "physician": 4,
     "behavioral-health": 4,
-    "other-clinical": 1,
+    "physician": 4,
+    "facility": 1,
     "advanced-practice": 1,
     "group": 1,
     "support": 1,
-    "facility": 1,
+    "other-clinical": 1,
     "chiropractic": 1
    }
   },
@@ -1502,7 +1502,7 @@
    "county": "Maricopa County",
    "practitioners": 884,
    "with_role": 277,
-   "orgs_provider": 245,
+   "orgs_provider": 238,
    "orgs_ein": 4,
    "locations": 369,
    "lat": 33.33077,
@@ -1520,9 +1520,9 @@
     "nursing": 10,
     "eye-vision": 8,
     "podiatry": 4,
-    "emergency-medical": 2,
-    "support": 2,
     "student": 2,
+    "support": 2,
+    "emergency-medical": 2,
     "no-taxonomy": 1
    }
   },
@@ -1545,16 +1545,16 @@
    "county": "Maricopa County",
    "practitioners": 485,
    "with_role": 167,
-   "orgs_provider": 169,
-   "orgs_ein": 5,
+   "orgs_provider": 182,
+   "orgs_ein": 6,
    "locations": 261,
    "lat": 33.30341,
    "lng": -112.00266,
    "by_category": {
     "behavioral-health": 136,
     "rehab-therapy": 71,
-    "physician": 69,
     "advanced-practice": 69,
+    "physician": 69,
     "pharmacy": 33,
     "dental": 27,
     "nursing": 21,
@@ -1562,8 +1562,8 @@
     "other-clinical": 10,
     "dietary": 9,
     "eye-vision": 6,
-    "group": 4,
     "podiatry": 4,
+    "group": 4,
     "support": 3,
     "facility": 2,
     "emergency-medical": 1
@@ -1575,8 +1575,8 @@
    "county": "Maricopa County",
    "practitioners": 311,
    "with_role": 81,
-   "orgs_provider": 228,
-   "orgs_ein": 10,
+   "orgs_provider": 205,
+   "orgs_ein": 8,
    "locations": 251,
    "lat": 33.67625,
    "lng": -111.99024,
@@ -1604,8 +1604,8 @@
    "county": "Maricopa County",
    "practitioners": 663,
    "with_role": 329,
-   "orgs_provider": 269,
-   "orgs_ein": 7,
+   "orgs_provider": 291,
+   "orgs_ein": 5,
    "locations": 397,
    "lat": 33.56209,
    "lng": -112.13208,
@@ -1618,13 +1618,13 @@
     "dietary": 41,
     "nursing": 40,
     "dental": 28,
-    "other-clinical": 14,
     "chiropractic": 14,
+    "other-clinical": 14,
     "group": 12,
     "facility": 5,
     "eye-vision": 3,
-    "support": 2,
     "agency": 2,
+    "support": 2,
     "student": 1,
     "transport": 1
    }
@@ -1635,7 +1635,7 @@
    "county": "Maricopa County",
    "practitioners": 261,
    "with_role": 72,
-   "orgs_provider": 152,
+   "orgs_provider": 148,
    "orgs_ein": 3,
    "locations": 232,
    "lat": 33.63128,
@@ -1650,13 +1650,13 @@
     "chiropractic": 13,
     "nursing": 12,
     "other-clinical": 8,
-    "dietary": 4,
     "eye-vision": 4,
+    "dietary": 4,
     "podiatry": 2,
+    "student": 1,
     "group": 1,
     "facility": 1,
     "supplier": 1,
-    "student": 1,
     "support": 1
    }
   },
@@ -1666,7 +1666,7 @@
    "county": "Maricopa County",
    "practitioners": 230,
    "with_role": 38,
-   "orgs_provider": 49,
+   "orgs_provider": 54,
    "orgs_ein": 0,
    "locations": 92,
    "lat": 33.65978,
@@ -1678,14 +1678,14 @@
     "advanced-practice": 30,
     "pharmacy": 21,
     "student": 13,
-    "other-clinical": 7,
     "eye-vision": 7,
+    "other-clinical": 7,
     "dental": 6,
     "no-taxonomy": 4,
-    "chiropractic": 2,
     "group": 2,
-    "dietary": 2,
+    "chiropractic": 2,
     "support": 2,
+    "dietary": 2,
     "behavioral-health": 1,
     "emergency-medical": 1
    }
@@ -1717,8 +1717,8 @@
    "lat": 33.50963,
    "lng": -112.03876,
    "by_category": {
-    "podiatry": 1,
-    "physician": 1
+    "physician": 1,
+    "podiatry": 1
    }
   },
   {
@@ -1733,8 +1733,8 @@
    "lat": 33.492,
    "lng": -112.08325,
    "by_category": {
-    "other-clinical": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1769,7 +1769,7 @@
    "county": null,
    "practitioners": 16,
    "with_role": 16,
-   "orgs_provider": 4,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 33.65482,
@@ -1811,8 +1811,8 @@
     "dental": 3,
     "rehab-therapy": 2,
     "group": 1,
-    "advanced-practice": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -1821,7 +1821,7 @@
    "county": "Maricopa County",
    "practitioners": 219,
    "with_role": 56,
-   "orgs_provider": 172,
+   "orgs_provider": 133,
    "orgs_ein": 5,
    "locations": 199,
    "lat": 33.76663,
@@ -1832,8 +1832,8 @@
     "dental": 29,
     "rehab-therapy": 18,
     "physician": 16,
-    "chiropractic": 13,
     "advanced-practice": 13,
+    "chiropractic": 13,
     "other-clinical": 9,
     "nursing": 7,
     "eye-vision": 4,
@@ -1849,8 +1849,8 @@
    "county": "Maricopa County",
    "practitioners": 194,
    "with_role": 49,
-   "orgs_provider": 131,
-   "orgs_ein": 6,
+   "orgs_provider": 150,
+   "orgs_ein": 7,
    "locations": 286,
    "lat": 33.85172,
    "lng": -112.13665,
@@ -1859,8 +1859,8 @@
     "behavioral-health": 32,
     "pharmacy": 30,
     "dental": 18,
-    "nursing": 15,
     "advanced-practice": 15,
+    "nursing": 15,
     "chiropractic": 10,
     "physician": 9,
     "eye-vision": 9,
@@ -1878,7 +1878,7 @@
    "county": "Maricopa County",
    "practitioners": 9,
    "with_role": 0,
-   "orgs_provider": 4,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 33.9028,
@@ -1887,8 +1887,8 @@
     "nursing": 4,
     "behavioral-health": 2,
     "chiropractic": 1,
-    "dental": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "dental": 1
    }
   },
   {
@@ -1897,7 +1897,7 @@
    "county": "Pinal County",
    "practitioners": 37,
    "with_role": 8,
-   "orgs_provider": 29,
+   "orgs_provider": 33,
    "orgs_ein": 1,
    "locations": 88,
    "lat": 33.35848,
@@ -1909,10 +1909,10 @@
     "nursing": 4,
     "advanced-practice": 3,
     "behavioral-health": 2,
-    "support": 1,
-    "physician": 1,
     "podiatry": 1,
+    "support": 1,
     "other-clinical": 1,
+    "physician": 1,
     "chiropractic": 1
    }
   },
@@ -1936,12 +1936,12 @@
     "advanced-practice": 6,
     "eye-vision": 5,
     "other-clinical": 2,
-    "no-taxonomy": 1,
-    "facility": 1,
     "support": 1,
+    "no-taxonomy": 1,
     "group": 1,
     "pharmacy": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "facility": 1
    }
   },
   {
@@ -1950,8 +1950,8 @@
    "county": "Pinal County",
    "practitioners": 264,
    "with_role": 107,
-   "orgs_provider": 98,
-   "orgs_ein": 5,
+   "orgs_provider": 110,
+   "orgs_ein": 6,
    "locations": 193,
    "lat": 33.41291,
    "lng": -111.56577,
@@ -1966,8 +1966,8 @@
     "eye-vision": 12,
     "chiropractic": 8,
     "other-clinical": 4,
-    "podiatry": 2,
     "group": 2,
+    "podiatry": 2,
     "dietary": 1
    }
   },
@@ -1977,8 +1977,8 @@
    "county": "Pinal County",
    "practitioners": 838,
    "with_role": 320,
-   "orgs_provider": 354,
-   "orgs_ein": 13,
+   "orgs_provider": 363,
+   "orgs_ein": 14,
    "locations": 591,
    "lat": 32.88935,
    "lng": -111.73391,
@@ -1997,9 +1997,9 @@
     "student": 4,
     "dietary": 3,
     "facility": 2,
+    "no-taxonomy": 1,
     "agency": 1,
-    "support": 1,
-    "no-taxonomy": 1
+    "support": 1
    }
   },
   {
@@ -2015,11 +2015,11 @@
    "lng": -111.67084,
    "by_category": {
     "behavioral-health": 4,
-    "advanced-practice": 2,
     "dietary": 2,
-    "physician": 1,
+    "advanced-practice": 2,
     "group": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "physician": 1
    }
   },
   {
@@ -2028,24 +2028,24 @@
    "county": "Pinal County",
    "practitioners": 104,
    "with_role": 37,
-   "orgs_provider": 44,
+   "orgs_provider": 43,
    "orgs_ein": 1,
    "locations": 70,
    "lat": 32.98,
    "lng": -111.52146,
    "by_category": {
-    "behavioral-health": 17,
     "advanced-practice": 17,
+    "behavioral-health": 17,
     "dental": 16,
     "physician": 14,
     "pharmacy": 12,
     "rehab-therapy": 11,
     "nursing": 8,
-    "eye-vision": 3,
     "other-clinical": 3,
+    "eye-vision": 3,
     "student": 1,
-    "transport": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "transport": 1
    }
   },
   {
@@ -2066,10 +2066,10 @@
     "rehab-therapy": 4,
     "physician": 3,
     "dental": 2,
+    "chiropractic": 1,
     "other-clinical": 1,
-    "nursing": 1,
     "group": 1,
-    "chiropractic": 1
+    "nursing": 1
    }
   },
   {
@@ -2078,7 +2078,7 @@
    "county": "Pinal County",
    "practitioners": 61,
    "with_role": 33,
-   "orgs_provider": 26,
+   "orgs_provider": 41,
    "orgs_ein": 0,
    "locations": 41,
    "lat": 33.04188,
@@ -2086,8 +2086,8 @@
    "by_category": {
     "advanced-practice": 20,
     "physician": 14,
-    "pharmacy": 7,
     "behavioral-health": 7,
+    "pharmacy": 7,
     "nursing": 5,
     "rehab-therapy": 4,
     "dental": 3,
@@ -2115,7 +2115,7 @@
    "county": "Pinal County",
    "practitioners": 85,
    "with_role": 7,
-   "orgs_provider": 25,
+   "orgs_provider": 29,
    "orgs_ein": 1,
    "locations": 47,
    "lat": 33.055,
@@ -2127,8 +2127,8 @@
     "pharmacy": 6,
     "advanced-practice": 3,
     "other-clinical": 2,
-    "behavioral-health": 2,
     "physician": 2,
+    "behavioral-health": 2,
     "no-taxonomy": 1
    }
   },
@@ -2138,7 +2138,7 @@
    "county": "Pinal County",
    "practitioners": 146,
    "with_role": 38,
-   "orgs_provider": 65,
+   "orgs_provider": 66,
    "orgs_ein": 4,
    "locations": 110,
    "lat": 33.05565,
@@ -2148,16 +2148,16 @@
     "physician": 20,
     "behavioral-health": 20,
     "pharmacy": 16,
-    "advanced-practice": 15,
     "nursing": 15,
+    "advanced-practice": 15,
     "dental": 12,
     "other-clinical": 11,
     "chiropractic": 3,
     "emergency-medical": 2,
     "student": 2,
-    "no-taxonomy": 1,
+    "eye-vision": 1,
     "group": 1,
-    "eye-vision": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -2166,15 +2166,15 @@
    "county": "Pinal County",
    "practitioners": 120,
    "with_role": 41,
-   "orgs_provider": 46,
-   "orgs_ein": 1,
+   "orgs_provider": 65,
+   "orgs_ein": 2,
    "locations": 156,
    "lat": 33.22045,
    "lng": -111.55657,
    "by_category": {
     "rehab-therapy": 26,
-    "behavioral-health": 19,
     "advanced-practice": 19,
+    "behavioral-health": 19,
     "nursing": 14,
     "dental": 14,
     "physician": 12,
@@ -2206,7 +2206,7 @@
    "county": "Maricopa County",
    "practitioners": 430,
    "with_role": 126,
-   "orgs_provider": 218,
+   "orgs_provider": 222,
    "orgs_ein": 5,
    "locations": 333,
    "lat": 33.24662,
@@ -2221,12 +2221,12 @@
     "nursing": 26,
     "chiropractic": 22,
     "eye-vision": 12,
-    "group": 9,
     "other-clinical": 9,
+    "group": 9,
     "agency": 1,
-    "student": 1,
+    "support": 1,
     "dietary": 1,
-    "support": 1
+    "student": 1
    }
   },
   {
@@ -2235,8 +2235,8 @@
    "county": "Pinal County",
    "practitioners": 179,
    "with_role": 104,
-   "orgs_provider": 45,
-   "orgs_ein": 3,
+   "orgs_provider": 48,
+   "orgs_ein": 2,
    "locations": 78,
    "lat": 33.16072,
    "lng": -111.55875,
@@ -2244,14 +2244,14 @@
     "physician": 62,
     "advanced-practice": 35,
     "rehab-therapy": 22,
-    "pharmacy": 15,
     "dental": 15,
+    "pharmacy": 15,
     "behavioral-health": 12,
     "nursing": 7,
     "emergency-medical": 3,
     "eye-vision": 2,
-    "chiropractic": 2,
     "group": 2,
+    "chiropractic": 2,
     "other-clinical": 1,
     "facility": 1
    }
@@ -2268,12 +2268,12 @@
    "lat": 33.23956,
    "lng": -111.65949,
    "by_category": {
-    "rehab-therapy": 4,
     "nursing": 4,
     "pharmacy": 4,
+    "rehab-therapy": 4,
     "eye-vision": 2,
-    "behavioral-health": 1,
-    "support": 1
+    "support": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -2282,14 +2282,14 @@
    "county": "Pinal County",
    "practitioners": 2,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 32.87521,
    "lng": -111.96381,
    "by_category": {
-    "nursing": 1,
-    "support": 1
+    "support": 1,
+    "nursing": 1
    }
   },
   {
@@ -2307,8 +2307,8 @@
     "advanced-practice": 14,
     "physician": 10,
     "behavioral-health": 1,
-    "podiatry": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "podiatry": 1
    }
   },
   {
@@ -2323,9 +2323,9 @@
    "lat": 33.42241,
    "lng": -111.54812,
    "by_category": {
-    "rehab-therapy": 1,
+    "agency": 1,
     "dental": 1,
-    "agency": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -2340,8 +2340,8 @@
    "lat": 32.91372,
    "lng": -111.83651,
    "by_category": {
-    "rehab-therapy": 1,
-    "group": 1
+    "group": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -2350,7 +2350,7 @@
    "county": "Pinal County",
    "practitioners": 22,
    "with_role": 7,
-   "orgs_provider": 10,
+   "orgs_provider": 14,
    "orgs_ein": 0,
    "locations": 19,
    "lat": 32.89535,
@@ -2360,10 +2360,10 @@
     "advanced-practice": 3,
     "behavioral-health": 3,
     "physician": 3,
-    "rehab-therapy": 2,
     "eye-vision": 2,
-    "nursing": 1,
-    "supplier": 1
+    "rehab-therapy": 2,
+    "supplier": 1,
+    "nursing": 1
    }
   },
   {
@@ -2372,7 +2372,7 @@
    "county": "Maricopa County",
    "practitioners": 879,
    "with_role": 122,
-   "orgs_provider": 258,
+   "orgs_provider": 286,
    "orgs_ein": 7,
    "locations": 484,
    "lat": 33.4266,
@@ -2383,8 +2383,8 @@
     "behavioral-health": 142,
     "other-clinical": 45,
     "pharmacy": 41,
-    "support": 39,
     "physician": 39,
+    "support": 39,
     "advanced-practice": 28,
     "dental": 27,
     "chiropractic": 15,
@@ -2392,12 +2392,12 @@
     "dietary": 5,
     "eye-vision": 3,
     "student": 3,
-    "emergency-medical": 2,
     "supplier": 2,
+    "emergency-medical": 2,
+    "agency": 1,
     "no-taxonomy": 1,
     "transport": 1,
-    "facility": 1,
-    "agency": 1
+    "facility": 1
    }
   },
   {
@@ -2406,8 +2406,8 @@
    "county": "Maricopa County",
    "practitioners": 1698,
    "with_role": 999,
-   "orgs_provider": 522,
-   "orgs_ein": 12,
+   "orgs_provider": 484,
+   "orgs_ein": 11,
    "locations": 617,
    "lat": 33.38302,
    "lng": -111.87567,
@@ -2428,9 +2428,9 @@
     "student": 9,
     "eye-vision": 6,
     "no-taxonomy": 4,
-    "supplier": 1,
     "agency": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "supplier": 1
    }
   },
   {
@@ -2439,8 +2439,8 @@
    "county": "Maricopa County",
    "practitioners": 322,
    "with_role": 112,
-   "orgs_provider": 257,
-   "orgs_ein": 6,
+   "orgs_provider": 254,
+   "orgs_ein": 8,
    "locations": 384,
    "lat": 33.43251,
    "lng": -111.80289,
@@ -2456,11 +2456,11 @@
     "chiropractic": 11,
     "eye-vision": 9,
     "podiatry": 4,
-    "dietary": 3,
     "group": 3,
+    "dietary": 3,
     "student": 2,
-    "facility": 1,
-    "agency": 1
+    "agency": 1,
+    "facility": 1
    }
   },
   {
@@ -2469,8 +2469,8 @@
    "county": "Maricopa County",
    "practitioners": 896,
    "with_role": 358,
-   "orgs_provider": 335,
-   "orgs_ein": 10,
+   "orgs_provider": 345,
+   "orgs_ein": 11,
    "locations": 493,
    "lat": 33.39135,
    "lng": -111.78794,
@@ -2491,8 +2491,8 @@
     "podiatry": 7,
     "agency": 2,
     "facility": 1,
-    "transport": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "transport": 1
    }
   },
   {
@@ -2501,8 +2501,8 @@
    "county": "Maricopa County",
    "practitioners": 366,
    "with_role": 138,
-   "orgs_provider": 196,
-   "orgs_ein": 8,
+   "orgs_provider": 213,
+   "orgs_ein": 9,
    "locations": 326,
    "lat": 33.42805,
    "lng": -111.71263,
@@ -2523,8 +2523,8 @@
     "support": 2,
     "student": 2,
     "no-taxonomy": 2,
-    "supplier": 1,
-    "facility": 1
+    "facility": 1,
+    "supplier": 1
    }
   },
   {
@@ -2533,8 +2533,8 @@
    "county": "Maricopa County",
    "practitioners": 1563,
    "with_role": 437,
-   "orgs_provider": 725,
-   "orgs_ein": 20,
+   "orgs_provider": 794,
+   "orgs_ein": 26,
    "locations": 989,
    "lat": 33.39487,
    "lng": -111.71545,
@@ -2555,8 +2555,8 @@
     "support": 10,
     "dietary": 5,
     "podiatry": 4,
-    "facility": 2,
     "agency": 2,
+    "facility": 2,
     "transport": 1,
     "supplier": 1
    }
@@ -2567,7 +2567,7 @@
    "county": "Maricopa County",
    "practitioners": 173,
    "with_role": 106,
-   "orgs_provider": 73,
+   "orgs_provider": 91,
    "orgs_ein": 2,
    "locations": 144,
    "lat": 33.42907,
@@ -2582,8 +2582,8 @@
     "nursing": 10,
     "group": 5,
     "chiropractic": 3,
-    "facility": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "facility": 1
    }
   },
   {
@@ -2592,7 +2592,7 @@
    "county": "Maricopa County",
    "practitioners": 53,
    "with_role": 6,
-   "orgs_provider": 15,
+   "orgs_provider": 18,
    "orgs_ein": 0,
    "locations": 46,
    "lat": 33.40395,
@@ -2614,7 +2614,7 @@
    "county": "Maricopa County",
    "practitioners": 1191,
    "with_role": 756,
-   "orgs_provider": 283,
+   "orgs_provider": 295,
    "orgs_ein": 7,
    "locations": 292,
    "lat": 33.3821,
@@ -2634,8 +2634,8 @@
     "chiropractic": 10,
     "podiatry": 7,
     "dietary": 5,
-    "emergency-medical": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -2644,8 +2644,8 @@
    "county": "Maricopa County",
    "practitioners": 988,
    "with_role": 199,
-   "orgs_provider": 451,
-   "orgs_ein": 10,
+   "orgs_provider": 420,
+   "orgs_ein": 9,
    "locations": 585,
    "lat": 33.38484,
    "lng": -111.84793,
@@ -2664,8 +2664,8 @@
     "support": 15,
     "group": 12,
     "supplier": 2,
-    "transport": 1,
-    "agency": 1
+    "agency": 1,
+    "transport": 1
    }
   },
   {
@@ -2674,7 +2674,7 @@
    "county": null,
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 33.41803,
@@ -2689,7 +2689,7 @@
    "county": "Maricopa County",
    "practitioners": 151,
    "with_role": 33,
-   "orgs_provider": 86,
+   "orgs_provider": 100,
    "orgs_ein": 2,
    "locations": 187,
    "lat": 33.33446,
@@ -2702,14 +2702,14 @@
     "advanced-practice": 15,
     "nursing": 10,
     "physician": 8,
-    "chiropractic": 5,
     "eye-vision": 5,
+    "chiropractic": 5,
     "dietary": 4,
     "other-clinical": 2,
     "group": 1,
-    "supplier": 1,
+    "podiatry": 1,
     "student": 1,
-    "podiatry": 1
+    "supplier": 1
    }
   },
   {
@@ -2718,8 +2718,8 @@
    "county": "Maricopa County",
    "practitioners": 190,
    "with_role": 58,
-   "orgs_provider": 77,
-   "orgs_ein": 2,
+   "orgs_provider": 89,
+   "orgs_ein": 3,
    "locations": 151,
    "lat": 33.4306,
    "lng": -111.77065,
@@ -2733,8 +2733,8 @@
     "other-clinical": 8,
     "chiropractic": 7,
     "physician": 5,
-    "group": 3,
     "eye-vision": 3,
+    "group": 3,
     "dietary": 2,
     "support": 1
    }
@@ -2745,7 +2745,7 @@
    "county": "Maricopa County",
    "practitioners": 164,
    "with_role": 22,
-   "orgs_provider": 92,
+   "orgs_provider": 99,
    "orgs_ein": 1,
    "locations": 193,
    "lat": 33.4617,
@@ -2814,8 +2814,8 @@
    "county": "Maricopa County",
    "practitioners": 2085,
    "with_role": 806,
-   "orgs_provider": 619,
-   "orgs_ein": 18,
+   "orgs_provider": 626,
+   "orgs_ein": 19,
    "locations": 973,
    "lat": 33.31617,
    "lng": -111.87213,
@@ -2845,8 +2845,8 @@
    "county": "Maricopa County",
    "practitioners": 678,
    "with_role": 288,
-   "orgs_provider": 260,
-   "orgs_ein": 7,
+   "orgs_provider": 277,
+   "orgs_ein": 6,
    "locations": 461,
    "lat": 33.32203,
    "lng": -111.83872,
@@ -2864,10 +2864,10 @@
     "eye-vision": 5,
     "facility": 3,
     "student": 2,
-    "agency": 1,
-    "support": 1,
     "transport": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "agency": 1,
+    "support": 1
    }
   },
   {
@@ -2876,8 +2876,8 @@
    "county": "Maricopa County",
    "practitioners": 588,
    "with_role": 125,
-   "orgs_provider": 262,
-   "orgs_ein": 8,
+   "orgs_provider": 239,
+   "orgs_ein": 6,
    "locations": 358,
    "lat": 33.3105,
    "lng": -111.9311,
@@ -2892,8 +2892,8 @@
     "other-clinical": 19,
     "chiropractic": 14,
     "podiatry": 11,
-    "nursing": 4,
     "dietary": 4,
+    "nursing": 4,
     "support": 3,
     "group": 1
    }
@@ -2943,8 +2943,8 @@
    "county": "Maricopa County",
    "practitioners": 400,
    "with_role": 127,
-   "orgs_provider": 215,
-   "orgs_ein": 9,
+   "orgs_provider": 209,
+   "orgs_ein": 10,
    "locations": 311,
    "lat": 33.35952,
    "lng": -111.81234,
@@ -2959,10 +2959,10 @@
     "physician": 24,
     "other-clinical": 11,
     "group": 7,
-    "agency": 2,
     "dietary": 2,
-    "eye-vision": 1,
-    "podiatry": 1
+    "agency": 2,
+    "podiatry": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2971,8 +2971,8 @@
    "county": "Maricopa County",
    "practitioners": 922,
    "with_role": 322,
-   "orgs_provider": 381,
-   "orgs_ein": 14,
+   "orgs_provider": 379,
+   "orgs_ein": 11,
    "locations": 594,
    "lat": 33.37249,
    "lng": -111.75747,
@@ -2993,8 +2993,8 @@
     "student": 4,
     "support": 2,
     "facility": 1,
-    "agency": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "agency": 1
    }
   },
   {
@@ -3003,16 +3003,16 @@
    "county": null,
    "practitioners": 5,
    "with_role": 1,
-   "orgs_provider": 4,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 16,
    "lat": 33.32162,
    "lng": -111.71898,
    "by_category": {
     "rehab-therapy": 2,
+    "behavioral-health": 1,
     "other-clinical": 1,
-    "advanced-practice": 1,
-    "behavioral-health": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -3034,7 +3034,7 @@
    "county": null,
    "practitioners": 8,
    "with_role": 4,
-   "orgs_provider": 4,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 11,
    "lat": 33.30463,
@@ -3068,7 +3068,7 @@
    "county": "Maricopa County",
    "practitioners": 536,
    "with_role": 287,
-   "orgs_provider": 197,
+   "orgs_provider": 207,
    "orgs_ein": 8,
    "locations": 296,
    "lat": 33.24134,
@@ -3095,7 +3095,7 @@
    "county": "Maricopa County",
    "practitioners": 92,
    "with_role": 22,
-   "orgs_provider": 53,
+   "orgs_provider": 59,
    "orgs_ein": 2,
    "locations": 112,
    "lat": 33.22485,
@@ -3103,17 +3103,17 @@
    "by_category": {
     "pharmacy": 29,
     "rehab-therapy": 18,
-    "chiropractic": 8,
     "advanced-practice": 8,
+    "chiropractic": 8,
     "nursing": 7,
     "dental": 7,
     "behavioral-health": 5,
     "physician": 4,
     "support": 2,
-    "group": 1,
-    "no-taxonomy": 1,
     "student": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "no-taxonomy": 1,
+    "group": 1
    }
   },
   {
@@ -3122,7 +3122,7 @@
    "county": "Maricopa County",
    "practitioners": 306,
    "with_role": 17,
-   "orgs_provider": 99,
+   "orgs_provider": 87,
    "orgs_ein": 1,
    "locations": 216,
    "lat": 33.52375,
@@ -3137,11 +3137,11 @@
     "chiropractic": 9,
     "physician": 7,
     "group": 3,
-    "facility": 2,
     "dietary": 2,
+    "facility": 2,
     "support": 2,
-    "eye-vision": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -3150,8 +3150,8 @@
    "county": "Maricopa County",
    "practitioners": 944,
    "with_role": 289,
-   "orgs_provider": 539,
-   "orgs_ein": 14,
+   "orgs_provider": 565,
+   "orgs_ein": 16,
    "locations": 1053,
    "lat": 33.49151,
    "lng": -111.92335,
@@ -3167,10 +3167,10 @@
     "student": 31,
     "chiropractic": 21,
     "emergency-medical": 12,
-    "eye-vision": 6,
     "group": 6,
-    "dietary": 4,
+    "eye-vision": 6,
     "podiatry": 4,
+    "dietary": 4,
     "no-taxonomy": 3,
     "support": 3,
     "agency": 2,
@@ -3183,16 +3183,16 @@
    "county": null,
    "practitioners": 5,
    "with_role": 2,
-   "orgs_provider": 6,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 7,
    "lat": 33.46706,
    "lng": -111.92633,
    "by_category": {
     "advanced-practice": 2,
+    "dietary": 1,
     "physician": 1,
-    "behavioral-health": 1,
-    "dietary": 1
+    "behavioral-health": 1
    }
   },
   {
@@ -3201,8 +3201,8 @@
    "county": "Maricopa County",
    "practitioners": 398,
    "with_role": 186,
-   "orgs_provider": 130,
-   "orgs_ein": 7,
+   "orgs_provider": 133,
+   "orgs_ein": 6,
    "locations": 269,
    "lat": 33.55525,
    "lng": -111.93838,
@@ -3215,8 +3215,8 @@
     "other-clinical": 16,
     "rehab-therapy": 16,
     "pharmacy": 15,
-    "group": 7,
     "chiropractic": 7,
+    "group": 7,
     "podiatry": 6,
     "support": 3,
     "eye-vision": 2,
@@ -3230,8 +3230,8 @@
    "county": "Maricopa County",
    "practitioners": 1006,
    "with_role": 484,
-   "orgs_provider": 568,
-   "orgs_ein": 21,
+   "orgs_provider": 510,
+   "orgs_ein": 20,
    "locations": 645,
    "lat": 33.60672,
    "lng": -111.9375,
@@ -3262,29 +3262,29 @@
    "county": "Maricopa County",
    "practitioners": 578,
    "with_role": 126,
-   "orgs_provider": 326,
-   "orgs_ein": 8,
+   "orgs_provider": 331,
+   "orgs_ein": 9,
    "locations": 653,
    "lat": 33.67084,
    "lng": -111.90274,
    "by_category": {
     "behavioral-health": 163,
     "physician": 74,
-    "rehab-therapy": 67,
     "dental": 67,
+    "rehab-therapy": 67,
     "advanced-practice": 51,
     "pharmacy": 44,
     "chiropractic": 31,
     "other-clinical": 30,
     "nursing": 15,
-    "group": 9,
     "eye-vision": 9,
+    "group": 9,
     "student": 6,
     "dietary": 5,
     "support": 4,
-    "no-taxonomy": 1,
     "emergency-medical": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -3293,7 +3293,7 @@
    "county": "Maricopa County",
    "practitioners": 181,
    "with_role": 121,
-   "orgs_provider": 16,
+   "orgs_provider": 19,
    "orgs_ein": 2,
    "locations": 32,
    "lat": 33.51295,
@@ -3307,10 +3307,10 @@
     "rehab-therapy": 9,
     "podiatry": 8,
     "dietary": 8,
-    "nursing": 5,
     "eye-vision": 5,
-    "other-clinical": 2,
+    "nursing": 5,
     "group": 2,
+    "other-clinical": 2,
     "chiropractic": 1
    }
   },
@@ -3320,7 +3320,7 @@
    "county": "Maricopa County",
    "practitioners": 397,
    "with_role": 97,
-   "orgs_provider": 118,
+   "orgs_provider": 131,
    "orgs_ein": 1,
    "locations": 197,
    "lat": 33.46693,
@@ -3348,8 +3348,8 @@
    "county": "Maricopa County",
    "practitioners": 2271,
    "with_role": 1500,
-   "orgs_provider": 755,
-   "orgs_ein": 24,
+   "orgs_provider": 778,
+   "orgs_ein": 25,
    "locations": 1041,
    "lat": 33.56934,
    "lng": -111.88768,
@@ -3382,7 +3382,7 @@
    "county": "Maricopa County",
    "practitioners": 2715,
    "with_role": 1888,
-   "orgs_provider": 91,
+   "orgs_provider": 83,
    "orgs_ein": 4,
    "locations": 154,
    "lat": 33.58515,
@@ -3413,8 +3413,8 @@
    "county": "Maricopa County",
    "practitioners": 1830,
    "with_role": 604,
-   "orgs_provider": 1022,
-   "orgs_ein": 15,
+   "orgs_provider": 1008,
+   "orgs_ein": 16,
    "locations": 1473,
    "lat": 33.61069,
    "lng": -111.89383,
@@ -3436,8 +3436,8 @@
     "podiatry": 3,
     "student": 3,
     "agency": 2,
-    "no-taxonomy": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -3459,7 +3459,7 @@
    "county": "Maricopa County",
    "practitioners": 122,
    "with_role": 42,
-   "orgs_provider": 34,
+   "orgs_provider": 33,
    "orgs_ein": 0,
    "locations": 49,
    "lat": 33.74689,
@@ -3472,11 +3472,11 @@
     "pharmacy": 3,
     "nursing": 3,
     "dental": 2,
-    "student": 1,
-    "other-clinical": 1,
-    "transport": 1,
-    "dietary": 1,
     "agency": 1,
+    "dietary": 1,
+    "student": 1,
+    "transport": 1,
+    "other-clinical": 1,
     "eye-vision": 1
    }
   },
@@ -3520,7 +3520,7 @@
    "county": "Maricopa County",
    "practitioners": 119,
    "with_role": 18,
-   "orgs_provider": 51,
+   "orgs_provider": 55,
    "orgs_ein": 1,
    "locations": 101,
    "lat": 33.78894,
@@ -3535,14 +3535,14 @@
     "physician": 4,
     "chiropractic": 3,
     "podiatry": 3,
-    "eye-vision": 2,
     "agency": 2,
+    "eye-vision": 2,
     "facility": 1,
-    "supplier": 1,
+    "student": 1,
     "no-taxonomy": 1,
     "group": 1,
     "advanced-practice": 1,
-    "student": 1
+    "supplier": 1
    }
   },
   {
@@ -3551,7 +3551,7 @@
    "county": null,
    "practitioners": 3,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 6,
    "lat": 33.61648,
@@ -3567,7 +3567,7 @@
    "county": "Maricopa County",
    "practitioners": 478,
    "with_role": 127,
-   "orgs_provider": 113,
+   "orgs_provider": 118,
    "orgs_ein": 7,
    "locations": 234,
    "lat": 33.60252,
@@ -3624,7 +3624,7 @@
    "county": null,
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 33.4226,
@@ -3644,8 +3644,8 @@
    "lng": -111.72072,
    "by_category": {
     "group": 1,
-    "advanced-practice": 1,
-    "nursing": 1
+    "nursing": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3654,8 +3654,8 @@
    "county": "Maricopa County",
    "practitioners": 444,
    "with_role": 126,
-   "orgs_provider": 225,
-   "orgs_ein": 11,
+   "orgs_provider": 224,
+   "orgs_ein": 12,
    "locations": 317,
    "lat": 33.42125,
    "lng": -111.94892,
@@ -3670,11 +3670,11 @@
     "dental": 6,
     "group": 5,
     "podiatry": 5,
-    "dietary": 3,
-    "eye-vision": 3,
-    "student": 3,
-    "chiropractic": 3,
     "support": 3,
+    "student": 3,
+    "eye-vision": 3,
+    "dietary": 3,
+    "chiropractic": 3,
     "emergency-medical": 2
    }
   },
@@ -3684,8 +3684,8 @@
    "county": "Maricopa County",
    "practitioners": 1617,
    "with_role": 454,
-   "orgs_provider": 711,
-   "orgs_ein": 19,
+   "orgs_provider": 727,
+   "orgs_ein": 18,
    "locations": 1025,
    "lat": 33.39463,
    "lng": -111.92093,
@@ -3717,8 +3717,8 @@
    "county": "Maricopa County",
    "practitioners": 648,
    "with_role": 131,
-   "orgs_provider": 277,
-   "orgs_ein": 4,
+   "orgs_provider": 283,
+   "orgs_ein": 6,
    "locations": 500,
    "lat": 33.37074,
    "lng": -111.92385,
@@ -3748,8 +3748,8 @@
    "county": "Maricopa County",
    "practitioners": 686,
    "with_role": 207,
-   "orgs_provider": 321,
-   "orgs_ein": 5,
+   "orgs_provider": 232,
+   "orgs_ein": 3,
    "locations": 345,
    "lat": 33.33893,
    "lng": -111.93056,
@@ -3790,7 +3790,7 @@
    "county": "Maricopa County",
    "practitioners": 858,
    "with_role": 385,
-   "orgs_provider": 197,
+   "orgs_provider": 186,
    "orgs_ein": 6,
    "locations": 300,
    "lat": 33.27405,
@@ -3803,8 +3803,8 @@
     "dental": 74,
     "rehab-therapy": 69,
     "nursing": 34,
-    "eye-vision": 19,
     "chiropractic": 19,
+    "eye-vision": 19,
     "group": 16,
     "other-clinical": 13,
     "student": 10,
@@ -3830,9 +3830,9 @@
    "by_category": {
     "rehab-therapy": 13,
     "behavioral-health": 13,
+    "physician": 1,
     "advanced-practice": 1,
-    "no-taxonomy": 1,
-    "physician": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -3841,8 +3841,8 @@
    "county": null,
    "practitioners": 236,
    "with_role": 137,
-   "orgs_provider": 69,
-   "orgs_ein": 2,
+   "orgs_provider": 70,
+   "orgs_ein": 3,
    "locations": 128,
    "lat": 33.43388,
    "lng": -111.9189,
@@ -3858,8 +3858,8 @@
     "chiropractic": 4,
     "student": 4,
     "other-clinical": 3,
-    "dental": 1,
-    "facility": 1
+    "facility": 1,
+    "dental": 1
    }
   },
   {
@@ -3868,8 +3868,8 @@
    "county": "Maricopa County",
    "practitioners": 709,
    "with_role": 225,
-   "orgs_provider": 296,
-   "orgs_ein": 9,
+   "orgs_provider": 304,
+   "orgs_ein": 10,
    "locations": 464,
    "lat": 33.303,
    "lng": -111.74783,
@@ -3901,8 +3901,8 @@
    "county": "Maricopa County",
    "practitioners": 1279,
    "with_role": 205,
-   "orgs_provider": 245,
-   "orgs_ein": 4,
+   "orgs_provider": 253,
+   "orgs_ein": 5,
    "locations": 334,
    "lat": 33.33526,
    "lng": -111.76077,
@@ -3910,8 +3910,8 @@
     "behavioral-health": 735,
     "rehab-therapy": 237,
     "nursing": 58,
-    "advanced-practice": 52,
     "physician": 52,
+    "advanced-practice": 52,
     "dental": 39,
     "pharmacy": 36,
     "chiropractic": 25,
@@ -3922,8 +3922,8 @@
     "support": 3,
     "student": 2,
     "facility": 1,
-    "emergency-medical": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -3932,7 +3932,7 @@
    "county": "Maricopa County",
    "practitioners": 511,
    "with_role": 226,
-   "orgs_provider": 223,
+   "orgs_provider": 231,
    "orgs_ein": 9,
    "locations": 458,
    "lat": 33.28294,
@@ -3950,8 +3950,8 @@
     "chiropractic": 12,
     "support": 11,
     "group": 8,
-    "podiatry": 7,
     "dietary": 7,
+    "podiatry": 7,
     "eye-vision": 5,
     "no-taxonomy": 3,
     "emergency-medical": 1
@@ -3963,7 +3963,7 @@
    "county": "Maricopa County",
    "practitioners": 92,
    "with_role": 27,
-   "orgs_provider": 42,
+   "orgs_provider": 38,
    "orgs_ein": 0,
    "locations": 75,
    "lat": 33.24244,
@@ -3975,15 +3975,15 @@
     "dental": 11,
     "physician": 8,
     "advanced-practice": 5,
-    "dietary": 3,
     "chiropractic": 3,
+    "dietary": 3,
     "eye-vision": 3,
     "other-clinical": 2,
     "group": 1,
-    "transport": 1,
     "nursing": 1,
     "facility": 1,
-    "student": 1
+    "student": 1,
+    "transport": 1
    }
   },
   {
@@ -3998,10 +3998,10 @@
    "lat": 33.34933,
    "lng": -111.78654,
    "by_category": {
+    "physician": 1,
     "advanced-practice": 1,
-    "dietary": 1,
     "group": 1,
-    "physician": 1
+    "dietary": 1
    }
   },
   {
@@ -4010,8 +4010,8 @@
    "county": "Maricopa County",
    "practitioners": 261,
    "with_role": 27,
-   "orgs_provider": 163,
-   "orgs_ein": 8,
+   "orgs_provider": 177,
+   "orgs_ein": 9,
    "locations": 277,
    "lat": 33.53805,
    "lng": -112.17374,
@@ -4025,12 +4025,12 @@
     "physician": 8,
     "advanced-practice": 8,
     "chiropractic": 5,
-    "eye-vision": 4,
     "group": 4,
+    "eye-vision": 4,
     "transport": 3,
     "student": 2,
-    "podiatry": 1,
     "facility": 1,
+    "podiatry": 1,
     "support": 1,
     "dietary": 1
    }
@@ -4041,8 +4041,8 @@
    "county": "Maricopa County",
    "practitioners": 249,
    "with_role": 76,
-   "orgs_provider": 144,
-   "orgs_ein": 4,
+   "orgs_provider": 162,
+   "orgs_ein": 6,
    "locations": 245,
    "lat": 33.57202,
    "lng": -112.17251,
@@ -4055,12 +4055,12 @@
     "nursing": 21,
     "dental": 17,
     "other-clinical": 5,
-    "chiropractic": 4,
     "group": 4,
+    "chiropractic": 4,
     "facility": 1,
     "transport": 1,
-    "dietary": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "dietary": 1
    }
   },
   {
@@ -4069,7 +4069,7 @@
    "county": "Maricopa County",
    "practitioners": 28,
    "with_role": 1,
-   "orgs_provider": 14,
+   "orgs_provider": 22,
    "orgs_ein": 0,
    "locations": 50,
    "lat": 33.5267,
@@ -4090,7 +4090,7 @@
    "county": "Maricopa County",
    "practitioners": 435,
    "with_role": 207,
-   "orgs_provider": 78,
+   "orgs_provider": 82,
    "orgs_ein": 4,
    "locations": 133,
    "lat": 33.60006,
@@ -4106,12 +4106,12 @@
     "pharmacy": 16,
     "dietary": 10,
     "dental": 7,
-    "other-clinical": 5,
     "eye-vision": 5,
+    "other-clinical": 5,
     "podiatry": 4,
     "chiropractic": 4,
-    "no-taxonomy": 1,
-    "support": 1
+    "support": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -4120,7 +4120,7 @@
    "county": "Maricopa County",
    "practitioners": 52,
    "with_role": 6,
-   "orgs_provider": 44,
+   "orgs_provider": 49,
    "orgs_ein": 0,
    "locations": 67,
    "lat": 33.53143,
@@ -4130,9 +4130,9 @@
     "rehab-therapy": 10,
     "nursing": 9,
     "behavioral-health": 4,
-    "eye-vision": 3,
     "other-clinical": 3,
     "advanced-practice": 3,
+    "eye-vision": 3,
     "support": 1
    }
   },
@@ -4142,8 +4142,8 @@
    "county": "Maricopa County",
    "practitioners": 629,
    "with_role": 105,
-   "orgs_provider": 226,
-   "orgs_ein": 4,
+   "orgs_provider": 243,
+   "orgs_ein": 5,
    "locations": 507,
    "lat": 33.6146,
    "lng": -112.18264,
@@ -4152,18 +4152,18 @@
     "behavioral-health": 149,
     "nursing": 103,
     "physician": 64,
-    "advanced-practice": 45,
     "dental": 45,
+    "advanced-practice": 45,
     "pharmacy": 29,
     "chiropractic": 14,
     "other-clinical": 10,
     "group": 6,
-    "podiatry": 4,
     "eye-vision": 4,
+    "podiatry": 4,
     "dietary": 2,
+    "student": 1,
     "emergency-medical": 1,
-    "support": 1,
-    "student": 1
+    "support": 1
    }
   },
   {
@@ -4172,7 +4172,7 @@
    "county": "Maricopa County",
    "practitioners": 16,
    "with_role": 3,
-   "orgs_provider": 10,
+   "orgs_provider": 18,
    "orgs_ein": 1,
    "locations": 49,
    "lat": 33.53869,
@@ -4180,8 +4180,8 @@
    "by_category": {
     "rehab-therapy": 6,
     "behavioral-health": 5,
-    "eye-vision": 2,
     "other-clinical": 2,
+    "eye-vision": 2,
     "student": 1
    }
   },
@@ -4191,8 +4191,8 @@
    "county": "Maricopa County",
    "practitioners": 1981,
    "with_role": 612,
-   "orgs_provider": 649,
-   "orgs_ein": 19,
+   "orgs_provider": 678,
+   "orgs_ein": 22,
    "locations": 1111,
    "lat": 33.65112,
    "lng": -112.19907,
@@ -4236,8 +4236,8 @@
     "advanced-practice": 12,
     "rehab-therapy": 8,
     "other-clinical": 7,
-    "dietary": 2,
     "nursing": 2,
+    "dietary": 2,
     "eye-vision": 2
    }
   },
@@ -4247,8 +4247,8 @@
    "county": "Maricopa County",
    "practitioners": 97,
    "with_role": 9,
-   "orgs_provider": 46,
-   "orgs_ein": 1,
+   "orgs_provider": 49,
+   "orgs_ein": 0,
    "locations": 111,
    "lat": 33.70768,
    "lng": -112.17895,
@@ -4260,8 +4260,8 @@
     "dental": 7,
     "group": 4,
     "chiropractic": 4,
-    "physician": 1,
     "other-clinical": 1,
+    "physician": 1,
     "advanced-practice": 1,
     "dietary": 1
    }
@@ -4306,8 +4306,8 @@
    "lat": 33.66527,
    "lng": -112.18652,
    "by_category": {
-    "behavioral-health": 1,
     "other-clinical": 1,
+    "behavioral-health": 1,
     "pharmacy": 1
    }
   },
@@ -4326,12 +4326,12 @@
     "behavioral-health": 4,
     "physician": 2,
     "pharmacy": 2,
-    "dietary": 1,
+    "rehab-therapy": 1,
     "nursing": 1,
-    "dental": 1,
+    "dietary": 1,
     "chiropractic": 1,
-    "agency": 1,
-    "rehab-therapy": 1
+    "dental": 1,
+    "agency": 1
    }
   },
   {
@@ -4340,7 +4340,7 @@
    "county": "Maricopa County",
    "practitioners": 297,
    "with_role": 47,
-   "orgs_provider": 85,
+   "orgs_provider": 98,
    "orgs_ein": 3,
    "locations": 137,
    "lat": 33.44353,
@@ -4355,11 +4355,11 @@
     "chiropractic": 11,
     "other-clinical": 5,
     "physician": 4,
-    "group": 2,
-    "supplier": 2,
     "student": 2,
-    "eye-vision": 1,
-    "dietary": 1
+    "supplier": 2,
+    "group": 2,
+    "dietary": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -4374,13 +4374,13 @@
    "lat": 34.06719,
    "lng": -112.14957,
    "by_category": {
-    "advanced-practice": 2,
-    "behavioral-health": 2,
     "physician": 2,
-    "other-clinical": 1,
-    "podiatry": 1,
+    "behavioral-health": 2,
+    "advanced-practice": 2,
     "group": 1,
-    "dental": 1
+    "dental": 1,
+    "other-clinical": 1,
+    "podiatry": 1
    }
   },
   {
@@ -4389,8 +4389,8 @@
    "county": "Maricopa County",
    "practitioners": 202,
    "with_role": 46,
-   "orgs_provider": 77,
-   "orgs_ein": 4,
+   "orgs_provider": 85,
+   "orgs_ein": 3,
    "locations": 163,
    "lat": 33.40316,
    "lng": -112.56584,
@@ -4403,8 +4403,8 @@
     "nursing": 13,
     "physician": 11,
     "support": 8,
-    "other-clinical": 4,
     "chiropractic": 4,
+    "other-clinical": 4,
     "group": 3,
     "eye-vision": 2,
     "facility": 1,
@@ -4445,7 +4445,7 @@
    "county": "Maricopa County",
    "practitioners": 107,
    "with_role": 33,
-   "orgs_provider": 64,
+   "orgs_provider": 69,
    "orgs_ein": 0,
    "locations": 144,
    "lat": 33.77993,
@@ -4458,8 +4458,8 @@
     "chiropractic": 10,
     "other-clinical": 8,
     "behavioral-health": 6,
-    "physician": 2,
-    "nursing": 2
+    "nursing": 2,
+    "physician": 2
    }
   },
   {
@@ -4483,7 +4483,7 @@
    "county": "Maricopa County",
    "practitioners": 80,
    "with_role": 17,
-   "orgs_provider": 23,
+   "orgs_provider": 22,
    "orgs_ein": 2,
    "locations": 34,
    "lat": 33.60336,
@@ -4516,8 +4516,8 @@
    "lng": -114.77339,
    "by_category": {
     "physician": 2,
-    "rehab-therapy": 1,
-    "group": 1
+    "group": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -4539,7 +4539,7 @@
    "county": "Maricopa County",
    "practitioners": 510,
    "with_role": 225,
-   "orgs_provider": 119,
+   "orgs_provider": 133,
    "orgs_ein": 9,
    "locations": 278,
    "lat": 33.43749,
@@ -4569,7 +4569,7 @@
    "county": "Maricopa County",
    "practitioners": 260,
    "with_role": 153,
-   "orgs_provider": 50,
+   "orgs_provider": 66,
    "orgs_ein": 3,
    "locations": 114,
    "lat": 33.37551,
@@ -4585,9 +4585,9 @@
     "pharmacy": 13,
     "eye-vision": 10,
     "podiatry": 8,
-    "other-clinical": 4,
-    "group": 4,
     "chiropractic": 4,
+    "group": 4,
+    "other-clinical": 4,
     "facility": 1
    }
   },
@@ -4597,7 +4597,7 @@
    "county": "Maricopa County",
    "practitioners": 219,
    "with_role": 63,
-   "orgs_provider": 84,
+   "orgs_provider": 89,
    "orgs_ein": 2,
    "locations": 150,
    "lat": 33.49893,
@@ -4613,11 +4613,11 @@
     "other-clinical": 6,
     "chiropractic": 5,
     "student": 3,
-    "group": 2,
     "support": 2,
+    "group": 2,
+    "agency": 1,
     "no-taxonomy": 1,
     "payer": 1,
-    "agency": 1,
     "eye-vision": 1
    }
   },
@@ -4627,7 +4627,7 @@
    "county": "La Paz County",
    "practitioners": 506,
    "with_role": 187,
-   "orgs_provider": 83,
+   "orgs_provider": 88,
    "orgs_ein": 4,
    "locations": 76,
    "lat": 34.14797,
@@ -4641,14 +4641,14 @@
     "no-taxonomy": 27,
     "behavioral-health": 20,
     "dental": 18,
-    "rehab-therapy": 10,
     "eye-vision": 10,
+    "rehab-therapy": 10,
     "other-clinical": 8,
     "podiatry": 7,
     "dietary": 5,
     "group": 3,
-    "student": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "student": 1
    }
   },
   {
@@ -4657,8 +4657,8 @@
    "county": "Maricopa County",
    "practitioners": 330,
    "with_role": 106,
-   "orgs_provider": 111,
-   "orgs_ein": 6,
+   "orgs_provider": 127,
+   "orgs_ein": 7,
    "locations": 188,
    "lat": 33.57401,
    "lng": -112.25441,
@@ -4673,9 +4673,9 @@
     "rehab-therapy": 21,
     "chiropractic": 6,
     "facility": 2,
+    "supplier": 1,
     "agency": 1,
-    "group": 1,
-    "supplier": 1
+    "group": 1
    }
   },
   {
@@ -4712,7 +4712,7 @@
    "county": "Yuma County",
    "practitioners": 61,
    "with_role": 44,
-   "orgs_provider": 12,
+   "orgs_provider": 13,
    "orgs_ein": 1,
    "locations": 12,
    "lat": 32.54499,
@@ -4723,9 +4723,9 @@
     "behavioral-health": 8,
     "rehab-therapy": 5,
     "other-clinical": 4,
-    "dental": 3,
-    "group": 3,
     "student": 3,
+    "group": 3,
+    "dental": 3,
     "dietary": 1,
     "nursing": 1
    }
@@ -4736,7 +4736,7 @@
    "county": "Maricopa County",
    "practitioners": 2341,
    "with_role": 1898,
-   "orgs_provider": 524,
+   "orgs_provider": 536,
    "orgs_ein": 24,
    "locations": 472,
    "lat": 33.60875,
@@ -4757,8 +4757,8 @@
     "dietary": 13,
     "support": 5,
     "facility": 3,
-    "no-taxonomy": 1,
-    "supplier": 1
+    "supplier": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -4767,7 +4767,7 @@
    "county": "Maricopa County",
    "practitioners": 151,
    "with_role": 5,
-   "orgs_provider": 15,
+   "orgs_provider": 20,
    "orgs_ein": 0,
    "locations": 58,
    "lat": 33.44299,
@@ -4780,10 +4780,10 @@
     "dental": 4,
     "physician": 3,
     "chiropractic": 2,
-    "other-clinical": 1,
     "eye-vision": 1,
     "no-taxonomy": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -4800,9 +4800,9 @@
    "by_category": {
     "nursing": 5,
     "rehab-therapy": 4,
-    "no-taxonomy": 1,
     "behavioral-health": 1,
-    "physician": 1
+    "physician": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -4862,8 +4862,8 @@
    "lat": 33.77085,
    "lng": -112.51861,
    "by_category": {
-    "rehab-therapy": 3,
     "physician": 3,
+    "rehab-therapy": 3,
     "advanced-practice": 2,
     "nursing": 2
    }
@@ -4883,12 +4883,12 @@
     "dental": 6,
     "physician": 6,
     "pharmacy": 4,
-    "rehab-therapy": 2,
     "other-clinical": 2,
+    "rehab-therapy": 2,
     "chiropractic": 2,
     "nursing": 2,
-    "advanced-practice": 1,
     "behavioral-health": 1,
+    "advanced-practice": 1,
     "podiatry": 1
    }
   },
@@ -4898,7 +4898,7 @@
    "county": "Yuma County",
    "practitioners": 1217,
    "with_role": 494,
-   "orgs_provider": 548,
+   "orgs_provider": 562,
    "orgs_ein": 26,
    "locations": 855,
    "lat": 32.68843,
@@ -4930,7 +4930,7 @@
    "county": "Yuma County",
    "practitioners": 201,
    "with_role": 43,
-   "orgs_provider": 78,
+   "orgs_provider": 83,
    "orgs_ein": 3,
    "locations": 135,
    "lat": 32.68169,
@@ -4941,11 +4941,11 @@
     "pharmacy": 19,
     "nursing": 18,
     "advanced-practice": 14,
-    "eye-vision": 9,
     "dental": 9,
+    "eye-vision": 9,
     "physician": 8,
-    "other-clinical": 2,
     "emergency-medical": 2,
+    "other-clinical": 2,
     "agency": 1
    }
   },
@@ -4968,8 +4968,8 @@
    "county": "Yuma County",
    "practitioners": 288,
    "with_role": 212,
-   "orgs_provider": 68,
-   "orgs_ein": 5,
+   "orgs_provider": 69,
+   "orgs_ein": 6,
    "locations": 90,
    "lat": 32.66511,
    "lng": -114.43031,
@@ -4981,11 +4981,11 @@
     "nursing": 13,
     "group": 12,
     "dental": 7,
-    "podiatry": 4,
     "chiropractic": 4,
+    "podiatry": 4,
+    "eye-vision": 2,
     "other-clinical": 2,
     "student": 2,
-    "eye-vision": 2,
     "emergency-medical": 1,
     "dietary": 1,
     "supplier": 1
@@ -5010,7 +5010,7 @@
    "county": "Maricopa County",
    "practitioners": 50,
    "with_role": 12,
-   "orgs_provider": 41,
+   "orgs_provider": 43,
    "orgs_ein": 4,
    "locations": 66,
    "lat": 33.64345,
@@ -5019,14 +5019,14 @@
     "behavioral-health": 19,
     "rehab-therapy": 14,
     "physician": 4,
-    "nursing": 3,
     "dental": 3,
+    "nursing": 3,
     "chiropractic": 2,
-    "advanced-practice": 1,
-    "other-clinical": 1,
-    "pharmacy": 1,
     "group": 1,
-    "transport": 1
+    "advanced-practice": 1,
+    "transport": 1,
+    "pharmacy": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -5035,8 +5035,8 @@
    "county": "Maricopa County",
    "practitioners": 1251,
    "with_role": 473,
-   "orgs_provider": 392,
-   "orgs_ein": 17,
+   "orgs_provider": 390,
+   "orgs_ein": 16,
    "locations": 578,
    "lat": 33.64197,
    "lng": -112.38145,
@@ -5049,8 +5049,8 @@
     "nursing": 75,
     "pharmacy": 70,
     "student": 37,
-    "eye-vision": 29,
     "chiropractic": 29,
+    "eye-vision": 29,
     "other-clinical": 25,
     "group": 23,
     "dietary": 16,
@@ -5068,8 +5068,8 @@
    "county": "Maricopa County",
    "practitioners": 475,
    "with_role": 214,
-   "orgs_provider": 232,
-   "orgs_ein": 10,
+   "orgs_provider": 234,
+   "orgs_ein": 8,
    "locations": 347,
    "lat": 33.65949,
    "lng": -112.36554,
@@ -5086,8 +5086,8 @@
     "other-clinical": 6,
     "podiatry": 5,
     "dietary": 4,
-    "student": 3,
     "chiropractic": 3,
+    "student": 3,
     "support": 1
    }
   },
@@ -5112,7 +5112,7 @@
    "county": "Maricopa County",
    "practitioners": 14,
    "with_role": 4,
-   "orgs_provider": 13,
+   "orgs_provider": 12,
    "orgs_ein": 0,
    "locations": 33,
    "lat": 33.82344,
@@ -5121,8 +5121,8 @@
     "behavioral-health": 6,
     "chiropractic": 4,
     "podiatry": 1,
-    "dental": 1,
     "physician": 1,
+    "dental": 1,
     "advanced-practice": 1
    }
   },
@@ -5132,7 +5132,7 @@
    "county": null,
    "practitioners": 289,
    "with_role": 174,
-   "orgs_provider": 122,
+   "orgs_provider": 121,
    "orgs_ein": 10,
    "locations": 116,
    "lat": 33.63806,
@@ -5147,12 +5147,12 @@
     "eye-vision": 6,
     "chiropractic": 5,
     "other-clinical": 3,
-    "pharmacy": 2,
-    "dental": 2,
     "facility": 2,
+    "dental": 2,
     "group": 2,
-    "supplier": 1,
-    "dietary": 1
+    "pharmacy": 2,
+    "dietary": 1,
+    "supplier": 1
    }
   },
   {
@@ -5161,8 +5161,8 @@
    "county": "Maricopa County",
    "practitioners": 275,
    "with_role": 61,
-   "orgs_provider": 54,
-   "orgs_ein": 1,
+   "orgs_provider": 50,
+   "orgs_ein": 0,
    "locations": 82,
    "lat": 33.60719,
    "lng": -112.36711,
@@ -5178,10 +5178,10 @@
     "eye-vision": 5,
     "podiatry": 3,
     "support": 2,
-    "group": 2,
     "chiropractic": 2,
-    "other-clinical": 1,
-    "agency": 1
+    "group": 2,
+    "agency": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -5190,8 +5190,8 @@
    "county": "Maricopa County",
    "practitioners": 1168,
    "with_role": 685,
-   "orgs_provider": 433,
-   "orgs_ein": 23,
+   "orgs_provider": 461,
+   "orgs_ein": 24,
    "locations": 612,
    "lat": 33.60985,
    "lng": -112.24374,
@@ -5221,8 +5221,8 @@
    "county": "Maricopa County",
    "practitioners": 539,
    "with_role": 101,
-   "orgs_provider": 223,
-   "orgs_ein": 8,
+   "orgs_provider": 245,
+   "orgs_ein": 9,
    "locations": 432,
    "lat": 33.66043,
    "lng": -112.24755,
@@ -5232,16 +5232,16 @@
     "pharmacy": 79,
     "dental": 47,
     "advanced-practice": 30,
-    "nursing": 23,
     "physician": 23,
+    "nursing": 23,
     "other-clinical": 18,
     "chiropractic": 13,
     "eye-vision": 10,
     "dietary": 6,
     "group": 6,
     "agency": 3,
-    "support": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "support": 1
    }
   },
   {
@@ -5250,8 +5250,8 @@
    "county": "Maricopa County",
    "practitioners": 624,
    "with_role": 488,
-   "orgs_provider": 93,
-   "orgs_ein": 3,
+   "orgs_provider": 101,
+   "orgs_ein": 2,
    "locations": 178,
    "lat": 33.71797,
    "lng": -112.27252,
@@ -5263,13 +5263,13 @@
     "pharmacy": 19,
     "rehab-therapy": 15,
     "behavioral-health": 11,
-    "group": 9,
     "chiropractic": 9,
+    "group": 9,
     "other-clinical": 5,
+    "support": 1,
     "dietary": 1,
     "eye-vision": 1,
-    "podiatry": 1,
-    "support": 1
+    "podiatry": 1
    }
   },
   {
@@ -5336,7 +5336,7 @@
    "county": "Maricopa County",
    "practitioners": 89,
    "with_role": 24,
-   "orgs_provider": 64,
+   "orgs_provider": 79,
    "orgs_ein": 3,
    "locations": 113,
    "lat": 33.97207,
@@ -5351,10 +5351,10 @@
     "chiropractic": 4,
     "nursing": 3,
     "dietary": 3,
-    "eye-vision": 1,
+    "emergency-medical": 1,
     "group": 1,
     "other-clinical": 1,
-    "emergency-medical": 1
+    "eye-vision": 1
    }
   },
   {
@@ -5363,8 +5363,8 @@
    "county": "Maricopa County",
    "practitioners": 1643,
    "with_role": 729,
-   "orgs_provider": 289,
-   "orgs_ein": 12,
+   "orgs_provider": 291,
+   "orgs_ein": 14,
    "locations": 330,
    "lat": 33.47065,
    "lng": -112.3117,
@@ -5393,8 +5393,8 @@
    "county": "Maricopa County",
    "practitioners": 1376,
    "with_role": 752,
-   "orgs_provider": 289,
-   "orgs_ein": 11,
+   "orgs_provider": 290,
+   "orgs_ein": 10,
    "locations": 396,
    "lat": 33.47389,
    "lng": -112.36506,
@@ -5410,15 +5410,15 @@
     "eye-vision": 30,
     "group": 29,
     "other-clinical": 21,
-    "dietary": 11,
     "chiropractic": 11,
+    "dietary": 11,
     "podiatry": 10,
     "support": 5,
     "no-taxonomy": 3,
-    "facility": 1,
-    "transport": 1,
     "agency": 1,
-    "supplier": 1
+    "supplier": 1,
+    "transport": 1,
+    "facility": 1
    }
   },
   {
@@ -5433,15 +5433,15 @@
    "lat": 33.51192,
    "lng": -112.55289,
    "by_category": {
+    "rehab-therapy": 7,
     "nursing": 7,
     "dental": 7,
-    "rehab-therapy": 7,
     "advanced-practice": 4,
     "pharmacy": 4,
     "behavioral-health": 3,
     "physician": 2,
-    "other-clinical": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -5450,7 +5450,7 @@
    "county": "Gila County",
    "practitioners": 103,
    "with_role": 36,
-   "orgs_provider": 96,
+   "orgs_provider": 103,
    "orgs_ein": 4,
    "locations": 111,
    "lat": 33.4015,
@@ -5466,10 +5466,10 @@
     "behavioral-health": 3,
     "nursing": 2,
     "other-clinical": 2,
-    "group": 1,
     "facility": 1,
+    "podiatry": 1,
     "support": 1,
-    "podiatry": 1
+    "group": 1
    }
   },
   {
@@ -5515,7 +5515,7 @@
    "county": "Greenlee County",
    "practitioners": 10,
    "with_role": 7,
-   "orgs_provider": 6,
+   "orgs_provider": 7,
    "orgs_ein": 2,
    "locations": 3,
    "lat": 33.04535,
@@ -5533,7 +5533,7 @@
    "county": "Gila County",
    "practitioners": 505,
    "with_role": 346,
-   "orgs_provider": 165,
+   "orgs_provider": 170,
    "orgs_ein": 6,
    "locations": 237,
    "lat": 34.23783,
@@ -5552,8 +5552,8 @@
     "student": 5,
     "podiatry": 2,
     "dietary": 1,
-    "facility": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "facility": 1
    }
   },
   {
@@ -5604,8 +5604,8 @@
    "county": "Graham County",
    "practitioners": 248,
    "with_role": 120,
-   "orgs_provider": 116,
-   "orgs_ein": 5,
+   "orgs_provider": 121,
+   "orgs_ein": 6,
    "locations": 159,
    "lat": 32.8294,
    "lng": -109.716,
@@ -5621,9 +5621,9 @@
     "other-clinical": 5,
     "chiropractic": 4,
     "dietary": 3,
-    "support": 1,
+    "supplier": 1,
     "student": 1,
-    "supplier": 1
+    "support": 1
    }
   },
   {
@@ -5673,17 +5673,17 @@
    "county": "Graham County",
    "practitioners": 7,
    "with_role": 1,
-   "orgs_provider": 7,
+   "orgs_provider": 8,
    "orgs_ein": 1,
    "locations": 20,
    "lat": 32.83982,
    "lng": -109.75241,
    "by_category": {
     "pharmacy": 3,
-    "other-clinical": 1,
-    "chiropractic": 1,
+    "rehab-therapy": 1,
     "group": 1,
-    "rehab-therapy": 1
+    "other-clinical": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -5692,7 +5692,7 @@
    "county": "Cochise County",
    "practitioners": 56,
    "with_role": 13,
-   "orgs_provider": 20,
+   "orgs_provider": 29,
    "orgs_ein": 1,
    "locations": 61,
    "lat": 31.96635,
@@ -5705,11 +5705,11 @@
     "advanced-practice": 4,
     "rehab-therapy": 3,
     "dental": 2,
-    "dietary": 1,
+    "group": 1,
+    "chiropractic": 1,
     "emergency-medical": 1,
     "other-clinical": 1,
-    "chiropractic": 1,
-    "group": 1
+    "dietary": 1
    }
   },
   {
@@ -5718,7 +5718,7 @@
    "county": "Cochise County",
    "practitioners": 102,
    "with_role": 77,
-   "orgs_provider": 28,
+   "orgs_provider": 29,
    "orgs_ein": 1,
    "locations": 35,
    "lat": 31.41052,
@@ -5730,10 +5730,10 @@
     "behavioral-health": 7,
     "other-clinical": 3,
     "rehab-therapy": 3,
-    "chiropractic": 2,
     "dental": 2,
-    "dietary": 1,
-    "pharmacy": 1
+    "chiropractic": 2,
+    "pharmacy": 1,
+    "dietary": 1
    }
   },
   {
@@ -5742,7 +5742,7 @@
    "county": "Cochise County",
    "practitioners": 320,
    "with_role": 241,
-   "orgs_provider": 94,
+   "orgs_provider": 93,
    "orgs_ein": 5,
    "locations": 92,
    "lat": 31.34771,
@@ -5757,12 +5757,12 @@
     "group": 8,
     "other-clinical": 4,
     "podiatry": 3,
-    "dental": 2,
     "chiropractic": 2,
-    "transport": 1,
-    "student": 1,
+    "dental": 2,
     "dietary": 1,
-    "no-taxonomy": 1
+    "student": 1,
+    "no-taxonomy": 1,
+    "transport": 1
    }
   },
   {
@@ -5784,8 +5784,8 @@
     "nursing": 6,
     "dietary": 4,
     "rehab-therapy": 1,
-    "group": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "group": 1
    }
   },
   {
@@ -5825,8 +5825,8 @@
     "other-clinical": 4,
     "facility": 3,
     "dietary": 2,
-    "emergency-medical": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -5835,7 +5835,7 @@
    "county": "Pima County",
    "practitioners": 511,
    "with_role": 335,
-   "orgs_provider": 161,
+   "orgs_provider": 169,
    "orgs_ein": 5,
    "locations": 242,
    "lat": 31.87483,
@@ -5848,8 +5848,8 @@
     "dental": 29,
     "behavioral-health": 20,
     "nursing": 16,
-    "other-clinical": 11,
     "podiatry": 11,
+    "other-clinical": 11,
     "pharmacy": 10,
     "group": 8,
     "chiropractic": 6,
@@ -5862,15 +5862,15 @@
    "county": "Cochise County",
    "practitioners": 9,
    "with_role": 1,
-   "orgs_provider": 9,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 9,
    "lat": 31.42673,
    "lng": -110.15377,
    "by_category": {
     "nursing": 3,
-    "advanced-practice": 2,
     "rehab-therapy": 2,
+    "advanced-practice": 2,
     "agency": 1,
     "other-clinical": 1
    }
@@ -5882,14 +5882,14 @@
    "practitioners": 4,
    "with_role": 0,
    "orgs_provider": 4,
-   "orgs_ein": 0,
+   "orgs_ein": 1,
    "locations": 5,
    "lat": 31.67422,
    "lng": -110.31701,
    "by_category": {
     "rehab-therapy": 2,
-    "nursing": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "nursing": 1
    }
   },
   {
@@ -5911,7 +5911,7 @@
    "county": "Santa Cruz County",
    "practitioners": 361,
    "with_role": 237,
-   "orgs_provider": 86,
+   "orgs_provider": 88,
    "orgs_ein": 3,
    "locations": 130,
    "lat": 31.35685,
@@ -5925,8 +5925,8 @@
     "dental": 16,
     "agency": 14,
     "group": 10,
-    "other-clinical": 6,
     "podiatry": 6,
+    "other-clinical": 6,
     "rehab-therapy": 4,
     "emergency-medical": 3,
     "eye-vision": 2,
@@ -5940,7 +5940,7 @@
    "county": "Pima County",
    "practitioners": 65,
    "with_role": 37,
-   "orgs_provider": 22,
+   "orgs_provider": 24,
    "orgs_ein": 1,
    "locations": 56,
    "lat": 31.84906,
@@ -5953,8 +5953,8 @@
     "behavioral-health": 6,
     "group": 3,
     "other-clinical": 2,
-    "chiropractic": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -5997,7 +5997,7 @@
    "county": "Cochise County",
    "practitioners": 3,
    "with_role": 2,
-   "orgs_provider": 5,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 4,
    "lat": 31.93571,
@@ -6013,7 +6013,7 @@
    "county": "Pima County",
    "practitioners": 61,
    "with_role": 22,
-   "orgs_provider": 20,
+   "orgs_provider": 22,
    "orgs_ein": 4,
    "locations": 36,
    "lat": 31.94603,
@@ -6043,8 +6043,8 @@
    "lat": 31.88726,
    "lng": -110.21404,
    "by_category": {
-    "behavioral-health": 1,
-    "nursing": 1
+    "nursing": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -6053,7 +6053,7 @@
    "county": "Pinal County",
    "practitioners": 7,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 32.60845,
@@ -6061,8 +6061,8 @@
    "by_category": {
     "behavioral-health": 2,
     "agency": 1,
-    "pharmacy": 1,
     "physician": 1,
+    "pharmacy": 1,
     "advanced-practice": 1,
     "rehab-therapy": 1
    }
@@ -6080,9 +6080,9 @@
    "lng": -111.86762,
    "by_category": {
     "nursing": 3,
+    "eye-vision": 1,
     "pharmacy": 1,
-    "rehab-therapy": 1,
-    "eye-vision": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -6091,8 +6091,8 @@
    "county": "Cochise County",
    "practitioners": 539,
    "with_role": 171,
-   "orgs_provider": 264,
-   "orgs_ein": 9,
+   "orgs_provider": 281,
+   "orgs_ein": 10,
    "locations": 459,
    "lat": 31.55094,
    "lng": -110.26719,
@@ -6101,8 +6101,8 @@
     "physician": 84,
     "rehab-therapy": 74,
     "advanced-practice": 58,
-    "dental": 52,
     "nursing": 52,
+    "dental": 52,
     "pharmacy": 40,
     "student": 16,
     "eye-vision": 12,
@@ -6112,8 +6112,8 @@
     "group": 4,
     "podiatry": 4,
     "support": 1,
-    "no-taxonomy": 1,
-    "facility": 1
+    "facility": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -6165,7 +6165,7 @@
    "county": "Pima County",
    "practitioners": 90,
    "with_role": 19,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 1,
    "locations": 32,
    "lat": 32.02644,
@@ -6175,10 +6175,10 @@
     "behavioral-health": 16,
     "dental": 10,
     "pharmacy": 6,
-    "advanced-practice": 5,
     "nursing": 5,
-    "physician": 4,
+    "advanced-practice": 5,
     "other-clinical": 4,
+    "physician": 4,
     "group": 1
    }
   },
@@ -6188,7 +6188,7 @@
    "county": "Cochise County",
    "practitioners": 25,
    "with_role": 6,
-   "orgs_provider": 19,
+   "orgs_provider": 23,
    "orgs_ein": 2,
    "locations": 43,
    "lat": 32.25728,
@@ -6197,8 +6197,8 @@
     "behavioral-health": 5,
     "pharmacy": 5,
     "rehab-therapy": 4,
-    "advanced-practice": 4,
     "nursing": 4,
+    "advanced-practice": 4,
     "physician": 2,
     "chiropractic": 1
    }
@@ -6249,10 +6249,10 @@
     "dental": 13,
     "nursing": 6,
     "pharmacy": 4,
-    "behavioral-health": 2,
     "dietary": 2,
-    "group": 1,
-    "chiropractic": 1
+    "behavioral-health": 2,
+    "chiropractic": 1,
+    "group": 1
    }
   },
   {
@@ -6261,7 +6261,7 @@
    "county": "Cochise County",
    "practitioners": 26,
    "with_role": 3,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 1,
    "locations": 27,
    "lat": 31.50085,
@@ -6270,11 +6270,11 @@
     "rehab-therapy": 11,
     "nursing": 7,
     "behavioral-health": 3,
+    "chiropractic": 1,
     "dental": 1,
-    "physician": 1,
     "support": 1,
     "advanced-practice": 1,
-    "chiropractic": 1
+    "physician": 1
    }
   },
   {
@@ -6296,7 +6296,7 @@
    "county": "Pima County",
    "practitioners": 305,
    "with_role": 187,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 1,
    "locations": 46,
    "lat": 32.4326,
@@ -6322,7 +6322,7 @@
    "county": "Pima County",
    "practitioners": 23,
    "with_role": 5,
-   "orgs_provider": 11,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 19,
    "lat": 32.4351,
@@ -6332,10 +6332,10 @@
     "dental": 4,
     "rehab-therapy": 3,
     "behavioral-health": 2,
-    "advanced-practice": 1,
-    "nursing": 1,
-    "physician": 1,
     "student": 1,
+    "nursing": 1,
+    "advanced-practice": 1,
+    "physician": 1,
     "chiropractic": 1
    }
   },
@@ -6345,7 +6345,7 @@
    "county": "Pima County",
    "practitioners": 423,
    "with_role": 91,
-   "orgs_provider": 88,
+   "orgs_provider": 89,
    "orgs_ein": 4,
    "locations": 138,
    "lat": 32.22075,
@@ -6361,11 +6361,11 @@
     "dental": 5,
     "pharmacy": 4,
     "support": 1,
-    "eye-vision": 1,
+    "group": 1,
     "chiropractic": 1,
     "podiatry": 1,
-    "group": 1,
-    "student": 1
+    "student": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -6374,7 +6374,7 @@
    "county": "Pima County",
    "practitioners": 944,
    "with_role": 374,
-   "orgs_provider": 407,
+   "orgs_provider": 442,
    "orgs_ein": 11,
    "locations": 757,
    "lat": 32.32851,
@@ -6394,8 +6394,8 @@
     "eye-vision": 11,
     "support": 5,
     "facility": 3,
-    "dietary": 3,
     "podiatry": 3,
+    "dietary": 3,
     "agency": 2,
     "no-taxonomy": 1
    }
@@ -6406,7 +6406,7 @@
    "county": "Pima County",
    "practitioners": 543,
    "with_role": 116,
-   "orgs_provider": 200,
+   "orgs_provider": 228,
    "orgs_ein": 10,
    "locations": 377,
    "lat": 32.26745,
@@ -6422,13 +6422,13 @@
     "other-clinical": 21,
     "chiropractic": 5,
     "dietary": 4,
-    "group": 3,
     "eye-vision": 3,
-    "student": 2,
+    "group": 3,
     "support": 2,
-    "facility": 1,
+    "student": 2,
+    "no-taxonomy": 1,
     "supplier": 1,
-    "no-taxonomy": 1
+    "facility": 1
    }
   },
   {
@@ -6437,7 +6437,7 @@
    "county": "Pima County",
    "practitioners": 235,
    "with_role": 10,
-   "orgs_provider": 18,
+   "orgs_provider": 26,
    "orgs_ein": 0,
    "locations": 78,
    "lat": 32.14378,
@@ -6450,9 +6450,9 @@
     "dental": 11,
     "physician": 2,
     "chiropractic": 2,
+    "emergency-medical": 1,
     "support": 1,
     "advanced-practice": 1,
-    "emergency-medical": 1,
     "eye-vision": 1
    }
   },
@@ -6462,7 +6462,7 @@
    "county": "Pima County",
    "practitioners": 128,
    "with_role": 5,
-   "orgs_provider": 5,
+   "orgs_provider": 10,
    "orgs_ein": 2,
    "locations": 34,
    "lat": 32.17945,
@@ -6472,8 +6472,8 @@
     "physician": 25,
     "dental": 19,
     "other-clinical": 16,
-    "advanced-practice": 13,
     "pharmacy": 13,
+    "advanced-practice": 13,
     "rehab-therapy": 6,
     "nursing": 5,
     "dietary": 2,
@@ -6510,8 +6510,8 @@
    "lng": -110.99132,
    "by_category": {
     "rehab-therapy": 4,
-    "physician": 2,
     "nursing": 2,
+    "physician": 2,
     "advanced-practice": 1,
     "group": 1
    }
@@ -6522,7 +6522,7 @@
    "county": "Pima County",
    "practitioners": 427,
    "with_role": 53,
-   "orgs_provider": 254,
+   "orgs_provider": 277,
    "orgs_ein": 8,
    "locations": 484,
    "lat": 32.223,
@@ -6541,9 +6541,9 @@
     "podiatry": 4,
     "no-taxonomy": 3,
     "group": 3,
-    "support": 2,
+    "student": 2,
     "dietary": 2,
-    "student": 2
+    "support": 2
    }
   },
   {
@@ -6552,7 +6552,7 @@
    "county": "Pima County",
    "practitioners": 604,
    "with_role": 77,
-   "orgs_provider": 300,
+   "orgs_provider": 343,
    "orgs_ein": 5,
    "locations": 695,
    "lat": 32.22349,
@@ -6565,16 +6565,16 @@
     "pharmacy": 49,
     "advanced-practice": 29,
     "nursing": 27,
-    "other-clinical": 18,
     "chiropractic": 18,
+    "other-clinical": 18,
     "group": 8,
     "support": 7,
     "eye-vision": 7,
     "student": 4,
     "dietary": 3,
     "facility": 2,
-    "supplier": 1,
     "podiatry": 1,
+    "supplier": 1,
     "no-taxonomy": 1
    }
   },
@@ -6584,8 +6584,8 @@
    "county": "Pima County",
    "practitioners": 1623,
    "with_role": 478,
-   "orgs_provider": 617,
-   "orgs_ein": 28,
+   "orgs_provider": 646,
+   "orgs_ein": 33,
    "locations": 1130,
    "lat": 32.24937,
    "lng": -110.88115,
@@ -6599,8 +6599,8 @@
     "student": 93,
     "nursing": 68,
     "other-clinical": 62,
-    "chiropractic": 28,
     "dietary": 28,
+    "chiropractic": 28,
     "group": 21,
     "support": 18,
     "eye-vision": 14,
@@ -6616,8 +6616,8 @@
    "county": "Pima County",
    "practitioners": 590,
    "with_role": 150,
-   "orgs_provider": 118,
-   "orgs_ein": 2,
+   "orgs_provider": 122,
+   "orgs_ein": 3,
    "locations": 231,
    "lat": 32.18478,
    "lng": -110.9549,
@@ -6645,8 +6645,8 @@
    "county": "Pima County",
    "practitioners": 517,
    "with_role": 350,
-   "orgs_provider": 86,
-   "orgs_ein": 3,
+   "orgs_provider": 101,
+   "orgs_ein": 4,
    "locations": 159,
    "lat": 32.1696,
    "lng": -110.95374,
@@ -6664,9 +6664,9 @@
     "other-clinical": 4,
     "chiropractic": 3,
     "support": 3,
-    "no-taxonomy": 1,
-    "facility": 1,
     "supplier": 1,
+    "facility": 1,
+    "no-taxonomy": 1,
     "student": 1
    }
   },
@@ -6676,8 +6676,8 @@
    "county": "Pima County",
    "practitioners": 568,
    "with_role": 135,
-   "orgs_provider": 154,
-   "orgs_ein": 5,
+   "orgs_provider": 168,
+   "orgs_ein": 4,
    "locations": 389,
    "lat": 32.244,
    "lng": -110.84991,
@@ -6704,7 +6704,7 @@
    "county": "Pima County",
    "practitioners": 711,
    "with_role": 187,
-   "orgs_provider": 217,
+   "orgs_provider": 230,
    "orgs_ein": 7,
    "locations": 387,
    "lat": 32.24357,
@@ -6713,8 +6713,8 @@
     "behavioral-health": 255,
     "rehab-therapy": 155,
     "dental": 58,
-    "advanced-practice": 54,
     "physician": 54,
+    "advanced-practice": 54,
     "other-clinical": 49,
     "nursing": 28,
     "pharmacy": 21,
@@ -6724,8 +6724,8 @@
     "group": 4,
     "podiatry": 3,
     "support": 3,
-    "supplier": 1,
-    "agency": 1
+    "agency": 1,
+    "supplier": 1
    }
   },
   {
@@ -6734,7 +6734,7 @@
    "county": "Pima County",
    "practitioners": 387,
    "with_role": 144,
-   "orgs_provider": 170,
+   "orgs_provider": 173,
    "orgs_ein": 3,
    "locations": 314,
    "lat": 32.29814,
@@ -6750,9 +6750,9 @@
     "dental": 10,
     "chiropractic": 8,
     "group": 2,
-    "support": 1,
+    "student": 1,
     "facility": 1,
-    "student": 1
+    "support": 1
    }
   },
   {
@@ -6761,7 +6761,7 @@
    "county": "Pima County",
    "practitioners": 1728,
    "with_role": 696,
-   "orgs_provider": 235,
+   "orgs_provider": 250,
    "orgs_ein": 5,
    "locations": 476,
    "lat": 32.25224,
@@ -6782,8 +6782,8 @@
     "chiropractic": 6,
     "support": 5,
     "no-taxonomy": 3,
-    "emergency-medical": 1,
-    "agency": 1
+    "agency": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -6835,8 +6835,8 @@
     "eye-vision": 14,
     "dental": 12,
     "other-clinical": 6,
-    "group": 4,
     "student": 4,
+    "group": 4,
     "facility": 3,
     "support": 2,
     "no-taxonomy": 1,
@@ -6867,11 +6867,11 @@
     "rehab-therapy": 8,
     "other-clinical": 7,
     "no-taxonomy": 3,
-    "dental": 1,
+    "eye-vision": 1,
+    "emergency-medical": 1,
     "podiatry": 1,
     "facility": 1,
-    "eye-vision": 1,
-    "emergency-medical": 1
+    "dental": 1
    }
   },
   {
@@ -6909,7 +6909,7 @@
    "county": "Pima County",
    "practitioners": 66,
    "with_role": 5,
-   "orgs_provider": 12,
+   "orgs_provider": 18,
    "orgs_ein": 0,
    "locations": 52,
    "lat": 32.19031,
@@ -6948,7 +6948,7 @@
    "county": null,
    "practitioners": 1,
    "with_role": 1,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 32.22501,
@@ -6984,8 +6984,8 @@
    "lat": 32.15525,
    "lng": -111.1486,
    "by_category": {
-    "rehab-therapy": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -7009,7 +7009,7 @@
    "county": "Pima County",
    "practitioners": 354,
    "with_role": 226,
-   "orgs_provider": 80,
+   "orgs_provider": 78,
    "orgs_ein": 3,
    "locations": 112,
    "lat": 32.40172,
@@ -7026,10 +7026,10 @@
     "group": 6,
     "other-clinical": 3,
     "podiatry": 2,
-    "chiropractic": 1,
-    "no-taxonomy": 1,
+    "support": 1,
     "facility": 1,
-    "support": 1
+    "chiropractic": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -7051,7 +7051,7 @@
    "county": "Pinal County",
    "practitioners": 122,
    "with_role": 52,
-   "orgs_provider": 58,
+   "orgs_provider": 60,
    "orgs_ein": 2,
    "locations": 77,
    "lat": 32.48218,
@@ -7088,8 +7088,8 @@
    "county": "Pima County",
    "practitioners": 440,
    "with_role": 114,
-   "orgs_provider": 166,
-   "orgs_ein": 5,
+   "orgs_provider": 203,
+   "orgs_ein": 10,
    "locations": 390,
    "lat": 32.33138,
    "lng": -111.02447,
@@ -7117,7 +7117,7 @@
    "county": "Pima County",
    "practitioners": 101,
    "with_role": 12,
-   "orgs_provider": 25,
+   "orgs_provider": 28,
    "orgs_ein": 0,
    "locations": 68,
    "lat": 32.3653,
@@ -7141,7 +7141,7 @@
    "county": "Pima County",
    "practitioners": 121,
    "with_role": 52,
-   "orgs_provider": 39,
+   "orgs_provider": 51,
    "orgs_ein": 2,
    "locations": 109,
    "lat": 32.35398,
@@ -7154,12 +7154,12 @@
     "rehab-therapy": 11,
     "nursing": 8,
     "dental": 3,
-    "student": 2,
-    "dietary": 2,
     "chiropractic": 2,
-    "eye-vision": 1,
+    "dietary": 2,
+    "student": 2,
     "support": 1,
-    "agency": 1
+    "agency": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -7181,8 +7181,8 @@
    "county": "Pima County",
    "practitioners": 647,
    "with_role": 254,
-   "orgs_provider": 248,
-   "orgs_ein": 9,
+   "orgs_provider": 228,
+   "orgs_ein": 11,
    "locations": 340,
    "lat": 32.23393,
    "lng": -111.00251,
@@ -7191,8 +7191,8 @@
     "advanced-practice": 103,
     "behavioral-health": 84,
     "rehab-therapy": 68,
-    "nursing": 57,
     "pharmacy": 57,
+    "nursing": 57,
     "dental": 29,
     "student": 19,
     "dietary": 15,
@@ -7211,8 +7211,8 @@
    "county": "Pima County",
    "practitioners": 514,
    "with_role": 183,
-   "orgs_provider": 100,
-   "orgs_ein": 4,
+   "orgs_provider": 91,
+   "orgs_ein": 3,
    "locations": 104,
    "lat": 32.13422,
    "lng": -111.00606,
@@ -7226,8 +7226,8 @@
     "support": 14,
     "rehab-therapy": 10,
     "student": 6,
-    "dietary": 6,
     "eye-vision": 6,
+    "dietary": 6,
     "group": 4,
     "chiropractic": 2,
     "podiatry": 2,
@@ -7241,8 +7241,8 @@
    "county": "Pima County",
    "practitioners": 553,
    "with_role": 459,
-   "orgs_provider": 66,
-   "orgs_ein": 1,
+   "orgs_provider": 79,
+   "orgs_ein": 2,
    "locations": 131,
    "lat": 32.11821,
    "lng": -110.77689,
@@ -7255,8 +7255,8 @@
     "group": 17,
     "nursing": 15,
     "dietary": 8,
-    "other-clinical": 6,
     "dental": 6,
+    "other-clinical": 6,
     "eye-vision": 5,
     "podiatry": 4,
     "chiropractic": 3,
@@ -7270,7 +7270,7 @@
    "practitioners": 545,
    "with_role": 400,
    "orgs_provider": 44,
-   "orgs_ein": 3,
+   "orgs_ein": 2,
    "locations": 75,
    "lat": 32.21882,
    "lng": -110.76782,
@@ -7295,7 +7295,7 @@
    "county": "Pima County",
    "practitioners": 34,
    "with_role": 4,
-   "orgs_provider": 13,
+   "orgs_provider": 19,
    "orgs_ein": 0,
    "locations": 54,
    "lat": 32.25871,
@@ -7305,13 +7305,13 @@
     "behavioral-health": 6,
     "rehab-therapy": 5,
     "other-clinical": 3,
-    "nursing": 2,
     "dental": 2,
     "advanced-practice": 2,
-    "facility": 1,
-    "chiropractic": 1,
+    "nursing": 2,
+    "physician": 1,
     "group": 1,
-    "physician": 1
+    "facility": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -7320,7 +7320,7 @@
    "county": "Pima County",
    "practitioners": 60,
    "with_role": 4,
-   "orgs_provider": 28,
+   "orgs_provider": 31,
    "orgs_ein": 0,
    "locations": 85,
    "lat": 32.29486,
@@ -7336,8 +7336,8 @@
     "chiropractic": 3,
     "nursing": 2,
     "group": 1,
-    "facility": 1,
-    "support": 1
+    "support": 1,
+    "facility": 1
    }
   },
   {
@@ -7385,7 +7385,7 @@
    "county": "Pima County",
    "practitioners": 497,
    "with_role": 325,
-   "orgs_provider": 141,
+   "orgs_provider": 139,
    "orgs_ein": 2,
    "locations": 139,
    "lat": 32.43418,
@@ -7413,7 +7413,7 @@
    "county": "Pima County",
    "practitioners": 59,
    "with_role": 14,
-   "orgs_provider": 13,
+   "orgs_provider": 11,
    "orgs_ein": 1,
    "locations": 31,
    "lat": 32.11195,
@@ -7425,10 +7425,10 @@
     "rehab-therapy": 2,
     "nursing": 2,
     "facility": 1,
-    "dental": 1,
     "support": 1,
     "pharmacy": 1,
-    "group": 1
+    "group": 1,
+    "dental": 1
    }
   },
   {
@@ -7444,8 +7444,8 @@
    "lng": -111.07819,
    "by_category": {
     "behavioral-health": 3,
-    "nursing": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "nursing": 1
    }
   },
   {
@@ -7467,8 +7467,8 @@
    "county": "Navajo County",
    "practitioners": 298,
    "with_role": 112,
-   "orgs_provider": 186,
-   "orgs_ein": 8,
+   "orgs_provider": 184,
+   "orgs_ein": 7,
    "locations": 287,
    "lat": 34.23342,
    "lng": -110.02842,
@@ -7479,16 +7479,16 @@
     "behavioral-health": 43,
     "pharmacy": 33,
     "dental": 20,
-    "other-clinical": 8,
     "nursing": 8,
+    "other-clinical": 8,
     "chiropractic": 6,
     "eye-vision": 4,
     "group": 3,
     "dietary": 2,
-    "support": 1,
-    "transport": 1,
     "supplier": 1,
-    "emergency-medical": 1
+    "transport": 1,
+    "emergency-medical": 1,
+    "support": 1
    }
   },
   {
@@ -7527,7 +7527,7 @@
    "county": "Navajo County",
    "practitioners": 68,
    "with_role": 23,
-   "orgs_provider": 71,
+   "orgs_provider": 82,
    "orgs_ein": 2,
    "locations": 114,
    "lat": 34.16386,
@@ -7539,11 +7539,11 @@
     "behavioral-health": 5,
     "dental": 5,
     "chiropractic": 4,
-    "pharmacy": 3,
     "nursing": 3,
+    "pharmacy": 3,
     "eye-vision": 2,
-    "other-clinical": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -7552,18 +7552,18 @@
    "county": "Navajo County",
    "practitioners": 9,
    "with_role": 1,
-   "orgs_provider": 13,
+   "orgs_provider": 14,
    "orgs_ein": 1,
    "locations": 24,
    "lat": 34.1282,
    "lng": -109.94298,
    "by_category": {
     "dental": 4,
+    "podiatry": 1,
+    "physician": 1,
     "chiropractic": 1,
     "behavioral-health": 1,
-    "rehab-therapy": 1,
-    "physician": 1,
-    "podiatry": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -7572,8 +7572,8 @@
    "county": "Navajo County",
    "practitioners": 65,
    "with_role": 27,
-   "orgs_provider": 35,
-   "orgs_ein": 0,
+   "orgs_provider": 37,
+   "orgs_ein": 1,
    "locations": 46,
    "lat": 34.50394,
    "lng": -110.07489,
@@ -7582,9 +7582,9 @@
     "physician": 9,
     "behavioral-health": 8,
     "chiropractic": 7,
-    "dental": 6,
-    "rehab-therapy": 6,
     "nursing": 6,
+    "rehab-therapy": 6,
+    "dental": 6,
     "other-clinical": 3,
     "podiatry": 1,
     "pharmacy": 1
@@ -7605,13 +7605,13 @@
     "physician": 22,
     "advanced-practice": 10,
     "pharmacy": 5,
-    "rehab-therapy": 2,
     "podiatry": 2,
     "nursing": 2,
     "group": 2,
+    "rehab-therapy": 2,
+    "other-clinical": 1,
     "student": 1,
-    "behavioral-health": 1,
-    "other-clinical": 1
+    "behavioral-health": 1
    }
   },
   {
@@ -7620,7 +7620,7 @@
    "county": "Coconino County",
    "practitioners": 2788,
    "with_role": 2004,
-   "orgs_provider": 435,
+   "orgs_provider": 446,
    "orgs_ein": 15,
    "locations": 673,
    "lat": 35.19962,
@@ -7642,11 +7642,11 @@
     "support": 5,
     "podiatry": 5,
     "no-taxonomy": 4,
-    "supplier": 2,
     "emergency-medical": 2,
-    "student": 1,
+    "supplier": 2,
+    "payer": 1,
     "agency": 1,
-    "payer": 1
+    "student": 1
    }
   },
   {
@@ -7668,7 +7668,7 @@
    "county": "Coconino County",
    "practitioners": 561,
    "with_role": 146,
-   "orgs_provider": 137,
+   "orgs_provider": 147,
    "orgs_ein": 6,
    "locations": 254,
    "lat": 35.21442,
@@ -7685,11 +7685,11 @@
     "student": 18,
     "chiropractic": 18,
     "dietary": 4,
-    "no-taxonomy": 2,
     "agency": 2,
+    "no-taxonomy": 2,
+    "facility": 1,
     "support": 1,
-    "group": 1,
-    "facility": 1
+    "group": 1
    }
   },
   {
@@ -7705,8 +7705,8 @@
    "lng": -111.67927,
    "by_category": {
     "nursing": 3,
-    "no-taxonomy": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -7779,7 +7779,7 @@
    "county": "Navajo County",
    "practitioners": 73,
    "with_role": 23,
-   "orgs_provider": 30,
+   "orgs_provider": 32,
    "orgs_ein": 3,
    "locations": 38,
    "lat": 34.91199,
@@ -7803,18 +7803,18 @@
    "county": "Coconino County",
    "practitioners": 21,
    "with_role": 5,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 23,
    "lat": 35.2682,
    "lng": -112.18559,
    "by_category": {
-    "pharmacy": 4,
     "rehab-therapy": 4,
-    "dental": 3,
+    "pharmacy": 4,
     "advanced-practice": 3,
-    "chiropractic": 2,
+    "dental": 3,
     "behavioral-health": 2,
+    "chiropractic": 2,
     "other-clinical": 1,
     "dietary": 1,
     "physician": 1
@@ -7826,7 +7826,7 @@
    "county": "Navajo County",
    "practitioners": 333,
    "with_role": 136,
-   "orgs_provider": 53,
+   "orgs_provider": 58,
    "orgs_ein": 5,
    "locations": 63,
    "lat": 35.02944,
@@ -7843,11 +7843,11 @@
     "student": 8,
     "group": 3,
     "other-clinical": 3,
-    "no-taxonomy": 3,
     "podiatry": 3,
-    "chiropractic": 2,
+    "no-taxonomy": 3,
+    "dietary": 2,
     "agency": 2,
-    "dietary": 2
+    "chiropractic": 2
    }
   },
   {
@@ -7856,7 +7856,7 @@
    "county": "Yavapai County",
    "practitioners": 1000,
    "with_role": 530,
-   "orgs_provider": 353,
+   "orgs_provider": 352,
    "orgs_ein": 16,
    "locations": 496,
    "lat": 34.56194,
@@ -7902,7 +7902,7 @@
    "county": "Yavapai County",
    "practitioners": 149,
    "with_role": 28,
-   "orgs_provider": 73,
+   "orgs_provider": 65,
    "orgs_ein": 1,
    "locations": 138,
    "lat": 34.53913,
@@ -7915,8 +7915,8 @@
     "chiropractic": 9,
     "pharmacy": 7,
     "physician": 5,
-    "dental": 4,
     "advanced-practice": 4,
+    "dental": 4,
     "dietary": 1,
     "eye-vision": 1
    }
@@ -7940,8 +7940,8 @@
    "county": "Yavapai County",
    "practitioners": 520,
    "with_role": 227,
-   "orgs_provider": 218,
-   "orgs_ein": 12,
+   "orgs_provider": 237,
+   "orgs_ein": 13,
    "locations": 339,
    "lat": 34.57243,
    "lng": -112.48007,
@@ -7959,8 +7959,8 @@
     "dietary": 5,
     "eye-vision": 3,
     "no-taxonomy": 2,
-    "transport": 1,
     "podiatry": 1,
+    "transport": 1,
     "support": 1
    }
   },
@@ -7997,12 +7997,12 @@
     "physician": 6,
     "support": 4,
     "dietary": 3,
+    "dental": 1,
     "podiatry": 1,
     "student": 1,
+    "group": 1,
     "other-clinical": 1,
-    "dental": 1,
-    "facility": 1,
-    "group": 1
+    "facility": 1
    }
   },
   {
@@ -8011,8 +8011,8 @@
    "county": "Yavapai County",
    "practitioners": 370,
    "with_role": 84,
-   "orgs_provider": 209,
-   "orgs_ein": 8,
+   "orgs_provider": 232,
+   "orgs_ein": 11,
    "locations": 392,
    "lat": 34.59038,
    "lng": -112.32946,
@@ -8030,8 +8030,8 @@
     "group": 4,
     "dietary": 3,
     "podiatry": 2,
-    "support": 1,
-    "agency": 1
+    "agency": 1,
+    "support": 1
    }
   },
   {
@@ -8056,8 +8056,8 @@
    "county": "Yavapai County",
    "practitioners": 66,
    "with_role": 24,
-   "orgs_provider": 32,
-   "orgs_ein": 0,
+   "orgs_provider": 37,
+   "orgs_ein": 2,
    "locations": 62,
    "lat": 34.56251,
    "lng": -111.85832,
@@ -8071,8 +8071,8 @@
     "behavioral-health": 4,
     "group": 3,
     "chiropractic": 2,
-    "facility": 1,
-    "dietary": 1
+    "dietary": 1,
+    "facility": 1
    }
   },
   {
@@ -8081,8 +8081,8 @@
    "county": "Yavapai County",
    "practitioners": 64,
    "with_role": 16,
-   "orgs_provider": 35,
-   "orgs_ein": 1,
+   "orgs_provider": 40,
+   "orgs_ein": 2,
    "locations": 74,
    "lat": 34.75869,
    "lng": -112.45146,
@@ -8091,9 +8091,9 @@
     "rehab-therapy": 15,
     "pharmacy": 9,
     "advanced-practice": 5,
-    "nursing": 4,
     "physician": 4,
     "chiropractic": 4,
+    "nursing": 4,
     "other-clinical": 3,
     "behavioral-health": 2,
     "emergency-medical": 1,
@@ -8136,8 +8136,8 @@
    "county": "Yavapai County",
    "practitioners": 346,
    "with_role": 77,
-   "orgs_provider": 191,
-   "orgs_ein": 4,
+   "orgs_provider": 217,
+   "orgs_ein": 6,
    "locations": 355,
    "lat": 34.73175,
    "lng": -112.0191,
@@ -8149,16 +8149,16 @@
     "dental": 30,
     "pharmacy": 22,
     "nursing": 19,
-    "chiropractic": 14,
     "student": 14,
+    "chiropractic": 14,
     "other-clinical": 12,
     "no-taxonomy": 5,
     "eye-vision": 4,
     "dietary": 3,
     "group": 2,
+    "podiatry": 1,
     "support": 1,
-    "agency": 1,
-    "podiatry": 1
+    "agency": 1
    }
   },
   {
@@ -8176,13 +8176,13 @@
     "advanced-practice": 26,
     "nursing": 5,
     "behavioral-health": 4,
-    "physician": 3,
     "dental": 3,
-    "group": 2,
+    "physician": 3,
     "chiropractic": 2,
+    "group": 2,
     "rehab-therapy": 1,
-    "pharmacy": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -8211,7 +8211,7 @@
    "county": "Yavapai County",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 34.85439,
@@ -8230,9 +8230,9 @@
    "lat": 34.64782,
    "lng": -111.77947,
    "by_category": {
-    "nursing": 1,
+    "rehab-therapy": 1,
     "other-clinical": 1,
-    "rehab-therapy": 1
+    "nursing": 1
    }
   },
   {
@@ -8241,8 +8241,8 @@
    "county": "Yavapai County",
    "practitioners": 160,
    "with_role": 40,
-   "orgs_provider": 103,
-   "orgs_ein": 6,
+   "orgs_provider": 108,
+   "orgs_ein": 7,
    "locations": 230,
    "lat": 34.86336,
    "lng": -111.79524,
@@ -8256,10 +8256,10 @@
     "advanced-practice": 11,
     "chiropractic": 9,
     "eye-vision": 5,
-    "nursing": 2,
     "group": 2,
-    "podiatry": 1,
+    "nursing": 2,
     "support": 1,
+    "podiatry": 1,
     "supplier": 1
    }
   },
@@ -8269,8 +8269,8 @@
    "county": "Yavapai County",
    "practitioners": 97,
    "with_role": 47,
-   "orgs_provider": 38,
-   "orgs_ein": 1,
+   "orgs_provider": 42,
+   "orgs_ein": 2,
    "locations": 68,
    "lat": 34.77921,
    "lng": -111.76476,
@@ -8280,10 +8280,10 @@
     "behavioral-health": 17,
     "eye-vision": 8,
     "chiropractic": 3,
-    "group": 2,
-    "pharmacy": 2,
     "nursing": 2,
+    "pharmacy": 2,
     "other-clinical": 2,
+    "group": 2,
     "dental": 1
    }
   },
@@ -8293,8 +8293,8 @@
    "county": "Mohave County",
    "practitioners": 277,
    "with_role": 120,
-   "orgs_provider": 116,
-   "orgs_ein": 5,
+   "orgs_provider": 115,
+   "orgs_ein": 6,
    "locations": 262,
    "lat": 35.20987,
    "lng": -114.0213,
@@ -8334,8 +8334,8 @@
    "county": "Mohave County",
    "practitioners": 925,
    "with_role": 640,
-   "orgs_provider": 357,
-   "orgs_ein": 19,
+   "orgs_provider": 361,
+   "orgs_ein": 20,
    "locations": 523,
    "lat": 34.4777,
    "lng": -114.33525,
@@ -8353,11 +8353,11 @@
     "eye-vision": 10,
     "dietary": 6,
     "support": 3,
-    "facility": 2,
     "student": 2,
+    "facility": 2,
+    "podiatry": 1,
     "supplier": 1,
-    "agency": 1,
-    "podiatry": 1
+    "agency": 1
    }
   },
   {
@@ -8374,8 +8374,8 @@
    "by_category": {
     "rehab-therapy": 37,
     "pharmacy": 4,
-    "eye-vision": 3,
     "nursing": 3,
+    "eye-vision": 3,
     "other-clinical": 3,
     "group": 2
    }
@@ -8401,7 +8401,7 @@
    "county": "Mohave County",
    "practitioners": 23,
    "with_role": 2,
-   "orgs_provider": 14,
+   "orgs_provider": 11,
    "orgs_ein": 0,
    "locations": 22,
    "lat": 34.46226,
@@ -8409,8 +8409,8 @@
    "by_category": {
     "rehab-therapy": 10,
     "nursing": 9,
-    "support": 1,
     "dental": 1,
+    "support": 1,
     "podiatry": 1,
     "agency": 1
    }
@@ -8421,8 +8421,8 @@
    "county": "Mohave County",
    "practitioners": 373,
    "with_role": 151,
-   "orgs_provider": 109,
-   "orgs_ein": 7,
+   "orgs_provider": 115,
+   "orgs_ein": 6,
    "locations": 235,
    "lat": 35.23025,
    "lng": -114.03465,
@@ -8436,14 +8436,14 @@
     "student": 18,
     "nursing": 15,
     "chiropractic": 7,
-    "other-clinical": 5,
     "eye-vision": 5,
     "dietary": 5,
+    "other-clinical": 5,
     "group": 4,
     "facility": 2,
     "support": 2,
-    "no-taxonomy": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -8452,7 +8452,7 @@
    "county": "Mohave County",
    "practitioners": 7,
    "with_role": 0,
-   "orgs_provider": 3,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 17,
    "lat": 35.21294,
@@ -8460,8 +8460,8 @@
    "by_category": {
     "behavioral-health": 3,
     "nursing": 2,
-    "dental": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "dental": 1
    }
   },
   {
@@ -8470,7 +8470,7 @@
    "county": "Mohave County",
    "practitioners": 73,
    "with_role": 24,
-   "orgs_provider": 63,
+   "orgs_provider": 78,
    "orgs_ein": 5,
    "locations": 124,
    "lat": 35.00623,
@@ -8481,11 +8481,11 @@
     "pharmacy": 13,
     "rehab-therapy": 10,
     "dental": 6,
-    "chiropractic": 3,
     "nursing": 3,
-    "support": 2,
+    "chiropractic": 3,
     "other-clinical": 2,
     "behavioral-health": 2,
+    "support": 2,
     "dietary": 1
    }
   },
@@ -8495,15 +8495,15 @@
    "county": "Mohave County",
    "practitioners": 4,
    "with_role": 1,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 12,
    "lat": 35.16125,
    "lng": -114.54414,
    "by_category": {
     "pharmacy": 2,
-    "nursing": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "nursing": 1
    }
   },
   {
@@ -8533,8 +8533,8 @@
    "by_category": {
     "dental": 2,
     "behavioral-health": 2,
-    "physician": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "physician": 1
    }
   },
   {
@@ -8556,25 +8556,25 @@
    "county": "Mohave County",
    "practitioners": 20,
    "with_role": 3,
-   "orgs_provider": 10,
-   "orgs_ein": 0,
+   "orgs_provider": 11,
+   "orgs_ein": 1,
    "locations": 15,
    "lat": 34.90624,
    "lng": -114.60206,
    "by_category": {
-    "behavioral-health": 3,
-    "physician": 3,
     "advanced-practice": 3,
+    "physician": 3,
+    "behavioral-health": 3,
     "dental": 2,
-    "pharmacy": 1,
-    "podiatry": 1,
     "rehab-therapy": 1,
     "dietary": 1,
+    "podiatry": 1,
+    "other-clinical": 1,
     "student": 1,
     "nursing": 1,
     "support": 1,
-    "other-clinical": 1,
-    "agency": 1
+    "agency": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -8598,8 +8598,8 @@
    "county": "Mohave County",
    "practitioners": 368,
    "with_role": 140,
-   "orgs_provider": 251,
-   "orgs_ein": 15,
+   "orgs_provider": 270,
+   "orgs_ein": 14,
    "locations": 505,
    "lat": 35.09796,
    "lng": -114.58803,
@@ -8612,8 +8612,8 @@
     "dental": 33,
     "chiropractic": 13,
     "eye-vision": 10,
-    "nursing": 7,
     "group": 7,
+    "nursing": 7,
     "other-clinical": 6,
     "support": 4,
     "podiatry": 2,
@@ -8665,13 +8665,13 @@
     "nursing": 6,
     "behavioral-health": 4,
     "support": 2,
-    "physician": 1,
-    "pharmacy": 1,
     "eye-vision": 1,
+    "advanced-practice": 1,
     "dental": 1,
-    "advanced-practice": 1
+    "physician": 1,
+    "pharmacy": 1
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

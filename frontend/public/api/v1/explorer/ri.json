@@ -1,13 +1,13 @@
 {
  "state": "RI",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 23466,
   "with_role": 10244,
-  "orgs_provider": 14347,
-  "orgs_ein": 224,
+  "orgs_provider": 6012,
+  "orgs_ein": 176,
   "orgs_other": 0,
   "locations": 8471,
   "with_coords": 8372
@@ -149,8 +149,8 @@
    "practitioners": 16695,
    "with_role": 7432,
    "role_pct": 44.5,
-   "orgs_provider": 12461,
-   "orgs_ein": 164,
+   "orgs_provider": 4009,
+   "orgs_ein": 109,
    "by_category": {
     "physician": 4255,
     "behavioral-health": 3976,
@@ -169,8 +169,8 @@
    "practitioners": 3251,
    "with_role": 1336,
    "role_pct": 41.1,
-   "orgs_provider": 874,
-   "orgs_ein": 24,
+   "orgs_provider": 920,
+   "orgs_ein": 28,
    "by_category": {
     "behavioral-health": 1113,
     "physician": 571,
@@ -189,8 +189,8 @@
    "practitioners": 1869,
    "with_role": 864,
    "role_pct": 46.2,
-   "orgs_provider": 574,
-   "orgs_ein": 16,
+   "orgs_provider": 600,
+   "orgs_ein": 19,
    "by_category": {
     "behavioral-health": 498,
     "physician": 402,
@@ -209,7 +209,7 @@
    "practitioners": 1277,
    "with_role": 499,
    "role_pct": 39.1,
-   "orgs_provider": 273,
+   "orgs_provider": 303,
    "orgs_ein": 16,
    "by_category": {
     "behavioral-health": 318,
@@ -229,7 +229,7 @@
    "practitioners": 352,
    "with_role": 110,
    "role_pct": 31.2,
-   "orgs_provider": 162,
+   "orgs_provider": 177,
    "orgs_ein": 4,
    "by_category": {
     "behavioral-health": 90,
@@ -284,7 +284,7 @@
    "county": "Bristol County",
    "practitioners": 157,
    "with_role": 33,
-   "orgs_provider": 75,
+   "orgs_provider": 78,
    "orgs_ein": 1,
    "locations": 101,
    "lat": 41.74024,
@@ -299,10 +299,10 @@
     "pharmacy": 5,
     "advanced-practice": 4,
     "other-clinical": 2,
-    "supplier": 1,
+    "dietary": 1,
     "group": 1,
-    "support": 1,
-    "dietary": 1
+    "supplier": 1,
+    "support": 1
    }
   },
   {
@@ -324,25 +324,25 @@
    "county": "Bristol County",
    "practitioners": 131,
    "with_role": 66,
-   "orgs_provider": 55,
+   "orgs_provider": 59,
    "orgs_ein": 3,
    "locations": 73,
    "lat": 41.68381,
    "lng": -71.27035,
    "by_category": {
     "physician": 41,
-    "behavioral-health": 22,
     "rehab-therapy": 22,
+    "behavioral-health": 22,
     "advanced-practice": 12,
     "pharmacy": 10,
     "eye-vision": 9,
     "podiatry": 5,
-    "chiropractic": 2,
     "dental": 2,
     "student": 2,
+    "chiropractic": 2,
+    "group": 1,
     "nursing": 1,
     "facility": 1,
-    "group": 1,
     "other-clinical": 1
    }
   },
@@ -352,7 +352,7 @@
    "county": "Washington County",
    "practitioners": 42,
    "with_role": 4,
-   "orgs_provider": 13,
+   "orgs_provider": 15,
    "orgs_ein": 1,
    "locations": 27,
    "lat": 41.39626,
@@ -392,8 +392,8 @@
    "county": "Kent County",
    "practitioners": 180,
    "with_role": 58,
-   "orgs_provider": 78,
-   "orgs_ein": 5,
+   "orgs_provider": 91,
+   "orgs_ein": 8,
    "locations": 115,
    "lat": 41.68245,
    "lng": -71.57033,
@@ -401,16 +401,16 @@
     "rehab-therapy": 49,
     "pharmacy": 34,
     "advanced-practice": 22,
-    "behavioral-health": 15,
     "physician": 15,
+    "behavioral-health": 15,
     "nursing": 10,
     "dental": 9,
     "eye-vision": 9,
     "other-clinical": 6,
     "group": 3,
     "support": 2,
-    "podiatry": 2,
     "student": 2,
+    "podiatry": 2,
     "facility": 2
    }
   },
@@ -420,21 +420,21 @@
    "county": "Kent County",
    "practitioners": 34,
    "with_role": 6,
-   "orgs_provider": 14,
+   "orgs_provider": 12,
    "orgs_ein": 0,
    "locations": 23,
    "lat": 41.63724,
    "lng": -71.63476,
    "by_category": {
     "rehab-therapy": 8,
-    "chiropractic": 6,
     "other-clinical": 6,
+    "chiropractic": 6,
     "behavioral-health": 5,
     "emergency-medical": 4,
     "nursing": 2,
-    "dental": 1,
+    "physician": 1,
     "advanced-practice": 1,
-    "physician": 1
+    "dental": 1
    }
   },
   {
@@ -443,7 +443,7 @@
    "county": "Kent County",
    "practitioners": 578,
    "with_role": 301,
-   "orgs_provider": 164,
+   "orgs_provider": 170,
    "orgs_ein": 7,
    "locations": 336,
    "lat": 41.64638,
@@ -456,15 +456,15 @@
     "dental": 30,
     "nursing": 24,
     "pharmacy": 16,
-    "dietary": 14,
     "other-clinical": 14,
+    "dietary": 14,
     "chiropractic": 7,
     "group": 5,
     "eye-vision": 5,
     "podiatry": 4,
     "student": 3,
-    "support": 1,
-    "facility": 1
+    "facility": 1,
+    "support": 1
    }
   },
   {
@@ -473,17 +473,17 @@
    "county": "Washington County",
    "practitioners": 7,
    "with_role": 1,
-   "orgs_provider": 9,
-   "orgs_ein": 0,
+   "orgs_provider": 8,
+   "orgs_ein": 1,
    "locations": 12,
    "lat": 41.55327,
    "lng": -71.59424,
    "by_category": {
-    "rehab-therapy": 2,
     "behavioral-health": 2,
-    "physician": 1,
+    "rehab-therapy": 2,
+    "eye-vision": 1,
     "facility": 1,
-    "eye-vision": 1
+    "physician": 1
    }
   },
   {
@@ -499,10 +499,10 @@
    "lng": -71.72991,
    "by_category": {
     "nursing": 5,
-    "behavioral-health": 3,
     "advanced-practice": 3,
-    "dental": 2,
+    "behavioral-health": 3,
     "rehab-therapy": 2,
+    "dental": 2,
     "podiatry": 1,
     "chiropractic": 1,
     "physician": 1
@@ -527,7 +527,7 @@
    "county": "Providence County",
    "practitioners": 113,
    "with_role": 20,
-   "orgs_provider": 42,
+   "orgs_provider": 49,
    "orgs_ein": 0,
    "locations": 68,
    "lat": 41.87207,
@@ -539,9 +539,9 @@
     "dental": 6,
     "advanced-practice": 3,
     "support": 2,
+    "other-clinical": 1,
     "eye-vision": 1,
-    "chiropractic": 1,
-    "other-clinical": 1
+    "chiropractic": 1
    }
   },
   {
@@ -558,8 +558,8 @@
    "by_category": {
     "behavioral-health": 8,
     "dental": 3,
-    "rehab-therapy": 1,
-    "physician": 1
+    "physician": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -568,15 +568,15 @@
    "county": "Providence County",
    "practitioners": 4,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 41.7341,
    "lng": -71.58215,
    "by_category": {
     "dental": 2,
-    "rehab-therapy": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -585,7 +585,7 @@
    "county": "Washington County",
    "practitioners": 19,
    "with_role": 1,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 1,
    "locations": 11,
    "lat": 41.50565,
@@ -594,9 +594,9 @@
     "behavioral-health": 5,
     "physician": 3,
     "advanced-practice": 3,
-    "nursing": 2,
-    "dental": 2,
     "other-clinical": 2,
+    "dental": 2,
+    "nursing": 2,
     "dietary": 1,
     "rehab-therapy": 1
    }
@@ -615,8 +615,8 @@
    "by_category": {
     "behavioral-health": 2,
     "dental": 1,
-    "rehab-therapy": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -656,7 +656,7 @@
    "county": "Newport County",
    "practitioners": 540,
    "with_role": 335,
-   "orgs_provider": 72,
+   "orgs_provider": 75,
    "orgs_ein": 4,
    "locations": 166,
    "lat": 41.49248,
@@ -666,11 +666,11 @@
     "advanced-practice": 96,
     "behavioral-health": 65,
     "student": 42,
-    "dental": 18,
     "nursing": 18,
+    "dental": 18,
     "rehab-therapy": 16,
-    "pharmacy": 10,
     "other-clinical": 10,
+    "pharmacy": 10,
     "dietary": 8,
     "support": 8,
     "group": 7,
@@ -685,7 +685,7 @@
    "county": "Newport County",
    "practitioners": 104,
    "with_role": 2,
-   "orgs_provider": 4,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 13,
    "lat": 41.51041,
@@ -700,8 +700,8 @@
     "advanced-practice": 6,
     "nursing": 4,
     "emergency-medical": 1,
-    "dietary": 1,
     "no-taxonomy": 1,
+    "dietary": 1,
     "eye-vision": 1
    }
   },
@@ -711,7 +711,7 @@
    "county": "Newport County",
    "practitioners": 428,
    "with_role": 102,
-   "orgs_provider": 95,
+   "orgs_provider": 113,
    "orgs_ein": 10,
    "locations": 202,
    "lat": 41.5164,
@@ -738,8 +738,8 @@
    "county": "Washington County",
    "practitioners": 446,
    "with_role": 140,
-   "orgs_provider": 185,
-   "orgs_ein": 4,
+   "orgs_provider": 180,
+   "orgs_ein": 3,
    "locations": 285,
    "lat": 41.58486,
    "lng": -71.47767,
@@ -765,22 +765,22 @@
    "county": "Providence County",
    "practitioners": 31,
    "with_role": 10,
-   "orgs_provider": 22,
+   "orgs_provider": 23,
    "orgs_ein": 0,
    "locations": 32,
    "lat": 41.83731,
    "lng": -71.6031,
    "by_category": {
     "pharmacy": 9,
-    "dental": 4,
     "chiropractic": 4,
     "physician": 4,
+    "dental": 4,
     "behavioral-health": 3,
-    "nursing": 2,
     "advanced-practice": 2,
+    "nursing": 2,
+    "facility": 1,
     "rehab-therapy": 1,
-    "eye-vision": 1,
-    "facility": 1
+    "eye-vision": 1
    }
   },
   {
@@ -806,7 +806,7 @@
    "county": "Providence County",
    "practitioners": 41,
    "with_role": 9,
-   "orgs_provider": 15,
+   "orgs_provider": 18,
    "orgs_ein": 1,
    "locations": 16,
    "lat": 41.95865,
@@ -827,8 +827,8 @@
    "county": "Providence County",
    "practitioners": 934,
    "with_role": 320,
-   "orgs_provider": 268,
-   "orgs_ein": 7,
+   "orgs_provider": 272,
+   "orgs_ein": 8,
    "locations": 364,
    "lat": 41.87152,
    "lng": -71.38605,
@@ -857,7 +857,7 @@
    "county": "Providence County",
    "practitioners": 73,
    "with_role": 16,
-   "orgs_provider": 57,
+   "orgs_provider": 62,
    "orgs_ein": 1,
    "locations": 75,
    "lat": 41.87892,
@@ -896,7 +896,7 @@
    "county": "Providence County",
    "practitioners": 130,
    "with_role": 71,
-   "orgs_provider": 35,
+   "orgs_provider": 36,
    "orgs_ein": 2,
    "locations": 50,
    "lat": 41.88995,
@@ -907,15 +907,15 @@
     "behavioral-health": 20,
     "other-clinical": 19,
     "rehab-therapy": 12,
-    "pharmacy": 9,
     "nursing": 9,
+    "pharmacy": 9,
     "dental": 6,
     "dietary": 3,
     "group": 2,
     "eye-vision": 2,
+    "no-taxonomy": 1,
     "agency": 1,
     "support": 1,
-    "no-taxonomy": 1,
     "podiatry": 1
    }
   },
@@ -925,8 +925,8 @@
    "county": "Providence County",
    "practitioners": 328,
    "with_role": 160,
-   "orgs_provider": 117,
-   "orgs_ein": 5,
+   "orgs_provider": 118,
+   "orgs_ein": 7,
    "locations": 189,
    "lat": 41.9479,
    "lng": -71.42724,
@@ -939,11 +939,11 @@
     "dental": 13,
     "nursing": 13,
     "group": 7,
-    "chiropractic": 4,
     "other-clinical": 4,
+    "chiropractic": 4,
     "eye-vision": 4,
-    "student": 1,
-    "support": 1
+    "support": 1,
+    "student": 1
    }
   },
   {
@@ -952,7 +952,7 @@
    "county": "Providence County",
    "practitioners": 337,
    "with_role": 167,
-   "orgs_provider": 111,
+   "orgs_provider": 114,
    "orgs_ein": 0,
    "locations": 208,
    "lat": 41.9238,
@@ -965,9 +965,9 @@
     "nursing": 13,
     "dental": 10,
     "pharmacy": 7,
+    "podiatry": 6,
     "chiropractic": 6,
     "dietary": 6,
-    "podiatry": 6,
     "eye-vision": 4,
     "other-clinical": 3,
     "group": 2,
@@ -980,7 +980,7 @@
    "county": "Newport County",
    "practitioners": 149,
    "with_role": 48,
-   "orgs_provider": 62,
+   "orgs_provider": 69,
    "orgs_ein": 0,
    "locations": 112,
    "lat": 41.59603,
@@ -995,9 +995,9 @@
     "physician": 6,
     "nursing": 4,
     "dietary": 3,
-    "agency": 2,
-    "group": 2,
     "chiropractic": 2,
+    "group": 2,
+    "agency": 2,
     "supplier": 1,
     "student": 1
    }
@@ -1008,7 +1008,7 @@
    "county": "Washington County",
    "practitioners": 6,
    "with_role": 2,
-   "orgs_provider": 0,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 41.49678,
@@ -1038,7 +1038,7 @@
    "county": "Newport County",
    "practitioners": 50,
    "with_role": 11,
-   "orgs_provider": 30,
+   "orgs_provider": 33,
    "orgs_ein": 1,
    "locations": 58,
    "lat": 41.6338,
@@ -1061,8 +1061,8 @@
    "county": "Washington County",
    "practitioners": 839,
    "with_role": 565,
-   "orgs_provider": 168,
-   "orgs_ein": 3,
+   "orgs_provider": 175,
+   "orgs_ein": 4,
    "locations": 306,
    "lat": 41.44113,
    "lng": -71.49111,
@@ -1077,8 +1077,8 @@
     "other-clinical": 13,
     "group": 9,
     "dietary": 7,
-    "chiropractic": 4,
     "podiatry": 4,
+    "chiropractic": 4,
     "eye-vision": 3,
     "student": 1,
     "facility": 1,
@@ -1092,7 +1092,7 @@
    "county": "Washington County",
    "practitioners": 43,
    "with_role": 4,
-   "orgs_provider": 8,
+   "orgs_provider": 9,
    "orgs_ein": 1,
    "locations": 12,
    "lat": 41.48494,
@@ -1111,7 +1111,7 @@
    "county": "Washington County",
    "practitioners": 98,
    "with_role": 25,
-   "orgs_provider": 40,
+   "orgs_provider": 49,
    "orgs_ein": 0,
    "locations": 100,
    "lat": 41.43645,
@@ -1121,12 +1121,12 @@
     "pharmacy": 19,
     "behavioral-health": 12,
     "physician": 10,
-    "chiropractic": 3,
     "other-clinical": 3,
     "dental": 3,
+    "chiropractic": 3,
     "nursing": 2,
-    "podiatry": 1,
     "advanced-practice": 1,
+    "podiatry": 1,
     "dietary": 1
    }
   },
@@ -1136,7 +1136,7 @@
    "county": "Bristol County",
    "practitioners": 64,
    "with_role": 11,
-   "orgs_provider": 32,
+   "orgs_provider": 40,
    "orgs_ein": 0,
    "locations": 60,
    "lat": 41.72766,
@@ -1149,8 +1149,8 @@
     "pharmacy": 7,
     "other-clinical": 2,
     "chiropractic": 2,
-    "facility": 1,
-    "physician": 1
+    "physician": 1,
+    "facility": 1
    }
   },
   {
@@ -1159,8 +1159,8 @@
    "county": "Kent County",
    "practitioners": 1835,
    "with_role": 668,
-   "orgs_provider": 426,
-   "orgs_ein": 9,
+   "orgs_provider": 437,
+   "orgs_ein": 10,
    "locations": 658,
    "lat": 41.71022,
    "lng": -71.46709,
@@ -1175,13 +1175,13 @@
     "pharmacy": 50,
     "dietary": 23,
     "eye-vision": 19,
-    "chiropractic": 17,
     "student": 17,
+    "chiropractic": 17,
     "podiatry": 15,
     "group": 8,
-    "agency": 2,
-    "no-taxonomy": 2,
     "facility": 2,
+    "no-taxonomy": 2,
+    "agency": 2,
     "support": 1
    }
   },
@@ -1206,7 +1206,7 @@
    "county": "Kent County",
    "practitioners": 392,
    "with_role": 214,
-   "orgs_provider": 108,
+   "orgs_provider": 119,
    "orgs_ein": 1,
    "locations": 172,
    "lat": 41.74843,
@@ -1224,11 +1224,11 @@
     "podiatry": 4,
     "other-clinical": 3,
     "student": 2,
-    "no-taxonomy": 1,
+    "support": 1,
     "agency": 1,
     "dietary": 1,
     "group": 1,
-    "support": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -1237,7 +1237,7 @@
    "county": "Kent County",
    "practitioners": 78,
    "with_role": 14,
-   "orgs_provider": 32,
+   "orgs_provider": 35,
    "orgs_ein": 0,
    "locations": 49,
    "lat": 41.71972,
@@ -1250,8 +1250,8 @@
     "physician": 4,
     "other-clinical": 3,
     "agency": 1,
-    "group": 1,
-    "nursing": 1
+    "nursing": 1,
+    "group": 1
    }
   },
   {
@@ -1260,8 +1260,8 @@
    "county": "Washington County",
    "practitioners": 355,
    "with_role": 120,
-   "orgs_provider": 136,
-   "orgs_ein": 6,
+   "orgs_provider": 144,
+   "orgs_ein": 8,
    "locations": 208,
    "lat": 41.36458,
    "lng": -71.81865,
@@ -1276,8 +1276,8 @@
     "eye-vision": 10,
     "dietary": 9,
     "nursing": 7,
-    "group": 6,
     "other-clinical": 6,
+    "group": 6,
     "student": 1
    }
   },
@@ -1303,7 +1303,7 @@
    "county": "Kent County",
    "practitioners": 154,
    "with_role": 75,
-   "orgs_provider": 51,
+   "orgs_provider": 55,
    "orgs_ein": 2,
    "locations": 89,
    "lat": 41.69171,
@@ -1317,13 +1317,13 @@
     "dental": 10,
     "chiropractic": 5,
     "dietary": 4,
+    "nursing": 3,
     "other-clinical": 3,
     "eye-vision": 3,
-    "nursing": 3,
     "group": 2,
-    "supplier": 1,
+    "no-taxonomy": 1,
     "support": 1,
-    "no-taxonomy": 1
+    "supplier": 1
    }
   },
   {
@@ -1347,8 +1347,8 @@
    "county": "Providence County",
    "practitioners": 1537,
    "with_role": 727,
-   "orgs_provider": 9476,
-   "orgs_ein": 71,
+   "orgs_provider": 945,
+   "orgs_ein": 14,
    "locations": 291,
    "lat": 42.00278,
    "lng": -71.49701,
@@ -1365,10 +1365,10 @@
     "dental": 33,
     "no-taxonomy": 9,
     "group": 6,
-    "dietary": 5,
     "podiatry": 5,
-    "support": 3,
+    "dietary": 5,
     "supplier": 3,
+    "support": 3,
     "chiropractic": 2
    }
   },
@@ -1378,25 +1378,25 @@
    "county": "Providence County",
    "practitioners": 129,
    "with_role": 33,
-   "orgs_provider": 67,
+   "orgs_provider": 71,
    "orgs_ein": 4,
    "locations": 101,
    "lat": 41.98788,
    "lng": -71.5356,
    "by_category": {
     "rehab-therapy": 36,
-    "behavioral-health": 19,
     "physician": 19,
+    "behavioral-health": 19,
     "pharmacy": 19,
     "advanced-practice": 11,
     "dental": 9,
     "group": 6,
     "other-clinical": 3,
-    "eye-vision": 2,
     "podiatry": 2,
-    "facility": 1,
+    "eye-vision": 2,
+    "nursing": 1,
     "chiropractic": 1,
-    "nursing": 1
+    "facility": 1
    }
   },
   {
@@ -1437,8 +1437,8 @@
    "county": "Providence County",
    "practitioners": 2754,
    "with_role": 1093,
-   "orgs_provider": 259,
-   "orgs_ein": 13,
+   "orgs_provider": 240,
+   "orgs_ein": 7,
    "locations": 670,
    "lat": 41.81711,
    "lng": -71.41137,
@@ -1455,8 +1455,8 @@
     "group": 36,
     "dental": 17,
     "chiropractic": 14,
-    "no-taxonomy": 8,
     "eye-vision": 8,
+    "no-taxonomy": 8,
     "facility": 4,
     "support": 3,
     "transport": 1,
@@ -1469,8 +1469,8 @@
    "county": "Providence County",
    "practitioners": 1318,
    "with_role": 579,
-   "orgs_provider": 266,
-   "orgs_ein": 7,
+   "orgs_provider": 274,
+   "orgs_ein": 10,
    "locations": 429,
    "lat": 41.85209,
    "lng": -71.42655,
@@ -1499,8 +1499,8 @@
    "county": "Providence County",
    "practitioners": 3007,
    "with_role": 1849,
-   "orgs_provider": 187,
-   "orgs_ein": 9,
+   "orgs_provider": 170,
+   "orgs_ein": 6,
    "locations": 297,
    "lat": 41.80046,
    "lng": -71.40641,
@@ -1521,8 +1521,8 @@
     "podiatry": 3,
     "agency": 2,
     "support": 2,
-    "emergency-medical": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1531,8 +1531,8 @@
    "county": "Providence County",
    "practitioners": 1538,
    "with_role": 602,
-   "orgs_provider": 252,
-   "orgs_ein": 7,
+   "orgs_provider": 269,
+   "orgs_ein": 9,
    "locations": 500,
    "lat": 41.83424,
    "lng": -71.39177,
@@ -1551,8 +1551,8 @@
     "chiropractic": 12,
     "student": 7,
     "no-taxonomy": 4,
-    "support": 2,
-    "podiatry": 2
+    "podiatry": 2,
+    "support": 2
    }
   },
   {
@@ -1561,8 +1561,8 @@
    "county": "Providence County",
    "practitioners": 180,
    "with_role": 44,
-   "orgs_provider": 93,
-   "orgs_ein": 3,
+   "orgs_provider": 100,
+   "orgs_ein": 4,
    "locations": 131,
    "lat": 41.80066,
    "lng": -71.42547,
@@ -1578,8 +1578,8 @@
     "chiropractic": 7,
     "group": 2,
     "support": 1,
-    "student": 1,
-    "dietary": 1
+    "dietary": 1,
+    "student": 1
    }
   },
   {
@@ -1588,8 +1588,8 @@
    "county": "Providence County",
    "practitioners": 778,
    "with_role": 214,
-   "orgs_provider": 104,
-   "orgs_ein": 4,
+   "orgs_provider": 115,
+   "orgs_ein": 3,
    "locations": 175,
    "lat": 41.83574,
    "lng": -71.43252,
@@ -1602,14 +1602,14 @@
     "rehab-therapy": 62,
     "student": 29,
     "other-clinical": 19,
-    "dietary": 15,
     "dental": 15,
+    "dietary": 15,
     "chiropractic": 8,
-    "support": 4,
     "group": 4,
-    "no-taxonomy": 3,
-    "eye-vision": 3,
+    "support": 4,
     "podiatry": 3,
+    "eye-vision": 3,
+    "no-taxonomy": 3,
     "facility": 2
    }
   },
@@ -1619,8 +1619,8 @@
    "county": "Providence County",
    "practitioners": 189,
    "with_role": 37,
-   "orgs_provider": 83,
-   "orgs_ein": 3,
+   "orgs_provider": 86,
+   "orgs_ein": 2,
    "locations": 98,
    "lat": 41.81943,
    "lng": -71.44084,
@@ -1634,8 +1634,8 @@
     "advanced-practice": 7,
     "eye-vision": 5,
     "chiropractic": 4,
-    "group": 2,
     "dental": 2,
+    "group": 2,
     "dietary": 2,
     "agency": 1,
     "student": 1
@@ -1647,7 +1647,7 @@
    "county": "Providence County",
    "practitioners": 420,
    "with_role": 150,
-   "orgs_provider": 133,
+   "orgs_provider": 130,
    "orgs_ein": 3,
    "locations": 207,
    "lat": 41.7778,
@@ -1687,9 +1687,9 @@
     "dental": 3,
     "advanced-practice": 2,
     "pharmacy": 2,
-    "podiatry": 1,
     "dietary": 1,
     "nursing": 1,
+    "podiatry": 1,
     "supplier": 1
    }
   },
@@ -1709,8 +1709,8 @@
     "advanced-practice": 7,
     "physician": 4,
     "behavioral-health": 3,
-    "pharmacy": 1,
-    "student": 1
+    "student": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -1719,8 +1719,8 @@
    "county": "Providence County",
    "practitioners": 623,
    "with_role": 343,
-   "orgs_provider": 144,
-   "orgs_ein": 3,
+   "orgs_provider": 158,
+   "orgs_ein": 4,
    "locations": 289,
    "lat": 41.81367,
    "lng": -71.36459,
@@ -1738,9 +1738,9 @@
     "group": 9,
     "chiropractic": 7,
     "podiatry": 2,
-    "student": 1,
     "support": 1,
-    "agency": 1
+    "agency": 1,
+    "student": 1
    }
   },
   {
@@ -1749,8 +1749,8 @@
    "county": "Providence County",
    "practitioners": 528,
    "with_role": 241,
-   "orgs_provider": 99,
-   "orgs_ein": 4,
+   "orgs_provider": 94,
+   "orgs_ein": 5,
    "locations": 141,
    "lat": 41.78546,
    "lng": -71.34664,
@@ -1765,8 +1765,8 @@
     "other-clinical": 6,
     "group": 5,
     "podiatry": 3,
-    "dietary": 2,
     "student": 2,
+    "dietary": 2,
     "chiropractic": 2,
     "transport": 1,
     "eye-vision": 1
@@ -1778,16 +1778,16 @@
    "county": "Providence County",
    "practitioners": 52,
    "with_role": 6,
-   "orgs_provider": 27,
+   "orgs_provider": 31,
    "orgs_ein": 0,
    "locations": 45,
    "lat": 41.84461,
    "lng": -71.35262,
    "by_category": {
     "behavioral-health": 30,
-    "pharmacy": 7,
     "dental": 7,
     "rehab-therapy": 7,
+    "pharmacy": 7,
     "chiropractic": 1
    }
   },
@@ -1797,7 +1797,7 @@
    "county": "Providence County",
    "practitioners": 96,
    "with_role": 31,
-   "orgs_provider": 48,
+   "orgs_provider": 58,
    "orgs_ein": 4,
    "locations": 96,
    "lat": 41.89192,
@@ -1842,7 +1842,7 @@
    "county": "Providence County",
    "practitioners": 608,
    "with_role": 281,
-   "orgs_provider": 179,
+   "orgs_provider": 186,
    "orgs_ein": 8,
    "locations": 263,
    "lat": 41.82417,
@@ -1872,8 +1872,8 @@
    "county": "Providence County",
    "practitioners": 757,
    "with_role": 375,
-   "orgs_provider": 258,
-   "orgs_ein": 4,
+   "orgs_provider": 271,
+   "orgs_ein": 6,
    "locations": 354,
    "lat": 41.76177,
    "lng": -71.46176,
@@ -1891,11 +1891,11 @@
     "dietary": 13,
     "group": 9,
     "podiatry": 8,
-    "no-taxonomy": 1,
-    "supplier": 1,
     "student": 1,
+    "no-taxonomy": 1,
     "facility": 1,
-    "support": 1
+    "support": 1,
+    "supplier": 1
    }
   },
   {
@@ -1904,20 +1904,20 @@
    "county": "Providence County",
    "practitioners": 26,
    "with_role": 9,
-   "orgs_provider": 32,
+   "orgs_provider": 31,
    "orgs_ein": 0,
    "locations": 18,
    "lat": 41.78045,
    "lng": -71.51236,
    "by_category": {
     "behavioral-health": 12,
-    "advanced-practice": 3,
     "dietary": 3,
+    "advanced-practice": 3,
     "pharmacy": 3,
     "rehab-therapy": 2,
+    "support": 1,
     "nursing": 1,
-    "group": 1,
-    "support": 1
+    "group": 1
    }
   },
   {
@@ -1932,10 +1932,10 @@
    "lat": 41.83869,
    "lng": -71.41384,
    "by_category": {
-    "behavioral-health": 1,
-    "physician": 1
+    "physician": 1,
+    "behavioral-health": 1
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

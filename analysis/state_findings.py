@@ -537,7 +537,12 @@ def run_for_state(state_code: str) -> None:
             f"(NPPES match); the full H11/H13 specialty-agreement re-run requires the "
             f"CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. "
             f"Verify samples are five {state}-resident NPIs not present in NPPES — the "
-            f"actionable cohort the state PI team can revalidate first."
+            f"actionable cohort the state PI team can revalidate first. "
+            f"Organization state is the physical address since 2026-10-26 "
+            f"(FHI-84); before that it was the first address, often the billing "
+            f"one, so the organization denominator and the H14/H15 state rate "
+            f"from earlier files are not comparable. Practitioner state still "
+            f"reads the first address."
         ),
     }
 

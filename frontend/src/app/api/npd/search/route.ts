@@ -153,6 +153,8 @@ async function searchOrganizations(params: SearchParams) {
     );
     qp.orgName = '%' + q + '%';
   }
+  // Organization _state is the physical address (FHI-84, 2026-10-26), not
+  // address[0], which the NDH often fills with the billing address.
   if (params.state) {
     where.push('_state = @state');
     qp.state = params.state;

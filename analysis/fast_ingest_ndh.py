@@ -112,10 +112,51 @@ def first_address(raw):
     return raw if isinstance(raw, dict) else {}
 
 
+PHYSICAL_ADDRESS_TYPES = ("physical", "both")
+
+
+def physical_address(raw):
+    """The Address that says where the organization is, as a dict.
+
+    `Organization.address` is 0..* and the NDH frequently lists the postal
+    billing address first and the physical work address second (NPI
+    1548282270: a Woonsocket, RI billing address, then the Harrisburg, PA
+    practice). Reading `address[0]` put 63,194 of 2,058,500 organizations in
+    the wrong state on the 2026-10-07 release (FHI-84). Choose, in order:
+
+      1. the first entry whose `type` is `physical` or `both` (FHIR
+         Address.type is postal | physical | both, and `both` is physical);
+      2. else the first entry whose `use` is `work`;
+      3. else the first entry that is an object (what `first_address` does).
+
+    Same never-raise contract as `first_address`: degrade to {}.
+    `analysis/backfill_flattened_columns.py` mirrors this in SQL
+    (`picked_address_sql`); keep the two in step.
+    """
+    if isinstance(raw, dict):
+        return raw
+    if not isinstance(raw, list):
+        return {}
+    addrs = [a for a in raw if isinstance(a, dict)]
+    for a in addrs:
+        if a.get("type") in PHYSICAL_ADDRESS_TYPES:
+            return a
+    for a in addrs:
+        if a.get("use") == "work":
+            return a
+    return addrs[0] if addrs else {}
+
+
 def _address_line(address):
-    """Join address.line entries. Accepts an Address or a list of them."""
+    """Join address.line entries. Accepts an Address or a list of them.
+
+    `line` is 0..* strings. A bare string in its place is malformed and yields
+    None, matching the SQL backfill (JSON_VALUE_ARRAY returns NULL for a
+    non-array); iterating it would join its characters.
+    """
     addr = first_address(address)
-    lines = [l for l in (addr.get("line") or []) if isinstance(l, str) and l]
+    raw = addr.get("line")
+    lines = [l for l in raw if isinstance(l, str) and l] if isinstance(raw, list) else []
     return "|".join(lines) or None
 
 
@@ -223,8 +264,8 @@ def extract_practitioner_role(r):
 
 
 def extract_organization(r):
-    addresses = r.get("address")
-    addr = first_address(addresses)
+    # Physical address, not address[0]: see physical_address (FHI-84).
+    addr = physical_address(r.get("address"))
     types = r.get("type") or []
     types = [t for t in types if isinstance(t, dict)] if isinstance(types, list) else []
     type_coding = (types[0].get("coding", [{}])[0] if types else {}) or {}
@@ -235,7 +276,7 @@ def extract_organization(r):
         "_name": r.get("name") or None,
         "_state": addr.get("state") or None,
         "_city": addr.get("city") or None,
-        "_address_line": _address_line(addresses),
+        "_address_line": _address_line(addr),
         "_phone": org_phone,
         "_telecom": org_telecom,
         "_org_type": type_coding.get("code") or None,

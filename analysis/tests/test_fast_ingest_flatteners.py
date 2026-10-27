@@ -31,6 +31,7 @@ from fast_ingest_ndh import (  # noqa: E402
     extract_practitioner,
     extract_practitioner_role,
     first_address,
+    physical_address,
 )
 
 ALL_EXTRACTORS = [
@@ -65,6 +66,9 @@ MALFORMED = [
     {"id": "X", "specialty": [{"coding": [None]}]},
     {"id": "X", "specialty": [{"coding": [{"display": "no code"}]}]},
     {"id": "X", "specialty": [{"coding": [{"code": 12345}]}]},
+    {"id": "X", "address": [{"type": ["physical"]}, {"use": {"x": 1}}]},
+    {"id": "X", "address": [None, "junk", {"type": None, "use": None}]},
+    {"id": "X", "address": [{"type": "physical", "line": "not-a-list"}]},
 ]
 
 
@@ -115,10 +119,99 @@ class TestAddressLine:
         r = extract_organization({"id": "O", "address": [{"city": "Erie"}]})
         assert r["_address_line"] is None and r["_city"] == "Erie"
 
+    def test_bare_string_line_is_none_like_the_sql(self):
+        """JSON_VALUE_ARRAY returns NULL for a non-array, so the backfill
+        writes NULL. The flattener used to join the string's characters."""
+        r = extract_organization({"id": "O", "address": [
+            {"type": "physical", "line": "1 Main St", "state": "PA"}]})
+        assert r["_address_line"] is None and r["_state"] == "PA"
+        r = extract_location({"id": "L", "address": {"line": "1 Main St"}})
+        assert r["_address_line"] is None
+
     def test_first_address_skips_non_dict_entries(self):
         assert first_address(["junk", {"city": "Erie"}]) == {"city": "Erie"}
         assert first_address("nope") == {}
         assert first_address(None) == {}
+
+
+BILLING = {"type": "postal", "use": "billing", "line": ["1 Cvs Dr", "#1075"],
+           "city": "Woonsocket", "state": "RI"}
+PHYSICAL = {"type": "physical", "use": "work", "line": ["5125 Jonestown Rd", "Ste 331"],
+            "city": "Harrisburg", "state": "PA"}
+
+
+class TestOrganizationPhysicalAddress:
+    """FHI-84. Organization.address is 0..* and the NDH often lists the postal
+    billing address first (NPI 1548282270: billing in Woonsocket, RI, practice
+    in Harrisburg, PA). Reading address[0] put 63,194 of 2,058,500
+    organizations in the wrong state on the 2026-10-07 release."""
+
+    def test_billing_first_reads_the_physical_address(self):
+        r = extract_organization({"id": "O", "address": [BILLING, PHYSICAL]})
+        assert (r["_state"], r["_city"]) == ("PA", "Harrisburg")
+        assert r["_address_line"] == "5125 Jonestown Rd|Ste 331"
+
+    def test_physical_first_is_unchanged(self):
+        r = extract_organization({"id": "O", "address": [PHYSICAL, BILLING]})
+        assert r["_state"] == "PA"
+
+    def test_physical_without_use(self):
+        a = {"type": "physical", "state": "OH", "city": "Akron"}
+        r = extract_organization({"id": "O", "address": [BILLING, a]})
+        assert r["_state"] == "OH"
+
+    def test_use_work_without_type(self):
+        a = {"use": "work", "state": "VA", "city": "Richmond"}
+        r = extract_organization({"id": "O", "address": [BILLING, a]})
+        assert r["_state"] == "VA"
+
+    def test_type_both_counts_as_physical(self):
+        """FHIR Address.type is postal | physical | both."""
+        a = {"type": "both", "use": "billing", "state": "NJ"}
+        w = {"use": "work", "state": "NY"}
+        r = extract_organization({"id": "O", "address": [BILLING, w, a]})
+        assert r["_state"] == "NJ"
+
+    def test_type_outranks_use(self):
+        w = {"use": "work", "state": "NY"}
+        r = extract_organization({"id": "O", "address": [BILLING, w, PHYSICAL]})
+        assert r["_state"] == "PA"
+
+    def test_first_physical_wins_among_several(self):
+        a = dict(PHYSICAL, state="MD", city="Columbia")
+        r = extract_organization({"id": "O", "address": [BILLING, PHYSICAL, a]})
+        assert r["_state"] == "PA"
+
+    def test_neither_marker_falls_back_to_first_entry(self):
+        r = extract_organization({"id": "O", "address": [
+            {"state": "DE", "city": "Dover"}, {"state": "MD"}]})
+        assert (r["_state"], r["_city"]) == ("DE", "Dover")
+
+    def test_only_billing_falls_back_to_first_entry(self):
+        r = extract_organization({"id": "O", "address": [BILLING]})
+        assert r["_state"] == "RI"
+
+    def test_non_dict_entry_before_the_physical_one(self):
+        r = extract_organization({"id": "O", "address": ["junk", None, BILLING, PHYSICAL]})
+        assert r["_state"] == "PA"
+
+    def test_single_object_instead_of_list(self):
+        r = extract_organization({"id": "O", "address": BILLING})
+        assert r["_state"] == "RI"
+
+    def test_picker_degrades_to_empty(self):
+        assert physical_address(None) == {}
+        assert physical_address("nope") == {}
+        assert physical_address([]) == {}
+        assert physical_address([None, "x"]) == {}
+
+    def test_practitioner_still_reads_address_zero(self):
+        """Practitioner has the same billing-first pattern (119,906 state
+        changes measured on 2026-10-07) but its _state is the denominator of
+        every per-state number, so it is changed separately. Pinned here so
+        the two cannot drift apart by accident."""
+        r = extract_practitioner({"id": "P", "address": [BILLING, PHYSICAL]})
+        assert r["_state"] == "RI"
 
 
 class TestPosition:

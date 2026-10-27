@@ -787,16 +787,39 @@ def test_funnel_bands_alias_above_a_vendor_list():
     assert "summary.organizations_with_endpoint" in payload["field_notes"]
 
 
-def test_pa_funnel_correction_quotes_the_run():
-    summary = {"reaches_endpoint_pct": 22.3,
-               "reaches_endpoint_pct_of_affiliated": 50.3,
+def test_pa_funnel_correction_quotes_the_run(monkeypatch):
+    monkeypatch.setattr(sc, "NDH_RELEASE", "2026-10-07")
+    summary = {"reaches_endpoint": 50880,
+               "reaches_endpoint_pct": 22.3,
+               "reaches_endpoint_pct_of_affiliated": 50.4,
+               "reaches_endpoint_deterministic": 6555,
                "reaches_endpoint_deterministic_pct": 2.9}
-    (c,) = sc.funnel_corrections("pa", summary)
-    for text in ("15.8%", "35.8%", "22.3%", "50.3%", "2.9%", "18.7%",
+    c, fhi84 = sc.funnel_corrections("pa", summary, affiliation_edges=5612)
+    for text in ("15.8%", "35.8%", "22.3%", "50.4%", "2.9%", "18.7%",
                  "2026-10-14", "every NPI", "10 or fewer"):
         assert text in c["what"], text
     assert "\u2014" not in c["what"]
+    assert fhi84["issue"] == "FHI-84" and fhi84["date"] == "2026-10-26"
+    for text in ("2026-10-07 release", "50,812", "50.3%", "50,880", "50.4%",
+                 "physical address", "63,194", "4,322", "1,996",
+                 "unchanged at 6,555", "6,507 edges to 5,612"):
+        assert text in fhi84["what"], text
+    assert "wrong state" not in fhi84["what"]
+    assert "\u2014" not in fhi84["what"]
     assert sc.funnel_corrections("oh", summary) == []
+
+
+def test_fhi84_correction_is_release_agnostic_after_its_release(monkeypatch):
+    monkeypatch.setattr(sc, "NDH_RELEASE", "2027-01-15")
+    summary = {"reaches_endpoint": 1, "reaches_endpoint_pct": 1.0,
+               "reaches_endpoint_pct_of_affiliated": 1.0,
+               "reaches_endpoint_deterministic": 1,
+               "reaches_endpoint_deterministic_pct": 1.0}
+    fhi84 = sc.funnel_corrections("pa", summary, affiliation_edges=9)[-1]
+    assert fhi84["issue"] == "FHI-84"
+    assert "physical address" in fhi84["what"]
+    for text in ("50,812", "63,194", "6,507", "2026-10-07"):
+        assert text not in fhi84["what"], text
 
 
 def test_build_payload_systems_block():

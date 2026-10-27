@@ -1,13 +1,13 @@
 {
  "state": "AK",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 21978,
   "with_role": 6549,
-  "orgs_provider": 4244,
-  "orgs_ein": 177,
+  "orgs_provider": 4366,
+  "orgs_ein": 182,
   "orgs_other": 0,
   "locations": 6343,
   "with_coords": 6219
@@ -155,8 +155,8 @@
    "practitioners": 10979,
    "with_role": 3153,
    "role_pct": 28.7,
-   "orgs_provider": 2079,
-   "orgs_ein": 82,
+   "orgs_provider": 2135,
+   "orgs_ein": 78,
    "by_category": {
     "behavioral-health": 3058,
     "rehab-therapy": 1497,
@@ -175,8 +175,8 @@
    "practitioners": 3494,
    "with_role": 896,
    "role_pct": 25.6,
-   "orgs_provider": 615,
-   "orgs_ein": 25,
+   "orgs_provider": 628,
+   "orgs_ein": 27,
    "by_category": {
     "behavioral-health": 1066,
     "other-clinical": 682,
@@ -195,7 +195,7 @@
    "practitioners": 2748,
    "with_role": 988,
    "role_pct": 36.0,
-   "orgs_provider": 557,
+   "orgs_provider": 565,
    "orgs_ein": 22,
    "by_category": {
     "other-clinical": 614,
@@ -215,8 +215,8 @@
    "practitioners": 1653,
    "with_role": 439,
    "role_pct": 26.6,
-   "orgs_provider": 373,
-   "orgs_ein": 18,
+   "orgs_provider": 389,
+   "orgs_ein": 19,
    "by_category": {
     "behavioral-health": 446,
     "other-clinical": 254,
@@ -235,8 +235,8 @@
    "practitioners": 986,
    "with_role": 314,
    "role_pct": 31.8,
-   "orgs_provider": 94,
-   "orgs_ein": 2,
+   "orgs_provider": 96,
+   "orgs_ein": 3,
    "by_category": {
     "behavioral-health": 335,
     "nursing": 166,
@@ -255,8 +255,8 @@
    "practitioners": 932,
    "with_role": 233,
    "role_pct": 25.0,
-   "orgs_provider": 292,
-   "orgs_ein": 11,
+   "orgs_provider": 305,
+   "orgs_ein": 15,
    "by_category": {
     "behavioral-health": 184,
     "other-clinical": 159,
@@ -275,8 +275,8 @@
    "practitioners": 595,
    "with_role": 173,
    "role_pct": 29.1,
-   "orgs_provider": 105,
-   "orgs_ein": 6,
+   "orgs_provider": 113,
+   "orgs_ein": 7,
    "by_category": {
     "behavioral-health": 323,
     "other-clinical": 73,
@@ -295,7 +295,7 @@
    "practitioners": 313,
    "with_role": 126,
    "role_pct": 40.3,
-   "orgs_provider": 64,
+   "orgs_provider": 69,
    "orgs_ein": 4,
    "by_category": {
     "physician": 86,
@@ -343,9 +343,9 @@
     "behavioral-health": 7,
     "rehab-therapy": 5,
     "nursing": 2,
-    "pharmacy": 2,
     "dental": 2,
-    "dietary": 1
+    "pharmacy": 2,
+    "other-clinical": 1
    }
   },
   {
@@ -364,8 +364,8 @@
     "rehab-therapy": 4,
     "support": 3,
     "pharmacy": 1,
-    "chiropractic": 1,
-    "nursing": 1
+    "facility": 1,
+    "dental": 1
    }
   },
   {
@@ -408,8 +408,8 @@
    "orgs_ein": 0,
    "by_category": {
     "advanced-practice": 2,
-    "rehab-therapy": 1,
-    "physician": 1
+    "physician": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -480,7 +480,7 @@
    "practitioners": 0,
    "with_role": 0,
    "role_pct": null,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "by_category": {}
   }
@@ -520,7 +520,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 624,
    "with_role": 122,
-   "orgs_provider": 172,
+   "orgs_provider": 175,
    "orgs_ein": 7,
    "locations": 285,
    "lat": 61.21566,
@@ -538,8 +538,8 @@
     "pharmacy": 10,
     "chiropractic": 6,
     "group": 3,
-    "dietary": 2,
     "emergency-medical": 2,
+    "dietary": 2,
     "agency": 2,
     "supplier": 1,
     "facility": 1
@@ -551,7 +551,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 39,
    "with_role": 8,
-   "orgs_provider": 19,
+   "orgs_provider": 28,
    "orgs_ein": 1,
    "locations": 46,
    "lat": 61.15495,
@@ -560,8 +560,8 @@
     "rehab-therapy": 11,
     "dental": 9,
     "pharmacy": 6,
-    "chiropractic": 4,
     "advanced-practice": 4,
+    "chiropractic": 4,
     "physician": 3,
     "emergency-medical": 1,
     "nursing": 1
@@ -573,8 +573,8 @@
    "county": "Anchorage Municipality",
    "practitioners": 2046,
    "with_role": 513,
-   "orgs_provider": 466,
-   "orgs_ein": 19,
+   "orgs_provider": 474,
+   "orgs_ein": 17,
    "locations": 714,
    "lat": 61.19002,
    "lng": -149.88653,
@@ -606,8 +606,8 @@
    "county": "Anchorage Municipality",
    "practitioners": 494,
    "with_role": 241,
-   "orgs_provider": 73,
-   "orgs_ein": 4,
+   "orgs_provider": 92,
+   "orgs_ein": 5,
    "locations": 107,
    "lat": 61.20973,
    "lng": -149.75215,
@@ -623,10 +623,10 @@
     "group": 5,
     "podiatry": 2,
     "chiropractic": 2,
+    "support": 1,
     "eye-vision": 1,
     "supplier": 1,
-    "dietary": 1,
-    "support": 1
+    "dietary": 1
    }
   },
   {
@@ -635,7 +635,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 42,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 17,
    "lat": 61.25461,
@@ -646,12 +646,12 @@
     "advanced-practice": 5,
     "nursing": 4,
     "physician": 4,
-    "other-clinical": 1,
+    "emergency-medical": 1,
     "group": 1,
     "pharmacy": 1,
-    "dietary": 1,
-    "emergency-medical": 1,
-    "rehab-therapy": 1
+    "other-clinical": 1,
+    "rehab-therapy": 1,
+    "dietary": 1
    }
   },
   {
@@ -676,9 +676,9 @@
     "dietary": 11,
     "nursing": 9,
     "eye-vision": 5,
+    "support": 3,
     "group": 3,
     "podiatry": 3,
-    "support": 3,
     "chiropractic": 2,
     "student": 1
    }
@@ -689,7 +689,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 1091,
    "with_role": 164,
-   "orgs_provider": 181,
+   "orgs_provider": 182,
    "orgs_ein": 6,
    "locations": 215,
    "lat": 61.16061,
@@ -720,7 +720,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 4390,
    "with_role": 1286,
-   "orgs_provider": 683,
+   "orgs_provider": 701,
    "orgs_ein": 25,
    "locations": 1203,
    "lat": 61.19279,
@@ -755,7 +755,7 @@
    "county": null,
    "practitioners": 1,
    "with_role": 1,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 61.11025,
@@ -785,8 +785,8 @@
    "county": "Anchorage Municipality",
    "practitioners": 586,
    "with_role": 305,
-   "orgs_provider": 160,
-   "orgs_ein": 4,
+   "orgs_provider": 158,
+   "orgs_ein": 3,
    "locations": 239,
    "lat": 61.12723,
    "lng": -149.86998,
@@ -799,14 +799,14 @@
     "chiropractic": 40,
     "dental": 34,
     "eye-vision": 15,
-    "nursing": 9,
     "group": 9,
+    "nursing": 9,
     "other-clinical": 7,
     "podiatry": 6,
     "dietary": 2,
     "student": 1,
-    "no-taxonomy": 1,
-    "support": 1
+    "support": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -828,7 +828,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 136,
    "with_role": 30,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 1,
    "locations": 53,
    "lat": 61.18692,
@@ -842,10 +842,10 @@
     "nursing": 2,
     "dental": 2,
     "eye-vision": 1,
-    "physician": 1,
-    "emergency-medical": 1,
     "advanced-practice": 1,
-    "dietary": 1
+    "dietary": 1,
+    "physician": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -854,8 +854,8 @@
    "county": "Anchorage Municipality",
    "practitioners": 535,
    "with_role": 137,
-   "orgs_provider": 131,
-   "orgs_ein": 5,
+   "orgs_provider": 130,
+   "orgs_ein": 3,
    "locations": 169,
    "lat": 61.16216,
    "lng": -149.87815,
@@ -866,8 +866,8 @@
     "advanced-practice": 13,
     "dental": 9,
     "nursing": 7,
-    "chiropractic": 6,
     "student": 6,
+    "chiropractic": 6,
     "emergency-medical": 5,
     "group": 3,
     "pharmacy": 3,
@@ -932,9 +932,9 @@
     "behavioral-health": 28,
     "advanced-practice": 2,
     "other-clinical": 2,
-    "nursing": 1,
-    "support": 1,
     "eye-vision": 1,
+    "support": 1,
+    "nursing": 1,
     "chiropractic": 1
    }
   },
@@ -944,7 +944,7 @@
    "county": "Anchorage Municipality",
    "practitioners": 651,
    "with_role": 313,
-   "orgs_provider": 144,
+   "orgs_provider": 142,
    "orgs_ein": 9,
    "locations": 231,
    "lat": 61.32881,
@@ -998,8 +998,8 @@
    "lng": -145.52963,
    "by_category": {
     "advanced-practice": 12,
-    "behavioral-health": 3,
     "physician": 3,
+    "behavioral-health": 3,
     "rehab-therapy": 1
    }
   },
@@ -1009,7 +1009,7 @@
    "county": "Kenai Peninsula Borough",
    "practitioners": 321,
    "with_role": 69,
-   "orgs_provider": 69,
+   "orgs_provider": 72,
    "orgs_ein": 4,
    "locations": 123,
    "lat": 59.64779,
@@ -1028,8 +1028,8 @@
     "group": 2,
     "eye-vision": 2,
     "supplier": 1,
-    "support": 1,
-    "facility": 1
+    "facility": 1,
+    "support": 1
    }
   },
   {
@@ -1038,7 +1038,7 @@
    "county": "Kenai Peninsula Borough",
    "practitioners": 446,
    "with_role": 106,
-   "orgs_provider": 100,
+   "orgs_provider": 105,
    "orgs_ein": 2,
    "locations": 145,
    "lat": 60.56137,
@@ -1058,8 +1058,8 @@
     "group": 2,
     "dietary": 2,
     "agency": 1,
-    "facility": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "facility": 1
    }
   },
   {
@@ -1068,7 +1068,7 @@
    "county": "Kodiak Island Borough",
    "practitioners": 313,
    "with_role": 126,
-   "orgs_provider": 64,
+   "orgs_provider": 69,
    "orgs_ein": 4,
    "locations": 82,
    "lat": 57.79518,
@@ -1085,11 +1085,11 @@
     "dietary": 6,
     "eye-vision": 5,
     "group": 4,
-    "support": 2,
     "agency": 2,
+    "support": 2,
     "no-taxonomy": 2,
-    "emergency-medical": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1098,7 +1098,7 @@
    "county": null,
    "practitioners": 22,
    "with_role": 7,
-   "orgs_provider": 15,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 15,
    "lat": 61.53695,
@@ -1109,12 +1109,12 @@
     "support": 3,
     "behavioral-health": 3,
     "pharmacy": 1,
-    "chiropractic": 1,
-    "nursing": 1,
     "facility": 1,
     "dental": 1,
-    "payer": 1,
-    "other-clinical": 1
+    "chiropractic": 1,
+    "other-clinical": 1,
+    "nursing": 1,
+    "payer": 1
    }
   },
   {
@@ -1123,7 +1123,7 @@
    "county": "Matanuska-Susitna Borough",
    "practitioners": 672,
    "with_role": 314,
-   "orgs_provider": 163,
+   "orgs_provider": 155,
    "orgs_ein": 5,
    "locations": 233,
    "lat": 61.5973,
@@ -1136,14 +1136,14 @@
     "advanced-practice": 64,
     "chiropractic": 31,
     "nursing": 19,
-    "group": 9,
     "pharmacy": 9,
+    "group": 9,
     "dental": 5,
     "dietary": 4,
     "support": 3,
     "student": 2,
-    "no-taxonomy": 1,
-    "agency": 1
+    "agency": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -1166,8 +1166,8 @@
     "other-clinical": 4,
     "chiropractic": 3,
     "group": 2,
-    "dietary": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "dietary": 1
    }
   },
   {
@@ -1176,7 +1176,7 @@
    "county": "Matanuska-Susitna Borough",
    "practitioners": 2075,
    "with_role": 673,
-   "orgs_provider": 391,
+   "orgs_provider": 407,
    "orgs_ein": 17,
    "locations": 612,
    "lat": 61.5819,
@@ -1196,9 +1196,9 @@
     "group": 23,
     "dietary": 12,
     "facility": 3,
-    "no-taxonomy": 2,
-    "emergency-medical": 2,
     "supplier": 2,
+    "emergency-medical": 2,
+    "no-taxonomy": 2,
     "agency": 1
    }
   },
@@ -1208,8 +1208,8 @@
    "county": "Kenai Peninsula Borough",
    "practitioners": 170,
    "with_role": 16,
-   "orgs_provider": 5,
-   "orgs_ein": 0,
+   "orgs_provider": 11,
+   "orgs_ein": 1,
    "locations": 10,
    "lat": 60.12505,
    "lng": -149.42024,
@@ -1230,7 +1230,7 @@
    "county": "Kenai Peninsula Borough",
    "practitioners": 716,
    "with_role": 248,
-   "orgs_provider": 198,
+   "orgs_provider": 200,
    "orgs_ein": 12,
    "locations": 283,
    "lat": 60.49087,
@@ -1247,12 +1247,12 @@
     "dental": 18,
     "chiropractic": 10,
     "group": 8,
-    "eye-vision": 7,
     "dietary": 7,
+    "eye-vision": 7,
     "student": 2,
-    "facility": 1,
+    "no-taxonomy": 1,
     "podiatry": 1,
-    "no-taxonomy": 1
+    "facility": 1
    }
   },
   {
@@ -1300,10 +1300,10 @@
     "behavioral-health": 4,
     "nursing": 2,
     "advanced-practice": 2,
-    "pharmacy": 2,
     "dental": 2,
-    "dietary": 1,
-    "other-clinical": 1
+    "pharmacy": 2,
+    "other-clinical": 1,
+    "dietary": 1
    }
   },
   {
@@ -1353,8 +1353,8 @@
    "county": "Fairbanks North Star Borough",
    "practitioners": 2504,
    "with_role": 741,
-   "orgs_provider": 421,
-   "orgs_ein": 14,
+   "orgs_provider": 427,
+   "orgs_ein": 17,
    "locations": 567,
    "lat": 64.83837,
    "lng": -147.72423,
@@ -1371,14 +1371,14 @@
     "support": 24,
     "chiropractic": 22,
     "agency": 19,
-    "group": 16,
     "dietary": 16,
+    "group": 16,
     "facility": 6,
     "emergency-medical": 5,
     "podiatry": 4,
     "student": 2,
-    "no-taxonomy": 1,
-    "supplier": 1
+    "supplier": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -1393,13 +1393,13 @@
    "lat": 64.67878,
    "lng": -147.08237,
    "by_category": {
-    "group": 1,
-    "other-clinical": 1,
-    "dental": 1,
+    "rehab-therapy": 1,
     "facility": 1,
     "dietary": 1,
+    "group": 1,
     "physician": 1,
-    "rehab-therapy": 1
+    "dental": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1408,7 +1408,7 @@
    "county": "Fairbanks North Star Borough",
    "practitioners": 165,
    "with_role": 28,
-   "orgs_provider": 13,
+   "orgs_provider": 11,
    "orgs_ein": 1,
    "locations": 28,
    "lat": 64.83918,
@@ -1439,8 +1439,8 @@
    "lng": -149.1608,
    "by_category": {
     "advanced-practice": 2,
-    "rehab-therapy": 1,
-    "physician": 1
+    "physician": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1449,18 +1449,18 @@
    "county": "Fairbanks North Star Borough",
    "practitioners": 67,
    "with_role": 27,
-   "orgs_provider": 28,
-   "orgs_ein": 3,
+   "orgs_provider": 30,
+   "orgs_ein": 2,
    "locations": 33,
    "lat": 64.75944,
    "lng": -147.35953,
    "by_category": {
     "rehab-therapy": 29,
     "behavioral-health": 16,
-    "pharmacy": 6,
     "dental": 6,
-    "advanced-practice": 3,
+    "pharmacy": 6,
     "physician": 3,
+    "advanced-practice": 3,
     "eye-vision": 2,
     "nursing": 1,
     "chiropractic": 1
@@ -1498,7 +1498,7 @@
    "county": "Fairbanks North Star Borough",
    "practitioners": 739,
    "with_role": 98,
-   "orgs_provider": 148,
+   "orgs_provider": 155,
    "orgs_ein": 6,
    "locations": 213,
    "lat": 64.84196,
@@ -1515,9 +1515,9 @@
     "physician": 10,
     "chiropractic": 6,
     "eye-vision": 5,
-    "group": 2,
     "dietary": 2,
     "facility": 2,
+    "group": 2,
     "agency": 2
    }
   },
@@ -1572,7 +1572,7 @@
    "county": "Yukon-Koyukuk Census Area",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 1,
    "lat": null,
@@ -1607,8 +1607,8 @@
    "lng": -147.84914,
    "by_category": {
     "advanced-practice": 3,
-    "physician": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "physician": 1
    }
   },
   {
@@ -1617,8 +1617,8 @@
    "county": "Juneau City and Borough",
    "practitioners": 932,
    "with_role": 233,
-   "orgs_provider": 291,
-   "orgs_ein": 10,
+   "orgs_provider": 304,
+   "orgs_ein": 14,
    "locations": 365,
    "lat": 58.34004,
    "lng": -134.50837,
@@ -1637,8 +1637,8 @@
     "eye-vision": 7,
     "no-taxonomy": 4,
     "student": 3,
-    "facility": 2,
     "podiatry": 2,
+    "facility": 2,
     "group": 1
    }
   },
@@ -1678,8 +1678,8 @@
    "county": "Sitka City and Borough",
    "practitioners": 986,
    "with_role": 314,
-   "orgs_provider": 94,
-   "orgs_ein": 2,
+   "orgs_provider": 96,
+   "orgs_ein": 3,
    "locations": 82,
    "lat": 57.05353,
    "lng": -135.3422,
@@ -1693,8 +1693,8 @@
     "pharmacy": 26,
     "dietary": 17,
     "dental": 15,
-    "chiropractic": 9,
     "eye-vision": 9,
+    "chiropractic": 9,
     "support": 7,
     "facility": 5,
     "group": 4,
@@ -1710,8 +1710,8 @@
    "county": "Ketchikan Gateway Borough",
    "practitioners": 595,
    "with_role": 173,
-   "orgs_provider": 105,
-   "orgs_ein": 6,
+   "orgs_provider": 113,
+   "orgs_ein": 7,
    "locations": 153,
    "lat": 55.35084,
    "lng": -131.67242,
@@ -1749,5 +1749,5 @@
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

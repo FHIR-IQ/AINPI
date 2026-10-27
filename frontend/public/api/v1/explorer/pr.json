@@ -1,13 +1,13 @@
 {
  "state": "PR",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 19791,
   "with_role": 6151,
-  "orgs_provider": 8068,
-  "orgs_ein": 442,
+  "orgs_provider": 8134,
+  "orgs_ein": 443,
   "orgs_other": 1,
   "locations": 13328,
   "with_coords": 13023
@@ -155,8 +155,8 @@
    "practitioners": 5370,
    "with_role": 1501,
    "role_pct": 28.0,
-   "orgs_provider": 2207,
-   "orgs_ein": 117,
+   "orgs_provider": 2208,
+   "orgs_ein": 116,
    "by_category": {
     "physician": 2040,
     "behavioral-health": 865,
@@ -175,7 +175,7 @@
    "practitioners": 2452,
    "with_role": 614,
    "role_pct": 25.0,
-   "orgs_provider": 606,
+   "orgs_provider": 614,
    "orgs_ein": 37,
    "by_category": {
     "student": 790,
@@ -195,8 +195,8 @@
    "practitioners": 1458,
    "with_role": 251,
    "role_pct": 17.2,
-   "orgs_provider": 395,
-   "orgs_ein": 22,
+   "orgs_provider": 369,
+   "orgs_ein": 21,
    "by_category": {
     "emergency-medical": 759,
     "physician": 230,
@@ -215,8 +215,8 @@
    "practitioners": 1405,
    "with_role": 461,
    "role_pct": 32.8,
-   "orgs_provider": 577,
-   "orgs_ein": 26,
+   "orgs_provider": 606,
+   "orgs_ein": 28,
    "by_category": {
     "physician": 580,
     "pharmacy": 162,
@@ -235,8 +235,8 @@
    "practitioners": 1216,
    "with_role": 710,
    "role_pct": 58.4,
-   "orgs_provider": 449,
-   "orgs_ein": 18,
+   "orgs_provider": 446,
+   "orgs_ein": 17,
    "by_category": {
     "physician": 728,
     "behavioral-health": 101,
@@ -255,7 +255,7 @@
    "practitioners": 909,
    "with_role": 320,
    "role_pct": 35.2,
-   "orgs_provider": 370,
+   "orgs_provider": 380,
    "orgs_ein": 17,
    "by_category": {
     "physician": 416,
@@ -275,8 +275,8 @@
    "practitioners": 470,
    "with_role": 169,
    "role_pct": 36.0,
-   "orgs_provider": 79,
-   "orgs_ein": 5,
+   "orgs_provider": 82,
+   "orgs_ein": 6,
    "by_category": {
     "physician": 312,
     "student": 62,
@@ -295,7 +295,7 @@
    "practitioners": 454,
    "with_role": 126,
    "role_pct": 27.8,
-   "orgs_provider": 216,
+   "orgs_provider": 225,
    "orgs_ein": 20,
    "by_category": {
     "physician": 229,
@@ -315,15 +315,15 @@
    "practitioners": 364,
    "with_role": 107,
    "role_pct": 29.4,
-   "orgs_provider": 209,
-   "orgs_ein": 10,
+   "orgs_provider": 214,
+   "orgs_ein": 9,
    "by_category": {
     "physician": 162,
     "behavioral-health": 67,
     "pharmacy": 32,
     "dental": 31,
-    "other-clinical": 13,
     "rehab-therapy": 13,
+    "other-clinical": 13,
     "eye-vision": 9,
     "advanced-practice": 7
    }
@@ -335,7 +335,7 @@
    "practitioners": 362,
    "with_role": 114,
    "role_pct": 31.5,
-   "orgs_provider": 169,
+   "orgs_provider": 173,
    "orgs_ein": 8,
    "by_category": {
     "physician": 106,
@@ -355,7 +355,7 @@
    "practitioners": 240,
    "with_role": 75,
    "role_pct": 31.2,
-   "orgs_provider": 133,
+   "orgs_provider": 136,
    "orgs_ein": 9,
    "by_category": {
     "physician": 98,
@@ -375,7 +375,7 @@
    "practitioners": 234,
    "with_role": 77,
    "role_pct": 32.9,
-   "orgs_provider": 150,
+   "orgs_provider": 151,
    "orgs_ein": 11,
    "by_category": {
     "physician": 110,
@@ -385,7 +385,7 @@
     "other-clinical": 16,
     "rehab-therapy": 14,
     "eye-vision": 8,
-    "advanced-practice": 6
+    "chiropractic": 6
    }
   },
   {
@@ -395,8 +395,8 @@
    "practitioners": 206,
    "with_role": 65,
    "role_pct": 31.6,
-   "orgs_provider": 85,
-   "orgs_ein": 4,
+   "orgs_provider": 87,
+   "orgs_ein": 5,
    "by_category": {
     "physician": 73,
     "pharmacy": 38,
@@ -415,7 +415,7 @@
    "practitioners": 196,
    "with_role": 71,
    "role_pct": 36.2,
-   "orgs_provider": 108,
+   "orgs_provider": 105,
    "orgs_ein": 7,
    "by_category": {
     "physician": 99,
@@ -425,7 +425,7 @@
     "dental": 12,
     "group": 7,
     "advanced-practice": 5,
-    "eye-vision": 4
+    "other-clinical": 4
    }
   },
   {
@@ -445,7 +445,7 @@
     "dental": 12,
     "eye-vision": 11,
     "advanced-practice": 6,
-    "facility": 5
+    "other-clinical": 5
    }
   },
   {
@@ -455,15 +455,15 @@
    "practitioners": 175,
    "with_role": 75,
    "role_pct": 42.9,
-   "orgs_provider": 73,
-   "orgs_ein": 2,
+   "orgs_provider": 71,
+   "orgs_ein": 1,
    "by_category": {
     "physician": 72,
     "pharmacy": 34,
     "behavioral-health": 29,
-    "rehab-therapy": 6,
     "dental": 6,
     "dietary": 6,
+    "rehab-therapy": 6,
     "eye-vision": 5,
     "chiropractic": 4
    }
@@ -475,7 +475,7 @@
    "practitioners": 172,
    "with_role": 60,
    "role_pct": 34.9,
-   "orgs_provider": 88,
+   "orgs_provider": 89,
    "orgs_ein": 5,
    "by_category": {
     "physician": 68,
@@ -484,8 +484,8 @@
     "rehab-therapy": 16,
     "dental": 15,
     "other-clinical": 7,
-    "eye-vision": 5,
-    "dietary": 5
+    "dietary": 5,
+    "eye-vision": 5
    }
   },
   {
@@ -495,8 +495,8 @@
    "practitioners": 156,
    "with_role": 51,
    "role_pct": 32.7,
-   "orgs_provider": 90,
-   "orgs_ein": 5,
+   "orgs_provider": 91,
+   "orgs_ein": 6,
    "by_category": {
     "physician": 84,
     "behavioral-health": 11,
@@ -515,15 +515,15 @@
    "practitioners": 153,
    "with_role": 53,
    "role_pct": 34.6,
-   "orgs_provider": 88,
+   "orgs_provider": 87,
    "orgs_ein": 4,
    "by_category": {
     "physician": 60,
     "behavioral-health": 24,
     "dental": 20,
     "pharmacy": 12,
-    "other-clinical": 7,
     "chiropractic": 7,
+    "other-clinical": 7,
     "dietary": 4,
     "rehab-therapy": 3
    }
@@ -544,8 +544,8 @@
     "dental": 8,
     "group": 5,
     "dietary": 5,
-    "rehab-therapy": 2,
-    "chiropractic": 2
+    "facility": 2,
+    "rehab-therapy": 2
    }
   },
   {
@@ -555,8 +555,8 @@
    "practitioners": 144,
    "with_role": 41,
    "role_pct": 28.5,
-   "orgs_provider": 72,
-   "orgs_ein": 4,
+   "orgs_provider": 76,
+   "orgs_ein": 5,
    "by_category": {
     "physician": 47,
     "behavioral-health": 34,
@@ -565,7 +565,7 @@
     "support": 5,
     "chiropractic": 5,
     "dietary": 4,
-    "rehab-therapy": 3
+    "other-clinical": 3
    }
   },
   {
@@ -575,7 +575,7 @@
    "practitioners": 137,
    "with_role": 44,
    "role_pct": 32.1,
-   "orgs_provider": 76,
+   "orgs_provider": 78,
    "orgs_ein": 3,
    "by_category": {
     "physician": 53,
@@ -585,7 +585,7 @@
     "rehab-therapy": 8,
     "eye-vision": 6,
     "chiropractic": 4,
-    "dietary": 2
+    "group": 2
    }
   },
   {
@@ -603,9 +603,9 @@
     "dental": 13,
     "advanced-practice": 9,
     "behavioral-health": 7,
-    "rehab-therapy": 5,
+    "other-clinical": 5,
     "nursing": 5,
-    "group": 5
+    "rehab-therapy": 5
    }
   },
   {
@@ -625,7 +625,7 @@
     "rehab-therapy": 9,
     "group": 4,
     "other-clinical": 3,
-    "student": 2
+    "advanced-practice": 2
    }
   },
   {
@@ -635,17 +635,17 @@
    "practitioners": 126,
    "with_role": 49,
    "role_pct": 38.9,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 3,
    "by_category": {
     "physician": 57,
     "behavioral-health": 28,
     "pharmacy": 15,
     "eye-vision": 4,
+    "dental": 3,
     "rehab-therapy": 3,
     "dietary": 3,
-    "chiropractic": 3,
-    "dental": 3
+    "chiropractic": 3
    }
   },
   {
@@ -655,17 +655,17 @@
    "practitioners": 118,
    "with_role": 57,
    "role_pct": 48.3,
-   "orgs_provider": 49,
+   "orgs_provider": 50,
    "orgs_ein": 2,
    "by_category": {
     "physician": 52,
-    "behavioral-health": 17,
     "pharmacy": 17,
+    "behavioral-health": 17,
     "dental": 10,
     "group": 4,
     "eye-vision": 4,
     "rehab-therapy": 3,
-    "chiropractic": 2
+    "dietary": 2
    }
   },
   {
@@ -695,7 +695,7 @@
    "practitioners": 105,
    "with_role": 60,
    "role_pct": 57.1,
-   "orgs_provider": 34,
+   "orgs_provider": 35,
    "orgs_ein": 2,
    "by_category": {
     "physician": 51,
@@ -703,8 +703,8 @@
     "dental": 11,
     "eye-vision": 7,
     "dietary": 5,
-    "nursing": 2,
     "other-clinical": 2,
+    "nursing": 2,
     "rehab-therapy": 2
    }
   },
@@ -715,8 +715,8 @@
    "practitioners": 102,
    "with_role": 17,
    "role_pct": 16.7,
-   "orgs_provider": 69,
-   "orgs_ein": 3,
+   "orgs_provider": 70,
+   "orgs_ein": 4,
    "by_category": {
     "physician": 31,
     "pharmacy": 27,
@@ -724,7 +724,7 @@
     "dental": 10,
     "eye-vision": 8,
     "rehab-therapy": 4,
-    "dietary": 3,
+    "chiropractic": 3,
     "other-clinical": 3
    }
   },
@@ -735,16 +735,16 @@
    "practitioners": 98,
    "with_role": 19,
    "role_pct": 19.4,
-   "orgs_provider": 52,
-   "orgs_ein": 4,
+   "orgs_provider": 51,
+   "orgs_ein": 3,
    "by_category": {
     "physician": 39,
     "pharmacy": 19,
     "behavioral-health": 10,
-    "eye-vision": 6,
     "support": 6,
-    "dental": 5,
+    "eye-vision": 6,
     "other-clinical": 5,
+    "dental": 5,
     "group": 3
    }
   },
@@ -755,7 +755,7 @@
    "practitioners": 97,
    "with_role": 26,
    "role_pct": 26.8,
-   "orgs_provider": 41,
+   "orgs_provider": 42,
    "orgs_ein": 3,
    "by_category": {
     "pharmacy": 32,
@@ -775,7 +775,7 @@
    "practitioners": 97,
    "with_role": 27,
    "role_pct": 27.8,
-   "orgs_provider": 47,
+   "orgs_provider": 48,
    "orgs_ein": 2,
    "by_category": {
     "physician": 29,
@@ -804,8 +804,8 @@
     "dental": 5,
     "chiropractic": 4,
     "rehab-therapy": 2,
-    "other-clinical": 1,
-    "support": 1
+    "nursing": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -815,7 +815,7 @@
    "practitioners": 91,
    "with_role": 19,
    "role_pct": 20.9,
-   "orgs_provider": 54,
+   "orgs_provider": 55,
    "orgs_ein": 0,
    "by_category": {
     "physician": 22,
@@ -824,8 +824,8 @@
     "behavioral-health": 13,
     "group": 7,
     "dental": 4,
-    "other-clinical": 2,
-    "dietary": 2
+    "dietary": 2,
+    "eye-vision": 2
    }
   },
   {
@@ -875,17 +875,17 @@
    "practitioners": 80,
    "with_role": 33,
    "role_pct": 41.2,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 6,
    "by_category": {
     "physician": 31,
     "pharmacy": 16,
     "behavioral-health": 11,
     "dental": 9,
-    "eye-vision": 3,
     "rehab-therapy": 3,
+    "eye-vision": 3,
     "other-clinical": 2,
-    "support": 1
+    "group": 1
    }
   },
   {
@@ -895,7 +895,7 @@
    "practitioners": 75,
    "with_role": 13,
    "role_pct": 17.3,
-   "orgs_provider": 36,
+   "orgs_provider": 35,
    "orgs_ein": 0,
    "by_category": {
     "pharmacy": 27,
@@ -915,7 +915,7 @@
    "practitioners": 73,
    "with_role": 21,
    "role_pct": 28.8,
-   "orgs_provider": 42,
+   "orgs_provider": 43,
    "orgs_ein": 3,
    "by_category": {
     "physician": 25,
@@ -935,7 +935,7 @@
    "practitioners": 73,
    "with_role": 18,
    "role_pct": 24.7,
-   "orgs_provider": 35,
+   "orgs_provider": 36,
    "orgs_ein": 2,
    "by_category": {
     "physician": 32,
@@ -945,7 +945,7 @@
     "behavioral-health": 3,
     "other-clinical": 3,
     "rehab-therapy": 2,
-    "advanced-practice": 1
+    "nursing": 1
    }
   },
   {
@@ -958,13 +958,13 @@
    "orgs_provider": 50,
    "orgs_ein": 2,
    "by_category": {
-    "pharmacy": 18,
     "physician": 18,
+    "pharmacy": 18,
     "other-clinical": 10,
     "behavioral-health": 9,
     "rehab-therapy": 3,
     "dental": 2,
-    "facility": 2,
+    "nursing": 2,
     "group": 2
    }
   },
@@ -984,8 +984,8 @@
     "physician": 10,
     "dental": 2,
     "eye-vision": 2,
-    "chiropractic": 1,
-    "facility": 1
+    "facility": 1,
+    "group": 1
    }
   },
   {
@@ -995,7 +995,7 @@
    "practitioners": 66,
    "with_role": 15,
    "role_pct": 22.7,
-   "orgs_provider": 40,
+   "orgs_provider": 42,
    "orgs_ein": 2,
    "by_category": {
     "physician": 20,
@@ -1003,8 +1003,8 @@
     "rehab-therapy": 7,
     "behavioral-health": 6,
     "dental": 4,
-    "eye-vision": 3,
     "group": 3,
+    "eye-vision": 3,
     "other-clinical": 2
    }
   },
@@ -1023,8 +1023,8 @@
     "pharmacy": 10,
     "dental": 5,
     "nursing": 5,
-    "rehab-therapy": 3,
     "facility": 3,
+    "rehab-therapy": 3,
     "chiropractic": 2
    }
   },
@@ -1041,11 +1041,11 @@
     "physician": 26,
     "behavioral-health": 12,
     "pharmacy": 11,
-    "chiropractic": 4,
     "eye-vision": 4,
+    "chiropractic": 4,
     "dental": 2,
-    "emergency-medical": 1,
-    "dietary": 1
+    "other-clinical": 1,
+    "group": 1
    }
   },
   {
@@ -1055,11 +1055,11 @@
    "practitioners": 60,
    "with_role": 13,
    "role_pct": 21.7,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 3,
    "by_category": {
-    "pharmacy": 16,
     "physician": 16,
+    "pharmacy": 16,
     "behavioral-health": 9,
     "dental": 6,
     "rehab-therapy": 5,
@@ -1081,11 +1081,11 @@
     "physician": 23,
     "behavioral-health": 7,
     "dental": 6,
-    "rehab-therapy": 5,
     "pharmacy": 5,
+    "rehab-therapy": 5,
     "eye-vision": 2,
-    "dietary": 1,
-    "other-clinical": 1
+    "advanced-practice": 1,
+    "supplier": 1
    }
   },
   {
@@ -1095,17 +1095,17 @@
    "practitioners": 53,
    "with_role": 7,
    "role_pct": 13.2,
-   "orgs_provider": 20,
+   "orgs_provider": 21,
    "orgs_ein": 1,
    "by_category": {
-    "physician": 15,
     "pharmacy": 15,
+    "physician": 15,
     "behavioral-health": 12,
     "dental": 5,
     "eye-vision": 2,
-    "nursing": 1,
     "student": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "nursing": 1
    }
   },
   {
@@ -1121,11 +1121,11 @@
     "pharmacy": 26,
     "physician": 10,
     "behavioral-health": 5,
-    "dental": 2,
     "eye-vision": 2,
-    "supplier": 2,
     "support": 2,
-    "chiropractic": 1
+    "dental": 2,
+    "supplier": 2,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1135,7 +1135,7 @@
    "practitioners": 49,
    "with_role": 9,
    "role_pct": 18.4,
-   "orgs_provider": 30,
+   "orgs_provider": 31,
    "orgs_ein": 3,
    "by_category": {
     "rehab-therapy": 19,
@@ -1144,8 +1144,8 @@
     "pharmacy": 4,
     "dental": 3,
     "other-clinical": 2,
-    "group": 1,
-    "supplier": 1
+    "supplier": 1,
+    "group": 1
    }
   },
   {
@@ -1163,9 +1163,9 @@
     "student": 5,
     "behavioral-health": 3,
     "dental": 3,
-    "other-clinical": 1,
+    "group": 1,
     "advanced-practice": 1,
-    "group": 1
+    "other-clinical": 1
    }
   },
   {
@@ -1184,7 +1184,7 @@
     "rehab-therapy": 4,
     "dental": 3,
     "facility": 2,
-    "student": 1,
+    "advanced-practice": 1,
     "dietary": 1
    }
   },
@@ -1201,11 +1201,11 @@
     "physician": 26,
     "pharmacy": 9,
     "dental": 2,
+    "chiropractic": 1,
     "rehab-therapy": 1,
-    "dietary": 1,
-    "behavioral-health": 1,
     "group": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "support": 1
    }
   },
   {
@@ -1235,7 +1235,7 @@
    "practitioners": 41,
    "with_role": 12,
    "role_pct": 29.3,
-   "orgs_provider": 49,
+   "orgs_provider": 50,
    "orgs_ein": 6,
    "by_category": {
     "physician": 20,
@@ -1244,8 +1244,8 @@
     "eye-vision": 2,
     "facility": 2,
     "chiropractic": 1,
-    "emergency-medical": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "dietary": 1
    }
   },
   {
@@ -1260,12 +1260,12 @@
    "by_category": {
     "pharmacy": 19,
     "physician": 12,
-    "dental": 2,
     "behavioral-health": 2,
     "other-clinical": 2,
-    "rehab-therapy": 1,
+    "dental": 2,
     "eye-vision": 1,
-    "nursing": 1
+    "nursing": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1275,7 +1275,7 @@
    "practitioners": 39,
    "with_role": 12,
    "role_pct": 30.8,
-   "orgs_provider": 33,
+   "orgs_provider": 34,
    "orgs_ein": 0,
    "by_category": {
     "physician": 14,
@@ -1285,7 +1285,7 @@
     "group": 3,
     "behavioral-health": 3,
     "emergency-medical": 2,
-    "eye-vision": 1
+    "support": 1
    }
   },
   {
@@ -1295,17 +1295,17 @@
    "practitioners": 37,
    "with_role": 9,
    "role_pct": 24.3,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 2,
    "by_category": {
     "physician": 12,
     "pharmacy": 9,
     "dental": 5,
     "behavioral-health": 2,
-    "eye-vision": 2,
     "chiropractic": 2,
-    "advanced-practice": 1,
-    "facility": 1
+    "eye-vision": 2,
+    "nursing": 1,
+    "transport": 1
    }
   },
   {
@@ -1321,10 +1321,10 @@
     "pharmacy": 16,
     "physician": 10,
     "dental": 3,
-    "behavioral-health": 2,
     "support": 2,
-    "transport": 1,
+    "behavioral-health": 2,
     "student": 1,
+    "transport": 1,
     "eye-vision": 1
    }
   },
@@ -1378,9 +1378,9 @@
     "pharmacy": 13,
     "physician": 8,
     "nursing": 3,
-    "rehab-therapy": 2,
     "dental": 2,
-    "eye-vision": 1,
+    "rehab-therapy": 2,
+    "advanced-practice": 1,
     "behavioral-health": 1,
     "other-clinical": 1
    }
@@ -1399,8 +1399,8 @@
     "pharmacy": 9,
     "behavioral-health": 3,
     "rehab-therapy": 2,
-    "other-clinical": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1410,7 +1410,7 @@
    "practitioners": 31,
    "with_role": 13,
    "role_pct": 41.9,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 2,
    "by_category": {
     "physician": 15,
@@ -1433,10 +1433,10 @@
     "physician": 16,
     "dental": 3,
     "rehab-therapy": 3,
-    "dietary": 1,
-    "other-clinical": 1,
+    "pharmacy": 1,
     "emergency-medical": 1,
-    "behavioral-health": 1,
+    "other-clinical": 1,
+    "dietary": 1,
     "facility": 1
    }
   },
@@ -1452,11 +1452,11 @@
    "by_category": {
     "physician": 16,
     "pharmacy": 3,
-    "behavioral-health": 2,
     "other-clinical": 2,
     "dental": 2,
-    "facility": 1,
-    "advanced-practice": 1
+    "behavioral-health": 2,
+    "advanced-practice": 1,
+    "facility": 1
    }
   },
   {
@@ -1471,10 +1471,10 @@
    "by_category": {
     "physician": 12,
     "pharmacy": 3,
-    "eye-vision": 2,
     "behavioral-health": 2,
-    "rehab-therapy": 2,
     "group": 2,
+    "eye-vision": 2,
+    "rehab-therapy": 2,
     "other-clinical": 1,
     "facility": 1
    }
@@ -1493,9 +1493,9 @@
     "physician": 4,
     "dental": 3,
     "behavioral-health": 2,
+    "facility": 1,
     "supplier": 1,
-    "advanced-practice": 1,
-    "facility": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -1511,11 +1511,11 @@
     "physician": 7,
     "pharmacy": 6,
     "other-clinical": 3,
-    "rehab-therapy": 2,
     "group": 2,
-    "agency": 1,
-    "emergency-medical": 1,
-    "facility": 1
+    "rehab-therapy": 2,
+    "facility": 1,
+    "advanced-practice": 1,
+    "support": 1
    }
   },
   {
@@ -1529,13 +1529,13 @@
    "orgs_ein": 1,
    "by_category": {
     "physician": 7,
-    "dental": 3,
     "eye-vision": 3,
+    "dental": 3,
     "pharmacy": 3,
     "other-clinical": 2,
     "behavioral-health": 2,
-    "transport": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "transport": 1
    }
   },
   {
@@ -1550,10 +1550,10 @@
    "by_category": {
     "physician": 14,
     "behavioral-health": 4,
-    "rehab-therapy": 1,
     "dental": 1,
-    "dietary": 1,
-    "support": 1
+    "rehab-therapy": 1,
+    "support": 1,
+    "dietary": 1
    }
   },
   {
@@ -1563,14 +1563,14 @@
    "practitioners": 19,
    "with_role": 1,
    "role_pct": 5.3,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "by_category": {
     "physician": 9,
     "pharmacy": 6,
     "support": 2,
-    "dental": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dental": 1
    }
   },
   {
@@ -1580,16 +1580,16 @@
    "practitioners": 19,
    "with_role": 7,
    "role_pct": 36.8,
-   "orgs_provider": 17,
+   "orgs_provider": 16,
    "orgs_ein": 0,
    "by_category": {
-    "behavioral-health": 5,
     "physician": 5,
+    "behavioral-health": 5,
     "pharmacy": 3,
-    "eye-vision": 2,
     "group": 2,
-    "support": 1,
-    "emergency-medical": 1
+    "eye-vision": 2,
+    "emergency-medical": 1,
+    "support": 1
    }
   },
   {
@@ -1607,8 +1607,8 @@
     "pharmacy": 2,
     "dental": 2,
     "other-clinical": 1,
-    "support": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "support": 1
    }
   },
   {
@@ -1623,9 +1623,9 @@
    "by_category": {
     "pharmacy": 8,
     "physician": 2,
-    "dental": 1,
     "support": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "dental": 1
    }
   },
   {
@@ -1668,8 +1668,8 @@
    "orgs_provider": 11,
    "orgs_ein": 2,
    "by_category": {
-    "behavioral-health": 2,
-    "physician": 2
+    "physician": 2,
+    "behavioral-health": 2
    }
   }
  ],
@@ -1701,11 +1701,11 @@
    "by_category": {
     "physician": 16,
     "pharmacy": 3,
-    "behavioral-health": 2,
     "other-clinical": 2,
     "dental": 2,
-    "facility": 1,
-    "advanced-practice": 1
+    "behavioral-health": 2,
+    "advanced-practice": 1,
+    "facility": 1
    }
   },
   {
@@ -1714,8 +1714,8 @@
    "county": "Aguada Municipio",
    "practitioners": 175,
    "with_role": 75,
-   "orgs_provider": 73,
-   "orgs_ein": 2,
+   "orgs_provider": 71,
+   "orgs_ein": 1,
    "locations": 117,
    "lat": 18.3803,
    "lng": -67.18689,
@@ -1723,18 +1723,18 @@
     "physician": 72,
     "pharmacy": 34,
     "behavioral-health": 29,
-    "rehab-therapy": 6,
     "dental": 6,
     "dietary": 6,
+    "rehab-therapy": 6,
     "eye-vision": 5,
     "chiropractic": 4,
     "student": 3,
     "group": 3,
     "other-clinical": 2,
-    "support": 1,
     "facility": 1,
-    "nursing": 1,
+    "support": 1,
     "advanced-practice": 1,
+    "nursing": 1,
     "emergency-medical": 1
    }
   },
@@ -1744,7 +1744,7 @@
    "county": "Aguadilla Municipio",
    "practitioners": 141,
    "with_role": 50,
-   "orgs_provider": 80,
+   "orgs_provider": 79,
    "orgs_ein": 4,
    "locations": 177,
    "lat": 18.44303,
@@ -1759,12 +1759,12 @@
     "dietary": 4,
     "rehab-therapy": 3,
     "eye-vision": 3,
-    "emergency-medical": 2,
     "facility": 2,
     "support": 2,
-    "group": 1,
+    "emergency-medical": 2,
     "payer": 1,
     "no-taxonomy": 1,
+    "group": 1,
     "transport": 1,
     "nursing": 1
    }
@@ -1792,7 +1792,7 @@
    "county": "A\u00c3\u00b1asco Municipio",
    "practitioners": 37,
    "with_role": 9,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 2,
    "locations": 57,
    "lat": 18.28227,
@@ -1802,13 +1802,13 @@
     "pharmacy": 9,
     "dental": 5,
     "behavioral-health": 2,
-    "eye-vision": 2,
     "chiropractic": 2,
-    "advanced-practice": 1,
-    "facility": 1,
+    "eye-vision": 2,
     "nursing": 1,
+    "transport": 1,
     "rehab-therapy": 1,
-    "transport": 1
+    "facility": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -1817,8 +1817,8 @@
    "county": "Arecibo Municipio",
    "practitioners": 362,
    "with_role": 107,
-   "orgs_provider": 209,
-   "orgs_ein": 10,
+   "orgs_provider": 214,
+   "orgs_ein": 9,
    "locations": 333,
    "lat": 18.46997,
    "lng": -66.72693,
@@ -1832,14 +1832,14 @@
     "eye-vision": 9,
     "advanced-practice": 7,
     "chiropractic": 6,
-    "nursing": 5,
     "dietary": 5,
+    "nursing": 5,
     "support": 4,
     "group": 3,
     "student": 3,
     "emergency-medical": 2,
-    "facility": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "facility": 1
    }
   },
   {
@@ -1863,7 +1863,7 @@
    "county": "Barceloneta Municipio",
    "practitioners": 97,
    "with_role": 26,
-   "orgs_provider": 41,
+   "orgs_provider": 42,
    "orgs_ein": 3,
    "locations": 58,
    "lat": 18.44918,
@@ -1886,8 +1886,8 @@
    "county": "Cabo Rojo Municipio",
    "practitioners": 98,
    "with_role": 19,
-   "orgs_provider": 52,
-   "orgs_ein": 4,
+   "orgs_provider": 51,
+   "orgs_ein": 3,
    "locations": 111,
    "lat": 18.08645,
    "lng": -67.14879,
@@ -1895,15 +1895,15 @@
     "physician": 39,
     "pharmacy": 19,
     "behavioral-health": 10,
-    "eye-vision": 6,
     "support": 6,
-    "dental": 5,
+    "eye-vision": 6,
     "other-clinical": 5,
+    "dental": 5,
     "group": 3,
     "student": 2,
     "rehab-therapy": 1,
-    "emergency-medical": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1921,10 +1921,10 @@
     "pharmacy": 16,
     "physician": 10,
     "dental": 3,
-    "behavioral-health": 2,
     "support": 2,
-    "transport": 1,
+    "behavioral-health": 2,
     "student": 1,
+    "transport": 1,
     "eye-vision": 1
    }
   },
@@ -1946,15 +1946,15 @@
     "dental": 5,
     "chiropractic": 4,
     "rehab-therapy": 2,
-    "other-clinical": 1,
-    "support": 1,
-    "emergency-medical": 1,
-    "eye-vision": 1,
-    "student": 1,
-    "supplier": 1,
-    "advanced-practice": 1,
     "nursing": 1,
-    "dietary": 1
+    "other-clinical": 1,
+    "dietary": 1,
+    "emergency-medical": 1,
+    "supplier": 1,
+    "eye-vision": 1,
+    "advanced-practice": 1,
+    "support": 1,
+    "student": 1
    }
   },
   {
@@ -1974,8 +1974,8 @@
     "pharmacy": 10,
     "dental": 5,
     "nursing": 5,
-    "rehab-therapy": 3,
     "facility": 3,
+    "rehab-therapy": 3,
     "chiropractic": 2,
     "group": 1,
     "dietary": 1
@@ -1999,9 +1999,9 @@
     "physician": 10,
     "dental": 2,
     "eye-vision": 2,
-    "chiropractic": 1,
     "facility": 1,
-    "group": 1
+    "group": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -2016,17 +2016,17 @@
    "lat": 18.26828,
    "lng": -66.69659,
    "by_category": {
-    "pharmacy": 18,
     "physician": 18,
+    "pharmacy": 18,
     "other-clinical": 10,
     "behavioral-health": 9,
     "rehab-therapy": 3,
     "dental": 2,
-    "facility": 2,
-    "group": 2,
     "nursing": 2,
-    "transport": 1,
+    "group": 2,
+    "facility": 2,
     "eye-vision": 1,
+    "transport": 1,
     "student": 1
    }
   },
@@ -2036,7 +2036,7 @@
    "county": "Dorado Municipio",
    "practitioners": 196,
    "with_role": 71,
-   "orgs_provider": 108,
+   "orgs_provider": 105,
    "orgs_ein": 7,
    "locations": 120,
    "lat": 18.45622,
@@ -2049,8 +2049,8 @@
     "dental": 12,
     "group": 7,
     "advanced-practice": 5,
-    "eye-vision": 4,
     "other-clinical": 4,
+    "eye-vision": 4,
     "chiropractic": 3,
     "support": 2,
     "dietary": 2,
@@ -2087,10 +2087,10 @@
    "by_category": {
     "physician": 12,
     "pharmacy": 3,
-    "eye-vision": 2,
     "behavioral-health": 2,
-    "rehab-therapy": 2,
     "group": 2,
+    "eye-vision": 2,
+    "rehab-therapy": 2,
     "other-clinical": 1,
     "facility": 1,
     "dietary": 1
@@ -2112,9 +2112,9 @@
     "behavioral-health": 3,
     "dental": 2,
     "other-clinical": 1,
+    "eye-vision": 1,
     "support": 1,
-    "pharmacy": 1,
-    "eye-vision": 1
+    "pharmacy": 1
    }
   },
   {
@@ -2133,8 +2133,8 @@
     "pharmacy": 9,
     "behavioral-health": 3,
     "rehab-therapy": 2,
-    "other-clinical": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -2143,7 +2143,7 @@
    "county": "Hatillo Municipio",
    "practitioners": 126,
    "with_role": 49,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 3,
    "locations": 77,
    "lat": 18.48784,
@@ -2153,16 +2153,16 @@
     "behavioral-health": 28,
     "pharmacy": 15,
     "eye-vision": 4,
+    "dental": 3,
     "rehab-therapy": 3,
     "dietary": 3,
     "chiropractic": 3,
-    "dental": 3,
-    "student": 2,
-    "other-clinical": 2,
     "group": 2,
     "support": 2,
-    "facility": 1,
-    "emergency-medical": 1
+    "student": 2,
+    "other-clinical": 2,
+    "emergency-medical": 1,
+    "facility": 1
    }
   },
   {
@@ -2180,12 +2180,12 @@
     "physician": 16,
     "dental": 3,
     "rehab-therapy": 3,
-    "dietary": 1,
-    "other-clinical": 1,
+    "pharmacy": 1,
     "emergency-medical": 1,
-    "behavioral-health": 1,
+    "other-clinical": 1,
+    "dietary": 1,
     "facility": 1,
-    "pharmacy": 1
+    "behavioral-health": 1
    }
   },
   {
@@ -2207,16 +2207,16 @@
     "dental": 12,
     "eye-vision": 11,
     "advanced-practice": 6,
-    "facility": 5,
     "other-clinical": 5,
+    "facility": 5,
     "group": 5,
-    "chiropractic": 2,
     "dietary": 2,
-    "support": 1,
-    "nursing": 1,
+    "chiropractic": 2,
     "no-taxonomy": 1,
     "supplier": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "nursing": 1,
+    "support": 1
    }
   },
   {
@@ -2233,10 +2233,10 @@
    "by_category": {
     "physician": 14,
     "behavioral-health": 4,
-    "rehab-therapy": 1,
     "dental": 1,
-    "dietary": 1,
-    "support": 1
+    "rehab-therapy": 1,
+    "support": 1,
+    "dietary": 1
    }
   },
   {
@@ -2275,12 +2275,12 @@
     "pharmacy": 26,
     "physician": 10,
     "behavioral-health": 5,
-    "dental": 2,
     "eye-vision": 2,
-    "supplier": 2,
     "support": 2,
-    "chiropractic": 1,
-    "rehab-therapy": 1
+    "dental": 2,
+    "supplier": 2,
+    "rehab-therapy": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -2297,9 +2297,9 @@
    "by_category": {
     "pharmacy": 8,
     "physician": 2,
-    "dental": 1,
     "support": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "dental": 1
    }
   },
   {
@@ -2308,7 +2308,7 @@
    "county": "Manat\u00c3\u00ad Municipio",
    "practitioners": 234,
    "with_role": 77,
-   "orgs_provider": 150,
+   "orgs_provider": 151,
    "orgs_ein": 11,
    "locations": 247,
    "lat": 18.43315,
@@ -2321,13 +2321,13 @@
     "other-clinical": 16,
     "rehab-therapy": 14,
     "eye-vision": 8,
-    "advanced-practice": 6,
     "chiropractic": 6,
+    "advanced-practice": 6,
     "group": 5,
     "dietary": 4,
     "nursing": 3,
-    "facility": 1,
     "student": 1,
+    "facility": 1,
     "supplier": 1,
     "podiatry": 1
    }
@@ -2338,7 +2338,7 @@
    "county": "Moca Municipio",
    "practitioners": 91,
    "with_role": 19,
-   "orgs_provider": 54,
+   "orgs_provider": 55,
    "orgs_ein": 0,
    "locations": 89,
    "lat": 18.39471,
@@ -2350,14 +2350,14 @@
     "behavioral-health": 13,
     "group": 7,
     "dental": 4,
-    "other-clinical": 2,
     "dietary": 2,
     "eye-vision": 2,
-    "transport": 1,
+    "other-clinical": 2,
+    "nursing": 1,
     "chiropractic": 1,
+    "transport": 1,
     "facility": 1,
-    "support": 1,
-    "nursing": 1
+    "support": 1
    }
   },
   {
@@ -2377,9 +2377,9 @@
     "student": 5,
     "behavioral-health": 3,
     "dental": 3,
-    "other-clinical": 1,
-    "advanced-practice": 1,
     "group": 1,
+    "advanced-practice": 1,
+    "other-clinical": 1,
     "nursing": 1
    }
   },
@@ -2389,7 +2389,7 @@
    "county": "Quebradillas Municipio",
    "practitioners": 39,
    "with_role": 12,
-   "orgs_provider": 33,
+   "orgs_provider": 34,
    "orgs_ein": 0,
    "locations": 44,
    "lat": 18.46914,
@@ -2402,10 +2402,10 @@
     "group": 3,
     "behavioral-health": 3,
     "emergency-medical": 2,
-    "eye-vision": 1,
-    "facility": 1,
     "support": 1,
-    "chiropractic": 1
+    "eye-vision": 1,
+    "chiropractic": 1,
+    "facility": 1
    }
   },
   {
@@ -2414,7 +2414,7 @@
    "county": "Mayag\u00c3\u00bcez Municipio",
    "practitioners": 630,
    "with_role": 265,
-   "orgs_provider": 284,
+   "orgs_provider": 289,
    "orgs_ein": 12,
    "locations": 462,
    "lat": 18.20153,
@@ -2431,11 +2431,11 @@
     "dietary": 12,
     "chiropractic": 8,
     "support": 8,
-    "advanced-practice": 6,
     "emergency-medical": 6,
+    "advanced-practice": 6,
     "student": 5,
-    "nursing": 3,
     "facility": 3,
+    "nursing": 3,
     "podiatry": 3,
     "no-taxonomy": 1
    }
@@ -2459,7 +2459,7 @@
    "county": "Mayag\u00c3\u00bcez Municipio",
    "practitioners": 279,
    "with_role": 55,
-   "orgs_provider": 86,
+   "orgs_provider": 91,
    "orgs_ein": 5,
    "locations": 120,
    "lat": 18.20581,
@@ -2474,17 +2474,17 @@
     "rehab-therapy": 17,
     "dental": 8,
     "chiropractic": 5,
-    "facility": 3,
     "support": 3,
-    "eye-vision": 2,
-    "advanced-practice": 2,
-    "dietary": 2,
+    "facility": 3,
     "group": 2,
-    "transport": 1,
+    "advanced-practice": 2,
+    "eye-vision": 2,
+    "dietary": 2,
+    "podiatry": 1,
+    "supplier": 1,
     "no-taxonomy": 1,
     "agency": 1,
-    "supplier": 1,
-    "podiatry": 1
+    "transport": 1
    }
   },
   {
@@ -2493,8 +2493,8 @@
    "county": "San Germ\u00c3\u00a1n Municipio",
    "practitioners": 156,
    "with_role": 51,
-   "orgs_provider": 90,
-   "orgs_ein": 5,
+   "orgs_provider": 91,
+   "orgs_ein": 6,
    "locations": 143,
    "lat": 18.07991,
    "lng": -67.03592,
@@ -2508,9 +2508,9 @@
     "other-clinical": 6,
     "supplier": 3,
     "dietary": 3,
+    "chiropractic": 2,
     "group": 2,
     "facility": 2,
-    "chiropractic": 2,
     "nursing": 1,
     "support": 1,
     "emergency-medical": 1
@@ -2522,8 +2522,8 @@
    "county": "San Sebasti\u00c3\u00a1n Municipio",
    "practitioners": 206,
    "with_role": 65,
-   "orgs_provider": 85,
-   "orgs_ein": 4,
+   "orgs_provider": 87,
+   "orgs_ein": 5,
    "locations": 142,
    "lat": 18.33599,
    "lng": -66.9939,
@@ -2536,13 +2536,13 @@
     "dental": 9,
     "group": 5,
     "other-clinical": 4,
-    "support": 3,
-    "nursing": 3,
     "advanced-practice": 3,
-    "chiropractic": 2,
+    "nursing": 3,
+    "support": 3,
     "facility": 2,
-    "transport": 1,
-    "dietary": 1
+    "chiropractic": 2,
+    "dietary": 1,
+    "transport": 1
    }
   },
   {
@@ -2566,9 +2566,9 @@
     "dietary": 2,
     "emergency-medical": 2,
     "student": 1,
-    "group": 1,
+    "eye-vision": 1,
     "transport": 1,
-    "eye-vision": 1
+    "group": 1
    }
   },
   {
@@ -2600,11 +2600,11 @@
    "lng": -67.09806,
    "by_category": {
     "dental": 4,
-    "pharmacy": 2,
     "physician": 2,
-    "student": 1,
-    "behavioral-health": 1,
+    "pharmacy": 2,
     "support": 1,
+    "behavioral-health": 1,
+    "student": 1,
     "other-clinical": 1
    }
   },
@@ -2614,7 +2614,7 @@
    "county": "Vega Alta Municipio",
    "practitioners": 73,
    "with_role": 21,
-   "orgs_provider": 42,
+   "orgs_provider": 43,
    "orgs_ein": 3,
    "locations": 79,
    "lat": 18.41466,
@@ -2629,9 +2629,9 @@
     "other-clinical": 2,
     "advanced-practice": 2,
     "facility": 1,
-    "dietary": 1,
     "supplier": 1,
     "group": 1,
+    "dietary": 1,
     "podiatry": 1
    }
   },
@@ -2641,8 +2641,8 @@
    "county": "Vega Baja Municipio",
    "practitioners": 102,
    "with_role": 17,
-   "orgs_provider": 69,
-   "orgs_ein": 3,
+   "orgs_provider": 70,
+   "orgs_ein": 4,
    "locations": 127,
    "lat": 18.44729,
    "lng": -66.38585,
@@ -2653,12 +2653,12 @@
     "dental": 10,
     "eye-vision": 8,
     "rehab-therapy": 4,
-    "dietary": 3,
-    "other-clinical": 3,
     "chiropractic": 3,
+    "other-clinical": 3,
+    "dietary": 3,
+    "support": 1,
     "transport": 1,
-    "group": 1,
-    "support": 1
+    "group": 1
    }
   },
   {
@@ -2680,7 +2680,7 @@
    "county": "Yauco Municipio",
    "practitioners": 137,
    "with_role": 44,
-   "orgs_provider": 76,
+   "orgs_provider": 78,
    "orgs_ein": 3,
    "locations": 121,
    "lat": 18.02695,
@@ -2693,12 +2693,12 @@
     "rehab-therapy": 8,
     "eye-vision": 6,
     "chiropractic": 4,
-    "dietary": 2,
-    "facility": 2,
     "group": 2,
-    "nursing": 1,
+    "facility": 2,
+    "dietary": 2,
+    "support": 1,
     "podiatry": 1,
-    "support": 1
+    "nursing": 1
    }
   },
   {
@@ -2727,7 +2727,7 @@
    "county": "Aibonito Municipio",
    "practitioners": 97,
    "with_role": 27,
-   "orgs_provider": 47,
+   "orgs_provider": 48,
    "orgs_ein": 2,
    "locations": 105,
    "lat": 18.13874,
@@ -2743,8 +2743,8 @@
     "dietary": 3,
     "eye-vision": 2,
     "advanced-practice": 2,
-    "group": 1,
-    "supplier": 1
+    "supplier": 1,
+    "group": 1
    }
   },
   {
@@ -2753,7 +2753,7 @@
    "county": "Maunabo Municipio",
    "practitioners": 19,
    "with_role": 1,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 25,
    "lat": 18.00729,
@@ -2762,8 +2762,8 @@
     "physician": 9,
     "pharmacy": 6,
     "support": 2,
-    "dental": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dental": 1
    }
   },
   {
@@ -2781,13 +2781,13 @@
     "physician": 26,
     "pharmacy": 9,
     "dental": 2,
+    "chiropractic": 1,
     "rehab-therapy": 1,
-    "dietary": 1,
-    "behavioral-health": 1,
     "group": 1,
     "emergency-medical": 1,
     "support": 1,
-    "chiropractic": 1
+    "dietary": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -2813,7 +2813,7 @@
    "county": "Ponce Municipio",
    "practitioners": 1521,
    "with_role": 286,
-   "orgs_provider": 205,
+   "orgs_provider": 210,
    "orgs_ein": 9,
    "locations": 291,
    "lat": 18.01396,
@@ -2825,8 +2825,8 @@
     "no-taxonomy": 64,
     "pharmacy": 58,
     "rehab-therapy": 30,
-    "eye-vision": 29,
     "group": 29,
+    "eye-vision": 29,
     "dental": 28,
     "other-clinical": 21,
     "chiropractic": 13,
@@ -2836,8 +2836,8 @@
     "facility": 5,
     "support": 4,
     "podiatry": 2,
-    "agency": 1,
-    "emergency-medical": 1
+    "emergency-medical": 1,
+    "agency": 1
    }
   },
   {
@@ -2861,8 +2861,8 @@
     "nursing": 23,
     "support": 22,
     "student": 17,
-    "chiropractic": 12,
     "dietary": 12,
+    "chiropractic": 12,
     "group": 10,
     "eye-vision": 6,
     "agency": 6,
@@ -2887,12 +2887,12 @@
     "pharmacy": 13,
     "physician": 8,
     "nursing": 3,
-    "rehab-therapy": 2,
     "dental": 2,
-    "eye-vision": 1,
+    "rehab-therapy": 2,
+    "advanced-practice": 1,
     "behavioral-health": 1,
     "other-clinical": 1,
-    "advanced-practice": 1
+    "eye-vision": 1
    }
   },
   {
@@ -2901,22 +2901,22 @@
    "county": "Naranjito Municipio",
    "practitioners": 60,
    "with_role": 13,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 3,
    "locations": 56,
    "lat": 18.30071,
    "lng": -66.24395,
    "by_category": {
-    "pharmacy": 16,
     "physician": 16,
+    "pharmacy": 16,
     "behavioral-health": 9,
     "dental": 6,
     "rehab-therapy": 5,
     "chiropractic": 3,
     "eye-vision": 2,
     "dietary": 1,
-    "other-clinical": 1,
-    "student": 1
+    "student": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -2932,13 +2932,13 @@
    "lng": -66.39041,
    "by_category": {
     "physician": 7,
-    "dental": 3,
     "eye-vision": 3,
+    "dental": 3,
     "pharmacy": 3,
     "other-clinical": 2,
     "behavioral-health": 2,
-    "transport": 1,
     "rehab-therapy": 1,
+    "transport": 1,
     "chiropractic": 1
    }
   },
@@ -2958,9 +2958,9 @@
     "physician": 4,
     "dental": 3,
     "behavioral-health": 2,
+    "facility": 1,
     "supplier": 1,
-    "advanced-practice": 1,
-    "facility": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -2969,8 +2969,8 @@
    "county": "Caguas Municipio",
    "practitioners": 1159,
    "with_role": 693,
-   "orgs_provider": 425,
-   "orgs_ein": 18,
+   "orgs_provider": 422,
+   "orgs_ein": 17,
    "locations": 607,
    "lat": 18.2303,
    "lng": -66.03576,
@@ -3025,16 +3025,16 @@
     "physician": 19,
     "pharmacy": 9,
     "rehab-therapy": 7,
-    "chiropractic": 4,
     "dental": 4,
-    "behavioral-health": 3,
+    "chiropractic": 4,
     "eye-vision": 3,
-    "group": 2,
+    "behavioral-health": 3,
     "nursing": 2,
-    "other-clinical": 1,
+    "group": 2,
+    "no-taxonomy": 1,
     "supplier": 1,
-    "support": 1,
-    "no-taxonomy": 1
+    "other-clinical": 1,
+    "support": 1
    }
   },
   {
@@ -3043,7 +3043,7 @@
    "county": "Ponce Municipio",
    "practitioners": 56,
    "with_role": 11,
-   "orgs_provider": 11,
+   "orgs_provider": 12,
    "orgs_ein": 1,
    "locations": 44,
    "lat": 18.02387,
@@ -3051,14 +3051,14 @@
    "by_category": {
     "pharmacy": 35,
     "physician": 8,
-    "dental": 3,
     "behavioral-health": 3,
+    "dental": 3,
     "nursing": 2,
     "rehab-therapy": 1,
-    "other-clinical": 1,
-    "podiatry": 1,
     "eye-vision": 1,
-    "support": 1
+    "podiatry": 1,
+    "support": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -3067,7 +3067,7 @@
    "county": "Can\u00c3\u00b3vanas Municipio",
    "practitioners": 66,
    "with_role": 15,
-   "orgs_provider": 40,
+   "orgs_provider": 42,
    "orgs_ein": 2,
    "locations": 68,
    "lat": 18.37769,
@@ -3078,11 +3078,11 @@
     "rehab-therapy": 7,
     "behavioral-health": 6,
     "dental": 4,
-    "eye-vision": 3,
     "group": 3,
+    "eye-vision": 3,
     "other-clinical": 2,
-    "supplier": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "supplier": 1
    }
   },
   {
@@ -3091,7 +3091,7 @@
    "county": "Ponce Municipio",
    "practitioners": 144,
    "with_role": 46,
-   "orgs_provider": 76,
+   "orgs_provider": 77,
    "orgs_ein": 5,
    "locations": 121,
    "lat": 18.01363,
@@ -3106,13 +3106,13 @@
     "no-taxonomy": 5,
     "dietary": 3,
     "group": 2,
-    "rehab-therapy": 2,
-    "emergency-medical": 2,
     "chiropractic": 2,
+    "emergency-medical": 2,
+    "rehab-therapy": 2,
+    "support": 1,
     "other-clinical": 1,
     "facility": 1,
-    "student": 1,
-    "support": 1
+    "student": 1
    }
   },
   {
@@ -3143,13 +3143,13 @@
     "physician": 7,
     "pharmacy": 6,
     "other-clinical": 3,
-    "rehab-therapy": 2,
     "group": 2,
-    "agency": 1,
-    "emergency-medical": 1,
+    "rehab-therapy": 2,
     "facility": 1,
     "advanced-practice": 1,
-    "support": 1
+    "support": 1,
+    "emergency-medical": 1,
+    "agency": 1
    }
   },
   {
@@ -3158,7 +3158,7 @@
    "county": "Cayey Municipio",
    "practitioners": 172,
    "with_role": 60,
-   "orgs_provider": 88,
+   "orgs_provider": 89,
    "orgs_ein": 5,
    "locations": 134,
    "lat": 18.1144,
@@ -3170,15 +3170,15 @@
     "rehab-therapy": 16,
     "dental": 15,
     "other-clinical": 7,
-    "eye-vision": 5,
     "dietary": 5,
-    "chiropractic": 4,
+    "eye-vision": 5,
     "nursing": 4,
-    "facility": 3,
+    "chiropractic": 4,
     "group": 3,
+    "facility": 3,
     "support": 1,
-    "advanced-practice": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3187,7 +3187,7 @@
    "county": "Fajardo Municipio",
    "practitioners": 240,
    "with_role": 75,
-   "orgs_provider": 133,
+   "orgs_provider": 136,
    "orgs_ein": 9,
    "locations": 241,
    "lat": 18.32627,
@@ -3205,9 +3205,9 @@
     "chiropractic": 4,
     "advanced-practice": 2,
     "dietary": 2,
+    "facility": 1,
     "supplier": 1,
     "student": 1,
-    "facility": 1,
     "podiatry": 1
    }
   },
@@ -3217,7 +3217,7 @@
    "county": "Cidra Municipio",
    "practitioners": 105,
    "with_role": 60,
-   "orgs_provider": 34,
+   "orgs_provider": 35,
    "orgs_ein": 2,
    "locations": 61,
    "lat": 18.17183,
@@ -3228,13 +3228,13 @@
     "dental": 11,
     "eye-vision": 7,
     "dietary": 5,
-    "nursing": 2,
     "other-clinical": 2,
+    "nursing": 2,
     "rehab-therapy": 2,
     "chiropractic": 1,
-    "pharmacy": 1,
+    "facility": 1,
     "podiatry": 1,
-    "facility": 1
+    "pharmacy": 1
    }
   },
   {
@@ -3267,16 +3267,16 @@
     "physician": 23,
     "behavioral-health": 7,
     "dental": 6,
-    "rehab-therapy": 5,
     "pharmacy": 5,
+    "rehab-therapy": 5,
     "eye-vision": 2,
+    "advanced-practice": 1,
+    "supplier": 1,
     "dietary": 1,
     "other-clinical": 1,
     "nursing": 1,
     "chiropractic": 1,
-    "emergency-medical": 1,
-    "supplier": 1,
-    "advanced-practice": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -3294,14 +3294,14 @@
     "physician": 26,
     "behavioral-health": 12,
     "pharmacy": 11,
-    "chiropractic": 4,
     "eye-vision": 4,
+    "chiropractic": 4,
     "dental": 2,
-    "emergency-medical": 1,
-    "dietary": 1,
-    "advanced-practice": 1,
     "other-clinical": 1,
-    "group": 1
+    "group": 1,
+    "advanced-practice": 1,
+    "emergency-medical": 1,
+    "dietary": 1
    }
   },
   {
@@ -3310,7 +3310,7 @@
    "county": "San Lorenzo Municipio",
    "practitioners": 80,
    "with_role": 33,
-   "orgs_provider": 37,
+   "orgs_provider": 38,
    "orgs_ein": 6,
    "locations": 60,
    "lat": 18.18955,
@@ -3320,14 +3320,14 @@
     "pharmacy": 16,
     "behavioral-health": 11,
     "dental": 9,
-    "eye-vision": 3,
     "rehab-therapy": 3,
+    "eye-vision": 3,
     "other-clinical": 2,
-    "support": 1,
-    "no-taxonomy": 1,
+    "group": 1,
     "emergency-medical": 1,
     "dietary": 1,
-    "group": 1
+    "support": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -3344,12 +3344,12 @@
    "by_category": {
     "pharmacy": 19,
     "physician": 12,
-    "dental": 2,
     "behavioral-health": 2,
     "other-clinical": 2,
-    "rehab-therapy": 1,
+    "dental": 2,
     "eye-vision": 1,
-    "nursing": 1
+    "nursing": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -3364,8 +3364,8 @@
    "lat": 18.14956,
    "lng": -65.44266,
    "by_category": {
-    "behavioral-health": 2,
-    "physician": 2
+    "physician": 2,
+    "behavioral-health": 2
    }
   },
   {
@@ -3398,7 +3398,7 @@
    "county": "Yabucoa Municipio",
    "practitioners": 75,
    "with_role": 13,
-   "orgs_provider": 36,
+   "orgs_provider": 35,
    "orgs_ein": 0,
    "locations": 57,
    "lat": 18.04865,
@@ -3437,13 +3437,13 @@
     "chiropractic": 6,
     "other-clinical": 5,
     "dietary": 4,
-    "eye-vision": 3,
     "group": 3,
-    "emergency-medical": 1,
+    "eye-vision": 3,
+    "student": 1,
     "transport": 1,
-    "advanced-practice": 1,
     "support": 1,
-    "student": 1
+    "emergency-medical": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3464,9 +3464,9 @@
     "rehab-therapy": 4,
     "dental": 3,
     "facility": 2,
-    "student": 1,
-    "dietary": 1,
     "advanced-practice": 1,
+    "dietary": 1,
+    "student": 1,
     "eye-vision": 1
    }
   },
@@ -3493,7 +3493,7 @@
    "county": "Luquillo Municipio",
    "practitioners": 31,
    "with_role": 13,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 2,
    "locations": 35,
    "lat": 18.37512,
@@ -3523,10 +3523,10 @@
     "dental": 13,
     "advanced-practice": 9,
     "behavioral-health": 7,
-    "rehab-therapy": 5,
-    "nursing": 5,
-    "group": 5,
     "other-clinical": 5,
+    "nursing": 5,
+    "rehab-therapy": 5,
+    "group": 5,
     "emergency-medical": 3,
     "chiropractic": 3,
     "eye-vision": 3
@@ -3538,20 +3538,20 @@
    "county": "Gurabo Municipio",
    "practitioners": 53,
    "with_role": 7,
-   "orgs_provider": 20,
+   "orgs_provider": 21,
    "orgs_ein": 1,
    "locations": 42,
    "lat": 18.25651,
    "lng": -65.96963,
    "by_category": {
-    "physician": 15,
     "pharmacy": 15,
+    "physician": 15,
     "behavioral-health": 12,
     "dental": 5,
     "eye-vision": 2,
-    "nursing": 1,
     "student": 1,
     "no-taxonomy": 1,
+    "nursing": 1,
     "support": 1
    }
   },
@@ -3561,7 +3561,7 @@
    "county": "Ponce Municipio",
    "practitioners": 68,
    "with_role": 32,
-   "orgs_provider": 36,
+   "orgs_provider": 37,
    "orgs_ein": 1,
    "locations": 67,
    "lat": 18.03998,
@@ -3569,14 +3569,14 @@
    "by_category": {
     "physician": 35,
     "behavioral-health": 13,
-    "pharmacy": 5,
     "dental": 5,
+    "pharmacy": 5,
     "eye-vision": 4,
     "other-clinical": 2,
     "chiropractic": 1,
+    "advanced-practice": 1,
     "group": 1,
-    "rehab-therapy": 1,
-    "advanced-practice": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -3585,19 +3585,19 @@
    "county": "Comer\u00c3\u00ado Municipio",
    "practitioners": 19,
    "with_role": 7,
-   "orgs_provider": 17,
+   "orgs_provider": 16,
    "orgs_ein": 0,
    "locations": 19,
    "lat": 18.22309,
    "lng": -66.2229,
    "by_category": {
-    "behavioral-health": 5,
     "physician": 5,
+    "behavioral-health": 5,
     "pharmacy": 3,
-    "eye-vision": 2,
     "group": 2,
-    "support": 1,
-    "emergency-medical": 1
+    "eye-vision": 2,
+    "emergency-medical": 1,
+    "support": 1
    }
   },
   {
@@ -3606,7 +3606,7 @@
    "county": "Corozal Municipio",
    "practitioners": 73,
    "with_role": 18,
-   "orgs_provider": 35,
+   "orgs_provider": 36,
    "orgs_ein": 2,
    "locations": 68,
    "lat": 18.33757,
@@ -3619,9 +3619,9 @@
     "behavioral-health": 3,
     "other-clinical": 3,
     "rehab-therapy": 2,
-    "advanced-practice": 1,
     "nursing": 1,
-    "group": 1
+    "group": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3643,14 +3643,14 @@
     "rehab-therapy": 9,
     "group": 4,
     "other-clinical": 3,
-    "student": 2,
-    "podiatry": 2,
     "advanced-practice": 2,
     "eye-vision": 2,
-    "chiropractic": 1,
-    "dietary": 1,
+    "podiatry": 2,
+    "student": 2,
     "nursing": 1,
-    "emergency-medical": 1
+    "dietary": 1,
+    "emergency-medical": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -3672,7 +3672,7 @@
    "county": "Humacao Municipio",
    "practitioners": 453,
    "with_role": 126,
-   "orgs_provider": 216,
+   "orgs_provider": 225,
    "orgs_ein": 20,
    "locations": 351,
    "lat": 18.15091,
@@ -3681,8 +3681,8 @@
     "physician": 229,
     "behavioral-health": 50,
     "pharmacy": 45,
-    "dental": 20,
     "other-clinical": 20,
+    "dental": 20,
     "rehab-therapy": 17,
     "eye-vision": 17,
     "dietary": 16,
@@ -3731,16 +3731,16 @@
     "dental": 8,
     "group": 5,
     "dietary": 5,
+    "facility": 2,
     "rehab-therapy": 2,
     "chiropractic": 2,
-    "facility": 2,
-    "nursing": 1,
-    "advanced-practice": 1,
-    "support": 1,
     "other-clinical": 1,
-    "eye-vision": 1,
+    "nursing": 1,
+    "student": 1,
     "podiatry": 1,
-    "student": 1
+    "eye-vision": 1,
+    "advanced-practice": 1,
+    "support": 1
    }
   },
   {
@@ -3766,8 +3766,8 @@
     "eye-vision": 3,
     "group": 1,
     "advanced-practice": 1,
-    "podiatry": 1,
     "nursing": 1,
+    "podiatry": 1,
     "transport": 1
    }
   },
@@ -3777,7 +3777,7 @@
    "county": "San Juan Municipio",
    "practitioners": 61,
    "with_role": 12,
-   "orgs_provider": 45,
+   "orgs_provider": 44,
    "orgs_ein": 3,
    "locations": 55,
    "lat": 18.46509,
@@ -3786,12 +3786,12 @@
     "behavioral-health": 20,
     "student": 17,
     "physician": 10,
-    "pharmacy": 4,
     "chiropractic": 4,
+    "pharmacy": 4,
     "nursing": 2,
     "rehab-therapy": 2,
-    "dietary": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "dietary": 1
    }
   },
   {
@@ -3800,7 +3800,7 @@
    "county": "San Juan Municipio",
    "practitioners": 355,
    "with_role": 112,
-   "orgs_provider": 161,
+   "orgs_provider": 162,
    "orgs_ein": 6,
    "locations": 287,
    "lat": 18.4532,
@@ -3813,16 +3813,16 @@
     "other-clinical": 16,
     "group": 10,
     "eye-vision": 10,
-    "rehab-therapy": 9,
     "nursing": 9,
+    "rehab-therapy": 9,
     "dietary": 7,
     "support": 3,
     "advanced-practice": 3,
+    "chiropractic": 2,
     "facility": 2,
     "student": 2,
-    "chiropractic": 2,
-    "podiatry": 1,
     "agency": 1,
+    "podiatry": 1,
     "supplier": 1,
     "emergency-medical": 1
    }
@@ -3833,8 +3833,8 @@
    "county": "San Juan Municipio",
    "practitioners": 568,
    "with_role": 196,
-   "orgs_provider": 262,
-   "orgs_ein": 11,
+   "orgs_provider": 266,
+   "orgs_ein": 12,
    "locations": 422,
    "lat": 18.44511,
    "lng": -66.06839,
@@ -3844,15 +3844,15 @@
     "rehab-therapy": 67,
     "other-clinical": 37,
     "pharmacy": 14,
-    "nursing": 12,
-    "dietary": 12,
-    "chiropractic": 12,
     "group": 12,
+    "nursing": 12,
+    "chiropractic": 12,
+    "dietary": 12,
     "dental": 10,
     "support": 7,
     "podiatry": 5,
-    "facility": 4,
     "advanced-practice": 4,
+    "facility": 4,
     "eye-vision": 2,
     "student": 1
    }
@@ -3873,14 +3873,14 @@
     "physician": 14,
     "dental": 7,
     "chiropractic": 6,
-    "behavioral-health": 3,
     "rehab-therapy": 3,
+    "behavioral-health": 3,
     "nursing": 2,
     "facility": 2,
-    "support": 1,
     "eye-vision": 1,
+    "emergency-medical": 1,
     "group": 1,
-    "emergency-medical": 1
+    "support": 1
    }
   },
   {
@@ -3900,11 +3900,11 @@
     "other-clinical": 7,
     "rehab-therapy": 6,
     "group": 5,
+    "pharmacy": 3,
     "dental": 3,
     "chiropractic": 3,
-    "pharmacy": 3,
-    "student": 1,
     "dietary": 1,
+    "student": 1,
     "eye-vision": 1
    }
   },
@@ -3920,8 +3920,8 @@
    "lat": 18.45026,
    "lng": -66.04332,
    "by_category": {
-    "physician": 1,
-    "dental": 1
+    "dental": 1,
+    "physician": 1
    }
   },
   {
@@ -3943,7 +3943,7 @@
    "county": "San Juan Municipio",
    "practitioners": 97,
    "with_role": 56,
-   "orgs_provider": 22,
+   "orgs_provider": 23,
    "orgs_ein": 1,
    "locations": 37,
    "lat": 18.43712,
@@ -3965,7 +3965,7 @@
    "county": "San Juan Municipio",
    "practitioners": 493,
    "with_role": 185,
-   "orgs_provider": 224,
+   "orgs_provider": 231,
    "orgs_ein": 15,
    "locations": 291,
    "lat": 18.41734,
@@ -3982,8 +3982,8 @@
     "group": 12,
     "advanced-practice": 6,
     "eye-vision": 4,
-    "nursing": 3,
     "no-taxonomy": 3,
+    "nursing": 3,
     "chiropractic": 1,
     "facility": 1
    }
@@ -3994,8 +3994,8 @@
    "county": "San Juan Municipio",
    "practitioners": 946,
    "with_role": 311,
-   "orgs_provider": 488,
-   "orgs_ein": 23,
+   "orgs_provider": 496,
+   "orgs_ein": 22,
    "locations": 817,
    "lat": 18.41506,
    "lng": -66.06388,
@@ -4006,8 +4006,8 @@
     "pharmacy": 76,
     "chiropractic": 33,
     "other-clinical": 32,
-    "eye-vision": 20,
     "dietary": 20,
+    "eye-vision": 20,
     "group": 16,
     "nursing": 13,
     "advanced-practice": 12,
@@ -4017,8 +4017,8 @@
     "support": 3,
     "facility": 3,
     "emergency-medical": 2,
-    "agency": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "agency": 1
    }
   },
   {
@@ -4040,7 +4040,7 @@
    "county": "San Juan Municipio",
    "practitioners": 226,
    "with_role": 60,
-   "orgs_provider": 105,
+   "orgs_provider": 107,
    "orgs_ein": 4,
    "locations": 222,
    "lat": 18.40859,
@@ -4056,12 +4056,12 @@
     "other-clinical": 10,
     "group": 4,
     "support": 3,
-    "eye-vision": 3,
     "dietary": 3,
+    "eye-vision": 3,
     "facility": 2,
     "podiatry": 2,
-    "supplier": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "supplier": 1
    }
   },
   {
@@ -4070,7 +4070,7 @@
    "county": "San Juan Municipio",
    "practitioners": 1293,
    "with_role": 220,
-   "orgs_provider": 219,
+   "orgs_provider": 228,
    "orgs_ein": 15,
    "locations": 355,
    "lat": 18.3936,
@@ -4117,7 +4117,7 @@
    "county": "San Juan Municipio",
    "practitioners": 79,
    "with_role": 27,
-   "orgs_provider": 52,
+   "orgs_provider": 53,
    "orgs_ein": 3,
    "locations": 93,
    "lat": 18.40185,
@@ -4129,11 +4129,11 @@
     "dental": 5,
     "pharmacy": 4,
     "group": 2,
-    "chiropractic": 1,
-    "dietary": 1,
-    "transport": 1,
-    "emergency-medical": 1,
     "eye-vision": 1,
+    "transport": 1,
+    "dietary": 1,
+    "emergency-medical": 1,
+    "chiropractic": 1,
     "advanced-practice": 1
    }
   },
@@ -4143,8 +4143,8 @@
    "county": "San Juan Municipio",
    "practitioners": 139,
    "with_role": 24,
-   "orgs_provider": 73,
-   "orgs_ein": 6,
+   "orgs_provider": 75,
+   "orgs_ein": 7,
    "locations": 125,
    "lat": 18.39948,
    "lng": -66.01387,
@@ -4153,18 +4153,18 @@
     "behavioral-health": 23,
     "physician": 21,
     "dental": 15,
-    "rehab-therapy": 9,
     "other-clinical": 9,
+    "rehab-therapy": 9,
     "chiropractic": 5,
     "eye-vision": 4,
     "group": 3,
-    "podiatry": 2,
-    "advanced-practice": 2,
     "dietary": 2,
     "student": 2,
+    "advanced-practice": 2,
+    "podiatry": 2,
+    "support": 1,
     "nursing": 1,
-    "facility": 1,
-    "support": 1
+    "facility": 1
    }
   },
   {
@@ -4173,7 +4173,7 @@
    "county": "San Juan Municipio",
    "practitioners": 136,
    "with_role": 32,
-   "orgs_provider": 61,
+   "orgs_provider": 62,
    "orgs_ein": 5,
    "locations": 135,
    "lat": 18.4002,
@@ -4187,11 +4187,11 @@
     "eye-vision": 7,
     "dietary": 6,
     "rehab-therapy": 3,
-    "facility": 2,
     "nursing": 2,
+    "facility": 2,
+    "group": 1,
     "support": 1,
-    "emergency-medical": 1,
-    "group": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -4200,8 +4200,8 @@
    "county": "San Juan Municipio",
    "practitioners": 667,
    "with_role": 152,
-   "orgs_provider": 349,
-   "orgs_ein": 17,
+   "orgs_provider": 315,
+   "orgs_ein": 15,
    "locations": 416,
    "lat": 18.37135,
    "lng": -66.05654,
@@ -4221,9 +4221,9 @@
     "advanced-practice": 6,
     "facility": 2,
     "agency": 2,
-    "support": 1,
+    "podiatry": 1,
     "emergency-medical": 1,
-    "podiatry": 1
+    "support": 1
    }
   },
   {
@@ -4278,8 +4278,8 @@
    "lat": 18.41131,
    "lng": -66.12423,
    "by_category": {
-    "behavioral-health": 3,
     "physician": 3,
+    "behavioral-health": 3,
     "dental": 1,
     "pharmacy": 1
    }
@@ -4290,8 +4290,8 @@
    "county": null,
    "practitioners": 456,
    "with_role": 165,
-   "orgs_provider": 77,
-   "orgs_ein": 4,
+   "orgs_provider": 80,
+   "orgs_ein": 5,
    "locations": 529,
    "lat": 18.41046,
    "lng": -66.06053,
@@ -4300,15 +4300,15 @@
     "student": 61,
     "group": 20,
     "dental": 14,
-    "nursing": 9,
     "pharmacy": 9,
+    "nursing": 9,
     "no-taxonomy": 8,
     "dietary": 6,
     "rehab-therapy": 6,
-    "behavioral-health": 5,
     "other-clinical": 5,
-    "facility": 2,
+    "behavioral-health": 5,
     "advanced-practice": 2,
+    "facility": 2,
     "support": 1,
     "eye-vision": 1
    }
@@ -4340,8 +4340,8 @@
    "lat": 18.41046,
    "lng": -66.06053,
    "by_category": {
-    "group": 1,
     "other-clinical": 1,
+    "group": 1,
     "physician": 1
    }
   },
@@ -4351,8 +4351,8 @@
    "county": "Toa Baja Municipio",
    "practitioners": 142,
    "with_role": 40,
-   "orgs_provider": 72,
-   "orgs_ein": 4,
+   "orgs_provider": 76,
+   "orgs_ein": 5,
    "locations": 115,
    "lat": 18.44066,
    "lng": -66.18094,
@@ -4363,12 +4363,12 @@
     "dental": 9,
     "chiropractic": 5,
     "dietary": 4,
-    "rehab-therapy": 3,
     "other-clinical": 3,
     "support": 3,
+    "rehab-therapy": 3,
     "advanced-practice": 2,
-    "group": 2,
-    "student": 2
+    "student": 2,
+    "group": 2
    }
   },
   {
@@ -4392,7 +4392,7 @@
    "county": "Toa Alta Municipio",
    "practitioners": 41,
    "with_role": 12,
-   "orgs_provider": 49,
+   "orgs_provider": 50,
    "orgs_ein": 6,
    "locations": 53,
    "lat": 18.38474,
@@ -4404,9 +4404,9 @@
     "eye-vision": 2,
     "facility": 2,
     "chiropractic": 1,
-    "emergency-medical": 1,
     "behavioral-health": 1,
     "dietary": 1,
+    "emergency-medical": 1,
     "group": 1
    }
   },
@@ -4431,8 +4431,8 @@
    "county": "Bayam\u00c3\u00b3n Municipio",
    "practitioners": 356,
    "with_role": 68,
-   "orgs_provider": 142,
-   "orgs_ein": 3,
+   "orgs_provider": 143,
+   "orgs_ein": 2,
    "locations": 204,
    "lat": 18.3724,
    "lng": -66.15744,
@@ -4445,13 +4445,13 @@
     "student": 25,
     "other-clinical": 15,
     "nursing": 10,
-    "eye-vision": 8,
     "group": 8,
+    "eye-vision": 8,
     "support": 7,
     "chiropractic": 6,
     "facility": 3,
-    "dietary": 2,
     "supplier": 2,
+    "dietary": 2,
     "podiatry": 1,
     "no-taxonomy": 1
    }
@@ -4462,8 +4462,8 @@
    "county": "Bayam\u00c3\u00b3n Municipio",
    "practitioners": 71,
    "with_role": 14,
-   "orgs_provider": 32,
-   "orgs_ein": 1,
+   "orgs_provider": 36,
+   "orgs_ein": 2,
    "locations": 71,
    "lat": 18.37168,
    "lng": -66.18311,
@@ -4475,10 +4475,10 @@
     "behavioral-health": 6,
     "eye-vision": 6,
     "nursing": 1,
-    "transport": 1,
+    "chiropractic": 1,
     "support": 1,
     "group": 1,
-    "chiropractic": 1,
+    "transport": 1,
     "dietary": 1
    }
   },
@@ -4488,8 +4488,8 @@
    "county": "Bayam\u00c3\u00b3n Municipio",
    "practitioners": 445,
    "with_role": 200,
-   "orgs_provider": 155,
-   "orgs_ein": 6,
+   "orgs_provider": 160,
+   "orgs_ein": 7,
    "locations": 293,
    "lat": 18.39136,
    "lng": -66.15124,
@@ -4507,8 +4507,8 @@
     "advanced-practice": 5,
     "facility": 3,
     "nursing": 2,
-    "emergency-medical": 2,
     "podiatry": 2,
+    "emergency-medical": 2,
     "supplier": 1
    }
   },
@@ -4518,8 +4518,8 @@
    "county": "Bayam\u00c3\u00b3n Municipio",
    "practitioners": 533,
    "with_role": 179,
-   "orgs_provider": 248,
-   "orgs_ein": 16,
+   "orgs_provider": 267,
+   "orgs_ein": 17,
    "locations": 405,
    "lat": 18.40161,
    "lng": -66.14969,
@@ -4549,7 +4549,7 @@
    "county": "Cata\u00c3\u00b1o Municipio",
    "practitioners": 49,
    "with_role": 9,
-   "orgs_provider": 30,
+   "orgs_provider": 31,
    "orgs_ein": 3,
    "locations": 36,
    "lat": 18.43771,
@@ -4561,8 +4561,8 @@
     "pharmacy": 4,
     "dental": 3,
     "other-clinical": 2,
-    "group": 1,
-    "supplier": 1
+    "supplier": 1,
+    "group": 1
    }
   },
   {
@@ -4571,7 +4571,7 @@
    "county": "Guaynabo Municipio",
    "practitioners": 18,
    "with_role": 6,
-   "orgs_provider": 6,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 11,
    "lat": 18.43296,
@@ -4590,8 +4590,8 @@
    "county": "Guaynabo Municipio",
    "practitioners": 150,
    "with_role": 60,
-   "orgs_provider": 105,
-   "orgs_ein": 4,
+   "orgs_provider": 74,
+   "orgs_ein": 3,
    "locations": 87,
    "lat": 18.39751,
    "lng": -66.11489,
@@ -4603,11 +4603,11 @@
     "chiropractic": 10,
     "rehab-therapy": 6,
     "dietary": 5,
-    "group": 5,
     "student": 5,
+    "group": 5,
     "eye-vision": 4,
-    "facility": 2,
-    "other-clinical": 2
+    "other-clinical": 2,
+    "facility": 2
    }
   },
   {
@@ -4617,7 +4617,7 @@
    "practitioners": 899,
    "with_role": 66,
    "orgs_provider": 90,
-   "orgs_ein": 5,
+   "orgs_ein": 4,
    "locations": 144,
    "lat": 18.40627,
    "lng": -66.10251,
@@ -4632,12 +4632,12 @@
     "eye-vision": 6,
     "chiropractic": 5,
     "group": 3,
-    "student": 2,
     "dietary": 2,
+    "student": 2,
     "advanced-practice": 2,
+    "transport": 1,
     "support": 1,
-    "nursing": 1,
-    "transport": 1
+    "nursing": 1
    }
   },
   {
@@ -4646,8 +4646,8 @@
    "county": "Guaynabo Municipio",
    "practitioners": 383,
    "with_role": 119,
-   "orgs_provider": 193,
-   "orgs_ein": 12,
+   "orgs_provider": 197,
+   "orgs_ein": 13,
    "locations": 251,
    "lat": 18.36512,
    "lng": -66.10743,
@@ -4666,8 +4666,8 @@
     "student": 4,
     "advanced-practice": 3,
     "support": 3,
-    "facility": 2,
     "podiatry": 2,
+    "facility": 2,
     "emergency-medical": 1
    }
   },
@@ -4684,8 +4684,8 @@
    "lng": -66.11229,
    "by_category": {
     "advanced-practice": 1,
-    "pharmacy": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -4709,26 +4709,26 @@
    "county": "Trujillo Alto Municipio",
    "practitioners": 118,
    "with_role": 57,
-   "orgs_provider": 49,
+   "orgs_provider": 50,
    "orgs_ein": 2,
    "locations": 66,
    "lat": 18.3657,
    "lng": -66.01708,
    "by_category": {
     "physician": 52,
-    "behavioral-health": 17,
     "pharmacy": 17,
+    "behavioral-health": 17,
     "dental": 10,
     "group": 4,
     "eye-vision": 4,
     "rehab-therapy": 3,
+    "dietary": 2,
     "chiropractic": 2,
     "emergency-medical": 2,
     "other-clinical": 2,
-    "dietary": 2,
-    "advanced-practice": 1,
+    "transport": 1,
     "support": 1,
-    "transport": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -4762,8 +4762,8 @@
     "behavioral-health": 4,
     "chiropractic": 3,
     "rehab-therapy": 3,
-    "nursing": 1,
-    "support": 1
+    "support": 1,
+    "nursing": 1
    }
   },
   {
@@ -4772,7 +4772,7 @@
    "county": "Carolina Municipio",
    "practitioners": 42,
    "with_role": 12,
-   "orgs_provider": 33,
+   "orgs_provider": 34,
    "orgs_ein": 2,
    "locations": 55,
    "lat": 18.40941,
@@ -4781,14 +4781,14 @@
     "physician": 17,
     "behavioral-health": 6,
     "dental": 4,
-    "pharmacy": 3,
     "support": 3,
+    "pharmacy": 3,
     "eye-vision": 2,
     "rehab-therapy": 2,
     "dietary": 2,
-    "facility": 1,
     "nursing": 1,
-    "group": 1
+    "group": 1,
+    "facility": 1
    }
   },
   {
@@ -4797,7 +4797,7 @@
    "county": "Carolina Municipio",
    "practitioners": 60,
    "with_role": 23,
-   "orgs_provider": 29,
+   "orgs_provider": 32,
    "orgs_ein": 1,
    "locations": 72,
    "lat": 18.4059,
@@ -4806,8 +4806,8 @@
     "physician": 23,
     "eye-vision": 9,
     "dental": 8,
-    "behavioral-health": 5,
     "other-clinical": 5,
+    "behavioral-health": 5,
     "pharmacy": 3,
     "dietary": 3,
     "chiropractic": 3,
@@ -4831,14 +4831,14 @@
     "pharmacy": 18,
     "rehab-therapy": 16,
     "dental": 11,
-    "eye-vision": 4,
-    "other-clinical": 4,
     "group": 4,
-    "dietary": 3,
+    "other-clinical": 4,
+    "eye-vision": 4,
     "chiropractic": 3,
+    "dietary": 3,
     "supplier": 2,
-    "support": 1,
     "emergency-medical": 1,
+    "support": 1,
     "advanced-practice": 1
    }
   },
@@ -4857,17 +4857,17 @@
     "pharmacy": 33,
     "physician": 21,
     "eye-vision": 6,
-    "chiropractic": 4,
     "other-clinical": 4,
+    "chiropractic": 4,
     "behavioral-health": 3,
-    "supplier": 2,
-    "dental": 2,
     "group": 2,
+    "dental": 2,
+    "supplier": 2,
     "rehab-therapy": 2,
     "dietary": 1,
     "support": 1
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address; on the 2026-10-07 release that placed 63,194 of 2,058,500 organizations in a different state from their physical address (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }
