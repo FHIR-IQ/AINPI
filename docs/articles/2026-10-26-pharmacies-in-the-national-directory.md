@@ -3,9 +3,8 @@
 *by Eugene Vestel · 2026-10-26 · proposal for the RTPBC and National Directory communities*
 
 CMS NPD already holds almost every pharmacy. Its FHIR records do not say which
-ones are pharmacies, and they mostly do not say where pharmacists work. Here is
-what we measured, what exists today, and a proposal for fixing it. Data: CMS
-NPD release 2026-10-07.
+ones are pharmacies, and they mostly do not say where pharmacists work. Data:
+CMS NPD release 2026-10-07.
 
 ---
 
@@ -37,9 +36,12 @@ copied into the phone book.
 | Of those pharmacists, in a CMS-enrolled (Medicare) billing group | 1 |
 
 The NPPES side is the public BigQuery snapshot dated 2026-02-07, so pharmacies
-registered since then are not counted. Pharmacy records are typed `prov`, like
-every other provider organization, or carry no type. 45% of them have "pharm"
-in the name, which is the only pharmacy signal in the record. Role figures come
+registered since then are not counted. The 108,637 pharmacies sit on 113,077
+Organization records. 108,636 are typed `prov`, like every other provider
+organization. 4,437 are text-only `ein` tax records that share a pharmacy NPI,
+and 4 have no type. The `ein` records explain the gap between records and
+NPIs. 45% of these records (50,829 of 113,077) have "pharm" in the name, which
+is the only pharmacy signal in the record. Role figures come
 from [role coverage by profession](/findings/role-gap-composition); the
 HealthcareService figure from [new resource types](/findings/ndh-new-resource-types).
 
@@ -47,9 +49,10 @@ One note on the pharmacist number. All 11,865 people in it already hold an NPI,
 so it says nothing about whether pharmacists need one. It shows that having an
 NPI does not give someone a workplace record. Across professions, CMS NPD
 workplace records follow Medicare billing: in Pennsylvania 74.8% of physicians
-have one, against single digits for nurses (6.2%) and the pharmacy category, technicians
-included (6.7%). Few
-pharmacists bill Medicare as providers, so few have one.
+have one, against single digits for nurses (6.2%) and the pharmacy category,
+technicians included (6.7%). Few pharmacists bill Medicare as individual
+providers, which fits that pattern: 1 of the 11,865 is in a CMS-enrolled
+group.
 
 ## Try it yourself
 
@@ -62,8 +65,9 @@ curl "https://ainpi.dev/api/npd/search?type=organization&npi=1548282270"
 Returns "CVS PHARMACY 16602" with type `prov`. Nothing in the record marks it as
 a pharmacy. The state shown is Rhode Island, the corporate billing address. The
 CMS record also carries the store's physical address, 5125 Jonestown Rd,
-Harrisburg PA, marked `type: physical`. AINPI's search currently shows the
-first address listed, and we are fixing that.
+Harrisburg PA, marked `type: physical`, after the billing address. A Location
+for the store exists in CMS NPD, but nothing links it to this record. AINPI's
+search currently shows the first address listed, and we are fixing that.
 
 ### 2. The same NPI in NPPES
 
@@ -71,8 +75,8 @@ first address listed, and we are fixing that.
 curl "https://npiregistry.cms.hhs.gov/api/?version=2.1&number=1548282270"
 ```
 
-Returns primary taxonomy 333600000X, Pharmacy. Joining these two is the
-workaround implementers use today.
+Returns primary taxonomy 333600000X, Pharmacy. Joining the two is the
+workaround available today.
 
 ### 3. Every Pennsylvania clinician, one row per NPI
 
@@ -100,8 +104,9 @@ Directory API, including the type of pharmacy. 42 CFR 422.120(b)(2) requires:
 > number, number of pharmacies in the network, and mix (specifically the type
 > of pharmacy, such as "retail pharmacy")
 
-updated within 30 calendar days. Those directories label pharmacies as
-pharmacies, and nothing in CMS NPD links to them.
+updated no later than 30 calendar days after the plan receives a change.
+Those directories are required to state the type of pharmacy, and nothing in
+CMS NPD links them to a plan.
 
 **Open measurement.** AINPI re-measures role coverage and the new resource
 types every CMS release, with the method and code, at
@@ -111,26 +116,36 @@ this note and are not yet a published series.
 ## Proposal: how this should work
 
 - **CMS NPD.** Carry the NUCC taxonomy CMS already holds in NPPES into the FHIR
-  export: on the Organization, and on a HealthcareService per pharmacy with
-  `specialty` set to the 3336 code and `providedBy` pointing at the
-  Organization, as NDH models it. Make it searchable. This one change lets
+  export, on the Organization and on a HealthcareService per pharmacy. In that
+  HealthcareService, set `category` to `pharm`, `specialty` to the 3336 code
+  and `providedBy` to the Organization, as NDH models it in its
+  [retail pharmacy example](https://hl7.org/fhir/us/ndh/STU1/HealthcareService-PharmChainRetailService.html). Make it searchable. This one change lets
   anyone ask the API for pharmacies.
-- **CMS NPD.** Give each pharmacy a Location for the store, or at least list
-  the physical address first. Today the store address sits on the Organization
-  record, often after a corporate billing address, and this store has no
-  Location record at all. A per-store NPI then resolves to a place. We left
-  NCPDP IDs out of this ask: NCPDP's pharmacy data is commercially licensed, so
-  it may not be CMS's to republish.
+- **CMS NPD.** Link each pharmacy's Location to its Organization, or at least
+  list the physical address first. In this record the store address sits on
+  the Organization after the corporate billing address. A Location for the
+  store exists (5125 Jonestown Rd #16602, phone 717-671-6903), but it has no
+  `managingOrganization` and no PractitionerRole points at it. Linking it lets
+  a per-store NPI resolve to a place. We left NCPDP IDs out of this ask. Our
+  understanding is that NCPDP licenses its pharmacy data, but we have not
+  checked the terms, so whether CMS could republish the IDs is a question for
+  NCPDP and CMS.
 - **CMS NPD.** Fill pharmacist workplace records from a source beyond Medicare
   billing, and link each MA-PD plan's pharmacy directory endpoint to the plan,
   so a pharmacy can be traced to the networks it belongs to.
-- **CARIN RTPBC.** An RTPBC message can carry the pharmacy's NPI, so it needs
-  no mapping once CMS NPD marks pharmacies. Whether NPI alone is enough to
-  identify the dispensing location is a question for the CARIN workgroup.
+- **CARIN RTPBC.** The
+  [RTPBC pharmacy profile](https://hl7.org/fhir/us/carin-rtpbc/StructureDefinition-rtpbc-pharmacy-organization.html)
+  says the NCPDP Provider ID "is the preferred identifier for this purpose
+  because it specifies the individual pharmacy location". It adds that
+  "alternatively, an organizational NPI may be used". Phone and address then
+  help tell locations apart: they "SHOULD be populated to assist in
+  identifying a particular pharmacy location". Marking
+  pharmacies in CMS NPD helps the NPI path. It does not replace the NCPDP ID,
+  which 1 of 108,637 CMS NPD pharmacy records mentions.
 - **Implementers, now.** Look up the pharmacy in CMS NPD by NPI, take its type
   from NPPES, and read the address marked `type: physical` or `use: work`, not
-  the first one listed. Expect pharmacies registered since the last CMS load to
-  be missing until the next one.
+  the first one listed. Pharmacies registered recently may be missing; we have
+  not measured how far CMS NPD lags NPPES.
 - **AINPI.** Watch HealthcareService and the pharmacy counts each release, so
   everyone can see when the fix lands.
 
@@ -143,14 +158,7 @@ enumeration is 2026-02-07. A pharmacy is an active type-2 NPI (no deactivation
 date) with any taxonomy code beginning 3336 in slots 1 to 3. The counts were
 measured on 2026-10-22 and re-run on 2026-10-26 with the same results.
 
-The warehouse is not public. The same release is in the AINPI archive on
-Databricks as `workspace.ainpi`, partitioned by `release_date`. The archive is
-shared over OpenSharing (formerly Delta Sharing). Its `organization` table
-holds the same raw `resource` JSON as a string, so the CMS NPD side of each
-query below can be rewritten against it with
-`WHERE release_date = '2026-10-07'`. The NPPES side is not in the archive; use
-the BigQuery public dataset or the NPPES monthly file. In BigQuery each query
-ran with a 100 GB cap:
+Each query ran in BigQuery with a 100 GB cap:
 
 ```bash
 bq query --use_legacy_sql=false --maximum_bytes_billed=100000000000 < query.sql
@@ -225,11 +233,12 @@ FROM `thematic-fort-453901-t7.cms_npd.organization` o
 JOIN pharm ON pharm.npi = o._npi
 ```
 
-The 108,637 pharmacies sit on 113,077 Organization records, because some NPIs
-appear more than once. Counted by record rather than by pharmacy, 507 carry an
-endpoint and 1 mentions NCPDP. As a positive control, every one of the 113,077
-records carries an NPI identifier system and a `type` key, so the zeros above
-come from records the query did read.
+The 108,637 pharmacies sit on 113,077 Organization records, because 4,437
+text-only `ein` tax records share a pharmacy NPI with a `prov` record.
+Counted by record rather than by pharmacy, 507 carry an endpoint and 1
+mentions NCPDP. As a positive control, every one of the 113,077 records
+carries the NPI identifier system and 113,073 carry a `type` key, so the zeros
+above come from records the query did read.
 
 The Pennsylvania pharmacist figures are recomputed from the committed
 [role-gap-composition-pa.csv](https://ainpi.dev/api/v1/findings/role-gap-composition-pa.csv)
