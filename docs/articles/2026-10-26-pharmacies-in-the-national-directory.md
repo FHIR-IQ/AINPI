@@ -144,8 +144,8 @@ date) with any taxonomy code beginning 3336 in slots 1 to 3. The counts were
 measured on 2026-10-22 and re-run on 2026-10-26 with the same results.
 
 The warehouse is not public. The same release is in the AINPI archive on
-Databricks, shared over OpenSharing (formerly Delta Sharing) as
-`workspace.ainpi`, partitioned by `release_date`. Its `organization` table
+Databricks as `workspace.ainpi`, partitioned by `release_date`. The archive is
+shared over OpenSharing (formerly Delta Sharing). Its `organization` table
 holds the same raw `resource` JSON as a string, so the CMS NPD side of each
 query below can be rewritten against it with
 `WHERE release_date = '2026-10-07'`. The NPPES side is not in the archive; use
