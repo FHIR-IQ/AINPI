@@ -45,6 +45,24 @@ function refId(ref: { reference?: string } | undefined | null): string | null {
 }
 
 // Extract NPI from identifier array
+type NdhAddress = { type?: unknown; use?: unknown; state?: string; city?: string };
+
+/**
+ * Organization.address is 0..* and the NDH often lists the postal billing
+ * address first. Mirrors physical_address() in analysis/fast_ingest_ndh.py
+ * (FHI-84): type physical or both, else use work, else the first object.
+ */
+function physicalAddress(raw: unknown): NdhAddress | undefined {
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) return raw as NdhAddress;
+  if (!Array.isArray(raw)) return undefined;
+  const addrs = raw.filter((a): a is NdhAddress => !!a && typeof a === 'object' && !Array.isArray(a));
+  return (
+    addrs.find((a) => a.type === 'physical' || a.type === 'both') ??
+    addrs.find((a) => a.use === 'work') ??
+    addrs[0]
+  );
+}
+
 function extractNpi(identifiers: Array<{ system?: string; value?: string }> | undefined): string | null {
   if (!identifiers) return null;
   const npi = identifiers.find(
@@ -108,14 +126,14 @@ const RESOURCES: ResourceConfig[] = [
     tableName: 'organization',
     extractFields: (r) => {
       const identifiers = r.identifier as Array<{ system?: string; value?: string }> | undefined;
-      const addresses = r.address as Array<{ state?: string; city?: string }> | undefined;
+      const addr = physicalAddress(r.address);
       const types = r.type as Array<{ coding?: Array<{ code?: string }> }> | undefined;
       return {
         _id: r.id as string,
         _npi: extractNpi(identifiers),
         _name: (r.name as string) || null,
-        _state: addresses?.[0]?.state || null,
-        _city: addresses?.[0]?.city || null,
+        _state: addr?.state || null,
+        _city: addr?.city || null,
         _org_type: types?.[0]?.coding?.[0]?.code || null,
         _active: r.active === true,
       };

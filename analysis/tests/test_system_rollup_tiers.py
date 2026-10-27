@@ -788,14 +788,20 @@ def test_funnel_bands_alias_above_a_vendor_list():
 
 
 def test_pa_funnel_correction_quotes_the_run():
-    summary = {"reaches_endpoint_pct": 22.3,
-               "reaches_endpoint_pct_of_affiliated": 50.3,
+    summary = {"reaches_endpoint": 50880,
+               "reaches_endpoint_pct": 22.3,
+               "reaches_endpoint_pct_of_affiliated": 50.4,
                "reaches_endpoint_deterministic_pct": 2.9}
-    (c,) = sc.funnel_corrections("pa", summary)
-    for text in ("15.8%", "35.8%", "22.3%", "50.3%", "2.9%", "18.7%",
+    c, fhi84 = sc.funnel_corrections("pa", summary)
+    for text in ("15.8%", "35.8%", "22.3%", "50.4%", "2.9%", "18.7%",
                  "2026-10-14", "every NPI", "10 or fewer"):
         assert text in c["what"], text
     assert "\u2014" not in c["what"]
+    assert fhi84["issue"] == "FHI-84" and fhi84["date"] == "2026-10-26"
+    for text in ("50,812", "50.3%", "50,880", "50.4%", "physical address",
+                 "63,194", "4,322", "1,996", "6,507"):
+        assert text in fhi84["what"], text
+    assert "\u2014" not in fhi84["what"]
     assert sc.funnel_corrections("oh", summary) == []
 
 

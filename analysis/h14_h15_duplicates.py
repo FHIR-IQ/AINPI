@@ -227,7 +227,13 @@ def run() -> None:
         f"treating as a defect. The raw rate is still the right number for "
         f"anyone doing COUNT(Organization), because the rows are really there; "
         f"it is the wrong number for judging directory hygiene. Fuzzy matching "
-        f"(Jaro-Winkler, suite-unit tolerance) is a v2 enhancement."
+        f"(Jaro-Winkler, suite-unit tolerance) is a v2 enhancement. "
+        f"Correction (FHI-84, 2026-10-26): Organization state and city now "
+        f"come from the physical address rather than the first address, which "
+        f"the NDH often fills with the billing address. On the 2026-10-07 "
+        f"release that moved H15 from 127,322 of 1,383,429 keys (9.2034%) to "
+        f"131,685 of 1,415,597 (9.3024%), and excess resources from 298,875 "
+        f"to 266,769."
     )
 
     payload = {

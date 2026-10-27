@@ -1,13 +1,13 @@
 {
  "state": "NH",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 31583,
   "with_role": 13072,
-  "orgs_provider": 5700,
-  "orgs_ein": 223,
+  "orgs_provider": 5935,
+  "orgs_ein": 234,
   "orgs_other": 0,
   "locations": 10607,
   "with_coords": 10358
@@ -149,8 +149,8 @@
    "practitioners": 9865,
    "with_role": 4063,
    "role_pct": 41.2,
-   "orgs_provider": 1788,
-   "orgs_ein": 60,
+   "orgs_provider": 1864,
+   "orgs_ein": 58,
    "by_category": {
     "behavioral-health": 2581,
     "physician": 1671,
@@ -169,8 +169,8 @@
    "practitioners": 6071,
    "with_role": 2310,
    "role_pct": 38.0,
-   "orgs_provider": 1493,
-   "orgs_ein": 52,
+   "orgs_provider": 1503,
+   "orgs_ein": 56,
    "by_category": {
     "rehab-therapy": 1464,
     "behavioral-health": 1342,
@@ -189,8 +189,8 @@
    "practitioners": 4718,
    "with_role": 3318,
    "role_pct": 70.3,
-   "orgs_provider": 18,
-   "orgs_ein": 1,
+   "orgs_provider": 16,
+   "orgs_ein": 0,
    "by_category": {
     "physician": 2486,
     "advanced-practice": 1040,
@@ -209,8 +209,8 @@
    "practitioners": 3438,
    "with_role": 1011,
    "role_pct": 29.4,
-   "orgs_provider": 690,
-   "orgs_ein": 25,
+   "orgs_provider": 716,
+   "orgs_ein": 26,
    "by_category": {
     "behavioral-health": 817,
     "rehab-therapy": 550,
@@ -229,7 +229,7 @@
    "practitioners": 2018,
    "with_role": 713,
    "role_pct": 35.3,
-   "orgs_provider": 431,
+   "orgs_provider": 461,
    "orgs_ein": 24,
    "by_category": {
     "behavioral-health": 485,
@@ -249,8 +249,8 @@
    "practitioners": 1839,
    "with_role": 740,
    "role_pct": 40.2,
-   "orgs_provider": 453,
-   "orgs_ein": 24,
+   "orgs_provider": 483,
+   "orgs_ein": 27,
    "by_category": {
     "behavioral-health": 464,
     "physician": 351,
@@ -269,8 +269,8 @@
    "practitioners": 1225,
    "with_role": 130,
    "role_pct": 10.6,
-   "orgs_provider": 218,
-   "orgs_ein": 7,
+   "orgs_provider": 239,
+   "orgs_ein": 9,
    "by_category": {
     "other-clinical": 379,
     "behavioral-health": 335,
@@ -289,8 +289,8 @@
    "practitioners": 909,
    "with_role": 272,
    "role_pct": 29.9,
-   "orgs_provider": 182,
-   "orgs_ein": 10,
+   "orgs_provider": 193,
+   "orgs_ein": 11,
    "by_category": {
     "behavioral-health": 324,
     "rehab-therapy": 178,
@@ -309,7 +309,7 @@
    "practitioners": 644,
    "with_role": 232,
    "role_pct": 36.0,
-   "orgs_provider": 175,
+   "orgs_provider": 193,
    "orgs_ein": 6,
    "by_category": {
     "behavioral-health": 205,
@@ -329,8 +329,8 @@
    "practitioners": 431,
    "with_role": 167,
    "role_pct": 38.7,
-   "orgs_provider": 125,
-   "orgs_ein": 10,
+   "orgs_provider": 134,
+   "orgs_ein": 13,
    "by_category": {
     "behavioral-health": 113,
     "physician": 96,
@@ -349,7 +349,7 @@
    "practitioners": 425,
    "with_role": 116,
    "role_pct": 27.3,
-   "orgs_provider": 127,
+   "orgs_provider": 133,
    "orgs_ein": 4,
    "by_category": {
     "behavioral-health": 95,
@@ -383,7 +383,7 @@
    "county": "Hillsborough County",
    "practitioners": 171,
    "with_role": 54,
-   "orgs_provider": 82,
+   "orgs_provider": 84,
    "orgs_ein": 4,
    "locations": 137,
    "lat": 42.83062,
@@ -408,7 +408,7 @@
    "county": "Rockingham County",
    "practitioners": 3,
    "with_role": 2,
-   "orgs_provider": 2,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 43.01106,
@@ -439,16 +439,16 @@
    "county": "Rockingham County",
    "practitioners": 32,
    "with_role": 24,
-   "orgs_provider": 6,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 43.05979,
    "lng": -71.28391,
    "by_category": {
     "rehab-therapy": 29,
+    "advanced-practice": 1,
     "group": 1,
-    "dental": 1,
-    "advanced-practice": 1
+    "dental": 1
    }
   },
   {
@@ -479,8 +479,8 @@
    "lng": -71.24211,
    "by_category": {
     "rehab-therapy": 2,
-    "eye-vision": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -489,8 +489,8 @@
    "county": "Rockingham County",
    "practitioners": 963,
    "with_role": 608,
-   "orgs_provider": 141,
-   "orgs_ein": 2,
+   "orgs_provider": 155,
+   "orgs_ein": 3,
    "locations": 232,
    "lat": 42.88858,
    "lng": -71.31912,
@@ -501,8 +501,8 @@
     "other-clinical": 56,
     "rehab-therapy": 54,
     "nursing": 37,
-    "pharmacy": 27,
     "dental": 27,
+    "pharmacy": 27,
     "chiropractic": 11,
     "group": 10,
     "eye-vision": 8,
@@ -519,7 +519,7 @@
    "county": "Rockingham County",
    "practitioners": 154,
    "with_role": 113,
-   "orgs_provider": 24,
+   "orgs_provider": 28,
    "orgs_ein": 2,
    "locations": 48,
    "lat": 43.04373,
@@ -541,14 +541,14 @@
    "county": "Rockingham County",
    "practitioners": 6,
    "with_role": 1,
-   "orgs_provider": 5,
+   "orgs_provider": 6,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 42.98473,
    "lng": -71.13151,
    "by_category": {
-    "behavioral-health": 3,
-    "rehab-therapy": 3
+    "rehab-therapy": 3,
+    "behavioral-health": 3
    }
   },
   {
@@ -557,7 +557,7 @@
    "county": "Hillsborough County",
    "practitioners": 37,
    "with_role": 8,
-   "orgs_provider": 14,
+   "orgs_provider": 15,
    "orgs_ein": 2,
    "locations": 36,
    "lat": 43.0103,
@@ -565,12 +565,12 @@
    "by_category": {
     "rehab-therapy": 17,
     "chiropractic": 5,
-    "other-clinical": 4,
     "physician": 4,
+    "other-clinical": 4,
     "eye-vision": 3,
     "behavioral-health": 2,
-    "nursing": 1,
-    "dental": 1
+    "dental": 1,
+    "nursing": 1
    }
   },
   {
@@ -611,9 +611,9 @@
    "lat": 42.7418,
    "lng": -71.79138,
    "by_category": {
-    "behavioral-health": 1,
     "dietary": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -628,10 +628,10 @@
    "lat": 42.74377,
    "lng": -71.58894,
    "by_category": {
-    "physician": 5,
-    "behavioral-health": 5,
     "advanced-practice": 5,
+    "physician": 5,
     "rehab-therapy": 5,
+    "behavioral-health": 5,
     "dental": 3,
     "chiropractic": 2,
     "pharmacy": 1,
@@ -644,7 +644,7 @@
    "county": "Hillsborough County",
    "practitioners": 125,
    "with_role": 31,
-   "orgs_provider": 40,
+   "orgs_provider": 44,
    "orgs_ein": 2,
    "locations": 81,
    "lat": 42.76497,
@@ -655,13 +655,13 @@
     "behavioral-health": 19,
     "dental": 16,
     "physician": 9,
-    "advanced-practice": 6,
     "eye-vision": 6,
+    "advanced-practice": 6,
     "chiropractic": 3,
-    "other-clinical": 1,
-    "support": 1,
+    "group": 1,
     "nursing": 1,
-    "group": 1
+    "other-clinical": 1,
+    "support": 1
    }
   },
   {
@@ -678,8 +678,8 @@
    "by_category": {
     "behavioral-health": 6,
     "rehab-therapy": 4,
-    "student": 1,
-    "dental": 1
+    "dental": 1,
+    "student": 1
    }
   },
   {
@@ -689,7 +689,7 @@
    "practitioners": 336,
    "with_role": 110,
    "orgs_provider": 151,
-   "orgs_ein": 5,
+   "orgs_ein": 4,
    "locations": 251,
    "lat": 42.86813,
    "lng": -71.36329,
@@ -704,8 +704,8 @@
     "group": 10,
     "other-clinical": 7,
     "eye-vision": 6,
-    "dietary": 3,
     "nursing": 3,
+    "dietary": 3,
     "support": 2,
     "facility": 1
    }
@@ -716,7 +716,7 @@
    "county": "Hillsborough County",
    "practitioners": 166,
    "with_role": 41,
-   "orgs_provider": 56,
+   "orgs_provider": 68,
    "orgs_ein": 0,
    "locations": 135,
    "lat": 42.8466,
@@ -731,8 +731,8 @@
     "chiropractic": 8,
     "other-clinical": 5,
     "eye-vision": 2,
-    "dietary": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dietary": 1
    }
   },
   {
@@ -741,7 +741,7 @@
    "county": "Hillsborough County",
    "practitioners": 408,
    "with_role": 289,
-   "orgs_provider": 34,
+   "orgs_provider": 41,
    "orgs_ein": 1,
    "locations": 82,
    "lat": 42.83332,
@@ -758,8 +758,8 @@
     "eye-vision": 3,
     "chiropractic": 3,
     "podiatry": 2,
-    "group": 1,
-    "support": 1
+    "support": 1,
+    "group": 1
    }
   },
   {
@@ -768,7 +768,7 @@
    "county": "Hillsborough County",
    "practitioners": 1587,
    "with_role": 705,
-   "orgs_provider": 253,
+   "orgs_provider": 270,
    "orgs_ein": 12,
    "locations": 505,
    "lat": 42.7498,
@@ -785,10 +785,10 @@
     "dietary": 14,
     "group": 10,
     "chiropractic": 8,
-    "podiatry": 7,
     "eye-vision": 7,
-    "support": 3,
-    "student": 3
+    "podiatry": 7,
+    "student": 3,
+    "support": 3
    }
   },
   {
@@ -797,8 +797,8 @@
    "county": "Hillsborough County",
    "practitioners": 378,
    "with_role": 140,
-   "orgs_provider": 125,
-   "orgs_ein": 6,
+   "orgs_provider": 119,
+   "orgs_ein": 5,
    "locations": 179,
    "lat": 42.73334,
    "lng": -71.4854,
@@ -808,8 +808,8 @@
     "behavioral-health": 68,
     "physician": 44,
     "dental": 27,
-    "eye-vision": 11,
     "nursing": 11,
+    "eye-vision": 11,
     "chiropractic": 9,
     "group": 8,
     "other-clinical": 6,
@@ -824,7 +824,7 @@
    "county": "Hillsborough County",
    "practitioners": 501,
    "with_role": 99,
-   "orgs_provider": 118,
+   "orgs_provider": 111,
    "orgs_ein": 2,
    "locations": 199,
    "lat": 42.78328,
@@ -841,8 +841,8 @@
     "eye-vision": 5,
     "chiropractic": 4,
     "group": 4,
-    "support": 2,
-    "dietary": 2
+    "dietary": 2,
+    "support": 2
    }
   },
   {
@@ -851,7 +851,7 @@
    "county": "Hillsborough County",
    "practitioners": 356,
    "with_role": 165,
-   "orgs_provider": 38,
+   "orgs_provider": 39,
    "orgs_ein": 0,
    "locations": 58,
    "lat": 42.76981,
@@ -866,10 +866,10 @@
     "pharmacy": 4,
     "group": 2,
     "eye-vision": 2,
+    "support": 1,
     "chiropractic": 1,
     "student": 1,
-    "dietary": 1,
-    "support": 1
+    "dietary": 1
    }
   },
   {
@@ -900,8 +900,8 @@
    "lat": 42.75417,
    "lng": -71.84077,
    "by_category": {
-    "dietary": 1,
     "rehab-therapy": 1,
+    "dietary": 1,
     "behavioral-health": 1
    }
   },
@@ -911,7 +911,7 @@
    "county": "Hillsborough County",
    "practitioners": 37,
    "with_role": 9,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 0,
    "locations": 32,
    "lat": 42.72492,
@@ -919,13 +919,13 @@
    "by_category": {
     "rehab-therapy": 9,
     "dental": 8,
-    "pharmacy": 6,
     "advanced-practice": 6,
+    "pharmacy": 6,
     "behavioral-health": 4,
-    "other-clinical": 1,
-    "group": 1,
     "chiropractic": 1,
-    "nursing": 1
+    "nursing": 1,
+    "group": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -934,7 +934,7 @@
    "county": "Rockingham County",
    "practitioners": 97,
    "with_role": 51,
-   "orgs_provider": 27,
+   "orgs_provider": 31,
    "orgs_ein": 2,
    "locations": 40,
    "lat": 43.03252,
@@ -943,8 +943,8 @@
     "advanced-practice": 27,
     "physician": 18,
     "rehab-therapy": 15,
-    "pharmacy": 11,
     "behavioral-health": 11,
+    "pharmacy": 11,
     "dental": 8,
     "nursing": 3,
     "group": 2,
@@ -958,8 +958,8 @@
    "county": "Rockingham County",
    "practitioners": 1010,
    "with_role": 187,
-   "orgs_provider": 200,
-   "orgs_ein": 10,
+   "orgs_provider": 211,
+   "orgs_ein": 12,
    "locations": 419,
    "lat": 42.77836,
    "lng": -71.23557,
@@ -971,8 +971,8 @@
     "advanced-practice": 52,
     "pharmacy": 38,
     "dental": 30,
-    "eye-vision": 22,
     "other-clinical": 22,
+    "eye-vision": 22,
     "chiropractic": 13,
     "group": 5,
     "dietary": 4,
@@ -993,8 +993,8 @@
    "lat": 42.88583,
    "lng": -71.79329,
    "by_category": {
-    "rehab-therapy": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1019,7 +1019,7 @@
    "county": "Rockingham County",
    "practitioners": 167,
    "with_role": 43,
-   "orgs_provider": 44,
+   "orgs_provider": 47,
    "orgs_ein": 1,
    "locations": 98,
    "lat": 42.80954,
@@ -1028,14 +1028,14 @@
     "rehab-therapy": 76,
     "physician": 19,
     "advanced-practice": 19,
-    "other-clinical": 14,
     "behavioral-health": 14,
+    "other-clinical": 14,
     "dental": 11,
     "chiropractic": 5,
     "pharmacy": 4,
     "nursing": 3,
-    "dietary": 1,
-    "group": 1
+    "group": 1,
+    "dietary": 1
    }
   },
   {
@@ -1044,7 +1044,7 @@
    "county": "Hillsborough County",
    "practitioners": 1423,
    "with_role": 346,
-   "orgs_provider": 172,
+   "orgs_provider": 178,
    "orgs_ein": 6,
    "locations": 281,
    "lat": 42.99213,
@@ -1063,12 +1063,12 @@
     "eye-vision": 16,
     "group": 6,
     "support": 3,
-    "transport": 3,
     "chiropractic": 3,
+    "transport": 3,
     "emergency-medical": 2,
-    "podiatry": 1,
     "supplier": 1,
-    "facility": 1
+    "facility": 1,
+    "podiatry": 1
    }
   },
   {
@@ -1077,8 +1077,8 @@
    "county": "Hillsborough County",
    "practitioners": 568,
    "with_role": 345,
-   "orgs_provider": 83,
-   "orgs_ein": 2,
+   "orgs_provider": 89,
+   "orgs_ein": 1,
    "locations": 168,
    "lat": 42.98654,
    "lng": -71.48003,
@@ -1087,8 +1087,8 @@
     "advanced-practice": 151,
     "rehab-therapy": 106,
     "pharmacy": 40,
-    "nursing": 20,
     "behavioral-health": 20,
+    "nursing": 20,
     "dental": 13,
     "dietary": 12,
     "other-clinical": 10,
@@ -1096,8 +1096,8 @@
     "eye-vision": 6,
     "support": 4,
     "group": 3,
-    "transport": 2,
     "agency": 2,
+    "transport": 2,
     "podiatry": 1,
     "facility": 1
    }
@@ -1108,8 +1108,8 @@
    "county": "Hillsborough County",
    "practitioners": 2050,
    "with_role": 1223,
-   "orgs_provider": 188,
-   "orgs_ein": 4,
+   "orgs_provider": 203,
+   "orgs_ein": 6,
    "locations": 340,
    "lat": 42.97088,
    "lng": -71.44295,
@@ -1125,14 +1125,14 @@
     "dietary": 18,
     "group": 15,
     "eye-vision": 7,
-    "podiatry": 3,
     "chiropractic": 3,
-    "no-taxonomy": 2,
+    "podiatry": 3,
     "support": 2,
+    "no-taxonomy": 2,
     "emergency-medical": 2,
-    "supplier": 1,
     "facility": 1,
-    "student": 1
+    "student": 1,
+    "supplier": 1
    }
   },
   {
@@ -1141,7 +1141,7 @@
    "county": "Hillsborough County",
    "practitioners": 726,
    "with_role": 182,
-   "orgs_provider": 143,
+   "orgs_provider": 150,
    "orgs_ein": 2,
    "locations": 264,
    "lat": 43.00293,
@@ -1161,8 +1161,8 @@
     "chiropractic": 6,
     "group": 4,
     "student": 3,
-    "facility": 2,
-    "support": 2
+    "support": 2,
+    "facility": 2
    }
   },
   {
@@ -1171,7 +1171,7 @@
    "county": "Merrimack County",
    "practitioners": 147,
    "with_role": 49,
-   "orgs_provider": 54,
+   "orgs_provider": 59,
    "orgs_ein": 1,
    "locations": 100,
    "lat": 43.05167,
@@ -1209,8 +1209,8 @@
    "county": "Hillsborough County",
    "practitioners": 134,
    "with_role": 32,
-   "orgs_provider": 35,
-   "orgs_ein": 2,
+   "orgs_provider": 30,
+   "orgs_ein": 1,
    "locations": 62,
    "lat": 42.98082,
    "lng": -71.41872,
@@ -1221,10 +1221,10 @@
     "rehab-therapy": 10,
     "advanced-practice": 4,
     "group": 2,
-    "dental": 1,
     "dietary": 1,
-    "other-clinical": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dental": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1233,7 +1233,7 @@
    "county": "Hillsborough County",
    "practitioners": 830,
    "with_role": 296,
-   "orgs_provider": 271,
+   "orgs_provider": 279,
    "orgs_ein": 9,
    "locations": 437,
    "lat": 42.95174,
@@ -1253,9 +1253,9 @@
     "group": 6,
     "podiatry": 4,
     "support": 3,
-    "emergency-medical": 1,
+    "student": 1,
     "facility": 1,
-    "student": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -1270,8 +1270,8 @@
    "lat": 42.93651,
    "lng": -71.45288,
    "by_category": {
-    "rehab-therapy": 12,
-    "nursing": 12
+    "nursing": 12,
+    "rehab-therapy": 12
    }
   },
   {
@@ -1308,8 +1308,8 @@
    "county": "Grafton County",
    "practitioners": 22,
    "with_role": 4,
-   "orgs_provider": 2,
-   "orgs_ein": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 1,
    "locations": 9,
    "lat": 43.69937,
    "lng": -71.6425,
@@ -1323,7 +1323,7 @@
    "county": "Belknap County",
    "practitioners": 32,
    "with_role": 10,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 25,
    "lat": 43.49313,
@@ -1333,8 +1333,8 @@
     "eye-vision": 4,
     "behavioral-health": 4,
     "physician": 3,
-    "dental": 3,
     "advanced-practice": 3,
+    "dental": 3,
     "nursing": 2,
     "pharmacy": 2,
     "chiropractic": 1
@@ -1359,7 +1359,7 @@
    "county": "Grafton County",
    "practitioners": 47,
    "with_role": 19,
-   "orgs_provider": 17,
+   "orgs_provider": 19,
    "orgs_ein": 2,
    "locations": 28,
    "lat": 43.60033,
@@ -1368,10 +1368,10 @@
     "rehab-therapy": 11,
     "behavioral-health": 10,
     "advanced-practice": 9,
-    "physician": 4,
     "dental": 4,
-    "nursing": 3,
+    "physician": 4,
     "pharmacy": 3,
+    "nursing": 3,
     "dietary": 2,
     "other-clinical": 1
    }
@@ -1498,7 +1498,7 @@
    "county": "Merrimack County",
    "practitioners": 247,
    "with_role": 124,
-   "orgs_provider": 32,
+   "orgs_provider": 36,
    "orgs_ein": 0,
    "locations": 54,
    "lat": 43.44511,
@@ -1513,9 +1513,9 @@
     "dietary": 6,
     "nursing": 4,
     "dental": 2,
-    "podiatry": 1,
+    "group": 1,
     "chiropractic": 1,
-    "group": 1
+    "podiatry": 1
    }
   },
   {
@@ -1567,7 +1567,7 @@
    "county": "Hillsborough County",
    "practitioners": 75,
    "with_role": 16,
-   "orgs_provider": 10,
+   "orgs_provider": 12,
    "orgs_ein": 0,
    "locations": 25,
    "lat": 43.11501,
@@ -1578,14 +1578,14 @@
     "physician": 12,
     "pharmacy": 9,
     "rehab-therapy": 6,
-    "advanced-practice": 3,
     "nursing": 3,
+    "advanced-practice": 3,
     "dental": 2,
     "chiropractic": 2,
-    "eye-vision": 1,
     "group": 1,
-    "facility": 1,
-    "emergency-medical": 1
+    "eye-vision": 1,
+    "emergency-medical": 1,
+    "facility": 1
    }
   },
   {
@@ -1609,8 +1609,8 @@
    "county": "Belknap County",
    "practitioners": 615,
    "with_role": 124,
-   "orgs_provider": 81,
-   "orgs_ein": 5,
+   "orgs_provider": 87,
+   "orgs_ein": 6,
    "locations": 179,
    "lat": 43.53371,
    "lng": -71.46728,
@@ -1636,7 +1636,7 @@
    "county": "Belknap County",
    "practitioners": 125,
    "with_role": 50,
-   "orgs_provider": 47,
+   "orgs_provider": 48,
    "orgs_ein": 1,
    "locations": 89,
    "lat": 43.55207,
@@ -1648,12 +1648,12 @@
     "dental": 14,
     "advanced-practice": 11,
     "pharmacy": 8,
+    "chiropractic": 1,
     "podiatry": 1,
-    "group": 1,
-    "nursing": 1,
-    "other-clinical": 1,
     "support": 1,
-    "chiropractic": 1
+    "nursing": 1,
+    "group": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1662,7 +1662,7 @@
    "county": "Grafton County",
    "practitioners": 9,
    "with_role": 3,
-   "orgs_provider": 3,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 11,
    "lat": 44.04234,
@@ -1671,9 +1671,9 @@
     "rehab-therapy": 3,
     "pharmacy": 2,
     "behavioral-health": 1,
-    "chiropractic": 1,
     "advanced-practice": 1,
-    "nursing": 1
+    "nursing": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -1682,7 +1682,7 @@
    "county": "Belknap County",
    "practitioners": 123,
    "with_role": 87,
-   "orgs_provider": 25,
+   "orgs_provider": 27,
    "orgs_ein": 2,
    "locations": 63,
    "lat": 43.64399,
@@ -1693,13 +1693,13 @@
     "rehab-therapy": 11,
     "pharmacy": 9,
     "behavioral-health": 4,
-    "dental": 3,
     "podiatry": 3,
+    "dental": 3,
     "chiropractic": 3,
     "other-clinical": 2,
-    "group": 1,
+    "dietary": 1,
     "student": 1,
-    "dietary": 1
+    "group": 1
    }
   },
   {
@@ -1708,7 +1708,7 @@
    "county": "Carroll County",
    "practitioners": 20,
    "with_role": 9,
-   "orgs_provider": 11,
+   "orgs_provider": 13,
    "orgs_ein": 0,
    "locations": 23,
    "lat": 43.72957,
@@ -1718,9 +1718,9 @@
     "dental": 4,
     "behavioral-health": 3,
     "other-clinical": 2,
-    "eye-vision": 1,
+    "advanced-practice": 1,
     "physician": 1,
-    "advanced-practice": 1
+    "eye-vision": 1
    }
   },
   {
@@ -1746,7 +1746,7 @@
    "county": "Merrimack County",
    "practitioners": 141,
    "with_role": 45,
-   "orgs_provider": 27,
+   "orgs_provider": 28,
    "orgs_ein": 2,
    "locations": 47,
    "lat": 43.42149,
@@ -1759,12 +1759,12 @@
     "dietary": 8,
     "nursing": 4,
     "other-clinical": 3,
-    "eye-vision": 3,
     "pharmacy": 3,
+    "eye-vision": 3,
     "student": 2,
-    "no-taxonomy": 1,
     "agency": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -1780,8 +1780,8 @@
    "lng": -71.40541,
    "by_category": {
     "behavioral-health": 3,
-    "rehab-therapy": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1810,7 +1810,7 @@
    "county": "Merrimack County",
    "practitioners": 21,
    "with_role": 4,
-   "orgs_provider": 7,
+   "orgs_provider": 8,
    "orgs_ein": 0,
    "locations": 12,
    "lat": 43.30494,
@@ -1820,8 +1820,8 @@
     "rehab-therapy": 6,
     "dental": 3,
     "pharmacy": 2,
-    "eye-vision": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -1848,8 +1848,8 @@
     "chiropractic": 6,
     "nursing": 5,
     "eye-vision": 4,
-    "group": 4,
     "no-taxonomy": 4,
+    "group": 4,
     "podiatry": 2
    }
   },
@@ -1889,7 +1889,7 @@
    "county": "Merrimack County",
    "practitioners": 48,
    "with_role": 13,
-   "orgs_provider": 26,
+   "orgs_provider": 29,
    "orgs_ein": 0,
    "locations": 37,
    "lat": 43.14942,
@@ -1898,8 +1898,8 @@
     "rehab-therapy": 16,
     "advanced-practice": 7,
     "physician": 6,
-    "behavioral-health": 5,
     "dental": 5,
+    "behavioral-health": 5,
     "pharmacy": 5,
     "chiropractic": 2,
     "transport": 1,
@@ -1912,7 +1912,7 @@
    "county": "Merrimack County",
    "practitioners": 64,
    "with_role": 21,
-   "orgs_provider": 33,
+   "orgs_provider": 35,
    "orgs_ein": 1,
    "locations": 65,
    "lat": 43.45051,
@@ -1935,16 +1935,16 @@
    "county": "Merrimack County",
    "practitioners": 7,
    "with_role": 3,
-   "orgs_provider": 3,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 43.28487,
    "lng": -71.81663,
    "by_category": {
-    "physician": 2,
     "behavioral-health": 2,
-    "nursing": 1,
+    "physician": 2,
     "advanced-practice": 1,
+    "nursing": 1,
     "rehab-therapy": 1
    }
   },
@@ -1989,9 +1989,9 @@
    "lng": -71.7158,
    "by_category": {
     "rehab-therapy": 6,
-    "dental": 1,
+    "behavioral-health": 1,
     "other-clinical": 1,
-    "behavioral-health": 1
+    "dental": 1
    }
   },
   {
@@ -2058,8 +2058,8 @@
    "county": "Merrimack County",
    "practitioners": 2613,
    "with_role": 727,
-   "orgs_provider": 435,
-   "orgs_ein": 17,
+   "orgs_provider": 440,
+   "orgs_ein": 18,
    "locations": 741,
    "lat": 43.20608,
    "lng": -71.53567,
@@ -2078,10 +2078,10 @@
     "chiropractic": 19,
     "group": 16,
     "supplier": 5,
-    "support": 2,
     "facility": 2,
-    "agency": 1,
-    "emergency-medical": 1
+    "support": 2,
+    "emergency-medical": 1,
+    "agency": 1
    }
   },
   {
@@ -2098,14 +2098,14 @@
    "by_category": {
     "rehab-therapy": 20,
     "pharmacy": 6,
-    "behavioral-health": 5,
     "dental": 5,
+    "behavioral-health": 5,
     "other-clinical": 4,
-    "chiropractic": 3,
     "advanced-practice": 3,
+    "chiropractic": 3,
     "nursing": 1,
-    "eye-vision": 1,
-    "agency": 1
+    "agency": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2114,7 +2114,7 @@
    "county": "Merrimack County",
    "practitioners": 32,
    "with_role": 5,
-   "orgs_provider": 17,
+   "orgs_provider": 20,
    "orgs_ein": 1,
    "locations": 27,
    "lat": 43.1578,
@@ -2123,11 +2123,11 @@
     "rehab-therapy": 19,
     "behavioral-health": 6,
     "dental": 2,
-    "group": 1,
+    "other-clinical": 1,
+    "chiropractic": 1,
     "advanced-practice": 1,
     "nursing": 1,
-    "chiropractic": 1,
-    "other-clinical": 1
+    "group": 1
    }
   },
   {
@@ -2149,8 +2149,8 @@
    "county": "Cheshire County",
    "practitioners": 1048,
    "with_role": 115,
-   "orgs_provider": 181,
-   "orgs_ein": 6,
+   "orgs_provider": 195,
+   "orgs_ein": 7,
    "locations": 326,
    "lat": 42.93396,
    "lng": -72.28416,
@@ -2158,16 +2158,16 @@
     "other-clinical": 371,
     "behavioral-health": 282,
     "rehab-therapy": 131,
-    "physician": 46,
     "dental": 46,
+    "physician": 46,
     "pharmacy": 42,
     "nursing": 34,
     "advanced-practice": 27,
     "student": 21,
     "eye-vision": 15,
     "chiropractic": 10,
-    "dietary": 8,
     "no-taxonomy": 8,
+    "dietary": 8,
     "group": 3,
     "agency": 2,
     "podiatry": 2
@@ -2206,8 +2206,8 @@
     "advanced-practice": 8,
     "dental": 4,
     "behavioral-health": 3,
-    "rehab-therapy": 3,
-    "physician": 3
+    "physician": 3,
+    "rehab-therapy": 3
    }
   },
   {
@@ -2231,7 +2231,7 @@
    "county": "Cheshire County",
    "practitioners": 3,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 42.90494,
@@ -2260,7 +2260,7 @@
    "county": "Cheshire County",
    "practitioners": 47,
    "with_role": 3,
-   "orgs_provider": 12,
+   "orgs_provider": 10,
    "orgs_ein": 1,
    "locations": 17,
    "lat": 42.88036,
@@ -2268,8 +2268,8 @@
    "by_category": {
     "behavioral-health": 37,
     "rehab-therapy": 4,
-    "physician": 2,
     "dental": 2,
+    "physician": 2,
     "other-clinical": 1,
     "chiropractic": 1
    }
@@ -2293,7 +2293,7 @@
    "county": "Cheshire County",
    "practitioners": 9,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 42.80784,
@@ -2311,8 +2311,8 @@
    "county": "Cheshire County",
    "practitioners": 61,
    "with_role": 4,
-   "orgs_provider": 11,
-   "orgs_ein": 0,
+   "orgs_provider": 13,
+   "orgs_ein": 1,
    "locations": 16,
    "lat": 42.81423,
    "lng": -72.02155,
@@ -2320,12 +2320,12 @@
     "rehab-therapy": 22,
     "support": 8,
     "pharmacy": 7,
-    "other-clinical": 7,
     "nursing": 7,
+    "other-clinical": 7,
     "dental": 5,
     "physician": 2,
-    "eye-vision": 1,
     "chiropractic": 1,
+    "eye-vision": 1,
     "advanced-practice": 1
    }
   },
@@ -2351,8 +2351,8 @@
    "county": "Hillsborough County",
    "practitioners": 202,
    "with_role": 48,
-   "orgs_provider": 74,
-   "orgs_ein": 4,
+   "orgs_provider": 79,
+   "orgs_ein": 3,
    "locations": 142,
    "lat": 42.88597,
    "lng": -71.94609,
@@ -2407,7 +2407,7 @@
    "county": "Cheshire County",
    "practitioners": 3,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 42.99948,
@@ -2422,7 +2422,7 @@
    "county": "Cheshire County",
    "practitioners": 22,
    "with_role": 1,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 42.76567,
@@ -2430,8 +2430,8 @@
    "by_category": {
     "rehab-therapy": 17,
     "pharmacy": 3,
-    "group": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "group": 1
    }
   },
   {
@@ -2440,7 +2440,7 @@
    "county": "Grafton County",
    "practitioners": 248,
    "with_role": 96,
-   "orgs_provider": 89,
+   "orgs_provider": 95,
    "orgs_ein": 9,
    "locations": 152,
    "lat": 44.30668,
@@ -2466,8 +2466,8 @@
    "county": "Coos County",
    "practitioners": 180,
    "with_role": 58,
-   "orgs_provider": 48,
-   "orgs_ein": 3,
+   "orgs_provider": 47,
+   "orgs_ein": 2,
    "locations": 68,
    "lat": 44.47621,
    "lng": -71.17658,
@@ -2480,10 +2480,10 @@
     "pharmacy": 6,
     "nursing": 5,
     "no-taxonomy": 4,
-    "other-clinical": 2,
     "podiatry": 2,
-    "eye-vision": 1,
-    "dietary": 1
+    "other-clinical": 2,
+    "dietary": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2508,8 +2508,8 @@
    "county": "Coos County",
    "practitioners": 73,
    "with_role": 34,
-   "orgs_provider": 27,
-   "orgs_ein": 2,
+   "orgs_provider": 29,
+   "orgs_ein": 3,
    "locations": 24,
    "lat": 44.89895,
    "lng": -71.48671,
@@ -2518,10 +2518,10 @@
     "physician": 17,
     "advanced-practice": 16,
     "nursing": 4,
-    "rehab-therapy": 3,
     "pharmacy": 3,
-    "dietary": 2,
+    "rehab-therapy": 3,
     "chiropractic": 2,
+    "dietary": 2,
     "dental": 2
    }
   },
@@ -2531,7 +2531,7 @@
    "county": "Grafton County",
    "practitioners": 62,
    "with_role": 39,
-   "orgs_provider": 16,
+   "orgs_provider": 19,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 44.22419,
@@ -2543,8 +2543,8 @@
     "behavioral-health": 6,
     "other-clinical": 1,
     "facility": 1,
-    "group": 1,
-    "nursing": 1
+    "nursing": 1,
+    "group": 1
    }
   },
   {
@@ -2553,7 +2553,7 @@
    "county": "Coos County",
    "practitioners": 30,
    "with_role": 6,
-   "orgs_provider": 10,
+   "orgs_provider": 12,
    "orgs_ein": 1,
    "locations": 30,
    "lat": 44.39668,
@@ -2561,8 +2561,8 @@
    "by_category": {
     "rehab-therapy": 15,
     "dental": 7,
-    "pharmacy": 2,
     "physician": 2,
+    "pharmacy": 2,
     "behavioral-health": 2,
     "eye-vision": 1,
     "agency": 1
@@ -2604,8 +2604,8 @@
    "county": "Coos County",
    "practitioners": 122,
    "with_role": 63,
-   "orgs_provider": 26,
-   "orgs_ein": 2,
+   "orgs_provider": 32,
+   "orgs_ein": 5,
    "locations": 32,
    "lat": 44.49378,
    "lng": -71.56766,
@@ -2616,12 +2616,12 @@
     "behavioral-health": 15,
     "podiatry": 5,
     "dietary": 5,
-    "eye-vision": 4,
     "pharmacy": 4,
-    "other-clinical": 3,
+    "eye-vision": 4,
     "dental": 3,
-    "group": 2,
+    "other-clinical": 3,
     "nursing": 2,
+    "group": 2,
     "chiropractic": 1
    }
   },
@@ -2640,8 +2640,8 @@
     "rehab-therapy": 3,
     "behavioral-health": 2,
     "other-clinical": 1,
-    "group": 1,
-    "nursing": 1
+    "nursing": 1,
+    "group": 1
    }
   },
   {
@@ -2701,8 +2701,8 @@
     "rehab-therapy": 9,
     "advanced-practice": 3,
     "physician": 3,
-    "behavioral-health": 2,
     "nursing": 2,
+    "behavioral-health": 2,
     "chiropractic": 1
    }
   },
@@ -2751,8 +2751,8 @@
    "lat": 43.24771,
    "lng": -72.16471,
    "by_category": {
-    "behavioral-health": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -2800,8 +2800,8 @@
     "dental": 3,
     "physician": 3,
     "rehab-therapy": 2,
-    "advanced-practice": 2,
-    "behavioral-health": 2
+    "behavioral-health": 2,
+    "advanced-practice": 2
    }
   },
   {
@@ -2810,7 +2810,7 @@
    "county": "Sullivan County",
    "practitioners": 302,
    "with_role": 66,
-   "orgs_provider": 76,
+   "orgs_provider": 80,
    "orgs_ein": 1,
    "locations": 120,
    "lat": 43.36931,
@@ -2824,14 +2824,14 @@
     "pharmacy": 26,
     "dental": 21,
     "nursing": 10,
-    "eye-vision": 7,
     "support": 7,
+    "eye-vision": 7,
     "chiropractic": 6,
     "dietary": 2,
-    "podiatry": 1,
-    "group": 1,
     "student": 1,
-    "agency": 1
+    "agency": 1,
+    "podiatry": 1,
+    "group": 1
    }
   },
   {
@@ -2871,7 +2871,7 @@
    "county": "Sullivan County",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 5,
+   "orgs_provider": 6,
    "orgs_ein": 0,
    "locations": 9,
    "lat": 43.50746,
@@ -2884,7 +2884,7 @@
    "county": "Grafton County",
    "practitioners": 181,
    "with_role": 43,
-   "orgs_provider": 55,
+   "orgs_provider": 58,
    "orgs_ein": 2,
    "locations": 144,
    "lat": 43.70517,
@@ -2898,9 +2898,9 @@
     "advanced-practice": 10,
     "nursing": 8,
     "pharmacy": 8,
-    "eye-vision": 4,
-    "dietary": 4,
     "chiropractic": 4,
+    "dietary": 4,
+    "eye-vision": 4,
     "other-clinical": 3,
     "no-taxonomy": 2,
     "emergency-medical": 1,
@@ -2913,8 +2913,8 @@
    "county": null,
    "practitioners": 4660,
    "with_role": 3314,
-   "orgs_provider": 16,
-   "orgs_ein": 1,
+   "orgs_provider": 15,
+   "orgs_ein": 0,
    "locations": 55,
    "lat": 43.68406,
    "lng": -72.27405,
@@ -2925,8 +2925,8 @@
     "behavioral-health": 166,
     "nursing": 138,
     "pharmacy": 97,
-    "no-taxonomy": 63,
     "dietary": 63,
+    "no-taxonomy": 63,
     "rehab-therapy": 50,
     "other-clinical": 45,
     "group": 33,
@@ -2959,8 +2959,8 @@
    "county": "Grafton County",
    "practitioners": 521,
    "with_role": 187,
-   "orgs_provider": 82,
-   "orgs_ein": 3,
+   "orgs_provider": 91,
+   "orgs_ein": 5,
    "locations": 211,
    "lat": 43.64581,
    "lng": -72.251,
@@ -2975,13 +2975,13 @@
     "nursing": 10,
     "chiropractic": 8,
     "eye-vision": 6,
-    "support": 4,
     "dietary": 4,
+    "support": 4,
     "student": 2,
-    "emergency-medical": 1,
-    "podiatry": 1,
+    "group": 1,
     "facility": 1,
-    "group": 1
+    "podiatry": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -3033,7 +3033,7 @@
    "county": "Sullivan County",
    "practitioners": 108,
    "with_role": 47,
-   "orgs_provider": 33,
+   "orgs_provider": 34,
    "orgs_ein": 1,
    "locations": 58,
    "lat": 43.36417,
@@ -3045,8 +3045,8 @@
     "advanced-practice": 13,
     "other-clinical": 12,
     "pharmacy": 7,
-    "dental": 3,
     "nursing": 3,
+    "dental": 3,
     "chiropractic": 3,
     "support": 2,
     "eye-vision": 1
@@ -3107,9 +3107,9 @@
    "lat": 43.38724,
    "lng": -72.09421,
    "by_category": {
-    "group": 1,
+    "rehab-therapy": 1,
     "behavioral-health": 1,
-    "rehab-therapy": 1
+    "group": 1
    }
   },
   {
@@ -3118,7 +3118,7 @@
    "county": "Grafton County",
    "practitioners": 122,
    "with_role": 14,
-   "orgs_provider": 25,
+   "orgs_provider": 28,
    "orgs_ein": 1,
    "locations": 87,
    "lat": 43.63916,
@@ -3133,9 +3133,9 @@
     "dental": 6,
     "physician": 4,
     "student": 2,
+    "group": 1,
     "chiropractic": 1,
-    "no-taxonomy": 1,
-    "group": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -3144,7 +3144,7 @@
    "county": "Grafton County",
    "practitioners": 59,
    "with_role": 23,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 23,
    "lat": 44.14182,
@@ -3166,8 +3166,8 @@
    "county": "Rockingham County",
    "practitioners": 1827,
    "with_role": 576,
-   "orgs_provider": 408,
-   "orgs_ein": 11,
+   "orgs_provider": 368,
+   "orgs_ein": 12,
    "locations": 727,
    "lat": 43.06966,
    "lng": -70.78187,
@@ -3184,13 +3184,13 @@
     "dietary": 33,
     "pharmacy": 31,
     "chiropractic": 29,
-    "group": 14,
     "support": 14,
-    "facility": 5,
+    "group": 14,
     "podiatry": 5,
-    "supplier": 1,
+    "facility": 5,
     "no-taxonomy": 1,
-    "agency": 1
+    "agency": 1,
+    "supplier": 1
    }
   },
   {
@@ -3218,8 +3218,8 @@
    "lat": 43.08968,
    "lng": -70.81674,
    "by_category": {
-    "pharmacy": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -3236,12 +3236,12 @@
    "by_category": {
     "other-clinical": 5,
     "advanced-practice": 3,
-    "behavioral-health": 3,
     "physician": 3,
+    "behavioral-health": 3,
     "rehab-therapy": 2,
-    "eye-vision": 1,
     "pharmacy": 1,
-    "dental": 1
+    "dental": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -3256,8 +3256,8 @@
    "lat": 43.45181,
    "lng": -71.2143,
    "by_category": {
-    "chiropractic": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -3273,9 +3273,9 @@
    "lng": -71.17698,
    "by_category": {
     "dental": 2,
-    "advanced-practice": 1,
     "behavioral-health": 1,
-    "facility": 1
+    "facility": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3297,7 +3297,7 @@
    "county": "Carroll County",
    "practitioners": 12,
    "with_role": 4,
-   "orgs_provider": 7,
+   "orgs_provider": 8,
    "orgs_ein": 1,
    "locations": 11,
    "lat": 44.0016,
@@ -3321,8 +3321,8 @@
    "lat": 43.75572,
    "lng": -71.14616,
    "by_category": {
-    "rehab-therapy": 1,
-    "dental": 1
+    "dental": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -3331,7 +3331,7 @@
    "county": "Carroll County",
    "practitioners": 205,
    "with_role": 63,
-   "orgs_provider": 32,
+   "orgs_provider": 34,
    "orgs_ein": 0,
    "locations": 49,
    "lat": 43.97995,
@@ -3341,13 +3341,13 @@
     "rehab-therapy": 21,
     "advanced-practice": 16,
     "nursing": 9,
-    "other-clinical": 8,
     "physician": 8,
+    "other-clinical": 8,
     "dental": 7,
     "chiropractic": 2,
-    "eye-vision": 1,
+    "group": 1,
     "support": 1,
-    "group": 1
+    "eye-vision": 1
    }
   },
   {
@@ -3371,7 +3371,7 @@
    "county": "Strafford County",
    "practitioners": 1153,
    "with_role": 439,
-   "orgs_provider": 206,
+   "orgs_provider": 213,
    "orgs_ein": 8,
    "locations": 465,
    "lat": 43.20224,
@@ -3392,11 +3392,11 @@
     "group": 6,
     "podiatry": 3,
     "no-taxonomy": 2,
-    "supplier": 1,
-    "facility": 1,
-    "student": 1,
     "support": 1,
-    "emergency-medical": 1
+    "facility": 1,
+    "supplier": 1,
+    "emergency-medical": 1,
+    "student": 1
    }
   },
   {
@@ -3405,7 +3405,7 @@
    "county": null,
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 43.19471,
@@ -3433,7 +3433,7 @@
    "county": "Strafford County",
    "practitioners": 105,
    "with_role": 13,
-   "orgs_provider": 30,
+   "orgs_provider": 34,
    "orgs_ein": 1,
    "locations": 63,
    "lat": 43.1355,
@@ -3444,10 +3444,10 @@
     "pharmacy": 7,
     "advanced-practice": 6,
     "student": 4,
-    "dietary": 3,
-    "physician": 3,
-    "nursing": 3,
     "dental": 3,
+    "dietary": 3,
+    "nursing": 3,
+    "physician": 3,
     "chiropractic": 3,
     "group": 2
    }
@@ -3468,9 +3468,9 @@
     "rehab-therapy": 7,
     "chiropractic": 3,
     "nursing": 1,
-    "dental": 1,
+    "physician": 1,
     "eye-vision": 1,
-    "physician": 1
+    "dental": 1
    }
   },
   {
@@ -3510,7 +3510,7 @@
    "county": "Rockingham County",
    "practitioners": 659,
    "with_role": 361,
-   "orgs_provider": 174,
+   "orgs_provider": 167,
    "orgs_ein": 8,
    "locations": 290,
    "lat": 42.97999,
@@ -3526,9 +3526,9 @@
     "chiropractic": 12,
     "nursing": 9,
     "dietary": 8,
+    "eye-vision": 3,
     "student": 3,
     "group": 3,
-    "eye-vision": 3,
     "podiatry": 1
    }
   },
@@ -3538,7 +3538,7 @@
    "county": "Strafford County",
    "practitioners": 6,
    "with_role": 4,
-   "orgs_provider": 4,
+   "orgs_provider": 6,
    "orgs_ein": 0,
    "locations": 12,
    "lat": 43.38214,
@@ -3560,8 +3560,8 @@
    "lat": 43.80749,
    "lng": -71.07904,
    "by_category": {
-    "nursing": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "nursing": 1
    }
   },
   {
@@ -3601,8 +3601,8 @@
    "county": "Strafford County",
    "practitioners": 23,
    "with_role": 5,
-   "orgs_provider": 9,
-   "orgs_ein": 0,
+   "orgs_provider": 13,
+   "orgs_ein": 1,
    "locations": 14,
    "lat": 43.2796,
    "lng": -70.98205,
@@ -3610,8 +3610,8 @@
     "behavioral-health": 10,
     "dental": 5,
     "rehab-therapy": 3,
-    "physician": 2,
     "advanced-practice": 2,
+    "physician": 2,
     "dietary": 1
    }
   },
@@ -3621,7 +3621,7 @@
    "county": "Rockingham County",
    "practitioners": 76,
    "with_role": 9,
-   "orgs_provider": 17,
+   "orgs_provider": 19,
    "orgs_ein": 1,
    "locations": 48,
    "lat": 43.03897,
@@ -3632,12 +3632,12 @@
     "other-clinical": 7,
     "pharmacy": 5,
     "dental": 3,
-    "nursing": 1,
     "eye-vision": 1,
-    "chiropractic": 1,
-    "emergency-medical": 1,
     "group": 1,
-    "physician": 1
+    "chiropractic": 1,
+    "nursing": 1,
+    "physician": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -3646,7 +3646,7 @@
    "county": "Rockingham County",
    "practitioners": 41,
    "with_role": 9,
-   "orgs_provider": 22,
+   "orgs_provider": 21,
    "orgs_ein": 0,
    "locations": 39,
    "lat": 42.86705,
@@ -3655,11 +3655,11 @@
     "behavioral-health": 23,
     "rehab-therapy": 9,
     "other-clinical": 3,
-    "pharmacy": 1,
-    "group": 1,
-    "physician": 1,
-    "dental": 1,
     "advanced-practice": 1,
+    "group": 1,
+    "dental": 1,
+    "physician": 1,
+    "pharmacy": 1,
     "facility": 1
    }
   },
@@ -3669,7 +3669,7 @@
    "county": "Rockingham County",
    "practitioners": 124,
    "with_role": 16,
-   "orgs_provider": 52,
+   "orgs_provider": 57,
    "orgs_ein": 2,
    "locations": 123,
    "lat": 42.94153,
@@ -3680,14 +3680,14 @@
     "pharmacy": 19,
     "dental": 10,
     "physician": 7,
-    "eye-vision": 5,
-    "other-clinical": 5,
     "advanced-practice": 5,
+    "other-clinical": 5,
+    "eye-vision": 5,
     "chiropractic": 4,
-    "podiatry": 2,
     "support": 2,
-    "dietary": 1,
+    "podiatry": 2,
     "facility": 1,
+    "dietary": 1,
     "group": 1
    }
   },
@@ -3717,11 +3717,11 @@
    "lng": -70.86366,
    "by_category": {
     "rehab-therapy": 27,
-    "chiropractic": 1,
-    "no-taxonomy": 1,
+    "other-clinical": 1,
     "behavioral-health": 1,
     "group": 1,
-    "other-clinical": 1
+    "chiropractic": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -3753,8 +3753,8 @@
    "lng": -71.05951,
    "by_category": {
     "rehab-therapy": 6,
-    "behavioral-health": 5,
     "advanced-practice": 5,
+    "behavioral-health": 5,
     "dental": 3,
     "chiropractic": 1,
     "physician": 1
@@ -3782,7 +3782,7 @@
    "county": "Strafford County",
    "practitioners": 5,
    "with_role": 4,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 6,
    "lat": 43.40677,
@@ -3826,7 +3826,7 @@
    "county": "Rockingham County",
    "practitioners": 41,
    "with_role": 13,
-   "orgs_provider": 10,
+   "orgs_provider": 11,
    "orgs_ein": 1,
    "locations": 30,
    "lat": 43.07547,
@@ -3840,8 +3840,8 @@
     "rehab-therapy": 3,
     "chiropractic": 2,
     "nursing": 2,
-    "other-clinical": 1,
-    "dietary": 1
+    "dietary": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -3866,7 +3866,7 @@
    "county": "Carroll County",
    "practitioners": 165,
    "with_role": 68,
-   "orgs_provider": 47,
+   "orgs_provider": 50,
    "orgs_ein": 2,
    "locations": 69,
    "lat": 44.04274,
@@ -3879,12 +3879,12 @@
     "pharmacy": 15,
     "dental": 8,
     "eye-vision": 6,
-    "other-clinical": 4,
     "dietary": 4,
-    "podiatry": 1,
+    "other-clinical": 4,
+    "nursing": 1,
     "group": 1,
     "transport": 1,
-    "nursing": 1
+    "podiatry": 1
    }
   },
   {
@@ -3893,7 +3893,7 @@
    "county": "Strafford County",
    "practitioners": 60,
    "with_role": 35,
-   "orgs_provider": 8,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 20,
    "lat": 43.14571,
@@ -3903,8 +3903,8 @@
     "rehab-therapy": 17,
     "physician": 10,
     "pharmacy": 7,
-    "group": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "group": 1
    }
   },
   {
@@ -3913,18 +3913,18 @@
    "county": "Rockingham County",
    "practitioners": 43,
    "with_role": 8,
-   "orgs_provider": 23,
+   "orgs_provider": 25,
    "orgs_ein": 1,
    "locations": 54,
    "lat": 42.97789,
    "lng": -70.82901,
    "by_category": {
     "rehab-therapy": 9,
-    "behavioral-health": 7,
     "pharmacy": 7,
+    "behavioral-health": 7,
     "chiropractic": 5,
-    "dental": 4,
     "physician": 4,
+    "dental": 4,
     "other-clinical": 2,
     "advanced-practice": 2,
     "group": 1,
@@ -3938,7 +3938,7 @@
    "county": "Carroll County",
    "practitioners": 19,
    "with_role": 2,
-   "orgs_provider": 12,
+   "orgs_provider": 15,
    "orgs_ein": 1,
    "locations": 21,
    "lat": 43.68862,
@@ -3947,8 +3947,8 @@
     "rehab-therapy": 14,
     "advanced-practice": 2,
     "pharmacy": 1,
-    "behavioral-health": 1,
-    "agency": 1
+    "agency": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -3957,7 +3957,7 @@
    "county": "Rockingham County",
    "practitioners": 135,
    "with_role": 59,
-   "orgs_provider": 30,
+   "orgs_provider": 36,
    "orgs_ein": 1,
    "locations": 82,
    "lat": 42.83079,
@@ -3982,8 +3982,8 @@
    "county": "Strafford County",
    "practitioners": 376,
    "with_role": 137,
-   "orgs_provider": 92,
-   "orgs_ein": 7,
+   "orgs_provider": 99,
+   "orgs_ein": 6,
    "locations": 188,
    "lat": 43.30166,
    "lng": -70.97091,
@@ -3995,14 +3995,14 @@
     "pharmacy": 26,
     "dental": 21,
     "eye-vision": 9,
-    "chiropractic": 6,
     "other-clinical": 6,
-    "group": 6,
+    "chiropractic": 6,
     "nursing": 6,
+    "group": 6,
     "emergency-medical": 3,
     "podiatry": 2,
-    "dietary": 1,
-    "facility": 1
+    "facility": 1,
+    "dietary": 1
    }
   },
   {
@@ -4034,8 +4034,8 @@
    "lat": 43.23535,
    "lng": -70.81787,
    "by_category": {
-    "behavioral-health": 3,
-    "rehab-therapy": 3
+    "rehab-therapy": 3,
+    "behavioral-health": 3
    }
   },
   {
@@ -4054,8 +4054,8 @@
     "behavioral-health": 6,
     "physician": 5,
     "chiropractic": 2,
-    "dental": 1,
     "podiatry": 1,
+    "dental": 1,
     "advanced-practice": 1,
     "facility": 1
    }
@@ -4074,9 +4074,9 @@
    "by_category": {
     "rehab-therapy": 5,
     "advanced-practice": 3,
-    "chiropractic": 1,
+    "physician": 1,
     "behavioral-health": 1,
-    "physician": 1
+    "chiropractic": 1
    }
   },
   {
@@ -4092,8 +4092,8 @@
    "lng": -71.18466,
    "by_category": {
     "rehab-therapy": 6,
-    "other-clinical": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -4102,8 +4102,8 @@
    "county": "Rockingham County",
    "practitioners": 47,
    "with_role": 18,
-   "orgs_provider": 23,
-   "orgs_ein": 0,
+   "orgs_provider": 29,
+   "orgs_ein": 1,
    "locations": 62,
    "lat": 42.88901,
    "lng": -70.86912,
@@ -4111,14 +4111,14 @@
     "pharmacy": 10,
     "behavioral-health": 9,
     "dental": 7,
+    "physician": 4,
     "rehab-therapy": 4,
     "advanced-practice": 4,
-    "physician": 4,
-    "chiropractic": 3,
     "eye-vision": 3,
-    "transport": 1,
+    "chiropractic": 3,
+    "nursing": 1,
     "group": 1,
-    "nursing": 1
+    "transport": 1
    }
   },
   {
@@ -4127,7 +4127,7 @@
    "county": "Strafford County",
    "practitioners": 238,
    "with_role": 65,
-   "orgs_provider": 57,
+   "orgs_provider": 60,
    "orgs_ein": 6,
    "locations": 131,
    "lat": 43.24647,
@@ -4139,14 +4139,14 @@
     "physician": 27,
     "dental": 21,
     "pharmacy": 15,
-    "nursing": 7,
     "other-clinical": 7,
+    "nursing": 7,
     "dietary": 7,
     "eye-vision": 2,
     "chiropractic": 2,
-    "transport": 1,
     "group": 1,
-    "student": 1
+    "student": 1,
+    "transport": 1
    }
   },
   {
@@ -4164,9 +4164,9 @@
     "behavioral-health": 5,
     "advanced-practice": 4,
     "rehab-therapy": 2,
-    "physician": 1,
+    "student": 1,
     "pharmacy": 1,
-    "student": 1
+    "physician": 1
    }
   },
   {
@@ -4191,7 +4191,7 @@
    "county": "Rockingham County",
    "practitioners": 160,
    "with_role": 77,
-   "orgs_provider": 66,
+   "orgs_provider": 63,
    "orgs_ein": 3,
    "locations": 89,
    "lat": 43.01383,
@@ -4203,10 +4203,10 @@
     "behavioral-health": 12,
     "pharmacy": 10,
     "other-clinical": 5,
-    "chiropractic": 4,
     "dental": 4,
-    "nursing": 2,
+    "chiropractic": 4,
     "dietary": 2,
+    "nursing": 2,
     "eye-vision": 1,
     "emergency-medical": 1,
     "group": 1
@@ -4218,7 +4218,7 @@
    "county": "Carroll County",
    "practitioners": 7,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 6,
    "orgs_ein": 0,
    "locations": 12,
    "lat": 43.85111,
@@ -4242,8 +4242,8 @@
    "lat": 43.50197,
    "lng": -71.04029,
    "by_category": {
-    "dental": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "dental": 1
    }
   },
   {
@@ -4265,7 +4265,7 @@
    "county": "Carroll County",
    "practitioners": 157,
    "with_role": 64,
-   "orgs_provider": 38,
+   "orgs_provider": 42,
    "orgs_ein": 1,
    "locations": 73,
    "lat": 43.58518,
@@ -4278,14 +4278,14 @@
     "pharmacy": 6,
     "nursing": 5,
     "other-clinical": 5,
-    "dental": 3,
-    "chiropractic": 3,
     "dietary": 3,
+    "chiropractic": 3,
+    "dental": 3,
     "group": 2,
     "emergency-medical": 2,
     "podiatry": 1,
-    "student": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "student": 1
    }
   },
   {
@@ -4317,5 +4317,5 @@
    "by_category": {}
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address, and placed 63,194 of 2,058,500 organizations in another state (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

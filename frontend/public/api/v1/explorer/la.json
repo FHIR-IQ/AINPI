@@ -1,13 +1,13 @@
 {
  "state": "LA",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 79087,
   "with_role": 30448,
-  "orgs_provider": 26390,
-  "orgs_ein": 1108,
+  "orgs_provider": 26529,
+  "orgs_ein": 1098,
   "orgs_other": 0,
   "locations": 38071,
   "with_coords": 37132
@@ -155,8 +155,8 @@
    "practitioners": 10577,
    "with_role": 3395,
    "role_pct": 32.1,
-   "orgs_provider": 3464,
-   "orgs_ein": 147,
+   "orgs_provider": 3404,
+   "orgs_ein": 127,
    "by_category": {
     "behavioral-health": 3580,
     "physician": 1417,
@@ -175,8 +175,8 @@
    "practitioners": 9311,
    "with_role": 3636,
    "role_pct": 39.1,
-   "orgs_provider": 2710,
-   "orgs_ein": 101,
+   "orgs_provider": 2673,
+   "orgs_ein": 106,
    "by_category": {
     "behavioral-health": 2546,
     "physician": 1990,
@@ -195,8 +195,8 @@
    "practitioners": 8777,
    "with_role": 2952,
    "role_pct": 33.6,
-   "orgs_provider": 2048,
-   "orgs_ein": 74,
+   "orgs_provider": 2105,
+   "orgs_ein": 79,
    "by_category": {
     "behavioral-health": 2292,
     "physician": 2235,
@@ -215,8 +215,8 @@
    "practitioners": 7760,
    "with_role": 2636,
    "role_pct": 34.0,
-   "orgs_provider": 1813,
-   "orgs_ein": 68,
+   "orgs_provider": 1861,
+   "orgs_ein": 67,
    "by_category": {
     "behavioral-health": 1934,
     "physician": 1705,
@@ -235,8 +235,8 @@
    "practitioners": 6008,
    "with_role": 2682,
    "role_pct": 44.6,
-   "orgs_provider": 2606,
-   "orgs_ein": 93,
+   "orgs_provider": 2192,
+   "orgs_ein": 83,
    "by_category": {
     "behavioral-health": 1612,
     "physician": 1159,
@@ -255,8 +255,8 @@
    "practitioners": 5277,
    "with_role": 2725,
    "role_pct": 51.6,
-   "orgs_provider": 1666,
-   "orgs_ein": 77,
+   "orgs_provider": 1727,
+   "orgs_ein": 75,
    "by_category": {
     "physician": 1695,
     "behavioral-health": 903,
@@ -275,8 +275,8 @@
    "practitioners": 3787,
    "with_role": 1239,
    "role_pct": 32.7,
-   "orgs_provider": 1382,
-   "orgs_ein": 58,
+   "orgs_provider": 1423,
+   "orgs_ein": 61,
    "by_category": {
     "behavioral-health": 1019,
     "other-clinical": 781,
@@ -295,8 +295,8 @@
    "practitioners": 2882,
    "with_role": 1278,
    "role_pct": 44.3,
-   "orgs_provider": 1000,
-   "orgs_ein": 49,
+   "orgs_provider": 1065,
+   "orgs_ein": 51,
    "by_category": {
     "behavioral-health": 608,
     "rehab-therapy": 448,
@@ -315,8 +315,8 @@
    "practitioners": 2478,
    "with_role": 683,
    "role_pct": 27.6,
-   "orgs_provider": 957,
-   "orgs_ein": 31,
+   "orgs_provider": 1013,
+   "orgs_ein": 30,
    "by_category": {
     "behavioral-health": 701,
     "other-clinical": 398,
@@ -335,8 +335,8 @@
    "practitioners": 2060,
    "with_role": 1180,
    "role_pct": 57.3,
-   "orgs_provider": 351,
-   "orgs_ein": 10,
+   "orgs_provider": 362,
+   "orgs_ein": 9,
    "by_category": {
     "physician": 612,
     "advanced-practice": 370,
@@ -355,7 +355,7 @@
    "practitioners": 1832,
    "with_role": 680,
    "role_pct": 37.1,
-   "orgs_provider": 698,
+   "orgs_provider": 722,
    "orgs_ein": 37,
    "by_category": {
     "behavioral-health": 492,
@@ -375,8 +375,8 @@
    "practitioners": 1583,
    "with_role": 405,
    "role_pct": 25.6,
-   "orgs_provider": 554,
-   "orgs_ein": 20,
+   "orgs_provider": 560,
+   "orgs_ein": 16,
    "by_category": {
     "behavioral-health": 503,
     "other-clinical": 396,
@@ -395,7 +395,7 @@
    "practitioners": 1546,
    "with_role": 765,
    "role_pct": 49.5,
-   "orgs_provider": 401,
+   "orgs_provider": 411,
    "orgs_ein": 16,
    "by_category": {
     "behavioral-health": 451,
@@ -415,8 +415,8 @@
    "practitioners": 1477,
    "with_role": 466,
    "role_pct": 31.6,
-   "orgs_provider": 576,
-   "orgs_ein": 19,
+   "orgs_provider": 521,
+   "orgs_ein": 20,
    "by_category": {
     "behavioral-health": 315,
     "other-clinical": 273,
@@ -435,8 +435,8 @@
    "practitioners": 1073,
    "with_role": 325,
    "role_pct": 30.3,
-   "orgs_provider": 300,
-   "orgs_ein": 12,
+   "orgs_provider": 314,
+   "orgs_ein": 11,
    "by_category": {
     "behavioral-health": 324,
     "rehab-therapy": 301,
@@ -455,7 +455,7 @@
    "practitioners": 894,
    "with_role": 546,
    "role_pct": 61.1,
-   "orgs_provider": 346,
+   "orgs_provider": 359,
    "orgs_ein": 18,
    "by_category": {
     "advanced-practice": 296,
@@ -475,7 +475,7 @@
    "practitioners": 694,
    "with_role": 448,
    "role_pct": 64.6,
-   "orgs_provider": 165,
+   "orgs_provider": 172,
    "orgs_ein": 8,
    "by_category": {
     "physician": 248,
@@ -495,7 +495,7 @@
    "practitioners": 664,
    "with_role": 260,
    "role_pct": 39.2,
-   "orgs_provider": 285,
+   "orgs_provider": 300,
    "orgs_ein": 15,
    "by_category": {
     "behavioral-health": 216,
@@ -515,8 +515,8 @@
    "practitioners": 639,
    "with_role": 268,
    "role_pct": 41.9,
-   "orgs_provider": 152,
-   "orgs_ein": 16,
+   "orgs_provider": 155,
+   "orgs_ein": 15,
    "by_category": {
     "physician": 160,
     "behavioral-health": 124,
@@ -535,8 +535,8 @@
    "practitioners": 636,
    "with_role": 441,
    "role_pct": 69.3,
-   "orgs_provider": 291,
-   "orgs_ein": 6,
+   "orgs_provider": 300,
+   "orgs_ein": 5,
    "by_category": {
     "physician": 202,
     "advanced-practice": 190,
@@ -544,8 +544,8 @@
     "rehab-therapy": 45,
     "pharmacy": 30,
     "other-clinical": 26,
-    "dental": 24,
-    "nursing": 24
+    "nursing": 24,
+    "dental": 24
    }
   },
   {
@@ -555,8 +555,8 @@
    "practitioners": 631,
    "with_role": 236,
    "role_pct": 37.4,
-   "orgs_provider": 380,
-   "orgs_ein": 18,
+   "orgs_provider": 412,
+   "orgs_ein": 19,
    "by_category": {
     "behavioral-health": 135,
     "physician": 111,
@@ -575,7 +575,7 @@
    "practitioners": 584,
    "with_role": 138,
    "role_pct": 23.6,
-   "orgs_provider": 92,
+   "orgs_provider": 81,
    "orgs_ein": 1,
    "by_category": {
     "behavioral-health": 342,
@@ -595,8 +595,8 @@
    "practitioners": 486,
    "with_role": 208,
    "role_pct": 42.8,
-   "orgs_provider": 260,
-   "orgs_ein": 16,
+   "orgs_provider": 252,
+   "orgs_ein": 18,
    "by_category": {
     "behavioral-health": 103,
     "physician": 88,
@@ -615,8 +615,8 @@
    "practitioners": 442,
    "with_role": 226,
    "role_pct": 51.1,
-   "orgs_provider": 234,
-   "orgs_ein": 15,
+   "orgs_provider": 243,
+   "orgs_ein": 17,
    "by_category": {
     "physician": 138,
     "advanced-practice": 75,
@@ -635,7 +635,7 @@
    "practitioners": 433,
    "with_role": 149,
    "role_pct": 34.4,
-   "orgs_provider": 234,
+   "orgs_provider": 251,
    "orgs_ein": 9,
    "by_category": {
     "behavioral-health": 144,
@@ -655,7 +655,7 @@
    "practitioners": 375,
    "with_role": 136,
    "role_pct": 36.3,
-   "orgs_provider": 210,
+   "orgs_provider": 219,
    "orgs_ein": 7,
    "by_category": {
     "behavioral-health": 71,
@@ -675,8 +675,8 @@
    "practitioners": 373,
    "with_role": 208,
    "role_pct": 55.8,
-   "orgs_provider": 176,
-   "orgs_ein": 11,
+   "orgs_provider": 182,
+   "orgs_ein": 12,
    "by_category": {
     "physician": 103,
     "advanced-practice": 91,
@@ -695,7 +695,7 @@
    "practitioners": 352,
    "with_role": 88,
    "role_pct": 25.0,
-   "orgs_provider": 145,
+   "orgs_provider": 152,
    "orgs_ein": 10,
    "by_category": {
     "behavioral-health": 127,
@@ -715,7 +715,7 @@
    "practitioners": 342,
    "with_role": 128,
    "role_pct": 37.4,
-   "orgs_provider": 168,
+   "orgs_provider": 172,
    "orgs_ein": 7,
    "by_category": {
     "rehab-therapy": 122,
@@ -735,8 +735,8 @@
    "practitioners": 341,
    "with_role": 74,
    "role_pct": 21.7,
-   "orgs_provider": 199,
-   "orgs_ein": 8,
+   "orgs_provider": 213,
+   "orgs_ein": 9,
    "by_category": {
     "behavioral-health": 119,
     "other-clinical": 54,
@@ -744,8 +744,8 @@
     "physician": 29,
     "pharmacy": 28,
     "advanced-practice": 20,
-    "dental": 18,
-    "nursing": 18
+    "nursing": 18,
+    "dental": 18
    }
   },
   {
@@ -755,7 +755,7 @@
    "practitioners": 339,
    "with_role": 48,
    "role_pct": 14.2,
-   "orgs_provider": 125,
+   "orgs_provider": 137,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 194,
@@ -764,8 +764,8 @@
     "rehab-therapy": 20,
     "dental": 17,
     "advanced-practice": 12,
-    "physician": 5,
-    "group": 5
+    "group": 5,
+    "physician": 5
    }
   },
   {
@@ -775,7 +775,7 @@
    "practitioners": 334,
    "with_role": 107,
    "role_pct": 32.0,
-   "orgs_provider": 168,
+   "orgs_provider": 171,
    "orgs_ein": 5,
    "by_category": {
     "behavioral-health": 133,
@@ -795,7 +795,7 @@
    "practitioners": 298,
    "with_role": 96,
    "role_pct": 32.2,
-   "orgs_provider": 167,
+   "orgs_provider": 177,
    "orgs_ein": 10,
    "by_category": {
     "behavioral-health": 89,
@@ -815,7 +815,7 @@
    "practitioners": 266,
    "with_role": 141,
    "role_pct": 53.0,
-   "orgs_provider": 47,
+   "orgs_provider": 49,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 125,
@@ -835,7 +835,7 @@
    "practitioners": 228,
    "with_role": 41,
    "role_pct": 18.0,
-   "orgs_provider": 146,
+   "orgs_provider": 154,
    "orgs_ein": 6,
    "by_category": {
     "behavioral-health": 112,
@@ -843,8 +843,8 @@
     "other-clinical": 26,
     "rehab-therapy": 13,
     "advanced-practice": 12,
-    "nursing": 9,
     "dental": 9,
+    "nursing": 9,
     "physician": 7
    }
   },
@@ -855,8 +855,8 @@
    "practitioners": 220,
    "with_role": 156,
    "role_pct": 70.9,
-   "orgs_provider": 114,
-   "orgs_ein": 8,
+   "orgs_provider": 119,
+   "orgs_ein": 9,
    "by_category": {
     "physician": 85,
     "advanced-practice": 59,
@@ -875,7 +875,7 @@
    "practitioners": 217,
    "with_role": 93,
    "role_pct": 42.9,
-   "orgs_provider": 112,
+   "orgs_provider": 120,
    "orgs_ein": 10,
    "by_category": {
     "rehab-therapy": 51,
@@ -895,7 +895,7 @@
    "practitioners": 215,
    "with_role": 104,
    "role_pct": 48.4,
-   "orgs_provider": 136,
+   "orgs_provider": 144,
    "orgs_ein": 7,
    "by_category": {
     "behavioral-health": 57,
@@ -915,7 +915,7 @@
    "practitioners": 213,
    "with_role": 37,
    "role_pct": 17.4,
-   "orgs_provider": 69,
+   "orgs_provider": 72,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 75,
@@ -935,7 +935,7 @@
    "practitioners": 208,
    "with_role": 89,
    "role_pct": 42.8,
-   "orgs_provider": 73,
+   "orgs_provider": 83,
    "orgs_ein": 6,
    "by_category": {
     "advanced-practice": 49,
@@ -945,7 +945,7 @@
     "physician": 20,
     "rehab-therapy": 17,
     "pharmacy": 9,
-    "group": 5
+    "nursing": 5
    }
   },
   {
@@ -955,7 +955,7 @@
    "practitioners": 202,
    "with_role": 88,
    "role_pct": 43.6,
-   "orgs_provider": 56,
+   "orgs_provider": 62,
    "orgs_ein": 3,
    "by_category": {
     "behavioral-health": 71,
@@ -965,7 +965,7 @@
     "pharmacy": 13,
     "rehab-therapy": 11,
     "nursing": 5,
-    "dental": 1
+    "group": 1
    }
   },
   {
@@ -981,11 +981,11 @@
     "physician": 63,
     "other-clinical": 29,
     "behavioral-health": 22,
-    "advanced-practice": 16,
     "rehab-therapy": 16,
+    "advanced-practice": 16,
     "pharmacy": 14,
     "dietary": 4,
-    "chiropractic": 4
+    "group": 4
    }
   },
   {
@@ -995,8 +995,8 @@
    "practitioners": 173,
    "with_role": 84,
    "role_pct": 48.6,
-   "orgs_provider": 191,
-   "orgs_ein": 9,
+   "orgs_provider": 202,
+   "orgs_ein": 10,
    "by_category": {
     "advanced-practice": 39,
     "rehab-therapy": 29,
@@ -1015,13 +1015,13 @@
    "practitioners": 170,
    "with_role": 18,
    "role_pct": 10.6,
-   "orgs_provider": 94,
-   "orgs_ein": 4,
+   "orgs_provider": 115,
+   "orgs_ein": 6,
    "by_category": {
     "behavioral-health": 79,
     "pharmacy": 16,
-    "rehab-therapy": 13,
     "physician": 13,
+    "rehab-therapy": 13,
     "other-clinical": 12,
     "advanced-practice": 11,
     "dental": 8,
@@ -1035,7 +1035,7 @@
    "practitioners": 149,
    "with_role": 50,
    "role_pct": 33.6,
-   "orgs_provider": 43,
+   "orgs_provider": 45,
    "orgs_ein": 4,
    "by_category": {
     "behavioral-health": 37,
@@ -1044,8 +1044,8 @@
     "other-clinical": 23,
     "rehab-therapy": 17,
     "pharmacy": 11,
-    "nursing": 2,
-    "dental": 2
+    "dental": 2,
+    "nursing": 2
    }
   },
   {
@@ -1055,7 +1055,7 @@
    "practitioners": 125,
    "with_role": 67,
    "role_pct": 53.6,
-   "orgs_provider": 71,
+   "orgs_provider": 73,
    "orgs_ein": 5,
    "by_category": {
     "rehab-therapy": 38,
@@ -1075,7 +1075,7 @@
    "practitioners": 118,
    "with_role": 32,
    "role_pct": 27.1,
-   "orgs_provider": 61,
+   "orgs_provider": 65,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 35,
@@ -1085,7 +1085,7 @@
     "other-clinical": 10,
     "physician": 5,
     "nursing": 4,
-    "dental": 2
+    "supplier": 2
    }
   },
   {
@@ -1095,8 +1095,8 @@
    "practitioners": 114,
    "with_role": 57,
    "role_pct": 50.0,
-   "orgs_provider": 71,
-   "orgs_ein": 5,
+   "orgs_provider": 77,
+   "orgs_ein": 4,
    "by_category": {
     "physician": 30,
     "behavioral-health": 22,
@@ -1115,7 +1115,7 @@
    "practitioners": 113,
    "with_role": 13,
    "role_pct": 11.5,
-   "orgs_provider": 47,
+   "orgs_provider": 48,
    "orgs_ein": 1,
    "by_category": {
     "behavioral-health": 34,
@@ -1135,13 +1135,13 @@
    "practitioners": 100,
    "with_role": 37,
    "role_pct": 37.0,
-   "orgs_provider": 92,
+   "orgs_provider": 93,
    "orgs_ein": 4,
    "by_category": {
     "behavioral-health": 17,
     "advanced-practice": 15,
-    "pharmacy": 13,
     "other-clinical": 13,
+    "pharmacy": 13,
     "rehab-therapy": 12,
     "physician": 12,
     "nursing": 6,
@@ -1155,7 +1155,7 @@
    "practitioners": 97,
    "with_role": 30,
    "role_pct": 30.9,
-   "orgs_provider": 40,
+   "orgs_provider": 47,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 35,
@@ -1163,8 +1163,8 @@
     "physician": 10,
     "dental": 7,
     "pharmacy": 6,
-    "other-clinical": 4,
     "nursing": 4,
+    "other-clinical": 4,
     "advanced-practice": 3
    }
   },
@@ -1175,8 +1175,8 @@
    "practitioners": 82,
    "with_role": 32,
    "role_pct": 39.0,
-   "orgs_provider": 46,
-   "orgs_ein": 3,
+   "orgs_provider": 49,
+   "orgs_ein": 4,
    "by_category": {
     "rehab-therapy": 21,
     "behavioral-health": 17,
@@ -1195,7 +1195,7 @@
    "practitioners": 77,
    "with_role": 17,
    "role_pct": 22.1,
-   "orgs_provider": 27,
+   "orgs_provider": 33,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 34,
@@ -1203,8 +1203,8 @@
     "advanced-practice": 7,
     "pharmacy": 6,
     "physician": 5,
-    "dental": 2,
     "nursing": 2,
+    "dental": 2,
     "agency": 1
    }
   },
@@ -1215,7 +1215,7 @@
    "practitioners": 75,
    "with_role": 62,
    "role_pct": 82.7,
-   "orgs_provider": 41,
+   "orgs_provider": 44,
    "orgs_ein": 4,
    "by_category": {
     "physician": 39,
@@ -1225,7 +1225,7 @@
     "other-clinical": 2,
     "eye-vision": 2,
     "chiropractic": 1,
-    "nursing": 1
+    "dietary": 1
    }
   },
   {
@@ -1235,14 +1235,14 @@
    "practitioners": 61,
    "with_role": 30,
    "role_pct": 49.2,
-   "orgs_provider": 43,
-   "orgs_ein": 2,
+   "orgs_provider": 48,
+   "orgs_ein": 3,
    "by_category": {
     "rehab-therapy": 19,
     "advanced-practice": 14,
     "pharmacy": 6,
-    "behavioral-health": 5,
     "physician": 5,
+    "behavioral-health": 5,
     "other-clinical": 5,
     "nursing": 3,
     "group": 2
@@ -1255,7 +1255,7 @@
    "practitioners": 57,
    "with_role": 54,
    "role_pct": 94.7,
-   "orgs_provider": 19,
+   "orgs_provider": 21,
    "orgs_ein": 1,
    "by_category": {
     "advanced-practice": 25,
@@ -1274,8 +1274,8 @@
    "practitioners": 50,
    "with_role": 11,
    "role_pct": 22.0,
-   "orgs_provider": 66,
-   "orgs_ein": 4,
+   "orgs_provider": 71,
+   "orgs_ein": 5,
    "by_category": {
     "behavioral-health": 11,
     "pharmacy": 8,
@@ -1284,7 +1284,7 @@
     "advanced-practice": 3,
     "other-clinical": 3,
     "nursing": 3,
-    "eye-vision": 3
+    "physician": 3
    }
   },
   {
@@ -1294,8 +1294,8 @@
    "practitioners": 46,
    "with_role": 28,
    "role_pct": 60.9,
-   "orgs_provider": 47,
-   "orgs_ein": 2,
+   "orgs_provider": 55,
+   "orgs_ein": 3,
    "by_category": {
     "advanced-practice": 17,
     "behavioral-health": 8,
@@ -1314,17 +1314,17 @@
    "practitioners": 45,
    "with_role": 24,
    "role_pct": 53.3,
-   "orgs_provider": 66,
-   "orgs_ein": 2,
+   "orgs_provider": 75,
+   "orgs_ein": 3,
    "by_category": {
     "physician": 13,
     "advanced-practice": 11,
     "pharmacy": 5,
     "nursing": 3,
     "rehab-therapy": 3,
-    "other-clinical": 2,
     "eye-vision": 2,
-    "support": 1
+    "other-clinical": 2,
+    "dental": 1
    }
   },
   {
@@ -1334,7 +1334,7 @@
    "practitioners": 45,
    "with_role": 38,
    "role_pct": 84.4,
-   "orgs_provider": 18,
+   "orgs_provider": 21,
    "orgs_ein": 1,
    "by_category": {
     "advanced-practice": 30,
@@ -1352,8 +1352,8 @@
    "practitioners": 43,
    "with_role": 19,
    "role_pct": 44.2,
-   "orgs_provider": 41,
-   "orgs_ein": 2,
+   "orgs_provider": 42,
+   "orgs_ein": 3,
    "by_category": {
     "rehab-therapy": 15,
     "pharmacy": 7,
@@ -1372,7 +1372,7 @@
    "practitioners": 38,
    "with_role": 19,
    "role_pct": 50.0,
-   "orgs_provider": 30,
+   "orgs_provider": 34,
    "orgs_ein": 3,
    "by_category": {
     "advanced-practice": 10,
@@ -1382,7 +1382,7 @@
     "rehab-therapy": 3,
     "nursing": 2,
     "other-clinical": 2,
-    "transport": 1
+    "group": 1
    }
   },
   {
@@ -1392,7 +1392,7 @@
    "practitioners": 28,
    "with_role": 17,
    "role_pct": 60.7,
-   "orgs_provider": 34,
+   "orgs_provider": 37,
    "orgs_ein": 0,
    "by_category": {
     "physician": 12,
@@ -1410,14 +1410,14 @@
    "practitioners": 25,
    "with_role": 6,
    "role_pct": 24.0,
-   "orgs_provider": 37,
+   "orgs_provider": 41,
    "orgs_ein": 1,
    "by_category": {
     "pharmacy": 9,
     "behavioral-health": 5,
     "nursing": 3,
-    "dental": 2,
     "rehab-therapy": 2,
+    "dental": 2,
     "advanced-practice": 2,
     "other-clinical": 1,
     "physician": 1
@@ -1436,8 +1436,8 @@
     "behavioral-health": 7,
     "physician": 5,
     "advanced-practice": 4,
-    "nursing": 3,
     "rehab-therapy": 3,
+    "nursing": 3,
     "dental": 1
    }
   }
@@ -1475,8 +1475,8 @@
    "county": "Jefferson Parish",
    "practitioners": 885,
    "with_role": 404,
-   "orgs_provider": 298,
-   "orgs_ein": 17,
+   "orgs_provider": 263,
+   "orgs_ein": 14,
    "locations": 428,
    "lat": 29.99061,
    "lng": -90.16944,
@@ -1494,8 +1494,8 @@
     "chiropractic": 18,
     "podiatry": 10,
     "no-taxonomy": 6,
-    "dietary": 4,
     "student": 4,
+    "dietary": 4,
     "supplier": 1,
     "facility": 1,
     "eye-vision": 1
@@ -1507,8 +1507,8 @@
    "county": "Jefferson Parish",
    "practitioners": 832,
    "with_role": 278,
-   "orgs_provider": 370,
-   "orgs_ein": 20,
+   "orgs_provider": 373,
+   "orgs_ein": 24,
    "locations": 734,
    "lat": 30.00772,
    "lng": -90.15907,
@@ -1528,9 +1528,9 @@
     "eye-vision": 7,
     "student": 4,
     "supplier": 3,
+    "agency": 2,
     "podiatry": 2,
     "transport": 2,
-    "agency": 2,
     "payer": 1
    }
   },
@@ -1540,8 +1540,8 @@
    "county": "Jefferson Parish",
    "practitioners": 124,
    "with_role": 10,
-   "orgs_provider": 68,
-   "orgs_ein": 2,
+   "orgs_provider": 75,
+   "orgs_ein": 3,
    "locations": 138,
    "lat": 29.9951,
    "lng": -90.21589,
@@ -1551,8 +1551,8 @@
     "rehab-therapy": 18,
     "other-clinical": 12,
     "chiropractic": 7,
-    "physician": 4,
     "dental": 4,
+    "physician": 4,
     "nursing": 3,
     "podiatry": 1,
     "advanced-practice": 1
@@ -1577,8 +1577,8 @@
    "county": "Jefferson Parish",
    "practitioners": 331,
    "with_role": 95,
-   "orgs_provider": 102,
-   "orgs_ein": 2,
+   "orgs_provider": 108,
+   "orgs_ein": 1,
    "locations": 243,
    "lat": 29.99384,
    "lng": -90.13113,
@@ -1593,8 +1593,8 @@
     "chiropractic": 6,
     "podiatry": 4,
     "eye-vision": 3,
-    "nursing": 1,
     "student": 1,
+    "nursing": 1,
     "group": 1
    }
   },
@@ -1604,8 +1604,8 @@
    "county": "Jefferson Parish",
    "practitioners": 1310,
    "with_role": 171,
-   "orgs_provider": 316,
-   "orgs_ein": 7,
+   "orgs_provider": 344,
+   "orgs_ein": 10,
    "locations": 673,
    "lat": 30.01053,
    "lng": -90.184,
@@ -1618,14 +1618,14 @@
     "advanced-practice": 45,
     "other-clinical": 27,
     "student": 22,
-    "group": 9,
     "dietary": 9,
     "nursing": 9,
+    "group": 9,
     "podiatry": 7,
     "chiropractic": 5,
     "support": 3,
-    "no-taxonomy": 2,
     "eye-vision": 2,
+    "no-taxonomy": 2,
     "supplier": 1,
     "emergency-medical": 1
    }
@@ -1669,7 +1669,7 @@
    "county": "Plaquemines Parish",
    "practitioners": 92,
    "with_role": 28,
-   "orgs_provider": 32,
+   "orgs_provider": 39,
    "orgs_ein": 2,
    "locations": 68,
    "lat": 29.85418,
@@ -1681,11 +1681,11 @@
     "dental": 7,
     "pharmacy": 5,
     "nursing": 4,
-    "other-clinical": 2,
-    "group": 2,
     "advanced-practice": 2,
-    "chiropractic": 1,
-    "eye-vision": 1
+    "group": 2,
+    "other-clinical": 2,
+    "eye-vision": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -1729,7 +1729,7 @@
    "county": "St. Bernard Parish",
    "practitioners": 318,
    "with_role": 42,
-   "orgs_provider": 105,
+   "orgs_provider": 117,
    "orgs_ein": 2,
    "locations": 213,
    "lat": 29.94725,
@@ -1741,14 +1741,14 @@
     "rehab-therapy": 20,
     "dental": 17,
     "advanced-practice": 12,
-    "physician": 5,
     "group": 5,
+    "physician": 5,
     "nursing": 4,
     "chiropractic": 4,
     "eye-vision": 3,
     "supplier": 2,
-    "dietary": 1,
     "facility": 1,
+    "dietary": 1,
     "support": 1
    }
   },
@@ -1771,7 +1771,7 @@
    "county": "St. Charles Parish",
    "practitioners": 198,
    "with_role": 152,
-   "orgs_provider": 36,
+   "orgs_provider": 38,
    "orgs_ein": 3,
    "locations": 56,
    "lat": 29.96572,
@@ -1784,9 +1784,9 @@
     "pharmacy": 13,
     "dental": 5,
     "nursing": 4,
+    "eye-vision": 2,
     "other-clinical": 2,
     "chiropractic": 2,
-    "eye-vision": 2,
     "group": 1
    }
   },
@@ -1796,7 +1796,7 @@
    "county": "St. John the Baptist Parish",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 6,
    "lat": 30.04435,
@@ -1811,7 +1811,7 @@
    "county": "St. James Parish",
    "practitioners": 31,
    "with_role": 15,
-   "orgs_provider": 17,
+   "orgs_provider": 16,
    "orgs_ein": 2,
    "locations": 24,
    "lat": 30.0587,
@@ -1832,7 +1832,7 @@
    "county": "Jefferson Parish",
    "practitioners": 273,
    "with_role": 65,
-   "orgs_provider": 155,
+   "orgs_provider": 151,
    "orgs_ein": 6,
    "locations": 192,
    "lat": 29.91209,
@@ -1846,9 +1846,9 @@
     "rehab-therapy": 10,
     "advanced-practice": 9,
     "chiropractic": 8,
-    "nursing": 3,
-    "support": 3,
     "eye-vision": 3,
+    "support": 3,
+    "nursing": 3,
     "agency": 2,
     "facility": 2,
     "dietary": 1,
@@ -1861,7 +1861,7 @@
    "county": "Jefferson Parish",
    "practitioners": 541,
    "with_role": 209,
-   "orgs_provider": 307,
+   "orgs_provider": 314,
    "orgs_ein": 5,
    "locations": 377,
    "lat": 29.89753,
@@ -1871,20 +1871,20 @@
     "physician": 101,
     "advanced-practice": 74,
     "other-clinical": 60,
-    "rehab-therapy": 45,
     "pharmacy": 45,
+    "rehab-therapy": 45,
     "dental": 14,
     "nursing": 11,
     "chiropractic": 7,
     "group": 6,
-    "support": 3,
     "agency": 3,
-    "eye-vision": 2,
+    "support": 3,
     "student": 2,
+    "eye-vision": 2,
     "dietary": 2,
+    "podiatry": 1,
     "supplier": 1,
-    "emergency-medical": 1,
-    "podiatry": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -1908,7 +1908,7 @@
    "county": "Jefferson Parish",
    "practitioners": 488,
    "with_role": 131,
-   "orgs_provider": 150,
+   "orgs_provider": 156,
    "orgs_ein": 2,
    "locations": 260,
    "lat": 29.88286,
@@ -1924,16 +1924,16 @@
     "nursing": 12,
     "chiropractic": 11,
     "eye-vision": 7,
-    "group": 6,
     "support": 6,
+    "group": 6,
     "agency": 3,
-    "payer": 1,
-    "podiatry": 1,
-    "transport": 1,
-    "facility": 1,
-    "supplier": 1,
     "no-taxonomy": 1,
-    "student": 1
+    "supplier": 1,
+    "transport": 1,
+    "payer": 1,
+    "student": 1,
+    "podiatry": 1,
+    "facility": 1
    }
   },
   {
@@ -1957,7 +1957,7 @@
    "county": null,
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 30.00243,
@@ -1970,7 +1970,7 @@
    "county": "Jefferson Parish",
    "practitioners": 102,
    "with_role": 20,
-   "orgs_provider": 115,
+   "orgs_provider": 108,
    "orgs_ein": 5,
    "locations": 124,
    "lat": 29.99685,
@@ -1979,9 +1979,9 @@
     "behavioral-health": 33,
     "physician": 13,
     "dental": 10,
+    "chiropractic": 9,
     "rehab-therapy": 9,
     "pharmacy": 9,
-    "chiropractic": 9,
     "other-clinical": 6,
     "advanced-practice": 6,
     "group": 2,
@@ -1997,8 +1997,8 @@
    "county": "Jefferson Parish",
    "practitioners": 258,
    "with_role": 73,
-   "orgs_provider": 204,
-   "orgs_ein": 10,
+   "orgs_provider": 177,
+   "orgs_ein": 11,
    "locations": 291,
    "lat": 30.02367,
    "lng": -90.25321,
@@ -2008,16 +2008,16 @@
     "advanced-practice": 35,
     "dental": 26,
     "behavioral-health": 23,
-    "other-clinical": 20,
     "rehab-therapy": 20,
+    "other-clinical": 20,
     "nursing": 11,
     "student": 8,
     "chiropractic": 6,
     "eye-vision": 3,
     "no-taxonomy": 2,
     "dietary": 1,
-    "support": 1,
-    "group": 1
+    "group": 1,
+    "support": 1
    }
   },
   {
@@ -2042,8 +2042,8 @@
    "county": "St. John the Baptist Parish",
    "practitioners": 307,
    "with_role": 61,
-   "orgs_provider": 186,
-   "orgs_ein": 7,
+   "orgs_provider": 198,
+   "orgs_ein": 8,
    "locations": 246,
    "lat": 30.07448,
    "lng": -90.49573,
@@ -2061,8 +2061,8 @@
     "facility": 2,
     "support": 2,
     "dietary": 2,
-    "podiatry": 1,
-    "agency": 1
+    "agency": 1,
+    "podiatry": 1
    }
   },
   {
@@ -2071,7 +2071,7 @@
    "county": "St. Charles Parish",
    "practitioners": 413,
    "with_role": 258,
-   "orgs_provider": 68,
+   "orgs_provider": 71,
    "orgs_ein": 4,
    "locations": 87,
    "lat": 29.92093,
@@ -2088,10 +2088,10 @@
     "podiatry": 3,
     "chiropractic": 2,
     "dietary": 2,
-    "eye-vision": 1,
-    "nursing": 1,
     "no-taxonomy": 1,
-    "student": 1
+    "student": 1,
+    "nursing": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2100,7 +2100,7 @@
    "county": "St. James Parish",
    "practitioners": 68,
    "with_role": 43,
-   "orgs_provider": 36,
+   "orgs_provider": 37,
    "orgs_ein": 3,
    "locations": 32,
    "lat": 30.05014,
@@ -2110,12 +2110,12 @@
     "rehab-therapy": 20,
     "dental": 11,
     "behavioral-health": 5,
-    "advanced-practice": 3,
     "nursing": 3,
+    "advanced-practice": 3,
     "other-clinical": 2,
     "dietary": 1,
-    "eye-vision": 1,
-    "group": 1
+    "group": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2124,7 +2124,7 @@
    "county": "Jefferson Parish",
    "practitioners": 1213,
    "with_role": 633,
-   "orgs_provider": 313,
+   "orgs_provider": 335,
    "orgs_ein": 15,
    "locations": 486,
    "lat": 29.88857,
@@ -2138,17 +2138,17 @@
     "pharmacy": 63,
     "dental": 31,
     "nursing": 24,
-    "eye-vision": 19,
     "group": 19,
+    "eye-vision": 19,
     "podiatry": 7,
     "dietary": 5,
     "supplier": 4,
-    "chiropractic": 4,
     "agency": 4,
+    "chiropractic": 4,
     "student": 3,
     "facility": 2,
-    "no-taxonomy": 1,
-    "support": 1
+    "support": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -2182,10 +2182,10 @@
     "advanced-practice": 5,
     "behavioral-health": 4,
     "physician": 3,
-    "dental": 2,
     "rehab-therapy": 2,
-    "other-clinical": 1,
-    "eye-vision": 1
+    "dental": 2,
+    "eye-vision": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -2194,7 +2194,7 @@
    "county": "St. Charles Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 29.87865,
@@ -2213,9 +2213,9 @@
    "lat": 29.50503,
    "lng": -89.7257,
    "by_category": {
+    "advanced-practice": 1,
     "pharmacy": 1,
-    "physician": 1,
-    "advanced-practice": 1
+    "physician": 1
    }
   },
   {
@@ -2224,7 +2224,7 @@
    "county": "St. John the Baptist Parish",
    "practitioners": 33,
    "with_role": 13,
-   "orgs_provider": 13,
+   "orgs_provider": 14,
    "orgs_ein": 1,
    "locations": 14,
    "lat": 30.06757,
@@ -2235,9 +2235,9 @@
     "pharmacy": 5,
     "nursing": 4,
     "behavioral-health": 2,
-    "physician": 1,
+    "dental": 1,
     "facility": 1,
-    "dental": 1
+    "physician": 1
    }
   },
   {
@@ -2276,15 +2276,15 @@
    "county": "St. Charles Parish",
    "practitioners": 8,
    "with_role": 1,
-   "orgs_provider": 17,
+   "orgs_provider": 18,
    "orgs_ein": 1,
    "locations": 29,
    "lat": 29.97511,
    "lng": -90.29149,
    "by_category": {
     "behavioral-health": 3,
-    "pharmacy": 2,
     "dental": 2,
+    "pharmacy": 2,
     "physician": 1
    }
   },
@@ -2294,18 +2294,18 @@
    "county": "St. James Parish",
    "practitioners": 19,
    "with_role": 8,
-   "orgs_provider": 16,
+   "orgs_provider": 18,
    "orgs_ein": 0,
    "locations": 20,
    "lat": 29.97693,
    "lng": -90.71485,
    "by_category": {
     "physician": 6,
-    "advanced-practice": 4,
     "pharmacy": 4,
+    "advanced-practice": 4,
     "nursing": 3,
-    "rehab-therapy": 1,
-    "group": 1
+    "group": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -2335,8 +2335,8 @@
    "lat": 29.906,
    "lng": -89.90051,
    "by_category": {
-    "other-clinical": 1,
-    "transport": 1
+    "transport": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -2345,7 +2345,7 @@
    "county": "Jefferson Parish",
    "practitioners": 51,
    "with_role": 20,
-   "orgs_provider": 16,
+   "orgs_provider": 19,
    "orgs_ein": 1,
    "locations": 40,
    "lat": 29.90603,
@@ -2354,13 +2354,13 @@
     "pharmacy": 22,
     "rehab-therapy": 12,
     "physician": 5,
-    "advanced-practice": 3,
     "behavioral-health": 3,
+    "advanced-practice": 3,
     "dental": 2,
+    "other-clinical": 1,
     "agency": 1,
     "nursing": 1,
-    "support": 1,
-    "other-clinical": 1
+    "support": 1
    }
   },
   {
@@ -2382,8 +2382,8 @@
    "county": "Orleans Parish",
    "practitioners": 2978,
    "with_role": 1270,
-   "orgs_provider": 222,
-   "orgs_ein": 11,
+   "orgs_provider": 187,
+   "orgs_ein": 10,
    "locations": 1030,
    "lat": 29.95599,
    "lng": -90.07858,
@@ -2403,10 +2403,10 @@
     "support": 5,
     "podiatry": 4,
     "chiropractic": 2,
-    "eye-vision": 1,
     "facility": 1,
-    "supplier": 1,
-    "agency": 1
+    "agency": 1,
+    "eye-vision": 1,
+    "supplier": 1
    }
   },
   {
@@ -2415,7 +2415,7 @@
    "county": "Orleans Parish",
    "practitioners": 238,
    "with_role": 33,
-   "orgs_provider": 90,
+   "orgs_provider": 71,
    "orgs_ein": 3,
    "locations": 80,
    "lat": 29.94423,
@@ -2438,8 +2438,8 @@
    "county": "Orleans Parish",
    "practitioners": 311,
    "with_role": 60,
-   "orgs_provider": 171,
-   "orgs_ein": 7,
+   "orgs_provider": 175,
+   "orgs_ein": 6,
    "locations": 228,
    "lat": 29.92923,
    "lng": -90.02534,
@@ -2455,9 +2455,9 @@
     "chiropractic": 4,
     "support": 3,
     "eye-vision": 3,
-    "dietary": 1,
-    "emergency-medical": 1,
     "transport": 1,
+    "emergency-medical": 1,
+    "dietary": 1,
     "facility": 1
    }
   },
@@ -2467,7 +2467,7 @@
    "county": "Orleans Parish",
    "practitioners": 794,
    "with_role": 272,
-   "orgs_provider": 316,
+   "orgs_provider": 342,
    "orgs_ein": 15,
    "locations": 631,
    "lat": 29.92858,
@@ -2477,20 +2477,20 @@
     "behavioral-health": 175,
     "advanced-practice": 117,
     "rehab-therapy": 74,
-    "other-clinical": 47,
     "pharmacy": 47,
+    "other-clinical": 47,
     "dental": 38,
     "nursing": 25,
     "student": 14,
     "support": 12,
     "group": 9,
-    "podiatry": 5,
     "eye-vision": 5,
+    "podiatry": 5,
     "dietary": 4,
     "no-taxonomy": 3,
+    "facility": 1,
     "emergency-medical": 1,
-    "chiropractic": 1,
-    "facility": 1
+    "chiropractic": 1
    }
   },
   {
@@ -2499,7 +2499,7 @@
    "county": "Orleans Parish",
    "practitioners": 65,
    "with_role": 12,
-   "orgs_provider": 47,
+   "orgs_provider": 48,
    "orgs_ein": 0,
    "locations": 65,
    "lat": 29.96687,
@@ -2510,10 +2510,10 @@
     "physician": 5,
     "pharmacy": 3,
     "rehab-therapy": 2,
-    "group": 1,
-    "dietary": 1,
     "advanced-practice": 1,
     "no-taxonomy": 1,
+    "group": 1,
+    "dietary": 1,
     "dental": 1
    }
   },
@@ -2523,7 +2523,7 @@
    "county": "Orleans Parish",
    "practitioners": 155,
    "with_role": 52,
-   "orgs_provider": 63,
+   "orgs_provider": 69,
    "orgs_ein": 4,
    "locations": 90,
    "lat": 29.96778,
@@ -2532,18 +2532,18 @@
     "behavioral-health": 49,
     "rehab-therapy": 27,
     "physician": 15,
-    "pharmacy": 12,
     "dental": 12,
-    "other-clinical": 11,
+    "pharmacy": 12,
     "nursing": 11,
+    "other-clinical": 11,
     "advanced-practice": 6,
     "dietary": 3,
+    "chiropractic": 2,
     "group": 2,
     "agency": 2,
-    "chiropractic": 2,
-    "eye-vision": 1,
     "support": 1,
-    "transport": 1
+    "transport": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -2552,7 +2552,7 @@
    "county": "Orleans Parish",
    "practitioners": 728,
    "with_role": 212,
-   "orgs_provider": 132,
+   "orgs_provider": 140,
    "orgs_ein": 9,
    "locations": 241,
    "lat": 29.93626,
@@ -2581,8 +2581,8 @@
    "county": "Orleans Parish",
    "practitioners": 1392,
    "with_role": 196,
-   "orgs_provider": 342,
-   "orgs_ein": 8,
+   "orgs_provider": 358,
+   "orgs_ein": 11,
    "locations": 565,
    "lat": 29.9725,
    "lng": -90.09193,
@@ -2597,17 +2597,17 @@
     "pharmacy": 35,
     "student": 26,
     "dietary": 10,
-    "eye-vision": 8,
     "chiropractic": 8,
+    "eye-vision": 8,
     "no-taxonomy": 7,
     "group": 6,
     "agency": 5,
-    "support": 4,
     "facility": 4,
-    "supplier": 1,
+    "support": 4,
+    "emergency-medical": 1,
     "transport": 1,
     "podiatry": 1,
-    "emergency-medical": 1
+    "supplier": 1
    }
   },
   {
@@ -2616,7 +2616,7 @@
    "county": "Jefferson Parish",
    "practitioners": 2498,
    "with_role": 1427,
-   "orgs_provider": 190,
+   "orgs_provider": 126,
    "orgs_ein": 5,
    "locations": 274,
    "lat": 29.96266,
@@ -2637,9 +2637,9 @@
     "podiatry": 13,
     "dental": 3,
     "supplier": 2,
-    "agency": 1,
     "emergency-medical": 1,
-    "support": 1
+    "support": 1,
+    "agency": 1
    }
   },
   {
@@ -2648,8 +2648,8 @@
    "county": "Orleans Parish",
    "practitioners": 251,
    "with_role": 112,
-   "orgs_provider": 84,
-   "orgs_ein": 1,
+   "orgs_provider": 94,
+   "orgs_ein": 2,
    "locations": 133,
    "lat": 30.00894,
    "lng": -90.06179,
@@ -2657,20 +2657,20 @@
     "behavioral-health": 77,
     "physician": 44,
     "advanced-practice": 35,
-    "pharmacy": 18,
     "dental": 18,
+    "pharmacy": 18,
     "other-clinical": 17,
     "rehab-therapy": 16,
     "nursing": 10,
     "podiatry": 3,
     "eye-vision": 3,
-    "group": 2,
     "support": 2,
+    "group": 2,
     "chiropractic": 2,
-    "facility": 1,
     "transport": 1,
     "student": 1,
-    "supplier": 1
+    "supplier": 1,
+    "facility": 1
    }
   },
   {
@@ -2679,7 +2679,7 @@
    "county": "Jefferson Parish",
    "practitioners": 401,
    "with_role": 98,
-   "orgs_provider": 103,
+   "orgs_provider": 121,
    "orgs_ein": 4,
    "locations": 312,
    "lat": 29.95438,
@@ -2706,8 +2706,8 @@
    "county": "Orleans Parish",
    "practitioners": 326,
    "with_role": 231,
-   "orgs_provider": 44,
-   "orgs_ein": 0,
+   "orgs_provider": 48,
+   "orgs_ein": 1,
    "locations": 88,
    "lat": 30.01245,
    "lng": -90.1091,
@@ -2734,7 +2734,7 @@
    "county": "Orleans Parish",
    "practitioners": 285,
    "with_role": 25,
-   "orgs_provider": 57,
+   "orgs_provider": 66,
    "orgs_ein": 1,
    "locations": 108,
    "lat": 29.94945,
@@ -2747,13 +2747,13 @@
     "nursing": 17,
     "rehab-therapy": 9,
     "dental": 7,
-    "physician": 3,
     "agency": 3,
+    "physician": 3,
     "group": 3,
     "student": 2,
     "emergency-medical": 1,
-    "facility": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "facility": 1
    }
   },
   {
@@ -2762,8 +2762,8 @@
    "county": "Orleans Parish",
    "practitioners": 38,
    "with_role": 7,
-   "orgs_provider": 33,
-   "orgs_ein": 1,
+   "orgs_provider": 37,
+   "orgs_ein": 2,
    "locations": 89,
    "lat": 30.01567,
    "lng": -90.02539,
@@ -2773,10 +2773,10 @@
     "rehab-therapy": 7,
     "physician": 3,
     "group": 2,
-    "nursing": 1,
     "other-clinical": 1,
-    "podiatry": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "nursing": 1,
+    "podiatry": 1
    }
   },
   {
@@ -2785,7 +2785,7 @@
    "county": "Orleans Parish",
    "practitioners": 389,
    "with_role": 48,
-   "orgs_provider": 170,
+   "orgs_provider": 184,
    "orgs_ein": 5,
    "locations": 347,
    "lat": 30.03204,
@@ -2802,10 +2802,10 @@
     "nursing": 4,
     "agency": 4,
     "student": 3,
-    "podiatry": 1,
     "transport": 1,
-    "facility": 1,
     "group": 1,
+    "facility": 1,
+    "podiatry": 1,
     "support": 1
    }
   },
@@ -2815,7 +2815,7 @@
    "county": "Orleans Parish",
    "practitioners": 52,
    "with_role": 7,
-   "orgs_provider": 36,
+   "orgs_provider": 40,
    "orgs_ein": 1,
    "locations": 106,
    "lat": 30.04509,
@@ -2837,7 +2837,7 @@
    "county": "Orleans Parish",
    "practitioners": 53,
    "with_role": 25,
-   "orgs_provider": 28,
+   "orgs_provider": 29,
    "orgs_ein": 2,
    "locations": 43,
    "lat": 30.03376,
@@ -2848,13 +2848,13 @@
     "other-clinical": 8,
     "support": 6,
     "dental": 4,
-    "pharmacy": 3,
     "behavioral-health": 3,
+    "pharmacy": 3,
     "transport": 2,
-    "rehab-therapy": 1,
+    "chiropractic": 1,
     "eye-vision": 1,
     "emergency-medical": 1,
-    "chiropractic": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -2863,7 +2863,7 @@
    "county": "Orleans Parish",
    "practitioners": 315,
    "with_role": 123,
-   "orgs_provider": 132,
+   "orgs_provider": 126,
    "orgs_ein": 2,
    "locations": 212,
    "lat": 29.94033,
@@ -2879,11 +2879,11 @@
     "nursing": 6,
     "group": 3,
     "chiropractic": 3,
-    "support": 2,
     "student": 2,
-    "dietary": 1,
+    "support": 2,
     "eye-vision": 1,
-    "transport": 1
+    "transport": 1,
+    "dietary": 1
    }
   },
   {
@@ -2892,8 +2892,8 @@
    "county": "Orleans Parish",
    "practitioners": 128,
    "with_role": 11,
-   "orgs_provider": 71,
-   "orgs_ein": 2,
+   "orgs_provider": 85,
+   "orgs_ein": 4,
    "locations": 132,
    "lat": 29.92462,
    "lng": -90.00622,
@@ -2906,8 +2906,8 @@
     "physician": 5,
     "dental": 3,
     "agency": 3,
-    "support": 2,
     "advanced-practice": 2,
+    "support": 2,
     "chiropractic": 1,
     "dietary": 1
    }
@@ -2956,10 +2956,10 @@
    "by_category": {
     "other-clinical": 4,
     "nursing": 1,
-    "dental": 1,
-    "rehab-therapy": 1,
+    "behavioral-health": 1,
     "physician": 1,
-    "behavioral-health": 1
+    "rehab-therapy": 1,
+    "dental": 1
    }
   },
   {
@@ -2974,9 +2974,9 @@
    "lat": 29.96168,
    "lng": -90.03331,
    "by_category": {
+    "dental": 1,
     "other-clinical": 1,
-    "support": 1,
-    "dental": 1
+    "support": 1
    }
   },
   {
@@ -3058,8 +3058,8 @@
    "county": "Orleans Parish",
    "practitioners": 278,
    "with_role": 255,
-   "orgs_provider": 7,
-   "orgs_ein": 2,
+   "orgs_provider": 3,
+   "orgs_ein": 1,
    "locations": 11,
    "lat": 29.95054,
    "lng": -90.07527,
@@ -3069,12 +3069,12 @@
     "behavioral-health": 25,
     "nursing": 9,
     "dietary": 8,
-    "group": 6,
     "rehab-therapy": 6,
-    "chiropractic": 1,
-    "eye-vision": 1,
+    "group": 6,
     "other-clinical": 1,
-    "dental": 1
+    "dental": 1,
+    "chiropractic": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -3183,8 +3183,8 @@
    "county": "Lafourche Parish",
    "practitioners": 904,
    "with_role": 175,
-   "orgs_provider": 237,
-   "orgs_ein": 8,
+   "orgs_provider": 243,
+   "orgs_ein": 7,
    "locations": 348,
    "lat": 29.78862,
    "lng": -90.81705,
@@ -3201,11 +3201,11 @@
     "chiropractic": 8,
     "group": 4,
     "support": 2,
-    "student": 2,
-    "no-taxonomy": 2,
     "supplier": 2,
-    "dietary": 1,
-    "podiatry": 1
+    "no-taxonomy": 2,
+    "student": 2,
+    "podiatry": 1,
+    "dietary": 1
    }
   },
   {
@@ -3221,9 +3221,9 @@
    "lng": -90.80161,
    "by_category": {
     "no-taxonomy": 2,
-    "behavioral-health": 1,
+    "rehab-therapy": 1,
     "student": 1,
-    "rehab-therapy": 1
+    "behavioral-health": 1
    }
   },
   {
@@ -3232,15 +3232,15 @@
    "county": "Assumption Parish",
    "practitioners": 6,
    "with_role": 5,
-   "orgs_provider": 6,
+   "orgs_provider": 8,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 29.95713,
    "lng": -91.21007,
    "by_category": {
     "physician": 4,
-    "advanced-practice": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3292,7 +3292,7 @@
    "county": "Lafourche Parish",
    "practitioners": 64,
    "with_role": 26,
-   "orgs_provider": 35,
+   "orgs_provider": 36,
    "orgs_ein": 0,
    "locations": 47,
    "lat": 29.47749,
@@ -3305,8 +3305,8 @@
     "rehab-therapy": 4,
     "nursing": 4,
     "dental": 2,
-    "dietary": 1,
     "chiropractic": 1,
+    "dietary": 1,
     "eye-vision": 1
    }
   },
@@ -3316,7 +3316,7 @@
    "county": "Ascension Parish",
    "practitioners": 120,
    "with_role": 25,
-   "orgs_provider": 61,
+   "orgs_provider": 59,
    "orgs_ein": 3,
    "locations": 57,
    "lat": 30.09804,
@@ -3330,8 +3330,8 @@
     "chiropractic": 7,
     "behavioral-health": 6,
     "dental": 6,
-    "nursing": 1,
     "group": 1,
+    "nursing": 1,
     "eye-vision": 1
    }
   },
@@ -3360,8 +3360,8 @@
    "lat": 29.4243,
    "lng": -90.29415,
    "by_category": {
-    "advanced-practice": 2,
     "rehab-therapy": 2,
+    "advanced-practice": 2,
     "behavioral-health": 1
    }
   },
@@ -3402,7 +3402,7 @@
    "county": "Terrebonne Parish",
    "practitioners": 32,
    "with_role": 20,
-   "orgs_provider": 24,
+   "orgs_provider": 28,
    "orgs_ein": 0,
    "locations": 27,
    "lat": 29.67545,
@@ -3422,7 +3422,7 @@
    "county": "Terrebonne Parish",
    "practitioners": 1123,
    "with_role": 322,
-   "orgs_provider": 351,
+   "orgs_provider": 375,
    "orgs_ein": 15,
    "locations": 460,
    "lat": 29.59798,
@@ -3432,8 +3432,8 @@
     "other-clinical": 259,
     "advanced-practice": 126,
     "physician": 113,
-    "rehab-therapy": 81,
     "support": 81,
+    "rehab-therapy": 81,
     "dental": 53,
     "pharmacy": 52,
     "nursing": 30,
@@ -3464,7 +3464,7 @@
    "county": "Terrebonne Parish",
    "practitioners": 214,
    "with_role": 91,
-   "orgs_provider": 37,
+   "orgs_provider": 40,
    "orgs_ein": 2,
    "locations": 66,
    "lat": 29.57836,
@@ -3475,8 +3475,8 @@
     "student": 24,
     "pharmacy": 21,
     "behavioral-health": 13,
-    "other-clinical": 11,
     "rehab-therapy": 11,
+    "other-clinical": 11,
     "no-taxonomy": 9,
     "dental": 4,
     "nursing": 3,
@@ -3490,7 +3490,7 @@
    "county": "Terrebonne Parish",
    "practitioners": 106,
    "with_role": 32,
-   "orgs_provider": 159,
+   "orgs_provider": 72,
    "orgs_ein": 2,
    "locations": 79,
    "lat": 29.62004,
@@ -3500,15 +3500,15 @@
     "behavioral-health": 29,
     "rehab-therapy": 21,
     "physician": 10,
-    "dental": 3,
     "advanced-practice": 3,
-    "chiropractic": 2,
-    "nursing": 2,
+    "dental": 3,
     "dietary": 2,
-    "podiatry": 1,
-    "other-clinical": 1,
+    "nursing": 2,
+    "chiropractic": 2,
     "eye-vision": 1,
-    "support": 1
+    "support": 1,
+    "other-clinical": 1,
+    "podiatry": 1
    }
   },
   {
@@ -3541,8 +3541,8 @@
    "by_category": {
     "rehab-therapy": 8,
     "pharmacy": 6,
-    "physician": 4,
     "advanced-practice": 4,
+    "physician": 4,
     "behavioral-health": 2,
     "chiropractic": 1,
     "nursing": 1
@@ -3562,12 +3562,12 @@
    "by_category": {
     "dental": 5,
     "behavioral-health": 4,
-    "physician": 2,
     "advanced-practice": 2,
     "pharmacy": 2,
-    "chiropractic": 1,
+    "physician": 2,
     "rehab-therapy": 1,
-    "nursing": 1
+    "nursing": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -3604,8 +3604,8 @@
    "county": "St. Mary Parish",
    "practitioners": 255,
    "with_role": 134,
-   "orgs_provider": 148,
-   "orgs_ein": 8,
+   "orgs_provider": 154,
+   "orgs_ein": 10,
    "locations": 188,
    "lat": 29.70299,
    "lng": -91.20582,
@@ -3617,18 +3617,18 @@
     "rehab-therapy": 18,
     "dental": 15,
     "nursing": 9,
-    "chiropractic": 7,
     "dietary": 7,
+    "chiropractic": 7,
     "podiatry": 2,
     "group": 2,
+    "supplier": 1,
+    "eye-vision": 1,
+    "other-clinical": 1,
+    "facility": 1,
     "support": 1,
     "agency": 1,
-    "transport": 1,
-    "eye-vision": 1,
-    "supplier": 1,
     "emergency-medical": 1,
-    "other-clinical": 1,
-    "facility": 1
+    "transport": 1
    }
   },
   {
@@ -3637,7 +3637,7 @@
    "county": "Assumption Parish",
    "practitioners": 19,
    "with_role": 12,
-   "orgs_provider": 27,
+   "orgs_provider": 28,
    "orgs_ein": 0,
    "locations": 22,
    "lat": 29.94522,
@@ -3656,7 +3656,7 @@
    "county": "St. Mary Parish",
    "practitioners": 2,
    "with_role": 0,
-   "orgs_provider": 4,
+   "orgs_provider": 6,
    "orgs_ein": 1,
    "locations": 11,
    "lat": 29.6906,
@@ -3671,7 +3671,7 @@
    "county": "Lafourche Parish",
    "practitioners": 1039,
    "with_role": 961,
-   "orgs_provider": 60,
+   "orgs_provider": 64,
    "orgs_ein": 1,
    "locations": 57,
    "lat": 29.70273,
@@ -3698,8 +3698,8 @@
    "county": "Terrebonne Parish",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 0,
-   "orgs_ein": 0,
+   "orgs_provider": 1,
+   "orgs_ein": 1,
    "locations": 2,
    "lat": 29.68097,
    "lng": -90.82835,
@@ -3713,7 +3713,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 357,
    "with_role": 60,
-   "orgs_provider": 150,
+   "orgs_provider": 145,
    "orgs_ein": 6,
    "locations": 185,
    "lat": 30.50965,
@@ -3728,9 +3728,9 @@
     "advanced-practice": 11,
     "chiropractic": 9,
     "physician": 7,
+    "student": 3,
     "support": 3,
     "eye-vision": 3,
-    "student": 3,
     "dietary": 2,
     "no-taxonomy": 2,
     "facility": 1
@@ -3761,7 +3761,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 1172,
    "with_role": 507,
-   "orgs_provider": 360,
+   "orgs_provider": 379,
    "orgs_ein": 22,
    "locations": 529,
    "lat": 30.48055,
@@ -3775,17 +3775,17 @@
     "nursing": 46,
     "dental": 35,
     "support": 30,
-    "student": 20,
-    "pharmacy": 20,
     "chiropractic": 20,
+    "student": 20,
     "dietary": 20,
+    "pharmacy": 20,
     "eye-vision": 12,
     "group": 11,
     "podiatry": 5,
     "supplier": 1,
-    "transport": 1,
     "facility": 1,
-    "agency": 1
+    "agency": 1,
+    "transport": 1
    }
   },
   {
@@ -3818,10 +3818,10 @@
     "pharmacy": 4,
     "dental": 3,
     "nursing": 3,
-    "chiropractic": 1,
-    "rehab-therapy": 1,
+    "dietary": 1,
     "facility": 1,
-    "dietary": 1
+    "rehab-therapy": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -3830,7 +3830,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 114,
    "with_role": 37,
-   "orgs_provider": 59,
+   "orgs_provider": 60,
    "orgs_ein": 5,
    "locations": 79,
    "lat": 30.72834,
@@ -3845,10 +3845,10 @@
     "dental": 8,
     "nursing": 6,
     "chiropractic": 2,
-    "student": 1,
-    "facility": 1,
-    "dietary": 1,
     "podiatry": 1,
+    "student": 1,
+    "dietary": 1,
+    "facility": 1,
     "eye-vision": 1
    }
   },
@@ -3873,7 +3873,7 @@
    "county": "Washington Parish",
    "practitioners": 242,
    "with_role": 98,
-   "orgs_provider": 118,
+   "orgs_provider": 124,
    "orgs_ein": 5,
    "locations": 176,
    "lat": 30.77532,
@@ -3892,9 +3892,9 @@
     "no-taxonomy": 4,
     "chiropractic": 3,
     "group": 2,
-    "supplier": 1,
     "eye-vision": 1,
-    "transport": 1
+    "transport": 1,
+    "supplier": 1
    }
   },
   {
@@ -3911,8 +3911,8 @@
    "by_category": {
     "nursing": 2,
     "rehab-therapy": 2,
-    "pharmacy": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -3921,8 +3921,8 @@
    "county": "St. Tammany Parish",
    "practitioners": 1858,
    "with_role": 995,
-   "orgs_provider": 556,
-   "orgs_ein": 31,
+   "orgs_provider": 585,
+   "orgs_ein": 32,
    "locations": 835,
    "lat": 30.45477,
    "lng": -90.10531,
@@ -3941,10 +3941,10 @@
     "chiropractic": 11,
     "podiatry": 7,
     "support": 7,
-    "student": 2,
     "supplier": 2,
-    "no-taxonomy": 1,
-    "facility": 1
+    "student": 2,
+    "facility": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -3977,12 +3977,12 @@
     "student": 13,
     "pharmacy": 5,
     "physician": 3,
+    "dental": 1,
     "nursing": 1,
     "group": 1,
-    "rehab-therapy": 1,
     "advanced-practice": 1,
-    "behavioral-health": 1,
-    "dental": 1
+    "rehab-therapy": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -3998,9 +3998,9 @@
    "lng": -90.18331,
    "by_category": {
     "dental": 3,
+    "rehab-therapy": 1,
     "pharmacy": 1,
-    "behavioral-health": 1,
-    "rehab-therapy": 1
+    "behavioral-health": 1
    }
   },
   {
@@ -4009,7 +4009,7 @@
    "county": "Washington Parish",
    "practitioners": 132,
    "with_role": 37,
-   "orgs_provider": 91,
+   "orgs_provider": 94,
    "orgs_ein": 2,
    "locations": 106,
    "lat": 30.84379,
@@ -4018,16 +4018,16 @@
     "behavioral-health": 24,
     "pharmacy": 21,
     "rehab-therapy": 20,
-    "physician": 17,
     "advanced-practice": 17,
-    "dental": 10,
+    "physician": 17,
     "nursing": 10,
+    "dental": 10,
     "other-clinical": 4,
     "dietary": 3,
-    "group": 2,
     "chiropractic": 2,
-    "agency": 1,
-    "podiatry": 1
+    "group": 2,
+    "podiatry": 1,
+    "agency": 1
    }
   },
   {
@@ -4045,8 +4045,8 @@
     "behavioral-health": 7,
     "physician": 5,
     "advanced-practice": 4,
-    "nursing": 3,
     "rehab-therapy": 3,
+    "nursing": 3,
     "dental": 1
    }
   },
@@ -4056,7 +4056,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 33,
    "with_role": 12,
-   "orgs_provider": 19,
+   "orgs_provider": 23,
    "orgs_ein": 0,
    "locations": 23,
    "lat": 30.63643,
@@ -4067,9 +4067,9 @@
     "pharmacy": 7,
     "behavioral-health": 5,
     "dietary": 2,
+    "group": 1,
     "dental": 1,
-    "nursing": 1,
-    "group": 1
+    "nursing": 1
    }
   },
   {
@@ -4078,7 +4078,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 15,
    "with_role": 6,
-   "orgs_provider": 19,
+   "orgs_provider": 22,
    "orgs_ein": 1,
    "locations": 36,
    "lat": 30.92841,
@@ -4087,8 +4087,8 @@
     "pharmacy": 6,
     "behavioral-health": 4,
     "advanced-practice": 3,
-    "rehab-therapy": 1,
-    "student": 1
+    "student": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -4097,8 +4097,8 @@
    "county": "St. Tammany Parish",
    "practitioners": 26,
    "with_role": 7,
-   "orgs_provider": 33,
-   "orgs_ein": 1,
+   "orgs_provider": 42,
+   "orgs_ein": 3,
    "locations": 40,
    "lat": 30.3446,
    "lng": -89.9256,
@@ -4118,7 +4118,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 13,
    "with_role": 2,
-   "orgs_provider": 6,
+   "orgs_provider": 7,
    "orgs_ein": 1,
    "locations": 14,
    "lat": 30.62679,
@@ -4135,7 +4135,7 @@
    "county": "St. Tammany Parish",
    "practitioners": 52,
    "with_role": 13,
-   "orgs_provider": 36,
+   "orgs_provider": 35,
    "orgs_ein": 0,
    "locations": 51,
    "lat": 30.42137,
@@ -4146,13 +4146,13 @@
     "physician": 8,
     "advanced-practice": 7,
     "pharmacy": 3,
-    "behavioral-health": 2,
     "nursing": 2,
+    "behavioral-health": 2,
+    "group": 1,
     "dietary": 1,
-    "chiropractic": 1,
     "student": 1,
     "supplier": 1,
-    "group": 1
+    "chiropractic": 1
    }
   },
   {
@@ -4161,8 +4161,8 @@
    "county": "St. Tammany Parish",
    "practitioners": 310,
    "with_role": 42,
-   "orgs_provider": 96,
-   "orgs_ein": 11,
+   "orgs_provider": 100,
+   "orgs_ein": 6,
    "locations": 208,
    "lat": 30.36892,
    "lng": -90.07436,
@@ -4197,8 +4197,8 @@
    "by_category": {
     "pharmacy": 5,
     "rehab-therapy": 4,
-    "advanced-practice": 1,
-    "physician": 1
+    "physician": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -4207,8 +4207,8 @@
    "county": "St. Tammany Parish",
    "practitioners": 13,
    "with_role": 2,
-   "orgs_provider": 10,
-   "orgs_ein": 1,
+   "orgs_provider": 12,
+   "orgs_ein": 2,
    "locations": 28,
    "lat": 30.36952,
    "lng": -89.75852,
@@ -4226,7 +4226,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 100,
    "with_role": 50,
-   "orgs_provider": 68,
+   "orgs_provider": 70,
    "orgs_ein": 1,
    "locations": 86,
    "lat": 30.44219,
@@ -4241,8 +4241,8 @@
     "chiropractic": 2,
     "dental": 2,
     "eye-vision": 1,
-    "group": 1,
     "dietary": 1,
+    "group": 1,
     "support": 1
    }
   },
@@ -4252,7 +4252,7 @@
    "county": "Tangipahoa Parish",
    "practitioners": 7,
    "with_role": 5,
-   "orgs_provider": 5,
+   "orgs_provider": 4,
    "orgs_ein": 1,
    "locations": 5,
    "lat": 30.51093,
@@ -4260,8 +4260,8 @@
    "by_category": {
     "advanced-practice": 3,
     "behavioral-health": 2,
-    "nursing": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "nursing": 1
    }
   },
   {
@@ -4283,7 +4283,7 @@
    "county": "St. Tammany Parish",
    "practitioners": 1098,
    "with_role": 478,
-   "orgs_provider": 413,
+   "orgs_provider": 420,
    "orgs_ein": 22,
    "locations": 578,
    "lat": 30.28261,
@@ -4302,13 +4302,13 @@
     "support": 12,
     "group": 11,
     "dietary": 9,
-    "transport": 3,
     "podiatry": 3,
+    "transport": 3,
     "facility": 2,
-    "student": 2,
     "supplier": 2,
-    "no-taxonomy": 1,
-    "agency": 1
+    "student": 2,
+    "agency": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -4317,7 +4317,7 @@
    "county": "St. Tammany Parish",
    "practitioners": 52,
    "with_role": 11,
-   "orgs_provider": 58,
+   "orgs_provider": 61,
    "orgs_ein": 1,
    "locations": 73,
    "lat": 30.30162,
@@ -4327,10 +4327,10 @@
     "rehab-therapy": 11,
     "advanced-practice": 7,
     "eye-vision": 6,
-    "dental": 4,
     "behavioral-health": 4,
-    "physician": 3,
+    "dental": 4,
     "nursing": 3,
+    "physician": 3,
     "chiropractic": 1
    }
   },
@@ -4340,8 +4340,8 @@
    "county": "St. Tammany Parish",
    "practitioners": 1143,
    "with_role": 878,
-   "orgs_provider": 203,
-   "orgs_ein": 4,
+   "orgs_provider": 202,
+   "orgs_ein": 3,
    "locations": 261,
    "lat": 30.28561,
    "lng": -89.73871,
@@ -4356,12 +4356,12 @@
     "group": 18,
     "nursing": 16,
     "chiropractic": 4,
-    "support": 3,
-    "podiatry": 3,
-    "dietary": 3,
     "eye-vision": 3,
-    "student": 1,
+    "dietary": 3,
+    "podiatry": 3,
+    "support": 3,
     "facility": 1,
+    "student": 1,
     "no-taxonomy": 1
    }
   },
@@ -4371,7 +4371,7 @@
    "county": "Livingston Parish",
    "practitioners": 20,
    "with_role": 4,
-   "orgs_provider": 4,
+   "orgs_provider": 6,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 30.38099,
@@ -4380,8 +4380,8 @@
     "other-clinical": 12,
     "behavioral-health": 4,
     "pharmacy": 2,
-    "rehab-therapy": 1,
-    "physician": 1
+    "physician": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -4420,7 +4420,7 @@
    "county": "St. Tammany Parish",
    "practitioners": 654,
    "with_role": 285,
-   "orgs_provider": 238,
+   "orgs_provider": 247,
    "orgs_ein": 6,
    "locations": 380,
    "lat": 30.39606,
@@ -4438,10 +4438,10 @@
     "eye-vision": 8,
     "group": 7,
     "support": 3,
+    "emergency-medical": 1,
     "dietary": 1,
     "facility": 1,
-    "supplier": 1,
-    "emergency-medical": 1
+    "supplier": 1
    }
   },
   {
@@ -4467,11 +4467,11 @@
     "eye-vision": 6,
     "group": 5,
     "dietary": 4,
-    "transport": 2,
     "agency": 2,
     "support": 2,
-    "chiropractic": 1,
-    "podiatry": 1
+    "transport": 2,
+    "podiatry": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -4480,8 +4480,8 @@
    "county": "Lafayette Parish",
    "practitioners": 1650,
    "with_role": 789,
-   "orgs_provider": 530,
-   "orgs_ein": 14,
+   "orgs_provider": 555,
+   "orgs_ein": 15,
    "locations": 806,
    "lat": 30.19884,
    "lng": -92.03077,
@@ -4501,8 +4501,8 @@
     "dietary": 11,
     "chiropractic": 11,
     "transport": 3,
-    "facility": 1,
     "agency": 1,
+    "facility": 1,
     "supplier": 1
    }
   },
@@ -4527,8 +4527,8 @@
    "county": "Lafayette Parish",
    "practitioners": 1097,
    "with_role": 458,
-   "orgs_provider": 330,
-   "orgs_ein": 16,
+   "orgs_provider": 340,
+   "orgs_ein": 15,
    "locations": 504,
    "lat": 30.20941,
    "lng": -92.05338,
@@ -4551,8 +4551,8 @@
     "facility": 3,
     "eye-vision": 2,
     "transport": 1,
-    "agency": 1,
-    "supplier": 1
+    "supplier": 1,
+    "agency": 1
    }
   },
   {
@@ -4561,8 +4561,8 @@
    "county": "Lafayette Parish",
    "practitioners": 97,
    "with_role": 22,
-   "orgs_provider": 62,
-   "orgs_ein": 2,
+   "orgs_provider": 61,
+   "orgs_ein": 1,
    "locations": 95,
    "lat": 30.28514,
    "lng": -92.026,
@@ -4574,8 +4574,8 @@
     "advanced-practice": 7,
     "physician": 5,
     "dental": 4,
-    "group": 3,
     "nursing": 3,
+    "group": 3,
     "transport": 1,
     "emergency-medical": 1
    }
@@ -4586,8 +4586,8 @@
    "county": "Lafayette Parish",
    "practitioners": 1995,
    "with_role": 1045,
-   "orgs_provider": 1224,
-   "orgs_ein": 43,
+   "orgs_provider": 758,
+   "orgs_ein": 32,
    "locations": 1045,
    "lat": 30.17175,
    "lng": -92.02541,
@@ -4607,9 +4607,9 @@
     "podiatry": 6,
     "support": 5,
     "student": 2,
+    "transport": 1,
     "facility": 1,
-    "no-taxonomy": 1,
-    "transport": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -4633,7 +4633,7 @@
    "county": "Vermilion Parish",
    "practitioners": 308,
    "with_role": 166,
-   "orgs_provider": 126,
+   "orgs_provider": 131,
    "orgs_ein": 6,
    "locations": 157,
    "lat": 29.97634,
@@ -4647,8 +4647,8 @@
     "behavioral-health": 17,
     "chiropractic": 9,
     "dental": 7,
-    "other-clinical": 6,
     "eye-vision": 6,
+    "other-clinical": 6,
     "dietary": 5,
     "group": 4,
     "facility": 1
@@ -4690,15 +4690,15 @@
    "county": "Evangeline Parish",
    "practitioners": 8,
    "with_role": 6,
-   "orgs_provider": 8,
+   "orgs_provider": 9,
    "orgs_ein": 0,
    "locations": 9,
    "lat": 30.48644,
    "lng": -92.59406,
    "by_category": {
     "advanced-practice": 3,
-    "physician": 2,
     "pharmacy": 2,
+    "physician": 2,
     "nursing": 1
    }
   },
@@ -4721,8 +4721,8 @@
    "county": "St. Martin Parish",
    "practitioners": 168,
    "with_role": 72,
-   "orgs_provider": 77,
-   "orgs_ein": 7,
+   "orgs_provider": 81,
+   "orgs_ein": 6,
    "locations": 111,
    "lat": 30.28505,
    "lng": -91.88628,
@@ -4737,10 +4737,10 @@
     "dental": 4,
     "eye-vision": 2,
     "group": 2,
-    "supplier": 1,
     "podiatry": 1,
-    "chiropractic": 1,
-    "dietary": 1
+    "supplier": 1,
+    "dietary": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -4775,7 +4775,7 @@
    "county": "Lafayette Parish",
    "practitioners": 122,
    "with_role": 45,
-   "orgs_provider": 64,
+   "orgs_provider": 68,
    "orgs_ein": 2,
    "locations": 93,
    "lat": 30.31402,
@@ -4785,18 +4785,18 @@
     "pharmacy": 18,
     "behavioral-health": 13,
     "support": 12,
-    "advanced-practice": 11,
     "dental": 11,
+    "advanced-practice": 11,
     "physician": 9,
     "other-clinical": 6,
     "chiropractic": 4,
     "group": 3,
-    "eye-vision": 1,
-    "nursing": 1,
-    "facility": 1,
-    "agency": 1,
     "student": 1,
-    "transport": 1
+    "eye-vision": 1,
+    "agency": 1,
+    "transport": 1,
+    "nursing": 1,
+    "facility": 1
    }
   },
   {
@@ -4805,19 +4805,19 @@
    "county": "Acadia Parish",
    "practitioners": 31,
    "with_role": 13,
-   "orgs_provider": 40,
+   "orgs_provider": 38,
    "orgs_ein": 4,
    "locations": 37,
    "lat": 30.40206,
    "lng": -92.21851,
    "by_category": {
-    "rehab-therapy": 9,
     "advanced-practice": 9,
+    "rehab-therapy": 9,
     "pharmacy": 6,
     "physician": 3,
     "chiropractic": 2,
-    "dental": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dental": 1
    }
   },
   {
@@ -4826,28 +4826,28 @@
    "county": "Acadia Parish",
    "practitioners": 391,
    "with_role": 175,
-   "orgs_provider": 161,
-   "orgs_ein": 9,
+   "orgs_provider": 155,
+   "orgs_ein": 11,
    "locations": 181,
    "lat": 30.22253,
    "lng": -92.3712,
    "by_category": {
     "behavioral-health": 102,
     "physician": 80,
-    "other-clinical": 48,
     "rehab-therapy": 48,
+    "other-clinical": 48,
     "advanced-practice": 42,
     "pharmacy": 24,
     "nursing": 14,
     "dental": 13,
-    "eye-vision": 5,
     "chiropractic": 5,
+    "eye-vision": 5,
     "group": 4,
     "support": 2,
     "dietary": 1,
-    "podiatry": 1,
     "no-taxonomy": 1,
-    "supplier": 1
+    "supplier": 1,
+    "podiatry": 1
    }
   },
   {
@@ -4856,8 +4856,8 @@
    "county": "Vermilion Parish",
    "practitioners": 2,
    "with_role": 0,
-   "orgs_provider": 1,
-   "orgs_ein": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 1,
    "locations": 8,
    "lat": 29.9515,
    "lng": -91.99008,
@@ -4872,7 +4872,7 @@
    "county": "Lafayette Parish",
    "practitioners": 4,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 30.18443,
@@ -4888,15 +4888,15 @@
    "county": "Jefferson Davis Parish",
    "practitioners": 4,
    "with_role": 1,
-   "orgs_provider": 6,
+   "orgs_provider": 8,
    "orgs_ein": 1,
    "locations": 4,
    "lat": 30.49556,
    "lng": -92.70495,
    "by_category": {
-    "pharmacy": 1,
     "dietary": 1,
     "advanced-practice": 1,
+    "pharmacy": 1,
     "behavioral-health": 1
    }
   },
@@ -4913,8 +4913,8 @@
    "lng": -92.03229,
    "by_category": {
     "pharmacy": 2,
-    "rehab-therapy": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -4923,7 +4923,7 @@
    "county": "St. Landry Parish",
    "practitioners": 155,
    "with_role": 76,
-   "orgs_provider": 107,
+   "orgs_provider": 114,
    "orgs_ein": 4,
    "locations": 176,
    "lat": 30.49349,
@@ -4937,10 +4937,10 @@
     "dental": 10,
     "chiropractic": 5,
     "eye-vision": 4,
-    "supplier": 2,
     "other-clinical": 2,
-    "podiatry": 1,
-    "group": 1
+    "supplier": 2,
+    "group": 1,
+    "podiatry": 1
    }
   },
   {
@@ -4949,7 +4949,7 @@
    "county": "St. Mary Parish",
    "practitioners": 182,
    "with_role": 91,
-   "orgs_provider": 76,
+   "orgs_provider": 77,
    "orgs_ein": 6,
    "locations": 72,
    "lat": 29.80047,
@@ -4963,11 +4963,11 @@
     "rehab-therapy": 7,
     "dental": 6,
     "group": 4,
-    "dietary": 2,
     "eye-vision": 2,
+    "dietary": 2,
+    "nursing": 1,
     "podiatry": 1,
     "chiropractic": 1,
-    "nursing": 1,
     "emergency-medical": 1
    }
   },
@@ -5013,18 +5013,18 @@
    "county": "Iberia Parish",
    "practitioners": 11,
    "with_role": 4,
-   "orgs_provider": 18,
+   "orgs_provider": 19,
    "orgs_ein": 0,
    "locations": 25,
    "lat": 29.91641,
    "lng": -91.66483,
    "by_category": {
-    "pharmacy": 3,
     "dental": 3,
-    "other-clinical": 1,
+    "pharmacy": 3,
     "rehab-therapy": 1,
-    "behavioral-health": 1,
     "physician": 1,
+    "other-clinical": 1,
+    "behavioral-health": 1,
     "advanced-practice": 1
    }
   },
@@ -5034,8 +5034,8 @@
    "county": "Jefferson Davis Parish",
    "practitioners": 330,
    "with_role": 125,
-   "orgs_provider": 153,
-   "orgs_ein": 5,
+   "orgs_provider": 149,
+   "orgs_ein": 4,
    "locations": 164,
    "lat": 30.23167,
    "lng": -92.66034,
@@ -5060,7 +5060,7 @@
    "county": "Vermilion Parish",
    "practitioners": 38,
    "with_role": 28,
-   "orgs_provider": 30,
+   "orgs_provider": 31,
    "orgs_ein": 4,
    "locations": 32,
    "lat": 30.00338,
@@ -5081,14 +5081,14 @@
    "county": "Jefferson Davis Parish",
    "practitioners": 3,
    "with_role": 0,
-   "orgs_provider": 2,
-   "orgs_ein": 0,
+   "orgs_provider": 7,
+   "orgs_ein": 1,
    "locations": 6,
    "lat": 30.08105,
    "lng": -92.67535,
    "by_category": {
-    "advanced-practice": 1,
     "rehab-therapy": 1,
+    "advanced-practice": 1,
     "pharmacy": 1
    }
   },
@@ -5098,8 +5098,8 @@
    "county": "Evangeline Parish",
    "practitioners": 34,
    "with_role": 13,
-   "orgs_provider": 46,
-   "orgs_ein": 3,
+   "orgs_provider": 48,
+   "orgs_ein": 4,
    "locations": 65,
    "lat": 30.63992,
    "lng": -92.4176,
@@ -5119,16 +5119,16 @@
    "county": "Vermilion Parish",
    "practitioners": 8,
    "with_role": 3,
-   "orgs_provider": 5,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 15,
    "lat": 30.0984,
    "lng": -92.12596,
    "by_category": {
-    "rehab-therapy": 2,
     "nursing": 2,
-    "chiropractic": 1,
+    "rehab-therapy": 2,
     "group": 1,
+    "chiropractic": 1,
     "other-clinical": 1,
     "dental": 1
    }
@@ -5152,7 +5152,7 @@
    "county": "Iberia Parish",
    "practitioners": 476,
    "with_role": 222,
-   "orgs_provider": 233,
+   "orgs_provider": 238,
    "orgs_ein": 10,
    "locations": 312,
    "lat": 29.99615,
@@ -5168,10 +5168,10 @@
     "dental": 12,
     "group": 9,
     "chiropractic": 7,
-    "eye-vision": 3,
+    "agency": 3,
     "dietary": 3,
     "support": 3,
-    "agency": 3,
+    "eye-vision": 3,
     "transport": 2,
     "podiatry": 2,
     "supplier": 1
@@ -5196,7 +5196,7 @@
    "county": "Iberia Parish",
    "practitioners": 407,
    "with_role": 320,
-   "orgs_provider": 95,
+   "orgs_provider": 102,
    "orgs_ein": 8,
    "locations": 136,
    "lat": 30.00631,
@@ -5223,8 +5223,8 @@
    "county": "St. Landry Parish",
    "practitioners": 433,
    "with_role": 144,
-   "orgs_provider": 247,
-   "orgs_ein": 13,
+   "orgs_provider": 271,
+   "orgs_ein": 14,
    "locations": 386,
    "lat": 30.52177,
    "lng": -92.08193,
@@ -5241,13 +5241,13 @@
     "supplier": 4,
     "dietary": 4,
     "eye-vision": 4,
+    "support": 3,
     "group": 3,
     "emergency-medical": 3,
-    "support": 3,
     "transport": 2,
-    "facility": 1,
     "podiatry": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "facility": 1
    }
   },
   {
@@ -5272,7 +5272,7 @@
    "county": "St. Landry Parish",
    "practitioners": 3,
    "with_role": 2,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 7,
    "lat": 30.55243,
@@ -5298,10 +5298,10 @@
     "pharmacy": 21,
     "dental": 12,
     "physician": 5,
-    "advanced-practice": 3,
     "rehab-therapy": 3,
-    "behavioral-health": 1,
+    "advanced-practice": 3,
     "group": 1,
+    "behavioral-health": 1,
     "chiropractic": 1
    }
   },
@@ -5311,23 +5311,23 @@
    "county": "St. Martin Parish",
    "practitioners": 49,
    "with_role": 21,
-   "orgs_provider": 35,
-   "orgs_ein": 3,
+   "orgs_provider": 39,
+   "orgs_ein": 4,
    "locations": 48,
    "lat": 30.13596,
    "lng": -91.83176,
    "by_category": {
     "advanced-practice": 10,
-    "rehab-therapy": 8,
     "pharmacy": 8,
+    "rehab-therapy": 8,
     "physician": 7,
     "dental": 4,
     "nursing": 4,
+    "dietary": 2,
     "chiropractic": 2,
     "behavioral-health": 2,
-    "dietary": 2,
-    "eye-vision": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -5336,7 +5336,7 @@
    "county": "Lafayette Parish",
    "practitioners": 102,
    "with_role": 36,
-   "orgs_provider": 33,
+   "orgs_provider": 39,
    "orgs_ein": 2,
    "locations": 61,
    "lat": 30.24144,
@@ -5348,11 +5348,11 @@
     "other-clinical": 9,
     "dental": 3,
     "chiropractic": 3,
-    "physician": 2,
-    "nursing": 2,
     "group": 2,
-    "eye-vision": 2,
-    "advanced-practice": 2
+    "nursing": 2,
+    "physician": 2,
+    "advanced-practice": 2,
+    "eye-vision": 2
    }
   },
   {
@@ -5369,14 +5369,14 @@
    "by_category": {
     "behavioral-health": 15,
     "advanced-practice": 6,
-    "pharmacy": 3,
     "physician": 3,
+    "pharmacy": 3,
     "nursing": 2,
     "other-clinical": 2,
-    "support": 1,
     "podiatry": 1,
-    "dental": 1,
-    "group": 1
+    "support": 1,
+    "group": 1,
+    "dental": 1
    }
   },
   {
@@ -5385,7 +5385,7 @@
    "county": "Evangeline Parish",
    "practitioners": 127,
    "with_role": 62,
-   "orgs_provider": 134,
+   "orgs_provider": 142,
    "orgs_ein": 5,
    "locations": 138,
    "lat": 30.68892,
@@ -5395,14 +5395,14 @@
     "rehab-therapy": 20,
     "physician": 18,
     "other-clinical": 13,
-    "dental": 11,
     "behavioral-health": 11,
+    "dental": 11,
     "nursing": 8,
     "pharmacy": 8,
     "support": 4,
     "chiropractic": 2,
-    "agency": 1,
     "eye-vision": 1,
+    "agency": 1,
     "group": 1
    }
   },
@@ -5429,16 +5429,16 @@
    "county": "Jefferson Davis Parish",
    "practitioners": 5,
    "with_role": 2,
-   "orgs_provider": 7,
+   "orgs_provider": 8,
    "orgs_ein": 1,
    "locations": 10,
    "lat": 30.23367,
    "lng": -92.81893,
    "by_category": {
     "physician": 2,
+    "dental": 1,
     "behavioral-health": 1,
-    "advanced-practice": 1,
-    "dental": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -5447,8 +5447,8 @@
    "county": "Lafayette Parish",
    "practitioners": 298,
    "with_role": 47,
-   "orgs_provider": 67,
-   "orgs_ein": 3,
+   "orgs_provider": 73,
+   "orgs_ein": 5,
    "locations": 87,
    "lat": 30.1071,
    "lng": -92.00674,
@@ -5484,8 +5484,8 @@
    "county": "Calcasieu Parish",
    "practitioners": 1493,
    "with_role": 572,
-   "orgs_provider": 424,
-   "orgs_ein": 15,
+   "orgs_provider": 450,
+   "orgs_ein": 17,
    "locations": 713,
    "lat": 30.2112,
    "lng": -93.213,
@@ -5506,8 +5506,8 @@
     "no-taxonomy": 9,
     "eye-vision": 6,
     "facility": 5,
-    "podiatry": 2,
     "transport": 2,
+    "podiatry": 2,
     "agency": 1,
     "supplier": 1
    }
@@ -5531,7 +5531,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 573,
    "with_role": 247,
-   "orgs_provider": 249,
+   "orgs_provider": 267,
    "orgs_ein": 17,
    "locations": 396,
    "lat": 30.17646,
@@ -5546,8 +5546,8 @@
     "other-clinical": 41,
     "nursing": 11,
     "chiropractic": 9,
-    "group": 8,
     "eye-vision": 8,
+    "group": 8,
     "dietary": 7,
     "podiatry": 5,
     "supplier": 2,
@@ -5576,7 +5576,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 280,
    "with_role": 160,
-   "orgs_provider": 69,
+   "orgs_provider": 72,
    "orgs_ein": 7,
    "locations": 91,
    "lat": 30.17541,
@@ -5617,7 +5617,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 107,
    "with_role": 51,
-   "orgs_provider": 38,
+   "orgs_provider": 39,
    "orgs_ein": 2,
    "locations": 79,
    "lat": 30.31087,
@@ -5633,9 +5633,9 @@
     "nursing": 4,
     "podiatry": 3,
     "group": 2,
+    "eye-vision": 1,
     "student": 1,
-    "other-clinical": 1,
-    "eye-vision": 1
+    "other-clinical": 1
    }
   },
   {
@@ -5644,7 +5644,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 22,
    "with_role": 2,
-   "orgs_provider": 29,
+   "orgs_provider": 33,
    "orgs_ein": 0,
    "locations": 26,
    "lat": 30.22332,
@@ -5653,8 +5653,8 @@
     "behavioral-health": 11,
     "rehab-therapy": 8,
     "nursing": 1,
-    "pharmacy": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -5663,7 +5663,7 @@
    "county": null,
    "practitioners": 11,
    "with_role": 7,
-   "orgs_provider": 24,
+   "orgs_provider": 14,
    "orgs_ein": 0,
    "locations": 19,
    "lat": 30.23168,
@@ -5672,8 +5672,8 @@
     "behavioral-health": 5,
     "physician": 2,
     "advanced-practice": 2,
-    "nursing": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "nursing": 1
    }
   },
   {
@@ -5697,7 +5697,7 @@
    "county": "Cameron Parish",
    "practitioners": 2,
    "with_role": 0,
-   "orgs_provider": 11,
+   "orgs_provider": 13,
    "orgs_ein": 1,
    "locations": 13,
    "lat": 29.78961,
@@ -5713,7 +5713,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 32,
    "with_role": 20,
-   "orgs_provider": 37,
+   "orgs_provider": 40,
    "orgs_ein": 5,
    "locations": 36,
    "lat": 30.45236,
@@ -5735,7 +5735,7 @@
    "county": "Beauregard Parish",
    "practitioners": 210,
    "with_role": 100,
-   "orgs_provider": 132,
+   "orgs_provider": 139,
    "orgs_ein": 7,
    "locations": 133,
    "lat": 30.85096,
@@ -5809,16 +5809,16 @@
    "county": "Calcasieu Parish",
    "practitioners": 6,
    "with_role": 1,
-   "orgs_provider": 7,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 20,
    "lat": 30.24229,
    "lng": -93.01165,
    "by_category": {
     "pharmacy": 3,
-    "physician": 1,
+    "dental": 1,
     "chiropractic": 1,
-    "dental": 1
+    "physician": 1
    }
   },
   {
@@ -5827,7 +5827,7 @@
    "county": "Allen Parish",
    "practitioners": 80,
    "with_role": 65,
-   "orgs_provider": 33,
+   "orgs_provider": 32,
    "orgs_ein": 3,
    "locations": 27,
    "lat": 30.47874,
@@ -5837,11 +5837,11 @@
     "advanced-practice": 25,
     "rehab-therapy": 4,
     "chiropractic": 3,
-    "pharmacy": 2,
     "behavioral-health": 2,
+    "pharmacy": 2,
+    "dental": 1,
     "group": 1,
-    "other-clinical": 1,
-    "dental": 1
+    "other-clinical": 1
    }
   },
   {
@@ -5856,8 +5856,8 @@
    "lat": 30.56344,
    "lng": -93.23411,
    "by_category": {
-    "advanced-practice": 2,
     "rehab-therapy": 2,
+    "advanced-practice": 2,
     "group": 1
    }
   },
@@ -5867,7 +5867,7 @@
    "county": "Beauregard Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 30.75693,
@@ -5880,7 +5880,7 @@
    "county": "Allen Parish",
    "practitioners": 37,
    "with_role": 20,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 8,
    "lat": 30.62266,
@@ -5888,9 +5888,9 @@
    "by_category": {
     "behavioral-health": 12,
     "advanced-practice": 12,
-    "nursing": 4,
-    "dental": 4,
     "physician": 4,
+    "dental": 4,
+    "nursing": 4,
     "podiatry": 1
    }
   },
@@ -5900,7 +5900,7 @@
    "county": "Vernon Parish",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 30.9262,
@@ -5930,7 +5930,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 329,
    "with_role": 209,
-   "orgs_provider": 107,
+   "orgs_provider": 114,
    "orgs_ein": 2,
    "locations": 164,
    "lat": 30.23279,
@@ -5947,8 +5947,8 @@
     "other-clinical": 4,
     "eye-vision": 3,
     "dietary": 2,
-    "group": 1,
-    "support": 1
+    "support": 1,
+    "group": 1
    }
   },
   {
@@ -5965,8 +5965,8 @@
    "by_category": {
     "advanced-practice": 4,
     "rehab-therapy": 2,
-    "dental": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "dental": 1
    }
   },
   {
@@ -5975,7 +5975,7 @@
    "county": "Calcasieu Parish",
    "practitioners": 9,
    "with_role": 4,
-   "orgs_provider": 19,
+   "orgs_provider": 18,
    "orgs_ein": 0,
    "locations": 16,
    "lat": 30.19004,
@@ -5983,9 +5983,9 @@
    "by_category": {
     "advanced-practice": 4,
     "chiropractic": 2,
-    "pharmacy": 1,
     "nursing": 1,
-    "dental": 1
+    "dental": 1,
+    "pharmacy": 1
    }
   },
   {
@@ -5994,20 +5994,20 @@
    "county": "Calcasieu Parish",
    "practitioners": 21,
    "with_role": 12,
-   "orgs_provider": 13,
+   "orgs_provider": 14,
    "orgs_ein": 1,
    "locations": 24,
    "lat": 30.24909,
    "lng": -93.26692,
    "by_category": {
     "rehab-therapy": 6,
-    "chiropractic": 4,
     "pharmacy": 4,
+    "chiropractic": 4,
     "advanced-practice": 2,
     "physician": 2,
+    "behavioral-health": 1,
     "nursing": 1,
-    "other-clinical": 1,
-    "behavioral-health": 1
+    "other-clinical": 1
    }
   },
   {
@@ -6016,7 +6016,7 @@
    "county": null,
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 30.58634,
@@ -6029,7 +6029,7 @@
    "county": "Livingston Parish",
    "practitioners": 109,
    "with_role": 8,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 37,
    "lat": 30.57247,
@@ -6040,8 +6040,8 @@
     "advanced-practice": 7,
     "rehab-therapy": 7,
     "nursing": 5,
-    "dental": 1,
-    "group": 1
+    "group": 1,
+    "dental": 1
    }
   },
   {
@@ -6067,7 +6067,7 @@
    "county": "Livingston Parish",
    "practitioners": 19,
    "with_role": 8,
-   "orgs_provider": 8,
+   "orgs_provider": 11,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 30.50361,
@@ -6075,11 +6075,11 @@
    "by_category": {
     "rehab-therapy": 8,
     "pharmacy": 6,
-    "advanced-practice": 1,
-    "group": 1,
     "nursing": 1,
+    "advanced-practice": 1,
+    "chiropractic": 1,
     "physician": 1,
-    "chiropractic": 1
+    "group": 1
    }
   },
   {
@@ -6103,7 +6103,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 90,
    "with_role": 29,
-   "orgs_provider": 85,
+   "orgs_provider": 84,
    "orgs_ein": 2,
    "locations": 90,
    "lat": 30.5828,
@@ -6115,15 +6115,15 @@
     "advanced-practice": 6,
     "pharmacy": 6,
     "group": 3,
-    "agency": 2,
     "rehab-therapy": 2,
-    "podiatry": 1,
+    "agency": 2,
     "emergency-medical": 1,
     "nursing": 1,
-    "transport": 1,
+    "eye-vision": 1,
+    "podiatry": 1,
     "physician": 1,
     "chiropractic": 1,
-    "eye-vision": 1
+    "transport": 1
    }
   },
   {
@@ -6133,13 +6133,13 @@
    "practitioners": 9,
    "with_role": 2,
    "orgs_provider": 8,
-   "orgs_ein": 1,
+   "orgs_ein": 0,
    "locations": 5,
    "lat": 30.86409,
    "lng": -91.68039,
    "by_category": {
-    "behavioral-health": 4,
     "dental": 4,
+    "behavioral-health": 4,
     "nursing": 1
    }
   },
@@ -6149,8 +6149,8 @@
    "county": "West Baton Rouge Parish",
    "practitioners": 14,
    "with_role": 9,
-   "orgs_provider": 9,
-   "orgs_ein": 1,
+   "orgs_provider": 11,
+   "orgs_ein": 2,
    "locations": 17,
    "lat": 30.38829,
    "lng": -91.24439,
@@ -6167,7 +6167,7 @@
    "county": "East Feliciana Parish",
    "practitioners": 218,
    "with_role": 131,
-   "orgs_provider": 26,
+   "orgs_provider": 28,
    "orgs_ein": 0,
    "locations": 25,
    "lat": 30.85093,
@@ -6182,8 +6182,8 @@
     "physician": 3,
     "group": 2,
     "pharmacy": 2,
-    "dietary": 1,
     "podiatry": 1,
+    "dietary": 1,
     "agency": 1
    }
   },
@@ -6193,7 +6193,7 @@
    "county": "St. James Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 30.01069,
@@ -6206,8 +6206,8 @@
    "county": "Livingston Parish",
    "practitioners": 664,
    "with_role": 191,
-   "orgs_provider": 218,
-   "orgs_ein": 9,
+   "orgs_provider": 220,
+   "orgs_ein": 8,
    "locations": 292,
    "lat": 30.46777,
    "lng": -90.94575,
@@ -6223,8 +6223,8 @@
     "nursing": 14,
     "chiropractic": 5,
     "group": 3,
-    "support": 2,
     "student": 2,
+    "support": 2,
     "agency": 1
    }
   },
@@ -6283,7 +6283,7 @@
    "county": "Ascension Parish",
    "practitioners": 906,
    "with_role": 516,
-   "orgs_provider": 226,
+   "orgs_provider": 232,
    "orgs_ein": 11,
    "locations": 352,
    "lat": 30.22753,
@@ -6302,8 +6302,8 @@
     "eye-vision": 11,
     "group": 5,
     "support": 3,
-    "transport": 2,
     "agency": 2,
+    "transport": 2,
     "student": 2,
     "facility": 1
    }
@@ -6314,7 +6314,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 84,
    "with_role": 17,
-   "orgs_provider": 22,
+   "orgs_provider": 21,
    "orgs_ein": 3,
    "locations": 37,
    "lat": 30.51894,
@@ -6399,7 +6399,7 @@
    "county": "Livingston Parish",
    "practitioners": 101,
    "with_role": 6,
-   "orgs_provider": 13,
+   "orgs_provider": 16,
    "orgs_ein": 0,
    "locations": 44,
    "lat": 30.482,
@@ -6410,8 +6410,8 @@
     "behavioral-health": 12,
     "advanced-practice": 10,
     "pharmacy": 2,
-    "dental": 1,
-    "group": 1
+    "group": 1,
+    "dental": 1
    }
   },
   {
@@ -6420,7 +6420,7 @@
    "county": "Pointe Coupee Parish",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 30.55688,
@@ -6451,7 +6451,7 @@
    "county": "Pointe Coupee Parish",
    "practitioners": 104,
    "with_role": 55,
-   "orgs_provider": 63,
+   "orgs_provider": 68,
    "orgs_ein": 4,
    "locations": 84,
    "lat": 30.68991,
@@ -6475,7 +6475,7 @@
    "county": "St. James Parish",
    "practitioners": 5,
    "with_role": 1,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 30.02974,
@@ -6491,26 +6491,26 @@
    "county": "Iberville Parish",
    "practitioners": 152,
    "with_role": 14,
-   "orgs_provider": 83,
-   "orgs_ein": 3,
+   "orgs_provider": 99,
+   "orgs_ein": 4,
    "locations": 124,
    "lat": 30.2738,
    "lng": -91.23929,
    "by_category": {
     "behavioral-health": 76,
     "pharmacy": 13,
-    "rehab-therapy": 12,
     "other-clinical": 12,
     "physician": 12,
+    "rehab-therapy": 12,
     "dental": 6,
-    "nursing": 5,
     "dietary": 5,
+    "nursing": 5,
     "advanced-practice": 4,
     "eye-vision": 3,
+    "facility": 1,
     "transport": 1,
     "chiropractic": 1,
-    "supplier": 1,
-    "facility": 1
+    "supplier": 1
    }
   },
   {
@@ -6519,7 +6519,7 @@
    "county": "West Baton Rouge Parish",
    "practitioners": 65,
    "with_role": 21,
-   "orgs_provider": 36,
+   "orgs_provider": 37,
    "orgs_ein": 2,
    "locations": 60,
    "lat": 30.44375,
@@ -6529,13 +6529,13 @@
     "advanced-practice": 12,
     "rehab-therapy": 10,
     "pharmacy": 8,
-    "other-clinical": 5,
     "physician": 5,
+    "other-clinical": 5,
     "dental": 4,
     "nursing": 2,
+    "agency": 1,
     "eye-vision": 1,
-    "chiropractic": 1,
-    "agency": 1
+    "chiropractic": 1
    }
   },
   {
@@ -6544,7 +6544,7 @@
    "county": "Ascension Parish",
    "practitioners": 433,
    "with_role": 173,
-   "orgs_provider": 99,
+   "orgs_provider": 105,
    "orgs_ein": 2,
    "locations": 195,
    "lat": 30.31246,
@@ -6560,8 +6560,8 @@
     "other-clinical": 5,
     "nursing": 3,
     "group": 2,
-    "facility": 1,
     "eye-vision": 1,
+    "facility": 1,
     "podiatry": 1
    }
   },
@@ -6606,7 +6606,7 @@
    "county": "West Feliciana Parish",
    "practitioners": 73,
    "with_role": 61,
-   "orgs_provider": 40,
+   "orgs_provider": 43,
    "orgs_ein": 3,
    "locations": 42,
    "lat": 30.78684,
@@ -6616,12 +6616,12 @@
     "advanced-practice": 20,
     "rehab-therapy": 4,
     "other-clinical": 2,
-    "eye-vision": 2,
     "pharmacy": 2,
+    "eye-vision": 2,
     "chiropractic": 1,
-    "nursing": 1,
+    "dietary": 1,
     "podiatry": 1,
-    "dietary": 1
+    "nursing": 1
    }
   },
   {
@@ -6630,17 +6630,17 @@
    "county": "Iberville Parish",
    "practitioners": 12,
    "with_role": 2,
-   "orgs_provider": 5,
-   "orgs_ein": 1,
+   "orgs_provider": 8,
+   "orgs_ein": 2,
    "locations": 13,
    "lat": 30.27955,
    "lng": -91.10749,
    "by_category": {
     "advanced-practice": 6,
-    "behavioral-health": 2,
     "dental": 2,
-    "nursing": 1,
-    "physician": 1
+    "behavioral-health": 2,
+    "physician": 1,
+    "nursing": 1
    }
   },
   {
@@ -6657,11 +6657,11 @@
    "by_category": {
     "advanced-practice": 4,
     "rehab-therapy": 2,
-    "nursing": 2,
     "behavioral-health": 2,
-    "podiatry": 1,
+    "nursing": 2,
+    "pharmacy": 1,
     "group": 1,
-    "pharmacy": 1
+    "podiatry": 1
    }
   },
   {
@@ -6677,8 +6677,8 @@
    "lng": -90.86271,
    "by_category": {
     "behavioral-health": 12,
-    "support": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "support": 1
    }
   },
   {
@@ -6687,7 +6687,7 @@
    "county": "Livingston Parish",
    "practitioners": 149,
    "with_role": 102,
-   "orgs_provider": 38,
+   "orgs_provider": 40,
    "orgs_ein": 2,
    "locations": 83,
    "lat": 30.48161,
@@ -6700,9 +6700,9 @@
     "chiropractic": 7,
     "behavioral-health": 4,
     "other-clinical": 3,
-    "eye-vision": 2,
-    "group": 2,
     "dental": 2,
+    "group": 2,
+    "eye-vision": 2,
     "nursing": 1,
     "support": 1
    }
@@ -6713,14 +6713,14 @@
    "county": "Iberville Parish",
    "practitioners": 2,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 30.16711,
    "lng": -91.14747,
    "by_category": {
-    "rehab-therapy": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -6729,8 +6729,8 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 347,
    "with_role": 128,
-   "orgs_provider": 180,
-   "orgs_ein": 7,
+   "orgs_provider": 184,
+   "orgs_ein": 8,
    "locations": 246,
    "lat": 30.6509,
    "lng": -91.15481,
@@ -6744,14 +6744,14 @@
     "other-clinical": 12,
     "dietary": 9,
     "nursing": 5,
+    "eye-vision": 3,
     "group": 3,
     "chiropractic": 3,
-    "eye-vision": 3,
     "support": 1,
-    "agency": 1,
+    "facility": 1,
     "transport": 1,
     "podiatry": 1,
-    "facility": 1
+    "agency": 1
    }
   },
   {
@@ -6760,7 +6760,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 15,
    "with_role": 4,
-   "orgs_provider": 25,
+   "orgs_provider": 22,
    "orgs_ein": 0,
    "locations": 41,
    "lat": 30.45028,
@@ -6768,13 +6768,13 @@
    "by_category": {
     "behavioral-health": 3,
     "support": 3,
-    "rehab-therapy": 2,
     "advanced-practice": 2,
-    "dietary": 1,
-    "physician": 1,
+    "rehab-therapy": 2,
     "nursing": 1,
-    "group": 1,
-    "agency": 1
+    "agency": 1,
+    "physician": 1,
+    "dietary": 1,
+    "group": 1
    }
   },
   {
@@ -6783,7 +6783,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 188,
    "with_role": 35,
-   "orgs_provider": 119,
+   "orgs_provider": 124,
    "orgs_ein": 8,
    "locations": 139,
    "lat": 30.446,
@@ -6796,8 +6796,8 @@
     "advanced-practice": 12,
     "dietary": 7,
     "physician": 6,
-    "support": 3,
     "pharmacy": 3,
+    "support": 3,
     "chiropractic": 2,
     "student": 1,
     "dental": 1
@@ -6809,7 +6809,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 103,
    "with_role": 26,
-   "orgs_provider": 8,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 69,
    "lat": 30.405,
@@ -6821,9 +6821,9 @@
     "advanced-practice": 9,
     "behavioral-health": 7,
     "no-taxonomy": 3,
-    "group": 2,
-    "pharmacy": 2,
     "emergency-medical": 2,
+    "pharmacy": 2,
+    "group": 2,
     "dietary": 1
    }
   },
@@ -6833,7 +6833,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 142,
    "with_role": 22,
-   "orgs_provider": 79,
+   "orgs_provider": 86,
    "orgs_ein": 4,
    "locations": 118,
    "lat": 30.48954,
@@ -6846,8 +6846,8 @@
     "rehab-therapy": 10,
     "physician": 9,
     "advanced-practice": 9,
-    "transport": 2,
     "nursing": 2,
+    "transport": 2,
     "eye-vision": 1
    }
   },
@@ -6857,8 +6857,8 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 1890,
    "with_role": 325,
-   "orgs_provider": 762,
-   "orgs_ein": 31,
+   "orgs_provider": 790,
+   "orgs_ein": 30,
    "locations": 905,
    "lat": 30.44928,
    "lng": -91.12159,
@@ -6878,8 +6878,8 @@
     "agency": 9,
     "dietary": 8,
     "podiatry": 5,
-    "no-taxonomy": 5,
     "transport": 5,
+    "no-taxonomy": 5,
     "supplier": 3,
     "facility": 2,
     "emergency-medical": 1,
@@ -6893,7 +6893,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 47,
    "with_role": 14,
-   "orgs_provider": 54,
+   "orgs_provider": 56,
    "orgs_ein": 1,
    "locations": 66,
    "lat": 30.52544,
@@ -6902,12 +6902,12 @@
     "behavioral-health": 16,
     "rehab-therapy": 7,
     "nursing": 7,
-    "other-clinical": 5,
     "advanced-practice": 5,
+    "other-clinical": 5,
     "physician": 4,
     "chiropractic": 1,
-    "dental": 1,
-    "transport": 1
+    "transport": 1,
+    "dental": 1
    }
   },
   {
@@ -6916,8 +6916,8 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 988,
    "with_role": 381,
-   "orgs_provider": 298,
-   "orgs_ein": 11,
+   "orgs_provider": 305,
+   "orgs_ein": 10,
    "locations": 589,
    "lat": 30.40554,
    "lng": -91.12419,
@@ -6934,12 +6934,12 @@
     "dietary": 16,
     "eye-vision": 7,
     "group": 5,
-    "agency": 3,
     "chiropractic": 3,
+    "agency": 3,
     "no-taxonomy": 2,
     "podiatry": 2,
-    "facility": 1,
-    "support": 1
+    "support": 1,
+    "facility": 1
    }
   },
   {
@@ -6948,7 +6948,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 1452,
    "with_role": 360,
-   "orgs_provider": 431,
+   "orgs_provider": 468,
    "orgs_ein": 22,
    "locations": 878,
    "lat": 30.40684,
@@ -6967,13 +6967,13 @@
     "group": 10,
     "support": 9,
     "eye-vision": 9,
-    "facility": 4,
-    "supplier": 4,
-    "chiropractic": 4,
     "transport": 4,
+    "chiropractic": 4,
+    "supplier": 4,
+    "facility": 4,
     "no-taxonomy": 3,
-    "agency": 1,
     "podiatry": 1,
+    "agency": 1,
     "emergency-medical": 1
    }
   },
@@ -6983,8 +6983,8 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 827,
    "with_role": 404,
-   "orgs_provider": 233,
-   "orgs_ein": 10,
+   "orgs_provider": 264,
+   "orgs_ein": 11,
    "locations": 382,
    "lat": 30.37055,
    "lng": -91.09047,
@@ -6993,20 +6993,20 @@
     "physician": 179,
     "behavioral-health": 157,
     "rehab-therapy": 113,
-    "dental": 51,
     "pharmacy": 51,
+    "dental": 51,
     "nursing": 19,
     "other-clinical": 17,
     "support": 15,
     "chiropractic": 7,
     "eye-vision": 5,
-    "group": 3,
     "transport": 3,
+    "group": 3,
     "dietary": 2,
-    "agency": 1,
-    "supplier": 1,
+    "podiatry": 1,
     "student": 1,
-    "podiatry": 1
+    "supplier": 1,
+    "agency": 1
    }
   },
   {
@@ -7015,7 +7015,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 15,
    "with_role": 7,
-   "orgs_provider": 27,
+   "orgs_provider": 31,
    "orgs_ein": 1,
    "locations": 30,
    "lat": 30.53575,
@@ -7041,8 +7041,8 @@
    "lat": 30.50835,
    "lng": -91.11594,
    "by_category": {
-    "advanced-practice": 2,
     "rehab-therapy": 2,
+    "advanced-practice": 2,
     "behavioral-health": 1
    }
   },
@@ -7069,7 +7069,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 37,
    "with_role": 4,
-   "orgs_provider": 33,
+   "orgs_provider": 34,
    "orgs_ein": 2,
    "locations": 55,
    "lat": 30.48333,
@@ -7079,13 +7079,13 @@
     "dental": 5,
     "rehab-therapy": 5,
     "behavioral-health": 3,
-    "other-clinical": 1,
-    "chiropractic": 1,
     "group": 1,
     "agency": 1,
     "support": 1,
     "physician": 1,
-    "advanced-practice": 1
+    "other-clinical": 1,
+    "advanced-practice": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -7094,8 +7094,8 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 252,
    "with_role": 47,
-   "orgs_provider": 156,
-   "orgs_ein": 5,
+   "orgs_provider": 165,
+   "orgs_ein": 6,
    "locations": 196,
    "lat": 30.45235,
    "lng": -91.07567,
@@ -7110,8 +7110,8 @@
     "dental": 7,
     "dietary": 3,
     "transport": 3,
-    "support": 1,
     "eye-vision": 1,
+    "support": 1,
     "supplier": 1
    }
   },
@@ -7121,8 +7121,8 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 2656,
    "with_role": 593,
-   "orgs_provider": 733,
-   "orgs_ein": 38,
+   "orgs_provider": 532,
+   "orgs_ein": 17,
    "locations": 820,
    "lat": 30.42379,
    "lng": -91.0438,
@@ -7142,8 +7142,8 @@
     "group": 8,
     "agency": 6,
     "transport": 4,
-    "podiatry": 2,
-    "facility": 2
+    "facility": 2,
+    "podiatry": 2
    }
   },
   {
@@ -7152,7 +7152,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 503,
    "with_role": 302,
-   "orgs_provider": 123,
+   "orgs_provider": 128,
    "orgs_ein": 2,
    "locations": 181,
    "lat": 30.38812,
@@ -7171,9 +7171,9 @@
     "eye-vision": 3,
     "chiropractic": 2,
     "support": 1,
-    "supplier": 1,
     "no-taxonomy": 1,
-    "dietary": 1
+    "dietary": 1,
+    "supplier": 1
    }
   },
   {
@@ -7198,8 +7198,8 @@
     "eye-vision": 6,
     "chiropractic": 3,
     "nursing": 2,
-    "supplier": 1,
-    "group": 1
+    "group": 1,
+    "supplier": 1
    }
   },
   {
@@ -7226,7 +7226,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 109,
    "with_role": 51,
-   "orgs_provider": 14,
+   "orgs_provider": 16,
    "orgs_ein": 0,
    "locations": 31,
    "lat": 30.3695,
@@ -7237,10 +7237,10 @@
     "nursing": 7,
     "pharmacy": 5,
     "advanced-practice": 3,
-    "facility": 1,
+    "physician": 1,
     "dental": 1,
     "group": 1,
-    "physician": 1
+    "facility": 1
    }
   },
   {
@@ -7262,7 +7262,7 @@
    "county": null,
    "practitioners": 29,
    "with_role": 13,
-   "orgs_provider": 23,
+   "orgs_provider": 24,
    "orgs_ein": 1,
    "locations": 8,
    "lat": 30.45156,
@@ -7272,8 +7272,8 @@
     "behavioral-health": 7,
     "physician": 3,
     "transport": 2,
-    "group": 1,
-    "nursing": 1
+    "nursing": 1,
+    "group": 1
    }
   },
   {
@@ -7297,7 +7297,7 @@
    "county": "East Baton Rouge Parish",
    "practitioners": 555,
    "with_role": 504,
-   "orgs_provider": 20,
+   "orgs_provider": 22,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 30.38865,
@@ -7307,12 +7307,12 @@
     "advanced-practice": 169,
     "behavioral-health": 26,
     "rehab-therapy": 22,
-    "nursing": 13,
     "dietary": 13,
+    "nursing": 13,
     "other-clinical": 8,
     "eye-vision": 5,
-    "podiatry": 4,
     "group": 4,
+    "podiatry": 4,
     "student": 3,
     "pharmacy": 1,
     "support": 1
@@ -7339,7 +7339,7 @@
    "county": null,
    "practitioners": 1,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 30.37727,
@@ -7394,8 +7394,8 @@
     "pharmacy": 6,
     "support": 6,
     "physician": 5,
-    "nursing": 2,
-    "dental": 2
+    "dental": 2,
+    "nursing": 2
    }
   },
   {
@@ -7430,7 +7430,7 @@
    "county": "Bossier Parish",
    "practitioners": 66,
    "with_role": 36,
-   "orgs_provider": 29,
+   "orgs_provider": 35,
    "orgs_ein": 1,
    "locations": 45,
    "lat": 32.66385,
@@ -7442,10 +7442,10 @@
     "pharmacy": 8,
     "physician": 5,
     "dental": 2,
-    "other-clinical": 1,
-    "group": 1,
+    "eye-vision": 1,
     "chiropractic": 1,
-    "eye-vision": 1
+    "group": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -7484,7 +7484,7 @@
    "county": "Red River Parish",
    "practitioners": 38,
    "with_role": 19,
-   "orgs_provider": 30,
+   "orgs_provider": 34,
    "orgs_ein": 3,
    "locations": 34,
    "lat": 32.02386,
@@ -7497,8 +7497,8 @@
     "rehab-therapy": 3,
     "nursing": 2,
     "other-clinical": 2,
-    "transport": 1,
     "group": 1,
+    "transport": 1,
     "eye-vision": 1
    }
   },
@@ -7577,8 +7577,8 @@
    "county": "Bossier Parish",
    "practitioners": 64,
    "with_role": 19,
-   "orgs_provider": 134,
-   "orgs_ein": 2,
+   "orgs_provider": 107,
+   "orgs_ein": 1,
    "locations": 34,
    "lat": 32.54918,
    "lng": -93.57626,
@@ -7587,11 +7587,11 @@
     "other-clinical": 14,
     "pharmacy": 10,
     "physician": 7,
-    "dental": 6,
     "chiropractic": 6,
+    "dental": 6,
     "rehab-therapy": 5,
-    "advanced-practice": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -7600,7 +7600,7 @@
    "county": "Claiborne Parish",
    "practitioners": 9,
    "with_role": 5,
-   "orgs_provider": 12,
+   "orgs_provider": 14,
    "orgs_ein": 0,
    "locations": 16,
    "lat": 32.95676,
@@ -7608,10 +7608,10 @@
    "by_category": {
     "advanced-practice": 3,
     "pharmacy": 2,
+    "dental": 1,
     "physician": 1,
     "support": 1,
-    "nursing": 1,
-    "dental": 1
+    "nursing": 1
    }
   },
   {
@@ -7620,8 +7620,8 @@
    "county": "Claiborne Parish",
    "practitioners": 36,
    "with_role": 19,
-   "orgs_provider": 51,
-   "orgs_ein": 2,
+   "orgs_provider": 58,
+   "orgs_ein": 3,
    "locations": 47,
    "lat": 32.7993,
    "lng": -93.05643,
@@ -7631,12 +7631,12 @@
     "rehab-therapy": 3,
     "pharmacy": 3,
     "nursing": 2,
-    "other-clinical": 2,
     "eye-vision": 2,
-    "behavioral-health": 1,
-    "payer": 1,
+    "other-clinical": 2,
     "chiropractic": 1,
-    "group": 1
+    "behavioral-health": 1,
+    "group": 1,
+    "payer": 1
    }
   },
   {
@@ -7673,9 +7673,9 @@
    "by_category": {
     "behavioral-health": 2,
     "eye-vision": 2,
-    "physician": 1,
     "advanced-practice": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "physician": 1
    }
   },
   {
@@ -7699,7 +7699,7 @@
    "county": "De Soto Parish",
    "practitioners": 109,
    "with_role": 51,
-   "orgs_provider": 47,
+   "orgs_provider": 55,
    "orgs_ein": 3,
    "locations": 56,
    "lat": 32.03697,
@@ -7709,14 +7709,14 @@
     "behavioral-health": 28,
     "physician": 12,
     "other-clinical": 9,
-    "pharmacy": 6,
     "rehab-therapy": 6,
+    "pharmacy": 6,
     "nursing": 4,
     "dental": 3,
-    "eye-vision": 2,
-    "group": 2,
     "dietary": 2,
-    "chiropractic": 2
+    "chiropractic": 2,
+    "group": 2,
+    "eye-vision": 2
    }
   },
   {
@@ -7725,7 +7725,7 @@
    "county": "Webster Parish",
    "practitioners": 585,
    "with_role": 422,
-   "orgs_provider": 233,
+   "orgs_provider": 243,
    "orgs_ein": 4,
    "locations": 171,
    "lat": 32.61909,
@@ -7736,13 +7736,13 @@
     "behavioral-health": 68,
     "rehab-therapy": 36,
     "dental": 23,
-    "other-clinical": 22,
     "nursing": 22,
+    "other-clinical": 22,
     "pharmacy": 20,
     "group": 9,
-    "chiropractic": 2,
-    "agency": 2,
     "facility": 2,
+    "agency": 2,
+    "chiropractic": 2,
     "dietary": 1
    }
   },
@@ -7759,9 +7759,9 @@
    "lng": -93.97671,
    "by_category": {
     "advanced-practice": 5,
-    "group": 1,
     "nursing": 1,
-    "physician": 1
+    "physician": 1,
+    "group": 1
    }
   },
   {
@@ -7793,10 +7793,10 @@
     "physician": 5,
     "pharmacy": 5,
     "advanced-practice": 3,
-    "group": 1,
     "podiatry": 1,
-    "behavioral-health": 1,
-    "rehab-therapy": 1
+    "group": 1,
+    "rehab-therapy": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -7805,7 +7805,7 @@
    "county": "Sabine Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 31.81919,
@@ -7833,15 +7833,15 @@
    "county": "Bienville Parish",
    "practitioners": 4,
    "with_role": 0,
-   "orgs_provider": 4,
+   "orgs_provider": 5,
    "orgs_ein": 1,
    "locations": 16,
    "lat": 32.32315,
    "lng": -93.2864,
    "by_category": {
     "dental": 2,
-    "rehab-therapy": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -7895,7 +7895,7 @@
    "county": "Webster Parish",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 3,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 9,
    "lat": 32.54349,
@@ -7910,8 +7910,8 @@
    "county": "Webster Parish",
    "practitioners": 38,
    "with_role": 10,
-   "orgs_provider": 41,
-   "orgs_ein": 1,
+   "orgs_provider": 39,
+   "orgs_ein": 0,
    "locations": 40,
    "lat": 33.00245,
    "lng": -93.45862,
@@ -7922,8 +7922,8 @@
     "other-clinical": 4,
     "advanced-practice": 3,
     "dietary": 3,
-    "behavioral-health": 2,
     "eye-vision": 2,
+    "behavioral-health": 2,
     "dental": 1,
     "nursing": 1
    }
@@ -7934,7 +7934,7 @@
    "county": "De Soto Parish",
    "practitioners": 92,
    "with_role": 32,
-   "orgs_provider": 17,
+   "orgs_provider": 19,
    "orgs_ein": 3,
    "locations": 28,
    "lat": 32.26883,
@@ -7957,7 +7957,7 @@
    "county": "Caddo Parish",
    "practitioners": 48,
    "with_role": 27,
-   "orgs_provider": 20,
+   "orgs_provider": 21,
    "orgs_ein": 1,
    "locations": 28,
    "lat": 32.86436,
@@ -7970,8 +7970,8 @@
     "pharmacy": 4,
     "dental": 2,
     "group": 1,
-    "dietary": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dietary": 1
    }
   },
   {
@@ -7980,8 +7980,8 @@
    "county": "Caddo Parish",
    "practitioners": 1691,
    "with_role": 674,
-   "orgs_provider": 492,
-   "orgs_ein": 17,
+   "orgs_provider": 391,
+   "orgs_ein": 16,
    "locations": 494,
    "lat": 32.50082,
    "lng": -93.74585,
@@ -7996,13 +7996,13 @@
     "dietary": 31,
     "group": 24,
     "student": 22,
-    "support": 15,
     "dental": 15,
+    "support": 15,
     "eye-vision": 7,
     "agency": 7,
     "podiatry": 5,
-    "chiropractic": 2,
     "supplier": 2,
+    "chiropractic": 2,
     "transport": 1,
     "facility": 1
    }
@@ -8013,8 +8013,8 @@
    "county": "Caddo Parish",
    "practitioners": 2321,
    "with_role": 978,
-   "orgs_provider": 177,
-   "orgs_ein": 13,
+   "orgs_provider": 191,
+   "orgs_ein": 12,
    "locations": 242,
    "lat": 32.48384,
    "lng": -93.77031,
@@ -8034,8 +8034,8 @@
     "eye-vision": 3,
     "podiatry": 2,
     "facility": 2,
-    "chiropractic": 1,
     "supplier": 1,
+    "chiropractic": 1,
     "support": 1
    }
   },
@@ -8045,20 +8045,20 @@
    "county": "Caddo Parish",
    "practitioners": 584,
    "with_role": 79,
-   "orgs_provider": 164,
-   "orgs_ein": 5,
+   "orgs_provider": 175,
+   "orgs_ein": 6,
    "locations": 257,
    "lat": 32.48635,
    "lng": -93.73947,
    "by_category": {
     "behavioral-health": 329,
     "other-clinical": 140,
-    "rehab-therapy": 34,
     "physician": 34,
+    "rehab-therapy": 34,
     "dental": 9,
-    "pharmacy": 8,
-    "advanced-practice": 8,
     "support": 8,
+    "advanced-practice": 8,
+    "pharmacy": 8,
     "group": 4,
     "chiropractic": 3,
     "transport": 2,
@@ -8073,8 +8073,8 @@
    "county": "Caddo Parish",
    "practitioners": 1267,
    "with_role": 529,
-   "orgs_provider": 326,
-   "orgs_ein": 15,
+   "orgs_provider": 350,
+   "orgs_ein": 14,
    "locations": 598,
    "lat": 32.44699,
    "lng": -93.71646,
@@ -8090,14 +8090,14 @@
     "group": 14,
     "chiropractic": 9,
     "eye-vision": 7,
-    "podiatry": 3,
     "support": 3,
+    "podiatry": 3,
     "dietary": 2,
+    "student": 1,
     "facility": 1,
-    "transport": 1,
-    "emergency-medical": 1,
     "agency": 1,
-    "student": 1
+    "emergency-medical": 1,
+    "transport": 1
    }
   },
   {
@@ -8106,8 +8106,8 @@
    "county": "Caddo Parish",
    "practitioners": 300,
    "with_role": 91,
-   "orgs_provider": 150,
-   "orgs_ein": 5,
+   "orgs_provider": 182,
+   "orgs_ein": 6,
    "locations": 314,
    "lat": 32.42734,
    "lng": -93.74467,
@@ -8124,9 +8124,9 @@
     "dietary": 2,
     "chiropractic": 2,
     "group": 1,
-    "facility": 1,
+    "student": 1,
     "supplier": 1,
-    "student": 1
+    "facility": 1
    }
   },
   {
@@ -8135,7 +8135,7 @@
    "county": "Caddo Parish",
    "practitioners": 442,
    "with_role": 75,
-   "orgs_provider": 78,
+   "orgs_provider": 81,
    "orgs_ein": 3,
    "locations": 111,
    "lat": 32.55381,
@@ -8147,11 +8147,11 @@
     "pharmacy": 21,
     "physician": 9,
     "dental": 9,
-    "rehab-therapy": 5,
     "advanced-practice": 5,
+    "rehab-therapy": 5,
     "chiropractic": 3,
-    "agency": 2,
     "support": 2,
+    "agency": 2,
     "facility": 1,
     "group": 1
    }
@@ -8162,7 +8162,7 @@
    "county": "Caddo Parish",
    "practitioners": 87,
    "with_role": 12,
-   "orgs_provider": 34,
+   "orgs_provider": 36,
    "orgs_ein": 0,
    "locations": 59,
    "lat": 32.44656,
@@ -8183,22 +8183,22 @@
    "county": "Caddo Parish",
    "practitioners": 83,
    "with_role": 7,
-   "orgs_provider": 40,
+   "orgs_provider": 48,
    "orgs_ein": 0,
    "locations": 68,
    "lat": 32.47351,
    "lng": -93.80749,
    "by_category": {
     "behavioral-health": 47,
-    "pharmacy": 9,
     "other-clinical": 9,
-    "dental": 6,
+    "pharmacy": 9,
     "physician": 6,
-    "group": 1,
+    "dental": 6,
+    "support": 1,
     "agency": 1,
+    "group": 1,
     "eye-vision": 1,
     "transport": 1,
-    "support": 1,
     "rehab-therapy": 1
    }
   },
@@ -8222,8 +8222,8 @@
     "pharmacy": 9,
     "nursing": 8,
     "rehab-therapy": 6,
-    "dietary": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "dietary": 1
    }
   },
   {
@@ -8232,8 +8232,8 @@
    "county": "Bossier Parish",
    "practitioners": 1011,
    "with_role": 302,
-   "orgs_provider": 311,
-   "orgs_ein": 13,
+   "orgs_provider": 332,
+   "orgs_ein": 10,
    "locations": 466,
    "lat": 32.54568,
    "lng": -93.71,
@@ -8247,15 +8247,15 @@
     "dental": 44,
     "eye-vision": 11,
     "chiropractic": 10,
+    "group": 5,
     "nursing": 5,
     "podiatry": 5,
-    "group": 5,
     "support": 5,
+    "student": 1,
     "dietary": 1,
     "facility": 1,
-    "supplier": 1,
     "agency": 1,
-    "student": 1
+    "supplier": 1
    }
   },
   {
@@ -8264,7 +8264,7 @@
    "county": "Bossier Parish",
    "practitioners": 287,
    "with_role": 27,
-   "orgs_provider": 58,
+   "orgs_provider": 64,
    "orgs_ein": 3,
    "locations": 117,
    "lat": 32.4929,
@@ -8278,10 +8278,10 @@
     "dental": 10,
     "chiropractic": 6,
     "group": 2,
-    "dietary": 1,
     "advanced-practice": 1,
     "physician": 1,
-    "transport": 1
+    "transport": 1,
+    "dietary": 1
    }
   },
   {
@@ -8290,8 +8290,8 @@
    "county": "Caddo Parish",
    "practitioners": 64,
    "with_role": 23,
-   "orgs_provider": 64,
-   "orgs_ein": 1,
+   "orgs_provider": 78,
+   "orgs_ein": 2,
    "locations": 88,
    "lat": 32.4216,
    "lng": -93.70569,
@@ -8300,14 +8300,14 @@
     "rehab-therapy": 13,
     "advanced-practice": 7,
     "nursing": 4,
-    "group": 2,
     "behavioral-health": 2,
+    "group": 2,
+    "support": 1,
     "chiropractic": 1,
     "other-clinical": 1,
-    "facility": 1,
     "pharmacy": 1,
     "dental": 1,
-    "support": 1
+    "facility": 1
    }
   },
   {
@@ -8316,8 +8316,8 @@
    "county": "Caddo Parish",
    "practitioners": 644,
    "with_role": 77,
-   "orgs_provider": 143,
-   "orgs_ein": 3,
+   "orgs_provider": 175,
+   "orgs_ein": 2,
    "locations": 248,
    "lat": 32.40373,
    "lng": -93.80041,
@@ -8334,8 +8334,8 @@
     "support": 4,
     "student": 3,
     "eye-vision": 2,
-    "facility": 1,
-    "agency": 1
+    "agency": 1,
+    "facility": 1
    }
   },
   {
@@ -8344,7 +8344,7 @@
    "county": "Caddo Parish",
    "practitioners": 12,
    "with_role": 0,
-   "orgs_provider": 12,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 16,
    "lat": 32.46152,
@@ -8352,8 +8352,8 @@
    "by_category": {
     "behavioral-health": 8,
     "pharmacy": 2,
-    "nursing": 1,
-    "dental": 1
+    "dental": 1,
+    "nursing": 1
    }
   },
   {
@@ -8362,7 +8362,7 @@
    "county": "Caddo Parish",
    "practitioners": 179,
    "with_role": 28,
-   "orgs_provider": 89,
+   "orgs_provider": 93,
    "orgs_ein": 0,
    "locations": 107,
    "lat": 32.44292,
@@ -8374,13 +8374,13 @@
     "pharmacy": 11,
     "advanced-practice": 5,
     "rehab-therapy": 4,
-    "dental": 3,
     "physician": 3,
+    "dental": 3,
     "nursing": 2,
-    "transport": 1,
     "facility": 1,
-    "agency": 1,
-    "chiropractic": 1
+    "transport": 1,
+    "chiropractic": 1,
+    "agency": 1
    }
   },
   {
@@ -8408,8 +8408,8 @@
    "lat": 32.48831,
    "lng": -93.76796,
    "by_category": {
-    "nursing": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "nursing": 1
    }
   },
   {
@@ -8431,8 +8431,8 @@
    "county": "Ouachita Parish",
    "practitioners": 2271,
    "with_role": 692,
-   "orgs_provider": 735,
-   "orgs_ein": 29,
+   "orgs_provider": 741,
+   "orgs_ein": 30,
    "locations": 916,
    "lat": 32.52051,
    "lng": -92.10658,
@@ -8452,12 +8452,12 @@
     "chiropractic": 19,
     "no-taxonomy": 11,
     "eye-vision": 11,
+    "podiatry": 2,
     "facility": 2,
     "agency": 2,
     "transport": 2,
-    "podiatry": 2,
-    "emergency-medical": 1,
-    "supplier": 1
+    "supplier": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -8466,8 +8466,8 @@
    "county": "Ouachita Parish",
    "practitioners": 259,
    "with_role": 29,
-   "orgs_provider": 80,
-   "orgs_ein": 7,
+   "orgs_provider": 93,
+   "orgs_ein": 8,
    "locations": 92,
    "lat": 32.47177,
    "lng": -92.09456,
@@ -8477,15 +8477,15 @@
     "nursing": 19,
     "physician": 16,
     "advanced-practice": 13,
-    "pharmacy": 12,
     "student": 12,
+    "pharmacy": 12,
     "rehab-therapy": 5,
     "chiropractic": 4,
     "no-taxonomy": 3,
-    "dental": 2,
     "dietary": 2,
-    "group": 1,
-    "facility": 1
+    "dental": 2,
+    "facility": 1,
+    "group": 1
    }
   },
   {
@@ -8494,7 +8494,7 @@
    "county": "Ouachita Parish",
    "practitioners": 300,
    "with_role": 45,
-   "orgs_provider": 170,
+   "orgs_provider": 190,
    "orgs_ein": 5,
    "locations": 254,
    "lat": 32.55378,
@@ -8510,9 +8510,9 @@
     "student": 8,
     "dietary": 2,
     "group": 2,
-    "eye-vision": 1,
+    "supplier": 1,
     "chiropractic": 1,
-    "supplier": 1
+    "eye-vision": 1
    }
   },
   {
@@ -8567,7 +8567,7 @@
    "county": "Morehouse Parish",
    "practitioners": 215,
    "with_role": 36,
-   "orgs_provider": 131,
+   "orgs_provider": 139,
    "orgs_ein": 5,
    "locations": 160,
    "lat": 32.77784,
@@ -8605,8 +8605,8 @@
     "advanced-practice": 11,
     "nursing": 2,
     "behavioral-health": 1,
-    "dental": 1,
-    "group": 1
+    "group": 1,
+    "dental": 1
    }
   },
   {
@@ -8621,8 +8621,8 @@
    "lat": 32.51452,
    "lng": -92.33394,
    "by_category": {
-    "dental": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dental": 1
    }
   },
   {
@@ -8661,7 +8661,7 @@
    "county": "Richland Parish",
    "practitioners": 138,
    "with_role": 31,
-   "orgs_provider": 71,
+   "orgs_provider": 70,
    "orgs_ein": 1,
    "locations": 46,
    "lat": 32.46461,
@@ -8674,9 +8674,9 @@
     "pharmacy": 5,
     "dental": 3,
     "dietary": 1,
-    "chiropractic": 1,
+    "nursing": 1,
     "rehab-therapy": 1,
-    "nursing": 1
+    "chiropractic": 1
    }
   },
   {
@@ -8713,7 +8713,7 @@
    "county": "Union Parish",
    "practitioners": 150,
    "with_role": 41,
-   "orgs_provider": 44,
+   "orgs_provider": 50,
    "orgs_ein": 2,
    "locations": 69,
    "lat": 32.77706,
@@ -8726,9 +8726,9 @@
     "advanced-practice": 10,
     "physician": 9,
     "nursing": 3,
-    "dietary": 1,
     "facility": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "dietary": 1
    }
   },
   {
@@ -8744,9 +8744,9 @@
    "lng": -92.7121,
    "by_category": {
     "behavioral-health": 2,
-    "other-clinical": 1,
+    "rehab-therapy": 1,
     "physician": 1,
-    "rehab-therapy": 1
+    "other-clinical": 1
    }
   },
   {
@@ -8768,7 +8768,7 @@
    "county": "Jackson Parish",
    "practitioners": 146,
    "with_role": 50,
-   "orgs_provider": 32,
+   "orgs_provider": 34,
    "orgs_ein": 3,
    "locations": 59,
    "lat": 32.24552,
@@ -8780,10 +8780,10 @@
     "other-clinical": 23,
     "rehab-therapy": 15,
     "pharmacy": 11,
-    "nursing": 2,
     "dental": 2,
-    "dietary": 1,
+    "nursing": 2,
     "chiropractic": 1,
+    "dietary": 1,
     "podiatry": 1
    }
   },
@@ -8793,7 +8793,7 @@
    "county": "East Carroll Parish",
    "practitioners": 76,
    "with_role": 17,
-   "orgs_provider": 27,
+   "orgs_provider": 33,
    "orgs_ein": 2,
    "locations": 42,
    "lat": 32.80817,
@@ -8804,8 +8804,8 @@
     "advanced-practice": 7,
     "pharmacy": 6,
     "physician": 5,
-    "dental": 2,
     "nursing": 2,
+    "dental": 2,
     "agency": 1
    }
   },
@@ -8828,7 +8828,7 @@
    "county": "Richland Parish",
    "practitioners": 11,
    "with_role": 6,
-   "orgs_provider": 15,
+   "orgs_provider": 16,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 32.31334,
@@ -8837,8 +8837,8 @@
     "pharmacy": 4,
     "advanced-practice": 3,
     "dental": 2,
-    "nursing": 1,
-    "group": 1
+    "group": 1,
+    "nursing": 1
    }
   },
   {
@@ -8872,10 +8872,10 @@
    "by_category": {
     "advanced-practice": 4,
     "behavioral-health": 3,
-    "dental": 2,
     "pharmacy": 2,
-    "physician": 1,
-    "other-clinical": 1
+    "dental": 2,
+    "other-clinical": 1,
+    "physician": 1
    }
   },
   {
@@ -8884,8 +8884,8 @@
    "county": "West Carroll Parish",
    "practitioners": 43,
    "with_role": 19,
-   "orgs_provider": 41,
-   "orgs_ein": 2,
+   "orgs_provider": 42,
+   "orgs_ein": 3,
    "locations": 35,
    "lat": 32.85923,
    "lng": -91.39772,
@@ -8949,7 +8949,7 @@
    "county": "Richland Parish",
    "practitioners": 185,
    "with_role": 70,
-   "orgs_provider": 82,
+   "orgs_provider": 85,
    "orgs_ein": 4,
    "locations": 96,
    "lat": 32.46642,
@@ -8960,16 +8960,16 @@
     "physician": 22,
     "other-clinical": 22,
     "rehab-therapy": 13,
-    "nursing": 8,
     "pharmacy": 8,
+    "nursing": 8,
     "eye-vision": 4,
     "dental": 4,
     "support": 3,
-    "dietary": 1,
-    "chiropractic": 1,
-    "podiatry": 1,
     "group": 1,
-    "supplier": 1
+    "dietary": 1,
+    "supplier": 1,
+    "chiropractic": 1,
+    "podiatry": 1
    }
   },
   {
@@ -8978,7 +8978,7 @@
    "county": "Lincoln Parish",
    "practitioners": 649,
    "with_role": 258,
-   "orgs_provider": 278,
+   "orgs_provider": 293,
    "orgs_ein": 14,
    "locations": 337,
    "lat": 32.53565,
@@ -9052,7 +9052,7 @@
    "county": "Ouachita Parish",
    "practitioners": 47,
    "with_role": 15,
-   "orgs_provider": 10,
+   "orgs_provider": 9,
    "orgs_ein": 0,
    "locations": 16,
    "lat": 32.68783,
@@ -9061,11 +9061,11 @@
     "behavioral-health": 22,
     "advanced-practice": 10,
     "other-clinical": 8,
-    "pharmacy": 2,
     "physician": 2,
-    "nursing": 1,
+    "pharmacy": 2,
+    "group": 1,
     "agency": 1,
-    "group": 1
+    "nursing": 1
    }
   },
   {
@@ -9074,7 +9074,7 @@
    "county": "Madison Parish",
    "practitioners": 213,
    "with_role": 37,
-   "orgs_provider": 69,
+   "orgs_provider": 72,
    "orgs_ein": 2,
    "locations": 71,
    "lat": 32.40251,
@@ -9090,8 +9090,8 @@
     "physician": 5,
     "nursing": 2,
     "transport": 2,
-    "dental": 1,
-    "supplier": 1
+    "supplier": 1,
+    "dental": 1
    }
   },
   {
@@ -9113,8 +9113,8 @@
    "county": "Ouachita Parish",
    "practitioners": 740,
    "with_role": 405,
-   "orgs_provider": 322,
-   "orgs_ein": 12,
+   "orgs_provider": 325,
+   "orgs_ein": 13,
    "locations": 427,
    "lat": 32.51509,
    "lng": -92.15517,
@@ -9133,8 +9133,8 @@
     "other-clinical": 7,
     "student": 3,
     "podiatry": 2,
-    "support": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "support": 1
    }
   },
   {
@@ -9151,8 +9151,8 @@
    "by_category": {
     "behavioral-health": 47,
     "other-clinical": 29,
-    "rehab-therapy": 28,
     "advanced-practice": 28,
+    "rehab-therapy": 28,
     "physician": 9,
     "nursing": 5,
     "pharmacy": 4,
@@ -9182,7 +9182,7 @@
    "county": "Franklin Parish",
    "practitioners": 117,
    "with_role": 31,
-   "orgs_provider": 56,
+   "orgs_provider": 59,
    "orgs_ein": 2,
    "locations": 89,
    "lat": 32.16593,
@@ -9195,11 +9195,11 @@
     "other-clinical": 10,
     "physician": 5,
     "nursing": 4,
-    "dental": 2,
-    "group": 2,
     "supplier": 2,
-    "transport": 1,
+    "group": 2,
+    "dental": 2,
     "agency": 1,
+    "transport": 1,
     "dietary": 1
    }
   },
@@ -9209,8 +9209,8 @@
    "county": "Rapides Parish",
    "practitioners": 933,
    "with_role": 321,
-   "orgs_provider": 388,
-   "orgs_ein": 14,
+   "orgs_provider": 396,
+   "orgs_ein": 12,
    "locations": 702,
    "lat": 31.2954,
    "lng": -92.46005,
@@ -9227,12 +9227,12 @@
     "group": 12,
     "chiropractic": 5,
     "eye-vision": 4,
-    "student": 3,
     "facility": 3,
     "dietary": 3,
+    "student": 3,
     "transport": 2,
-    "agency": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "agency": 1
    }
   },
   {
@@ -9241,7 +9241,7 @@
    "county": "Rapides Parish",
    "practitioners": 100,
    "with_role": 6,
-   "orgs_provider": 37,
+   "orgs_provider": 43,
    "orgs_ein": 1,
    "locations": 54,
    "lat": 31.2626,
@@ -9252,12 +9252,12 @@
     "other-clinical": 20,
     "nursing": 15,
     "advanced-practice": 5,
+    "dental": 1,
     "physician": 1,
     "podiatry": 1,
-    "facility": 1,
-    "supplier": 1,
-    "dental": 1,
     "group": 1,
+    "supplier": 1,
+    "facility": 1,
     "pharmacy": 1
    }
   },
@@ -9267,8 +9267,8 @@
    "county": "Rapides Parish",
    "practitioners": 797,
    "with_role": 229,
-   "orgs_provider": 265,
-   "orgs_ein": 8,
+   "orgs_provider": 271,
+   "orgs_ein": 9,
    "locations": 398,
    "lat": 31.28806,
    "lng": -92.48805,
@@ -9282,14 +9282,14 @@
     "pharmacy": 36,
     "support": 19,
     "dental": 11,
-    "chiropractic": 8,
     "student": 8,
+    "chiropractic": 8,
     "eye-vision": 7,
     "group": 4,
     "facility": 3,
     "podiatry": 2,
-    "supplier": 1,
-    "dietary": 1
+    "dietary": 1,
+    "supplier": 1
    }
   },
   {
@@ -9328,7 +9328,7 @@
    "county": "Avoyelles Parish",
    "practitioners": 102,
    "with_role": 17,
-   "orgs_provider": 42,
+   "orgs_provider": 43,
    "orgs_ein": 3,
    "locations": 42,
    "lat": 30.95067,
@@ -9338,15 +9338,15 @@
     "other-clinical": 31,
     "advanced-practice": 7,
     "pharmacy": 5,
-    "rehab-therapy": 4,
     "dental": 4,
+    "rehab-therapy": 4,
     "agency": 4,
     "physician": 2,
     "eye-vision": 2,
-    "nursing": 1,
-    "transport": 1,
     "dietary": 1,
-    "chiropractic": 1
+    "nursing": 1,
+    "chiropractic": 1,
+    "transport": 1
    }
   },
   {
@@ -9355,7 +9355,7 @@
    "county": "Avoyelles Parish",
    "practitioners": 35,
    "with_role": 26,
-   "orgs_provider": 13,
+   "orgs_provider": 12,
    "orgs_ein": 1,
    "locations": 10,
    "lat": 30.98492,
@@ -9373,7 +9373,7 @@
    "county": "Rapides Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 4,
    "lat": 31.35619,
@@ -9414,7 +9414,7 @@
    "county": "Concordia Parish",
    "practitioners": 123,
    "with_role": 41,
-   "orgs_provider": 60,
+   "orgs_provider": 64,
    "orgs_ein": 4,
    "locations": 75,
    "lat": 31.63457,
@@ -9422,14 +9422,14 @@
    "by_category": {
     "behavioral-health": 32,
     "other-clinical": 29,
-    "rehab-therapy": 16,
     "advanced-practice": 16,
+    "rehab-therapy": 16,
     "physician": 11,
     "pharmacy": 8,
     "nursing": 4,
-    "group": 2,
-    "eye-vision": 2,
     "dental": 2,
+    "eye-vision": 2,
+    "group": 2,
     "facility": 1
    }
   },
@@ -9452,7 +9452,7 @@
    "county": "Catahoula Parish",
    "practitioners": 2,
    "with_role": 0,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 7,
    "lat": 31.76803,
@@ -9467,7 +9467,7 @@
    "county": "Avoyelles Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 31.05449,
@@ -9494,8 +9494,8 @@
     "advanced-practice": 6,
     "chiropractic": 3,
     "dietary": 2,
-    "dental": 2,
     "nursing": 2,
+    "dental": 2,
     "group": 1
    }
   },
@@ -9505,7 +9505,7 @@
    "county": "Catahoula Parish",
    "practitioners": 20,
    "with_role": 5,
-   "orgs_provider": 25,
+   "orgs_provider": 27,
    "orgs_ein": 1,
    "locations": 28,
    "lat": 31.62707,
@@ -9516,8 +9516,8 @@
     "nursing": 3,
     "rehab-therapy": 2,
     "advanced-practice": 2,
-    "other-clinical": 1,
-    "dental": 1
+    "dental": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -9526,7 +9526,7 @@
    "county": "Rapides Parish",
    "practitioners": 7,
    "with_role": 5,
-   "orgs_provider": 4,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 31.08787,
@@ -9543,7 +9543,7 @@
    "county": "Avoyelles Parish",
    "practitioners": 33,
    "with_role": 9,
-   "orgs_provider": 8,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 22,
    "lat": 31.07997,
@@ -9555,9 +9555,9 @@
     "pharmacy": 4,
     "nursing": 4,
     "dental": 2,
+    "advanced-practice": 1,
     "supplier": 1,
-    "group": 1,
-    "advanced-practice": 1
+    "group": 1
    }
   },
   {
@@ -9566,7 +9566,7 @@
    "county": "Avoyelles Parish",
    "practitioners": 103,
    "with_role": 25,
-   "orgs_provider": 84,
+   "orgs_provider": 92,
    "orgs_ein": 4,
    "locations": 133,
    "lat": 31.12715,
@@ -9577,14 +9577,14 @@
     "physician": 12,
     "rehab-therapy": 10,
     "pharmacy": 8,
-    "advanced-practice": 6,
     "nursing": 6,
+    "advanced-practice": 6,
     "eye-vision": 3,
-    "chiropractic": 2,
     "dental": 2,
-    "podiatry": 1,
+    "chiropractic": 2,
+    "emergency-medical": 1,
     "transport": 1,
-    "emergency-medical": 1
+    "podiatry": 1
    }
   },
   {
@@ -9608,15 +9608,15 @@
    "county": "Avoyelles Parish",
    "practitioners": 16,
    "with_role": 15,
-   "orgs_provider": 5,
+   "orgs_provider": 4,
    "orgs_ein": 2,
    "locations": 2,
    "lat": 31.04037,
    "lng": -91.97968,
    "by_category": {
     "advanced-practice": 7,
-    "behavioral-health": 3,
     "group": 3,
+    "behavioral-health": 3,
     "physician": 2,
     "podiatry": 1
    }
@@ -9644,7 +9644,7 @@
    "county": null,
    "practitioners": 8,
    "with_role": 2,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 31.32563,
@@ -9660,7 +9660,7 @@
    "county": "Rapides Parish",
    "practitioners": 603,
    "with_role": 97,
-   "orgs_provider": 181,
+   "orgs_provider": 209,
    "orgs_ein": 7,
    "locations": 242,
    "lat": 31.34366,
@@ -9705,7 +9705,7 @@
    "county": "Tensas Parish",
    "practitioners": 8,
    "with_role": 3,
-   "orgs_provider": 10,
+   "orgs_provider": 13,
    "orgs_ein": 1,
    "locations": 17,
    "lat": 31.9182,
@@ -9729,8 +9729,8 @@
    "lat": 31.85151,
    "lng": -91.66028,
    "by_category": {
-    "physician": 1,
     "pharmacy": 1,
+    "physician": 1,
     "dental": 1
    }
   },
@@ -9774,7 +9774,7 @@
    "county": "Concordia Parish",
    "practitioners": 228,
    "with_role": 47,
-   "orgs_provider": 85,
+   "orgs_provider": 88,
    "orgs_ein": 6,
    "locations": 104,
    "lat": 31.57189,
@@ -9789,11 +9789,11 @@
     "dental": 4,
     "nursing": 3,
     "chiropractic": 2,
-    "transport": 1,
-    "support": 1,
     "eye-vision": 1,
     "podiatry": 1,
-    "group": 1
+    "transport": 1,
+    "group": 1,
+    "support": 1
    }
   },
   {
@@ -9815,7 +9815,7 @@
    "county": "Franklin Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 31.99304,
@@ -9863,9 +9863,9 @@
    "lng": -92.41098,
    "by_category": {
     "behavioral-health": 4,
+    "pharmacy": 1,
     "dental": 1,
     "other-clinical": 1,
-    "pharmacy": 1,
     "advanced-practice": 1
    }
   },
@@ -9898,10 +9898,10 @@
    "by_category": {
     "behavioral-health": 4,
     "pharmacy": 2,
-    "facility": 1,
-    "other-clinical": 1,
+    "transport": 1,
     "rehab-therapy": 1,
-    "transport": 1
+    "facility": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -9910,7 +9910,7 @@
    "county": "Natchitoches Parish",
    "practitioners": 11,
    "with_role": 5,
-   "orgs_provider": 3,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 31.90048,
@@ -9940,16 +9940,16 @@
    "county": "Grant Parish",
    "practitioners": 12,
    "with_role": 4,
-   "orgs_provider": 11,
+   "orgs_provider": 14,
    "orgs_ein": 1,
    "locations": 14,
    "lat": 31.52171,
    "lng": -92.69396,
    "by_category": {
-    "rehab-therapy": 3,
     "behavioral-health": 3,
-    "pharmacy": 2,
+    "rehab-therapy": 3,
     "nursing": 2,
+    "pharmacy": 2,
     "dental": 1,
     "advanced-practice": 1
    }
@@ -9960,8 +9960,8 @@
    "county": "Caldwell Parish",
    "practitioners": 61,
    "with_role": 30,
-   "orgs_provider": 43,
-   "orgs_ein": 2,
+   "orgs_provider": 48,
+   "orgs_ein": 3,
    "locations": 47,
    "lat": 32.07788,
    "lng": -92.08904,
@@ -9969,8 +9969,8 @@
     "rehab-therapy": 19,
     "advanced-practice": 14,
     "pharmacy": 6,
-    "behavioral-health": 5,
     "physician": 5,
+    "behavioral-health": 5,
     "other-clinical": 5,
     "nursing": 3,
     "group": 2,
@@ -10010,8 +10010,8 @@
     "rehab-therapy": 3,
     "physician": 2,
     "nursing": 2,
-    "facility": 1,
-    "dental": 1
+    "dental": 1,
+    "facility": 1
    }
   },
   {
@@ -10081,8 +10081,8 @@
    "county": "Vernon Parish",
    "practitioners": 409,
    "with_role": 248,
-   "orgs_provider": 142,
-   "orgs_ein": 14,
+   "orgs_provider": 143,
+   "orgs_ein": 13,
    "locations": 159,
    "lat": 31.13409,
    "lng": -93.26657,
@@ -10094,8 +10094,8 @@
     "other-clinical": 30,
     "eye-vision": 26,
     "pharmacy": 20,
-    "group": 9,
     "nursing": 9,
+    "group": 9,
     "chiropractic": 6,
     "podiatry": 5,
     "dental": 4
@@ -10107,7 +10107,7 @@
    "county": "Rapides Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 1,
    "lat": 31.40535,
@@ -10120,15 +10120,15 @@
    "county": "Sabine Parish",
    "practitioners": 84,
    "with_role": 24,
-   "orgs_provider": 78,
+   "orgs_provider": 76,
    "orgs_ein": 4,
    "locations": 78,
    "lat": 31.55867,
    "lng": -93.49066,
    "by_category": {
     "behavioral-health": 17,
-    "pharmacy": 13,
     "other-clinical": 13,
+    "pharmacy": 13,
     "rehab-therapy": 11,
     "physician": 8,
     "advanced-practice": 8,
@@ -10136,9 +10136,9 @@
     "dental": 3,
     "chiropractic": 2,
     "eye-vision": 2,
-    "group": 1,
     "dietary": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "group": 1
    }
   },
   {
@@ -10163,7 +10163,7 @@
    "county": "Grant Parish",
    "practitioners": 1,
    "with_role": 1,
-   "orgs_provider": 3,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 31.67141,
@@ -10178,7 +10178,7 @@
    "county": "Natchitoches Parish",
    "practitioners": 401,
    "with_role": 123,
-   "orgs_provider": 226,
+   "orgs_provider": 242,
    "orgs_ein": 9,
    "locations": 250,
    "lat": 31.75454,
@@ -10193,11 +10193,11 @@
     "dental": 11,
     "nursing": 9,
     "chiropractic": 4,
-    "group": 2,
-    "dietary": 2,
-    "support": 2,
-    "podiatry": 2,
     "eye-vision": 2,
+    "group": 2,
+    "podiatry": 2,
+    "support": 2,
+    "dietary": 2,
     "agency": 1
    }
   },
@@ -10207,7 +10207,7 @@
    "county": "Vernon Parish",
    "practitioners": 229,
    "with_role": 20,
-   "orgs_provider": 10,
+   "orgs_provider": 11,
    "orgs_ein": 2,
    "locations": 23,
    "lat": 31.05862,
@@ -10234,8 +10234,8 @@
    "county": "Allen Parish",
    "practitioners": 102,
    "with_role": 70,
-   "orgs_provider": 66,
-   "orgs_ein": 4,
+   "orgs_provider": 70,
+   "orgs_ein": 5,
    "locations": 75,
    "lat": 30.81069,
    "lng": -92.6564,
@@ -10246,10 +10246,10 @@
     "pharmacy": 7,
     "rehab-therapy": 6,
     "group": 3,
-    "nursing": 2,
-    "other-clinical": 2,
-    "chiropractic": 2,
     "dental": 2,
+    "chiropractic": 2,
+    "other-clinical": 2,
+    "nursing": 2,
     "eye-vision": 1
    }
   },
@@ -10267,15 +10267,15 @@
    "by_category": {
     "physician": 46,
     "advanced-practice": 10,
-    "behavioral-health": 4,
     "other-clinical": 4,
+    "behavioral-health": 4,
     "group": 3,
     "pharmacy": 2,
     "dietary": 2,
-    "chiropractic": 1,
-    "emergency-medical": 1,
     "podiatry": 1,
-    "nursing": 1
+    "chiropractic": 1,
+    "nursing": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -10284,7 +10284,7 @@
    "county": "Rapides Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 31.20195,
@@ -10297,8 +10297,8 @@
    "county": "Grant Parish",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 0,
-   "orgs_ein": 0,
+   "orgs_provider": 3,
+   "orgs_ein": 1,
    "locations": 4,
    "lat": 31.49533,
    "lng": -92.41802,
@@ -10351,8 +10351,8 @@
    "county": "Winn Parish",
    "practitioners": 44,
    "with_role": 11,
-   "orgs_provider": 65,
-   "orgs_ein": 4,
+   "orgs_provider": 70,
+   "orgs_ein": 5,
    "locations": 83,
    "lat": 31.92771,
    "lng": -92.64444,
@@ -10362,16 +10362,16 @@
     "rehab-therapy": 4,
     "dental": 4,
     "nursing": 3,
-    "eye-vision": 3,
     "physician": 3,
+    "eye-vision": 3,
+    "advanced-practice": 2,
+    "chiropractic": 2,
     "other-clinical": 2,
     "group": 2,
-    "chiropractic": 2,
-    "advanced-practice": 2,
-    "agency": 1,
+    "support": 1,
     "emergency-medical": 1,
     "dietary": 1,
-    "support": 1
+    "agency": 1
    }
   },
   {
@@ -10380,7 +10380,7 @@
    "county": "Rapides Parish",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 4,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 4,
    "lat": 31.16101,
@@ -10393,7 +10393,7 @@
    "county": "Sabine Parish",
    "practitioners": 15,
    "with_role": 13,
-   "orgs_provider": 12,
+   "orgs_provider": 14,
    "orgs_ein": 0,
    "locations": 8,
    "lat": 31.63801,
@@ -10438,5 +10438,5 @@
    "by_category": {}
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address, and placed 63,194 of 2,058,500 organizations in another state (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

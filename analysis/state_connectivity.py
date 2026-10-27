@@ -727,9 +727,10 @@ def funnel_corrections(state, summary):
     Built from the run's own summary so the current figures cannot drift from
     the payload they sit in. Empty for a state with no earlier publication.
     """
+    out = []
     before = PUBLISHED_BEFORE_FHI73.get((state or "").upper())
     if not before:
-        return []
+        return out + fhi84_correction(state, summary)
     name = STATE_NAMES.get(state.upper(), state.upper())
     return [{
         "date": "2026-10-16",
@@ -753,6 +754,55 @@ def funnel_corrections(state, summary):
             f"release."
         ),
         "since": f"the {before['report']}",
+    }] + fhi84_correction(state, summary)
+
+
+# As published before FHI-84 (2026-10-26), when organization _state/_city
+# read address[0], often the billing address. Measured: rerunning the
+# 2026-10-07 chain with the old columns reproduces these exactly.
+PUBLISHED_BEFORE_FHI84 = {
+    "PA": {
+        "reaches_endpoint": 50812,
+        "reaches_endpoint_pct": 22.3,
+        "reaches_endpoint_pct_of_affiliated": 50.3,
+        "affiliation_graph_edges": 6507,
+    },
+}
+
+
+def fhi84_correction(state, summary):
+    """Organization address correction (FHI-84), from the run's own summary.
+
+    The practitioner side of the ledger (its denominator) is unchanged: it
+    filters on Practitioner._state. What moved is every organization-side use
+    of state: H53's name-state and brand-state tiers, the out-of-state member
+    filter in the system rollup, and the in-state affiliation graph.
+    """
+    before = PUBLISHED_BEFORE_FHI84.get((state or "").upper())
+    if not before:
+        return []
+    name = STATE_NAMES.get(state.upper(), state.upper())
+    return [{
+        "date": "2026-10-26",
+        "issue": "FHI-84",
+        "what": (
+            "Organization state and city were read from the first address on "
+            "each Organization record, which the NDH often fills with the "
+            "postal billing address; 63,194 of 2,058,500 organizations were "
+            "placed in the wrong state, 4,322 of them out of "
+            f"{name} and 1,996 into it. They now come from the physical "
+            "address. The practitioner count is unchanged. Practitioners "
+            "reaching an endpoint by any route moved from "
+            f"{before['reaches_endpoint']:,} ({before['reaches_endpoint_pct']}%, "
+            f"{before['reaches_endpoint_pct_of_affiliated']}% of affiliated) to "
+            f"{summary['reaches_endpoint']:,} ({summary['reaches_endpoint_pct']}%, "
+            f"{summary['reaches_endpoint_pct_of_affiliated']}% of affiliated), "
+            "through the name-state and brand-state tiers. The deterministic "
+            "figure did not move. The in-state affiliation graph changed most, "
+            f"from {before['affiliation_graph_edges']:,} edges, because it "
+            "selects organizations by state."
+        ),
+        "since": "the 2026-10-16 correction (FHI-73)",
     }]
 
 

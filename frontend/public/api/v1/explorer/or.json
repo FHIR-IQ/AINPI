@@ -1,13 +1,13 @@
 {
  "state": "OR",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 114219,
   "with_role": 34886,
-  "orgs_provider": 19053,
-  "orgs_ein": 723,
+  "orgs_provider": 19445,
+  "orgs_ein": 752,
   "orgs_other": 0,
   "locations": 33374,
   "with_coords": 32671
@@ -155,8 +155,8 @@
    "practitioners": 34220,
    "with_role": 8452,
    "role_pct": 24.7,
-   "orgs_provider": 4758,
-   "orgs_ein": 141,
+   "orgs_provider": 4717,
+   "orgs_ein": 144,
    "by_category": {
     "behavioral-health": 12277,
     "physician": 4529,
@@ -175,8 +175,8 @@
    "practitioners": 16088,
    "with_role": 5177,
    "role_pct": 32.2,
-   "orgs_provider": 2470,
-   "orgs_ein": 74,
+   "orgs_provider": 2530,
+   "orgs_ein": 79,
    "by_category": {
     "behavioral-health": 5080,
     "rehab-therapy": 2284,
@@ -195,8 +195,8 @@
    "practitioners": 11802,
    "with_role": 5357,
    "role_pct": 45.4,
-   "orgs_provider": 1818,
-   "orgs_ein": 49,
+   "orgs_provider": 1801,
+   "orgs_ein": 51,
    "by_category": {
     "rehab-therapy": 3027,
     "physician": 2890,
@@ -215,8 +215,8 @@
    "practitioners": 9979,
    "with_role": 2969,
    "role_pct": 29.8,
-   "orgs_provider": 1641,
-   "orgs_ein": 65,
+   "orgs_provider": 1696,
+   "orgs_ein": 73,
    "by_category": {
     "behavioral-health": 5034,
     "rehab-therapy": 1139,
@@ -235,7 +235,7 @@
    "practitioners": 6321,
    "with_role": 1803,
    "role_pct": 28.5,
-   "orgs_provider": 1165,
+   "orgs_provider": 1201,
    "orgs_ein": 50,
    "by_category": {
     "behavioral-health": 2499,
@@ -255,8 +255,8 @@
    "practitioners": 6130,
    "with_role": 1616,
    "role_pct": 26.4,
-   "orgs_provider": 1424,
-   "orgs_ein": 43,
+   "orgs_provider": 1470,
+   "orgs_ein": 44,
    "by_category": {
     "behavioral-health": 1958,
     "other-clinical": 894,
@@ -275,8 +275,8 @@
    "practitioners": 4680,
    "with_role": 2106,
    "role_pct": 45.0,
-   "orgs_provider": 952,
-   "orgs_ein": 44,
+   "orgs_provider": 975,
+   "orgs_ein": 43,
    "by_category": {
     "behavioral-health": 1355,
     "physician": 899,
@@ -295,8 +295,8 @@
    "practitioners": 2556,
    "with_role": 595,
    "role_pct": 23.3,
-   "orgs_provider": 401,
-   "orgs_ein": 9,
+   "orgs_provider": 405,
+   "orgs_ein": 7,
    "by_category": {
     "behavioral-health": 838,
     "physician": 394,
@@ -315,8 +315,8 @@
    "practitioners": 2533,
    "with_role": 1184,
    "role_pct": 46.7,
-   "orgs_provider": 424,
-   "orgs_ein": 21,
+   "orgs_provider": 442,
+   "orgs_ein": 20,
    "by_category": {
     "physician": 697,
     "behavioral-health": 606,
@@ -335,8 +335,8 @@
    "practitioners": 2267,
    "with_role": 533,
    "role_pct": 23.5,
-   "orgs_provider": 331,
-   "orgs_ein": 15,
+   "orgs_provider": 350,
+   "orgs_ein": 17,
    "by_category": {
     "behavioral-health": 1259,
     "other-clinical": 210,
@@ -355,8 +355,8 @@
    "practitioners": 1931,
    "with_role": 520,
    "role_pct": 26.9,
-   "orgs_provider": 426,
-   "orgs_ein": 25,
+   "orgs_provider": 449,
+   "orgs_ein": 27,
    "by_category": {
     "behavioral-health": 593,
     "physician": 291,
@@ -375,8 +375,8 @@
    "practitioners": 1861,
    "with_role": 612,
    "role_pct": 32.9,
-   "orgs_provider": 390,
-   "orgs_ein": 18,
+   "orgs_provider": 393,
+   "orgs_ein": 21,
    "by_category": {
     "behavioral-health": 373,
     "physician": 335,
@@ -395,8 +395,8 @@
    "practitioners": 1800,
    "with_role": 352,
    "role_pct": 19.6,
-   "orgs_provider": 284,
-   "orgs_ein": 16,
+   "orgs_provider": 304,
+   "orgs_ein": 18,
    "by_category": {
     "other-clinical": 561,
     "behavioral-health": 505,
@@ -415,8 +415,8 @@
    "practitioners": 1711,
    "with_role": 403,
    "role_pct": 23.6,
-   "orgs_provider": 410,
-   "orgs_ein": 11,
+   "orgs_provider": 422,
+   "orgs_ein": 12,
    "by_category": {
     "behavioral-health": 655,
     "rehab-therapy": 260,
@@ -435,8 +435,8 @@
    "practitioners": 1215,
    "with_role": 380,
    "role_pct": 31.3,
-   "orgs_provider": 257,
-   "orgs_ein": 22,
+   "orgs_provider": 275,
+   "orgs_ein": 21,
    "by_category": {
     "behavioral-health": 356,
     "other-clinical": 172,
@@ -455,7 +455,7 @@
    "practitioners": 1162,
    "with_role": 261,
    "role_pct": 22.5,
-   "orgs_provider": 246,
+   "orgs_provider": 252,
    "orgs_ein": 19,
    "by_category": {
     "behavioral-health": 397,
@@ -475,7 +475,7 @@
    "practitioners": 1058,
    "with_role": 395,
    "role_pct": 37.3,
-   "orgs_provider": 163,
+   "orgs_provider": 172,
    "orgs_ein": 12,
    "by_category": {
     "behavioral-health": 332,
@@ -495,8 +495,8 @@
    "practitioners": 912,
    "with_role": 255,
    "role_pct": 28.0,
-   "orgs_provider": 178,
-   "orgs_ein": 10,
+   "orgs_provider": 201,
+   "orgs_ein": 11,
    "by_category": {
     "behavioral-health": 270,
     "physician": 157,
@@ -515,8 +515,8 @@
    "practitioners": 815,
    "with_role": 265,
    "role_pct": 32.5,
-   "orgs_provider": 201,
-   "orgs_ein": 9,
+   "orgs_provider": 207,
+   "orgs_ein": 11,
    "by_category": {
     "behavioral-health": 206,
     "other-clinical": 182,
@@ -535,8 +535,8 @@
    "practitioners": 769,
    "with_role": 366,
    "role_pct": 47.6,
-   "orgs_provider": 128,
-   "orgs_ein": 7,
+   "orgs_provider": 133,
+   "orgs_ein": 8,
    "by_category": {
     "behavioral-health": 218,
     "other-clinical": 176,
@@ -555,7 +555,7 @@
    "practitioners": 643,
    "with_role": 86,
    "role_pct": 13.4,
-   "orgs_provider": 82,
+   "orgs_provider": 91,
    "orgs_ein": 6,
    "by_category": {
     "behavioral-health": 242,
@@ -575,7 +575,7 @@
    "practitioners": 637,
    "with_role": 146,
    "role_pct": 22.9,
-   "orgs_provider": 133,
+   "orgs_provider": 145,
    "orgs_ein": 8,
    "by_category": {
     "behavioral-health": 249,
@@ -595,7 +595,7 @@
    "practitioners": 626,
    "with_role": 178,
    "role_pct": 28.4,
-   "orgs_provider": 188,
+   "orgs_provider": 191,
    "orgs_ein": 3,
    "by_category": {
     "rehab-therapy": 151,
@@ -615,8 +615,8 @@
    "practitioners": 509,
    "with_role": 132,
    "role_pct": 25.9,
-   "orgs_provider": 118,
-   "orgs_ein": 9,
+   "orgs_provider": 124,
+   "orgs_ein": 10,
    "by_category": {
     "behavioral-health": 171,
     "rehab-therapy": 74,
@@ -635,8 +635,8 @@
    "practitioners": 456,
    "with_role": 302,
    "role_pct": 66.2,
-   "orgs_provider": 88,
-   "orgs_ein": 7,
+   "orgs_provider": 91,
+   "orgs_ein": 6,
    "by_category": {
     "physician": 192,
     "advanced-practice": 63,
@@ -655,7 +655,7 @@
    "practitioners": 350,
    "with_role": 144,
    "role_pct": 41.1,
-   "orgs_provider": 61,
+   "orgs_provider": 67,
    "orgs_ein": 2,
    "by_category": {
     "behavioral-health": 151,
@@ -675,8 +675,8 @@
    "practitioners": 270,
    "with_role": 44,
    "role_pct": 16.3,
-   "orgs_provider": 85,
-   "orgs_ein": 4,
+   "orgs_provider": 95,
+   "orgs_ein": 5,
    "by_category": {
     "behavioral-health": 87,
     "other-clinical": 39,
@@ -695,7 +695,7 @@
    "practitioners": 247,
    "with_role": 64,
    "role_pct": 25.9,
-   "orgs_provider": 56,
+   "orgs_provider": 61,
    "orgs_ein": 6,
    "by_category": {
     "behavioral-health": 103,
@@ -715,7 +715,7 @@
    "practitioners": 137,
    "with_role": 23,
    "role_pct": 16.8,
-   "orgs_provider": 33,
+   "orgs_provider": 39,
    "orgs_ein": 6,
    "by_category": {
     "behavioral-health": 63,
@@ -735,7 +735,7 @@
    "practitioners": 129,
    "with_role": 37,
    "role_pct": 28.7,
-   "orgs_provider": 50,
+   "orgs_provider": 51,
    "orgs_ein": 2,
    "by_category": {
     "other-clinical": 36,
@@ -755,7 +755,7 @@
    "practitioners": 126,
    "with_role": 27,
    "role_pct": 21.4,
-   "orgs_provider": 30,
+   "orgs_provider": 33,
    "orgs_ein": 3,
    "by_category": {
     "behavioral-health": 59,
@@ -800,12 +800,12 @@
    "by_category": {
     "other-clinical": 36,
     "behavioral-health": 26,
-    "rehab-therapy": 7,
     "advanced-practice": 7,
+    "rehab-therapy": 7,
     "physician": 5,
     "nursing": 2,
     "dental": 2,
-    "student": 1
+    "pharmacy": 1
    }
   },
   {
@@ -823,8 +823,8 @@
     "other-clinical": 8,
     "advanced-practice": 6,
     "physician": 3,
-    "agency": 1,
-    "nursing": 1
+    "nursing": 1,
+    "agency": 1
    }
   },
   {
@@ -869,9 +869,9 @@
    "by_category": {
     "other-clinical": 3,
     "rehab-therapy": 2,
+    "dental": 1,
     "emergency-medical": 1,
-    "advanced-practice": 1,
-    "dental": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -880,7 +880,7 @@
    "county": null,
    "practitioners": 206,
    "with_role": 55,
-   "orgs_provider": 70,
+   "orgs_provider": 75,
    "orgs_ein": 2,
    "locations": 89,
    "lat": 45.49498,
@@ -896,9 +896,9 @@
     "advanced-practice": 6,
     "facility": 3,
     "eye-vision": 2,
+    "dietary": 1,
     "group": 1,
-    "nursing": 1,
-    "dietary": 1
+    "nursing": 1
    }
   },
   {
@@ -907,8 +907,8 @@
    "county": "Washington County",
    "practitioners": 1356,
    "with_role": 276,
-   "orgs_provider": 343,
-   "orgs_ein": 14,
+   "orgs_provider": 352,
+   "orgs_ein": 15,
    "locations": 548,
    "lat": 45.48766,
    "lng": -122.80147,
@@ -926,12 +926,12 @@
     "support": 19,
     "student": 12,
     "group": 10,
-    "dietary": 3,
     "podiatry": 3,
+    "dietary": 3,
     "no-taxonomy": 2,
     "agency": 2,
-    "payer": 1,
-    "facility": 1
+    "facility": 1,
+    "payer": 1
    }
   },
   {
@@ -970,7 +970,7 @@
    "county": "Washington County",
    "practitioners": 297,
    "with_role": 121,
-   "orgs_provider": 71,
+   "orgs_provider": 70,
    "orgs_ein": 4,
    "locations": 93,
    "lat": 45.44584,
@@ -986,10 +986,10 @@
     "eye-vision": 9,
     "chiropractic": 7,
     "nursing": 5,
-    "group": 1,
+    "support": 1,
     "podiatry": 1,
-    "dietary": 1,
-    "support": 1
+    "group": 1,
+    "dietary": 1
    }
   },
   {
@@ -998,8 +998,8 @@
    "county": "Washington County",
    "practitioners": 326,
    "with_role": 100,
-   "orgs_provider": 71,
-   "orgs_ein": 3,
+   "orgs_provider": 80,
+   "orgs_ein": 2,
    "locations": 209,
    "lat": 45.45999,
    "lng": -122.79155,
@@ -1010,14 +1010,14 @@
     "physician": 30,
     "other-clinical": 27,
     "dental": 17,
-    "advanced-practice": 14,
     "chiropractic": 14,
+    "advanced-practice": 14,
     "group": 6,
     "nursing": 2,
     "support": 2,
     "eye-vision": 1,
-    "student": 1,
-    "dietary": 1
+    "dietary": 1,
+    "student": 1
    }
   },
   {
@@ -1042,7 +1042,7 @@
    "county": "Clackamas County",
    "practitioners": 233,
    "with_role": 71,
-   "orgs_provider": 65,
+   "orgs_provider": 67,
    "orgs_ein": 2,
    "locations": 107,
    "lat": 45.26238,
@@ -1058,8 +1058,8 @@
     "advanced-practice": 14,
     "nursing": 8,
     "eye-vision": 4,
-    "emergency-medical": 1,
-    "group": 1
+    "group": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1083,8 +1083,8 @@
    "county": "Clackamas County",
    "practitioners": 4915,
    "with_role": 3626,
-   "orgs_provider": 286,
-   "orgs_ein": 6,
+   "orgs_provider": 294,
+   "orgs_ein": 8,
    "locations": 408,
    "lat": 45.42558,
    "lng": -122.55732,
@@ -1184,8 +1184,8 @@
     "dental": 3,
     "physician": 2,
     "rehab-therapy": 2,
-    "behavioral-health": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -1194,7 +1194,7 @@
    "county": "Multnomah County",
    "practitioners": 60,
    "with_role": 14,
-   "orgs_provider": 13,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 20,
    "lat": 45.53493,
@@ -1216,7 +1216,7 @@
    "county": "Clackamas County",
    "practitioners": 124,
    "with_role": 30,
-   "orgs_provider": 38,
+   "orgs_provider": 39,
    "orgs_ein": 2,
    "locations": 66,
    "lat": 45.38298,
@@ -1227,13 +1227,13 @@
     "physician": 9,
     "dental": 9,
     "pharmacy": 6,
-    "other-clinical": 5,
     "chiropractic": 5,
+    "other-clinical": 5,
     "support": 4,
     "nursing": 3,
     "advanced-practice": 2,
-    "dietary": 1,
-    "group": 1
+    "group": 1,
+    "dietary": 1
    }
   },
   {
@@ -1242,8 +1242,8 @@
    "county": "Multnomah County",
    "practitioners": 1175,
    "with_role": 217,
-   "orgs_provider": 277,
-   "orgs_ein": 11,
+   "orgs_provider": 300,
+   "orgs_ein": 13,
    "locations": 484,
    "lat": 45.50744,
    "lng": -122.42611,
@@ -1274,7 +1274,7 @@
    "county": "Hood River County",
    "practitioners": 617,
    "with_role": 173,
-   "orgs_provider": 184,
+   "orgs_provider": 187,
    "orgs_ein": 3,
    "locations": 286,
    "lat": 45.70487,
@@ -1320,7 +1320,7 @@
    "county": "Clackamas County",
    "practitioners": 276,
    "with_role": 107,
-   "orgs_provider": 74,
+   "orgs_provider": 71,
    "orgs_ein": 1,
    "locations": 198,
    "lat": 45.41723,
@@ -1336,10 +1336,10 @@
     "chiropractic": 5,
     "eye-vision": 5,
     "podiatry": 4,
-    "group": 2,
     "nursing": 2,
-    "facility": 1,
-    "dietary": 1
+    "group": 2,
+    "dietary": 1,
+    "facility": 1
    }
   },
   {
@@ -1348,8 +1348,8 @@
    "county": "Clackamas County",
    "practitioners": 822,
    "with_role": 196,
-   "orgs_provider": 290,
-   "orgs_ein": 8,
+   "orgs_provider": 293,
+   "orgs_ein": 9,
    "locations": 465,
    "lat": 45.41482,
    "lng": -122.72475,
@@ -1367,9 +1367,9 @@
     "eye-vision": 8,
     "group": 7,
     "podiatry": 2,
+    "support": 1,
     "student": 1,
-    "no-taxonomy": 1,
-    "support": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -1401,8 +1401,8 @@
    "by_category": {
     "advanced-practice": 4,
     "physician": 3,
-    "chiropractic": 1,
-    "dental": 1
+    "dental": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -1411,7 +1411,7 @@
    "county": "Clackamas County",
    "practitioners": 31,
    "with_role": 6,
-   "orgs_provider": 18,
+   "orgs_provider": 21,
    "orgs_ein": 0,
    "locations": 25,
    "lat": 45.15102,
@@ -1478,15 +1478,15 @@
    "county": "Clackamas County",
    "practitioners": 1294,
    "with_role": 387,
-   "orgs_provider": 227,
+   "orgs_provider": 231,
    "orgs_ein": 6,
    "locations": 419,
    "lat": 45.34743,
    "lng": -122.59565,
    "by_category": {
     "behavioral-health": 417,
-    "physician": 156,
     "other-clinical": 156,
+    "physician": 156,
     "rehab-therapy": 145,
     "dental": 112,
     "advanced-practice": 107,
@@ -1495,13 +1495,13 @@
     "chiropractic": 24,
     "dietary": 10,
     "support": 4,
-    "eye-vision": 3,
     "facility": 3,
-    "podiatry": 2,
+    "eye-vision": 3,
     "group": 2,
+    "podiatry": 2,
     "no-taxonomy": 2,
-    "student": 1,
-    "agency": 1
+    "agency": 1,
+    "student": 1
    }
   },
   {
@@ -1517,8 +1517,8 @@
    "lng": -122.95007,
    "by_category": {
     "dental": 5,
-    "chiropractic": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -1527,8 +1527,8 @@
    "county": "Columbia County",
    "practitioners": 580,
    "with_role": 71,
-   "orgs_provider": 52,
-   "orgs_ein": 5,
+   "orgs_provider": 56,
+   "orgs_ein": 4,
    "locations": 106,
    "lat": 45.85719,
    "lng": -122.81816,
@@ -1542,13 +1542,13 @@
     "physician": 12,
     "eye-vision": 8,
     "dental": 7,
+    "support": 2,
     "chiropractic": 2,
     "no-taxonomy": 2,
-    "support": 2,
-    "dietary": 1,
-    "facility": 1,
     "agency": 1,
-    "supplier": 1
+    "supplier": 1,
+    "dietary": 1,
+    "facility": 1
    }
   },
   {
@@ -1557,7 +1557,7 @@
    "county": "Clackamas County",
    "practitioners": 107,
    "with_role": 15,
-   "orgs_provider": 33,
+   "orgs_provider": 37,
    "orgs_ein": 0,
    "locations": 74,
    "lat": 45.39837,
@@ -1582,8 +1582,8 @@
    "county": "Columbia County",
    "practitioners": 48,
    "with_role": 12,
-   "orgs_provider": 17,
-   "orgs_ein": 1,
+   "orgs_provider": 20,
+   "orgs_ein": 2,
    "locations": 50,
    "lat": 45.74909,
    "lng": -122.87717,
@@ -1605,8 +1605,8 @@
    "county": "Wasco County",
    "practitioners": 755,
    "with_role": 359,
-   "orgs_provider": 124,
-   "orgs_ein": 6,
+   "orgs_provider": 129,
+   "orgs_ein": 7,
    "locations": 227,
    "lat": 45.60001,
    "lng": -121.18164,
@@ -1623,10 +1623,10 @@
     "group": 5,
     "dietary": 4,
     "eye-vision": 4,
-    "podiatry": 1,
+    "student": 1,
     "no-taxonomy": 1,
-    "support": 1,
-    "student": 1
+    "podiatry": 1,
+    "support": 1
    }
   },
   {
@@ -1635,7 +1635,7 @@
    "county": "Multnomah County",
    "practitioners": 117,
    "with_role": 19,
-   "orgs_provider": 35,
+   "orgs_provider": 40,
    "orgs_ein": 1,
    "locations": 59,
    "lat": 45.53252,
@@ -1661,8 +1661,8 @@
    "county": "Washington County",
    "practitioners": 657,
    "with_role": 224,
-   "orgs_provider": 206,
-   "orgs_ein": 6,
+   "orgs_provider": 222,
+   "orgs_ein": 7,
    "locations": 352,
    "lat": 45.37949,
    "lng": -122.7555,
@@ -1672,13 +1672,13 @@
     "rehab-therapy": 119,
     "other-clinical": 47,
     "pharmacy": 37,
-    "dental": 36,
     "advanced-practice": 36,
+    "dental": 36,
     "nursing": 23,
     "chiropractic": 20,
     "dietary": 7,
-    "support": 5,
     "group": 5,
+    "support": 5,
     "eye-vision": 3,
     "student": 2,
     "facility": 2,
@@ -1706,7 +1706,7 @@
    "county": "Columbia County",
    "practitioners": 8,
    "with_role": 1,
-   "orgs_provider": 8,
+   "orgs_provider": 10,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 45.85824,
@@ -1715,8 +1715,8 @@
     "rehab-therapy": 3,
     "pharmacy": 2,
     "other-clinical": 1,
-    "nursing": 1,
-    "dental": 1
+    "dental": 1,
+    "nursing": 1
    }
   },
   {
@@ -1731,12 +1731,12 @@
    "lat": 45.34979,
    "lng": -121.96989,
    "by_category": {
+    "advanced-practice": 1,
     "group": 1,
-    "rehab-therapy": 1,
-    "other-clinical": 1,
-    "physician": 1,
     "behavioral-health": 1,
-    "advanced-practice": 1
+    "physician": 1,
+    "other-clinical": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -1745,7 +1745,7 @@
    "county": "Clackamas County",
    "practitioners": 353,
    "with_role": 102,
-   "orgs_provider": 126,
+   "orgs_provider": 128,
    "orgs_ein": 7,
    "locations": 201,
    "lat": 45.36111,
@@ -1762,8 +1762,8 @@
     "nursing": 12,
     "eye-vision": 7,
     "group": 6,
-    "dietary": 2,
     "podiatry": 2,
+    "dietary": 2,
     "student": 2,
     "supplier": 1,
     "support": 1,
@@ -1776,7 +1776,7 @@
    "county": "Clackamas County",
    "practitioners": 837,
    "with_role": 70,
-   "orgs_provider": 232,
+   "orgs_provider": 188,
    "orgs_ein": 2,
    "locations": 251,
    "lat": 45.31597,
@@ -1787,8 +1787,8 @@
     "pharmacy": 35,
     "dental": 25,
     "other-clinical": 18,
-    "advanced-practice": 14,
     "chiropractic": 14,
+    "advanced-practice": 14,
     "physician": 13,
     "group": 11,
     "support": 5,
@@ -1804,7 +1804,7 @@
    "county": "Marion County",
    "practitioners": 370,
    "with_role": 177,
-   "orgs_provider": 85,
+   "orgs_provider": 91,
    "orgs_ein": 2,
    "locations": 135,
    "lat": 45.15011,
@@ -1821,8 +1821,8 @@
     "chiropractic": 9,
     "dietary": 4,
     "group": 3,
-    "eye-vision": 1,
-    "facility": 1
+    "facility": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -1846,7 +1846,7 @@
    "county": null,
    "practitioners": 251,
    "with_role": 14,
-   "orgs_provider": 16,
+   "orgs_provider": 15,
    "orgs_ein": 0,
    "locations": 31,
    "lat": 45.48745,
@@ -1884,7 +1884,7 @@
    "county": "Multnomah County",
    "practitioners": 94,
    "with_role": 30,
-   "orgs_provider": 22,
+   "orgs_provider": 25,
    "orgs_ein": 0,
    "locations": 48,
    "lat": 45.48853,
@@ -1897,8 +1897,8 @@
     "physician": 8,
     "dental": 7,
     "nursing": 3,
-    "no-taxonomy": 2,
     "chiropractic": 2,
+    "no-taxonomy": 2,
     "podiatry": 2
    }
   },
@@ -1908,8 +1908,8 @@
    "county": "Clackamas County",
    "practitioners": 297,
    "with_role": 100,
-   "orgs_provider": 95,
-   "orgs_ein": 1,
+   "orgs_provider": 107,
+   "orgs_ein": 2,
    "locations": 179,
    "lat": 45.44034,
    "lng": -122.55626,
@@ -1927,8 +1927,8 @@
     "group": 4,
     "student": 3,
     "no-taxonomy": 1,
-    "podiatry": 1,
-    "dietary": 1
+    "dietary": 1,
+    "podiatry": 1
    }
   },
   {
@@ -1972,8 +1972,8 @@
    "county": "Clatsop County",
    "practitioners": 469,
    "with_role": 204,
-   "orgs_provider": 130,
-   "orgs_ein": 4,
+   "orgs_provider": 132,
+   "orgs_ein": 5,
    "locations": 224,
    "lat": 46.18806,
    "lng": -123.8265,
@@ -1987,11 +1987,11 @@
     "pharmacy": 16,
     "nursing": 13,
     "chiropractic": 6,
-    "group": 4,
     "podiatry": 4,
+    "group": 4,
     "support": 3,
-    "dietary": 3,
     "eye-vision": 3,
+    "dietary": 3,
     "emergency-medical": 2,
     "supplier": 1
    }
@@ -2056,8 +2056,8 @@
    "lat": 45.27776,
    "lng": -123.14529,
    "by_category": {
-    "other-clinical": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -2081,9 +2081,9 @@
     "advanced-practice": 10,
     "nursing": 4,
     "student": 2,
+    "dietary": 1,
     "no-taxonomy": 1,
-    "rehab-therapy": 1,
-    "dietary": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -2116,9 +2116,9 @@
     "behavioral-health": 3,
     "other-clinical": 3,
     "chiropractic": 2,
-    "dental": 1,
+    "rehab-therapy": 1,
     "physician": 1,
-    "rehab-therapy": 1
+    "dental": 1
    }
   },
   {
@@ -2127,7 +2127,7 @@
    "county": "Washington County",
    "practitioners": 289,
    "with_role": 74,
-   "orgs_provider": 54,
+   "orgs_provider": 58,
    "orgs_ein": 2,
    "locations": 127,
    "lat": 45.52126,
@@ -2140,8 +2140,8 @@
     "dental": 23,
     "other-clinical": 20,
     "physician": 17,
-    "no-taxonomy": 16,
     "student": 16,
+    "no-taxonomy": 16,
     "pharmacy": 11,
     "chiropractic": 8,
     "nursing": 3,
@@ -2156,8 +2156,8 @@
    "county": "Washington County",
    "practitioners": 1146,
    "with_role": 221,
-   "orgs_provider": 164,
-   "orgs_ein": 6,
+   "orgs_provider": 177,
+   "orgs_ein": 8,
    "locations": 386,
    "lat": 45.51926,
    "lng": -122.98096,
@@ -2175,11 +2175,11 @@
     "nursing": 13,
     "group": 9,
     "support": 6,
-    "eye-vision": 5,
     "dietary": 5,
+    "eye-vision": 5,
     "facility": 4,
-    "agency": 1,
-    "supplier": 1
+    "supplier": 1,
+    "agency": 1
    }
   },
   {
@@ -2188,8 +2188,8 @@
    "county": "Washington County",
    "practitioners": 1059,
    "with_role": 269,
-   "orgs_provider": 204,
-   "orgs_ein": 5,
+   "orgs_provider": 217,
+   "orgs_ein": 7,
    "locations": 358,
    "lat": 45.54017,
    "lng": -122.92594,
@@ -2208,8 +2208,8 @@
     "group": 8,
     "dietary": 6,
     "support": 4,
-    "agency": 1,
-    "facility": 1
+    "facility": 1,
+    "agency": 1
    }
   },
   {
@@ -2233,7 +2233,7 @@
    "county": "Yamhill County",
    "practitioners": 1152,
    "with_role": 242,
-   "orgs_provider": 183,
+   "orgs_provider": 197,
    "orgs_ein": 13,
    "locations": 371,
    "lat": 45.21125,
@@ -2243,18 +2243,18 @@
     "other-clinical": 228,
     "physician": 113,
     "rehab-therapy": 104,
-    "advanced-practice": 67,
     "nursing": 67,
+    "advanced-practice": 67,
     "dental": 48,
     "pharmacy": 29,
     "chiropractic": 15,
-    "eye-vision": 10,
     "support": 10,
+    "eye-vision": 10,
     "dietary": 9,
     "group": 8,
     "agency": 4,
-    "no-taxonomy": 2,
     "podiatry": 2,
+    "no-taxonomy": 2,
     "student": 2
    }
   },
@@ -2264,7 +2264,7 @@
    "county": null,
    "practitioners": 70,
    "with_role": 27,
-   "orgs_provider": 14,
+   "orgs_provider": 15,
    "orgs_ein": 0,
    "locations": 44,
    "lat": 45.49964,
@@ -2275,9 +2275,9 @@
     "behavioral-health": 13,
     "pharmacy": 10,
     "eye-vision": 4,
-    "advanced-practice": 2,
     "nursing": 2,
     "other-clinical": 2,
+    "advanced-practice": 2,
     "chiropractic": 1
    }
   },
@@ -2302,8 +2302,8 @@
    "county": "Yamhill County",
    "practitioners": 1354,
    "with_role": 934,
-   "orgs_provider": 208,
-   "orgs_ein": 6,
+   "orgs_provider": 211,
+   "orgs_ein": 5,
    "locations": 306,
    "lat": 45.30524,
    "lng": -122.96034,
@@ -2341,8 +2341,8 @@
     "chiropractic": 7,
     "physician": 5,
     "rehab-therapy": 4,
-    "dental": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "dental": 1
    }
   },
   {
@@ -2364,7 +2364,7 @@
    "county": "Clatsop County",
    "practitioners": 124,
    "with_role": 35,
-   "orgs_provider": 41,
+   "orgs_provider": 42,
    "orgs_ein": 4,
    "locations": 103,
    "lat": 46.00036,
@@ -2374,15 +2374,15 @@
     "pharmacy": 25,
     "physician": 20,
     "advanced-practice": 19,
-    "behavioral-health": 8,
     "other-clinical": 8,
+    "behavioral-health": 8,
     "chiropractic": 6,
     "dental": 5,
-    "nursing": 2,
     "dietary": 2,
+    "nursing": 2,
+    "group": 1,
     "facility": 1,
     "eye-vision": 1,
-    "group": 1,
     "podiatry": 1
    }
   },
@@ -2392,8 +2392,8 @@
    "county": "Washington County",
    "practitioners": 193,
    "with_role": 38,
-   "orgs_provider": 60,
-   "orgs_ein": 2,
+   "orgs_provider": 66,
+   "orgs_ein": 3,
    "locations": 117,
    "lat": 45.36545,
    "lng": -122.84375,
@@ -2409,9 +2409,9 @@
     "advanced-practice": 6,
     "physician": 4,
     "group": 2,
-    "no-taxonomy": 1,
     "dietary": 1,
-    "support": 1
+    "support": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -2420,8 +2420,8 @@
    "county": "Tillamook County",
    "practitioners": 454,
    "with_role": 302,
-   "orgs_provider": 86,
-   "orgs_ein": 6,
+   "orgs_provider": 89,
+   "orgs_ein": 5,
    "locations": 92,
    "lat": 45.45948,
    "lng": -123.83885,
@@ -2447,8 +2447,8 @@
    "county": "Clatsop County",
    "practitioners": 220,
    "with_role": 26,
-   "orgs_provider": 29,
-   "orgs_ein": 1,
+   "orgs_provider": 32,
+   "orgs_ein": 2,
    "locations": 57,
    "lat": 46.15526,
    "lng": -123.90642,
@@ -2463,8 +2463,8 @@
     "physician": 6,
     "eye-vision": 4,
     "support": 2,
-    "dietary": 1,
-    "agency": 1
+    "agency": 1,
+    "dietary": 1
    }
   },
   {
@@ -2488,8 +2488,8 @@
    "county": "Multnomah County",
    "practitioners": 861,
    "with_role": 259,
-   "orgs_provider": 103,
-   "orgs_ein": 8,
+   "orgs_provider": 67,
+   "orgs_ein": 4,
    "locations": 214,
    "lat": 45.51001,
    "lng": -122.68106,
@@ -2506,8 +2506,8 @@
     "no-taxonomy": 11,
     "chiropractic": 6,
     "eye-vision": 6,
-    "group": 5,
     "dietary": 5,
+    "group": 5,
     "support": 4,
     "facility": 3,
     "agency": 3,
@@ -2522,8 +2522,8 @@
    "county": "Multnomah County",
    "practitioners": 3190,
    "with_role": 213,
-   "orgs_provider": 258,
-   "orgs_ein": 7,
+   "orgs_provider": 268,
+   "orgs_ein": 8,
    "locations": 419,
    "lat": 45.48868,
    "lng": -122.64453,
@@ -2542,9 +2542,9 @@
     "student": 13,
     "no-taxonomy": 11,
     "facility": 6,
-    "dietary": 4,
     "agency": 4,
     "eye-vision": 4,
+    "dietary": 4,
     "podiatry": 1
    }
   },
@@ -2554,7 +2554,7 @@
    "county": "Multnomah County",
    "practitioners": 214,
    "with_role": 31,
-   "orgs_provider": 45,
+   "orgs_provider": 50,
    "orgs_ein": 2,
    "locations": 125,
    "lat": 45.58865,
@@ -2568,10 +2568,10 @@
     "dental": 10,
     "nursing": 10,
     "student": 4,
-    "chiropractic": 2,
-    "advanced-practice": 2,
-    "dietary": 2,
     "group": 2,
+    "chiropractic": 2,
+    "dietary": 2,
+    "advanced-practice": 2,
     "no-taxonomy": 1
    }
   },
@@ -2581,8 +2581,8 @@
    "county": "Multnomah County",
    "practitioners": 697,
    "with_role": 235,
-   "orgs_provider": 110,
-   "orgs_ein": 3,
+   "orgs_provider": 113,
+   "orgs_ein": 2,
    "locations": 187,
    "lat": 45.51907,
    "lng": -122.67571,
@@ -2595,14 +2595,14 @@
     "dental": 22,
     "rehab-therapy": 17,
     "pharmacy": 15,
+    "group": 4,
     "support": 4,
     "student": 4,
-    "group": 4,
     "dietary": 3,
-    "chiropractic": 2,
     "no-taxonomy": 2,
-    "emergency-medical": 1,
-    "facility": 1
+    "chiropractic": 2,
+    "facility": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -2611,8 +2611,8 @@
    "county": "Multnomah County",
    "practitioners": 1564,
    "with_role": 265,
-   "orgs_provider": 238,
-   "orgs_ein": 8,
+   "orgs_provider": 246,
+   "orgs_ein": 9,
    "locations": 543,
    "lat": 45.52024,
    "lng": -122.68441,
@@ -2642,7 +2642,7 @@
    "county": "Multnomah County",
    "practitioners": 685,
    "with_role": 143,
-   "orgs_provider": 113,
+   "orgs_provider": 115,
    "orgs_ein": 3,
    "locations": 198,
    "lat": 45.48933,
@@ -2652,8 +2652,8 @@
     "other-clinical": 220,
     "rehab-therapy": 57,
     "support": 37,
-    "dental": 19,
     "chiropractic": 19,
+    "dental": 19,
     "advanced-practice": 16,
     "nursing": 14,
     "physician": 14,
@@ -2700,8 +2700,8 @@
    "county": "Multnomah County",
    "practitioners": 1481,
    "with_role": 453,
-   "orgs_provider": 265,
-   "orgs_ein": 8,
+   "orgs_provider": 243,
+   "orgs_ein": 7,
    "locations": 490,
    "lat": 45.52884,
    "lng": -122.6866,
@@ -2721,9 +2721,9 @@
     "dietary": 11,
     "facility": 5,
     "student": 3,
-    "payer": 1,
+    "emergency-medical": 1,
     "podiatry": 1,
-    "emergency-medical": 1
+    "payer": 1
    }
   },
   {
@@ -2732,8 +2732,8 @@
    "county": "Multnomah County",
    "practitioners": 2629,
    "with_role": 1669,
-   "orgs_provider": 281,
-   "orgs_ein": 12,
+   "orgs_provider": 279,
+   "orgs_ein": 11,
    "locations": 508,
    "lat": 45.53076,
    "lng": -122.69936,
@@ -2748,8 +2748,8 @@
     "pharmacy": 51,
     "support": 44,
     "group": 30,
-    "dietary": 28,
     "chiropractic": 28,
+    "dietary": 28,
     "dental": 22,
     "podiatry": 18,
     "no-taxonomy": 13,
@@ -2763,8 +2763,8 @@
    "county": "Multnomah County",
    "practitioners": 284,
    "with_role": 45,
-   "orgs_provider": 70,
-   "orgs_ein": 1,
+   "orgs_provider": 76,
+   "orgs_ein": 0,
    "locations": 148,
    "lat": 45.5633,
    "lng": -122.65128,
@@ -2774,13 +2774,13 @@
     "other-clinical": 67,
     "pharmacy": 18,
     "chiropractic": 8,
-    "dental": 7,
     "physician": 7,
+    "dental": 7,
     "eye-vision": 6,
     "support": 4,
     "group": 3,
-    "student": 3,
     "nursing": 3,
+    "student": 3,
     "advanced-practice": 2
    }
   },
@@ -2790,7 +2790,7 @@
    "county": "Multnomah County",
    "practitioners": 854,
    "with_role": 145,
-   "orgs_provider": 148,
+   "orgs_provider": 141,
    "orgs_ein": 2,
    "locations": 239,
    "lat": 45.54003,
@@ -2803,16 +2803,16 @@
     "nursing": 37,
     "advanced-practice": 19,
     "chiropractic": 17,
-    "eye-vision": 12,
     "pharmacy": 12,
+    "eye-vision": 12,
     "physician": 12,
     "student": 11,
     "dental": 10,
     "group": 8,
     "no-taxonomy": 7,
     "dietary": 2,
-    "facility": 1,
-    "supplier": 1
+    "supplier": 1,
+    "facility": 1
    }
   },
   {
@@ -2821,8 +2821,8 @@
    "county": "Multnomah County",
    "practitioners": 1520,
    "with_role": 394,
-   "orgs_provider": 266,
-   "orgs_ein": 8,
+   "orgs_provider": 278,
+   "orgs_ein": 9,
    "locations": 632,
    "lat": 45.53267,
    "lng": -122.61032,
@@ -2853,8 +2853,8 @@
    "county": "Multnomah County",
    "practitioners": 2171,
    "with_role": 590,
-   "orgs_provider": 374,
-   "orgs_ein": 13,
+   "orgs_provider": 377,
+   "orgs_ein": 11,
    "locations": 574,
    "lat": 45.51672,
    "lng": -122.64966,
@@ -2873,8 +2873,8 @@
     "dietary": 12,
     "group": 12,
     "student": 9,
-    "facility": 2,
     "no-taxonomy": 2,
+    "facility": 2,
     "payer": 1,
     "emergency-medical": 1
    }
@@ -2885,7 +2885,7 @@
    "county": "Multnomah County",
    "practitioners": 447,
    "with_role": 51,
-   "orgs_provider": 123,
+   "orgs_provider": 132,
    "orgs_ein": 4,
    "locations": 215,
    "lat": 45.51636,
@@ -2901,11 +2901,11 @@
     "pharmacy": 9,
     "dietary": 5,
     "physician": 4,
-    "eye-vision": 2,
     "group": 2,
-    "payer": 1,
+    "eye-vision": 2,
+    "facility": 1,
     "support": 1,
-    "facility": 1
+    "payer": 1
    }
   },
   {
@@ -2914,7 +2914,7 @@
    "county": "Multnomah County",
    "practitioners": 1311,
    "with_role": 761,
-   "orgs_provider": 302,
+   "orgs_provider": 203,
    "orgs_ein": 3,
    "locations": 302,
    "lat": 45.51527,
@@ -2932,8 +2932,8 @@
     "dietary": 15,
     "student": 14,
     "group": 12,
-    "support": 11,
     "eye-vision": 11,
+    "support": 11,
     "podiatry": 2,
     "no-taxonomy": 1
    }
@@ -2944,7 +2944,7 @@
    "county": "Multnomah County",
    "practitioners": 331,
    "with_role": 50,
-   "orgs_provider": 100,
+   "orgs_provider": 101,
    "orgs_ein": 2,
    "locations": 165,
    "lat": 45.57393,
@@ -2960,8 +2960,8 @@
     "physician": 9,
     "dietary": 8,
     "group": 7,
-    "student": 3,
     "nursing": 3,
+    "student": 3,
     "support": 2,
     "eye-vision": 2,
     "supplier": 1
@@ -2973,7 +2973,7 @@
    "county": "Multnomah County",
    "practitioners": 272,
    "with_role": 2,
-   "orgs_provider": 32,
+   "orgs_provider": 39,
    "orgs_ein": 1,
    "locations": 55,
    "lat": 45.56522,
@@ -2995,8 +2995,8 @@
    "county": "Multnomah County",
    "practitioners": 602,
    "with_role": 85,
-   "orgs_provider": 138,
-   "orgs_ein": 3,
+   "orgs_provider": 146,
+   "orgs_ein": 5,
    "locations": 359,
    "lat": 45.46174,
    "lng": -122.7107,
@@ -3007,13 +3007,13 @@
     "dental": 30,
     "physician": 29,
     "chiropractic": 18,
-    "support": 15,
     "pharmacy": 15,
+    "support": 15,
     "advanced-practice": 12,
     "nursing": 8,
     "group": 6,
-    "dietary": 3,
     "student": 3,
+    "dietary": 3,
     "eye-vision": 1
    }
   },
@@ -3023,8 +3023,8 @@
    "county": "Multnomah County",
    "practitioners": 1955,
    "with_role": 763,
-   "orgs_provider": 229,
-   "orgs_ein": 11,
+   "orgs_provider": 242,
+   "orgs_ein": 12,
    "locations": 353,
    "lat": 45.53983,
    "lng": -122.55706,
@@ -3055,7 +3055,7 @@
    "county": "Multnomah County",
    "practitioners": 471,
    "with_role": 54,
-   "orgs_provider": 50,
+   "orgs_provider": 54,
    "orgs_ein": 2,
    "locations": 120,
    "lat": 45.50674,
@@ -3069,9 +3069,9 @@
     "pharmacy": 12,
     "nursing": 8,
     "dietary": 5,
+    "support": 4,
     "physician": 4,
     "chiropractic": 4,
-    "support": 4,
     "group": 2,
     "advanced-practice": 2,
     "agency": 1,
@@ -3084,8 +3084,8 @@
    "county": "Clackamas County",
    "practitioners": 2256,
    "with_role": 582,
-   "orgs_provider": 260,
-   "orgs_ein": 12,
+   "orgs_provider": 244,
+   "orgs_ein": 10,
    "locations": 285,
    "lat": 45.44144,
    "lng": -122.62576,
@@ -3098,15 +3098,15 @@
     "pharmacy": 68,
     "nursing": 57,
     "dental": 46,
-    "chiropractic": 30,
     "eye-vision": 30,
+    "chiropractic": 30,
     "group": 26,
     "dietary": 5,
     "student": 4,
     "agency": 2,
     "support": 2,
-    "no-taxonomy": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -3115,8 +3115,8 @@
    "county": "Washington County",
    "practitioners": 5263,
    "with_role": 1393,
-   "orgs_provider": 491,
-   "orgs_ein": 14,
+   "orgs_provider": 501,
+   "orgs_ein": 13,
    "locations": 724,
    "lat": 45.43642,
    "lng": -122.76446,
@@ -3137,9 +3137,9 @@
     "no-taxonomy": 3,
     "agency": 3,
     "facility": 3,
-    "support": 2,
     "emergency-medical": 2,
-    "podiatry": 2
+    "podiatry": 2,
+    "support": 2
    }
   },
   {
@@ -3148,7 +3148,7 @@
    "county": "Washington County",
    "practitioners": 709,
    "with_role": 179,
-   "orgs_provider": 213,
+   "orgs_provider": 176,
    "orgs_ein": 3,
    "locations": 257,
    "lat": 45.40277,
@@ -3165,12 +3165,12 @@
     "chiropractic": 12,
     "podiatry": 4,
     "eye-vision": 4,
-    "student": 3,
     "dietary": 3,
+    "student": 3,
     "emergency-medical": 1,
-    "facility": 1,
     "support": 1,
-    "group": 1
+    "group": 1,
+    "facility": 1
    }
   },
   {
@@ -3179,7 +3179,7 @@
    "county": "Washington County",
    "practitioners": 1666,
    "with_role": 550,
-   "orgs_provider": 291,
+   "orgs_provider": 306,
    "orgs_ein": 6,
    "locations": 692,
    "lat": 45.5055,
@@ -3201,8 +3201,8 @@
     "group": 11,
     "no-taxonomy": 4,
     "podiatry": 2,
-    "supplier": 1,
-    "payer": 1
+    "payer": 1,
+    "supplier": 1
    }
   },
   {
@@ -3211,8 +3211,8 @@
    "county": "Multnomah County",
    "practitioners": 1187,
    "with_role": 207,
-   "orgs_provider": 113,
-   "orgs_ein": 3,
+   "orgs_provider": 123,
+   "orgs_ein": 4,
    "locations": 297,
    "lat": 45.54414,
    "lng": -122.67128,
@@ -3233,9 +3233,9 @@
     "emergency-medical": 3,
     "student": 2,
     "no-taxonomy": 1,
-    "supplier": 1,
     "podiatry": 1,
-    "facility": 1
+    "facility": 1,
+    "supplier": 1
    }
   },
   {
@@ -3257,7 +3257,7 @@
    "county": "Washington County",
    "practitioners": 821,
    "with_role": 111,
-   "orgs_provider": 86,
+   "orgs_provider": 89,
    "orgs_ein": 3,
    "locations": 161,
    "lat": 45.53682,
@@ -3271,14 +3271,14 @@
     "physician": 32,
     "no-taxonomy": 22,
     "nursing": 15,
-    "chiropractic": 10,
     "podiatry": 10,
     "eye-vision": 10,
+    "chiropractic": 10,
     "advanced-practice": 9,
     "support": 5,
     "group": 4,
-    "student": 1,
-    "facility": 1
+    "facility": 1,
+    "student": 1
    }
   },
   {
@@ -3287,8 +3287,8 @@
    "county": "Multnomah County",
    "practitioners": 893,
    "with_role": 87,
-   "orgs_provider": 117,
-   "orgs_ein": 5,
+   "orgs_provider": 123,
+   "orgs_ein": 6,
    "locations": 198,
    "lat": 45.53948,
    "lng": -122.51601,
@@ -3306,12 +3306,12 @@
     "eye-vision": 5,
     "facility": 4,
     "student": 3,
-    "group": 2,
     "agency": 2,
     "dietary": 2,
-    "podiatry": 1,
+    "group": 2,
+    "emergency-medical": 1,
     "payer": 1,
-    "emergency-medical": 1
+    "podiatry": 1
    }
   },
   {
@@ -3328,8 +3328,8 @@
    "by_category": {
     "behavioral-health": 39,
     "nursing": 3,
-    "dietary": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "dietary": 1
    }
   },
   {
@@ -3338,7 +3338,7 @@
    "county": "Multnomah County",
    "practitioners": 3021,
    "with_role": 476,
-   "orgs_provider": 363,
+   "orgs_provider": 332,
    "orgs_ein": 6,
    "locations": 568,
    "lat": 45.53075,
@@ -3370,7 +3370,7 @@
    "county": "Multnomah County",
    "practitioners": 679,
    "with_role": 156,
-   "orgs_provider": 103,
+   "orgs_provider": 106,
    "orgs_ein": 6,
    "locations": 213,
    "lat": 45.51679,
@@ -3401,7 +3401,7 @@
    "county": "Multnomah County",
    "practitioners": 333,
    "with_role": 51,
-   "orgs_provider": 71,
+   "orgs_provider": 76,
    "orgs_ein": 2,
    "locations": 87,
    "lat": 45.50003,
@@ -3440,8 +3440,8 @@
    "county": "Multnomah County",
    "practitioners": 4589,
    "with_role": 771,
-   "orgs_provider": 319,
-   "orgs_ein": 4,
+   "orgs_provider": 329,
+   "orgs_ein": 7,
    "locations": 721,
    "lat": 45.49303,
    "lng": -122.67989,
@@ -3462,8 +3462,8 @@
     "eye-vision": 21,
     "support": 20,
     "facility": 5,
-    "emergency-medical": 2,
     "podiatry": 2,
+    "emergency-medical": 2,
     "agency": 1
    }
   },
@@ -3503,7 +3503,7 @@
    "county": "Multnomah County",
    "practitioners": 488,
    "with_role": 209,
-   "orgs_provider": 79,
+   "orgs_provider": 82,
    "orgs_ein": 2,
    "locations": 136,
    "lat": 45.49405,
@@ -3521,12 +3521,12 @@
     "group": 4,
     "no-taxonomy": 3,
     "dietary": 2,
-    "eye-vision": 1,
-    "facility": 1,
-    "support": 1,
+    "supplier": 1,
     "podiatry": 1,
+    "support": 1,
     "student": 1,
-    "supplier": 1
+    "facility": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -3535,7 +3535,7 @@
    "county": "Clackamas County",
    "practitioners": 199,
    "with_role": 54,
-   "orgs_provider": 54,
+   "orgs_provider": 61,
    "orgs_ein": 1,
    "locations": 118,
    "lat": 45.41073,
@@ -3550,8 +3550,8 @@
     "support": 7,
     "nursing": 5,
     "physician": 4,
-    "chiropractic": 3,
     "dietary": 3,
+    "chiropractic": 3,
     "student": 1
    }
   },
@@ -3618,7 +3618,7 @@
    "county": null,
    "practitioners": 5,
    "with_role": 3,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 4,
    "lat": 45.49676,
@@ -3659,15 +3659,15 @@
    "county": null,
    "practitioners": 4,
    "with_role": 0,
-   "orgs_provider": 3,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 45.51565,
    "lng": -122.65855,
    "by_category": {
     "behavioral-health": 2,
-    "other-clinical": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -3689,7 +3689,7 @@
    "county": null,
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 4,
    "lat": 45.53479,
@@ -3717,7 +3717,7 @@
    "county": "Marion County",
    "practitioners": 2930,
    "with_role": 757,
-   "orgs_provider": 527,
+   "orgs_provider": 546,
    "orgs_ein": 16,
    "locations": 965,
    "lat": 44.94195,
@@ -3740,8 +3740,8 @@
     "facility": 8,
     "agency": 4,
     "no-taxonomy": 3,
-    "supplier": 2,
     "podiatry": 2,
+    "supplier": 2,
     "transport": 1
    }
   },
@@ -3751,7 +3751,7 @@
    "county": "Marion County",
    "practitioners": 1159,
    "with_role": 286,
-   "orgs_provider": 474,
+   "orgs_provider": 453,
    "orgs_ein": 14,
    "locations": 552,
    "lat": 44.91452,
@@ -3782,7 +3782,7 @@
    "county": "Marion County",
    "practitioners": 289,
    "with_role": 73,
-   "orgs_provider": 94,
+   "orgs_provider": 111,
    "orgs_ein": 3,
    "locations": 177,
    "lat": 44.99305,
@@ -3798,13 +3798,13 @@
     "chiropractic": 10,
     "group": 5,
     "eye-vision": 5,
-    "dietary": 4,
     "nursing": 4,
+    "dietary": 4,
     "podiatry": 3,
     "support": 2,
     "supplier": 1,
-    "student": 1,
-    "facility": 1
+    "facility": 1,
+    "student": 1
    }
   },
   {
@@ -3830,10 +3830,10 @@
     "student": 5,
     "no-taxonomy": 4,
     "chiropractic": 2,
-    "emergency-medical": 1,
     "group": 1,
     "support": 1,
-    "facility": 1
+    "facility": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -3842,8 +3842,8 @@
    "county": "Marion County",
    "practitioners": 526,
    "with_role": 45,
-   "orgs_provider": 44,
-   "orgs_ein": 0,
+   "orgs_provider": 51,
+   "orgs_ein": 1,
    "locations": 110,
    "lat": 44.96383,
    "lng": -122.98423,
@@ -3860,9 +3860,9 @@
     "chiropractic": 10,
     "support": 5,
     "dietary": 2,
-    "supplier": 1,
     "no-taxonomy": 1,
-    "student": 1
+    "student": 1,
+    "supplier": 1
    }
   },
   {
@@ -3871,7 +3871,7 @@
    "county": "Marion County",
    "practitioners": 208,
    "with_role": 50,
-   "orgs_provider": 21,
+   "orgs_provider": 34,
    "orgs_ein": 1,
    "locations": 70,
    "lat": 44.87691,
@@ -3887,9 +3887,9 @@
     "other-clinical": 4,
     "student": 3,
     "nursing": 2,
+    "dietary": 1,
     "podiatry": 1,
-    "group": 1,
-    "dietary": 1
+    "group": 1
    }
   },
   {
@@ -3924,7 +3924,7 @@
    "county": null,
    "practitioners": 11,
    "with_role": 1,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 44.92386,
@@ -3933,8 +3933,8 @@
     "behavioral-health": 4,
     "physician": 3,
     "dental": 2,
-    "advanced-practice": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -3956,7 +3956,7 @@
    "county": "Marion County",
    "practitioners": 125,
    "with_role": 14,
-   "orgs_provider": 24,
+   "orgs_provider": 27,
    "orgs_ein": 3,
    "locations": 35,
    "lat": 44.9051,
@@ -3968,8 +3968,8 @@
     "pharmacy": 11,
     "chiropractic": 2,
     "physician": 2,
-    "dental": 1,
-    "payer": 1
+    "payer": 1,
+    "dental": 1
    }
   },
   {
@@ -3978,8 +3978,8 @@
    "county": "Linn County",
    "practitioners": 857,
    "with_role": 290,
-   "orgs_provider": 176,
-   "orgs_ein": 9,
+   "orgs_provider": 171,
+   "orgs_ein": 11,
    "locations": 287,
    "lat": 44.63248,
    "lng": -123.10776,
@@ -3999,8 +3999,8 @@
     "student": 6,
     "support": 5,
     "agency": 3,
-    "facility": 2,
     "no-taxonomy": 2,
+    "facility": 2,
     "supplier": 1,
     "podiatry": 1
    }
@@ -4011,7 +4011,7 @@
    "county": "Linn County",
    "practitioners": 363,
    "with_role": 95,
-   "orgs_provider": 96,
+   "orgs_provider": 99,
    "orgs_ein": 4,
    "locations": 155,
    "lat": 44.62834,
@@ -4028,9 +4028,9 @@
     "nursing": 5,
     "chiropractic": 5,
     "student": 3,
-    "no-taxonomy": 1,
+    "podiatry": 1,
     "agency": 1,
-    "podiatry": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -4047,8 +4047,8 @@
    "by_category": {
     "support": 2,
     "nursing": 1,
-    "other-clinical": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -4089,16 +4089,16 @@
    "county": "Benton County",
    "practitioners": 1959,
    "with_role": 502,
-   "orgs_provider": 291,
-   "orgs_ein": 8,
+   "orgs_provider": 289,
+   "orgs_ein": 6,
    "locations": 521,
    "lat": 44.58669,
    "lng": -123.26165,
    "by_category": {
     "behavioral-health": 657,
     "physician": 374,
-    "rehab-therapy": 181,
     "other-clinical": 181,
+    "rehab-therapy": 181,
     "nursing": 110,
     "pharmacy": 104,
     "advanced-practice": 88,
@@ -4120,7 +4120,7 @@
    "county": "Benton County",
    "practitioners": 205,
    "with_role": 5,
-   "orgs_provider": 6,
+   "orgs_provider": 9,
    "orgs_ein": 1,
    "locations": 38,
    "lat": 44.56662,
@@ -4134,8 +4134,8 @@
     "physician": 10,
     "behavioral-health": 5,
     "advanced-practice": 3,
-    "dietary": 2,
     "group": 2,
+    "dietary": 2,
     "facility": 1,
     "supplier": 1
    }
@@ -4146,7 +4146,7 @@
    "county": "Benton County",
    "practitioners": 352,
    "with_role": 78,
-   "orgs_provider": 85,
+   "orgs_provider": 87,
    "orgs_ein": 0,
    "locations": 216,
    "lat": 44.55976,
@@ -4163,9 +4163,9 @@
     "advanced-practice": 6,
     "support": 5,
     "student": 3,
+    "group": 2,
     "chiropractic": 2,
     "dietary": 2,
-    "group": 2,
     "facility": 1
    }
   },
@@ -4175,7 +4175,7 @@
    "county": "Polk County",
    "practitioners": 435,
    "with_role": 126,
-   "orgs_provider": 75,
+   "orgs_provider": 82,
    "orgs_ein": 6,
    "locations": 107,
    "lat": 44.92552,
@@ -4219,9 +4219,9 @@
    "lat": 44.81783,
    "lng": -124.06294,
    "by_category": {
-    "chiropractic": 1,
+    "physician": 1,
     "behavioral-health": 1,
-    "physician": 1
+    "chiropractic": 1
    }
   },
   {
@@ -4247,7 +4247,7 @@
    "county": "Polk County",
    "practitioners": 44,
    "with_role": 17,
-   "orgs_provider": 3,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 45.07441,
@@ -4257,11 +4257,11 @@
     "other-clinical": 11,
     "dental": 5,
     "nursing": 4,
-    "pharmacy": 2,
     "advanced-practice": 2,
+    "pharmacy": 2,
     "emergency-medical": 1,
-    "rehab-therapy": 1,
     "chiropractic": 1,
+    "rehab-therapy": 1,
     "eye-vision": 1
    }
   },
@@ -4287,7 +4287,7 @@
    "county": "Polk County",
    "practitioners": 148,
    "with_role": 110,
-   "orgs_provider": 20,
+   "orgs_provider": 21,
    "orgs_ein": 3,
    "locations": 38,
    "lat": 44.85346,
@@ -4328,8 +4328,8 @@
    "county": "Linn County",
    "practitioners": 546,
    "with_role": 190,
-   "orgs_provider": 94,
-   "orgs_ein": 2,
+   "orgs_provider": 96,
+   "orgs_ein": 3,
    "locations": 153,
    "lat": 44.53666,
    "lng": -122.90668,
@@ -4348,11 +4348,11 @@
     "dietary": 8,
     "chiropractic": 4,
     "support": 3,
+    "group": 1,
+    "agency": 1,
     "podiatry": 1,
     "facility": 1,
     "supplier": 1,
-    "group": 1,
-    "agency": 1,
     "emergency-medical": 1
    }
   },
@@ -4381,8 +4381,8 @@
    "lat": 44.75175,
    "lng": -122.47671,
    "by_category": {
-    "nursing": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "nursing": 1
    }
   },
   {
@@ -4403,11 +4403,11 @@
     "eye-vision": 4,
     "advanced-practice": 2,
     "pharmacy": 2,
-    "support": 1,
-    "group": 1,
     "physician": 1,
     "other-clinical": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "support": 1,
+    "group": 1
    }
   },
   {
@@ -4416,7 +4416,7 @@
    "county": "Marion County",
    "practitioners": 45,
    "with_role": 1,
-   "orgs_provider": 10,
+   "orgs_provider": 11,
    "orgs_ein": 1,
    "locations": 9,
    "lat": 45.06805,
@@ -4427,8 +4427,8 @@
     "dental": 3,
     "behavioral-health": 2,
     "pharmacy": 1,
-    "group": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "group": 1
    }
   },
   {
@@ -4452,8 +4452,8 @@
    "county": "Lincoln County",
    "practitioners": 533,
    "with_role": 83,
-   "orgs_provider": 99,
-   "orgs_ein": 6,
+   "orgs_provider": 117,
+   "orgs_ein": 7,
    "locations": 227,
    "lat": 44.63853,
    "lng": -124.05484,
@@ -4470,10 +4470,10 @@
     "chiropractic": 6,
     "eye-vision": 6,
     "dietary": 6,
-    "supplier": 1,
-    "podiatry": 1,
+    "emergency-medical": 1,
     "student": 1,
-    "emergency-medical": 1
+    "podiatry": 1,
+    "supplier": 1
    }
   },
   {
@@ -4490,8 +4490,8 @@
    "by_category": {
     "behavioral-health": 6,
     "other-clinical": 3,
-    "dental": 1,
-    "nursing": 1
+    "nursing": 1,
+    "dental": 1
    }
   },
   {
@@ -4500,7 +4500,7 @@
    "county": "Lincoln County",
    "practitioners": 287,
    "with_role": 161,
-   "orgs_provider": 67,
+   "orgs_provider": 71,
    "orgs_ein": 4,
    "locations": 139,
    "lat": 44.97611,
@@ -4514,8 +4514,8 @@
     "other-clinical": 17,
     "nursing": 16,
     "dental": 15,
-    "chiropractic": 2,
     "podiatry": 2,
+    "chiropractic": 2,
     "group": 2,
     "eye-vision": 1
    }
@@ -4542,7 +4542,7 @@
    "county": "Benton County",
    "practitioners": 28,
    "with_role": 10,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 0,
    "locations": 17,
    "lat": 44.54053,
@@ -4550,11 +4550,11 @@
    "by_category": {
     "rehab-therapy": 17,
     "behavioral-health": 4,
-    "dental": 2,
     "pharmacy": 2,
-    "nursing": 1,
+    "dental": 2,
     "other-clinical": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "nursing": 1
    }
   },
   {
@@ -4609,7 +4609,7 @@
    "county": "Yamhill County",
    "practitioners": 8,
    "with_role": 3,
-   "orgs_provider": 16,
+   "orgs_provider": 17,
    "orgs_ein": 2,
    "locations": 12,
    "lat": 45.09534,
@@ -4618,8 +4618,8 @@
     "chiropractic": 3,
     "pharmacy": 2,
     "physician": 1,
-    "rehab-therapy": 1,
-    "dental": 1
+    "dental": 1,
+    "rehab-therapy": 1
    }
   },
   {
@@ -4628,7 +4628,7 @@
    "county": "Marion County",
    "practitioners": 174,
    "with_role": 53,
-   "orgs_provider": 59,
+   "orgs_provider": 62,
    "orgs_ein": 2,
    "locations": 112,
    "lat": 45.00671,
@@ -4636,20 +4636,20 @@
    "by_category": {
     "rehab-therapy": 33,
     "physician": 28,
-    "behavioral-health": 19,
     "other-clinical": 19,
+    "behavioral-health": 19,
     "advanced-practice": 15,
     "pharmacy": 13,
     "nursing": 11,
     "dental": 10,
     "eye-vision": 7,
-    "support": 5,
     "dietary": 5,
+    "support": 5,
     "chiropractic": 4,
     "emergency-medical": 2,
-    "student": 1,
+    "facility": 1,
     "group": 1,
-    "facility": 1
+    "student": 1
    }
   },
   {
@@ -4658,7 +4658,7 @@
    "county": "Marion County",
    "practitioners": 271,
    "with_role": 157,
-   "orgs_provider": 69,
+   "orgs_provider": 67,
    "orgs_ein": 1,
    "locations": 56,
    "lat": 44.80363,
@@ -4675,9 +4675,9 @@
     "group": 6,
     "support": 4,
     "dietary": 3,
-    "chiropractic": 2,
     "podiatry": 2,
-    "eye-vision": 2
+    "eye-vision": 2,
+    "chiropractic": 2
    }
   },
   {
@@ -4694,8 +4694,8 @@
    "by_category": {
     "rehab-therapy": 10,
     "other-clinical": 1,
-    "dental": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "dental": 1
    }
   },
   {
@@ -4704,7 +4704,7 @@
    "county": "Linn County",
    "practitioners": 73,
    "with_role": 30,
-   "orgs_provider": 14,
+   "orgs_provider": 17,
    "orgs_ein": 1,
    "locations": 41,
    "lat": 44.39854,
@@ -4751,13 +4751,13 @@
    "by_category": {
     "behavioral-health": 41,
     "other-clinical": 3,
-    "advanced-practice": 2,
     "dental": 2,
-    "physician": 1,
+    "advanced-practice": 2,
+    "rehab-therapy": 1,
     "nursing": 1,
-    "facility": 1,
+    "physician": 1,
     "eye-vision": 1,
-    "rehab-therapy": 1
+    "facility": 1
    }
   },
   {
@@ -4781,7 +4781,7 @@
    "county": "Lincoln County",
    "practitioners": 9,
    "with_role": 1,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 44.42746,
@@ -4816,8 +4816,8 @@
    "county": "Lane County",
    "practitioners": 4725,
    "with_role": 1315,
-   "orgs_provider": 811,
-   "orgs_ein": 26,
+   "orgs_provider": 810,
+   "orgs_ein": 30,
    "locations": 1514,
    "lat": 44.05538,
    "lng": -123.08931,
@@ -4850,8 +4850,8 @@
    "county": "Lane County",
    "practitioners": 1042,
    "with_role": 144,
-   "orgs_provider": 145,
-   "orgs_ein": 10,
+   "orgs_provider": 144,
+   "orgs_ein": 8,
    "locations": 263,
    "lat": 44.05432,
    "lng": -123.13712,
@@ -4878,7 +4878,7 @@
    "county": "Lane County",
    "practitioners": 195,
    "with_role": 78,
-   "orgs_provider": 40,
+   "orgs_provider": 43,
    "orgs_ein": 2,
    "locations": 83,
    "lat": 44.04384,
@@ -4903,7 +4903,7 @@
    "county": "Lane County",
    "practitioners": 250,
    "with_role": 58,
-   "orgs_provider": 56,
+   "orgs_provider": 67,
    "orgs_ein": 1,
    "locations": 80,
    "lat": 44.09559,
@@ -4913,16 +4913,16 @@
     "rehab-therapy": 26,
     "physician": 19,
     "pharmacy": 18,
-    "advanced-practice": 13,
     "other-clinical": 13,
+    "advanced-practice": 13,
     "nursing": 10,
     "chiropractic": 10,
     "dental": 9,
     "facility": 4,
-    "group": 1,
+    "dietary": 1,
     "podiatry": 1,
     "eye-vision": 1,
-    "dietary": 1
+    "group": 1
    }
   },
   {
@@ -4931,8 +4931,8 @@
    "county": "Lane County",
    "practitioners": 368,
    "with_role": 59,
-   "orgs_provider": 99,
-   "orgs_ein": 2,
+   "orgs_provider": 111,
+   "orgs_ein": 3,
    "locations": 201,
    "lat": 44.02516,
    "lng": -123.09146,
@@ -4945,8 +4945,8 @@
     "pharmacy": 15,
     "advanced-practice": 10,
     "nursing": 7,
-    "group": 2,
     "chiropractic": 2,
+    "group": 2,
     "eye-vision": 2,
     "podiatry": 1
    }
@@ -4957,7 +4957,7 @@
    "county": "Lane County",
    "practitioners": 594,
    "with_role": 319,
-   "orgs_provider": 47,
+   "orgs_provider": 49,
    "orgs_ein": 1,
    "locations": 79,
    "lat": 44.09762,
@@ -4985,22 +4985,22 @@
    "county": "Coos County",
    "practitioners": 94,
    "with_role": 51,
-   "orgs_provider": 41,
-   "orgs_ein": 5,
+   "orgs_provider": 43,
+   "orgs_ein": 4,
    "locations": 51,
    "lat": 43.11542,
    "lng": -124.40883,
    "by_category": {
     "behavioral-health": 19,
-    "dental": 17,
     "advanced-practice": 17,
+    "dental": 17,
     "physician": 13,
     "rehab-therapy": 9,
     "other-clinical": 6,
     "pharmacy": 6,
     "eye-vision": 3,
-    "chiropractic": 2,
-    "nursing": 2
+    "nursing": 2,
+    "chiropractic": 2
    }
   },
   {
@@ -5022,8 +5022,8 @@
    "county": "Curry County",
    "practitioners": 213,
    "with_role": 41,
-   "orgs_provider": 70,
-   "orgs_ein": 3,
+   "orgs_provider": 78,
+   "orgs_ein": 4,
    "locations": 104,
    "lat": 42.05281,
    "lng": -124.2768,
@@ -5040,9 +5040,9 @@
     "group": 4,
     "dietary": 2,
     "chiropractic": 2,
+    "support": 1,
     "facility": 1,
-    "podiatry": 1,
-    "support": 1
+    "podiatry": 1
    }
   },
   {
@@ -5067,8 +5067,8 @@
    "county": "Coos County",
    "practitioners": 612,
    "with_role": 236,
-   "orgs_provider": 124,
-   "orgs_ein": 11,
+   "orgs_provider": 137,
+   "orgs_ein": 10,
    "locations": 188,
    "lat": 43.37566,
    "lng": -124.2296,
@@ -5084,9 +5084,9 @@
     "dietary": 12,
     "group": 9,
     "chiropractic": 6,
-    "podiatry": 2,
+    "eye-vision": 2,
     "support": 2,
-    "eye-vision": 2
+    "podiatry": 2
    }
   },
   {
@@ -5095,21 +5095,21 @@
    "county": "Coos County",
    "practitioners": 29,
    "with_role": 5,
-   "orgs_provider": 14,
+   "orgs_provider": 17,
    "orgs_ein": 1,
    "locations": 29,
    "lat": 43.17811,
    "lng": -124.18791,
    "by_category": {
     "behavioral-health": 10,
-    "rehab-therapy": 5,
     "pharmacy": 5,
+    "rehab-therapy": 5,
     "dental": 3,
     "chiropractic": 2,
-    "physician": 1,
-    "other-clinical": 1,
     "student": 1,
-    "nursing": 1
+    "nursing": 1,
+    "physician": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -5118,8 +5118,8 @@
    "county": "Lane County",
    "practitioners": 283,
    "with_role": 98,
-   "orgs_provider": 56,
-   "orgs_ein": 5,
+   "orgs_provider": 60,
+   "orgs_ein": 7,
    "locations": 101,
    "lat": 43.79808,
    "lng": -123.0581,
@@ -5155,9 +5155,9 @@
     "nursing": 5,
     "dental": 4,
     "behavioral-health": 2,
-    "group": 1,
     "other-clinical": 1,
     "physician": 1,
+    "group": 1,
     "eye-vision": 1
    }
   },
@@ -5201,9 +5201,9 @@
    "lat": 44.07453,
    "lng": -123.3608,
    "by_category": {
-    "behavioral-health": 2,
     "physician": 2,
     "other-clinical": 2,
+    "behavioral-health": 2,
     "advanced-practice": 1,
     "nursing": 1
    }
@@ -5230,8 +5230,8 @@
    "county": "Lane County",
    "practitioners": 154,
    "with_role": 41,
-   "orgs_provider": 42,
-   "orgs_ein": 4,
+   "orgs_provider": 48,
+   "orgs_ein": 5,
    "locations": 130,
    "lat": 43.98184,
    "lng": -124.10545,
@@ -5243,11 +5243,11 @@
     "rehab-therapy": 17,
     "advanced-practice": 13,
     "dental": 13,
-    "group": 3,
-    "eye-vision": 3,
     "nursing": 3,
-    "dietary": 2,
+    "eye-vision": 3,
+    "group": 3,
     "support": 2,
+    "dietary": 2,
     "chiropractic": 2
    }
   },
@@ -5290,7 +5290,7 @@
    "county": "Curry County",
    "practitioners": 57,
    "with_role": 3,
-   "orgs_provider": 15,
+   "orgs_provider": 17,
    "orgs_ein": 1,
    "locations": 25,
    "lat": 42.41684,
@@ -5298,15 +5298,15 @@
    "by_category": {
     "behavioral-health": 31,
     "rehab-therapy": 6,
-    "dental": 4,
     "nursing": 4,
+    "dental": 4,
     "other-clinical": 3,
     "physician": 3,
     "pharmacy": 2,
+    "agency": 1,
     "advanced-practice": 1,
     "dietary": 1,
-    "eye-vision": 1,
-    "agency": 1
+    "eye-vision": 1
    }
   },
   {
@@ -5344,24 +5344,24 @@
    "county": "Lane County",
    "practitioners": 192,
    "with_role": 11,
-   "orgs_provider": 19,
+   "orgs_provider": 21,
    "orgs_ein": 0,
    "locations": 38,
    "lat": 44.21017,
    "lng": -123.20519,
    "by_category": {
     "behavioral-health": 161,
-    "rehab-therapy": 5,
     "pharmacy": 5,
+    "rehab-therapy": 5,
     "advanced-practice": 4,
     "physician": 3,
     "group": 3,
     "dental": 3,
     "eye-vision": 2,
     "dietary": 2,
+    "nursing": 1,
     "support": 1,
     "chiropractic": 1,
-    "nursing": 1,
     "other-clinical": 1
    }
   },
@@ -5418,7 +5418,7 @@
    "county": "Lane County",
    "practitioners": 3,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 7,
    "lat": 43.96963,
@@ -5473,14 +5473,14 @@
    "county": "Coos County",
    "practitioners": 3,
    "with_role": 1,
-   "orgs_provider": 5,
-   "orgs_ein": 0,
+   "orgs_provider": 9,
+   "orgs_ein": 1,
    "locations": 11,
    "lat": 43.064,
    "lng": -124.13971,
    "by_category": {
-    "advanced-practice": 1,
     "dental": 1,
+    "advanced-practice": 1,
     "pharmacy": 1
    }
   },
@@ -5490,7 +5490,7 @@
    "county": "Coos County",
    "practitioners": 477,
    "with_role": 87,
-   "orgs_provider": 73,
+   "orgs_provider": 69,
    "orgs_ein": 5,
    "locations": 120,
    "lat": 43.40135,
@@ -5508,8 +5508,8 @@
     "group": 4,
     "eye-vision": 3,
     "chiropractic": 3,
-    "podiatry": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "podiatry": 1
    }
   },
   {
@@ -5518,15 +5518,15 @@
    "county": "Lane County",
    "practitioners": 4,
    "with_role": 2,
-   "orgs_provider": 3,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 7,
    "lat": 43.74441,
    "lng": -122.47025,
    "by_category": {
-    "rehab-therapy": 1,
-    "chiropractic": 1,
     "behavioral-health": 1,
+    "chiropractic": 1,
+    "rehab-therapy": 1,
     "nursing": 1
    }
   },
@@ -5536,21 +5536,21 @@
    "county": "Douglas County",
    "practitioners": 33,
    "with_role": 9,
-   "orgs_provider": 23,
-   "orgs_ein": 4,
+   "orgs_provider": 26,
+   "orgs_ein": 5,
    "locations": 33,
    "lat": 43.69789,
    "lng": -124.11184,
    "by_category": {
-    "dental": 6,
     "advanced-practice": 6,
+    "dental": 6,
     "physician": 6,
     "pharmacy": 6,
     "other-clinical": 3,
     "rehab-therapy": 2,
     "behavioral-health": 2,
-    "support": 1,
-    "dietary": 1
+    "dietary": 1,
+    "support": 1
    }
   },
   {
@@ -5559,7 +5559,7 @@
    "county": "Douglas County",
    "practitioners": 782,
    "with_role": 167,
-   "orgs_provider": 106,
+   "orgs_provider": 105,
    "orgs_ein": 3,
    "locations": 227,
    "lat": 43.2188,
@@ -5568,14 +5568,14 @@
     "behavioral-health": 353,
     "other-clinical": 154,
     "nursing": 76,
-    "rehab-therapy": 51,
     "physician": 51,
+    "rehab-therapy": 51,
     "advanced-practice": 28,
     "dental": 23,
     "pharmacy": 21,
     "student": 9,
-    "dietary": 5,
     "chiropractic": 5,
+    "dietary": 5,
     "group": 3,
     "eye-vision": 2,
     "support": 1
@@ -5587,8 +5587,8 @@
    "county": "Douglas County",
    "practitioners": 1011,
    "with_role": 294,
-   "orgs_provider": 248,
-   "orgs_ein": 16,
+   "orgs_provider": 268,
+   "orgs_ein": 17,
    "locations": 380,
    "lat": 43.22637,
    "lng": -123.37135,
@@ -5606,11 +5606,11 @@
     "chiropractic": 14,
     "podiatry": 7,
     "support": 3,
-    "no-taxonomy": 2,
     "facility": 2,
+    "no-taxonomy": 2,
     "group": 2,
-    "student": 1,
-    "supplier": 1
+    "supplier": 1,
+    "student": 1
    }
   },
   {
@@ -5632,8 +5632,8 @@
    "county": "Lane County",
    "practitioners": 1711,
    "with_role": 711,
-   "orgs_provider": 262,
-   "orgs_ein": 10,
+   "orgs_provider": 261,
+   "orgs_ein": 12,
    "locations": 399,
    "lat": 44.06554,
    "lng": -123.02271,
@@ -5653,8 +5653,8 @@
     "dietary": 7,
     "student": 5,
     "podiatry": 3,
-    "supplier": 2,
     "facility": 2,
+    "supplier": 2,
     "no-taxonomy": 2
    }
   },
@@ -5664,7 +5664,7 @@
    "county": "Lane County",
    "practitioners": 103,
    "with_role": 27,
-   "orgs_provider": 27,
+   "orgs_provider": 42,
    "orgs_ein": 1,
    "locations": 68,
    "lat": 44.04861,
@@ -5678,8 +5678,8 @@
     "advanced-practice": 4,
     "chiropractic": 2,
     "nursing": 2,
-    "eye-vision": 1,
     "support": 1,
+    "eye-vision": 1,
     "other-clinical": 1,
     "dietary": 1
    }
@@ -5690,7 +5690,7 @@
    "county": "Douglas County",
    "practitioners": 49,
    "with_role": 23,
-   "orgs_provider": 27,
+   "orgs_provider": 28,
    "orgs_ein": 2,
    "locations": 48,
    "lat": 43.38829,
@@ -5700,9 +5700,9 @@
     "physician": 10,
     "dental": 7,
     "pharmacy": 6,
-    "rehab-therapy": 3,
     "other-clinical": 3,
     "behavioral-health": 3,
+    "rehab-therapy": 3,
     "chiropractic": 3,
     "group": 2
    }
@@ -5713,7 +5713,7 @@
    "county": "Lane County",
    "practitioners": 11,
    "with_role": 0,
-   "orgs_provider": 9,
+   "orgs_provider": 10,
    "orgs_ein": 3,
    "locations": 17,
    "lat": 44.05201,
@@ -5768,9 +5768,9 @@
     "behavioral-health": 7,
     "pharmacy": 4,
     "dental": 2,
+    "nursing": 1,
     "group": 1,
     "physician": 1,
-    "nursing": 1,
     "rehab-therapy": 1,
     "advanced-practice": 1
    }
@@ -5796,8 +5796,8 @@
    "county": "Jackson County",
    "practitioners": 1419,
    "with_role": 336,
-   "orgs_provider": 187,
-   "orgs_ein": 11,
+   "orgs_provider": 182,
+   "orgs_ein": 12,
    "locations": 387,
    "lat": 42.32448,
    "lng": -122.87342,
@@ -5812,12 +5812,12 @@
     "pharmacy": 46,
     "dental": 23,
     "dietary": 9,
-    "eye-vision": 7,
     "chiropractic": 7,
+    "eye-vision": 7,
     "group": 5,
     "student": 2,
-    "emergency-medical": 1,
-    "facility": 1
+    "facility": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -5826,8 +5826,8 @@
    "county": "Jackson County",
    "practitioners": 196,
    "with_role": 56,
-   "orgs_provider": 85,
-   "orgs_ein": 1,
+   "orgs_provider": 67,
+   "orgs_ein": 2,
    "locations": 104,
    "lat": 42.3771,
    "lng": -122.90961,
@@ -5855,7 +5855,7 @@
    "county": "Jackson County",
    "practitioners": 218,
    "with_role": 9,
-   "orgs_provider": 17,
+   "orgs_provider": 26,
    "orgs_ein": 0,
    "locations": 63,
    "lat": 42.43645,
@@ -5882,8 +5882,8 @@
    "county": "Jackson County",
    "practitioners": 3610,
    "with_role": 1143,
-   "orgs_provider": 569,
-   "orgs_ein": 27,
+   "orgs_provider": 595,
+   "orgs_ein": 25,
    "locations": 934,
    "lat": 42.333,
    "lng": -122.8524,
@@ -5900,14 +5900,14 @@
     "group": 32,
     "eye-vision": 24,
     "dietary": 21,
-    "podiatry": 12,
     "student": 12,
+    "podiatry": 12,
     "support": 8,
     "facility": 3,
     "emergency-medical": 2,
     "no-taxonomy": 2,
-    "agency": 1,
-    "supplier": 1
+    "supplier": 1,
+    "agency": 1
    }
   },
   {
@@ -5916,8 +5916,8 @@
    "county": "Jackson County",
    "practitioners": 685,
    "with_role": 199,
-   "orgs_provider": 235,
-   "orgs_ein": 9,
+   "orgs_provider": 252,
+   "orgs_ein": 8,
    "locations": 417,
    "lat": 42.19443,
    "lng": -122.70169,
@@ -5932,8 +5932,8 @@
     "pharmacy": 16,
     "nursing": 15,
     "group": 11,
-    "eye-vision": 7,
     "support": 7,
+    "eye-vision": 7,
     "dietary": 4,
     "podiatry": 2,
     "supplier": 1,
@@ -5946,7 +5946,7 @@
    "county": "Josephine County",
    "practitioners": 11,
    "with_role": 1,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 42.15609,
@@ -5954,10 +5954,10 @@
    "by_category": {
     "rehab-therapy": 4,
     "other-clinical": 3,
+    "behavioral-health": 1,
     "dental": 1,
     "advanced-practice": 1,
-    "chiropractic": 1,
-    "behavioral-health": 1
+    "chiropractic": 1
    }
   },
   {
@@ -5966,7 +5966,7 @@
    "county": "Jackson County",
    "practitioners": 59,
    "with_role": 27,
-   "orgs_provider": 17,
+   "orgs_provider": 19,
    "orgs_ein": 0,
    "locations": 35,
    "lat": 42.46881,
@@ -5977,9 +5977,9 @@
     "pharmacy": 9,
     "advanced-practice": 7,
     "dental": 5,
-    "physician": 3,
-    "eye-vision": 3,
     "behavioral-health": 3,
+    "eye-vision": 3,
+    "physician": 3,
     "nursing": 1,
     "dietary": 1
    }
@@ -5990,7 +5990,7 @@
    "county": "Jackson County",
    "practitioners": 8,
    "with_role": 3,
-   "orgs_provider": 5,
+   "orgs_provider": 6,
    "orgs_ein": 1,
    "locations": 5,
    "lat": 42.43208,
@@ -6008,8 +6008,8 @@
    "county": "Josephine County",
    "practitioners": 1516,
    "with_role": 386,
-   "orgs_provider": 252,
-   "orgs_ein": 10,
+   "orgs_provider": 265,
+   "orgs_ein": 12,
    "locations": 481,
    "lat": 42.4464,
    "lng": -123.32397,
@@ -6038,7 +6038,7 @@
    "county": "Josephine County",
    "practitioners": 737,
    "with_role": 146,
-   "orgs_provider": 73,
+   "orgs_provider": 76,
    "orgs_ein": 5,
    "locations": 133,
    "lat": 42.41741,
@@ -6053,11 +6053,11 @@
     "nursing": 17,
     "dental": 14,
     "chiropractic": 5,
-    "group": 3,
     "facility": 3,
-    "dietary": 1,
-    "podiatry": 1,
+    "group": 3,
     "agency": 1,
+    "podiatry": 1,
+    "dietary": 1,
     "support": 1
    }
   },
@@ -6077,9 +6077,9 @@
     "dental": 5,
     "other-clinical": 4,
     "chiropractic": 3,
-    "physician": 1,
     "pharmacy": 1,
     "eye-vision": 1,
+    "physician": 1,
     "behavioral-health": 1
    }
   },
@@ -6102,7 +6102,7 @@
    "county": "Josephine County",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 1,
    "lat": 42.50967,
@@ -6128,19 +6128,19 @@
    "county": "Jackson County",
    "practitioners": 49,
    "with_role": 8,
-   "orgs_provider": 8,
+   "orgs_provider": 9,
    "orgs_ein": 0,
    "locations": 25,
    "lat": 42.27593,
    "lng": -122.81707,
    "by_category": {
     "behavioral-health": 40,
-    "nursing": 2,
-    "rehab-therapy": 2,
     "other-clinical": 2,
-    "advanced-practice": 1,
+    "rehab-therapy": 2,
+    "nursing": 2,
     "dental": 1,
-    "eye-vision": 1
+    "eye-vision": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -6172,12 +6172,12 @@
     "physician": 4,
     "chiropractic": 3,
     "nursing": 2,
-    "behavioral-health": 2,
     "advanced-practice": 2,
+    "behavioral-health": 2,
     "other-clinical": 2,
     "pharmacy": 2,
-    "support": 1,
-    "dental": 1
+    "dental": 1,
+    "support": 1
    }
   },
   {
@@ -6201,18 +6201,18 @@
    "county": "Jackson County",
    "practitioners": 12,
    "with_role": 1,
-   "orgs_provider": 10,
-   "orgs_ein": 1,
+   "orgs_provider": 13,
+   "orgs_ein": 2,
    "locations": 13,
    "lat": 42.61719,
    "lng": -122.81152,
    "by_category": {
     "behavioral-health": 5,
-    "pharmacy": 2,
     "rehab-therapy": 2,
-    "dental": 1,
+    "pharmacy": 2,
     "nursing": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "dental": 1
    }
   },
   {
@@ -6229,8 +6229,8 @@
    "by_category": {
     "rehab-therapy": 10,
     "physician": 3,
-    "other-clinical": 1,
     "chiropractic": 1,
+    "other-clinical": 1,
     "advanced-practice": 1
    }
   },
@@ -6255,8 +6255,8 @@
    "county": "Klamath County",
    "practitioners": 1449,
    "with_role": 311,
-   "orgs_provider": 204,
-   "orgs_ein": 14,
+   "orgs_provider": 212,
+   "orgs_ein": 16,
    "locations": 343,
    "lat": 42.23507,
    "lng": -121.78286,
@@ -6270,14 +6270,14 @@
     "pharmacy": 54,
     "dental": 41,
     "student": 13,
-    "dietary": 10,
     "group": 10,
+    "dietary": 10,
     "chiropractic": 9,
     "support": 7,
     "eye-vision": 7,
     "no-taxonomy": 4,
-    "facility": 3,
     "emergency-medical": 3,
+    "facility": 3,
     "agency": 2,
     "podiatry": 2
    }
@@ -6288,7 +6288,7 @@
    "county": "Klamath County",
    "practitioners": 350,
    "with_role": 41,
-   "orgs_provider": 80,
+   "orgs_provider": 92,
    "orgs_ein": 2,
    "locations": 180,
    "lat": 42.20502,
@@ -6297,13 +6297,13 @@
     "other-clinical": 110,
     "behavioral-health": 66,
     "support": 34,
-    "rehab-therapy": 31,
     "pharmacy": 31,
+    "rehab-therapy": 31,
     "dental": 21,
     "chiropractic": 15,
     "nursing": 12,
-    "physician": 10,
     "advanced-practice": 10,
+    "physician": 10,
     "eye-vision": 5,
     "dietary": 2,
     "group": 2,
@@ -6344,7 +6344,7 @@
    "county": "Lake County",
    "practitioners": 91,
    "with_role": 26,
-   "orgs_provider": 34,
+   "orgs_provider": 33,
    "orgs_ein": 3,
    "locations": 37,
    "lat": 42.18968,
@@ -6352,17 +6352,17 @@
    "by_category": {
     "other-clinical": 36,
     "behavioral-health": 26,
-    "rehab-therapy": 7,
     "advanced-practice": 7,
+    "rehab-therapy": 7,
     "physician": 5,
     "nursing": 2,
     "dental": 2,
-    "student": 1,
-    "dietary": 1,
-    "agency": 1,
-    "chiropractic": 1,
     "pharmacy": 1,
-    "support": 1
+    "dietary": 1,
+    "support": 1,
+    "chiropractic": 1,
+    "student": 1,
+    "agency": 1
    }
   },
   {
@@ -6371,7 +6371,7 @@
    "county": "Lake County",
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 1,
    "lat": 43.24145,
@@ -6384,8 +6384,8 @@
    "county": "Deschutes County",
    "practitioners": 2405,
    "with_role": 1001,
-   "orgs_provider": 358,
-   "orgs_ein": 13,
+   "orgs_provider": 360,
+   "orgs_ein": 11,
    "locations": 643,
    "lat": 44.06581,
    "lng": -121.28272,
@@ -6404,10 +6404,10 @@
     "eye-vision": 14,
     "support": 7,
     "student": 4,
-    "podiatry": 3,
     "emergency-medical": 3,
-    "facility": 1,
-    "supplier": 1
+    "podiatry": 3,
+    "supplier": 1,
+    "facility": 1
    }
   },
   {
@@ -6416,8 +6416,8 @@
    "county": "Deschutes County",
    "practitioners": 908,
    "with_role": 321,
-   "orgs_provider": 330,
-   "orgs_ein": 15,
+   "orgs_provider": 333,
+   "orgs_ein": 16,
    "locations": 550,
    "lat": 44.042,
    "lng": -121.32029,
@@ -6434,8 +6434,8 @@
     "eye-vision": 15,
     "group": 8,
     "dietary": 3,
-    "student": 3,
     "podiatry": 3,
+    "student": 3,
     "support": 2,
     "facility": 1,
     "agency": 1
@@ -6447,8 +6447,8 @@
    "county": null,
    "practitioners": 1154,
    "with_role": 298,
-   "orgs_provider": 296,
-   "orgs_ein": 9,
+   "orgs_provider": 307,
+   "orgs_ein": 10,
    "locations": 523,
    "lat": 44.06888,
    "lng": -121.32566,
@@ -6488,8 +6488,8 @@
     "dental": 3,
     "physician": 2,
     "behavioral-health": 2,
-    "group": 1,
     "other-clinical": 1,
+    "group": 1,
     "nursing": 1
    }
   },
@@ -6512,7 +6512,7 @@
    "county": "Harney County",
    "practitioners": 125,
    "with_role": 27,
-   "orgs_provider": 28,
+   "orgs_provider": 30,
    "orgs_ein": 3,
    "locations": 30,
    "lat": 43.58783,
@@ -6526,8 +6526,8 @@
     "dental": 6,
     "nursing": 4,
     "rehab-therapy": 3,
-    "chiropractic": 2,
     "eye-vision": 2,
+    "chiropractic": 2,
     "dietary": 1
    }
   },
@@ -6550,7 +6550,7 @@
    "county": "Harney County",
    "practitioners": 1,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 43.57088,
@@ -6565,7 +6565,7 @@
    "county": "Deschutes County",
    "practitioners": 57,
    "with_role": 19,
-   "orgs_provider": 20,
+   "orgs_provider": 22,
    "orgs_ein": 2,
    "locations": 42,
    "lat": 43.67471,
@@ -6588,7 +6588,7 @@
    "county": "Jefferson County",
    "practitioners": 131,
    "with_role": 21,
-   "orgs_provider": 28,
+   "orgs_provider": 34,
    "orgs_ein": 4,
    "locations": 71,
    "lat": 44.62713,
@@ -6601,11 +6601,11 @@
     "advanced-practice": 7,
     "pharmacy": 6,
     "eye-vision": 5,
-    "physician": 4,
     "nursing": 4,
+    "physician": 4,
     "dietary": 1,
-    "group": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "group": 1
    }
   },
   {
@@ -6614,7 +6614,7 @@
    "county": "Crook County",
    "practitioners": 350,
    "with_role": 144,
-   "orgs_provider": 61,
+   "orgs_provider": 67,
    "orgs_ein": 2,
    "locations": 112,
    "lat": 44.30381,
@@ -6640,7 +6640,7 @@
    "county": "Deschutes County",
    "practitioners": 1227,
    "with_role": 745,
-   "orgs_provider": 220,
+   "orgs_provider": 234,
    "orgs_ein": 12,
    "locations": 366,
    "lat": 44.27338,
@@ -6655,13 +6655,13 @@
     "pharmacy": 43,
     "nursing": 42,
     "group": 17,
-    "eye-vision": 16,
     "chiropractic": 16,
-    "dietary": 9,
+    "eye-vision": 16,
     "student": 9,
+    "dietary": 9,
     "podiatry": 4,
-    "support": 2,
     "agency": 2,
+    "support": 2,
     "no-taxonomy": 1
    }
   },
@@ -6671,7 +6671,7 @@
    "county": "Deschutes County",
    "practitioners": 67,
    "with_role": 19,
-   "orgs_provider": 19,
+   "orgs_provider": 21,
    "orgs_ein": 2,
    "locations": 59,
    "lat": 44.2987,
@@ -6679,8 +6679,8 @@
    "by_category": {
     "behavioral-health": 33,
     "rehab-therapy": 15,
-    "group": 6,
     "pharmacy": 6,
+    "group": 6,
     "other-clinical": 4,
     "chiropractic": 3
    }
@@ -6698,8 +6698,8 @@
    "lng": -121.21607,
    "by_category": {
     "behavioral-health": 4,
-    "advanced-practice": 1,
-    "nursing": 1
+    "nursing": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -6708,7 +6708,7 @@
    "county": "Umatilla County",
    "practitioners": 642,
    "with_role": 116,
-   "orgs_provider": 122,
+   "orgs_provider": 123,
    "orgs_ein": 9,
    "locations": 195,
    "lat": 45.66624,
@@ -6727,8 +6727,8 @@
     "chiropractic": 5,
     "dietary": 4,
     "podiatry": 3,
-    "student": 1,
-    "no-taxonomy": 1
+    "no-taxonomy": 1,
+    "student": 1
    }
   },
   {
@@ -6750,7 +6750,7 @@
    "county": "Baker County",
    "practitioners": 247,
    "with_role": 64,
-   "orgs_provider": 54,
+   "orgs_provider": 59,
    "orgs_ein": 5,
    "locations": 100,
    "lat": 44.78306,
@@ -6789,8 +6789,8 @@
     "other-clinical": 8,
     "advanced-practice": 6,
     "physician": 3,
-    "agency": 1,
-    "nursing": 1
+    "nursing": 1,
+    "agency": 1
    }
   },
   {
@@ -6872,8 +6872,8 @@
     "rehab-therapy": 5,
     "chiropractic": 3,
     "group": 2,
-    "eye-vision": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -6882,7 +6882,7 @@
    "county": "Umatilla County",
    "practitioners": 370,
    "with_role": 118,
-   "orgs_provider": 94,
+   "orgs_provider": 97,
    "orgs_ein": 6,
    "locations": 218,
    "lat": 45.84287,
@@ -6900,9 +6900,9 @@
     "eye-vision": 12,
     "dietary": 7,
     "support": 2,
-    "podiatry": 1,
     "no-taxonomy": 1,
-    "agency": 1
+    "agency": 1,
+    "podiatry": 1
    }
   },
   {
@@ -6926,8 +6926,8 @@
     "dental": 6,
     "pharmacy": 3,
     "eye-vision": 2,
-    "podiatry": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "podiatry": 1
    }
   },
   {
@@ -6949,8 +6949,8 @@
    "county": "Union County",
    "practitioners": 493,
    "with_role": 124,
-   "orgs_provider": 110,
-   "orgs_ein": 9,
+   "orgs_provider": 116,
+   "orgs_ein": 10,
    "locations": 163,
    "lat": 45.32518,
    "lng": -118.08802,
@@ -6965,11 +6965,11 @@
     "dental": 19,
     "chiropractic": 12,
     "eye-vision": 11,
-    "support": 2,
-    "group": 2,
     "podiatry": 2,
-    "student": 1,
-    "dietary": 1
+    "group": 2,
+    "support": 2,
+    "dietary": 1,
+    "student": 1
    }
   },
   {
@@ -6978,7 +6978,7 @@
    "county": "Umatilla County",
    "practitioners": 57,
    "with_role": 20,
-   "orgs_provider": 23,
+   "orgs_provider": 24,
    "orgs_ein": 4,
    "locations": 34,
    "lat": 45.94183,
@@ -6990,8 +6990,8 @@
     "pharmacy": 6,
     "chiropractic": 4,
     "physician": 3,
-    "advanced-practice": 2,
     "other-clinical": 2,
+    "advanced-practice": 2,
     "eye-vision": 2
    }
   },
@@ -7027,7 +7027,7 @@
    "county": "Umatilla County",
    "practitioners": 93,
    "with_role": 7,
-   "orgs_provider": 7,
+   "orgs_provider": 8,
    "orgs_ein": 0,
    "locations": 13,
    "lat": 45.92278,
@@ -7057,8 +7057,8 @@
    "by_category": {
     "advanced-practice": 10,
     "physician": 2,
-    "behavioral-health": 1,
-    "dental": 1
+    "dental": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -7067,14 +7067,14 @@
    "county": "Wallowa County",
    "practitioners": 2,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 45.56418,
    "lng": -117.52525,
    "by_category": {
-    "nursing": 1,
-    "support": 1
+    "support": 1,
+    "nursing": 1
    }
   },
   {
@@ -7115,8 +7115,8 @@
    "lat": 43.87651,
    "lng": -116.99854,
    "by_category": {
-    "dental": 2,
     "physician": 2,
+    "dental": 2,
     "other-clinical": 1,
     "advanced-practice": 1
    }
@@ -7127,7 +7127,7 @@
    "county": "Malheur County",
    "practitioners": 620,
    "with_role": 143,
-   "orgs_provider": 121,
+   "orgs_provider": 133,
    "orgs_ein": 7,
    "locations": 197,
    "lat": 44.0276,
@@ -7165,12 +7165,12 @@
    "by_category": {
     "rehab-therapy": 5,
     "dental": 2,
-    "advanced-practice": 1,
-    "pharmacy": 1,
     "physician": 1,
-    "behavioral-health": 1
+    "pharmacy": 1,
+    "behavioral-health": 1,
+    "advanced-practice": 1
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address, and placed 63,194 of 2,058,500 organizations in another state (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

@@ -18,6 +18,12 @@ The SQL deliberately mirrors `fast_ingest_ndh.py` field for field:
   _specialty_codes
                 every PractitionerRole.specialty coding[0].code, pipe-joined,
                 source order. The singular _specialty_code stays first-entry.
+  Organization _state / _city / _address_line
+                the physical address, not address[0] (FHI-84): first entry
+                with type physical or both, else use work, else the first
+                object. Mirrors physical_address() in fast_ingest_ndh.py.
+                Practitioner keeps address[0] for now; see the run doc
+                docs/methodology/runs/2026-10-26-fhi-84-org-physical-address.md.
 
 Source order is pinned with WITH OFFSET ... ORDER BY offset. Without it
 BigQuery does not guarantee UNNEST ordering, and _phone could pick a different
@@ -83,27 +89,70 @@ def telecom_sql(path: str = "$.telecom") -> tuple[str, str]:
     return phone, joined
 
 
-def line_sql(path: str) -> str:
+def line_sql(path: str, source: str = "resource") -> str:
     return f"""NULLIF(ARRAY_TO_STRING(ARRAY(
-      SELECT l FROM UNNEST(JSON_VALUE_ARRAY(resource, '{path}')) l WITH OFFSET o
+      SELECT l FROM UNNEST(JSON_VALUE_ARRAY({source}, '{path}')) l WITH OFFSET o
       WHERE l IS NOT NULL AND l != '' ORDER BY o
     ), '|'), '')"""
+
+
+def picked_address_sql(source: str = "resource") -> str:
+    """The Address a flattened organization column reads, as a JSON value.
+
+    Mirrors `physical_address` in fast_ingest_ndh.py (FHI-84): the first
+    entry whose type is physical or both, else the first whose use is work,
+    else the first entry that is an object. A bare object in place of the
+    array is taken as is, as the Python does. Source order is pinned with
+    WITH OFFSET ... ORDER BY.
+    """
+    arr = f"JSON_QUERY_ARRAY({source}, '$.address')"
+    return f"""COALESCE(
+      (SELECT x FROM UNNEST({arr}) x WITH OFFSET o
+        WHERE JSON_VALUE(x, '$.type') IN ('physical', 'both') ORDER BY o LIMIT 1),
+      (SELECT x FROM UNNEST({arr}) x WITH OFFSET o
+        WHERE JSON_VALUE(x, '$.use') = 'work' ORDER BY o LIMIT 1),
+      (SELECT x FROM UNNEST({arr}) x WITH OFFSET o
+        WHERE JSON_TYPE(x) = 'object' ORDER BY o LIMIT 1),
+      IF(JSON_TYPE(JSON_QUERY({source}, '$.address')) = 'object',
+         JSON_QUERY({source}, '$.address'), NULL)
+    )"""
+
+
+def org_address_select(source: str = "resource") -> str:
+    """`_state, _city, _address_line` for Organization, as SELECT columns.
+
+    NULLIF(..., '') matches the Python flattener's `.get(...) or None`.
+    """
+    a = picked_address_sql(source)
+    return f"""NULLIF(JSON_VALUE(a, '$.state'), '') AS _state,
+      NULLIF(JSON_VALUE(a, '$.city'), '') AS _city,
+      {line_sql('$.line', source='a')} AS _address_line
+    FROM (SELECT _id, {a} AS a FROM `{PROJECT}.{DATASET}.organization`)"""
 
 
 def statements() -> dict[str, str]:
     phone, telecom = telecom_sql()
     t = f"`{PROJECT}.{DATASET}`"
     return {
-        # Practitioner/Organization: address is 0..* so the first entry wins,
-        # matching the existing _state/_city columns.
+        # Practitioner: address is 0..* and the first entry still wins,
+        # matching its _state/_city. It has the same billing-first flaw as
+        # Organization (FHI-84 measured 119,906 state changes on 2026-10-07)
+        # and is held for a separate change because its _state is the
+        # denominator of every per-state number. Change both together.
         "practitioner": f"""UPDATE {t}.practitioner SET
               _address_line = {line_sql('$.address[0].line')},
               _phone = {phone}, _telecom = {telecom}
             WHERE TRUE""",
-        "organization": f"""UPDATE {t}.organization SET
-              _address_line = {line_sql('$.address[0].line')},
-              _phone = {phone}, _telecom = {telecom}
-            WHERE TRUE""",
+        # Organization reads the physical address (FHI-84). The picked
+        # address is computed once per row in a subquery and joined back on
+        # _id, which is unique in this table.
+        "organization": f"""UPDATE {t}.organization o SET
+              _state = n._state, _city = n._city,
+              _address_line = n._address_line,
+              _phone = {phone.replace('resource', 'o.resource')},
+              _telecom = {telecom.replace('resource', 'o.resource')}
+            FROM (SELECT _id, {org_address_select()}) n
+            WHERE o._id = n._id""",
         "practitioner_role": f"""UPDATE {t}.practitioner_role SET
               _phone = {phone}, _telecom = {telecom},
               _specialty_codes = {specialty_codes_sql()}

@@ -1,13 +1,13 @@
 {
  "state": "DC",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 37128,
   "with_role": 10516,
-  "orgs_provider": 4648,
-  "orgs_ein": 140,
+  "orgs_provider": 4585,
+  "orgs_ein": 143,
   "orgs_other": 0,
   "locations": 8630,
   "with_coords": 8563
@@ -155,8 +155,8 @@
    "practitioners": 35247,
    "with_role": 10296,
    "role_pct": 29.2,
-   "orgs_provider": 4549,
-   "orgs_ein": 138,
+   "orgs_provider": 4484,
+   "orgs_ein": 139,
    "by_category": {
     "support": 7111,
     "physician": 6667,
@@ -175,8 +175,8 @@
    "practitioners": 1881,
    "with_role": 220,
    "role_pct": 11.7,
-   "orgs_provider": 99,
-   "orgs_ein": 2,
+   "orgs_provider": 101,
+   "orgs_ein": 4,
    "by_category": {
     "physician": 516,
     "student": 254,
@@ -196,7 +196,7 @@
    "county": "District of Columbia",
    "practitioners": 1317,
    "with_role": 221,
-   "orgs_provider": 105,
+   "orgs_provider": 123,
    "orgs_ein": 5,
    "locations": 287,
    "lat": 38.90643,
@@ -217,8 +217,8 @@
     "student": 4,
     "no-taxonomy": 3,
     "facility": 2,
-    "chiropractic": 1,
-    "supplier": 1
+    "supplier": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -227,7 +227,7 @@
    "county": "District of Columbia",
    "practitioners": 3242,
    "with_role": 321,
-   "orgs_provider": 378,
+   "orgs_provider": 399,
    "orgs_ein": 7,
    "locations": 571,
    "lat": 38.90395,
@@ -249,10 +249,10 @@
     "podiatry": 4,
     "no-taxonomy": 4,
     "supplier": 3,
-    "eye-vision": 3,
     "student": 3,
-    "emergency-medical": 2,
-    "chiropractic": 2
+    "eye-vision": 3,
+    "chiropractic": 2,
+    "emergency-medical": 2
    }
   },
   {
@@ -261,8 +261,8 @@
    "county": "District of Columbia",
    "practitioners": 1467,
    "with_role": 432,
-   "orgs_provider": 222,
-   "orgs_ein": 12,
+   "orgs_provider": 188,
+   "orgs_ein": 11,
    "locations": 329,
    "lat": 38.88253,
    "lng": -76.99503,
@@ -280,8 +280,8 @@
     "group": 11,
     "podiatry": 7,
     "student": 7,
-    "agency": 6,
     "chiropractic": 6,
+    "agency": 6,
     "eye-vision": 3,
     "facility": 2,
     "no-taxonomy": 2
@@ -293,7 +293,7 @@
    "county": "District of Columbia",
    "practitioners": 99,
    "with_role": 24,
-   "orgs_provider": 28,
+   "orgs_provider": 30,
    "orgs_ein": 0,
    "locations": 73,
    "lat": 38.89532,
@@ -303,13 +303,13 @@
     "rehab-therapy": 9,
     "physician": 8,
     "dental": 8,
-    "pharmacy": 7,
     "advanced-practice": 7,
+    "pharmacy": 7,
     "eye-vision": 3,
     "other-clinical": 2,
-    "nursing": 1,
     "dietary": 1,
-    "group": 1
+    "group": 1,
+    "nursing": 1
    }
   },
   {
@@ -318,7 +318,7 @@
    "county": "District of Columbia",
    "practitioners": 1230,
    "with_role": 394,
-   "orgs_provider": 228,
+   "orgs_provider": 230,
    "orgs_ein": 8,
    "locations": 284,
    "lat": 38.90235,
@@ -349,7 +349,7 @@
    "county": "District of Columbia",
    "practitioners": 1015,
    "with_role": 440,
-   "orgs_provider": 532,
+   "orgs_provider": 546,
    "orgs_ein": 8,
    "locations": 402,
    "lat": 38.90153,
@@ -371,10 +371,10 @@
     "pharmacy": 7,
     "agency": 5,
     "podiatry": 3,
-    "facility": 1,
+    "no-taxonomy": 1,
     "supplier": 1,
-    "transport": 1,
-    "no-taxonomy": 1
+    "facility": 1,
+    "transport": 1
    }
   },
   {
@@ -383,8 +383,8 @@
    "county": "District of Columbia",
    "practitioners": 1824,
    "with_role": 258,
-   "orgs_provider": 85,
-   "orgs_ein": 9,
+   "orgs_provider": 95,
+   "orgs_ein": 10,
    "locations": 451,
    "lat": 38.90897,
    "lng": -77.07323,
@@ -405,8 +405,8 @@
     "dietary": 5,
     "eye-vision": 3,
     "facility": 2,
-    "chiropractic": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -415,8 +415,8 @@
    "county": "District of Columbia",
    "practitioners": 288,
    "with_role": 41,
-   "orgs_provider": 228,
-   "orgs_ein": 3,
+   "orgs_provider": 95,
+   "orgs_ein": 2,
    "locations": 192,
    "lat": 38.93819,
    "lng": -77.06019,
@@ -432,8 +432,8 @@
     "dietary": 3,
     "nursing": 2,
     "group": 1,
-    "eye-vision": 1,
-    "support": 1
+    "support": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -442,8 +442,8 @@
    "county": "District of Columbia",
    "practitioners": 831,
    "with_role": 180,
-   "orgs_provider": 158,
-   "orgs_ein": 4,
+   "orgs_provider": 155,
+   "orgs_ein": 3,
    "locations": 343,
    "lat": 38.91769,
    "lng": -77.03841,
@@ -451,8 +451,8 @@
     "behavioral-health": 411,
     "physician": 75,
     "advanced-practice": 70,
-    "support": 53,
     "dental": 53,
+    "support": 53,
     "other-clinical": 44,
     "rehab-therapy": 35,
     "nursing": 32,
@@ -473,8 +473,8 @@
    "county": "District of Columbia",
    "practitioners": 6397,
    "with_role": 3963,
-   "orgs_provider": 374,
-   "orgs_ein": 13,
+   "orgs_provider": 317,
+   "orgs_ein": 12,
    "locations": 980,
    "lat": 38.93059,
    "lng": -77.01516,
@@ -505,8 +505,8 @@
    "county": "District of Columbia",
    "practitioners": 1947,
    "with_role": 221,
-   "orgs_provider": 209,
-   "orgs_ein": 4,
+   "orgs_provider": 221,
+   "orgs_ein": 5,
    "locations": 272,
    "lat": 38.95581,
    "lng": -77.02047,
@@ -535,7 +535,7 @@
    "county": "District of Columbia",
    "practitioners": 2691,
    "with_role": 65,
-   "orgs_provider": 175,
+   "orgs_provider": 188,
    "orgs_ein": 5,
    "locations": 193,
    "lat": 38.97954,
@@ -548,8 +548,8 @@
     "agency": 48,
     "dental": 16,
     "pharmacy": 15,
-    "rehab-therapy": 10,
     "group": 10,
+    "rehab-therapy": 10,
     "physician": 5,
     "student": 4,
     "advanced-practice": 4,
@@ -580,8 +580,8 @@
    "county": "District of Columbia",
    "practitioners": 191,
    "with_role": 9,
-   "orgs_provider": 54,
-   "orgs_ein": 1,
+   "orgs_provider": 62,
+   "orgs_ein": 2,
    "locations": 118,
    "lat": 38.96057,
    "lng": -77.07985,
@@ -593,11 +593,11 @@
     "other-clinical": 10,
     "advanced-practice": 6,
     "pharmacy": 5,
-    "no-taxonomy": 1,
-    "nursing": 1,
+    "student": 1,
     "chiropractic": 1,
     "group": 1,
-    "student": 1
+    "nursing": 1,
+    "no-taxonomy": 1
    }
   },
   {
@@ -606,8 +606,8 @@
    "county": "District of Columbia",
    "practitioners": 1157,
    "with_role": 245,
-   "orgs_provider": 225,
-   "orgs_ein": 8,
+   "orgs_provider": 252,
+   "orgs_ein": 9,
    "locations": 441,
    "lat": 38.94261,
    "lng": -77.08993,
@@ -628,8 +628,8 @@
     "no-taxonomy": 3,
     "eye-vision": 3,
     "facility": 2,
-    "podiatry": 1,
-    "supplier": 1
+    "supplier": 1,
+    "podiatry": 1
    }
   },
   {
@@ -638,8 +638,8 @@
    "county": "District of Columbia",
    "practitioners": 1043,
    "with_role": 369,
-   "orgs_provider": 227,
-   "orgs_ein": 7,
+   "orgs_provider": 228,
+   "orgs_ein": 6,
    "locations": 290,
    "lat": 38.93936,
    "lng": -76.99332,
@@ -658,9 +658,9 @@
     "agency": 8,
     "pharmacy": 7,
     "student": 3,
+    "eye-vision": 1,
     "no-taxonomy": 1,
-    "supplier": 1,
-    "eye-vision": 1
+    "supplier": 1
    }
   },
   {
@@ -669,8 +669,8 @@
    "county": "District of Columbia",
    "practitioners": 710,
    "with_role": 74,
-   "orgs_provider": 128,
-   "orgs_ein": 4,
+   "orgs_provider": 134,
+   "orgs_ein": 5,
    "locations": 173,
    "lat": 38.92652,
    "lng": -76.97675,
@@ -689,9 +689,9 @@
     "group": 3,
     "dietary": 2,
     "no-taxonomy": 2,
-    "transport": 1,
+    "facility": 1,
     "chiropractic": 1,
-    "facility": 1
+    "transport": 1
    }
   },
   {
@@ -700,8 +700,8 @@
    "county": "District of Columbia",
    "practitioners": 974,
    "with_role": 124,
-   "orgs_provider": 117,
-   "orgs_ein": 4,
+   "orgs_provider": 143,
+   "orgs_ein": 6,
    "locations": 193,
    "lat": 38.89392,
    "lng": -76.93907,
@@ -718,10 +718,10 @@
     "physician": 5,
     "facility": 3,
     "group": 3,
+    "emergency-medical": 1,
     "dietary": 1,
-    "no-taxonomy": 1,
     "chiropractic": 1,
-    "emergency-medical": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -730,7 +730,7 @@
    "county": "District of Columbia",
    "practitioners": 2001,
    "with_role": 315,
-   "orgs_provider": 153,
+   "orgs_provider": 167,
    "orgs_ein": 7,
    "locations": 247,
    "lat": 38.8641,
@@ -761,8 +761,8 @@
    "county": "District of Columbia",
    "practitioners": 362,
    "with_role": 7,
-   "orgs_provider": 39,
-   "orgs_ein": 2,
+   "orgs_provider": 40,
+   "orgs_ein": 1,
    "locations": 108,
    "lat": 38.87775,
    "lng": -77.01862,
@@ -772,8 +772,8 @@
     "physician": 25,
     "other-clinical": 16,
     "pharmacy": 15,
-    "advanced-practice": 13,
     "nursing": 13,
+    "advanced-practice": 13,
     "behavioral-health": 10,
     "rehab-therapy": 9,
     "emergency-medical": 4,
@@ -815,8 +815,8 @@
    "county": "District of Columbia",
    "practitioners": 1101,
    "with_role": 367,
-   "orgs_provider": 193,
-   "orgs_ein": 9,
+   "orgs_provider": 207,
+   "orgs_ein": 10,
    "locations": 266,
    "lat": 38.83737,
    "lng": -76.99459,
@@ -835,9 +835,9 @@
     "dietary": 11,
     "no-taxonomy": 6,
     "eye-vision": 4,
-    "podiatry": 3,
-    "facility": 3,
     "agency": 3,
+    "facility": 3,
+    "podiatry": 3,
     "chiropractic": 1
    }
   },
@@ -860,8 +860,8 @@
    "county": "District of Columbia",
    "practitioners": 3456,
    "with_role": 1714,
-   "orgs_provider": 445,
-   "orgs_ein": 10,
+   "orgs_provider": 431,
+   "orgs_ein": 7,
    "locations": 644,
    "lat": 38.90587,
    "lng": -77.04251,
@@ -893,8 +893,8 @@
    "county": "District of Columbia",
    "practitioners": 1596,
    "with_role": 502,
-   "orgs_provider": 234,
-   "orgs_ein": 6,
+   "orgs_provider": 220,
+   "orgs_ein": 8,
    "locations": 679,
    "lat": 38.90233,
    "lng": -77.04945,
@@ -924,7 +924,7 @@
    "county": null,
    "practitioners": 26,
    "with_role": 18,
-   "orgs_provider": 2,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 31,
    "lat": 38.89331,
@@ -947,8 +947,8 @@
    "lng": -77.03186,
    "by_category": {
     "behavioral-health": 6,
-    "other-clinical": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -957,7 +957,7 @@
    "county": "District of Columbia",
    "practitioners": 94,
    "with_role": 5,
-   "orgs_provider": 1,
+   "orgs_provider": 2,
    "orgs_ein": 1,
    "locations": 41,
    "lat": 38.89933,
@@ -1002,8 +1002,8 @@
     "behavioral-health": 19,
     "student": 13,
     "rehab-therapy": 8,
-    "physician": 4,
     "advanced-practice": 4,
+    "physician": 4,
     "support": 2,
     "other-clinical": 1
    }
@@ -1014,7 +1014,7 @@
    "county": null,
    "practitioners": 99,
    "with_role": 6,
-   "orgs_provider": 6,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 85,
    "lat": 38.92077,
@@ -1040,8 +1040,8 @@
    "county": null,
    "practitioners": 589,
    "with_role": 140,
-   "orgs_provider": 44,
-   "orgs_ein": 2,
+   "orgs_provider": 42,
+   "orgs_ein": 1,
    "locations": 268,
    "lat": 38.91779,
    "lng": -77.02174,
@@ -1052,8 +1052,8 @@
     "pharmacy": 39,
     "dental": 17,
     "group": 10,
-    "behavioral-health": 8,
     "advanced-practice": 8,
+    "behavioral-health": 8,
     "dietary": 5,
     "rehab-therapy": 4,
     "other-clinical": 4,
@@ -1101,8 +1101,8 @@
    "lat": 38.93772,
    "lng": -77.00094,
    "by_category": {
-    "rehab-therapy": 8,
     "student": 8,
+    "rehab-therapy": 8,
     "behavioral-health": 4,
     "nursing": 1,
     "advanced-practice": 1
@@ -1133,8 +1133,8 @@
    "lat": 38.91733,
    "lng": -76.99381,
    "by_category": {
-    "nursing": 1,
-    "physician": 1
+    "physician": 1,
+    "nursing": 1
    }
   },
   {
@@ -1169,7 +1169,7 @@
    "county": null,
    "practitioners": 20,
    "with_role": 17,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 55,
    "lat": 38.89701,
@@ -1219,9 +1219,9 @@
    "lng": -77.015,
    "by_category": {
     "physician": 2,
+    "advanced-practice": 1,
     "support": 1,
-    "pharmacy": 1,
-    "advanced-practice": 1
+    "pharmacy": 1
    }
   },
   {
@@ -1264,8 +1264,8 @@
    "lat": 38.89331,
    "lng": -77.01464,
    "by_category": {
-    "behavioral-health": 1,
-    "rehab-therapy": 1
+    "rehab-therapy": 1,
+    "behavioral-health": 1
    }
   },
   {
@@ -1437,7 +1437,7 @@
    "county": null,
    "practitioners": 8,
    "with_role": 0,
-   "orgs_provider": 2,
+   "orgs_provider": 3,
    "orgs_ein": 0,
    "locations": 13,
    "lat": 38.88996,
@@ -1445,11 +1445,11 @@
    "by_category": {
     "behavioral-health": 2,
     "advanced-practice": 1,
-    "other-clinical": 1,
-    "eye-vision": 1,
     "rehab-therapy": 1,
     "physician": 1,
-    "dental": 1
+    "eye-vision": 1,
+    "dental": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1491,23 +1491,23 @@
    "county": null,
    "practitioners": 50,
    "with_role": 0,
-   "orgs_provider": 7,
-   "orgs_ein": 0,
+   "orgs_provider": 10,
+   "orgs_ein": 2,
    "locations": 50,
    "lat": 38.89331,
    "lng": -77.01464,
    "by_category": {
     "physician": 11,
-    "dental": 10,
     "pharmacy": 10,
+    "dental": 10,
     "behavioral-health": 8,
     "other-clinical": 3,
     "dietary": 2,
     "rehab-therapy": 2,
-    "eye-vision": 1,
     "advanced-practice": 1,
-    "support": 1,
-    "nursing": 1
+    "eye-vision": 1,
+    "nursing": 1,
+    "support": 1
    }
   },
   {
@@ -1598,8 +1598,8 @@
    "lat": 38.8764,
    "lng": -76.99509,
    "by_category": {
-    "physician": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "physician": 1
    }
   },
   {
@@ -1615,11 +1615,11 @@
    "lng": -77.05012,
    "by_category": {
     "physician": 2,
-    "other-clinical": 1,
-    "nursing": 1,
-    "pharmacy": 1,
     "dental": 1,
-    "behavioral-health": 1
+    "pharmacy": 1,
+    "behavioral-health": 1,
+    "other-clinical": 1,
+    "nursing": 1
    }
   },
   {
@@ -1643,8 +1643,8 @@
    "county": null,
    "practitioners": 25,
    "with_role": 1,
-   "orgs_provider": 1,
-   "orgs_ein": 0,
+   "orgs_provider": 2,
+   "orgs_ein": 1,
    "locations": 8,
    "lat": 38.88776,
    "lng": -77.00618,
@@ -1653,11 +1653,11 @@
     "physician": 3,
     "behavioral-health": 2,
     "support": 2,
-    "other-clinical": 1,
-    "advanced-practice": 1,
-    "eye-vision": 1,
     "nursing": 1,
-    "pharmacy": 1
+    "advanced-practice": 1,
+    "pharmacy": 1,
+    "other-clinical": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -1672,8 +1672,8 @@
    "lat": 38.82454,
    "lng": -77.01745,
    "by_category": {
-    "physician": 1,
-    "nursing": 1
+    "nursing": 1,
+    "physician": 1
    }
   },
   {
@@ -1703,8 +1703,8 @@
    "lat": 38.89331,
    "lng": -77.01464,
    "by_category": {
-    "other-clinical": 1,
-    "physician": 1
+    "physician": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1793,8 +1793,8 @@
     "behavioral-health": 8,
     "pharmacy": 7,
     "rehab-therapy": 6,
-    "dietary": 3,
     "dental": 3,
+    "dietary": 3,
     "advanced-practice": 3,
     "other-clinical": 2
    }
@@ -1867,8 +1867,8 @@
    "lat": 38.89832,
    "lng": -77.04358,
    "by_category": {
-    "chiropractic": 1,
-    "other-clinical": 1
+    "other-clinical": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -2088,8 +2088,8 @@
    "lng": -77.00824,
    "by_category": {
     "other-clinical": 3,
-    "physician": 2,
     "pharmacy": 2,
+    "physician": 2,
     "rehab-therapy": 1
    }
   },
@@ -2123,8 +2123,8 @@
    "lng": -77.01464,
    "by_category": {
     "advanced-practice": 2,
-    "other-clinical": 1,
-    "physician": 1
+    "physician": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -2172,8 +2172,8 @@
    "lat": 38.90394,
    "lng": -77.04478,
    "by_category": {
-    "advanced-practice": 4,
     "physician": 4,
+    "advanced-practice": 4,
     "behavioral-health": 1
    }
   },
@@ -2220,9 +2220,9 @@
    "lng": -77.01227,
    "by_category": {
     "physician": 4,
+    "behavioral-health": 1,
     "dental": 1,
-    "advanced-practice": 1,
-    "behavioral-health": 1
+    "advanced-practice": 1
    }
   },
   {
@@ -2238,8 +2238,8 @@
    "lng": -77.02497,
    "by_category": {
     "physician": 4,
-    "advanced-practice": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "advanced-practice": 1
    }
   },
   {
@@ -2380,8 +2380,8 @@
    "lat": 38.90079,
    "lng": -77.03426,
    "by_category": {
-    "physician": 1,
     "advanced-practice": 1,
+    "physician": 1,
     "nursing": 1
    }
   },
@@ -2417,7 +2417,7 @@
    "county": null,
    "practitioners": 0,
    "with_role": 0,
-   "orgs_provider": 0,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 3,
    "lat": 38.89267,
@@ -2484,8 +2484,8 @@
     "pharmacy": 4,
     "nursing": 3,
     "physician": 2,
-    "other-clinical": 2,
     "advanced-practice": 2,
+    "other-clinical": 2,
     "no-taxonomy": 1,
     "behavioral-health": 1
    }
@@ -2517,5 +2517,5 @@
    "by_category": {}
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address, and placed 63,194 of 2,058,500 organizations in another state (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }

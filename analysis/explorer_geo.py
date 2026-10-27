@@ -55,6 +55,7 @@ from google.cloud import bigquery
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from claims_sources._cohorts import bq_job_config, is_valid_us_state  # noqa: E402
+from backfill_flattened_columns import picked_address_sql  # noqa: E402
 from nucc_taxonomy import categorize, load_taxonomy  # noqa: E402
 from release import CURRENT_RELEASE as RELEASE  # noqa: E402
 from zip_county import STATE_FIPS, load_zip_county  # noqa: E402
@@ -162,11 +163,14 @@ GROUP BY state, zip5, taxonomy
 
 # `organization` has no _postal_code column, so the ZIP comes out of the
 # resource JSON. Checked before writing this: the column genuinely is not there.
+# The ZIP must come from the same address as `_state`, which since FHI-84 is
+# the physical address rather than address[0] (picked_address_sql mirrors the
+# flattener). Reading address[0] here would pair a PA state with an RI ZIP.
 ORG_SQL = f"""
 SELECT
   _state AS state,
   SUBSTR(REGEXP_REPLACE(
-    IFNULL(JSON_VALUE(resource, '$.address[0].postalCode'), ''), r'[^0-9]', ''), 1, 5) AS zip5,
+    IFNULL(JSON_VALUE({picked_address_sql()}, '$.postalCode'), ''), r'[^0-9]', ''), 1, 5) AS zip5,
   COALESCE(NULLIF(JSON_VALUE(resource, '$.type[0].text'), ''),
            JSON_VALUE(resource, '$.type[0].coding[0].code'), '(untyped)') AS org_type,
   COUNT(*) AS organizations,
@@ -422,6 +426,10 @@ NOTES = (
     "so adding them to provider organizations roughly doubles the count. "
     "Practitioner geography uses the primary address; 14.85% of practitioners "
     "list addresses in more than one state and are counted only in the first. "
+    "Organization geography uses the physical address: the first entry typed "
+    "physical (or both), else the first with use work, else the first. Until "
+    "2026-10-26 it used the first entry, which is often the billing address, "
+    "and placed 63,194 of 2,058,500 organizations in another state (FHI-84). "
     "Counties are derived from the Census ZCTA-to-county relationship file, "
     "taking the county holding the largest share of a ZIP's population; ZIPs "
     "with no dominant county are grouped as unknown. Payer organizations carry "

@@ -1,13 +1,13 @@
 {
  "state": "HI",
  "release_date": "2026-10-07",
- "generated_at": "2026-10-14T01:59:34+00:00",
+ "generated_at": "2026-10-27T02:54:10+00:00",
  "methodology_version": "0.7.3-draft",
  "totals": {
   "practitioners": 26465,
   "with_role": 8655,
-  "orgs_provider": 6403,
-  "orgs_ein": 266,
+  "orgs_provider": 6598,
+  "orgs_ein": 277,
   "orgs_other": 0,
   "locations": 10482,
   "with_coords": 10381
@@ -155,8 +155,8 @@
    "practitioners": 20640,
    "with_role": 6785,
    "role_pct": 32.9,
-   "orgs_provider": 4616,
-   "orgs_ein": 179,
+   "orgs_provider": 4685,
+   "orgs_ein": 183,
    "by_category": {
     "behavioral-health": 6621,
     "physician": 4715,
@@ -175,8 +175,8 @@
    "practitioners": 2860,
    "with_role": 980,
    "role_pct": 34.3,
-   "orgs_provider": 836,
-   "orgs_ein": 41,
+   "orgs_provider": 902,
+   "orgs_ein": 47,
    "by_category": {
     "behavioral-health": 905,
     "physician": 582,
@@ -195,7 +195,7 @@
    "practitioners": 2220,
    "with_role": 695,
    "role_pct": 31.3,
-   "orgs_provider": 684,
+   "orgs_provider": 730,
    "orgs_ein": 30,
    "by_category": {
     "behavioral-health": 733,
@@ -215,8 +215,8 @@
    "practitioners": 734,
    "with_role": 191,
    "role_pct": 26.0,
-   "orgs_provider": 263,
-   "orgs_ein": 16,
+   "orgs_provider": 279,
+   "orgs_ein": 17,
    "by_category": {
     "behavioral-health": 276,
     "rehab-therapy": 108,
@@ -235,7 +235,7 @@
    "practitioners": 11,
    "with_role": 4,
    "role_pct": 36.4,
-   "orgs_provider": 4,
+   "orgs_provider": 2,
    "orgs_ein": 0,
    "by_category": {
     "behavioral-health": 5,
@@ -254,8 +254,8 @@
    "county": "Honolulu County",
    "practitioners": 1001,
    "with_role": 129,
-   "orgs_provider": 238,
-   "orgs_ein": 6,
+   "orgs_provider": 267,
+   "orgs_ein": 7,
    "locations": 459,
    "lat": 21.38343,
    "lng": -157.93976,
@@ -273,11 +273,11 @@
     "dietary": 7,
     "nursing": 6,
     "podiatry": 3,
-    "no-taxonomy": 2,
     "supplier": 2,
-    "support": 1,
+    "no-taxonomy": 2,
     "facility": 1,
-    "agency": 1
+    "agency": 1,
+    "support": 1
    }
   },
   {
@@ -286,7 +286,7 @@
    "county": "Hawaii County",
    "practitioners": 5,
    "with_role": 1,
-   "orgs_provider": 4,
+   "orgs_provider": 5,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 19.40013,
@@ -316,7 +316,7 @@
    "county": "Honolulu County",
    "practitioners": 363,
    "with_role": 76,
-   "orgs_provider": 74,
+   "orgs_provider": 85,
    "orgs_ein": 3,
    "locations": 140,
    "lat": 21.34438,
@@ -332,8 +332,8 @@
     "dental": 8,
     "group": 5,
     "support": 4,
-    "dietary": 3,
     "facility": 3,
+    "dietary": 3,
     "advanced-practice": 2,
     "eye-vision": 2,
     "student": 2,
@@ -346,8 +346,8 @@
    "county": "Honolulu County",
    "practitioners": 905,
    "with_role": 340,
-   "orgs_provider": 188,
-   "orgs_ein": 9,
+   "orgs_provider": 154,
+   "orgs_ein": 6,
    "locations": 177,
    "lat": 21.32987,
    "lng": -158.0849,
@@ -393,7 +393,7 @@
    "county": "Honolulu County",
    "practitioners": 61,
    "with_role": 12,
-   "orgs_provider": 19,
+   "orgs_provider": 24,
    "orgs_ein": 0,
    "locations": 49,
    "lat": 21.60148,
@@ -404,12 +404,12 @@
     "rehab-therapy": 7,
     "nursing": 5,
     "other-clinical": 4,
+    "group": 3,
     "pharmacy": 3,
     "dental": 3,
-    "group": 3,
     "eye-vision": 2,
-    "dietary": 1,
-    "physician": 1
+    "physician": 1,
+    "dietary": 1
    }
   },
   {
@@ -431,19 +431,19 @@
    "county": "Honolulu County",
    "practitioners": 16,
    "with_role": 4,
-   "orgs_provider": 2,
+   "orgs_provider": 4,
    "orgs_ein": 1,
    "locations": 7,
    "lat": 21.61632,
    "lng": -157.91369,
    "by_category": {
-    "rehab-therapy": 3,
-    "behavioral-health": 3,
     "advanced-practice": 3,
+    "rehab-therapy": 3,
     "physician": 3,
+    "behavioral-health": 3,
     "nursing": 2,
-    "dietary": 1,
-    "pharmacy": 1
+    "pharmacy": 1,
+    "dietary": 1
    }
   },
   {
@@ -452,8 +452,8 @@
    "county": "Hawaii County",
    "practitioners": 1862,
    "with_role": 700,
-   "orgs_provider": 437,
-   "orgs_ein": 25,
+   "orgs_provider": 467,
+   "orgs_ein": 28,
    "locations": 743,
    "lat": 19.71636,
    "lng": -155.08301,
@@ -476,8 +476,8 @@
     "podiatry": 5,
     "agency": 3,
     "support": 3,
-    "payer": 1,
     "supplier": 1,
+    "payer": 1,
     "emergency-medical": 1
    }
   },
@@ -533,7 +533,7 @@
    "county": "Hawaii County",
    "practitioners": 49,
    "with_role": 19,
-   "orgs_provider": 18,
+   "orgs_provider": 16,
    "orgs_ein": 1,
    "locations": 23,
    "lat": 20.07732,
@@ -580,7 +580,7 @@
    "county": "Honolulu County",
    "practitioners": 93,
    "with_role": 13,
-   "orgs_provider": 24,
+   "orgs_provider": 23,
    "orgs_ein": 1,
    "locations": 9,
    "lat": 21.67597,
@@ -589,13 +589,13 @@
     "behavioral-health": 53,
     "nursing": 16,
     "physician": 6,
-    "rehab-therapy": 5,
     "other-clinical": 5,
+    "rehab-therapy": 5,
     "pharmacy": 3,
     "facility": 2,
+    "advanced-practice": 1,
     "dietary": 1,
-    "emergency-medical": 1,
-    "advanced-practice": 1
+    "emergency-medical": 1
    }
   },
   {
@@ -604,8 +604,8 @@
    "county": "Maui County",
    "practitioners": 632,
    "with_role": 160,
-   "orgs_provider": 186,
-   "orgs_ein": 8,
+   "orgs_provider": 191,
+   "orgs_ein": 7,
    "locations": 324,
    "lat": 20.88474,
    "lng": -156.46576,
@@ -621,9 +621,9 @@
     "eye-vision": 21,
     "chiropractic": 18,
     "group": 9,
-    "agency": 1,
     "facility": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "agency": 1
    }
   },
   {
@@ -632,7 +632,7 @@
    "county": "Honolulu County",
    "practitioners": 881,
    "with_role": 266,
-   "orgs_provider": 262,
+   "orgs_provider": 280,
    "orgs_ein": 9,
    "locations": 450,
    "lat": 21.39715,
@@ -653,8 +653,8 @@
     "dietary": 7,
     "podiatry": 5,
     "support": 4,
-    "no-taxonomy": 2,
     "emergency-medical": 2,
+    "no-taxonomy": 2,
     "facility": 1,
     "supplier": 1
    }
@@ -665,16 +665,16 @@
    "county": "Hawaii County",
    "practitioners": 4,
    "with_role": 1,
-   "orgs_provider": 5,
+   "orgs_provider": 7,
    "orgs_ein": 0,
    "locations": 14,
    "lat": 19.92917,
    "lng": -155.82698,
    "by_category": {
-    "other-clinical": 1,
-    "chiropractic": 1,
+    "dental": 1,
     "behavioral-health": 1,
-    "dental": 1
+    "chiropractic": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -683,8 +683,8 @@
    "county": "Hawaii County",
    "practitioners": 505,
    "with_role": 139,
-   "orgs_provider": 187,
-   "orgs_ein": 10,
+   "orgs_provider": 204,
+   "orgs_ein": 11,
    "locations": 473,
    "lat": 19.63526,
    "lng": -155.98716,
@@ -700,11 +700,11 @@
     "nursing": 13,
     "group": 10,
     "eye-vision": 7,
-    "student": 3,
     "dietary": 3,
-    "podiatry": 1,
+    "student": 3,
+    "transport": 1,
     "facility": 1,
-    "transport": 1
+    "podiatry": 1
    }
   },
   {
@@ -731,7 +731,7 @@
    "county": "Hawaii County",
    "practitioners": 208,
    "with_role": 65,
-   "orgs_provider": 103,
+   "orgs_provider": 110,
    "orgs_ein": 1,
    "locations": 202,
    "lat": 20.0218,
@@ -749,8 +749,8 @@
     "group": 5,
     "eye-vision": 4,
     "dietary": 3,
-    "student": 1,
-    "podiatry": 1
+    "podiatry": 1,
+    "student": 1
    }
   },
   {
@@ -759,8 +759,8 @@
    "county": "Honolulu County",
    "practitioners": 312,
    "with_role": 75,
-   "orgs_provider": 123,
-   "orgs_ein": 3,
+   "orgs_provider": 137,
+   "orgs_ein": 4,
    "locations": 219,
    "lat": 21.41634,
    "lng": -157.80302,
@@ -785,7 +785,7 @@
    "county": "Kauai County",
    "practitioners": 136,
    "with_role": 32,
-   "orgs_provider": 48,
+   "orgs_provider": 51,
    "orgs_ein": 1,
    "locations": 100,
    "lat": 22.07254,
@@ -796,11 +796,11 @@
     "rehab-therapy": 25,
     "chiropractic": 11,
     "physician": 10,
-    "dental": 6,
     "pharmacy": 6,
+    "dental": 6,
     "advanced-practice": 5,
-    "eye-vision": 3,
     "group": 3,
+    "eye-vision": 3,
     "nursing": 2
    }
   },
@@ -816,9 +816,9 @@
    "lat": 21.06759,
    "lng": -156.89307,
    "by_category": {
-    "behavioral-health": 1,
+    "dental": 1,
     "rehab-therapy": 1,
-    "dental": 1
+    "behavioral-health": 1
    }
   },
   {
@@ -827,7 +827,7 @@
    "county": "Hawaii County",
    "practitioners": 106,
    "with_role": 24,
-   "orgs_provider": 23,
+   "orgs_provider": 22,
    "orgs_ein": 1,
    "locations": 62,
    "lat": 19.62298,
@@ -839,8 +839,8 @@
     "advanced-practice": 11,
     "pharmacy": 7,
     "physician": 5,
-    "chiropractic": 3,
     "dental": 3,
+    "chiropractic": 3,
     "nursing": 2,
     "student": 2
    }
@@ -851,25 +851,25 @@
    "county": "Hawaii County",
    "practitioners": 61,
    "with_role": 8,
-   "orgs_provider": 40,
-   "orgs_ein": 0,
+   "orgs_provider": 52,
+   "orgs_ein": 2,
    "locations": 87,
    "lat": 19.52289,
    "lng": -155.92345,
    "by_category": {
     "physician": 12,
     "other-clinical": 10,
-    "behavioral-health": 9,
     "rehab-therapy": 9,
-    "dental": 5,
+    "behavioral-health": 9,
     "advanced-practice": 5,
+    "dental": 5,
     "nursing": 4,
     "pharmacy": 2,
-    "chiropractic": 1,
-    "transport": 1,
+    "eye-vision": 1,
     "group": 1,
-    "student": 1,
-    "eye-vision": 1
+    "transport": 1,
+    "chiropractic": 1,
+    "student": 1
    }
   },
   {
@@ -878,8 +878,8 @@
    "county": "Maui County",
    "practitioners": 305,
    "with_role": 121,
-   "orgs_provider": 119,
-   "orgs_ein": 7,
+   "orgs_provider": 126,
+   "orgs_ein": 8,
    "locations": 231,
    "lat": 20.74088,
    "lng": -156.45004,
@@ -913,10 +913,10 @@
     "rehab-therapy": 16,
     "advanced-practice": 7,
     "other-clinical": 5,
-    "behavioral-health": 4,
     "physician": 4,
-    "group": 3,
+    "behavioral-health": 4,
     "chiropractic": 3,
+    "group": 3,
     "pharmacy": 2,
     "dental": 1
    }
@@ -942,14 +942,14 @@
    "county": "Kauai County",
    "practitioners": 11,
    "with_role": 7,
-   "orgs_provider": 14,
+   "orgs_provider": 15,
    "orgs_ein": 2,
    "locations": 26,
    "lat": 21.89789,
    "lng": -159.46336,
    "by_category": {
-    "physician": 3,
     "advanced-practice": 3,
+    "physician": 3,
     "other-clinical": 2,
     "behavioral-health": 2,
     "chiropractic": 1
@@ -961,7 +961,7 @@
    "county": "Maui County",
    "practitioners": 177,
    "with_role": 65,
-   "orgs_provider": 53,
+   "orgs_provider": 61,
    "orgs_ein": 3,
    "locations": 124,
    "lat": 20.90861,
@@ -976,10 +976,10 @@
     "chiropractic": 10,
     "dental": 9,
     "nursing": 3,
-    "group": 2,
     "eye-vision": 2,
-    "podiatry": 1,
-    "dietary": 1
+    "group": 2,
+    "dietary": 1,
+    "podiatry": 1
    }
   },
   {
@@ -998,8 +998,8 @@
     "physician": 4,
     "pharmacy": 3,
     "rehab-therapy": 2,
-    "eye-vision": 1,
-    "chiropractic": 1
+    "chiropractic": 1,
+    "eye-vision": 1
    }
   },
   {
@@ -1008,15 +1008,15 @@
    "county": "Maui County",
    "practitioners": 4,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 4,
    "orgs_ein": 0,
    "locations": 10,
    "lat": 20.82763,
    "lng": -156.92028,
    "by_category": {
     "dental": 2,
-    "chiropractic": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -1025,8 +1025,8 @@
    "county": "Kauai County",
    "practitioners": 517,
    "with_role": 118,
-   "orgs_provider": 158,
-   "orgs_ein": 9,
+   "orgs_provider": 170,
+   "orgs_ein": 10,
    "locations": 294,
    "lat": 21.97358,
    "lng": -159.37215,
@@ -1044,10 +1044,10 @@
     "dietary": 5,
     "group": 3,
     "agency": 2,
+    "student": 1,
     "no-taxonomy": 1,
     "emergency-medical": 1,
     "support": 1,
-    "student": 1,
     "facility": 1
    }
   },
@@ -1057,7 +1057,7 @@
    "county": "Maui County",
    "practitioners": 189,
    "with_role": 58,
-   "orgs_provider": 61,
+   "orgs_provider": 62,
    "orgs_ein": 1,
    "locations": 133,
    "lat": 20.84432,
@@ -1066,9 +1066,9 @@
     "behavioral-health": 60,
     "rehab-therapy": 53,
     "other-clinical": 31,
-    "pharmacy": 9,
-    "dental": 9,
     "chiropractic": 9,
+    "dental": 9,
+    "pharmacy": 9,
     "advanced-practice": 7,
     "physician": 5,
     "nursing": 3,
@@ -1089,8 +1089,8 @@
    "lat": 19.5499,
    "lng": -155.10817,
    "by_category": {
-    "nursing": 1,
-    "advanced-practice": 1
+    "advanced-practice": 1,
+    "nursing": 1
    }
   },
   {
@@ -1108,8 +1108,8 @@
     "behavioral-health": 25,
     "rehab-therapy": 9,
     "physician": 6,
-    "other-clinical": 5,
     "advanced-practice": 5,
+    "other-clinical": 5,
     "nursing": 2,
     "pharmacy": 2,
     "chiropractic": 1
@@ -1121,7 +1121,7 @@
    "county": "Maui County",
    "practitioners": 1,
    "with_role": 1,
-   "orgs_provider": 2,
+   "orgs_provider": 1,
    "orgs_ein": 0,
    "locations": 5,
    "lat": 20.91111,
@@ -1164,7 +1164,7 @@
    "county": "Honolulu County",
    "practitioners": 315,
    "with_role": 127,
-   "orgs_provider": 95,
+   "orgs_provider": 109,
    "orgs_ein": 4,
    "locations": 152,
    "lat": 21.39388,
@@ -1182,8 +1182,8 @@
     "chiropractic": 7,
     "group": 4,
     "podiatry": 2,
-    "supplier": 1,
-    "support": 1
+    "support": 1,
+    "supplier": 1
    }
   },
   {
@@ -1192,8 +1192,8 @@
    "county": "Honolulu County",
    "practitioners": 235,
    "with_role": 117,
-   "orgs_provider": 108,
-   "orgs_ein": 4,
+   "orgs_provider": 116,
+   "orgs_ein": 5,
    "locations": 116,
    "lat": 21.49729,
    "lng": -158.02866,
@@ -1205,9 +1205,9 @@
     "dental": 18,
     "pharmacy": 13,
     "other-clinical": 7,
-    "eye-vision": 5,
-    "nursing": 5,
     "group": 5,
+    "nursing": 5,
+    "eye-vision": 5,
     "dietary": 3,
     "support": 1,
     "chiropractic": 1
@@ -1219,8 +1219,8 @@
    "county": "Honolulu County",
    "practitioners": 792,
    "with_role": 101,
-   "orgs_provider": 53,
-   "orgs_ein": 4,
+   "orgs_provider": 66,
+   "orgs_ein": 5,
    "locations": 152,
    "lat": 21.46074,
    "lng": -158.01049,
@@ -1233,8 +1233,8 @@
     "dental": 20,
     "eye-vision": 7,
     "chiropractic": 5,
-    "nursing": 4,
     "other-clinical": 4,
+    "nursing": 4,
     "support": 3,
     "student": 1
    }
@@ -1245,7 +1245,7 @@
    "county": "Maui County",
    "practitioners": 31,
    "with_role": 23,
-   "orgs_provider": 24,
+   "orgs_provider": 23,
    "orgs_ein": 1,
    "locations": 6,
    "lat": 20.73425,
@@ -1253,9 +1253,9 @@
    "by_category": {
     "physician": 22,
     "rehab-therapy": 3,
+    "advanced-practice": 2,
     "group": 2,
-    "other-clinical": 2,
-    "advanced-practice": 2
+    "other-clinical": 2
    }
   },
   {
@@ -1271,8 +1271,8 @@
    "lng": -158.12011,
    "by_category": {
     "chiropractic": 1,
-    "other-clinical": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "other-clinical": 1
    }
   },
   {
@@ -1281,7 +1281,7 @@
    "county": "Honolulu County",
    "practitioners": 281,
    "with_role": 107,
-   "orgs_provider": 75,
+   "orgs_provider": 78,
    "orgs_ein": 4,
    "locations": 102,
    "lat": 21.43058,
@@ -1294,8 +1294,8 @@
     "other-clinical": 29,
     "pharmacy": 20,
     "student": 11,
-    "rehab-therapy": 10,
     "dietary": 10,
+    "rehab-therapy": 10,
     "nursing": 5,
     "eye-vision": 4,
     "chiropractic": 4,
@@ -1308,7 +1308,7 @@
    "county": "Maui County",
    "practitioners": 856,
    "with_role": 263,
-   "orgs_provider": 228,
+   "orgs_provider": 252,
    "orgs_ein": 10,
    "locations": 382,
    "lat": 20.89111,
@@ -1340,7 +1340,7 @@
    "county": "Honolulu County",
    "practitioners": 61,
    "with_role": 27,
-   "orgs_provider": 12,
+   "orgs_provider": 13,
    "orgs_ein": 0,
    "locations": 18,
    "lat": 21.34125,
@@ -1349,16 +1349,16 @@
     "behavioral-health": 13,
     "dental": 10,
     "dietary": 7,
-    "rehab-therapy": 5,
     "other-clinical": 5,
+    "rehab-therapy": 5,
     "advanced-practice": 5,
     "student": 5,
     "physician": 4,
     "pharmacy": 2,
     "nursing": 2,
     "eye-vision": 1,
-    "group": 1,
-    "supplier": 1
+    "supplier": 1,
+    "group": 1
    }
   },
   {
@@ -1382,8 +1382,8 @@
    "county": "Honolulu County",
    "practitioners": 914,
    "with_role": 78,
-   "orgs_provider": 175,
-   "orgs_ein": 5,
+   "orgs_provider": 196,
+   "orgs_ein": 7,
    "locations": 447,
    "lat": 21.39105,
    "lng": -158.01175,
@@ -1395,14 +1395,14 @@
     "dental": 38,
     "physician": 26,
     "eye-vision": 17,
-    "other-clinical": 11,
     "advanced-practice": 11,
+    "other-clinical": 11,
     "group": 11,
-    "chiropractic": 3,
     "agency": 3,
+    "chiropractic": 3,
     "support": 2,
-    "student": 1,
     "dietary": 1,
+    "student": 1,
     "supplier": 1
    }
   },
@@ -1425,8 +1425,8 @@
    "county": "Honolulu County",
    "practitioners": 3529,
    "with_role": 1678,
-   "orgs_provider": 867,
-   "orgs_ein": 25,
+   "orgs_provider": 858,
+   "orgs_ein": 27,
    "locations": 1195,
    "lat": 21.3064,
    "lng": -157.85774,
@@ -1449,8 +1449,8 @@
     "support": 8,
     "agency": 4,
     "facility": 3,
-    "emergency-medical": 1,
-    "supplier": 1
+    "supplier": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1459,7 +1459,7 @@
    "county": "Honolulu County",
    "practitioners": 2492,
    "with_role": 1007,
-   "orgs_provider": 846,
+   "orgs_provider": 806,
    "orgs_ein": 37,
    "locations": 1063,
    "lat": 21.29666,
@@ -1482,8 +1482,8 @@
     "podiatry": 5,
     "support": 5,
     "facility": 4,
-    "emergency-medical": 1,
-    "supplier": 1
+    "supplier": 1,
+    "emergency-medical": 1
    }
   },
   {
@@ -1492,15 +1492,15 @@
    "county": "Honolulu County",
    "practitioners": 242,
    "with_role": 96,
-   "orgs_provider": 107,
+   "orgs_provider": 110,
    "orgs_ein": 2,
    "locations": 207,
    "lat": 21.28048,
    "lng": -157.82849,
    "by_category": {
     "behavioral-health": 84,
-    "advanced-practice": 35,
     "physician": 35,
+    "advanced-practice": 35,
     "rehab-therapy": 29,
     "other-clinical": 18,
     "eye-vision": 11,
@@ -1510,8 +1510,8 @@
     "chiropractic": 4,
     "dietary": 3,
     "nursing": 2,
-    "supplier": 1,
-    "facility": 1
+    "facility": 1,
+    "supplier": 1
    }
   },
   {
@@ -1520,8 +1520,8 @@
    "county": "Honolulu County",
    "practitioners": 764,
    "with_role": 271,
-   "orgs_provider": 307,
-   "orgs_ein": 10,
+   "orgs_provider": 305,
+   "orgs_ein": 9,
    "locations": 373,
    "lat": 21.28051,
    "lng": -157.79793,
@@ -1539,12 +1539,12 @@
     "dietary": 15,
     "nursing": 11,
     "student": 4,
-    "support": 3,
     "podiatry": 3,
+    "support": 3,
     "no-taxonomy": 2,
-    "agency": 1,
     "supplier": 1,
-    "facility": 1
+    "facility": 1,
+    "agency": 1
    }
   },
   {
@@ -1553,8 +1553,8 @@
    "county": "Honolulu County",
    "practitioners": 1280,
    "with_role": 429,
-   "orgs_provider": 485,
-   "orgs_ein": 28,
+   "orgs_provider": 500,
+   "orgs_ein": 29,
    "locations": 688,
    "lat": 21.32123,
    "lng": -157.86059,
@@ -1570,10 +1570,10 @@
     "dietary": 20,
     "eye-vision": 18,
     "group": 9,
-    "chiropractic": 5,
     "facility": 5,
-    "no-taxonomy": 3,
+    "chiropractic": 5,
     "podiatry": 3,
+    "no-taxonomy": 3,
     "support": 2,
     "supplier": 1
    }
@@ -1584,7 +1584,7 @@
    "county": "Honolulu County",
    "practitioners": 229,
    "with_role": 6,
-   "orgs_provider": 17,
+   "orgs_provider": 23,
    "orgs_ein": 0,
    "locations": 53,
    "lat": 21.35587,
@@ -1599,9 +1599,9 @@
     "eye-vision": 3,
     "other-clinical": 2,
     "advanced-practice": 1,
-    "physician": 1,
+    "support": 1,
     "chiropractic": 1,
-    "support": 1
+    "physician": 1
    }
   },
   {
@@ -1610,8 +1610,8 @@
    "county": "Honolulu County",
    "practitioners": 1844,
    "with_role": 535,
-   "orgs_provider": 162,
-   "orgs_ein": 8,
+   "orgs_provider": 163,
+   "orgs_ein": 11,
    "locations": 292,
    "lat": 21.33691,
    "lng": -157.89084,
@@ -1632,8 +1632,8 @@
     "no-taxonomy": 9,
     "podiatry": 6,
     "chiropractic": 3,
-    "emergency-medical": 2,
-    "facility": 2
+    "facility": 2,
+    "emergency-medical": 2
    }
   },
   {
@@ -1658,7 +1658,7 @@
    "county": "Honolulu County",
    "practitioners": 70,
    "with_role": 25,
-   "orgs_provider": 31,
+   "orgs_provider": 33,
    "orgs_ein": 1,
    "locations": 53,
    "lat": 21.27937,
@@ -1681,8 +1681,8 @@
    "county": "Honolulu County",
    "practitioners": 217,
    "with_role": 34,
-   "orgs_provider": 47,
-   "orgs_ein": 1,
+   "orgs_provider": 42,
+   "orgs_ein": 0,
    "locations": 83,
    "lat": 21.30351,
    "lng": -157.81747,
@@ -1699,9 +1699,9 @@
     "chiropractic": 3,
     "dental": 3,
     "eye-vision": 2,
+    "facility": 1,
     "support": 1,
-    "group": 1,
-    "facility": 1
+    "group": 1
    }
   },
   {
@@ -1723,7 +1723,7 @@
    "county": "Honolulu County",
    "practitioners": 122,
    "with_role": 36,
-   "orgs_provider": 49,
+   "orgs_provider": 53,
    "orgs_ein": 2,
    "locations": 93,
    "lat": 21.28289,
@@ -1737,10 +1737,10 @@
     "physician": 7,
     "dental": 7,
     "nursing": 5,
-    "group": 3,
     "other-clinical": 3,
-    "chiropractic": 1,
-    "support": 1
+    "group": 3,
+    "support": 1,
+    "chiropractic": 1
    }
   },
   {
@@ -1749,8 +1749,8 @@
    "county": "Honolulu County",
    "practitioners": 1206,
    "with_role": 776,
-   "orgs_provider": 200,
-   "orgs_ein": 9,
+   "orgs_provider": 192,
+   "orgs_ein": 6,
    "locations": 354,
    "lat": 21.29614,
    "lng": -157.83081,
@@ -1762,17 +1762,17 @@
     "dental": 41,
     "other-clinical": 34,
     "nursing": 26,
-    "pharmacy": 17,
     "student": 17,
+    "pharmacy": 17,
     "eye-vision": 16,
     "no-taxonomy": 16,
     "group": 13,
     "dietary": 10,
     "chiropractic": 8,
     "podiatry": 2,
-    "transport": 1,
     "supplier": 1,
-    "agency": 1
+    "agency": 1,
+    "transport": 1
    }
   },
   {
@@ -1794,14 +1794,14 @@
    "county": null,
    "practitioners": 2,
    "with_role": 2,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 2,
    "lat": 21.3119,
    "lng": -157.86071,
    "by_category": {
-    "physician": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "physician": 1
    }
   },
   {
@@ -1823,15 +1823,15 @@
    "county": null,
    "practitioners": 4,
    "with_role": 0,
-   "orgs_provider": 1,
+   "orgs_provider": 0,
    "orgs_ein": 0,
    "locations": 4,
    "lat": 21.29686,
    "lng": -157.81518,
    "by_category": {
     "no-taxonomy": 2,
-    "student": 1,
-    "behavioral-health": 1
+    "behavioral-health": 1,
+    "student": 1
    }
   },
   {
@@ -1882,9 +1882,9 @@
     "nursing": 8,
     "pharmacy": 5,
     "group": 2,
+    "eye-vision": 1,
     "dietary": 1,
-    "rehab-therapy": 1,
-    "eye-vision": 1
+    "rehab-therapy": 1
    }
   },
   {
@@ -1923,7 +1923,7 @@
    "county": "Honolulu County",
    "practitioners": 1827,
    "with_role": 398,
-   "orgs_provider": 20,
+   "orgs_provider": 18,
    "orgs_ein": 1,
    "locations": 57,
    "lat": 21.35579,
@@ -1944,8 +1944,8 @@
     "eye-vision": 10,
     "podiatry": 5,
     "support": 4,
-    "facility": 3,
     "chiropractic": 3,
+    "facility": 3,
     "emergency-medical": 1
    }
   },
@@ -1973,9 +1973,9 @@
     "eye-vision": 5,
     "support": 4,
     "group": 2,
-    "no-taxonomy": 1,
+    "chiropractic": 1,
     "dietary": 1,
-    "chiropractic": 1
+    "no-taxonomy": 1
    }
   },
   {
@@ -1995,5 +1995,5 @@
    }
   }
  ],
- "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
+ "notes": "Counts come from the NDH bulk export at the release named above. Organizations are split by record type and never summed: roughly half the Organization file is `ein` tax records that carry an NPI and an address, so adding them to provider organizations roughly doubles the count. Practitioner geography uses the primary address; 14.85% of practitioners list addresses in more than one state and are counted only in the first. Organization geography uses the physical address: the first entry typed physical (or both), else the first with use work, else the first. Until 2026-10-26 it used the first entry, which is often the billing address, and placed 63,194 of 2,058,500 organizations in another state (FHI-84). Counties are derived from the Census ZCTA-to-county relationship file, taking the county holding the largest share of a ZIP's population; ZIPs with no dominant county are grouped as unknown. Payer organizations carry no address at all and cannot appear in any geography. Profession categories here come from the directory's own Practitioner.qualification taxonomy, not from NPPES. H54 categorises the same practitioners against their NPPES taxonomy and lands 1 to 2 points different per profession as a result: PA physicians read 73.0% here and 74.3% there. Neither is wrong. This view describes what the directory says about itself, which is the right frame for a directory explorer; H54 asks how the directory compares to the federal registry."
 }
