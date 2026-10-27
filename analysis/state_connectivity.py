@@ -732,6 +732,10 @@ def funnel_corrections(state, summary, affiliation_edges=None):
         return (fhi84_correction(state, summary, affiliation_edges)
                 + fhi84_practitioner_correction(state, summary))
     name = STATE_NAMES.get(state.upper(), state.upper())
+    # Quote the figures as this correction published them; the FHI-84
+    # entries below carry the later moves, so the live run would credit
+    # them to FHI-73.
+    after73 = PUBLISHED_BEFORE_FHI84.get(state.upper(), summary)
     return [{
         "date": "2026-10-16",
         "issue": "FHI-73",
@@ -742,12 +746,13 @@ def funnel_corrections(state, summary, affiliation_edges=None):
             f"an affiliation). On 2026-10-16 the method changed: H51 now "
             f"keeps every NPI a vendor lists beside an endpoint URL, where "
             f"before it kept only the first. Under the new method the "
-            f"any-route figure reads {summary['reaches_endpoint_pct']}% "
-            f"({summary['reaches_endpoint_pct_of_affiliated']}% of "
-            f"practitioners affiliated through any source). The "
+            f"any-route figure read {after73['reaches_endpoint_pct']}% "
+            f"({after73['reaches_endpoint_pct_of_affiliated']}% of "
+            f"practitioners affiliated through any source), before the "
+            f"FHI-84 corrections below. The "
             f"deterministic figure (the NDH's own attribution, or a vendor "
-            f"NPI on a URL listing {LIST_THRESHOLD} or fewer NPIs) reads "
-            f"{summary['reaches_endpoint_deterministic_pct']}%. Neither is "
+            f"NPI on a URL listing {LIST_THRESHOLD} or fewer NPIs) read "
+            f"{after73['reaches_endpoint_deterministic_pct']}%. Neither is "
             f"comparable with the {before['reaches_endpoint_pct']}% of "
             f"{before['report'].split()[0]} or the "
             f"{before['august_reaches_endpoint_pct']}% of the 2026-08-20 "
@@ -768,6 +773,7 @@ PUBLISHED_BEFORE_FHI84 = {
         "reaches_endpoint_pct": 22.3,
         "reaches_endpoint_pct_of_affiliated": 50.3,
         "reaches_endpoint_deterministic": 6555,
+        "reaches_endpoint_deterministic_pct": 2.9,
         "affiliation_graph_edges": 6507,
         "orgs_moved_out": 4322,
         "orgs_moved_in": 1996,

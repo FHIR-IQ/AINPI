@@ -580,10 +580,12 @@ export default function DeveloperPage() {
             <strong>NPI lookup 2 units</strong>, <strong>name search 25</strong>,{' '}
             <strong>state or city search 27</strong>. Pass{' '}
             <code className="font-mono text-xs">?scope=primary</code> on a
-            geography search to match only the provider&rsquo;s first listed
-            address for 25 units instead of 27. Be aware of what that costs you:
-            1,095,257 practitioners (14.85%) list addresses in more than one
-            state, and the cheap path will not find them outside their first one.
+            geography search to match only one address per provider, the
+            physical address (the first typed physical, else the first work
+            address, else the first listed), for 25 units instead of 27. Be
+            aware of what that costs you: 1,095,257 practitioners (14.85%) list
+            addresses in more than one state, and the cheap path will not find
+            them outside the address picked.
           </p>
           <p className="text-sm text-gray-700 max-w-3xl mb-4">
             Send a key as{' '}

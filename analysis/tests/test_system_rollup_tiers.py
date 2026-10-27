@@ -799,9 +799,11 @@ def test_pa_funnel_correction_quotes_the_run(monkeypatch):
                "reaches_endpoint_deterministic": 6498,
                "reaches_endpoint_deterministic_pct": 2.9}
     c, fhi84, prac = sc.funnel_corrections("pa", summary, affiliation_edges=5700)
-    for text in ("15.8%", "35.8%", "22.2%", "50.6%", "2.9%", "18.7%",
-                 "2026-10-14", "every NPI", "10 or fewer"):
+    # FHI-73 quotes its own published figures, not the later run.
+    for text in ("15.8%", "35.8%", "22.3%", "50.3%", "2.9%", "18.7%",
+                 "2026-10-14", "every NPI", "10 or fewer", "before the FHI-84"):
         assert text in c["what"], text
+    assert "22.2%" not in c["what"] and "50.6%" not in c["what"]
     assert "\u2014" not in c["what"]
     assert fhi84["issue"] == "FHI-84" and fhi84["date"] == "2026-10-26"
     for text in ("2026-10-07 release", "50,812", "50.3%", "50,880", "50.4%",

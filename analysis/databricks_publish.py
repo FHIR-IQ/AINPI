@@ -153,6 +153,8 @@ ID_NOTE_LOCATION = _UNSTABLE_ID + (
 # resource JSON is in every partition, so the comment carries the rule as SQL
 # instead. The snippet was run against the 2026-10-07 practitioner partition
 # on 2026-10-27 and reproduced the warehouse change exactly (119,906 rows).
+# It assumes address is an array; the Python rule also accepts a bare object,
+# which no 2026-10-07 practitioner record has.
 PHYSICAL_ADDRESS_SQL = (
     "coalesce(try_element_at(filter(addrs, x -> x.type IN ('physical', 'both')), 1), "
     "try_element_at(filter(addrs, x -> x.use = 'work'), 1), try_element_at(addrs, 1)) "

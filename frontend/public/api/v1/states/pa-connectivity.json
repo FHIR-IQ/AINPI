@@ -3,9 +3,9 @@
   "state_name": "Pennsylvania",
   "slug": "pa-connectivity",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T14:16:03+00:00",
+  "generated_at": "2026-10-27T14:50:30+00:00",
   "methodology_version": "0.7.2-draft",
-  "commit_sha": "adb6d00",
+  "commit_sha": "c0592f9",
   "summary": {
     "practitioners": 225413,
     "with_role": 97848,
@@ -36,7 +36,7 @@
     {
       "date": "2026-10-16",
       "issue": "FHI-73",
-      "what": "The 2026-10-14 update reported 15.8% of Pennsylvania practitioners reaching a FHIR endpoint (35.8% of those with an affiliation). On 2026-10-16 the method changed: H51 now keeps every NPI a vendor lists beside an endpoint URL, where before it kept only the first. Under the new method the any-route figure reads 22.2% (50.8% of practitioners affiliated through any source). The deterministic figure (the NDH's own attribution, or a vendor NPI on a URL listing 10 or fewer NPIs) reads 2.8%. Neither is comparable with the 15.8% of 2026-10-14 or the 18.7% of the 2026-08-20 release.",
+      "what": "The 2026-10-14 update reported 15.8% of Pennsylvania practitioners reaching a FHIR endpoint (35.8% of those with an affiliation). On 2026-10-16 the method changed: H51 now keeps every NPI a vendor lists beside an endpoint URL, where before it kept only the first. Under the new method the any-route figure read 22.3% (50.3% of practitioners affiliated through any source), before the FHI-84 corrections below. The deterministic figure (the NDH's own attribution, or a vendor NPI on a URL listing 10 or fewer NPIs) read 2.9%. Neither is comparable with the 15.8% of 2026-10-14 or the 18.7% of the 2026-08-20 release.",
       "since": "the 2026-10-14 update"
     },
     {
