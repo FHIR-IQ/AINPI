@@ -1,8 +1,8 @@
 {
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-26T16:25:05+00:00",
+  "generated_at": "2026-10-27T03:45:04+00:00",
   "methodology_version": "0.7.3-draft",
-  "commit_sha": "56dbb04",
+  "commit_sha": "8fcfade",
   "counters": {
     "resources_processed": 24761939,
     "npis_checked": 9526462,

@@ -3,12 +3,12 @@
   "state_name": "Iowa",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:48:12+00:00",
+  "generated_at": "2026-10-27T03:37:10+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "6e74041",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 45558,
-    "organization": 14133,
+    "organization": 14524,
     "location": 20999
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 743,
-      "state_denominator": 14133,
-      "state_pct": 5.2572,
+      "state_numerator": 766,
+      "state_denominator": 14524,
+      "state_pct": 5.274,
       "national_pct": 1.4362,
-      "state_headline": "IA has 14,133 Organization resources covering 13,390 unique NPIs \u2014 743 excess resources (5.2572%) appear duplicated.",
+      "state_headline": "IA has 14,524 Organization resources covering 13,758 unique NPIs \u2014 766 excess resources (5.274%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 80690,
-      "state_denominator": 80690,
+      "state_numerator": 81081,
+      "state_denominator": 81081,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "80,690 of 80,690 IA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "81,081 of 81,081 IA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five IA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five IA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }

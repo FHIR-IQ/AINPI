@@ -176,3 +176,16 @@ cache with real BigQuery credentials if the file is absent.
 - Pennsylvania only. The same comparison has not been run for any other
   state, and no other state has a published ledger.
 - Reaching an endpoint is not the endpoint answering. Liveness is H1 to H5.
+
+## Note added 2026-10-27 (FHI-84)
+
+Organization `_state` and `_city` in the warehouse now come from the physical
+address rather than `address[0]` (run doc
+`2026-10-26-fhi-84-org-physical-address.md`). Both parquet exports this
+comparison ran on were written with the `address[0]` rule, so the pair above
+is consistent within itself and is left as published. Its 2026-10-07 side
+(50.3% of affiliated) is therefore not the ledger's current figure (50.4%).
+It was not rerun: doing so consistently needs both organization exports
+rewritten with the current flattener and the 2026-10-13 vendor download, and
+the only vendor cache available on 2026-10-27 is a 2026-10-26 download whose
+H51 output already differs from the published file.

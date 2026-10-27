@@ -3,12 +3,12 @@
   "state_name": "Ohio",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-26T16:02:03+00:00",
+  "generated_at": "2026-10-27T03:41:38+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "56dbb04",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 264318,
-    "organization": 55299,
+    "organization": 55747,
     "location": 90127
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 2409,
-      "state_denominator": 55299,
-      "state_pct": 4.3563,
+      "state_numerator": 2432,
+      "state_denominator": 55747,
+      "state_pct": 4.3626,
       "national_pct": 1.4362,
-      "state_headline": "OH has 55,299 Organization resources covering 52,890 unique NPIs \u2014 2,409 excess resources (4.3563%) appear duplicated.",
+      "state_headline": "OH has 55,747 Organization resources covering 53,315 unique NPIs \u2014 2,432 excess resources (4.3626%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 409743,
-      "state_denominator": 409743,
+      "state_numerator": 410191,
+      "state_denominator": 410191,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "409,743 of 409,743 OH-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "410,191 of 410,191 OH-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five OH-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }

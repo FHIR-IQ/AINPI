@@ -3,12 +3,12 @@
   "state_name": "New Jersey",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:49:58+00:00",
+  "generated_at": "2026-10-27T03:40:54+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "6e74041",
+  "commit_sha": "8fcfade",
   "denominators": {
     "practitioner": 144824,
-    "organization": 55049,
+    "organization": 54770,
     "location": 74026
   },
   "findings": [
@@ -38,11 +38,11 @@
       ],
       "title": "Duplicate detection",
       "state_computable": true,
-      "state_numerator": 1584,
-      "state_denominator": 55049,
-      "state_pct": 2.8774,
+      "state_numerator": 1565,
+      "state_denominator": 54770,
+      "state_pct": 2.8574,
       "national_pct": 1.4362,
-      "state_headline": "NJ has 55,049 Organization resources covering 53,464 unique NPIs \u2014 1,584 excess resources (2.8774%) appear duplicated.",
+      "state_headline": "NJ has 54,770 Organization resources covering 53,204 unique NPIs \u2014 1,565 excess resources (2.8574%) appear duplicated.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 273898,
-      "state_denominator": 273898,
+      "state_numerator": 273619,
+      "state_denominator": 273619,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "273,898 of 273,898 NJ-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "273,619 of 273,619 NJ-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NJ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five NJ-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
 }
