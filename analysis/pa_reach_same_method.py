@@ -149,8 +149,47 @@ def _delta(a, b):
     return round(d, 1) if isinstance(d, float) else d
 
 
+# The address rule both runs used for practitioner and organization state.
+# "address0" is the first listed address (before FHI-84); "physical" is the
+# first entry typed physical or both, else use work, else the first.
+ADDRESS_RULES = {
+    "address0": "the first address listed on each record",
+    "physical": ("the physical address (the first entry typed physical or "
+                 "both, else use work, else the first; FHI-84)"),
+}
+
+
+def ledger_reproduction(after: dict, ledger: dict | None) -> str:
+    """The limit sentence on how the later run relates to the published
+    ledger for the same release."""
+    if ledger is None:
+        return (
+            "BigQuery SQL was run through DuckDB with a small set of rewrites. "
+            "The October run reproduces the committed October summary, "
+            "funnel, confidence bands and all four intermediate CSVs (as row "
+            "sets), except vendor_known, which varies by one between runs "
+            "with row order (49,455 or 49,456; 49,456 committed). It is not "
+            "part of the reach count."
+        )
+    a, l = after["summary"], ledger["summary"]
+    return (
+        "BigQuery SQL was run through DuckDB with a small set of rewrites. "
+        f"The {after['release_date']} run reads {a['reaches_endpoint']:,} any "
+        f"route and {a['reaches_endpoint_deterministic']:,} deterministic, "
+        f"against {l['reaches_endpoint']:,} and "
+        f"{l['reaches_endpoint_deterministic']:,} in the published ledger for "
+        "the same release, on the same practitioner count "
+        f"({a['practitioners']:,} and {l['practitioners']:,}). The difference "
+        "is the vendor files: this comparison holds one later download for "
+        "both releases, and the ledger reads the published H51 file."
+    )
+
+
 def build_side_by_side(before: dict, after: dict, *, source_commit: str,
-                       run_commit: str, generated_at: str) -> dict:
+                       run_commit: str, generated_at: str,
+                       vendor_download: str = "2026-10-13",
+                       address_rule: str = "address0",
+                       ledger: dict | None = None) -> dict:
     """Side-by-side payload for two ``pa-connectivity.json`` runs."""
     a, b = release_summary(before), release_summary(after)
     for r in (a, b):
@@ -192,13 +231,15 @@ def build_side_by_side(before: dict, after: dict, *, source_commit: str,
             "on consistent inputs?"
         ),
         "method": (
-            "The current connectivity chain (H50, H51, H53, then "
+            f"The current connectivity chain (H50, H51, H53, then "
             "state_connectivity.py pa --no-geo) was run on each release from "
-            "the local parquet export, read through DuckDB in place of "
-            "BigQuery. Vendor endpoint files (2026-10-13 download), the NPPES "
-            "corporate-parent snapshot, the CMS enrollment crosswalk, the "
-            "hospital ownership crosswalk and the H47 rural file were held "
-            "constant, so the difference isolates the change on the NDH side."
+            f"the local parquet export, read through DuckDB in place of "
+            f"BigQuery. Practitioner and organization state came from "
+            f"{ADDRESS_RULES[address_rule]} on both releases. Vendor endpoint "
+            f"files ({vendor_download} download), the NPPES "
+            f"corporate-parent snapshot, the CMS enrollment crosswalk, the "
+            f"hospital ownership crosswalk and the H47 rural file were held "
+            f"constant, so the difference isolates the change on the NDH side."
         ),
         "releases": {a["release_date"]: {k: a[k] for k in keys},
                      b["release_date"]: {k: b[k] for k in keys}},
@@ -222,12 +263,7 @@ def build_side_by_side(before: dict, after: dict, *, source_commit: str,
             "depend on the county layer.",
             "Vendor files were held at one download, so vendor-side change "
             "between August and October is excluded by design.",
-            "BigQuery SQL was run through DuckDB with a small set of rewrites. "
-            "The October run reproduces the committed October summary, "
-            "funnel, confidence bands and all four intermediate CSVs (as row "
-            "sets), except vendor_known, which varies by one between runs "
-            "with row order (49,455 or 49,456; 49,456 committed). It is not "
-            "part of the reach count.",
+            ledger_reproduction(after, ledger),
             "Pennsylvania only.",
         ],
     }
@@ -394,6 +430,11 @@ def main(argv=None) -> int:
     s.add_argument("--run-commit", default=None,
                    help="checkout the script ran from (default: this checkout's HEAD)")
     s.add_argument("--write", type=pathlib.Path)
+    s.add_argument("--vendor-download", default="2026-10-13",
+                   help="date the held-constant vendor files were downloaded")
+    s.add_argument("--address-rule", choices=sorted(ADDRESS_RULES), default="address0")
+    s.add_argument("--ledger", type=pathlib.Path,
+                   help="published pa-connectivity.json for the later release")
     args = ap.parse_args(argv)
 
     if args.cmd == "run":
@@ -406,6 +447,9 @@ def main(argv=None) -> int:
         source_commit=args.source_commit or git_head(),
         run_commit=args.run_commit or git_head(),
         generated_at=dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
+        vendor_download=args.vendor_download,
+        address_rule=args.address_rule,
+        ledger=json.loads(args.ledger.read_text()) if args.ledger else None,
     )
     text = json.dumps(payload, indent=2) + "\n"
     if args.write:

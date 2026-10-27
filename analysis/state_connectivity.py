@@ -729,7 +729,8 @@ def funnel_corrections(state, summary, affiliation_edges=None):
     """
     before = PUBLISHED_BEFORE_FHI73.get((state or "").upper())
     if not before:
-        return fhi84_correction(state, summary, affiliation_edges)
+        return (fhi84_correction(state, summary, affiliation_edges)
+                + fhi84_practitioner_correction(state, summary))
     name = STATE_NAMES.get(state.upper(), state.upper())
     return [{
         "date": "2026-10-16",
@@ -753,7 +754,8 @@ def funnel_corrections(state, summary, affiliation_edges=None):
             f"release."
         ),
         "since": f"the {before['report']}",
-    }] + fhi84_correction(state, summary, affiliation_edges)
+    }] + fhi84_correction(state, summary, affiliation_edges) \
+       + fhi84_practitioner_correction(state, summary)
 
 
 # As published before FHI-84 (2026-10-26), when organization _state/_city
@@ -777,9 +779,68 @@ FHI84_METHOD = (
     "Organization record, which the NDH often fills with the postal billing "
     "address. Since 2026-10-26 they come from the physical address (the "
     "first entry typed physical or both, else use work, else the first). "
-    "The practitioner count is unaffected: it filters on the practitioner's "
-    "own state."
+    "At that step the practitioner count was unaffected: it filters on the "
+    "practitioner's own state, which changed separately on 2026-10-27."
 )
+
+# As published on 2026-10-27 after the organization step, when practitioner
+# _state still read address[0]. The practitioner step changes the
+# denominator itself, so the before/after names the count as well as reach.
+PUBLISHED_BEFORE_FHI84_PRACTITIONER = {
+    "PA": {
+        "practitioners": 227917,
+        "reaches_endpoint": 50880,
+        "reaches_endpoint_pct": 22.3,
+        "reaches_endpoint_pct_of_affiliated": 50.4,
+        "reaches_endpoint_deterministic": 6555,
+        "reaches_endpoint_deterministic_pct": 2.9,
+        "affiliation_graph_edges": 5612,
+    },
+}
+
+FHI84_PRACTITIONER_METHOD = (
+    "Practitioner state, city and ZIP code were read from the first address "
+    "on each Practitioner record, which the NDH often fills with the postal "
+    "billing address. Since 2026-10-27 they come from the physical address, "
+    "by the same rule as organizations. This changes which practitioners "
+    "count as in the state, so the denominator moves as well as the reach."
+)
+
+
+def fhi84_practitioner_correction(state, summary):
+    """Practitioner address correction (FHI-84, second step).
+
+    Release-gated like `fhi84_correction`: the numbers are emitted only for
+    the release they were measured on.
+    """
+    before = PUBLISHED_BEFORE_FHI84_PRACTITIONER.get((state or "").upper())
+    if not before:
+        return []
+    name = STATE_NAMES.get(state.upper(), state.upper())
+    what = FHI84_PRACTITIONER_METHOD
+    if NDH_RELEASE == FHI84_RELEASE:
+        what += (
+            f" On the {FHI84_RELEASE} release the {name} practitioner count "
+            f"moved from {before['practitioners']:,} to "
+            f"{summary['practitioners']:,}. Practitioners reaching an "
+            f"endpoint by any route moved from {before['reaches_endpoint']:,} "
+            f"({before['reaches_endpoint_pct']}%, "
+            f"{before['reaches_endpoint_pct_of_affiliated']}% of affiliated) "
+            f"to {summary['reaches_endpoint']:,} "
+            f"({summary['reaches_endpoint_pct']}%, "
+            f"{summary['reaches_endpoint_pct_of_affiliated']}% of "
+            f"affiliated), and deterministic reach from "
+            f"{before['reaches_endpoint_deterministic']:,} "
+            f"({before['reaches_endpoint_deterministic_pct']}%) to "
+            f"{summary['reaches_endpoint_deterministic']:,} "
+            f"({summary['reaches_endpoint_deterministic_pct']}%)."
+        )
+    return [{
+        "date": "2026-10-27",
+        "issue": "FHI-84",
+        "what": what,
+        "since": "the 2026-10-26 organization address correction",
+    }]
 
 
 def fhi84_correction(state, summary, affiliation_edges=None):
@@ -793,6 +854,13 @@ def fhi84_correction(state, summary, affiliation_edges=None):
     before = PUBLISHED_BEFORE_FHI84.get((state or "").upper())
     if not before:
         return []
+    # The organization step's "after" is the figure published on 2026-10-27,
+    # before the practitioner step moved the denominator. Reading the
+    # current run here would credit both steps to this one.
+    published = PUBLISHED_BEFORE_FHI84_PRACTITIONER.get(state.upper())
+    if published:
+        summary = published
+        affiliation_edges = published["affiliation_graph_edges"]
     name = STATE_NAMES.get(state.upper(), state.upper())
     what = FHI84_METHOD
     if NDH_RELEASE == FHI84_RELEASE:

@@ -789,13 +789,17 @@ def test_funnel_bands_alias_above_a_vendor_list():
 
 def test_pa_funnel_correction_quotes_the_run(monkeypatch):
     monkeypatch.setattr(sc, "NDH_RELEASE", "2026-10-07")
-    summary = {"reaches_endpoint": 50880,
-               "reaches_endpoint_pct": 22.3,
-               "reaches_endpoint_pct_of_affiliated": 50.4,
-               "reaches_endpoint_deterministic": 6555,
+    # A run after the practitioner step: a different count and reach, so
+    # the organization step's sentence must keep its pinned 2026-10-27
+    # figures rather than read these.
+    summary = {"practitioners": 225413,
+               "reaches_endpoint": 50101,
+               "reaches_endpoint_pct": 22.2,
+               "reaches_endpoint_pct_of_affiliated": 50.6,
+               "reaches_endpoint_deterministic": 6498,
                "reaches_endpoint_deterministic_pct": 2.9}
-    c, fhi84 = sc.funnel_corrections("pa", summary, affiliation_edges=5612)
-    for text in ("15.8%", "35.8%", "22.3%", "50.4%", "2.9%", "18.7%",
+    c, fhi84, prac = sc.funnel_corrections("pa", summary, affiliation_edges=5700)
+    for text in ("15.8%", "35.8%", "22.2%", "50.6%", "2.9%", "18.7%",
                  "2026-10-14", "every NPI", "10 or fewer"):
         assert text in c["what"], text
     assert "\u2014" not in c["what"]
@@ -804,8 +808,15 @@ def test_pa_funnel_correction_quotes_the_run(monkeypatch):
                  "physical address", "63,194", "4,322", "1,996",
                  "unchanged at 6,555", "6,507 edges to 5,612"):
         assert text in fhi84["what"], text
+    assert "50,101" not in fhi84["what"]
     assert "wrong state" not in fhi84["what"]
     assert "\u2014" not in fhi84["what"]
+    assert prac["issue"] == "FHI-84" and prac["date"] == "2026-10-27"
+    for text in ("227,917 to 225,413", "50,880 (22.3%, 50.4% of affiliated) "
+                 "to 50,101 (22.2%, 50.6% of affiliated)",
+                 "6,555 (2.9%) to 6,498 (2.9%)", "denominator"):
+        assert text in prac["what"], text
+    assert "\u2014" not in prac["what"]
     assert sc.funnel_corrections("oh", summary) == []
 
 
@@ -815,9 +826,12 @@ def test_fhi84_correction_is_release_agnostic_after_its_release(monkeypatch):
                "reaches_endpoint_pct_of_affiliated": 1.0,
                "reaches_endpoint_deterministic": 1,
                "reaches_endpoint_deterministic_pct": 1.0}
-    fhi84 = sc.funnel_corrections("pa", summary, affiliation_edges=9)[-1]
+    fhi84, prac = sc.funnel_corrections("pa", summary, affiliation_edges=9)[-2:]
     assert fhi84["issue"] == "FHI-84"
     assert "physical address" in fhi84["what"]
+    assert prac["date"] == "2026-10-27" and "physical address" in prac["what"]
+    for text in ("227,917", "2026-10-07"):
+        assert text not in prac["what"], text
     for text in ("50,812", "63,194", "6,507", "2026-10-07"):
         assert text not in fhi84["what"], text
 

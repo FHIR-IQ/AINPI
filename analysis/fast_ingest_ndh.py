@@ -116,13 +116,15 @@ PHYSICAL_ADDRESS_TYPES = ("physical", "both")
 
 
 def physical_address(raw):
-    """The Address that says where the organization is, as a dict.
+    """The Address that says where the organization or practitioner is.
 
-    `Organization.address` is 0..* and the NDH frequently lists the postal
+    `Organization.address` and `Practitioner.address` are 0..* and the NDH
+    frequently lists the postal
     billing address first and the physical work address second (NPI
     1548282270: a Woonsocket, RI billing address, then the Harrisburg, PA
     practice). Reading `address[0]` put 63,194 of 2,058,500 organizations in
-    the wrong state on the 2026-10-07 release (FHI-84). Choose, in order:
+    the wrong state on the 2026-10-07 release (FHI-84), and 119,906 of
+    7,481,907 practitioners the same way. Choose, in order:
 
       1. the first entry whose `type` is `physical` or `both` (FHIR
          Address.type is postal | physical | both, and `both` is physical);
@@ -178,8 +180,8 @@ def extract_practitioner(r):
         names = [n for n in names if isinstance(n, dict)]
     else:
         names = []
-    addresses = r.get("address")
-    addr = first_address(addresses)
+    # Physical address, not address[0]: see physical_address (FHI-84).
+    addr = physical_address(r.get("address"))
     phone, telecom = _telecom_pairs(r.get("telecom"))
     return {
         "_id": r.get("id"),
@@ -189,7 +191,7 @@ def extract_practitioner(r):
         "_state": addr.get("state") or None,
         "_city": addr.get("city") or None,
         "_postal_code": addr.get("postalCode") or None,
-        "_address_line": _address_line(addresses),
+        "_address_line": _address_line(addr),
         "_phone": phone,
         "_telecom": telecom,
         "_gender": r.get("gender") or None,

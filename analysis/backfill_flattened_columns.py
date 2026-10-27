@@ -19,11 +19,13 @@ The SQL deliberately mirrors `fast_ingest_ndh.py` field for field:
                 every PractitionerRole.specialty coding[0].code, pipe-joined,
                 source order. The singular _specialty_code stays first-entry.
   Organization _state / _city / _address_line
+  Practitioner _state / _city / _postal_code / _address_line
                 the physical address, not address[0] (FHI-84): first entry
                 with type physical or both, else use work, else the first
                 object. Mirrors physical_address() in fast_ingest_ndh.py.
-                Practitioner keeps address[0] for now; see the run doc
-                docs/methodology/runs/2026-10-26-fhi-84-org-physical-address.md.
+                Organization changed 2026-10-26, Practitioner 2026-10-27; see
+                docs/methodology/runs/2026-10-26-fhi-84-org-physical-address.md
+                and 2026-10-27-fhi-84-practitioner-physical-address.md.
 
 Source order is pinned with WITH OFFSET ... ORDER BY offset. Without it
 BigQuery does not guarantee UNNEST ordering, and _phone could pick a different
@@ -97,7 +99,7 @@ def line_sql(path: str, source: str = "resource") -> str:
 
 
 def picked_address_sql(source: str = "resource") -> str:
-    """The Address a flattened organization column reads, as a JSON value.
+    """The Address a flattened address column reads, as a JSON value.
 
     Mirrors `physical_address` in fast_ingest_ndh.py (FHI-84): the first
     entry whose type is physical or both, else the first whose use is work,
@@ -118,31 +120,43 @@ def picked_address_sql(source: str = "resource") -> str:
     )"""
 
 
-def org_address_select(source: str = "resource") -> str:
-    """`_state, _city, _address_line` for Organization, as SELECT columns.
+def address_select(table: str, source: str = "resource") -> str:
+    """The flattened address columns for `table`, as SELECT columns.
 
-    NULLIF(..., '') matches the Python flattener's `.get(...) or None`.
+    Organization has `_state, _city, _address_line`; Practitioner also has
+    `_postal_code`. NULLIF(..., '') matches the Python flattener's
+    `.get(...) or None`.
     """
     a = picked_address_sql(source)
+    postal = (
+        "NULLIF(JSON_VALUE(a, '$.postalCode'), '') AS _postal_code,"
+        if table == "practitioner" else ""
+    )
     return f"""NULLIF(JSON_VALUE(a, '$.state'), '') AS _state,
-      NULLIF(JSON_VALUE(a, '$.city'), '') AS _city,
+      NULLIF(JSON_VALUE(a, '$.city'), '') AS _city, {postal}
       {line_sql('$.line', source='a')} AS _address_line
-    FROM (SELECT _id, {a} AS a FROM `{PROJECT}.{DATASET}.organization`)"""
+    FROM (SELECT _id, {a} AS a FROM `{PROJECT}.{DATASET}.{table}`)"""
+
+
+def org_address_select(source: str = "resource") -> str:
+    return address_select("organization", source)
 
 
 def statements() -> dict[str, str]:
     phone, telecom = telecom_sql()
     t = f"`{PROJECT}.{DATASET}`"
     return {
-        # Practitioner: address is 0..* and the first entry still wins,
-        # matching its _state/_city. It has the same billing-first flaw as
-        # Organization (FHI-84 measured 119,906 state changes on 2026-10-07)
-        # and is held for a separate change because its _state is the
-        # denominator of every per-state number. Change both together.
-        "practitioner": f"""UPDATE {t}.practitioner SET
-              _address_line = {line_sql('$.address[0].line')},
-              _phone = {phone}, _telecom = {telecom}
-            WHERE TRUE""",
+        # Practitioner reads the physical address too (FHI-84, 119,906
+        # state changes on 2026-10-07). Same subquery-and-join as
+        # Organization; Practitioner _id is unique in this table.
+        "practitioner": f"""UPDATE {t}.practitioner p SET
+              _state = n._state, _city = n._city,
+              _postal_code = n._postal_code,
+              _address_line = n._address_line,
+              _phone = {phone.replace('resource', 'p.resource')},
+              _telecom = {telecom.replace('resource', 'p.resource')}
+            FROM (SELECT _id, {address_select('practitioner')}) n
+            WHERE p._id = n._id""",
         # Organization reads the physical address (FHI-84). The picked
         # address is computed once per row in a subquery and joined back on
         # _id, which is unique in this table.

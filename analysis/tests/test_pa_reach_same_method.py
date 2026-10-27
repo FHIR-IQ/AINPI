@@ -56,6 +56,43 @@ OCT = {
     },
 }
 
+# The published pair since 2026-10-27: both releases rerun on the physical
+# address (FHI-84) with the 2026-10-26 vendor download held constant.
+AUG_FHI84 = {
+    "release_date": "2026-08-20",
+    "summary": {
+        "practitioners": 228445, "with_role": 99091, "with_role_pct": 43.4,
+        "reaches_endpoint": 52530, "reaches_endpoint_pct": 23.0,
+        "reaches_endpoint_deterministic": 8034,
+        "reaches_endpoint_deterministic_pct": 3.5,
+        "affiliated_any_source": 99428,
+        "reaches_endpoint_pct_of_affiliated": 52.8,
+    },
+    "confidence": {
+        "green": 2408, "yellow": 5626, "vendor_list": 9634, "resolved": 27824,
+        "resolved_by_tier": {"alias": 11383, "name-state": 5933, "brand-state": 10508},
+        "enrolled": 7038, "candidate": 1823, "red": 39089, "none": 135003,
+    },
+}
+OCT_FHI84 = {
+    "release_date": "2026-10-07",
+    "summary": {
+        "practitioners": 225413, "with_role": 97848, "with_role_pct": 43.4,
+        "reaches_endpoint": 49997, "reaches_endpoint_pct": 22.2,
+        "reaches_endpoint_deterministic": 6381,
+        "reaches_endpoint_deterministic_pct": 2.8,
+        "affiliated_any_source": 98444,
+        "reaches_endpoint_pct_of_affiliated": 50.8,
+    },
+    "confidence": {
+        "green": 1845, "yellow": 4536, "vendor_list": 8366, "resolved": 27157,
+        "resolved_by_tier": {"alias": 11339, "name-state": 5605, "brand-state": 10213},
+        "enrolled": 8093, "candidate": 1670, "red": 39923, "none": 133823,
+    },
+}
+LEDGER_OCT = {"summary": {"practitioners": 225413, "reaches_endpoint": 49995,
+                          "reaches_endpoint_deterministic": 6352}}
+
 PUBLISHED = (Path(__file__).resolve().parents[2]
              / "frontend/public/api/v1/states/pa-reach-same-method.json")
 
@@ -97,11 +134,25 @@ def test_refuses_same_release():
 
 def test_published_file_matches_builder():
     pub = json.loads(PUBLISHED.read_text())
-    out = build_side_by_side(AUG, OCT, source_commit=pub["source_commit"],
+    out = build_side_by_side(AUG_FHI84, OCT_FHI84, source_commit=pub["source_commit"],
                              run_commit=pub["run_commit"],
-                             generated_at=pub["generated_at"])
-    assert pub["source_commit"] == "b5aa33a" and pub["run_commit"] == "4ba909a"
+                             generated_at=pub["generated_at"],
+                             vendor_download="2026-10-26", address_rule="physical",
+                             ledger=LEDGER_OCT)
     assert pub == out
+
+
+def test_fhi84_pair_states_its_inputs():
+    out = build_side_by_side(AUG_FHI84, OCT_FHI84, source_commit="x", run_commit="x",
+                             generated_at="t", vendor_download="2026-10-26",
+                             address_rule="physical", ledger=LEDGER_OCT)
+    assert "2026-10-26 download" in out["method"]
+    assert "physical address" in out["method"]
+    assert "2026-10-13" not in out["method"]
+    lim = " ".join(out["limits"])
+    assert "49,997" in lim and "49,995" in lim and "6,381" in lim and "6,352" in lim
+    assert "reproduces" not in lim
+    assert out["change"]["reaches_endpoint_pct"] == -0.8
 
 
 def test_translate_rewrites_and_refuses():
