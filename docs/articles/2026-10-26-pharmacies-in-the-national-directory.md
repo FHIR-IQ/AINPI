@@ -139,9 +139,9 @@ this note and are not yet a published series.
   because it specifies the individual pharmacy location". It adds that
   "alternatively, an organizational NPI may be used". Phone and address then
   help tell locations apart: they "SHOULD be populated to assist in
-  identifying a particular pharmacy location". Marking
-  pharmacies in CMS NPD helps the NPI path. It does not replace the NCPDP ID,
-  which 1 of 108,637 CMS NPD pharmacy records mentions.
+  identifying a particular pharmacy location". Marking pharmacies in CMS NPD
+  helps the NPI path. It does not replace the NCPDP ID, which the CMS NPD
+  record of 1 of 108,637 pharmacies mentions.
 - **Implementers, now.** Look up the pharmacy in CMS NPD by NPI, take its type
   from NPPES, and read the address marked `type: physical` or `use: work`, not
   the first one listed. Pharmacies registered recently may be missing; we have
