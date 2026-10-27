@@ -3,11 +3,11 @@
   "state_name": "Wisconsin",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:43:47+00:00",
+  "generated_at": "2026-10-27T14:11:36+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 100933,
+    "practitioner": 102572,
     "organization": 22453,
     "location": 33772
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 95661,
-      "state_denominator": 100933,
-      "state_pct": 94.7767,
+      "state_numerator": 97235,
+      "state_denominator": 102572,
+      "state_pct": 94.7968,
       "national_pct": 97.7651,
-      "state_headline": "95,661 of 100,933 WI practitioner NPIs (94.7767%) match NPPES; 129 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "97,235 of 102,572 WI practitioner NPIs (94.7968%) match NPPES; 133 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 157158,
-      "state_denominator": 157158,
+      "state_numerator": 158797,
+      "state_denominator": 158797,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "157,158 of 157,158 WI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "158,797 of 158,797 WI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five WI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five WI practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

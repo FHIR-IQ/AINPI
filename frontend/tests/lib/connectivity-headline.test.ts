@@ -21,12 +21,13 @@ describe('loadConnectivityHeadline', () => {
     expect(h?.deterministicPct).toBe(`${s.reaches_endpoint_deterministic_pct.toFixed(1)}%`);
   });
 
+  // Practitioner state from the physical address since 2026-10-27 (FHI-84).
   it('matches the 2026-10-07 release values', () => {
     expect(loadConnectivityHeadline('pa')).toEqual({
-      practitioners: '227,917',
-      withRolePct: '44.0%',
-      reachPct: '22.3%',
-      deterministicPct: '2.9%',
+      practitioners: '225,413',
+      withRolePct: '43.4%',
+      reachPct: '22.2%',
+      deterministicPct: '2.8%',
     });
   });
 

@@ -3,11 +3,11 @@
   "state_name": "Hawaii",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:36:58+00:00",
+  "generated_at": "2026-10-27T14:03:27+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 26465,
+    "practitioner": 27068,
     "organization": 6875,
     "location": 10482
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 25561,
-      "state_denominator": 26465,
-      "state_pct": 96.5842,
+      "state_numerator": 26165,
+      "state_denominator": 27068,
+      "state_pct": 96.664,
       "national_pct": 97.7651,
-      "state_headline": "25,561 of 26,465 HI practitioner NPIs (96.5842%) match NPPES; 60 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "26,165 of 27,068 HI practitioner NPIs (96.664%) match NPPES; 62 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 43822,
-      "state_denominator": 43822,
+      "state_numerator": 44425,
+      "state_denominator": 44425,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "43,822 of 43,822 HI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "44,425 of 44,425 HI-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -134,11 +134,11 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
-      "npi": "1568499960",
-      "display_name": "HARRIS, SHEILA",
+      "npi": "1306919956",
+      "display_name": "LIPETZ, MARK",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2020-07-20 (exclusion type 1128a3)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1568499960",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2020-07-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306919956",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five HI-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five HI practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

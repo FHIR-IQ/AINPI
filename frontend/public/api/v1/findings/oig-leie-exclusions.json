@@ -6,9 +6,9 @@
   ],
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-26T16:02:18+00:00",
+  "generated_at": "2026-10-27T14:00:17+00:00",
   "methodology_version": "0.3.0",
-  "commit_sha": "56dbb04",
+  "commit_sha": "adb6d00",
   "headline": "7,799 of 8,924 actively-excluded LEIE NPIs (87.39%) appear in the 2026-10-07 NDH bulk export \u2014 7,378 as Practitioner resources, 602 as Organization resources (7,980 total NDH appearances; some excluded individuals are listed as both a Practitioner and an Organization). Each match warrants immediate state Medicaid revalidation under 42 CFR \u00a7 455.436.",
   "numerator": 7799,
   "denominator": 8924,
@@ -23,27 +23,27 @@
       },
       {
         "label": "CA",
-        "value": 828
+        "value": 830
       },
       {
         "label": "FL",
-        "value": 526
+        "value": 524
       },
       {
         "label": "NY",
-        "value": 479
+        "value": 481
       },
       {
         "label": "TX",
-        "value": 380
+        "value": 374
       },
       {
         "label": "OH",
-        "value": 287
+        "value": 286
       },
       {
         "label": "MI",
-        "value": 281
+        "value": 282
       },
       {
         "label": "PA",
@@ -51,11 +51,11 @@
       },
       {
         "label": "IL",
-        "value": 169
+        "value": 170
       },
       {
         "label": "TN",
-        "value": 137
+        "value": 139
       }
     ]
   },

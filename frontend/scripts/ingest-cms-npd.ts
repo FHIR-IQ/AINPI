@@ -45,10 +45,11 @@ function refId(ref: { reference?: string } | undefined | null): string | null {
 }
 
 // Extract NPI from identifier array
-type NdhAddress = { type?: unknown; use?: unknown; state?: string; city?: string };
+type NdhAddress = { type?: unknown; use?: unknown; state?: string; city?: string; postalCode?: string };
 
 /**
- * Organization.address is 0..* and the NDH often lists the postal billing
+ * Organization.address and Practitioner.address are 0..* and the NDH often
+ * lists the postal billing
  * address first. Mirrors physical_address() in analysis/fast_ingest_ndh.py
  * (FHI-84): type physical or both, else use work, else the first object.
  */
@@ -85,16 +86,16 @@ const RESOURCES: ResourceConfig[] = [
     tableName: 'practitioner',
     extractFields: (r) => {
       const names = r.name as Array<{ family?: string; given?: string[] }> | undefined;
-      const addresses = r.address as Array<{ state?: string; city?: string; postalCode?: string }> | undefined;
+      const addr = physicalAddress(r.address);
       const identifiers = r.identifier as Array<{ system?: string; value?: string }> | undefined;
       return {
         _id: r.id as string,
         _npi: extractNpi(identifiers),
         _family_name: names?.[0]?.family || null,
         _given_name: names?.[0]?.given?.[0] || null,
-        _state: addresses?.[0]?.state || null,
-        _city: addresses?.[0]?.city || null,
-        _postal_code: addresses?.[0]?.postalCode || null,
+        _state: addr?.state || null,
+        _city: addr?.city || null,
+        _postal_code: addr?.postalCode || null,
         _gender: (r.gender as string) || null,
         _active: r.active === true,
       };

@@ -3,11 +3,11 @@
   "state_name": "Louisiana",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:38:20+00:00",
+  "generated_at": "2026-10-27T14:05:04+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 79087,
+    "practitioner": 80231,
     "organization": 27627,
     "location": 38071
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 76421,
-      "state_denominator": 79087,
-      "state_pct": 96.629,
+      "state_numerator": 77524,
+      "state_denominator": 80231,
+      "state_pct": 96.626,
       "national_pct": 97.7651,
-      "state_headline": "76,421 of 79,087 LA practitioner NPIs (96.629%) match NPPES; 178 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "77,524 of 80,231 LA practitioner NPIs (96.626%) match NPPES; 180 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 144785,
-      "state_denominator": 144785,
+      "state_numerator": 145929,
+      "state_denominator": 145929,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "144,785 of 144,785 LA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "145,929 of 145,929 LA-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -121,16 +121,8 @@
       "npi": "1780752444",
       "display_name": "AUZINE II, DONALD",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128a4)",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2009-12-20 (exclusion type 1128a3)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1780752444",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
-    },
-    {
-      "npi": "1225074859",
-      "display_name": "PATEL, MEHMOOD",
-      "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-01-20 (exclusion type 1128a1)",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1225074859",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
@@ -142,6 +134,14 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
     {
+      "npi": "1225074859",
+      "display_name": "PATEL, MEHMOOD",
+      "flagged_by": "oig-leie-exclusions",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2010-01-20 (exclusion type 1128a1)",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1225074859",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
+    },
+    {
       "npi": "1336239102",
       "display_name": "SMITH, TRUDY",
       "flagged_by": "oig-leie-exclusions",
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five LA-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five LA practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

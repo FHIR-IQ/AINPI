@@ -2,8 +2,8 @@
   "slug": "specialty-by-organization",
   "status": "exploratory",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-14T02:06:08.684000+00:00",
-  "commit_sha": "6e7404180d8092bf31d3c799acacb1d7fcd4bd09",
+  "generated_at": "2026-10-27T14:14:31.311852+00:00",
+  "commit_sha": "adb6d00c8befd9b85e432ebdce7aed271096b933",
   "of": "specialty-context",
   "population": 82598,
   "population_distinct_org_name": 76539,
@@ -92,16 +92,16 @@
       "orgs": [
         {
           "org": "BLUEMARK LLCOFFICE ALLY",
-          "org_npi": "1962461889",
+          "org_npi": "1275045049",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "SPORTS MEDICINE"
           ]
         },
         {
           "org": "BLUEMARK LLCOFFICE ALLY",
-          "org_npi": "1275045049",
+          "org_npi": "1962461889",
           "specialties": [
-            "SPORTS MEDICINE"
+            "INTERNAL MEDICINE"
           ]
         }
       ]
@@ -131,7 +131,7 @@
         },
         {
           "org": "TEXAS ONCOLOGY PA",
-          "org_npi": "1912174350",
+          "org_npi": "1821265265",
           "specialties": [
             "HEMATOLOGY & ONCOLOGY",
             "MEDICAL ONCOLOGY",
@@ -140,7 +140,7 @@
         },
         {
           "org": "TEXAS ONCOLOGY PA",
-          "org_npi": "1821265265",
+          "org_npi": "1912174350",
           "specialties": [
             "HEMATOLOGY & ONCOLOGY",
             "MEDICAL ONCOLOGY",
@@ -279,16 +279,16 @@
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1760552343",
+          "org_npi": "1477624104",
           "specialties": [
-            "INFECTIOUS DISEASE",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1760552343",
           "specialties": [
+            "INFECTIOUS DISEASE",
             "INTERNAL MEDICINE"
           ]
         }
@@ -379,14 +379,14 @@
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1750704367",
+          "org_npi": "1558786830",
           "specialties": [
             "FAMILY MEDICINE"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1558786830",
+          "org_npi": "1750704367",
           "specialties": [
             "FAMILY MEDICINE"
           ]
@@ -443,6 +443,13 @@
       "orgs": [
         {
           "org": "CEP AMERICA ILLINOIS INTENSIVISTS",
+          "org_npi": "1174320873",
+          "specialties": [
+            "CRITICAL CARE MEDICINE"
+          ]
+        },
+        {
+          "org": "CEP AMERICA ILLINOIS INTENSIVISTS",
           "org_npi": "1871071837",
           "specialties": [
             "CRITICAL CARE MEDICINE"
@@ -451,13 +458,6 @@
         {
           "org": "CEP AMERICA ILLINOIS INTENSIVISTS",
           "org_npi": "1821641499",
-          "specialties": [
-            "CRITICAL CARE MEDICINE"
-          ]
-        },
-        {
-          "org": "CEP AMERICA ILLINOIS INTENSIVISTS",
-          "org_npi": "1174320873",
           "specialties": [
             "CRITICAL CARE MEDICINE"
           ]
@@ -863,7 +863,7 @@
     {
       "npi": "1013628601",
       "name": "JENKINS, CHANDLER",
-      "state": "GA",
+      "state": "TN",
       "orgs": [
         {
           "org": "EMERGENCY MEDICINE SERVICES OF TN PC",
@@ -1194,7 +1194,7 @@
     {
       "npi": "1023455748",
       "name": "GROOVER, MICHAEL",
-      "state": "CO",
+      "state": "WY",
       "orgs": [
         {
           "org": "BAKER CLINIC - OB-GYN",
@@ -1440,14 +1440,14 @@
         },
         {
           "org": "THE UNIVERSITY OF TEXAS HEALTH SCIENCE CENTER AT SAN ANTONIO",
-          "org_npi": "1326829904",
+          "org_npi": "1417921834",
           "specialties": [
             "DIAGNOSTIC RADIOLOGY"
           ]
         },
         {
           "org": "THE UNIVERSITY OF TEXAS HEALTH SCIENCE CENTER AT SAN ANTONIO",
-          "org_npi": "1417921834",
+          "org_npi": "1326829904",
           "specialties": [
             "DIAGNOSTIC RADIOLOGY"
           ]
@@ -1498,16 +1498,16 @@
       "orgs": [
         {
           "org": "FIRST CHOICE PHYSICIAN PARTNERS",
-          "org_npi": "1558797118",
+          "org_npi": "1104183052",
           "specialties": [
-            "GASTROENTEROLOGY",
             "SINGLE SPECIALTY"
           ]
         },
         {
           "org": "FIRST CHOICE PHYSICIAN PARTNERS",
-          "org_npi": "1104183052",
+          "org_npi": "1558797118",
           "specialties": [
+            "GASTROENTEROLOGY",
             "SINGLE SPECIALTY"
           ]
         },
@@ -1550,14 +1550,14 @@
       "orgs": [
         {
           "org": "COLORADO HOSPITALIST SERVICES PLLC",
-          "org_npi": "1669115747",
+          "org_npi": "1265806178",
           "specialties": [
             "HOSPITALIST"
           ]
         },
         {
           "org": "COLORADO HOSPITALIST SERVICES PLLC",
-          "org_npi": "1265806178",
+          "org_npi": "1669115747",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -1643,18 +1643,18 @@
       "orgs": [
         {
           "org": "ST PAUL PLACE SPECIALISTS INC",
-          "org_npi": "1851405187",
-          "specialties": [
-            "ORTHOPAEDIC SURGERY"
-          ]
-        },
-        {
-          "org": "ST PAUL PLACE SPECIALISTS INC",
           "org_npi": "1871549196",
           "specialties": [
             "ADULT RECONSTRUCTIVE ORTHOPAEDIC SURGERY",
             "ORTHOPAEDIC SURGERY",
             "SPORTS MEDICINE"
+          ]
+        },
+        {
+          "org": "ST PAUL PLACE SPECIALISTS INC",
+          "org_npi": "1851405187",
+          "specialties": [
+            "ORTHOPAEDIC SURGERY"
           ]
         }
       ]
@@ -1695,14 +1695,14 @@
         },
         {
           "org": "ORTHOPAEDIC SURGERY ASSOCIATES PA",
-          "org_npi": "1104865088",
+          "org_npi": "1285316414",
           "specialties": [
             "ORTHOPAEDIC SURGERY"
           ]
         },
         {
           "org": "ORTHOPAEDIC SURGERY ASSOCIATES PA",
-          "org_npi": "1285316414",
+          "org_npi": "1104865088",
           "specialties": [
             "ORTHOPAEDIC SURGERY"
           ]
@@ -1723,17 +1723,17 @@
         },
         {
           "org": "CLEVELAND CLINIC FOUNDATION FAIRVIEW HOSPITAL",
-          "org_npi": "1215989611",
-          "specialties": [
-            "MULTI-SPECIALTY"
-          ]
-        },
-        {
-          "org": "CLEVELAND CLINIC FOUNDATION FAIRVIEW HOSPITAL",
           "org_npi": "1407953706",
           "specialties": [
             "MULTI-SPECIALTY",
             "OBSTETRICS & GYNECOLOGY"
+          ]
+        },
+        {
+          "org": "CLEVELAND CLINIC FOUNDATION FAIRVIEW HOSPITAL",
+          "org_npi": "1215989611",
+          "specialties": [
+            "MULTI-SPECIALTY"
           ]
         },
         {
@@ -1894,16 +1894,16 @@
       "orgs": [
         {
           "org": "ALL BE HEALTHY LLC",
-          "org_npi": "1275286148",
+          "org_npi": "1104636836",
           "specialties": [
-            "INTERVENTIONAL PAIN MEDICINE",
             "PAIN MEDICINE"
           ]
         },
         {
           "org": "ALL BE HEALTHY LLC",
-          "org_npi": "1104636836",
+          "org_npi": "1275286148",
           "specialties": [
+            "INTERVENTIONAL PAIN MEDICINE",
             "PAIN MEDICINE"
           ]
         },
@@ -2352,7 +2352,7 @@
     {
       "npi": "1063101962",
       "name": "JEWELL, DAN",
-      "state": "AL",
+      "state": "MO",
       "orgs": [
         {
           "org": "AR SERC REHABILITATION PARTNERS",
@@ -2374,7 +2374,7 @@
     {
       "npi": "1063407260",
       "name": "KALOTA, SUSAN",
-      "state": "MD",
+      "state": "AZ",
       "orgs": [
         {
           "org": "ARIZONA UROLOGIC SPECIALISTS",
@@ -2650,7 +2650,7 @@
         },
         {
           "org": "ORTHOPAEDIC ASSOCIATES PA",
-          "org_npi": "1255001350",
+          "org_npi": "1467589010",
           "specialties": [
             "ORTHOPAEDIC SURGERY",
             "ORTHOPAEDIC SURGERY OF THE SPINE"
@@ -2658,7 +2658,7 @@
         },
         {
           "org": "ORTHOPAEDIC ASSOCIATES PA",
-          "org_npi": "1467589010",
+          "org_npi": "1255001350",
           "specialties": [
             "ORTHOPAEDIC SURGERY",
             "ORTHOPAEDIC SURGERY OF THE SPINE"
@@ -2690,7 +2690,7 @@
     {
       "npi": "1063874584",
       "name": "WATSON, JOSEPH",
-      "state": "TN",
+      "state": "FL",
       "orgs": [
         {
           "org": "ATLANTIC PODIATRY ASSOCIATES DPM PA",
@@ -2702,16 +2702,16 @@
         },
         {
           "org": "PASCARELLA HOOVER FINKELSTEIN WAGNER DPM PA",
-          "org_npi": "1649585571",
+          "org_npi": "1740275635",
           "specialties": [
+            "FOOT & ANKLE SURGERY",
             "SINGLE SPECIALTY"
           ]
         },
         {
           "org": "PASCARELLA HOOVER FINKELSTEIN WAGNER DPM PA",
-          "org_npi": "1740275635",
+          "org_npi": "1649585571",
           "specialties": [
-            "FOOT & ANKLE SURGERY",
             "SINGLE SPECIALTY"
           ]
         },
@@ -2805,14 +2805,21 @@
         },
         {
           "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
-          "org_npi": "1205009917",
+          "org_npi": "1386694313",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
         },
         {
           "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
-          "org_npi": "1366492399",
+          "org_npi": "1073563748",
+          "specialties": [
+            "SINGLE SPECIALTY"
+          ]
+        },
+        {
+          "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
+          "org_npi": "1205009917",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
@@ -2827,21 +2834,7 @@
         },
         {
           "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
-          "org_npi": "1386694313",
-          "specialties": [
-            "SINGLE SPECIALTY"
-          ]
-        },
-        {
-          "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
-          "org_npi": "1073563748",
-          "specialties": [
-            "SINGLE SPECIALTY"
-          ]
-        },
-        {
-          "org": "SOUTHERN CALIFORNIA PERMANENTE MEDICAL GROUP",
-          "org_npi": "1316979834",
+          "org_npi": "1366492399",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
@@ -2849,6 +2842,13 @@
         {
           "org": "SOUTHERN CALIFORNIA PERMANENTE MEDICAL GROUP",
           "org_npi": "1013433465",
+          "specialties": [
+            "SINGLE SPECIALTY"
+          ]
+        },
+        {
+          "org": "SOUTHERN CALIFORNIA PERMANENTE MEDICAL GROUP",
+          "org_npi": "1316979834",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
@@ -2943,6 +2943,13 @@
       "orgs": [
         {
           "org": "LENDING CARE TRANSPORTATION",
+          "org_npi": "1689453581",
+          "specialties": [
+            "NON-EMERGENCY MEDICAL TRANSPORT (VAN)"
+          ]
+        },
+        {
+          "org": "LENDING CARE TRANSPORTATION",
           "org_npi": "1043099245",
           "specialties": [
             "BUS",
@@ -2952,13 +2959,6 @@
             "TAXI",
             "TRANSPORTATION BROKER",
             "TRANSPORTATION NETWORK COMPANY"
-          ]
-        },
-        {
-          "org": "LENDING CARE TRANSPORTATION",
-          "org_npi": "1689453581",
-          "specialties": [
-            "NON-EMERGENCY MEDICAL TRANSPORT (VAN)"
           ]
         }
       ]
@@ -3254,17 +3254,17 @@
       "orgs": [
         {
           "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
-          "org_npi": "1821447103",
+          "org_npi": "1447260435",
           "specialties": [
-            "DIAGNOSTIC RADIOLOGY",
-            "NUCLEAR MEDICINE"
+            "DIAGNOSTIC RADIOLOGY"
           ]
         },
         {
           "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
-          "org_npi": "1447260435",
+          "org_npi": "1821447103",
           "specialties": [
-            "DIAGNOSTIC RADIOLOGY"
+            "DIAGNOSTIC RADIOLOGY",
+            "NUCLEAR MEDICINE"
           ]
         },
         {
@@ -3407,16 +3407,16 @@
         },
         {
           "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
-          "org_npi": "1205009917",
+          "org_npi": "1073563748",
           "specialties": [
-            "CARDIOVASCULAR DISEASE"
+            "PEDIATRICS"
           ]
         },
         {
           "org": "FACULTY PHYSICIANS AND SURGEONS OF LLUSM",
-          "org_npi": "1073563748",
+          "org_npi": "1205009917",
           "specialties": [
-            "PEDIATRICS"
+            "CARDIOVASCULAR DISEASE"
           ]
         },
         {
@@ -3515,14 +3515,14 @@
       "orgs": [
         {
           "org": "EDWARD W SPARROW HOSPITAL ASSOCIATION",
-          "org_npi": "1720034499",
+          "org_npi": "1831139088",
           "specialties": [
             "PEDIATRICS"
           ]
         },
         {
           "org": "EDWARD W SPARROW HOSPITAL ASSOCIATION",
-          "org_npi": "1831139088",
+          "org_npi": "1720034499",
           "specialties": [
             "PEDIATRICS"
           ]
@@ -3625,8 +3625,9 @@
         },
         {
           "org": "BAYLOR COLLEGE OF MEDICINE",
-          "org_npi": "1104867175",
+          "org_npi": "1881026664",
           "specialties": [
+            "FAMILY MEDICINE",
             "SINGLE SPECIALTY"
           ]
         },
@@ -3639,9 +3640,8 @@
         },
         {
           "org": "BAYLOR COLLEGE OF MEDICINE",
-          "org_npi": "1881026664",
+          "org_npi": "1104867175",
           "specialties": [
-            "FAMILY MEDICINE",
             "SINGLE SPECIALTY"
           ]
         }
@@ -3784,14 +3784,14 @@
         },
         {
           "org": "QUESTCARE MEDICAL SERVICES PLLC",
-          "org_npi": "1164574489",
+          "org_npi": "1912059247",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
         },
         {
           "org": "QUESTCARE MEDICAL SERVICES PLLC",
-          "org_npi": "1912059247",
+          "org_npi": "1164574489",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -4425,6 +4425,14 @@
       "orgs": [
         {
           "org": "ICAHN SCHOOL OF MEDICINE AT MOUNT SINAI",
+          "org_npi": "1871847848",
+          "specialties": [
+            "GERIATRIC MEDICINE",
+            "INTERNAL MEDICINE"
+          ]
+        },
+        {
+          "org": "ICAHN SCHOOL OF MEDICINE AT MOUNT SINAI",
           "org_npi": "1184977324",
           "specialties": [
             "INTERNAL MEDICINE"
@@ -4434,14 +4442,6 @@
           "org": "ICAHN SCHOOL OF MEDICINE AT MOUNT SINAI",
           "org_npi": "1780938753",
           "specialties": [
-            "INTERNAL MEDICINE"
-          ]
-        },
-        {
-          "org": "ICAHN SCHOOL OF MEDICINE AT MOUNT SINAI",
-          "org_npi": "1871847848",
-          "specialties": [
-            "GERIATRIC MEDICINE",
             "INTERNAL MEDICINE"
           ]
         }
@@ -4505,17 +4505,17 @@
       "orgs": [
         {
           "org": "COMMUNITY FOOT SPECIALISTS",
-          "org_npi": "1851707913",
-          "specialties": [
-            "FOOT & ANKLE SURGERY"
-          ]
-        },
-        {
-          "org": "COMMUNITY FOOT SPECIALISTS",
           "org_npi": "1619285160",
           "specialties": [
             "FOOT & ANKLE SURGERY",
             "PODIATRIST"
+          ]
+        },
+        {
+          "org": "COMMUNITY FOOT SPECIALISTS",
+          "org_npi": "1851707913",
+          "specialties": [
+            "FOOT & ANKLE SURGERY"
           ]
         }
       ]
@@ -4603,14 +4603,14 @@
         },
         {
           "org": "PENINSULA PLASTIC SURGERY P",
-          "org_npi": "1396228995",
+          "org_npi": "1396926242",
           "specialties": [
             "PLASTIC AND RECONSTRUCTIVE SURGERY"
           ]
         },
         {
           "org": "PENINSULA PLASTIC SURGERY P",
-          "org_npi": "1396926242",
+          "org_npi": "1396228995",
           "specialties": [
             "PLASTIC AND RECONSTRUCTIVE SURGERY"
           ]
@@ -4891,7 +4891,7 @@
     {
       "npi": "1134384548",
       "name": "NEEKHRA, ANEESH",
-      "state": "IL",
+      "state": "IA",
       "orgs": [
         {
           "org": "ILLINOIS RETINA INSTITUTE",
@@ -5128,7 +5128,7 @@
     {
       "npi": "1144586728",
       "name": "CASTRO, ALEXANDRA",
-      "state": "GA",
+      "state": "NJ",
       "orgs": [
         {
           "org": "ONE HUNDRED OAKS IMAGINGLLC",
@@ -5139,16 +5139,16 @@
         },
         {
           "org": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-          "org_npi": "1861457830",
+          "org_npi": "1285692699",
           "specialties": [
-            "EMERGENCY MEDICINE"
+            "DIAGNOSTIC RADIOLOGY"
           ]
         },
         {
           "org": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-          "org_npi": "1285692699",
+          "org_npi": "1861457830",
           "specialties": [
-            "DIAGNOSTIC RADIOLOGY"
+            "EMERGENCY MEDICINE"
           ]
         },
         {
@@ -5410,17 +5410,17 @@
       "orgs": [
         {
           "org": "BAYLOR COLLEGE OF MEDICINE",
-          "org_npi": "1700683844",
+          "org_npi": "1881026664",
           "specialties": [
-            "ORTHOPAEDIC SURGERY",
-            "ORTHOPAEDIC TRAUMA"
+            "ORTHOPAEDIC SURGERY"
           ]
         },
         {
           "org": "BAYLOR COLLEGE OF MEDICINE",
-          "org_npi": "1881026664",
+          "org_npi": "1700683844",
           "specialties": [
-            "ORTHOPAEDIC SURGERY"
+            "ORTHOPAEDIC SURGERY",
+            "ORTHOPAEDIC TRAUMA"
           ]
         }
       ]
@@ -5607,16 +5607,16 @@
       "orgs": [
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1760552343",
+          "org_npi": "1477624104",
           "specialties": [
-            "CARDIOVASCULAR DISEASE"
+            "NURSE PRACTITIONER"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1760552343",
           "specialties": [
-            "NURSE PRACTITIONER"
+            "CARDIOVASCULAR DISEASE"
           ]
         },
         {
@@ -5667,14 +5667,14 @@
         },
         {
           "org": "LAHEY CLINIC",
-          "org_npi": "1538194980",
+          "org_npi": "1063447316",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "LAHEY CLINIC",
-          "org_npi": "1063447316",
+          "org_npi": "1538194980",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -6211,18 +6211,18 @@
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MARYLAND PC",
-          "org_npi": "1366240111",
+          "org_npi": "1992945471",
           "specialties": [
             "FAMILY MEDICINE",
+            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MARYLAND PC",
-          "org_npi": "1992945471",
+          "org_npi": "1366240111",
           "specialties": [
             "FAMILY MEDICINE",
-            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
@@ -6375,16 +6375,16 @@
       "orgs": [
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1760552343",
+          "org_npi": "1477624104",
           "specialties": [
-            "CARDIOVASCULAR DISEASE",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1760552343",
           "specialties": [
+            "CARDIOVASCULAR DISEASE",
             "INTERNAL MEDICINE"
           ]
         },
@@ -6623,7 +6623,7 @@
       "orgs": [
         {
           "org": "ASCENSION MEDICAL GROUP MICHIGAN",
-          "org_npi": "1376644922",
+          "org_npi": "1942317631",
           "specialties": [
             "FAMILY MEDICINE",
             "INTERNAL MEDICINE"
@@ -6631,7 +6631,7 @@
         },
         {
           "org": "ASCENSION MEDICAL GROUP MICHIGAN",
-          "org_npi": "1942317631",
+          "org_npi": "1376644922",
           "specialties": [
             "FAMILY MEDICINE",
             "INTERNAL MEDICINE"
@@ -6965,7 +6965,7 @@
         },
         {
           "org": "FOREFRONT DERMATOLOGY SC",
-          "org_npi": "1063365385",
+          "org_npi": "1720664907",
           "specialties": [
             "DERMATOLOGY",
             "MOHS-MICROGRAPHIC SURGERY"
@@ -6973,7 +6973,7 @@
         },
         {
           "org": "FOREFRONT DERMATOLOGY SC",
-          "org_npi": "1720664907",
+          "org_npi": "1063365385",
           "specialties": [
             "DERMATOLOGY",
             "MOHS-MICROGRAPHIC SURGERY"
@@ -7025,14 +7025,14 @@
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1205787686",
+          "org_npi": "1639056989",
           "specialties": [
             "HOSPITALIST"
           ]
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1639056989",
+          "org_npi": "1205787686",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -7070,7 +7070,7 @@
     {
       "npi": "1194426676",
       "name": "ADEKOLA, SOLOMON",
-      "state": "MA",
+      "state": "MD",
       "orgs": [
         {
           "org": "BOSTON NEUROBEHAVIORAL ASSOCIATES",
@@ -7122,7 +7122,7 @@
     {
       "npi": "1194775445",
       "name": "LUNDEEN, BRIAN",
-      "state": "IL",
+      "state": "WI",
       "orgs": [
         {
           "org": "ABILITY NETWORK",
@@ -7289,14 +7289,14 @@
         },
         {
           "org": "LAHEY CLINIC",
-          "org_npi": "1538194980",
+          "org_npi": "1063447316",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "LAHEY CLINIC",
-          "org_npi": "1063447316",
+          "org_npi": "1538194980",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -7443,20 +7443,20 @@
     {
       "npi": "1205865136",
       "name": "ROUHANI, JAHANGIR",
-      "state": "PA",
+      "state": "MD",
       "orgs": [
-        {
-          "org": "COMMUNITY NEONATAL ASSOCIATES",
-          "org_npi": "1578443040",
-          "specialties": [
-            "NEONATAL-PERINATAL MEDICINE"
-          ]
-        },
         {
           "org": "COMMUNITY NEONATAL ASSOCIATES",
           "org_npi": "1619057148",
           "specialties": [
             "SPECIALIST"
+          ]
+        },
+        {
+          "org": "COMMUNITY NEONATAL ASSOCIATES",
+          "org_npi": "1578443040",
+          "specialties": [
+            "NEONATAL-PERINATAL MEDICINE"
           ]
         },
         {
@@ -7505,13 +7505,6 @@
       "orgs": [
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1902281009",
-          "specialties": [
-            "FAMILY MEDICINE"
-          ]
-        },
-        {
-          "org": "GALEN INPATIENT PHYSICIANS PC",
           "org_npi": "1205787686",
           "specialties": [
             "HOSPITALIST"
@@ -7522,6 +7515,13 @@
           "org_npi": "1689320459",
           "specialties": [
             "HOSPITALIST"
+          ]
+        },
+        {
+          "org": "GALEN INPATIENT PHYSICIANS PC",
+          "org_npi": "1902281009",
+          "specialties": [
+            "FAMILY MEDICINE"
           ]
         }
       ]
@@ -7600,6 +7600,13 @@
       "orgs": [
         {
           "org": "PROHEALTH PARTNERS A MEDICAL GROUP",
+          "org_npi": "1003949975",
+          "specialties": [
+            "INTERNAL MEDICINE"
+          ]
+        },
+        {
+          "org": "PROHEALTH PARTNERS A MEDICAL GROUP",
           "org_npi": "1285086843",
           "specialties": [
             "RHEUMATOLOGY"
@@ -7608,13 +7615,6 @@
         {
           "org": "PROHEALTH PARTNERS A MEDICAL GROUP",
           "org_npi": "1912899394",
-          "specialties": [
-            "INTERNAL MEDICINE"
-          ]
-        },
-        {
-          "org": "PROHEALTH PARTNERS A MEDICAL GROUP",
-          "org_npi": "1003949975",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -7819,14 +7819,14 @@
         },
         {
           "org": "HURLEY MEDICAL CENTER",
-          "org_npi": "1689345761",
+          "org_npi": "1982630844",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
         },
         {
           "org": "HURLEY MEDICAL CENTER",
-          "org_npi": "1982630844",
+          "org_npi": "1689345761",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
@@ -7990,6 +7990,13 @@
       "orgs": [
         {
           "org": "NEW YORK UNIVERSITY",
+          "org_npi": "1851456701",
+          "specialties": [
+            "ANESTHESIOLOGY"
+          ]
+        },
+        {
+          "org": "NEW YORK UNIVERSITY",
           "org_npi": "1952392946",
           "specialties": [
             "ANESTHESIOLOGY",
@@ -7999,13 +8006,6 @@
         {
           "org": "NEW YORK UNIVERSITY",
           "org_npi": "1285826438",
-          "specialties": [
-            "ANESTHESIOLOGY"
-          ]
-        },
-        {
-          "org": "NEW YORK UNIVERSITY",
-          "org_npi": "1851456701",
           "specialties": [
             "ANESTHESIOLOGY"
           ]
@@ -8219,7 +8219,7 @@
     {
       "npi": "1235243346",
       "name": "ZHANG, LYDIA",
-      "state": "SC",
+      "state": "MA",
       "orgs": [
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
@@ -8264,7 +8264,7 @@
     {
       "npi": "1235391970",
       "name": "BHATIA, AASHIM",
-      "state": "GA",
+      "state": "PA",
       "orgs": [
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
@@ -8329,17 +8329,17 @@
         },
         {
           "org": "MEMORIAL HERMANN MEDICAL GROUP",
-          "org_npi": "1003985102",
+          "org_npi": "1982099255",
           "specialties": [
-            "FAMILY MEDICINE",
-            "HOSPITALIST"
+            "FAMILY MEDICINE"
           ]
         },
         {
           "org": "MEMORIAL HERMANN MEDICAL GROUP",
-          "org_npi": "1982099255",
+          "org_npi": "1003985102",
           "specialties": [
-            "FAMILY MEDICINE"
+            "FAMILY MEDICINE",
+            "HOSPITALIST"
           ]
         }
       ]
@@ -8379,14 +8379,14 @@
       "orgs": [
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1073606299",
+          "org_npi": "1548343510",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
         },
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1548343510",
+          "org_npi": "1073606299",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
@@ -8445,6 +8445,13 @@
       "orgs": [
         {
           "org": "NEW YORK UNIVERSITY",
+          "org_npi": "1851456701",
+          "specialties": [
+            "ANESTHESIOLOGY"
+          ]
+        },
+        {
+          "org": "NEW YORK UNIVERSITY",
           "org_npi": "1952392946",
           "specialties": [
             "ANESTHESIOLOGY",
@@ -8457,20 +8464,13 @@
           "specialties": [
             "ANESTHESIOLOGY"
           ]
-        },
-        {
-          "org": "NEW YORK UNIVERSITY",
-          "org_npi": "1851456701",
-          "specialties": [
-            "ANESTHESIOLOGY"
-          ]
         }
       ]
     },
     {
       "npi": "1245673656",
       "name": "OKOLO-MILES, SADA",
-      "state": "FL",
+      "state": "TX",
       "orgs": [
         {
           "org": "BRAVE HEALTH MEDICAL GROUP PA",
@@ -8650,17 +8650,17 @@
         },
         {
           "org": "CEP AMERICA - AUC PC",
-          "org_npi": "1568861524",
-          "specialties": [
-            "GENERAL PRACTICE"
-          ]
-        },
-        {
-          "org": "CEP AMERICA - AUC PC",
           "org_npi": "1750024493",
           "specialties": [
             "GENERAL PRACTICE",
             "SURGERY"
+          ]
+        },
+        {
+          "org": "CEP AMERICA - AUC PC",
+          "org_npi": "1568861524",
+          "specialties": [
+            "GENERAL PRACTICE"
           ]
         },
         {
@@ -8893,14 +8893,14 @@
         },
         {
           "org": "PROVIDENCE HEALTH SERVICES - OREGON",
-          "org_npi": "1003991845",
+          "org_npi": "1740732650",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "PROVIDENCE HEALTH SERVICES - OREGON",
-          "org_npi": "1740732650",
+          "org_npi": "1003991845",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -8994,14 +8994,14 @@
         },
         {
           "org": "INPATIENT SERVICES PC",
-          "org_npi": "1376388868",
+          "org_npi": "1710999768",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "INPATIENT SERVICES PC",
-          "org_npi": "1710999768",
+          "org_npi": "1376388868",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -9045,17 +9045,17 @@
       "orgs": [
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1609192020",
+          "org_npi": "1205868353",
           "specialties": [
-            "INTERNAL MEDICINE",
-            "MEDICAL ONCOLOGY"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1205868353",
+          "org_npi": "1609192020",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "INTERNAL MEDICINE",
+            "MEDICAL ONCOLOGY"
           ]
         }
       ]
@@ -9309,6 +9309,15 @@
       "orgs": [
         {
           "org": "CENTURION SPINE PAIN CENTERS",
+          "org_npi": "1902852130",
+          "specialties": [
+            "ANESTHESIOLOGY",
+            "INTERVENTIONAL PAIN MEDICINE",
+            "PAIN MEDICINE"
+          ]
+        },
+        {
+          "org": "CENTURION SPINE PAIN CENTERS",
           "org_npi": "1861197071",
           "specialties": [
             "INTERVENTIONAL PAIN MEDICINE"
@@ -9318,15 +9327,6 @@
           "org": "CENTURION SPINE PAIN CENTERS",
           "org_npi": "1942052022",
           "specialties": [
-            "INTERVENTIONAL PAIN MEDICINE",
-            "PAIN MEDICINE"
-          ]
-        },
-        {
-          "org": "CENTURION SPINE PAIN CENTERS",
-          "org_npi": "1902852130",
-          "specialties": [
-            "ANESTHESIOLOGY",
             "INTERVENTIONAL PAIN MEDICINE",
             "PAIN MEDICINE"
           ]
@@ -9748,7 +9748,7 @@
     {
       "npi": "1295900959",
       "name": "LEDFORD, PAUL",
-      "state": "SC",
+      "state": "NC",
       "orgs": [
         {
           "org": "CBO MRMC EMERGENCY",
@@ -10117,14 +10117,13 @@
     {
       "npi": "1316502164",
       "name": "UL HAQ, MOHAMMED",
-      "state": "TN",
+      "state": "IN",
       "orgs": [
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1871178368",
+          "org_npi": "1205787686",
           "specialties": [
-            "HOSPITALIST",
-            "INTERNAL MEDICINE"
+            "HOSPITALIST"
           ]
         },
         {
@@ -10136,9 +10135,10 @@
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1205787686",
+          "org_npi": "1871178368",
           "specialties": [
-            "HOSPITALIST"
+            "HOSPITALIST",
+            "INTERNAL MEDICINE"
           ]
         },
         {
@@ -10273,16 +10273,16 @@
       "orgs": [
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1154820934",
+          "org_npi": "1609191121",
           "specialties": [
-            "PEDIATRICS"
+            "PEDIATRIC CARDIOLOGY"
           ]
         },
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1609191121",
+          "org_npi": "1154820934",
           "specialties": [
-            "PEDIATRIC CARDIOLOGY"
+            "PEDIATRICS"
           ]
         }
       ]
@@ -10337,14 +10337,14 @@
         },
         {
           "org": "CEP AMERICA - ILLINOIS SNF LLP",
-          "org_npi": "1043170434",
+          "org_npi": "1225552920",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "CEP AMERICA - ILLINOIS SNF LLP",
-          "org_npi": "1225552920",
+          "org_npi": "1043170434",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -10358,16 +10358,16 @@
         },
         {
           "org": "CEP AMERICA-ILLINOIS HOSPITALISTS LLP",
-          "org_npi": "1841613403",
+          "org_npi": "1639678790",
           "specialties": [
+            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "CEP AMERICA-ILLINOIS HOSPITALISTS LLP",
-          "org_npi": "1639678790",
+          "org_npi": "1841613403",
           "specialties": [
-            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
@@ -10719,7 +10719,7 @@
         },
         {
           "org": "JOHNS HOPKINS COMMUNITY PHYSICIANS INC",
-          "org_npi": "1255359972",
+          "org_npi": "1578598868",
           "specialties": [
             "INTERNAL MEDICINE",
             "PEDIATRICS"
@@ -10727,7 +10727,7 @@
         },
         {
           "org": "JOHNS HOPKINS COMMUNITY PHYSICIANS INC",
-          "org_npi": "1578598868",
+          "org_npi": "1255359972",
           "specialties": [
             "INTERNAL MEDICINE",
             "PEDIATRICS"
@@ -10866,17 +10866,17 @@
       "orgs": [
         {
           "org": "LIFESTANCE HEALTH",
-          "org_npi": "1912008178",
+          "org_npi": "1629345731",
           "specialties": [
-            "MENTAL HEALTH",
-            "PROFESSIONAL"
+            "MENTAL HEALTH"
           ]
         },
         {
           "org": "LIFESTANCE HEALTH",
-          "org_npi": "1629345731",
+          "org_npi": "1912008178",
           "specialties": [
-            "MENTAL HEALTH"
+            "MENTAL HEALTH",
+            "PROFESSIONAL"
           ]
         },
         {
@@ -10987,14 +10987,14 @@
       "orgs": [
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MICHIGAN PLLC",
-          "org_npi": "1013180181",
+          "org_npi": "1033370283",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MICHIGAN PLLC",
-          "org_npi": "1033370283",
+          "org_npi": "1013180181",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -11045,16 +11045,16 @@
       "orgs": [
         {
           "org": "BEST PRACTICES INPATIENT CARE LTD",
-          "org_npi": "1417240946",
+          "org_npi": "1073549713",
           "specialties": [
+            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "BEST PRACTICES INPATIENT CARE LTD",
-          "org_npi": "1073549713",
+          "org_npi": "1417240946",
           "specialties": [
-            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
@@ -11083,14 +11083,14 @@
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1871178368",
+          "org_npi": "1205787686",
           "specialties": [
             "HOSPITALIST"
           ]
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1205787686",
+          "org_npi": "1871178368",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -11143,14 +11143,14 @@
       "orgs": [
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1073606299",
+          "org_npi": "1841373800",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1841373800",
+          "org_npi": "1073606299",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -11172,14 +11172,14 @@
       "orgs": [
         {
           "org": "EASTSIDE EMERGENCY PHYSICIANS PLLC",
-          "org_npi": "1922303478",
+          "org_npi": "1689683229",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
         },
         {
           "org": "EASTSIDE EMERGENCY PHYSICIANS PLLC",
-          "org_npi": "1689683229",
+          "org_npi": "1922303478",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -11228,7 +11228,7 @@
         },
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1508001009",
+          "org_npi": "1972829562",
           "specialties": [
             "HOSPITALIST",
             "INTERNAL MEDICINE"
@@ -11236,7 +11236,7 @@
         },
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1972829562",
+          "org_npi": "1508001009",
           "specialties": [
             "HOSPITALIST",
             "INTERNAL MEDICINE"
@@ -11307,16 +11307,16 @@
       "orgs": [
         {
           "org": "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA HEALTH",
-          "org_npi": "1972682995",
+          "org_npi": "1790737468",
           "specialties": [
-            "FAMILY MEDICINE",
             "MULTI-SPECIALTY"
           ]
         },
         {
           "org": "CLINICAL CARE ASSOCIATES OF THE UNIVERSITY OF PENNSYLVANIA HEALTH",
-          "org_npi": "1790737468",
+          "org_npi": "1972682995",
           "specialties": [
+            "FAMILY MEDICINE",
             "MULTI-SPECIALTY"
           ]
         },
@@ -11332,7 +11332,7 @@
     {
       "npi": "1356835813",
       "name": "CHENG, OLIVIA",
-      "state": "IL",
+      "state": "MI",
       "orgs": [
         {
           "org": "CONSULTANTS IN OPHTHALMIC AND FACIAL PLASTIC SURGERY PC",
@@ -11366,17 +11366,17 @@
         },
         {
           "org": "TEXAS OCULOPLASTIC CONSULTANTS LLP",
-          "org_npi": "1760940431",
-          "specialties": [
-            "OPHTHALMIC PLASTIC AND RECONSTRUCTIVE SURGERY"
-          ]
-        },
-        {
-          "org": "TEXAS OCULOPLASTIC CONSULTANTS LLP",
           "org_npi": "1619366655",
           "specialties": [
             "OPHTHALMIC PLASTIC AND RECONSTRUCTIVE SURGERY",
             "OPHTHALMOLOGY"
+          ]
+        },
+        {
+          "org": "TEXAS OCULOPLASTIC CONSULTANTS LLP",
+          "org_npi": "1760940431",
+          "specialties": [
+            "OPHTHALMIC PLASTIC AND RECONSTRUCTIVE SURGERY"
           ]
         }
       ]
@@ -11590,14 +11590,6 @@
       "orgs": [
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1417272907",
-          "specialties": [
-            "CARDIOVASCULAR DISEASE",
-            "INTERNAL MEDICINE"
-          ]
-        },
-        {
-          "org": "ABILITY NETWORK",
           "org_npi": "1477878890",
           "specialties": [
             "CARDIOVASCULAR DISEASE"
@@ -11608,6 +11600,14 @@
           "org_npi": "1609191121",
           "specialties": [
             "CARDIOVASCULAR DISEASE"
+          ]
+        },
+        {
+          "org": "ABILITY NETWORK",
+          "org_npi": "1417272907",
+          "specialties": [
+            "CARDIOVASCULAR DISEASE",
+            "INTERNAL MEDICINE"
           ]
         }
       ]
@@ -11721,14 +11721,14 @@
         },
         {
           "org": "EASTSIDE EMERGENCY PHYSICIANS PLLC",
-          "org_npi": "1922303478",
+          "org_npi": "1689683229",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
         },
         {
           "org": "EASTSIDE EMERGENCY PHYSICIANS PLLC",
-          "org_npi": "1689683229",
+          "org_npi": "1922303478",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -11816,7 +11816,7 @@
     {
       "npi": "1386175750",
       "name": "DRAGNICH, ALEXANDER",
-      "state": "GA",
+      "state": "TN",
       "orgs": [
         {
           "org": "ANOVA MEDICAL ASSOCIATES",
@@ -11941,17 +11941,17 @@
       "orgs": [
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1609192020",
+          "org_npi": "1205868353",
           "specialties": [
-            "INTERNAL MEDICINE",
-            "MEDICAL ONCOLOGY"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1205868353",
+          "org_npi": "1609192020",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "INTERNAL MEDICINE",
+            "MEDICAL ONCOLOGY"
           ]
         }
       ]
@@ -12006,14 +12006,14 @@
       "orgs": [
         {
           "org": "GEORGIA EM-I MEDICAL SERVICES LLC",
-          "org_npi": "1851569560",
+          "org_npi": "1255213005",
           "specialties": [
             "NURSE PRACTITIONER"
           ]
         },
         {
           "org": "GEORGIA EM-I MEDICAL SERVICES LLC",
-          "org_npi": "1255213005",
+          "org_npi": "1851569560",
           "specialties": [
             "NURSE PRACTITIONER"
           ]
@@ -12128,17 +12128,17 @@
         },
         {
           "org": "PROVIDENCE LITTLE COMPANY OF MARY MEDICAL INSTITUTE",
-          "org_npi": "1417915760",
+          "org_npi": "1235182569",
           "specialties": [
-            "INTERNAL MEDICINE",
-            "SINGLE SPECIALTY"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "PROVIDENCE LITTLE COMPANY OF MARY MEDICAL INSTITUTE",
-          "org_npi": "1235182569",
+          "org_npi": "1417915760",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "INTERNAL MEDICINE",
+            "SINGLE SPECIALTY"
           ]
         },
         {
@@ -12187,17 +12187,17 @@
         },
         {
           "org": "PINNACLE HEALTH MEDICAL SERVICES",
-          "org_npi": "1932143427",
+          "org_npi": "1073974622",
           "specialties": [
-            "FAMILY MEDICINE",
-            "SURGERY"
+            "FAMILY MEDICINE"
           ]
         },
         {
           "org": "PINNACLE HEALTH MEDICAL SERVICES",
-          "org_npi": "1073974622",
+          "org_npi": "1932143427",
           "specialties": [
-            "FAMILY MEDICINE"
+            "FAMILY MEDICINE",
+            "SURGERY"
           ]
         },
         {
@@ -12213,7 +12213,7 @@
     {
       "npi": "1407158793",
       "name": "CHURCH, ANNE",
-      "state": "GA",
+      "state": "TN",
       "orgs": [
         {
           "org": "AMSURG CHATTANOOGA ANESTHESIA LLC",
@@ -12444,14 +12444,14 @@
         },
         {
           "org": "EMERGENCY MEDICINE ASSOCIATES PA PC",
-          "org_npi": "1881559102",
+          "org_npi": "1376917070",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "EMERGENCY MEDICINE ASSOCIATES PA PC",
-          "org_npi": "1376917070",
+          "org_npi": "1881559102",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -12656,14 +12656,14 @@
         },
         {
           "org": "TGH IMAGING",
-          "org_npi": "1740242411",
+          "org_npi": "1669267134",
           "specialties": [
             "DIAGNOSTIC RADIOLOGY"
           ]
         },
         {
           "org": "TGH IMAGING",
-          "org_npi": "1669267134",
+          "org_npi": "1740242411",
           "specialties": [
             "DIAGNOSTIC RADIOLOGY"
           ]
@@ -12770,23 +12770,15 @@
       "orgs": [
         {
           "org": "EDWARD W SPARROW HOSPITAL ASSOCIATION",
-          "org_npi": "1457744666",
-          "specialties": [
-            "SURGERY"
-          ]
-        },
-        {
-          "org": "EDWARD W SPARROW HOSPITAL ASSOCIATION",
           "org_npi": "1467197251",
           "specialties": [
             "SURGERY"
           ]
         },
         {
-          "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1184659559",
+          "org": "EDWARD W SPARROW HOSPITAL ASSOCIATION",
+          "org_npi": "1457744666",
           "specialties": [
-            "PLASTIC SURGERY",
             "SURGERY"
           ]
         },
@@ -12795,6 +12787,14 @@
           "org_npi": "1144535998",
           "specialties": [
             "PLASTIC SURGERY"
+          ]
+        },
+        {
+          "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
+          "org_npi": "1184659559",
+          "specialties": [
+            "PLASTIC SURGERY",
+            "SURGERY"
           ]
         }
       ]
@@ -12850,16 +12850,16 @@
       "orgs": [
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1598780447",
+          "org_npi": "1942315361",
           "specialties": [
-            "MEDICAL"
+            "PHYSICIAN ASSISTANT"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1942315361",
+          "org_npi": "1598780447",
           "specialties": [
-            "PHYSICIAN ASSISTANT"
+            "MEDICAL"
           ]
         }
       ]
@@ -13110,17 +13110,17 @@
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477627537",
+          "org_npi": "1477624104",
           "specialties": [
-            "SURGERY",
-            "TRANSPLANT SURGERY"
+            "SURGERY"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1477627537",
           "specialties": [
-            "SURGERY"
+            "SURGERY",
+            "TRANSPLANT SURGERY"
           ]
         }
       ]
@@ -13274,7 +13274,7 @@
     {
       "npi": "1437396546",
       "name": "LIN, JENNY",
-      "state": "PA",
+      "state": "NJ",
       "orgs": [
         {
           "org": "CHILDRENS HEALTH CARE ASSOCIATES INC",
@@ -13390,20 +13390,13 @@
     {
       "npi": "1437873742",
       "name": "OURS, AUDREY",
-      "state": "OH",
+      "state": "CO",
       "orgs": [
         {
           "org": "COMPASS POINT COUNSELING SERVICES",
           "org_npi": "1215679485",
           "specialties": [
             "COUNSELOR"
-          ]
-        },
-        {
-          "org": "HEART CENTERED COUNSELING PC",
-          "org_npi": "1427633015",
-          "specialties": [
-            "PROFESSIONAL"
           ]
         },
         {
@@ -13416,6 +13409,13 @@
         {
           "org": "HEART CENTERED COUNSELING PC",
           "org_npi": "1558158584",
+          "specialties": [
+            "PROFESSIONAL"
+          ]
+        },
+        {
+          "org": "HEART CENTERED COUNSELING PC",
+          "org_npi": "1427633015",
           "specialties": [
             "PROFESSIONAL"
           ]
@@ -13635,7 +13635,7 @@
       "orgs": [
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1205787686",
+          "org_npi": "1639056989",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -13649,7 +13649,7 @@
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1639056989",
+          "org_npi": "1205787686",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -13871,17 +13871,17 @@
         },
         {
           "org": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-          "org_npi": "1033125455",
+          "org_npi": "1285692699",
           "specialties": [
-            "MULTI-SPECIALTY",
-            "PAIN MEDICINE"
+            "MULTI-SPECIALTY"
           ]
         },
         {
           "org": "UNIVERSITY OF PITTSBURGH PHYSICIANS",
-          "org_npi": "1285692699",
+          "org_npi": "1033125455",
           "specialties": [
-            "MULTI-SPECIALTY"
+            "MULTI-SPECIALTY",
+            "PAIN MEDICINE"
           ]
         }
       ]
@@ -13987,7 +13987,7 @@
     {
       "npi": "1467173823",
       "name": "DEAN, ERICA",
-      "state": "CA",
+      "state": "IN",
       "orgs": [
         {
           "org": "ACCESS TELECARE",
@@ -14069,17 +14069,17 @@
       "orgs": [
         {
           "org": "KAISER FOUNDATION HEALTH PLAN OF THE NORTHWEST",
-          "org_npi": "1184786527",
+          "org_npi": "1306192455",
           "specialties": [
-            "INTERNAL MEDICINE",
-            "SINGLE SPECIALTY"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "KAISER FOUNDATION HEALTH PLAN OF THE NORTHWEST",
-          "org_npi": "1306192455",
+          "org_npi": "1184786527",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "INTERNAL MEDICINE",
+            "SINGLE SPECIALTY"
           ]
         }
       ]
@@ -14209,7 +14209,7 @@
     {
       "npi": "1477057115",
       "name": "KLEIN, SAMANTHA",
-      "state": "NY",
+      "state": "NJ",
       "orgs": [
         {
           "org": "HACKENSACK MERIDIAN HEALTH",
@@ -14418,7 +14418,7 @@
     {
       "npi": "1477786598",
       "name": "AHMAD, FAWAZ",
-      "state": "IL",
+      "state": "MI",
       "orgs": [
         {
           "org": "CENTRAL DUPAGE PHYSICIAN GROUP",
@@ -14627,14 +14627,22 @@
       "orgs": [
         {
           "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
+          "org_npi": "1447260435",
+          "specialties": [
+            "INTERNAL MEDICINE",
+            "SINGLE SPECIALTY"
+          ]
+        },
+        {
+          "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
           "org_npi": "1780296731",
           "specialties": [
             "SINGLE SPECIALTY"
           ]
         },
         {
-          "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
-          "org_npi": "1447260435",
+          "org": "COBIUS HEALTHCARE SOLUTIONS",
+          "org_npi": "1770176372",
           "specialties": [
             "INTERNAL MEDICINE",
             "SINGLE SPECIALTY"
@@ -14650,14 +14658,6 @@
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
           "org_npi": "1518194323",
-          "specialties": [
-            "INTERNAL MEDICINE",
-            "SINGLE SPECIALTY"
-          ]
-        },
-        {
-          "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1770176372",
           "specialties": [
             "INTERNAL MEDICINE",
             "SINGLE SPECIALTY"
@@ -14856,9 +14856,8 @@
         },
         {
           "org": "WAKE SPECIALTY PHYSICIANS LLC",
-          "org_npi": "1942440375",
+          "org_npi": "1578334892",
           "specialties": [
-            "FAMILY MEDICINE",
             "MULTI-SPECIALTY"
           ]
         },
@@ -14872,8 +14871,9 @@
         },
         {
           "org": "WAKE SPECIALTY PHYSICIANS LLC",
-          "org_npi": "1578334892",
+          "org_npi": "1942440375",
           "specialties": [
+            "FAMILY MEDICINE",
             "MULTI-SPECIALTY"
           ]
         },
@@ -15022,7 +15022,7 @@
     {
       "npi": "1497883169",
       "name": "SCHOTTER, DOROTHY",
-      "state": "IL",
+      "state": "VA",
       "orgs": [
         {
           "org": "CEDAR MILLS MEDICAL GROUP",
@@ -15501,16 +15501,16 @@
         },
         {
           "org": "LAKE ORTHOPAEDIC ASSOCIATES INC",
-          "org_npi": "1326366352",
+          "org_npi": "1780613851",
           "specialties": [
+            "HAND SURGERY",
             "ORTHOPAEDIC SURGERY"
           ]
         },
         {
           "org": "LAKE ORTHOPAEDIC ASSOCIATES INC",
-          "org_npi": "1780613851",
+          "org_npi": "1326366352",
           "specialties": [
-            "HAND SURGERY",
             "ORTHOPAEDIC SURGERY"
           ]
         }
@@ -16227,7 +16227,7 @@
     {
       "npi": "1538276134",
       "name": "ABREU LANFRANCO, ODALIZ",
-      "state": "MI",
+      "state": "CT",
       "orgs": [
         {
           "org": "HENRY FORD HEALTH SYSTEM",
@@ -16559,18 +16559,18 @@
         },
         {
           "org": "STERLING RIDGE ORTHOPAEDICS AND SPORTS MEDICINE LLC",
-          "org_npi": "1356947626",
-          "specialties": [
-            "MULTI-SPECIALTY"
-          ]
-        },
-        {
-          "org": "STERLING RIDGE ORTHOPAEDICS AND SPORTS MEDICINE LLC",
           "org_npi": "1154965739",
           "specialties": [
             "ADULT RECONSTRUCTIVE ORTHOPAEDIC SURGERY",
             "MULTI-SPECIALTY",
             "ORTHOPAEDIC SURGERY"
+          ]
+        },
+        {
+          "org": "STERLING RIDGE ORTHOPAEDICS AND SPORTS MEDICINE LLC",
+          "org_npi": "1356947626",
+          "specialties": [
+            "MULTI-SPECIALTY"
           ]
         }
       ]
@@ -16589,6 +16589,14 @@
         },
         {
           "org": "LONGVIEW WELLNESS CENTER INC",
+          "org_npi": "1023426665",
+          "specialties": [
+            "MENTAL HEALTH",
+            "PROFESSIONAL"
+          ]
+        },
+        {
+          "org": "LONGVIEW WELLNESS CENTER INC",
           "org_npi": "1255137659",
           "specialties": [
             "MENTAL HEALTH",
@@ -16599,14 +16607,6 @@
           "org": "LONGVIEW WELLNESS CENTER INC",
           "org_npi": "1942269493",
           "specialties": [
-            "PROFESSIONAL"
-          ]
-        },
-        {
-          "org": "LONGVIEW WELLNESS CENTER INC",
-          "org_npi": "1023426665",
-          "specialties": [
-            "MENTAL HEALTH",
             "PROFESSIONAL"
           ]
         },
@@ -16676,7 +16676,7 @@
     {
       "npi": "1558518589",
       "name": "JINADU, NUSIRAT",
-      "state": "MD",
+      "state": "DC",
       "orgs": [
         {
           "org": "AGHS MOBILE PET SCAN",
@@ -17183,7 +17183,7 @@
     {
       "npi": "1578215398",
       "name": "ALVAREZ, ANNIKA",
-      "state": "CA",
+      "state": "HI",
       "orgs": [
         {
           "org": "PSYCHPLUS MEDICAL ASSOCIATES OF CALIFORNIA PC",
@@ -17660,16 +17660,16 @@
         },
         {
           "org": "PODIATRY ASSOCIATES OF FLORIDA INC",
-          "org_npi": "1255432746",
+          "org_npi": "1417137183",
           "specialties": [
-            "FOOT & ANKLE SURGERY",
             "PODIATRIST"
           ]
         },
         {
           "org": "PODIATRY ASSOCIATES OF FLORIDA INC",
-          "org_npi": "1417137183",
+          "org_npi": "1255432746",
           "specialties": [
+            "FOOT & ANKLE SURGERY",
             "PODIATRIST"
           ]
         },
@@ -17686,7 +17686,7 @@
     {
       "npi": "1598287260",
       "name": "DAWKINS, LAKISHA",
-      "state": "NC",
+      "state": "FL",
       "orgs": [
         {
           "org": "DANDELION SPEECH LANGUAGE PATHOLOGY SERVICES LLC",
@@ -17818,16 +17818,16 @@
       "orgs": [
         {
           "org": "HEALTHTEXAS PROVIDER NETWORK",
-          "org_npi": "1235135906",
+          "org_npi": "1760488936",
           "specialties": [
+            "CARDIOVASCULAR DISEASE",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "HEALTHTEXAS PROVIDER NETWORK",
-          "org_npi": "1760488936",
+          "org_npi": "1235135906",
           "specialties": [
-            "CARDIOVASCULAR DISEASE",
             "INTERNAL MEDICINE"
           ]
         }
@@ -17854,16 +17854,16 @@
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MARYLAND PC",
-          "org_npi": "1366240111",
+          "org_npi": "1992945471",
           "specialties": [
+            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MARYLAND PC",
-          "org_npi": "1992945471",
+          "org_npi": "1366240111",
           "specialties": [
-            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
@@ -17919,6 +17919,14 @@
       "orgs": [
         {
           "org": "ABILITY NETWORK",
+          "org_npi": "1295967586",
+          "specialties": [
+            "GENERAL PRACTICE",
+            "SPORTS MEDICINE"
+          ]
+        },
+        {
+          "org": "ABILITY NETWORK",
           "org_npi": "1699979732",
           "specialties": [
             "GENERAL PRACTICE"
@@ -17927,14 +17935,6 @@
         {
           "org": "ABILITY NETWORK",
           "org_npi": "1386991297",
-          "specialties": [
-            "GENERAL PRACTICE",
-            "SPORTS MEDICINE"
-          ]
-        },
-        {
-          "org": "ABILITY NETWORK",
-          "org_npi": "1295967586",
           "specialties": [
             "GENERAL PRACTICE",
             "SPORTS MEDICINE"
@@ -18262,17 +18262,17 @@
       "orgs": [
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1053624247",
+          "org_npi": "1477878890",
           "specialties": [
-            "CARDIOVASCULAR DISEASE",
-            "INTERVENTIONAL CARDIOLOGY"
+            "CARDIOVASCULAR DISEASE"
           ]
         },
         {
           "org": "ABILITY NETWORK",
-          "org_npi": "1477878890",
+          "org_npi": "1053624247",
           "specialties": [
-            "CARDIOVASCULAR DISEASE"
+            "CARDIOVASCULAR DISEASE",
+            "INTERVENTIONAL CARDIOLOGY"
           ]
         }
       ]
@@ -18335,14 +18335,14 @@
         },
         {
           "org": "APPALACHIAN ORTHOPAEDIC ASSOCIATES P C",
-          "org_npi": "1669940078",
+          "org_npi": "1063875649",
           "specialties": [
             "ORTHOPAEDIC SURGERY"
           ]
         },
         {
           "org": "APPALACHIAN ORTHOPAEDIC ASSOCIATES P C",
-          "org_npi": "1063875649",
+          "org_npi": "1669940078",
           "specialties": [
             "ORTHOPAEDIC SURGERY"
           ]
@@ -18647,7 +18647,7 @@
         },
         {
           "org": "CENTERWELL SENIOR PRIMARY CARE FL INC",
-          "org_npi": "1922039254",
+          "org_npi": "1215980214",
           "specialties": [
             "FAMILY MEDICINE",
             "GENERAL PRACTICE"
@@ -18655,7 +18655,15 @@
         },
         {
           "org": "CENTERWELL SENIOR PRIMARY CARE FL INC",
-          "org_npi": "1831083187",
+          "org_npi": "1487686705",
+          "specialties": [
+            "FAMILY MEDICINE",
+            "GENERAL PRACTICE"
+          ]
+        },
+        {
+          "org": "CENTERWELL SENIOR PRIMARY CARE FL INC",
+          "org_npi": "1922039254",
           "specialties": [
             "FAMILY MEDICINE",
             "GENERAL PRACTICE"
@@ -18671,15 +18679,7 @@
         },
         {
           "org": "CENTERWELL SENIOR PRIMARY CARE FL INC",
-          "org_npi": "1215980214",
-          "specialties": [
-            "FAMILY MEDICINE",
-            "GENERAL PRACTICE"
-          ]
-        },
-        {
-          "org": "CENTERWELL SENIOR PRIMARY CARE FL INC",
-          "org_npi": "1487686705",
+          "org_npi": "1831083187",
           "specialties": [
             "FAMILY MEDICINE",
             "GENERAL PRACTICE"
@@ -18809,14 +18809,14 @@
       "orgs": [
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1568137008",
+          "org_npi": "1205787686",
           "specialties": [
             "HOSPITALIST"
           ]
         },
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1205787686",
+          "org_npi": "1568137008",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -19083,14 +19083,14 @@
         },
         {
           "org": "APOGEE MEDICAL GROUP INC",
-          "org_npi": "1760652218",
+          "org_npi": "1205883725",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "APOGEE MEDICAL GROUP INC",
-          "org_npi": "1205883725",
+          "org_npi": "1760652218",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -19266,14 +19266,14 @@
         },
         {
           "org": "QUESTCARE MEDICAL SERVICES PLLC",
-          "org_npi": "1164574489",
+          "org_npi": "1912059247",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
         },
         {
           "org": "QUESTCARE MEDICAL SERVICES PLLC",
-          "org_npi": "1912059247",
+          "org_npi": "1164574489",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -19432,14 +19432,14 @@
         },
         {
           "org": "LAHEY CLINIC",
-          "org_npi": "1538194980",
+          "org_npi": "1063447316",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "LAHEY CLINIC",
-          "org_npi": "1063447316",
+          "org_npi": "1538194980",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -19517,7 +19517,7 @@
     {
       "npi": "1659726404",
       "name": "DONTUKURTHY, SUJANA",
-      "state": "MI",
+      "state": "CA",
       "orgs": [
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
@@ -19643,7 +19643,7 @@
     {
       "npi": "1659900736",
       "name": "ICE, TYLER",
-      "state": "TN",
+      "state": "ID",
       "orgs": [
         {
           "org": "NEW ALBANY HOSPITALIST GROUP",
@@ -19788,16 +19788,16 @@
       "orgs": [
         {
           "org": "OGDEN CLINIC",
-          "org_npi": "1114203668",
+          "org_npi": "1578550083",
           "specialties": [
-            "GASTROENTEROLOGY"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "OGDEN CLINIC",
-          "org_npi": "1578550083",
+          "org_npi": "1114203668",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "GASTROENTEROLOGY"
           ]
         }
       ]
@@ -19998,13 +19998,6 @@
       "orgs": [
         {
           "org": "COMPREHENSIVE PATHOLOGY ASSOCIATES PA",
-          "org_npi": "1477328466",
-          "specialties": [
-            "ANATOMIC PATHOLOGY & CLINICAL PATHOLOGY"
-          ]
-        },
-        {
-          "org": "COMPREHENSIVE PATHOLOGY ASSOCIATES PA",
           "org_npi": "1760066179",
           "specialties": [
             "ANATOMIC PATHOLOGY & CLINICAL PATHOLOGY"
@@ -20017,6 +20010,13 @@
             "ANATOMIC PATHOLOGY & CLINICAL PATHOLOGY",
             "CYTOPATHOLOGY"
           ]
+        },
+        {
+          "org": "COMPREHENSIVE PATHOLOGY ASSOCIATES PA",
+          "org_npi": "1477328466",
+          "specialties": [
+            "ANATOMIC PATHOLOGY & CLINICAL PATHOLOGY"
+          ]
         }
       ]
     },
@@ -20025,6 +20025,13 @@
       "name": "GRIMES, JACQUELINE",
       "state": "NC",
       "orgs": [
+        {
+          "org": "BELLIN HEALTH",
+          "org_npi": "1104418037",
+          "specialties": [
+            "HOSPICE AND PALLIATIVE MEDICINE"
+          ]
+        },
         {
           "org": "BELLIN HEALTH",
           "org_npi": "1033172390",
@@ -20037,13 +20044,6 @@
           "org_npi": "1114579836",
           "specialties": [
             "OBSTETRICS & GYNECOLOGY"
-          ]
-        },
-        {
-          "org": "BELLIN HEALTH",
-          "org_npi": "1104418037",
-          "specialties": [
-            "HOSPICE AND PALLIATIVE MEDICINE"
           ]
         },
         {
@@ -20251,13 +20251,6 @@
       "orgs": [
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1366417933",
-          "specialties": [
-            "INFECTIOUS DISEASE"
-          ]
-        },
-        {
-          "org": "BLUEMARK LLC OFFICE ALLY",
           "org_npi": "1730434333",
           "specialties": [
             "INTERNAL MEDICINE"
@@ -20265,16 +20258,23 @@
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1760552343",
+          "org_npi": "1477624104",
           "specialties": [
-            "INFECTIOUS DISEASE",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1366417933",
           "specialties": [
+            "INFECTIOUS DISEASE"
+          ]
+        },
+        {
+          "org": "BLUEMARK LLC OFFICE ALLY",
+          "org_npi": "1760552343",
+          "specialties": [
+            "INFECTIOUS DISEASE",
             "INTERNAL MEDICINE"
           ]
         }
@@ -20551,7 +20551,7 @@
     {
       "npi": "1699476812",
       "name": "LESTER, ERICA",
-      "state": "IL",
+      "state": "TX",
       "orgs": [
         {
           "org": "BMSC TX LLC",
@@ -21019,15 +21019,7 @@
       "orgs": [
         {
           "org": "DUKE UNIVERSITY AFFILIATED PHYSICIANS INC",
-          "org_npi": "1356373724",
-          "specialties": [
-            "ENDOCRINOLOGY, DIABETES & METABOLISM",
-            "INTERNAL MEDICINE"
-          ]
-        },
-        {
-          "org": "DUKE UNIVERSITY AFFILIATED PHYSICIANS INC",
-          "org_npi": "1023046042",
+          "org_npi": "1316975972",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -21041,7 +21033,15 @@
         },
         {
           "org": "DUKE UNIVERSITY AFFILIATED PHYSICIANS INC",
-          "org_npi": "1316975972",
+          "org_npi": "1356373724",
+          "specialties": [
+            "ENDOCRINOLOGY, DIABETES & METABOLISM",
+            "INTERNAL MEDICINE"
+          ]
+        },
+        {
+          "org": "DUKE UNIVERSITY AFFILIATED PHYSICIANS INC",
+          "org_npi": "1023046042",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -21140,13 +21140,6 @@
       "orgs": [
         {
           "org": "GALEN INPATIENT PHYSICIANS PC",
-          "org_npi": "1841037850",
-          "specialties": [
-            "HOSPITALIST"
-          ]
-        },
-        {
-          "org": "GALEN INPATIENT PHYSICIANS PC",
           "org_npi": "1205787686",
           "specialties": [
             "HOSPITALIST"
@@ -21160,6 +21153,13 @@
           ]
         },
         {
+          "org": "GALEN INPATIENT PHYSICIANS PC",
+          "org_npi": "1841037850",
+          "specialties": [
+            "HOSPITALIST"
+          ]
+        },
+        {
           "org": "MARIN HOSPITALIST MEDICAL GROUP INC",
           "org_npi": "1023041753",
           "specialties": [
@@ -21168,14 +21168,14 @@
         },
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1073606299",
+          "org_npi": "1548343510",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1548343510",
+          "org_npi": "1073606299",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -21210,14 +21210,14 @@
       "orgs": [
         {
           "org": "CEP AMERICA - ILLINOIS SNF LLP",
-          "org_npi": "1073069415",
+          "org_npi": "1912453358",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "CEP AMERICA - ILLINOIS SNF LLP",
-          "org_npi": "1912453358",
+          "org_npi": "1073069415",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -21427,17 +21427,17 @@
       "orgs": [
         {
           "org": "TAYLOR REGIONAL MEDICAL GROUP LLC",
-          "org_npi": "1174697601",
+          "org_npi": "1740432053",
           "specialties": [
-            "ADVANCED PRACTICE MIDWIFE",
-            "OBSTETRICS & GYNECOLOGY"
+            "NURSE PRACTITIONER"
           ]
         },
         {
           "org": "TAYLOR REGIONAL MEDICAL GROUP LLC",
-          "org_npi": "1740432053",
+          "org_npi": "1174697601",
           "specialties": [
-            "NURSE PRACTITIONER"
+            "ADVANCED PRACTICE MIDWIFE",
+            "OBSTETRICS & GYNECOLOGY"
           ]
         }
       ]
@@ -21851,7 +21851,7 @@
     {
       "npi": "1720432941",
       "name": "INTIKHAB, OSAMA",
-      "state": "MI",
+      "state": "DC",
       "orgs": [
         {
           "org": "HENRY FORD HEALTH SYSTEM",
@@ -21873,7 +21873,7 @@
     {
       "npi": "1720469000",
       "name": "KORE, IDIL",
-      "state": "GA",
+      "state": "IL",
       "orgs": [
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
@@ -21942,7 +21942,7 @@
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1760552343",
+          "org_npi": "1477624104",
           "specialties": [
             "HEMATOLOGY & ONCOLOGY",
             "INTERNAL MEDICINE"
@@ -21950,7 +21950,7 @@
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1760552343",
           "specialties": [
             "HEMATOLOGY & ONCOLOGY",
             "INTERNAL MEDICINE"
@@ -22192,18 +22192,18 @@
         },
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
+          "org_npi": "1740417856",
+          "specialties": [
+            "HOSPICE AND PALLIATIVE MEDICINE"
+          ]
+        },
+        {
+          "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
           "org_npi": "1790719532",
           "specialties": [
             "HOSPICE AND PALLIATIVE MEDICINE",
             "PEDIATRIC REHABILITATION MEDICINE",
             "PHYSICAL MEDICINE & REHABILITATION"
-          ]
-        },
-        {
-          "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1740417856",
-          "specialties": [
-            "HOSPICE AND PALLIATIVE MEDICINE"
           ]
         }
       ]
@@ -22237,16 +22237,16 @@
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1306121405",
+          "org_npi": "1407848443",
           "specialties": [
-            "HOSPITALIST"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1407848443",
+          "org_npi": "1306121405",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "HOSPITALIST"
           ]
         },
         {
@@ -22272,16 +22272,16 @@
       "orgs": [
         {
           "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
-          "org_npi": "1669485363",
+          "org_npi": "1447260435",
           "specialties": [
-            "HEMATOLOGY & ONCOLOGY"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "CLINICAL HEALTH CARE ASSOCIATES OF NEW JERSEY PC",
-          "org_npi": "1447260435",
+          "org_npi": "1669485363",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "HEMATOLOGY & ONCOLOGY"
           ]
         },
         {
@@ -22377,7 +22377,7 @@
     {
       "npi": "1730745720",
       "name": "KLINE, NOAH",
-      "state": "MI",
+      "state": "WA",
       "orgs": [
         {
           "org": "ASSOCIATION OF CHMC AND UNIVERSITY PHYSICIANS",
@@ -22513,7 +22513,7 @@
     {
       "npi": "1740629096",
       "name": "SHOWELL, DARION",
-      "state": "SC",
+      "state": "GA",
       "orgs": [
         {
           "org": "BEEBE IMAGING LAB EXPRESS - GEORGETOWN",
@@ -22707,7 +22707,7 @@
     {
       "npi": "1750037511",
       "name": "MICHAUD, KATRYNE",
-      "state": "VA",
+      "state": "FL",
       "orgs": [
         {
           "org": "A B COUNSELING SERVICES LLC",
@@ -22779,17 +22779,17 @@
       "orgs": [
         {
           "org": "SPINE TEAM SPOKANE",
-          "org_npi": "1780754499",
+          "org_npi": "1346082344",
           "specialties": [
-            "MULTI-SPECIALTY",
-            "PHYSICIAN ASSISTANT"
+            "MULTI-SPECIALTY"
           ]
         },
         {
           "org": "SPINE TEAM SPOKANE",
-          "org_npi": "1346082344",
+          "org_npi": "1780754499",
           "specialties": [
-            "MULTI-SPECIALTY"
+            "MULTI-SPECIALTY",
+            "PHYSICIAN ASSISTANT"
           ]
         }
       ]
@@ -22904,17 +22904,17 @@
       "orgs": [
         {
           "org": "WAKE SPECIALTY PHYSICIANS LLC",
-          "org_npi": "1942440375",
+          "org_npi": "1528704418",
           "specialties": [
-            "INTERNAL MEDICINE",
-            "PEDIATRICS"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "WAKE SPECIALTY PHYSICIANS LLC",
-          "org_npi": "1528704418",
+          "org_npi": "1942440375",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "INTERNAL MEDICINE",
+            "PEDIATRICS"
           ]
         }
       ]
@@ -23070,16 +23070,16 @@
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1760552343",
+          "org_npi": "1477624104",
           "specialties": [
-            "CARDIOVASCULAR DISEASE",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1477624104",
+          "org_npi": "1760552343",
           "specialties": [
+            "CARDIOVASCULAR DISEASE",
             "INTERNAL MEDICINE"
           ]
         }
@@ -23245,7 +23245,7 @@
         },
         {
           "org": "TEXAS ONCOLOGY PA",
-          "org_npi": "1912174350",
+          "org_npi": "1821265265",
           "specialties": [
             "HEMATOLOGY & ONCOLOGY",
             "MEDICAL ONCOLOGY"
@@ -23253,7 +23253,7 @@
         },
         {
           "org": "TEXAS ONCOLOGY PA",
-          "org_npi": "1821265265",
+          "org_npi": "1912174350",
           "specialties": [
             "HEMATOLOGY & ONCOLOGY",
             "MEDICAL ONCOLOGY"
@@ -23404,7 +23404,7 @@
     {
       "npi": "1760975924",
       "name": "MEYER, AMANDA",
-      "state": "TN",
+      "state": "AZ",
       "orgs": [
         {
           "org": "AMERICAN PHYSICIANS INC",
@@ -23483,7 +23483,7 @@
     {
       "npi": "1770087769",
       "name": "PETERS, ANDREW",
-      "state": "IL",
+      "state": "MN",
       "orgs": [
         {
           "org": "FAIRVIEW CLINICSOCCUP MED",
@@ -23774,14 +23774,14 @@
       "orgs": [
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1811268592",
+          "org_npi": "1346546306",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1346546306",
+          "org_npi": "1811268592",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -23836,7 +23836,7 @@
     {
       "npi": "1780848309",
       "name": "AL-ABED, MOHAMAD",
-      "state": "PA",
+      "state": "WV",
       "orgs": [
         {
           "org": "HERITAGE VALLEY CONV CARE - BEAVER",
@@ -23985,16 +23985,16 @@
         },
         {
           "org": "PINNACLE HEALTH MEDICAL SERVICES",
-          "org_npi": "1932143427",
+          "org_npi": "1831238815",
           "specialties": [
-            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "PINNACLE HEALTH MEDICAL SERVICES",
-          "org_npi": "1831238815",
+          "org_npi": "1932143427",
           "specialties": [
+            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         }
@@ -24056,7 +24056,7 @@
       "orgs": [
         {
           "org": "AMERICAN ANESTHESIOLOGY OF NORTH CAROLINA PLLC",
-          "org_npi": "1053677195",
+          "org_npi": "1942248547",
           "specialties": [
             "ANESTHESIOLOGY",
             "NURSE ANESTHETIST, CERTIFIED REGISTERED"
@@ -24064,7 +24064,7 @@
         },
         {
           "org": "AMERICAN ANESTHESIOLOGY OF NORTH CAROLINA PLLC",
-          "org_npi": "1942248547",
+          "org_npi": "1053677195",
           "specialties": [
             "ANESTHESIOLOGY",
             "NURSE ANESTHETIST, CERTIFIED REGISTERED"
@@ -24361,7 +24361,7 @@
     {
       "npi": "1801072830",
       "name": "VIRNIG, DANIEL",
-      "state": "PA",
+      "state": "NY",
       "orgs": [
         {
           "org": "CAREMOUNT MEDICAL PC",
@@ -24501,7 +24501,7 @@
     {
       "npi": "1801864160",
       "name": "AFONG, ANTHONY",
-      "state": "MD",
+      "state": "FL",
       "orgs": [
         {
           "org": "FLORIDA PAIN AND REHABILITATION ASSOCIATES INC",
@@ -24596,7 +24596,7 @@
     {
       "npi": "1811218332",
       "name": "DALE, ELIZABETH",
-      "state": "PA",
+      "state": "NJ",
       "orgs": [
         {
           "org": "OPHTHALMIC PARTNERS PC",
@@ -24650,14 +24650,14 @@
       "orgs": [
         {
           "org": "24 ON PHYSICIANS PC",
-          "org_npi": "1790104511",
+          "org_npi": "1912956251",
           "specialties": [
             "HOSPITALIST"
           ]
         },
         {
           "org": "24 ON PHYSICIANS PC",
-          "org_npi": "1912956251",
+          "org_npi": "1790104511",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -24751,14 +24751,14 @@
         },
         {
           "org": "KND DEVELOPMENT 59 LLC",
-          "org_npi": "1922950823",
+          "org_npi": "1952630626",
           "specialties": [
             "HOSPITALIST"
           ]
         },
         {
           "org": "KND DEVELOPMENT 59 LLC",
-          "org_npi": "1952630626",
+          "org_npi": "1922950823",
           "specialties": [
             "HOSPITALIST"
           ]
@@ -24882,7 +24882,7 @@
         },
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1073606299",
+          "org_npi": "1548343510",
           "specialties": [
             "MULTI-SPECIALTY",
             "ORTHOPAEDIC SURGERY"
@@ -24890,7 +24890,7 @@
         },
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1548343510",
+          "org_npi": "1073606299",
           "specialties": [
             "MULTI-SPECIALTY",
             "ORTHOPAEDIC SURGERY"
@@ -24985,14 +24985,14 @@
         },
         {
           "org": "AEGIS GROUP PRACTICE LLC",
-          "org_npi": "1932072030",
+          "org_npi": "1619564275",
           "specialties": [
             "OCCUPATIONAL THERAPIST"
           ]
         },
         {
           "org": "AEGIS GROUP PRACTICE LLC",
-          "org_npi": "1619564275",
+          "org_npi": "1932072030",
           "specialties": [
             "OCCUPATIONAL THERAPIST"
           ]
@@ -25391,14 +25391,14 @@
         },
         {
           "org": "SWEDISH HEALTH SERVICES",
-          "org_npi": "1659328177",
+          "org_npi": "1720029028",
           "specialties": [
             "CARDIOVASCULAR DISEASE"
           ]
         },
         {
           "org": "SWEDISH HEALTH SERVICES",
-          "org_npi": "1720029028",
+          "org_npi": "1659328177",
           "specialties": [
             "CARDIOVASCULAR DISEASE"
           ]
@@ -25668,14 +25668,7 @@
       "orgs": [
         {
           "org": "CEP AMERICA - CALIFORNIA",
-          "org_npi": "1588552848",
-          "specialties": [
-            "EMERGENCY MEDICINE"
-          ]
-        },
-        {
-          "org": "CEP AMERICA - CALIFORNIA",
-          "org_npi": "1023063542",
+          "org_npi": "1780625871",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -25689,7 +25682,7 @@
         },
         {
           "org": "CEP AMERICA - CALIFORNIA",
-          "org_npi": "1780625871",
+          "org_npi": "1023063542",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -25697,6 +25690,13 @@
         {
           "org": "CEP AMERICA - CALIFORNIA",
           "org_npi": "1548667843",
+          "specialties": [
+            "EMERGENCY MEDICINE"
+          ]
+        },
+        {
+          "org": "CEP AMERICA - CALIFORNIA",
+          "org_npi": "1588552848",
           "specialties": [
             "EMERGENCY MEDICINE"
           ]
@@ -25727,7 +25727,7 @@
     {
       "npi": "1841756145",
       "name": "GLASSCOCK, MARIAH",
-      "state": "GA",
+      "state": "TN",
       "orgs": [
         {
           "org": "VANDERBILT HEALTH AND WILLIAMSON MEDICAL CENTER CLINICS AND SERVICES",
@@ -25892,7 +25892,7 @@
       "orgs": [
         {
           "org": "ATRIUS HEALTH INC",
-          "org_npi": "1417496431",
+          "org_npi": "1871639914",
           "specialties": [
             "INTERNAL MEDICINE",
             "PEDIATRICS"
@@ -25900,7 +25900,7 @@
         },
         {
           "org": "ATRIUS HEALTH INC",
-          "org_npi": "1871639914",
+          "org_npi": "1417496431",
           "specialties": [
             "INTERNAL MEDICINE",
             "PEDIATRICS"
@@ -25986,13 +25986,6 @@
       "orgs": [
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1366417420",
-          "specialties": [
-            "SINGLE SPECIALTY"
-          ]
-        },
-        {
-          "org": "BLUEMARK LLC OFFICE ALLY",
           "org_npi": "1174598296",
           "specialties": [
             "FAMILY MEDICINE",
@@ -26007,10 +26000,10 @@
           ]
         },
         {
-          "org": "LIFELONG MEDICAL CARE",
-          "org_npi": "1003289463",
+          "org": "BLUEMARK LLC OFFICE ALLY",
+          "org_npi": "1366417420",
           "specialties": [
-            "FAMILY MEDICINE"
+            "SINGLE SPECIALTY"
           ]
         },
         {
@@ -26018,6 +26011,13 @@
           "org_npi": "1689670002",
           "specialties": [
             "SINGLE SPECIALTY"
+          ]
+        },
+        {
+          "org": "LIFELONG MEDICAL CARE",
+          "org_npi": "1003289463",
+          "specialties": [
+            "FAMILY MEDICINE"
           ]
         }
       ]
@@ -26690,9 +26690,10 @@
       "orgs": [
         {
           "org": "LONGVIEW WELLNESS CENTER INC",
-          "org_npi": "1942269493",
+          "org_npi": "1578369922",
           "specialties": [
             "CASE MANAGEMENT",
+            "MENTAL HEALTH",
             "PROFESSIONAL"
           ]
         },
@@ -26707,10 +26708,9 @@
         },
         {
           "org": "LONGVIEW WELLNESS CENTER INC",
-          "org_npi": "1578369922",
+          "org_npi": "1942269493",
           "specialties": [
             "CASE MANAGEMENT",
-            "MENTAL HEALTH",
             "PROFESSIONAL"
           ]
         }
@@ -26896,23 +26896,24 @@
       "orgs": [
         {
           "org": "APOGEE MEDICAL GROUP OF PENNSYLVANIA PC",
-          "org_npi": "1649227166",
-          "specialties": [
-            "INTERNAL MEDICINE"
-          ]
-        },
-        {
-          "org": "APOGEE MEDICAL GROUP OF PENNSYLVANIA PC",
           "org_npi": "1568633535",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
-          "org": "DUBOIS REGIONAL MEDICAL CENTER",
-          "org_npi": "1053562207",
+          "org": "APOGEE MEDICAL GROUP OF PENNSYLVANIA PC",
+          "org_npi": "1649227166",
           "specialties": [
-            "FAMILY MEDICINE"
+            "INTERNAL MEDICINE"
+          ]
+        },
+        {
+          "org": "DUBOIS REGIONAL MEDICAL CENTER",
+          "org_npi": "1245410554",
+          "specialties": [
+            "FAMILY MEDICINE",
+            "INTERNAL MEDICINE"
           ]
         },
         {
@@ -26925,10 +26926,9 @@
         },
         {
           "org": "DUBOIS REGIONAL MEDICAL CENTER",
-          "org_npi": "1245410554",
+          "org_npi": "1053562207",
           "specialties": [
-            "FAMILY MEDICINE",
-            "INTERNAL MEDICINE"
+            "FAMILY MEDICINE"
           ]
         }
       ]
@@ -26936,7 +26936,7 @@
     {
       "npi": "1891134219",
       "name": "LEWIS, ADAM",
-      "state": "OH",
+      "state": "MD",
       "orgs": [
         {
           "org": "MCV ASSOCIATED PHYSICIANS",
@@ -26997,14 +26997,14 @@
       "orgs": [
         {
           "org": "BAYLOR COLLEGE OF MEDICINE",
-          "org_npi": "1104867175",
+          "org_npi": "1881026664",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "BAYLOR COLLEGE OF MEDICINE",
-          "org_npi": "1881026664",
+          "org_npi": "1104867175",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -27030,7 +27030,7 @@
     {
       "npi": "1891315149",
       "name": "WILLIAMSON, JENNA",
-      "state": "TN",
+      "state": "WA",
       "orgs": [
         {
           "org": "NORTHWEST HOSPITAL MEDICINE PHYSICIANS LLC",
@@ -27328,14 +27328,14 @@
         },
         {
           "org": "WEILL MEDICAL COLLEGE OF CORNELL",
-          "org_npi": "1164627139",
+          "org_npi": "1124170212",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "WEILL MEDICAL COLLEGE OF CORNELL",
-          "org_npi": "1124170212",
+          "org_npi": "1164627139",
           "specialties": [
             "INTERNAL MEDICINE"
           ]
@@ -27677,16 +27677,16 @@
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1467485565",
+          "org_npi": "1427270594",
           "specialties": [
+            "CRITICAL CARE MEDICINE",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1427270594",
+          "org_npi": "1467485565",
           "specialties": [
-            "CRITICAL CARE MEDICINE",
             "INTERNAL MEDICINE"
           ]
         },
@@ -27756,7 +27756,7 @@
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MARYLAND PC",
-          "org_npi": "1366240111",
+          "org_npi": "1992945471",
           "specialties": [
             "FAMILY MEDICINE",
             "INTERNAL MEDICINE"
@@ -27764,7 +27764,7 @@
         },
         {
           "org": "HOSPITALIST MEDICINE PHYSICIANS OF MARYLAND PC",
-          "org_npi": "1992945471",
+          "org_npi": "1366240111",
           "specialties": [
             "FAMILY MEDICINE",
             "INTERNAL MEDICINE"
@@ -27836,17 +27836,17 @@
         },
         {
           "org": "SOUND INPATIENT PHYSICIANS",
-          "org_npi": "1184891814",
-          "specialties": [
-            "HOSPITALIST"
-          ]
-        },
-        {
-          "org": "SOUND INPATIENT PHYSICIANS",
           "org_npi": "1508023789",
           "specialties": [
             "HOSPITALIST",
             "INTERNAL MEDICINE"
+          ]
+        },
+        {
+          "org": "SOUND INPATIENT PHYSICIANS",
+          "org_npi": "1184891814",
+          "specialties": [
+            "HOSPITALIST"
           ]
         },
         {
@@ -27908,16 +27908,16 @@
       "orgs": [
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1376614016",
+          "org_npi": "1164512851",
           "specialties": [
-            "PEDIATRIC CARDIOLOGY",
             "PEDIATRICS"
           ]
         },
         {
           "org": "BLUEMARK LLC OFFICE ALLY",
-          "org_npi": "1164512851",
+          "org_npi": "1376614016",
           "specialties": [
+            "PEDIATRIC CARDIOLOGY",
             "PEDIATRICS"
           ]
         },
@@ -27938,16 +27938,16 @@
       "orgs": [
         {
           "org": "UNITED FAMILY RECOVERY LLC",
-          "org_npi": "1598366346",
+          "org_npi": "1972100014",
           "specialties": [
-            "SOCIAL WORKER"
+            "ADDICTION (SUBSTANCE USE DISORDER)"
           ]
         },
         {
           "org": "UNITED FAMILY RECOVERY LLC",
-          "org_npi": "1972100014",
+          "org_npi": "1598366346",
           "specialties": [
-            "ADDICTION (SUBSTANCE USE DISORDER)"
+            "SOCIAL WORKER"
           ]
         }
       ]
@@ -28170,7 +28170,7 @@
     {
       "npi": "1922397561",
       "name": "JAYANI, REENA",
-      "state": "GA",
+      "state": "TN",
       "orgs": [
         {
           "org": "VANDERBILT HEALTH CLINICIANS",
@@ -28322,16 +28322,16 @@
       "orgs": [
         {
           "org": "HER STORY INC",
-          "org_npi": "1164194478",
+          "org_npi": "1841901337",
           "specialties": [
-            "ADDICTION (SUBSTANCE USE DISORDER)",
             "SOCIAL WORKER"
           ]
         },
         {
           "org": "HER STORY INC",
-          "org_npi": "1841901337",
+          "org_npi": "1164194478",
           "specialties": [
+            "ADDICTION (SUBSTANCE USE DISORDER)",
             "SOCIAL WORKER"
           ]
         }
@@ -28601,14 +28601,14 @@
         },
         {
           "org": "CEP AMERICA - ANESTHESIA PC",
-          "org_npi": "1023809076",
+          "org_npi": "1093678229",
           "specialties": [
             "ANESTHESIOLOGY"
           ]
         },
         {
           "org": "CEP AMERICA - ANESTHESIA PC",
-          "org_npi": "1093678229",
+          "org_npi": "1023809076",
           "specialties": [
             "ANESTHESIOLOGY"
           ]
@@ -29029,6 +29029,13 @@
         },
         {
           "org": "NEW YORK MEDICAL PHYSICIAN ASSOCIATES PC",
+          "org_npi": "1528869203",
+          "specialties": [
+            "HOSPITALIST"
+          ]
+        },
+        {
+          "org": "NEW YORK MEDICAL PHYSICIAN ASSOCIATES PC",
           "org_npi": "1578316501",
           "specialties": [
             "HOSPITALIST",
@@ -29041,20 +29048,13 @@
           "specialties": [
             "HOSPITALIST"
           ]
-        },
-        {
-          "org": "NEW YORK MEDICAL PHYSICIAN ASSOCIATES PC",
-          "org_npi": "1528869203",
-          "specialties": [
-            "HOSPITALIST"
-          ]
         }
       ]
     },
     {
       "npi": "1942938808",
       "name": "MEYER, SCOTT",
-      "state": "IL",
+      "state": "NH",
       "orgs": [
         {
           "org": "BMSC AZ LLC",
@@ -29219,17 +29219,17 @@
         },
         {
           "org": "RIVERSIDE MEDICAL CLINIC",
-          "org_npi": "1720183403",
+          "org_npi": "1730180415",
           "specialties": [
-            "OBSTETRICS & GYNECOLOGY",
-            "SINGLE SPECIALTY"
+            "OBSTETRICS & GYNECOLOGY"
           ]
         },
         {
           "org": "RIVERSIDE MEDICAL CLINIC",
-          "org_npi": "1730180415",
+          "org_npi": "1720183403",
           "specialties": [
-            "OBSTETRICS & GYNECOLOGY"
+            "OBSTETRICS & GYNECOLOGY",
+            "SINGLE SPECIALTY"
           ]
         }
       ]
@@ -29241,16 +29241,16 @@
       "orgs": [
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1366476012",
+          "org_npi": "1205868353",
           "specialties": [
-            "PEDIATRIC RHEUMATOLOGY",
             "PEDIATRICS"
           ]
         },
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1205868353",
+          "org_npi": "1366476012",
           "specialties": [
+            "PEDIATRIC RHEUMATOLOGY",
             "PEDIATRICS"
           ]
         }
@@ -29263,16 +29263,16 @@
       "orgs": [
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1487072633",
+          "org_npi": "1063917425",
           "specialties": [
-            "CARDIOVASCULAR DISEASE"
+            "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1063917425",
+          "org_npi": "1487072633",
           "specialties": [
-            "INTERNAL MEDICINE"
+            "CARDIOVASCULAR DISEASE"
           ]
         }
       ]
@@ -29312,20 +29312,6 @@
       "orgs": [
         {
           "org": "BAY IMAGING CONSULTANTS MEDICAL GROUP INC",
-          "org_npi": "1871749754",
-          "specialties": [
-            "DIAGNOSTIC RADIOLOGY"
-          ]
-        },
-        {
-          "org": "BAY IMAGING CONSULTANTS MEDICAL GROUP INC",
-          "org_npi": "1548769284",
-          "specialties": [
-            "DIAGNOSTIC RADIOLOGY"
-          ]
-        },
-        {
-          "org": "BAY IMAGING CONSULTANTS MEDICAL GROUP INC",
           "org_npi": "1235184110",
           "specialties": [
             "DIAGNOSTIC RADIOLOGY"
@@ -29333,7 +29319,21 @@
         },
         {
           "org": "BAY IMAGING CONSULTANTS MEDICAL GROUP INC",
+          "org_npi": "1871749754",
+          "specialties": [
+            "DIAGNOSTIC RADIOLOGY"
+          ]
+        },
+        {
+          "org": "BAY IMAGING CONSULTANTS MEDICAL GROUP INC",
           "org_npi": "1487040770",
+          "specialties": [
+            "DIAGNOSTIC RADIOLOGY"
+          ]
+        },
+        {
+          "org": "BAY IMAGING CONSULTANTS MEDICAL GROUP INC",
+          "org_npi": "1548769284",
           "specialties": [
             "DIAGNOSTIC RADIOLOGY"
           ]
@@ -29382,16 +29382,16 @@
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1750704367",
+          "org_npi": "1558786830",
           "specialties": [
+            "INTERNAL MEDICINE",
             "SINGLE SPECIALTY"
           ]
         },
         {
           "org": "COBIUS HEALTHCARE SOLUTIONS",
-          "org_npi": "1558786830",
+          "org_npi": "1750704367",
           "specialties": [
-            "INTERNAL MEDICINE",
             "SINGLE SPECIALTY"
           ]
         },
@@ -29595,9 +29595,10 @@
       "orgs": [
         {
           "org": "CEP AMERICA - CALIFORNIA",
-          "org_npi": "1356350680",
+          "org_npi": "1023063542",
           "specialties": [
-            "EMERGENCY MEDICINE"
+            "EMERGENCY MEDICINE",
+            "SINGLE SPECIALTY"
           ]
         },
         {
@@ -29609,7 +29610,14 @@
         },
         {
           "org": "CEP AMERICA - CALIFORNIA",
-          "org_npi": "1023063542",
+          "org_npi": "1356350680",
+          "specialties": [
+            "EMERGENCY MEDICINE"
+          ]
+        },
+        {
+          "org": "PERMANENTE MEDICAL GROUP INC",
+          "org_npi": "1548343510",
           "specialties": [
             "EMERGENCY MEDICINE",
             "SINGLE SPECIALTY"
@@ -29618,14 +29626,6 @@
         {
           "org": "PERMANENTE MEDICAL GROUP INC",
           "org_npi": "1073606299",
-          "specialties": [
-            "EMERGENCY MEDICINE",
-            "SINGLE SPECIALTY"
-          ]
-        },
-        {
-          "org": "PERMANENTE MEDICAL GROUP INC",
-          "org_npi": "1548343510",
           "specialties": [
             "EMERGENCY MEDICINE",
             "SINGLE SPECIALTY"
@@ -29662,17 +29662,17 @@
       "orgs": [
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1487689766",
+          "org_npi": "1457378036",
           "specialties": [
-            "PHYSICIAN ASSISTANT",
-            "THORACIC SURGERY (CARDIOTHORACIC VASCULAR SURGERY)"
+            "PHYSICIAN ASSISTANT"
           ]
         },
         {
           "org": "REGENTS OF THE UNIVERSITY OF MICHIGAN",
-          "org_npi": "1457378036",
+          "org_npi": "1487689766",
           "specialties": [
-            "PHYSICIAN ASSISTANT"
+            "PHYSICIAN ASSISTANT",
+            "THORACIC SURGERY (CARDIOTHORACIC VASCULAR SURGERY)"
           ]
         }
       ]
@@ -30070,16 +30070,16 @@
         },
         {
           "org": "PROHEALTH PARTNERS A MEDICAL GROUP",
-          "org_npi": "1912899394",
+          "org_npi": "1003949975",
           "specialties": [
+            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         },
         {
           "org": "PROHEALTH PARTNERS A MEDICAL GROUP",
-          "org_npi": "1003949975",
+          "org_npi": "1912899394",
           "specialties": [
-            "HOSPITALIST",
             "INTERNAL MEDICINE"
           ]
         }
@@ -30425,14 +30425,14 @@
         },
         {
           "org": "ROPER SAINT FRANCIS PHYSICIANS NETWORK",
-          "org_npi": "1619521036",
+          "org_npi": "1811857352",
           "specialties": [
             "OBSTETRICS & GYNECOLOGY"
           ]
         },
         {
           "org": "ROPER SAINT FRANCIS PHYSICIANS NETWORK",
-          "org_npi": "1811857352",
+          "org_npi": "1619521036",
           "specialties": [
             "OBSTETRICS & GYNECOLOGY"
           ]
@@ -30722,7 +30722,7 @@
     {
       "npi": "1992738397",
       "name": "DOWLER, KENNETH",
-      "state": "TN",
+      "state": "WV",
       "orgs": [
         {
           "org": "BALLAD HEALTH MEDICAL ASSOCIATES",
@@ -30766,7 +30766,7 @@
     {
       "npi": "1992863849",
       "name": "PRITTS, CHAD",
-      "state": "GA",
+      "state": "TN",
       "orgs": [
         {
           "org": "U S ANESTHESIA PARTNERS OF MONTANA P C",
@@ -30804,7 +30804,7 @@
     {
       "npi": "1992904775",
       "name": "DURING, ADELAIDE",
-      "state": "TX",
+      "state": "VA",
       "orgs": [
         {
           "org": "ACS PRIMARY CARE PHYS SW",

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-27T03:46:54+00:00",
+  "generated_at": "2026-10-27T14:31:32+00:00",
   "generator": "analysis/measures.py",
   "time_axis": "ndh-release",
   "releases": [
@@ -466,7 +466,7 @@
           "source": {
             "file": "frontend/public/api/v1/findings/pii-exposure-ndh.json",
             "field": "numerator / denominator",
-            "commit": "56dbb04",
+            "commit": "adb6d00",
             "vendored": false
           },
           "zero_control": "asserted in source notes, not yet a structured field: The zero is checked, not assumed: 7,451,577 of 7,481,907 Practitioner resources still carry the qualification array those exposures were found in, so the scan is reading the right field",

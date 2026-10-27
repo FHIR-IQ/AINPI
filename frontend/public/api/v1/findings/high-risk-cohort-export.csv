@@ -220,7 +220,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1053354787,"GOLDFEIN, AARON",MI,3.0,critical,oig_excluded|sam_excluded,2018-06-20,2018-06-20,
 1053357376,"GUPTA, DHAM",NY,3.0,critical,oig_excluded|sam_excluded,2014-01-20,2014-01-20,
 1053360420,"WYTTENBACH, WILLIAM",TX,3.0,critical,oig_excluded|sam_excluded,2015-09-20,2015-09-20,
-1053360966,"FUENTES, EDWIN",VA,3.0,critical,oig_excluded|sam_excluded,2018-05-20,2018-05-20,
+1053360966,"FUENTES, EDWIN",NC,3.0,critical,oig_excluded|sam_excluded,2018-05-20,2018-05-20,
 1053363796,"HAYES, GREGORY",FL,3.0,critical,oig_excluded|sam_excluded,2015-05-20,2015-05-20,
 1053372201,"COUCH, JOHN",AL,3.0,critical,oig_excluded|sam_excluded,2017-10-19,2017-10-19,
 1053373753,"BEALL JR, JOHN",MN,3.0,critical,oig_excluded|sam_excluded,2008-12-18,2008-12-18,
@@ -607,7 +607,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1154533131,"ROSENBLATT, ROBIN",CA,3.0,critical,oig_excluded|sam_excluded,2009-12-20,2009-12-20,
 1154544567,"WAHBA, SAMEH",NY,3.0,critical,oig_excluded|sam_excluded,2020-10-20,2020-10-20,
 1154545473,"ALONSO, CRISTINA",FL,3.0,critical,oig_excluded|sam_excluded,2017-12-20,2017-12-20,
-1154562833,"ONYEKWERE, CHIKWERE",PA,3.0,critical,oig_excluded|sam_excluded,2017-05-18,2017-05-18,
+1154562833,"ONYEKWERE, CHIKWERE",NY,3.0,critical,oig_excluded|sam_excluded,2017-05-18,2017-05-18,
 1154589737,"THURMAN, MAXINE",,3.0,critical,oig_excluded|sam_excluded,2016-04-20,2016-04-20,
 1154595213,"WILLIAMS, DARRELL",MO,3.0,critical,oig_excluded|sam_excluded,2017-02-20,2017-02-20,
 1154603462,"WILLIAMSON, ANGELIQUE",OK,3.0,critical,oig_excluded|sam_excluded,2015-08-20,2015-08-20,
@@ -705,7 +705,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1184691461,"RODRIGUEZ NAVARRO, RAYMOND",PR,3.0,critical,oig_excluded|sam_excluded,2019-03-20,2019-03-20,
 1184710691,"MERCADO, ARTHUR",NY,3.0,critical,oig_excluded|sam_excluded,2019-03-20,2019-03-20,
 1184727745,"BROWN, NATHANIEL",MS,3.0,critical,oig_excluded|sam_excluded,2018-06-20,2018-06-20,
-1184732596,"ALONSO, ERIK",GA,3.0,critical,oig_excluded|sam_excluded,2017-12-20,2017-12-20,
+1184732596,"ALONSO, ERIK",FL,3.0,critical,oig_excluded|sam_excluded,2017-12-20,2017-12-20,
 1184753238,"WORRELL, TAMMY",NC,3.0,critical,oig_excluded|sam_excluded,2017-07-20,2017-07-20,
 1184757957,"THOMPSON, LINDA",CA,3.0,critical,oig_excluded|sam_excluded,2012-12-20,2012-12-20,
 1184786196,"JAKIMIEC, JERRY",IL,3.0,critical,oig_excluded|sam_excluded,2015-10-20,2015-10-20,
@@ -765,7 +765,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1194959502,"CAMPBELL, ROBERT",OR,3.0,critical,oig_excluded|sam_excluded,2012-04-19,2012-04-19,
 1194983908,"FOHNER, ANGELA",,3.0,critical,oig_excluded|sam_excluded,2011-08-18,2011-08-18,
 1194984237,"CEDENO, RICHARD",NY,3.0,critical,oig_excluded|sam_excluded,2017-01-19,2017-01-19,
-1205000353,"ASLAM, MOHAMMAD",CA,3.0,critical,oig_excluded|sam_excluded,2015-05-20,2015-05-20,
+1205000353,"ASLAM, MOHAMMAD",MD,3.0,critical,oig_excluded|sam_excluded,2015-05-20,2015-05-20,
 1205008125,"BENITO, RUBEN",MI,3.0,critical,oig_excluded|sam_excluded,2014-12-18,2014-12-18,
 1205023512,"BADII, ROOZBEH",MA,3.0,critical,oig_excluded|sam_excluded,2018-09-20,2018-09-20,
 1205048618,"BAILEY, ASHLEY",,3.0,critical,oig_excluded|sam_excluded,2010-05-20,2010-05-20,
@@ -942,7 +942,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1255340790,"GROSSMAN, JAMES",ME,3.0,critical,oig_excluded|sam_excluded,2020-12-20,2020-12-20,
 1255342937,"ESTONILO, RODRIGO",PA,3.0,critical,oig_excluded|sam_excluded,2013-04-18,2013-04-18,
 1255345492,"HANSEN, BRIAN",IA,3.0,critical,oig_excluded|sam_excluded,2014-06-19,2014-06-19,
-1255357224,"HASHEMI, MOHAMMAD",MO,3.0,critical,oig_excluded|sam_excluded,2012-04-19,2012-04-19,
+1255357224,"HASHEMI, MOHAMMAD",IL,3.0,critical,oig_excluded|sam_excluded,2012-04-19,2012-04-19,
 1255374724,"HAMPTON, WILLIAM",CA,3.0,critical,oig_excluded|sam_excluded,2012-10-18,2012-10-18,
 1255375390,"LAHIJI, HOSSEIN",TX,3.0,critical,oig_excluded|sam_excluded,2014-07-20,2014-07-20,
 1255376216,"WAYNE, CHRISTOPH",FL,3.0,critical,oig_excluded|sam_excluded,2015-01-20,2015-01-20,
@@ -955,7 +955,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1255431888,"KURRLE, ROBERT",FL,3.0,critical,oig_excluded|sam_excluded,2020-05-20,2020-05-20,
 1255433116,"PRENTICE ERICKSON, MELISSA",,3.0,critical,oig_excluded|sam_excluded,2016-06-20,2016-06-20,
 1255438859,"MARINAKIS, STEVEN",PA,3.0,critical,oig_excluded|sam_excluded,2012-10-18,2012-10-18,
-1255438990,"PASTRANO, BUDDY",KY,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,
+1255438990,"PASTRANO, BUDDY",IN,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,
 1255439725,"RAWCLIFFE, LYNN",OR,3.0,critical,oig_excluded|sam_excluded,2012-05-20,2012-05-20,
 1255447215,"SOOD, USHA",MI,3.0,critical,oig_excluded|sam_excluded,2020-01-20,2020-01-20,
 1255458238,"DERKS, ERICUS",MI,3.0,critical,oig_excluded|sam_excluded,2014-10-20,2014-10-20,
@@ -1180,7 +1180,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1316203698,"OLZINSKI, MICHAEL",CT,3.0,critical,oig_excluded|sam_excluded,2018-03-20,2018-03-20,
 1316261647,"BROWN, STEVEN",NY,3.0,critical,oig_excluded|sam_excluded,2012-05-20,2012-05-20,
 1316266331,"SYKES, EVA",AR,3.0,critical,oig_excluded|sam_excluded,2018-10-18,2018-10-18,
-1316275647,"MACK, MELODIE",FL,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,
+1316275647,"MACK, MELODIE",CO,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,
 1316340102,"THOMAS, CAROLYN",FL,3.0,critical,oig_excluded|sam_excluded,2021-05-20,2021-05-20,
 1316355548,"WILKES, MONDA",,3.0,critical,oig_excluded|sam_excluded,2016-12-20,2016-12-20,
 1316906456,"BELLOFIORE, PAUL",CT,3.0,critical,oig_excluded|sam_excluded,2017-07-20,2017-07-20,
@@ -1351,7 +1351,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1366447260,"SILBER BENDER, ALAN",MI,3.0,critical,oig_excluded|sam_excluded,2011-10-20,2011-10-20,
 1366459273,"HENERY, RANDALL",OR,3.0,critical,oig_excluded|sam_excluded,2010-07-20,2010-07-20,
 1366472268,"SEET, RAY",CA,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,
-1366482358,"HENDERSON, JACQUELIN",MI,3.0,critical,oig_excluded|sam_excluded,2016-06-20,2016-06-20,
+1366482358,"HENDERSON, JACQUELIN",IN,3.0,critical,oig_excluded|sam_excluded,2016-06-20,2016-06-20,
 1366486938,"OWENS, CHRISTOPHER",CA,3.0,critical,oig_excluded|sam_excluded,2020-10-20,2020-10-20,
 1366509903,"SHARIF, MUDASSAR",NJ,3.0,critical,oig_excluded|sam_excluded,2017-07-20,2017-07-20,
 1366510752,"SUNDQUIST, CHRISTOPH",,3.0,critical,oig_excluded|sam_excluded,2010-01-20,2010-01-20,
@@ -1439,7 +1439,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1386631869,"MALIK, ATIF",NJ,3.0,critical,oig_excluded|sam_excluded,2019-02-20,2018-10-10,
 1386634582,"HOWARD, CHARLES",MO,3.0,critical,oig_excluded|sam_excluded,2010-01-20,2010-01-20,
 1386636181,"NASON, CHRISTIAN",,3.0,critical,oig_excluded|sam_excluded,2010-04-20,2010-04-20,
-1386639474,"NELSON, CHRISTOPH",KY,3.0,critical,oig_excluded|sam_excluded,2023-05-18,2019-11-15,
+1386639474,"NELSON, CHRISTOPH",FL,3.0,critical,oig_excluded|sam_excluded,2023-05-18,2019-11-15,
 1386651842,"BERMAN, MARK",,3.0,critical,oig_excluded|sam_excluded,2011-08-18,2011-08-18,
 1386665529,"HEYWOOD, GLENROY",NM,3.0,critical,oig_excluded|sam_excluded,2020-02-20,2020-02-20,
 1386670081,"THOMAS, JEREMY",OK,3.0,critical,oig_excluded|sam_excluded,2020-02-20,2020-02-20,
@@ -2168,7 +2168,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1598781171,"MALLIA, RICHARD",FL,3.0,critical,oig_excluded|sam_excluded,2021-06-17,2021-06-17,
 1598781494,"THOMPSON, ISAAC",FL,3.0,critical,oig_excluded|sam_excluded,2016-11-20,2016-11-20,
 1598790545,"ZIEMBA, JASON",CA,3.0,critical,oig_excluded|sam_excluded,2010-06-17,2010-06-17,
-1598801052,"MANGUM JR, PAUL",FL,3.0,critical,oig_excluded|sam_excluded,2010-11-18,2010-11-18,
+1598801052,"MANGUM JR, PAUL",GA,3.0,critical,oig_excluded|sam_excluded,2010-11-18,2010-11-18,
 1598806895,"FINCH JR, CHARLES",MS,3.0,critical,oig_excluded|sam_excluded,2011-08-18,2011-08-18,
 1598807547,"CHANG, ZONGLI",MI,3.0,critical,oig_excluded|sam_excluded,2019-09-19,2019-09-19,
 1598812851,"PERRY, WILLIAM",NV,3.0,critical,oig_excluded|sam_excluded,2012-04-19,2012-04-19,
@@ -2397,7 +2397,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1659582195,"SCOTT, SUSAN",PA,3.0,critical,oig_excluded|sam_excluded,2018-05-20,2018-05-20,
 1659592079,"ARRECHAVALETA, EDUARDO",FL,3.0,critical,oig_excluded|sam_excluded,2011-06-20,2011-06-20,
 1659599736,"CLAXTON, SHEILA",CA,3.0,critical,oig_excluded|sam_excluded,2019-02-20,2019-02-20,
-1659609246,"PULLEY, TYRONE",AZ,3.0,critical,oig_excluded|sam_excluded,2013-12-19,2013-12-19,
+1659609246,"PULLEY, TYRONE",CA,3.0,critical,oig_excluded|sam_excluded,2013-12-19,2013-12-19,
 1659640449,"FEWX-PATRICK, CAITLIN",OR,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,
 1659682482,"PANDEY, KIRAN",IA,3.0,critical,oig_excluded|sam_excluded,2018-04-19,2018-04-19,
 1659704955,"MOHRBACHER, LINDSAY",,3.0,critical,oig_excluded|sam_excluded,2016-08-18,2016-08-18,
@@ -2460,7 +2460,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1679648836,"STIGLER, D BARKER",TX,3.0,critical,oig_excluded|sam_excluded,2017-02-20,2017-02-20,
 1679661052,"BARNES, SHELTON",LA,3.0,critical,oig_excluded|sam_excluded,2019-04-18,2019-04-18,
 1679669345,"SAOUD, ALLEN",WV,3.0,critical,oig_excluded|sam_excluded,2014-10-20,2014-10-20,
-1679679096,"BARARIA, VINAY",CA,3.0,critical,oig_excluded|sam_excluded,2014-12-18,2014-12-18,
+1679679096,"BARARIA, VINAY",NV,3.0,critical,oig_excluded|sam_excluded,2014-12-18,2014-12-18,
 1679692503,"BUDA, ROBERT",WA,3.0,critical,oig_excluded|sam_excluded,2021-10-20,2021-10-20,
 1679694145,"CLARK, TONYA",,3.0,critical,oig_excluded|sam_excluded,2009-07-20,2009-07-20,
 1679695910,"RANK, DOUGLAS",KY,3.0,critical,oig_excluded|sam_excluded,2012-07-19,2012-07-19,
@@ -2652,7 +2652,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1720317837,"AGHAJANYAN, ROLAND",CA,3.0,critical,oig_excluded|sam_excluded,2014-01-20,2014-01-20,
 1720351133,"BATES, TONYA",,3.0,critical,oig_excluded|sam_excluded,2019-09-19,2019-09-19,
 1720382492,"GARRETT, MICHAEL",UT,3.0,critical,oig_excluded|sam_excluded,2013-09-19,2013-09-19,
-1720397748,"CONDON, RICKY",SC,3.0,critical,oig_excluded|sam_excluded,2014-09-18,2014-09-18,
+1720397748,"CONDON, RICKY",ME,3.0,critical,oig_excluded|sam_excluded,2014-09-18,2014-09-18,
 1720398548,"STEPHENS-TRAVERSE, TERRIE",NY,3.0,critical,oig_excluded|sam_excluded,2016-12-20,2016-12-20,
 1730107558,"GLOSKOWSKI, AARON",AZ,3.0,critical,oig_excluded|sam_excluded,2012-01-19,2012-01-19,
 1730137340,"MURRAY, CONRAD",NV,3.0,critical,oig_excluded|sam_excluded,2012-06-20,2012-06-20,
@@ -2807,7 +2807,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1770551665,"BARROW, ROBERT",AR,3.0,critical,oig_excluded|sam_excluded,2016-12-20,2016-12-20,
 1770553521,"BERRY, ALPHONSO",MI,3.0,critical,oig_excluded|sam_excluded,2017-05-18,2017-05-18,
 1770570194,"DEL AMO MOJICA, FERNANDO",,3.0,critical,oig_excluded|sam_excluded,2012-09-20,2012-09-20,
-1770575821,"LALLEMAND JR, ROGER",FL,3.0,critical,oig_excluded|sam_excluded,2014-11-20,2014-11-20,
+1770575821,"LALLEMAND JR, ROGER",NJ,3.0,critical,oig_excluded|sam_excluded,2014-11-20,2014-11-20,
 1770587651,"RICE, STANLEY",IN,3.0,critical,oig_excluded|sam_excluded,2013-04-18,2013-04-18,
 1770591042,"DIEHL, HERMAN",FL,3.0,critical,oig_excluded|sam_excluded,2015-05-20,2015-05-20,
 1770593030,"NILLS, SHAWN",SD,3.0,critical,oig_excluded|sam_excluded,2015-10-20,2015-11-30,
@@ -2966,7 +2966,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1811904170,"HOELSCHER, CHRIS",IL,3.0,critical,oig_excluded|sam_excluded,2017-07-20,2017-07-20,
 1811909260,"BAIR, SCOTT",,3.0,critical,oig_excluded|sam_excluded,2016-01-20,2016-01-20,
 1811928559,"MANTELL, MICHAEL",CA,3.0,critical,oig_excluded|sam_excluded,2017-05-18,2017-05-18,
-1811960974,"LI, FRANK",WA,3.0,critical,oig_excluded|sam_excluded,2016-11-20,2016-11-20,
+1811960974,"LI, FRANK",CA,3.0,critical,oig_excluded|sam_excluded,2016-11-20,2016-11-20,
 1811961709,"SIMONS SR, LAWRENCE",,3.0,critical,oig_excluded|sam_excluded,2010-09-20,2010-09-20,
 1811962251,"BROWN, VICKIE",OK,3.0,critical,oig_excluded|sam_excluded,2016-10-20,2016-10-20,
 1811966468,"JACKSON, WILLIAM",CA,3.0,critical,oig_excluded|sam_excluded,2013-04-18,2013-04-18,
@@ -3150,7 +3150,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1861607301,"ROUZAUD, ROBERT",OH,3.0,critical,oig_excluded|sam_excluded,2017-01-19,2017-01-19,
 1861629909,"DUNPHY, STEVEN",IL,3.0,critical,oig_excluded|sam_excluded,2015-10-20,2015-10-20,
 1861635187,"SMITH, LEE",VA,3.0,critical,oig_excluded|sam_excluded,2017-12-20,2017-12-20,
-1861636201,"DODDS, AL",GA,3.0,critical,oig_excluded|sam_excluded,2017-06-20,2017-06-20,
+1861636201,"DODDS, AL",AR,3.0,critical,oig_excluded|sam_excluded,2017-06-20,2017-06-20,
 1861663213,"SZALAVETZ, GEORGE",NY,3.0,critical,oig_excluded|sam_excluded,2010-01-20,2010-01-20,
 1861669731,"NGWUDILE, CHARLES",CA,3.0,critical,oig_excluded|sam_excluded,2014-05-20,2014-05-20,
 1861693848,"VARNEY, MICHAEL",MI,3.0,critical,oig_excluded|sam_excluded,2020-08-20,2020-08-20,
@@ -3162,7 +3162,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1871521476,"REST, STANLEY",AR,3.0,critical,oig_excluded|sam_excluded,2017-05-18,2017-05-18,
 1871523852,"ZHAO, MENGJIA",NY,3.0,critical,oig_excluded|sam_excluded,2016-10-20,2016-10-20,
 1871531350,"AGURA, EDWARD",TX,3.0,critical,oig_excluded|sam_excluded,2020-12-20,2020-12-20,
-1871568782,"TUCKER, KELLY",TX,3.0,critical,oig_excluded|sam_excluded,2009-11-19,2009-11-19,
+1871568782,"TUCKER, KELLY",CO,3.0,critical,oig_excluded|sam_excluded,2009-11-19,2009-11-19,
 1871570358,"DANDO, WILLIAM",MD,3.0,critical,oig_excluded|sam_excluded,2014-10-20,2014-10-20,
 1871571406,"ASWAD, MOHAMED",NM,3.0,critical,oig_excluded|sam_excluded,2016-01-20,2016-01-20,
 1871577213,"GRAY, JENNIFER",WA,3.0,critical,oig_excluded|sam_excluded,2010-07-20,2010-07-20,
@@ -3190,7 +3190,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1871987651,"TOBEY, CHRIS",FL,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,
 1881026920,"CITRIN, MAX",FL,3.0,critical,oig_excluded|sam_excluded,2021-11-18,2021-11-18,
 1881038313,"STALLION, JOHNNY",,3.0,critical,oig_excluded|sam_excluded,2016-07-20,2016-07-20,
-1881600906,"BRUCE, BARBARA",LA,3.0,critical,oig_excluded|sam_excluded,2020-01-20,2020-01-20,
+1881600906,"BRUCE, BARBARA",RI,3.0,critical,oig_excluded|sam_excluded,2020-01-20,2020-01-20,
 1881613362,"FRYDENBORG, CHRISTINE",NH,3.0,critical,oig_excluded|sam_excluded,2010-04-20,2010-04-20,
 1881614352,"COHEN, CLAUDE",CA,3.0,critical,oig_excluded|sam_excluded,2017-01-19,2017-01-19,
 1881622090,"KAPLAN, MICHAEL",NV,3.0,critical,oig_excluded|sam_excluded,2017-01-19,2017-01-19,
@@ -3307,7 +3307,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1912034075,"NGUYEN, AI",CA,3.0,critical,oig_excluded|sam_excluded,2012-04-19,2012-04-19,
 1912052200,"GOLDNER-RADO, IUDIT",,3.0,critical,oig_excluded|sam_excluded,2012-12-20,2012-12-20,
 1912063900,"WICKE, SUSAN",NC,3.0,critical,oig_excluded|sam_excluded,2015-08-20,2015-08-20,
-1912067356,"MARKIEWICZ, MICHAEL",IN,3.0,critical,oig_excluded|sam_excluded,2016-08-18,2016-08-18,
+1912067356,"MARKIEWICZ, MICHAEL",IL,3.0,critical,oig_excluded|sam_excluded,2016-08-18,2016-08-18,
 1912069394,"ADES, ALBERT",NJ,3.0,critical,oig_excluded|sam_excluded,2016-12-20,2016-12-20,
 1912073792,"TIAGHA, KHELLI",NC,3.0,critical,oig_excluded|sam_excluded,2012-04-19,2012-04-19,
 1912092636,"DEGRAW, RAMONA",,3.0,critical,oig_excluded|sam_excluded,2009-04-20,2009-04-20,
@@ -3382,7 +3382,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1932230588,"BIARS, AMANDA",,3.0,critical,oig_excluded|sam_excluded,2010-08-19,2010-08-19,
 1932232683,"BRAY, JACIENT",PA,3.0,critical,oig_excluded|sam_excluded,2010-10-20,2010-10-20,
 1932243011,"MANETTA, BREA",CO,3.0,critical,oig_excluded|sam_excluded,2013-07-18,2013-07-18,
-1932243110,"GALATIS, MICHAEL",PA,3.0,critical,oig_excluded|sam_excluded,2015-07-20,2015-07-20,
+1932243110,"GALATIS, MICHAEL",MA,3.0,critical,oig_excluded|sam_excluded,2015-07-20,2015-07-20,
 1932243169,"STEELE, ROBERT",NY,3.0,critical,oig_excluded|sam_excluded,2021-10-20,2021-10-20,
 1932260064,"PERSAUD, ANAND",NY,3.0,critical,oig_excluded|sam_excluded,2017-09-20,2017-09-20,
 1932261401,"BELARDO PEREZ, JAIME",PR,3.0,critical,oig_excluded|sam_excluded,2009-10-20,2009-10-20,
@@ -3522,7 +3522,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1972534394,"BUETOW JR, NORMAN",CA,3.0,critical,oig_excluded|sam_excluded,2012-09-20,2012-09-20,
 1972539849,"ELDER QUINTAN, WILLIAM",TX,3.0,critical,oig_excluded|sam_excluded,2022-03-20,2022-03-20,
 1972543247,"LOWY, JED",VT,3.0,critical,oig_excluded|sam_excluded,2018-08-20,2018-08-20,
-1972548618,"ADDISON, JEFFERY",PA,3.0,critical,oig_excluded|sam_excluded,2020-10-20,2020-10-20,
+1972548618,"ADDISON, JEFFERY",MO,3.0,critical,oig_excluded|sam_excluded,2020-10-20,2020-10-20,
 1972558575,"MCBRIDE, PAMELA",CA,3.0,critical,oig_excluded|sam_excluded,2009-01-20,2009-01-20,
 1972559227,"BREIDENSTEIN, JAMES",OH,3.0,critical,oig_excluded|sam_excluded,2011-07-20,2011-07-20,
 1972560449,"JOHNSON, KENNETH",KS,3.0,critical,oig_excluded|sam_excluded,2016-07-20,2016-08-01,
@@ -3634,7 +3634,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1780688218,"MARTINEZ, XAVIER",AZ,2.3,critical,oig_excluded|nppes_deactivated,2023-04-20,,2006-03-21
 1912999087,"SCHWARTZ, DAVID",CA,2.3,critical,oig_excluded|nppes_deactivated,2024-10-20,,2018-08-14
 1982603247,"GOLDIS, MICHAEL",NJ,2.3,critical,oig_excluded|nppes_deactivated,2024-08-20,,2006-03-20
-1003005315,"SMITH, ADAM",MN,1.5,critical,oig_excluded,2022-12-20,,
+1003005315,"SMITH, ADAM",MI,1.5,critical,oig_excluded,2022-12-20,,
 1003035395,"WARD, SHARON",OH,1.5,critical,oig_excluded,2025-08-20,,
 1003035924,"DAVIS, KARLIE",,1.5,critical,oig_excluded,2024-08-20,,
 1003036807,"MILLER, LORI",CA,1.5,critical,oig_excluded,2023-06-20,,
@@ -3677,7 +3677,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1003896523,"GUPTA, ADARSH",PA,1.5,critical,oig_excluded,2026-01-20,,
 1003905043,"GARDNER, WILLIAM",NM,1.5,critical,oig_excluded,2024-09-19,,
 1003907957,"EDENFIELD, LORI",FL,1.5,critical,oig_excluded,2022-12-20,,
-1003918558,"ROBERSON II, JAMES",DC,1.5,critical,oig_excluded,2026-07-20,,
+1003918558,"ROBERSON II, JAMES",MD,1.5,critical,oig_excluded,2026-07-20,,
 1003926270,"LAW, CHARLES",AL,1.5,critical,oig_excluded,2022-09-20,,
 1003937467,"GARRETT, F",PA,1.5,critical,oig_excluded,2024-01-18,,
 1003938416,"WHITAKER, AARON",DC,1.5,critical,oig_excluded,2009-01-15,,
@@ -3728,7 +3728,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1023117942,"MALGURIA, NAGINA",MA,1.5,critical,oig_excluded,2025-06-19,,
 1023118809,"AGOMUOH, OBIOMA",MI,1.5,critical,oig_excluded,2019-06-20,,
 1023120078,"VON LINTIG, FRIEDERIKE",CA,1.5,critical,oig_excluded,2025-04-20,,
-1023128402,"SHELCHKOV, DMITRY",NY,1.5,critical,oig_excluded,2023-03-20,,
+1023128402,"SHELCHKOV, DMITRY",NJ,1.5,critical,oig_excluded,2023-03-20,,
 1023137932,"ROZOWSKI, PATTI",MN,1.5,critical,oig_excluded,2025-08-20,,
 1023150422,"HORNE, ANGELA",GA,1.5,critical,oig_excluded,2022-05-19,,
 1023174034,"DULDULAO, KENDRICK",PA,1.5,critical,oig_excluded,2022-05-19,,
@@ -3836,7 +3836,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1053425132,"HERNANDEZ, GABRIEL",CA,1.5,critical,oig_excluded,2021-03-18,,
 1053434464,"FRYBARGER, KARIN",,1.5,critical,oig_excluded,2024-08-20,,
 1053452615,"DANIEL, JARROD",NC,1.5,critical,oig_excluded,2023-11-20,,
-1053454009,"HEROMAN, JAMES",SC,1.5,critical,oig_excluded,2023-07-20,,
+1053454009,"HEROMAN, JAMES",NC,1.5,critical,oig_excluded,2023-07-20,,
 1053455311,"HENRY, BRUCLE",TX,1.5,critical,oig_excluded,2022-09-20,,
 1053464917,"HASAN, ASHRAF",NY,1.5,critical,oig_excluded,2020-05-20,,
 1053475814,"AHMED, A S M",MI,1.5,critical,oig_excluded,2020-07-20,,
@@ -3962,7 +3962,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1083607741,"SHAH, ALAP",GA,1.5,critical,oig_excluded,2020-03-19,,
 1083612493,"O SHAUGHNESSY, GARY",TN,1.5,critical,oig_excluded,2014-06-19,,
 1083615223,"OZUMBA, DONALD",TX,1.5,critical,oig_excluded,2020-06-18,,
-1083617260,"BLATSTEIN, MARC",FL,1.5,critical,oig_excluded,2006-12-20,,
+1083617260,"BLATSTEIN, MARC",VA,1.5,critical,oig_excluded,2006-12-20,,
 1083623847,"KANTZLER, MARK",FL,1.5,critical,oig_excluded,2019-06-20,,
 1083628507,"FERRELL, JOHN",TX,1.5,critical,oig_excluded,2023-04-20,,
 1083630016,"ALVAREZ, MARIO",,1.5,critical,oig_excluded,2002-07-18,,
@@ -4087,7 +4087,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1124065966,"TITUS, AJEEB",PA,1.5,critical,oig_excluded,2023-11-20,,
 1124066097,"TANTUWAYA, LOKESH",CA,1.5,critical,oig_excluded,2023-11-20,,
 1124093240,"SHEHI, DAVID",AL,1.5,critical,oig_excluded,2024-10-20,,
-1124107909,"KESTEN, JEFFREY",CO,1.5,critical,oig_excluded,2022-10-20,,
+1124107909,"KESTEN, JEFFREY",NV,1.5,critical,oig_excluded,2022-10-20,,
 1124109830,"HATMAKER, KATHERINE",MD,1.5,critical,oig_excluded,2026-03-19,,
 1124181318,"MCCUE, RHONDA",AZ,1.5,critical,oig_excluded,2025-01-20,,
 1124196431,"MOLLICK, JOSEPH",CA,1.5,critical,oig_excluded,2024-10-20,,
@@ -4101,7 +4101,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1124511993,"AMEDOME, ENNA",TX,1.5,critical,oig_excluded,2024-05-20,,
 1124628003,"BRATCHER, KIMBERLEE",TX,1.5,critical,oig_excluded,2024-01-18,,
 1124672324,"TRUJILLO, DAISY",NV,1.5,critical,oig_excluded,2025-09-18,,
-1134100738,"GODOFSKY, ALLAN",KY,1.5,critical,oig_excluded,2019-06-20,,
+1134100738,"GODOFSKY, ALLAN",OH,1.5,critical,oig_excluded,2019-06-20,,
 1134102171,"SAWHNY, BHUPINDER",OH,1.5,critical,oig_excluded,2023-11-20,,
 1134215833,"ELMER, PAUL",,1.5,critical,oig_excluded,2021-01-20,,
 1134216633,"MORRIS, TERASA",TN,1.5,critical,oig_excluded,2025-04-20,,
@@ -4109,7 +4109,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1134221351,"KADAM, VISHWAS",GA,1.5,critical,oig_excluded,2021-01-20,,
 1134232887,"PIERCE, JOHN",CA,1.5,critical,oig_excluded,2020-11-19,,
 1134237761,"BAUMGARTNER, FRITZ",CA,1.5,critical,oig_excluded,2026-08-20,,
-1134270903,"POET, ALBERT",NY,1.5,critical,oig_excluded,2008-05-20,,
+1134270903,"POET, ALBERT",NJ,1.5,critical,oig_excluded,2008-05-20,,
 1134286958,"SHOPE, JEFFREY",OH,1.5,critical,sam_excluded,,2016-02-08,
 1134297062,"LEONE, ANTHONY",NY,1.5,critical,oig_excluded,2021-03-18,,
 1134302151,"STLUCIA, STEVEN",NY,1.5,critical,oig_excluded,2023-11-20,,
@@ -4144,7 +4144,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1144222068,"CANBY, JONI",OH,1.5,critical,oig_excluded,2023-11-20,,
 1144227885,"BENNETT, SARITA",WV,1.5,critical,oig_excluded,2023-10-19,,
 1144232117,"MCMAHON, SCOTT",NY,1.5,critical,oig_excluded,2022-02-20,,
-1144233461,"RICHARDSON, MELISSA",TX,1.5,critical,oig_excluded,2021-07-20,,
+1144233461,"RICHARDSON, MELISSA",LA,1.5,critical,oig_excluded,2021-07-20,,
 1144238973,"HILLS, EDWARD",OH,1.5,critical,oig_excluded,2020-03-19,,
 1144242090,"ANUKWU, LINUS",IN,1.5,critical,oig_excluded,2023-10-19,,
 1144244708,"AKINWUMI, ABBEY",MI,1.5,critical,oig_excluded,2020-07-20,,
@@ -4480,7 +4480,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1225196579,"BISHOP, MARK",CA,1.5,critical,oig_excluded,2024-10-20,,
 1225198567,"BILLINGS, ARTHUR",TX,1.5,critical,oig_excluded,2026-04-20,,
 1225223621,"SILVA, PAUL",TX,1.5,critical,oig_excluded,2024-08-20,,
-1225225048,"KARIMI, PARTO",AZ,1.5,critical,oig_excluded,2024-11-20,,
+1225225048,"KARIMI, PARTO",CA,1.5,critical,oig_excluded,2024-11-20,,
 1225230188,"PINCKNEY, AMY",SC,1.5,critical,oig_excluded,2022-09-20,,
 1225253073,"FRALEY, LYNN",ID,1.5,critical,oig_excluded,2022-11-20,,
 1225274038,"NOMANY, CHOUDHURY",WA,1.5,critical,oig_excluded,2022-07-20,,
@@ -4583,7 +4583,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1255355160,"BARRETT, ROYCE",CA,1.5,critical,oig_excluded,2000-09-20,,
 1255363362,"BURKE, ALAN",PA,1.5,critical,oig_excluded,2018-11-20,,
 1255365854,"BUSH, JEFFREY",FL,1.5,critical,oig_excluded,2020-11-19,,
-1255373452,"RUDIN, ANDREW",IL,1.5,critical,oig_excluded,2025-01-20,,
+1255373452,"RUDIN, ANDREW",NY,1.5,critical,oig_excluded,2025-01-20,,
 1255377180,"GOODING MDASSOCIATES PC, FREDERICK",DC,1.5,critical,oig_excluded,2024-10-20,,
 1255382008,"MASSOUD, OMAR",AL,1.5,critical,oig_excluded,2025-08-20,,
 1255404471,"JAIN, PAWAN",NM,1.5,critical,oig_excluded,2020-07-20,,
@@ -4648,7 +4648,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1265870935,"SINGH, ANKITA",OH,1.5,critical,oig_excluded,2026-09-20,,
 1265890149,"DESOUZA, ANTHONY",NY,1.5,critical,oig_excluded,2024-09-19,,
 1265933097,"ABREU ARTELLES, PABLO",,1.5,critical,oig_excluded,2026-01-20,,
-1265988653,"BROWN, REMONA L",MN,1.5,critical,oig_excluded,2022-07-20,,
+1265988653,"BROWN, REMONA L",MI,1.5,critical,oig_excluded,2022-07-20,,
 1275010035,"SAMPSON, LEIGH-ANDREW",UT,1.5,critical,oig_excluded,2025-03-20,,
 1275030041,"TUCKER, CHARCHEE",OH,1.5,critical,oig_excluded,2024-01-18,,
 1275031627,"CREECH, LISA",OH,1.5,critical,oig_excluded,2023-12-20,,
@@ -4662,7 +4662,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1275521445,"RANA, BRIJ",FL,1.5,critical,oig_excluded,2024-05-20,,
 1275540163,"ADAMCZYK, STEVEN",MI,1.5,critical,oig_excluded,2023-01-19,,
 1275580037,"ABDUL HADI, YOUMNA",CA,1.5,critical,oig_excluded,2026-09-20,,
-1275580169,"TELESKY, LASZLO",GA,1.5,critical,oig_excluded,2019-05-20,,
+1275580169,"TELESKY, LASZLO",FL,1.5,critical,oig_excluded,2019-05-20,,
 1275580748,"DICROCE, JOSEPH",PA,1.5,critical,oig_excluded,2025-03-20,,
 1275593618,"BACON, PAMELA",MO,1.5,critical,oig_excluded,1993-11-21,,
 1275596827,"NGUYEN, LINH",AZ,1.5,critical,oig_excluded,2025-08-20,,
@@ -4912,7 +4912,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1336655208,"RICHARDSON, SAMANTHA",IA,1.5,critical,oig_excluded,2020-07-20,,
 1336661347,"NGUYEN, NGA",MO,1.5,critical,oig_excluded,2024-05-20,,
 1336738863,"ZAHN, MELISSA",OH,1.5,critical,oig_excluded,2025-01-20,,
-1336768118,"KEELING, SCOTT",AZ,1.5,critical,oig_excluded,2024-09-19,,
+1336768118,"KEELING, SCOTT",CA,1.5,critical,oig_excluded,2024-09-19,,
 1336967314,"STACEY, LORI",AR,1.5,critical,oig_excluded,2026-01-20,,
 1346012317,"ROBINSON, ARKEISHA",DE,1.5,critical,oig_excluded,2024-03-20,,
 1346219706,"LUKS, ENRIQUE",FL,1.5,critical,oig_excluded,2020-11-19,,
@@ -5023,7 +5023,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1366485039,"VALENTINE, CHARISE",MI,1.5,critical,oig_excluded,2026-02-19,,
 1366507055,"DAUMKE, AMANDA",AZ,1.5,critical,oig_excluded,2019-04-18,,
 1366543506,"WYNN, JEFFREY",CA,1.5,critical,oig_excluded,2023-11-20,,
-1366544512,"OXENRIDER, AARON",FL,1.5,critical,oig_excluded,2021-08-16,,
+1366544512,"OXENRIDER, AARON",IN,1.5,critical,oig_excluded,2021-08-16,,
 1366544959,"LAGAAY, PIETER",CA,1.5,critical,oig_excluded,2022-12-20,,
 1366552887,"MODELL, CRAIG",WI,1.5,critical,oig_excluded,2018-12-20,,
 1366553885,"BERJIS, FARAZ",CA,1.5,critical,oig_excluded,2026-10-20,,
@@ -5110,7 +5110,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1386021798,"KATO, BOBBY",NC,1.5,critical,oig_excluded,2026-01-20,,
 1386058469,"DI BLASI, JOHN",NY,1.5,critical,oig_excluded,2020-03-19,,
 1386060549,"DILLINGER, JASON",PA,1.5,critical,oig_excluded,2024-11-20,,
-1386063618,"MCCLEVE, D",AZ,1.5,critical,oig_excluded,2026-08-20,,
+1386063618,"MCCLEVE, D",NV,1.5,critical,oig_excluded,2026-08-20,,
 1386107043,"CARTER, MARY",OH,1.5,critical,oig_excluded,2023-06-20,,
 1386180768,"ABDULAZIZ, TARIQ",,1.5,critical,oig_excluded,2023-04-20,,
 1386183572,"MANZANO, RIADEL",,1.5,critical,oig_excluded,2024-11-20,,
@@ -5221,7 +5221,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1417348186,"SANTANA, RAPHAEL",TX,1.5,critical,oig_excluded,2023-12-20,,
 1417366865,"LEE, CHERILYN",CA,1.5,critical,oig_excluded,2025-12-18,,
 1417372798,"NUHU, ALIYU",,1.5,critical,oig_excluded,2022-12-20,,
-1417389412,"BAUER, STEVEN",OH,1.5,critical,oig_excluded,2026-04-20,,
+1417389412,"BAUER, STEVEN",PA,1.5,critical,oig_excluded,2026-04-20,,
 1417436718,"WELLS, DONNA",,1.5,critical,oig_excluded,2026-06-18,,
 1417485251,"WEST, LAURIE",OH,1.5,critical,oig_excluded,2025-07-20,,
 1417560665,"MARTINEZ, JOSE",,1.5,critical,oig_excluded,2026-03-19,,
@@ -5250,12 +5250,12 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1427227297,"SEWELL, DOUGLAS",CO,1.5,critical,oig_excluded,2021-04-20,,
 1427229426,"DEMOND, PHILIP",DE,1.5,critical,oig_excluded,2026-06-18,,
 1427240605,"VAN STEENBERG, KIRSTEN",,1.5,critical,oig_excluded,2024-08-20,,
-1427280692,"IGWE, NGOZIKA",TX,1.5,critical,oig_excluded,2022-02-20,,
+1427280692,"IGWE, NGOZIKA",MA,1.5,critical,oig_excluded,2022-02-20,,
 1427285246,"RACETTE, WENDELL",MI,1.5,critical,oig_excluded,2014-02-20,,
 1427293281,"GARCIA III, RAMON",NY,1.5,critical,oig_excluded,2024-08-20,,
 1427295492,"PORTER, JOAN",CA,1.5,critical,oig_excluded,2024-12-19,,
 1427301167,"HAYES, JESSICA",MT,1.5,critical,oig_excluded,2022-11-20,,
-1427311968,"ARNOLD, JANET",AZ,1.5,critical,oig_excluded,2023-04-20,,
+1427311968,"ARNOLD, JANET",WA,1.5,critical,oig_excluded,2023-04-20,,
 1427323344,"DEZELL, KRISTIE",MN,1.5,critical,oig_excluded,2025-07-20,,
 1427358985,"METCALF, SHERRIE",ME,1.5,critical,oig_excluded,2020-11-19,,
 1427415637,"BAILEY, JOSEPH",LA,1.5,critical,oig_excluded,2025-10-20,,
@@ -5284,7 +5284,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1437198033,"TITUS, PATRICK",DE,1.5,critical,oig_excluded,2023-04-20,,
 1437198074,"DEAN, RONALD",MO,1.5,critical,oig_excluded,2025-07-20,,
 1437277142,"TORRES, ROSAIDA",PR,1.5,critical,oig_excluded,2026-05-20,,
-1437347200,"ISLAM, ZAKIYYAH",TX,1.5,critical,oig_excluded,2024-06-20,,
+1437347200,"ISLAM, ZAKIYYAH",CA,1.5,critical,oig_excluded,2024-06-20,,
 1437356789,"GARGAN III, JOHN",NY,1.5,critical,oig_excluded,2023-01-19,,
 1437370046,"BALL, CRAIG",CA,1.5,critical,oig_excluded,2024-09-19,,
 1437403094,"HIRTH, JANA",CA,1.5,critical,oig_excluded,2024-12-19,,
@@ -5597,7 +5597,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1518926583,"CHAVDA, DEEPAK",TX,1.5,critical,oig_excluded,2024-04-18,,
 1518952506,"KEARNEY, TIMOTHY",PA,1.5,critical,sam_excluded,,2013-02-20,
 1518967207,"RALEY, THOMAS",PA,1.5,critical,oig_excluded,2023-12-20,,
-1518969138,"METHA, SANJAY",WV,1.5,critical,oig_excluded,2026-07-20,,
+1518969138,"METHA, SANJAY",VA,1.5,critical,oig_excluded,2026-07-20,,
 1518982636,"FARLEY, DAVID",OR,1.5,critical,oig_excluded,2023-03-20,,
 1518986355,"CROWDER, DONNA",AR,1.5,critical,oig_excluded,2023-02-20,,
 1518987569,"KING, DEBORAH",KS,1.5,critical,oig_excluded,2026-01-20,,
@@ -5700,7 +5700,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1558385468,"WEINER, ARTHUR",NY,1.5,critical,oig_excluded,2024-04-18,,
 1558407411,"ARONOWITZ, JOEL",CA,1.5,critical,oig_excluded,2023-04-14,,
 1558430744,"EID, RENE",MI,1.5,critical,oig_excluded,2024-05-20,,
-1558474601,"PFANNL, ROLF",FL,1.5,critical,oig_excluded,2023-02-20,,
+1558474601,"PFANNL, ROLF",MA,1.5,critical,oig_excluded,2023-02-20,,
 1558493569,"HAZELTON, DAWN",,1.5,critical,sam_excluded,,2013-07-18,
 1558519751,"GREENE, THOMAS",NY,1.5,critical,oig_excluded,2023-09-20,,
 1558555672,"CHADEAYNE, DIANE",,1.5,critical,oig_excluded,2025-01-20,,
@@ -5820,7 +5820,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1598166274,"CRUZADO, ELISA",PR,1.5,critical,oig_excluded,2026-05-20,,
 1598185746,"BADIKI, PAULINE",,1.5,critical,oig_excluded,2023-03-20,,
 1598201121,"MIZRACHI, NAOMI",,1.5,critical,oig_excluded,2024-04-18,,
-1598243073,"DUDENHOEFER, AUSTIN",OH,1.5,critical,oig_excluded,2025-11-20,,
+1598243073,"DUDENHOEFER, AUSTIN",PA,1.5,critical,oig_excluded,2025-11-20,,
 1598273427,"BROWN, ACHANA",,1.5,critical,oig_excluded,2026-05-20,,
 1598335085,"WILLIAMS, STEPHEN",MS,1.5,critical,oig_excluded,2025-06-19,,
 1598380263,"MAYORGA, PETER",FL,1.5,critical,oig_excluded,2025-06-19,,
@@ -5872,7 +5872,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1609874742,"ABRAHAM, AKIVA",NY,1.5,critical,oig_excluded,2005-12-20,,
 1609879329,"VITARELLO JR, JOHN",MD,1.5,critical,oig_excluded,2022-06-20,,
 1609901891,"BADR, ASHRAF",FL,1.5,critical,oig_excluded,2020-07-20,,
-1609933100,"GREER, STEPHEN",KS,1.5,critical,oig_excluded,2020-06-18,,
+1609933100,"GREER, STEPHEN",OK,1.5,critical,oig_excluded,2020-06-18,,
 1609948793,"NASH, JENNIFER",NJ,1.5,critical,oig_excluded,2025-09-18,,
 1609949510,"HUNT, TIMOTHY",CA,1.5,critical,oig_excluded,2021-03-18,,
 1609955350,"BROWN, FREDERICK",TX,1.5,critical,oig_excluded,2025-11-20,,
@@ -5971,9 +5971,9 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1639208705,"CHASE, BRIDGETTE",VA,1.5,critical,oig_excluded,2026-08-20,,
 1639220064,"BURACK, STEVEN",FL,1.5,critical,oig_excluded,2024-09-19,,
 1639226012,"GINGRAS, JOHN",VA,1.5,critical,oig_excluded,2022-10-20,,
-1639260193,"SANCHEZ, DANIEL",GA,1.5,critical,oig_excluded,2019-06-20,,
+1639260193,"SANCHEZ, DANIEL",FL,1.5,critical,oig_excluded,2019-06-20,,
 1639260573,"FANEGO, LUIS",MI,1.5,critical,oig_excluded,2026-10-20,,
-1639292329,"ROETHLE, SCOTT",KS,1.5,critical,oig_excluded,2026-08-20,,
+1639292329,"ROETHLE, SCOTT",MO,1.5,critical,oig_excluded,2026-08-20,,
 1639294796,"SCHEER, MICHAEL",OK,1.5,critical,oig_excluded,2022-10-20,,
 1639296569,"LY, HUNG",GA,1.5,critical,oig_excluded,2010-03-18,,
 1639322498,"MCDONALD, LYNDEN",,1.5,critical,oig_excluded,2017-05-18,,
@@ -6108,7 +6108,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1679174668,"THOMAS, AMANDA",FL,1.5,critical,oig_excluded,2025-06-19,,
 1679355341,"CLARK, WILLIAM",UT,1.5,critical,oig_excluded,2025-10-20,,
 1679502108,"WILSON, WILLIAM",FL,1.5,critical,oig_excluded,2022-11-20,,
-1679505184,"RANIERI, THOMAS",OH,1.5,critical,oig_excluded,2022-02-20,,
+1679505184,"RANIERI, THOMAS",PA,1.5,critical,oig_excluded,2022-02-20,,
 1679520183,"IVESDAL, DAWN",ND,1.5,critical,oig_excluded,2023-03-20,,
 1679541098,"TYWON, SHAWN",GA,1.5,critical,oig_excluded,2020-06-18,,
 1679542781,"MOSS, DOUGLAS",GA,1.5,critical,oig_excluded,2020-06-18,,
@@ -6254,7 +6254,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1710476072,"LITTLE, BRANDI",OH,1.5,critical,oig_excluded,2024-01-18,,
 1710496161,"BURKHEAD, JASON",VA,1.5,critical,oig_excluded,2023-04-20,,
 1710563614,"LEE, JUSTIN",OK,1.5,critical,oig_excluded,2025-07-20,,
-1710857727,"HANEY, SARAH",NJ,1.5,critical,oig_excluded,2026-07-20,,
+1710857727,"HANEY, SARAH",NE,1.5,critical,oig_excluded,2026-07-20,,
 1710901095,"GONZALEZ, HORACIO",FL,1.5,critical,oig_excluded,2022-05-19,,
 1710921119,"EDWARDS, JEFFREY",NE,1.5,critical,oig_excluded,2026-05-20,,
 1710926480,"HARVEY, GREGORY",NJ,1.5,critical,oig_excluded,2025-10-20,,
@@ -6312,7 +6312,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1720837784,"MURPHY, KATHRYN",PA,1.5,critical,oig_excluded,2024-12-19,,
 1730102450,"DEGIROLAMO, MATTHEW",PA,1.5,critical,oig_excluded,2024-08-20,,
 1730117003,"MARDER, GARY",FL,1.5,critical,oig_excluded,2019-05-20,,
-1730123365,"KAIWI JR, PAUL",CA,1.5,critical,oig_excluded,2023-06-20,,
+1730123365,"KAIWI JR, PAUL",HI,1.5,critical,oig_excluded,2023-06-20,,
 1730148958,"LEINWEBER, ELDON",,1.5,critical,oig_excluded,2025-08-20,,
 1730166117,"ESCOBAR, MARTIN",OH,1.5,critical,oig_excluded,2023-05-18,,
 1730231606,"GURVITS, IRENE",NY,1.5,critical,oig_excluded,2022-01-19,,
@@ -6442,7 +6442,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1760708119,"SIMPSON, TUKK",,1.5,critical,oig_excluded,2020-05-20,,
 1760723092,"MCDONALD, ANNELEISA",NV,1.5,critical,oig_excluded,2024-09-19,,
 1760732234,"ASEMPA, AKPENE",,1.5,critical,oig_excluded,2022-09-20,,
-1760738421,"KATZOS, SAVVAS",IN,1.5,critical,oig_excluded,2025-08-20,,
+1760738421,"KATZOS, SAVVAS",TN,1.5,critical,oig_excluded,2025-08-20,,
 1760780597,"YADIDI, MAHYAR",CA,1.5,critical,oig_excluded,2021-01-20,,
 1760782619,"COUSINS, DANIEL",WI,1.5,critical,oig_excluded,2024-12-19,,
 1760804710,"WITEK, JEFFREY",IL,1.5,critical,sam_excluded,,2019-03-22,
@@ -6613,7 +6613,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1811074560,"ARMSTRONG, DANIEL",CA,1.5,critical,oig_excluded,1999-02-18,,
 1811077092,"BABBITT, GRANT",NJ,1.5,critical,oig_excluded,2026-10-20,,
 1811085038,"CHANDLER, CHARLES",PA,1.5,critical,oig_excluded,2026-08-20,,
-1811085129,"MAKHMETOV, MICHAEL",IN,1.5,critical,oig_excluded,2022-08-18,,
+1811085129,"MAKHMETOV, MICHAEL",NY,1.5,critical,oig_excluded,2022-08-18,,
 1811085574,"SYED, MOHSIN",TX,1.5,critical,oig_excluded,2020-03-19,,
 1811108368,"KEITH, ANGELA",SC,1.5,critical,oig_excluded,2020-05-20,,
 1811129901,"AFSHARI, ALIREZA",GA,1.5,critical,oig_excluded,2022-11-20,,
@@ -6698,7 +6698,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1831256510,"MELZER, DARYL",WI,1.5,critical,oig_excluded,2024-10-20,,
 1831256676,"PEYROUX, DAVID",LA,1.5,critical,oig_excluded,2026-07-20,,
 1831282326,"MILLER, WILLIAM",GA,1.5,critical,oig_excluded,2024-06-20,,
-1831297209,"RAUTH, BISHNU",MO,1.5,critical,sam_excluded,,2018-10-10,
+1831297209,"RAUTH, BISHNU",NM,1.5,critical,sam_excluded,,2018-10-10,
 1831297530,"MATHEWS BERMUDEZ, MELVIN",PR,1.5,critical,oig_excluded,2022-09-20,,
 1831367069,"PACHECO, DENNY",NY,1.5,critical,oig_excluded,2022-01-19,,
 1831377415,"NG, RENE",FL,1.5,critical,oig_excluded,2023-10-19,,
@@ -6757,7 +6757,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1841898483,"HOUSE, DAVID",,1.5,critical,oig_excluded,2024-06-20,,
 1841928520,"FLORENCE, TARIF",,1.5,critical,oig_excluded,2026-06-18,,
 1851038483,"WALKER, EBONY",AK,1.5,critical,oig_excluded,2025-05-20,,
-1851301204,"YOUNG, DAVID",TX,1.5,critical,oig_excluded,2025-07-20,,
+1851301204,"YOUNG, DAVID",OK,1.5,critical,oig_excluded,2025-07-20,,
 1851307961,"HAMACHER, DAVID",MI,1.5,critical,oig_excluded,2024-12-19,,
 1851339576,"WELCH, CHARLES",MO,1.5,critical,oig_excluded,2026-01-20,,
 1851339881,"VILLAMAN BENCOSME, YVELICE",FL,1.5,critical,oig_excluded,2022-09-20,,
@@ -6829,7 +6829,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1871253377,"DANDY, SHAKEISHA",,1.5,critical,oig_excluded,2025-12-18,,
 1871265447,"MCWHORTER, ISABELLA",,1.5,critical,oig_excluded,2023-05-18,,
 1871307355,"PLAYER, MARISSA",NV,1.5,critical,oig_excluded,2026-10-20,,
-1871360743,"LEPAK, ANGELA",FL,1.5,critical,oig_excluded,2025-09-18,,
+1871360743,"LEPAK, ANGELA",VA,1.5,critical,oig_excluded,2025-09-18,,
 1871520528,"TAYLOR, BRIDGETT",GA,1.5,critical,oig_excluded,2023-05-18,,
 1871526400,"LUEVANO, ALFONSO",TX,1.5,critical,oig_excluded,2023-12-20,,
 1871551721,"JOHOL, GURVINDRA",NJ,1.5,critical,oig_excluded,2025-01-20,,
@@ -7003,7 +7003,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1912947102,"JELLINEK, LAWRENCE",CA,1.5,critical,oig_excluded,2008-09-18,,
 1912994146,"CURTIS, KEITH",CA,1.5,critical,oig_excluded,2023-11-20,,
 1922005990,"AN, SUHYUN",TX,1.5,critical,oig_excluded,2021-05-27,,
-1922047489,"CRABB, JAMES",LA,1.5,critical,oig_excluded,2021-07-20,,
+1922047489,"CRABB, JAMES",TN,1.5,critical,oig_excluded,2021-07-20,,
 1922058791,"BIRD, BRYAN",NC,1.5,critical,oig_excluded,2024-08-20,,
 1922059831,"COSTELLO, LLOYD",CA,1.5,critical,oig_excluded,2024-01-19,,
 1922071802,"BRECHT, KRISTINE",WA,1.5,critical,oig_excluded,2024-10-20,,
@@ -7100,7 +7100,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1942420039,"GUERRERO, LUIS",CA,1.5,critical,oig_excluded,2019-04-18,,
 1942455597,"MONTGOMERY, ERNALYN",CA,1.5,critical,oig_excluded,2026-03-19,,
 1942459102,"WALLY, LISA",PA,1.5,critical,oig_excluded,2019-05-20,,
-1942470422,"LAZCANO, MARITZA",CA,1.5,critical,oig_excluded,2024-03-20,,
+1942470422,"LAZCANO, MARITZA",FL,1.5,critical,oig_excluded,2024-03-20,,
 1942495080,"FERRIS, JAMES",OK,1.5,critical,oig_excluded,2021-04-20,,
 1942503198,"CLARK, CRYSTAL",,1.5,critical,oig_excluded,2023-12-20,,
 1942523451,"WHATMOUGH, RACHELLE",MA,1.5,critical,oig_excluded,2026-01-20,,
@@ -7173,7 +7173,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1962572511,"SACHY, THOMAS",GA,1.5,critical,oig_excluded,2025-01-20,,
 1962622647,"VASQUEZ, LAURA",,1.5,critical,oig_excluded,2024-10-20,,
 1962645655,"DANIELS, YVETTE",,1.5,critical,oig_excluded,2019-05-20,,
-1962651836,"OCONNOR, CHRISTIAN",CT,1.5,critical,oig_excluded,2024-08-20,,
+1962651836,"OCONNOR, CHRISTIAN",NY,1.5,critical,oig_excluded,2024-08-20,,
 1962718684,"KELLY, THOMAS",,1.5,critical,oig_excluded,2026-03-19,,
 1962745356,"DAVENPORT, ANGIE",TN,1.5,critical,oig_excluded,2025-01-20,,
 1962771923,"FAZZINI, ROBERT",NJ,1.5,critical,oig_excluded,2024-08-20,,
@@ -7271,7 +7271,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1992203707,"BEG, AMIR",FL,1.5,critical,oig_excluded,2024-03-20,,
 1992214175,"WASHINGTON, JENNIFER",LA,1.5,critical,oig_excluded,2026-05-20,,
 1992215362,"ARNETT, FELICIA",,1.5,critical,oig_excluded,2023-07-20,,
-1992220479,"STEELE, ALLEN",NC,1.5,critical,oig_excluded,2024-01-18,,
+1992220479,"STEELE, ALLEN",OH,1.5,critical,oig_excluded,2024-01-18,,
 1992269146,"EZEANYA, OBIAGELI",MI,1.5,critical,oig_excluded,2024-03-20,,
 1992347462,"ROSKYDOLL, CASEY",,1.5,critical,oig_excluded,2024-09-19,,
 1992374540,"LERNER, BRETT",LA,1.5,critical,oig_excluded,2026-08-20,,
@@ -7326,7 +7326,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1003263146,"DAYANAND, PRADEEP",KY,0.8,medium,nppes_deactivated,,,2017-01-10
 1003271917,"UEJO MARCHAND, KERI",CA,0.8,medium,nppes_deactivated,,,2016-02-22
 1003285859,"SCHRADER, JUSTINE",MI,0.8,medium,nppes_deactivated,,,2018-02-06
-1003300757,"PHILLIPS, MOENSANIA",CA,0.8,medium,nppes_deactivated,,,2019-07-12
+1003300757,"PHILLIPS, MOENSANIA",CT,0.8,medium,nppes_deactivated,,,2019-07-12
 1003303470,"KATEREGGA, ALICE",FL,0.8,medium,nppes_deactivated,,,2018-11-28
 1003304767,"ISOPH, SAVANA",WA,0.8,medium,nppes_deactivated,,,2020-03-16
 1003305038,"BIZE-BUONYA, JOANNE",CA,0.8,medium,nppes_deactivated,,,2023-09-11
@@ -7345,7 +7345,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1003363532,"SHROYER, HEATHER",TX,0.8,medium,nppes_deactivated,,,2022-01-12
 1003367145,"ESENDAL, MELDA",MA,0.8,medium,nppes_deactivated,,,2022-07-19
 1003375304,"BADIOLA, ANDREA",NJ,0.8,medium,nppes_deactivated,,,2019-03-16
-1003379140,"CLARKE, MELONIE",FL,0.8,medium,nppes_deactivated,,,2020-04-27
+1003379140,"CLARKE, MELONIE",VA,0.8,medium,nppes_deactivated,,,2020-04-27
 1003381419,"NGUYEN, CINDY",CA,0.8,medium,nppes_deactivated,,,2024-07-25
 1003392648,"ALVORD, SKYLER",CA,0.8,medium,nppes_deactivated,,,2023-10-27
 1003400789,"BHATWALA, HARSHIT",CA,0.8,medium,nppes_deactivated,,,2022-02-21
@@ -7388,7 +7388,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1003553173,"MUSTAFA, HOSSAMELDEEN",RI,0.8,medium,nppes_deactivated,,,2023-02-17
 1003553967,"ARAJI, GHADA",,0.8,medium,nppes_deactivated,,,2023-01-04
 1003554833,"SEDHAI, SWASTIKA",VA,0.8,medium,nppes_deactivated,,,2023-02-20
-1003557026,"PHILBROOK, SAMANTHA",IN,0.8,medium,nppes_deactivated,,,2025-03-26
+1003557026,"PHILBROOK, SAMANTHA",AZ,0.8,medium,nppes_deactivated,,,2025-03-26
 1003558701,"MANGESHKAR, SHAUNAK",OH,0.8,medium,nppes_deactivated,,,2023-01-03
 1003558784,"DESAI, SUDHAMSH",PA,0.8,medium,nppes_deactivated,,,2023-01-03
 1003576935,"HENIN, JOCELYN",MA,0.8,medium,nppes_deactivated,,,2022-02-10
@@ -7410,7 +7410,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1003671496,"TIWARI, ATHENA",MS,0.8,medium,nppes_deactivated,,,2025-04-21
 1003682923,"HERON, MATTHEW",MA,0.8,medium,nppes_deactivated,,,2024-05-30
 1003696378,"SHAW, NARITA",NJ,0.8,medium,nppes_deactivated,,,2023-11-04
-1003698531,"HERNANDEZ, KASSANDRA",FL,0.8,medium,nppes_deactivated,,,2023-11-03
+1003698531,"HERNANDEZ, KASSANDRA",CA,0.8,medium,nppes_deactivated,,,2023-11-03
 1003705062,"AGUIRRE, BRYONNA",IN,0.8,medium,nppes_deactivated,,,2025-08-22
 1003801069,"SHIMANOVSKY, INNA",OR,0.8,medium,nppes_deactivated,,,2006-03-23
 1003801119,"THOMPSON JR, ROBERT",TX,0.8,medium,nppes_deactivated,,,2006-03-22
@@ -7459,7 +7459,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1013058783,"SONTARP-PRPICH, JILL",NY,0.8,medium,nppes_deactivated,,,2011-09-28
 1013080159,"RICHARDSON, MARY BETH",CA,0.8,medium,nppes_deactivated,,,2016-10-11
 1013089028,"DIAS, TAHA",FL,0.8,medium,nppes_deactivated,,,2019-09-28
-1013094093,"HESS, CHERYL",SC,0.8,medium,nppes_deactivated,,,2021-03-03
+1013094093,"HESS, CHERYL",TN,0.8,medium,nppes_deactivated,,,2021-03-03
 1013102276,"STEINMETZ, KAREN",RI,0.8,medium,nppes_deactivated,,,2017-11-13
 1013118249,"COLANTUONO, KRISTEN",,0.8,medium,nppes_deactivated,,,2009-10-01
 1013125384,"SWAN, LAURA",PA,0.8,medium,nppes_deactivated,,,2009-01-27
@@ -7537,8 +7537,8 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1013530617,"SINGH, AMANPREET",NY,0.8,medium,nppes_deactivated,,,2022-01-17
 1013531128,"HENDAWI, ALBARAA",,0.8,medium,nppes_deactivated,,,2022-01-18
 1013531235,"FRYDSON ANDRADE, INGRID",GA,0.8,medium,nppes_deactivated,,,2022-01-18
-1013531292,"GOEL, SIDDHARTH",NY,0.8,medium,nppes_deactivated,,,2022-01-18
-1013531821,"KARKI, PRAVA",FL,0.8,medium,nppes_deactivated,,,2022-01-18
+1013531292,"GOEL, SIDDHARTH",PA,0.8,medium,nppes_deactivated,,,2022-01-18
+1013531821,"KARKI, PRAVA",MA,0.8,medium,nppes_deactivated,,,2022-01-18
 1013532373,"WU, FEI",GA,0.8,medium,nppes_deactivated,,,2022-01-18
 1013532696,"SURESH, SUKRIT",NY,0.8,medium,nppes_deactivated,,,2022-01-18
 1013533918,"VARADARASA, SAJITHAA",AZ,0.8,medium,nppes_deactivated,,,2022-01-18
@@ -7735,7 +7735,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1023518255,"TRAN, KIMBERLY",CA,0.8,medium,nppes_deactivated,,,2018-02-24
 1023523453,"GOLDSTEIN, JOSHUA",AK,0.8,medium,nppes_deactivated,,,2018-11-29
 1023526688,"ENG, MEI",CA,0.8,medium,nppes_deactivated,,,2021-04-10
-1023531167,"ELKASSIS, DIANA",MI,0.8,medium,nppes_deactivated,,,2020-03-31
+1023531167,"ELKASSIS, DIANA",NY,0.8,medium,nppes_deactivated,,,2020-03-31
 1023532587,"GUTKIN, DARIA",MI,0.8,medium,nppes_deactivated,,,2020-04-13
 1023540689,"DRAKE, BRIANNA",,0.8,medium,nppes_deactivated,,,2017-12-08
 1023542081,"NG, WINNIE",AZ,0.8,medium,nppes_deactivated,,,2019-09-07
@@ -7854,7 +7854,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1033118419,"TASH, DARA",MD,0.8,medium,nppes_deactivated,,,2006-03-20
 1033118591,"TALAMANTES, LAURA",AZ,0.8,medium,nppes_deactivated,,,2006-03-18
 1033118781,"COSSIO, CARLOS",GA,0.8,medium,nppes_deactivated,,,2006-03-18
-1033118799,"LURATE, BARRY",TN,0.8,medium,nppes_deactivated,,,2006-03-18
+1033118799,"LURATE, BARRY",FL,0.8,medium,nppes_deactivated,,,2006-03-18
 1033119375,"BUSH, MARY",NC,0.8,medium,nppes_deactivated,,,2006-03-22
 1033119425,"JONES, DAVID",NC,0.8,medium,nppes_deactivated,,,2006-03-21
 1033119706,"COX, NICOLE",TN,0.8,medium,nppes_deactivated,,,2006-03-21
@@ -7875,13 +7875,13 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1033386768,"EERKENS, BOUKJE",CA,0.8,medium,nppes_deactivated,,,2017-05-17
 1033389978,"FOY, DEANNA",NY,0.8,medium,nppes_deactivated,,,2024-08-07
 1033390703,"PORTORREAL, ANGEL",,0.8,medium,nppes_deactivated,,,2023-11-27
-1033393814,"HONG, ERIN",TN,0.8,medium,nppes_deactivated,,,2018-08-07
+1033393814,"HONG, ERIN",TX,0.8,medium,nppes_deactivated,,,2018-08-07
 1033432687,"MARAVILLAS, OSCAR",IL,0.8,medium,nppes_deactivated,,,2013-08-29
 1033435862,"ANTINORO BURKE, DIANA",NJ,0.8,medium,nppes_deactivated,,,2025-03-10
 1033458179,"PERNICE, MATTHEW",NY,0.8,medium,nppes_deactivated,,,2023-12-14
 1033485610,"GARDNER, JANETT",OH,0.8,medium,nppes_deactivated,,,2023-01-27
 1033497862,"HEMPHILL, LOVELL",DE,0.8,medium,nppes_deactivated,,,2017-03-13
-1033502505,"SHEABAT, MANPREET",NC,0.8,medium,nppes_deactivated,,,2015-06-02
+1033502505,"SHEABAT, MANPREET",CA,0.8,medium,nppes_deactivated,,,2015-06-02
 1033510870,"MAHLER, AUDREY",NY,0.8,medium,nppes_deactivated,,,2015-09-03
 1033515408,"SCONZO, ASHLEY",TX,0.8,medium,nppes_deactivated,,,2025-12-15
 1033517388,"NGUYEN, YEN",,0.8,medium,nppes_deactivated,,,2015-07-23
@@ -7948,7 +7948,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1033756739,"DOMINGUEZ GONZALEZ, YANELA",FL,0.8,medium,nppes_deactivated,,,2025-09-06
 1033761564,"ARMAS, ERNEST",CA,0.8,medium,nppes_deactivated,,,2021-12-01
 1033761689,"SOARS, CASSANDRA",CA,0.8,medium,nppes_deactivated,,,2020-05-07
-1033762067,"YANNI, AMIRA",MD,0.8,medium,nppes_deactivated,,,2021-09-23
+1033762067,"YANNI, AMIRA",VA,0.8,medium,nppes_deactivated,,,2021-09-23
 1033762091,"CLOS, RIKKI",CO,0.8,medium,nppes_deactivated,,,2022-03-29
 1033765979,"SEMBIRING, HARSIMRAN",,0.8,medium,nppes_deactivated,,,2023-12-20
 1033766928,"BAKER, DELNISHA",NY,0.8,medium,nppes_deactivated,,,2020-09-16
@@ -7970,8 +7970,8 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1033851969,"TALAVERA, HANNAH",CA,0.8,medium,nppes_deactivated,,,2023-06-26
 1033853189,"ESCANO VOLQUEZ, LORENA",NY,0.8,medium,nppes_deactivated,,,2023-01-27
 1033857248,"CORDERO, VANESSA",,0.8,medium,nppes_deactivated,,,2023-09-26
-1033864038,"GREGORY, AUTUMN",FL,0.8,medium,nppes_deactivated,,,2024-05-03
-1033870936,"KARAMOURTOPOULOS, CASSANDRA",NH,0.8,medium,nppes_deactivated,,,2024-01-29
+1033864038,"GREGORY, AUTUMN",AZ,0.8,medium,nppes_deactivated,,,2024-05-03
+1033870936,"KARAMOURTOPOULOS, CASSANDRA",MA,0.8,medium,nppes_deactivated,,,2024-01-29
 1033872023,"AVILA, DARIO",TX,0.8,medium,nppes_deactivated,,,2021-10-18
 1033872692,"GORDON, JACQUELYN",CA,0.8,medium,nppes_deactivated,,,2024-11-12
 1033882113,"ODOM, NICOLE",,0.8,medium,nppes_deactivated,,,2025-10-13
@@ -8046,7 +8046,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1043287568,"URBAN, STEVEN",TN,0.8,medium,nppes_deactivated,,,2007-07-17
 1043288038,"MEADOWS, ELIZABETH",,0.8,medium,nppes_deactivated,,,2011-05-27
 1043318272,"MURPHY, SHARON",TX,0.8,medium,nppes_deactivated,,,2007-07-17
-1043324189,"SMITH BELL, DEANNA",GA,0.8,medium,nppes_deactivated,,,2019-02-18
+1043324189,"SMITH BELL, DEANNA",TN,0.8,medium,nppes_deactivated,,,2019-02-18
 1043325756,"ASTROTH, JEFFREY",,0.8,medium,nppes_deactivated,,,2007-07-17
 1043342199,"KREEMHOLZ, STEVEN",FL,0.8,medium,nppes_deactivated,,,2025-02-14
 1043363625,"BORG, N",CA,0.8,medium,nppes_deactivated,,,2007-03-12
@@ -8170,7 +8170,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1053135392,"THOMAS, RICHARD",,0.8,medium,nppes_deactivated,,,2024-11-12
 1053141580,"RAZOOQ, KARAM",MI,0.8,medium,nppes_deactivated,,,2024-08-07
 1053143115,"ENGLISH, NADIA",VA,0.8,medium,nppes_deactivated,,,2024-08-22
-1053143438,"BATISTA, KAYKE",CA,0.8,medium,nppes_deactivated,,,2025-05-15
+1053143438,"BATISTA, KAYKE",MA,0.8,medium,nppes_deactivated,,,2025-05-15
 1053148973,"CASTILLO, DENISE",NY,0.8,medium,nppes_deactivated,,,2024-10-16
 1053153627,"ARMACHE, ALEXANDRE",FL,0.8,medium,nppes_deactivated,,,2025-01-16
 1053154583,"RIVERA, NEREIDA",CA,0.8,medium,nppes_deactivated,,,2025-08-20
@@ -8213,7 +8213,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1053330415,"PANG, PETER",NC,0.8,medium,nppes_deactivated,,,2024-10-13
 1053340869,"OKONKWO, NDUBUEZE",LA,0.8,medium,nppes_deactivated,,,2007-07-17
 1053345926,"PATEL, NIKHILKUMAR",CA,0.8,medium,nppes_deactivated,,,2019-11-16
-1053371021,"WAY GEORGE BAILEY, TRACEY",IL,0.8,medium,nppes_deactivated,,,2024-05-02
+1053371021,"WAY GEORGE BAILEY, TRACEY",OK,0.8,medium,nppes_deactivated,,,2024-05-02
 1053415315,"MILLER, JEFFREY",FL,0.8,medium,nppes_deactivated,,,2020-12-03
 1053420299,"MC NALLY, LOIS",NY,0.8,medium,nppes_deactivated,,,2008-04-08
 1053420638,"POIRIER, TIMOTHY",NC,0.8,medium,nppes_deactivated,,,2006-12-27
@@ -8230,13 +8230,13 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1053589226,"HALTOM, JW",TX,0.8,medium,nppes_deactivated,,,2008-12-11
 1053592238,"DABAJA, IBRAHIM",MI,0.8,medium,nppes_deactivated,,,2021-04-23
 1053607606,"SHETH, MITAL",PA,0.8,medium,nppes_deactivated,,,2011-05-17
-1053616961,"MCMAHILL, JAMES",FL,0.8,medium,nppes_deactivated,,,2022-05-11
+1053616961,"MCMAHILL, JAMES",CA,0.8,medium,nppes_deactivated,,,2022-05-11
 1053638973,"POPELARS, REBECCA",SC,0.8,medium,nppes_deactivated,,,2023-01-27
 1053664532,"MALONE, DAMITA",,0.8,medium,nppes_deactivated,,,2018-04-10
 1053677484,"SCHMUTZLER, TARA",WA,0.8,medium,nppes_deactivated,,,2023-01-04
 1053679142,"JIMENEZ, ANNA",FL,0.8,medium,nppes_deactivated,,,2016-01-27
 1053686873,"CLARKE, DIEDRIAN",,0.8,medium,nppes_deactivated,,,2013-07-30
-1053718502,"KARAKCHEYEVA, VIKTORIYA",MD,0.8,medium,nppes_deactivated,,,2017-02-07
+1053718502,"KARAKCHEYEVA, VIKTORIYA",DC,0.8,medium,nppes_deactivated,,,2017-02-07
 1053724740,"SINGH, RAVIYA",NY,0.8,medium,nppes_deactivated,,,2015-01-14
 1053735613,"HOLCOMB, RYAN",PA,0.8,medium,nppes_deactivated,,,2018-09-18
 1053756387,"JOSHI, SUCHITRA",FL,0.8,medium,nppes_deactivated,,,2014-03-27
@@ -8296,7 +8296,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1053933440,"PUROHIT, RACHANA",CA,0.8,medium,nppes_deactivated,,,2022-01-11
 1053934059,"LOWE, MARIAM",CA,0.8,medium,nppes_deactivated,,,2021-05-26
 1053940734,"KAUR, HARNOOR",TX,0.8,medium,nppes_deactivated,,,2020-04-06
-1053945592,"MATHESON, MYKENA",MO,0.8,medium,nppes_deactivated,,,2024-03-12
+1053945592,"MATHESON, MYKENA",OK,0.8,medium,nppes_deactivated,,,2024-03-12
 1053950287,"ROTA, CAITLIN",CA,0.8,medium,nppes_deactivated,,,2020-07-15
 1053954743,"OZAROW, LINDA",CA,0.8,medium,nppes_deactivated,,,2023-10-02
 1053955088,"LANG, CORY",LA,0.8,medium,nppes_deactivated,,,2022-06-16
@@ -8319,7 +8319,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1063030393,"RASCON, RAFAEL",NM,0.8,medium,nppes_deactivated,,,2025-07-09
 1063032829,"STEPHENSON, MARIAH",MN,0.8,medium,nppes_deactivated,,,2020-05-28
 1063034007,"QIU, YUE",PA,0.8,medium,nppes_deactivated,,,2022-01-17
-1063035038,"GEBHARDT, GRANT",GA,0.8,medium,nppes_deactivated,,,2020-11-30
+1063035038,"GEBHARDT, GRANT",AR,0.8,medium,nppes_deactivated,,,2020-11-30
 1063036762,"POKHAREL, SHASHWAT",WI,0.8,medium,nppes_deactivated,,,2022-01-18
 1063041440,"WALDRON, SHERVONNE",FL,0.8,medium,nppes_deactivated,,,2021-04-12
 1063043800,"MACKO, MARK",,0.8,medium,nppes_deactivated,,,2023-01-24
@@ -8523,12 +8523,12 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1073210936,"DUKE, CHIMENA",NJ,0.8,medium,nppes_deactivated,,,2025-01-30
 1073217352,"WATERS, DANEDA",,0.8,medium,nppes_deactivated,,,2023-04-18
 1073219028,"STEPANOV, JOSHUA",,0.8,medium,nppes_deactivated,,,2024-01-06
-1073225504,"DOUGLAS, GARY",MI,0.8,medium,nppes_deactivated,,,2024-06-20
+1073225504,"DOUGLAS, GARY",AZ,0.8,medium,nppes_deactivated,,,2024-06-20
 1073226049,"MURATALLA, BIANCA",CA,0.8,medium,nppes_deactivated,,,2023-01-04
 1073234902,"JOHNSON, CHARLI",TX,0.8,medium,nppes_deactivated,,,2025-07-28
 1073238531,"POTTER, HAILEY",CA,0.8,medium,nppes_deactivated,,,2024-06-24
 1073243994,"PONIATOWSKI, NATALIE",,0.8,medium,nppes_deactivated,,,2023-03-06
-1073244844,"PATEL, NIMI",TN,0.8,medium,nppes_deactivated,,,2023-03-10
+1073244844,"PATEL, NIMI",NC,0.8,medium,nppes_deactivated,,,2023-03-10
 1073253829,"WOO, MICHAEL",CA,0.8,medium,nppes_deactivated,,,2022-03-30
 1073256616,"GREEN, SHANNON",,0.8,medium,nppes_deactivated,,,2023-01-01
 1073257689,"HARUTYUNYAN, HAKOB",NY,0.8,medium,nppes_deactivated,,,2023-01-18
@@ -8605,7 +8605,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1073798104,"HUBBARD, THOMAS",VA,0.8,medium,nppes_deactivated,,,2025-06-06
 1073811915,"D'SOUZA, EMMANUEL",OH,0.8,medium,nppes_deactivated,,,2013-01-24
 1073821591,"ALICEA, INGRID",OH,0.8,medium,nppes_deactivated,,,2010-12-23
-1073833026,"ABDELFATTAH, ADHAM",TX,0.8,medium,nppes_deactivated,,,2019-08-05
+1073833026,"ABDELFATTAH, ADHAM",FL,0.8,medium,nppes_deactivated,,,2019-08-05
 1073843413,"TRUJILLO, NATHAN",CA,0.8,medium,nppes_deactivated,,,2014-06-09
 1073846291,"ANDERSON, MARSHAY",,0.8,medium,nppes_deactivated,,,2015-03-31
 1073850657,"BOLDEN, SONYA",TX,0.8,medium,nppes_deactivated,,,2020-02-18
@@ -8651,7 +8651,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1083101109,"CEPA, SAJMIR",,0.8,medium,nppes_deactivated,,,2022-11-28
 1083102388,"CARTER, SPENCER",AL,0.8,medium,nppes_deactivated,,,2021-06-29
 1083114011,"KEPL, RACHEL",WA,0.8,medium,nppes_deactivated,,,2025-09-02
-1083116073,"MURPHY, PAIGE",MI,0.8,medium,nppes_deactivated,,,2020-10-13
+1083116073,"MURPHY, PAIGE",OH,0.8,medium,nppes_deactivated,,,2020-10-13
 1083117394,"WATSON, CHRISTINA",MI,0.8,medium,nppes_deactivated,,,2022-10-26
 1083123673,"LYNN, TERRANCE",NE,0.8,medium,nppes_deactivated,,,2018-05-10
 1083124630,"ARANDA, NANCY",CA,0.8,medium,nppes_deactivated,,,2022-11-17
@@ -8695,7 +8695,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1083279194,"LEHTO, MELISSA",TX,0.8,medium,nppes_deactivated,,,2020-04-20
 1083288542,"ESPINOZA, DULCE",,0.8,medium,nppes_deactivated,,,2021-11-15
 1083288807,"AMMAR, LIANN",FL,0.8,medium,nppes_deactivated,,,2022-10-31
-1083297535,"AL-FARAJ, NADA",FL,0.8,medium,nppes_deactivated,,,2022-02-23
+1083297535,"AL-FARAJ, NADA",MS,0.8,medium,nppes_deactivated,,,2022-02-23
 1083298954,"ALGABBANI, SARAH",WV,0.8,medium,nppes_deactivated,,,2023-03-23
 1083303424,"SATIDWONGPIBOOL, PEMIKA",NY,0.8,medium,nppes_deactivated,,,2023-12-07
 1083303689,"PEETE, MISTY",MI,0.8,medium,nppes_deactivated,,,2024-10-16
@@ -8781,7 +8781,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1083777080,"KLINKENBORG, JOHN",CA,0.8,medium,nppes_deactivated,,,2007-07-17
 1083800205,"AITKEN, ANGELA",,0.8,medium,nppes_deactivated,,,2019-02-20
 1083815617,"MCKINNEY, JEREY",IL,0.8,medium,nppes_deactivated,,,2012-07-26
-1083816508,"PRIKOSOVITS, CAROLE",CA,0.8,medium,nppes_deactivated,,,2015-11-10
+1083816508,"PRIKOSOVITS, CAROLE",TX,0.8,medium,nppes_deactivated,,,2015-11-10
 1083821789,"BUGLISI JR, JOSEPH",NC,0.8,medium,nppes_deactivated,,,2019-08-13
 1083829493,"BLACK, MAGNITA",WA,0.8,medium,nppes_deactivated,,,2014-05-06
 1083838379,"WALKER, MICHAEL",CA,0.8,medium,nppes_deactivated,,,2007-07-17
@@ -8797,7 +8797,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1083964860,"LEVIN, JAMIE",,0.8,medium,nppes_deactivated,,,2019-01-11
 1083968002,"SON, MIN SOO",CA,0.8,medium,nppes_deactivated,,,2025-08-27
 1083974430,"MAHMOODI, VENUS",NY,0.8,medium,nppes_deactivated,,,2018-10-01
-1083976559,"LUNDBERG, KATIE",WA,0.8,medium,nppes_deactivated,,,2019-09-24
+1083976559,"LUNDBERG, KATIE",OR,0.8,medium,nppes_deactivated,,,2019-09-24
 1083977359,"URBAN, STEPHANIE",FL,0.8,medium,nppes_deactivated,,,2025-09-26
 1083984850,"ASHBACHER, ASHLEY",MN,0.8,medium,nppes_deactivated,,,2016-09-19
 1083997506,"BENTLEY, CHRISTINE",WA,0.8,medium,nppes_deactivated,,,2025-12-01
@@ -8833,7 +8833,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1093199622,"AREMU, MERCY",GA,0.8,medium,nppes_deactivated,,,2020-06-26
 1093200230,"FILIO, EULAH JOHANNA",CA,0.8,medium,nppes_deactivated,,,2022-11-28
 1093206005,"BUENCAMINO, ANJELINE",OR,0.8,medium,nppes_deactivated,,,2018-08-27
-1093206070,"VYAS, RAJIV",VT,0.8,medium,nppes_deactivated,,,2019-01-22
+1093206070,"VYAS, RAJIV",NY,0.8,medium,nppes_deactivated,,,2019-01-22
 1093208506,"COLCHA, MIRO",,0.8,medium,nppes_deactivated,,,2021-06-14
 1093211211,"MICELLI, BONNIE",WI,0.8,medium,nppes_deactivated,,,2021-06-29
 1093222010,"MOORE, LEYA",WI,0.8,medium,nppes_deactivated,,,2020-11-11
@@ -8850,7 +8850,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1093277089,"LANGE, MICHELLE",CO,0.8,medium,nppes_deactivated,,,2019-03-26
 1093278731,"AGGARWAL, GAURAV",AZ,0.8,medium,nppes_deactivated,,,2019-10-31
 1093282568,"DIGIORGI, COURTNEY",OH,0.8,medium,nppes_deactivated,,,2025-03-24
-1093295164,"ADWERE, GLORIA",FL,0.8,medium,nppes_deactivated,,,2022-06-14
+1093295164,"ADWERE, GLORIA",OH,0.8,medium,nppes_deactivated,,,2022-06-14
 1093298366,"SANCHEZ, DEAN",OR,0.8,medium,nppes_deactivated,,,2019-06-04
 1093300733,"NICHOLS, TIFFANY",TN,0.8,medium,nppes_deactivated,,,2025-08-06
 1093306482,"BOYD, DOUGLAS",NY,0.8,medium,nppes_deactivated,,,2022-11-16
@@ -8865,7 +8865,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1093336646,"TOMAR, SANJEEVANI KUMAR",FL,0.8,medium,nppes_deactivated,,,2022-01-11
 1093336919,"RABARA, JOEL",CA,0.8,medium,nppes_deactivated,,,2021-09-29
 1093337248,"PATEL, DHWANI",NY,0.8,medium,nppes_deactivated,,,2022-02-10
-1093339343,"QURESHI, DANISH",CA,0.8,medium,nppes_deactivated,,,2020-07-08
+1093339343,"QURESHI, DANISH",NY,0.8,medium,nppes_deactivated,,,2020-07-08
 1093341430,"GALINDO, ALIAH",CA,0.8,medium,nppes_deactivated,,,2023-10-18
 1093346710,"OBRIEN, KATE",NC,0.8,medium,nppes_deactivated,,,2020-01-31
 1093356586,"ATEYEH, TALA",CA,0.8,medium,nppes_deactivated,,,2024-10-31
@@ -8935,7 +8935,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1093714107,"GABRIEL, DAVID",RI,0.8,medium,nppes_deactivated,,,2006-03-20
 1093714222,"RUSSELL, KERRY",MI,0.8,medium,nppes_deactivated,,,2006-03-20
 1093715369,"YOUNG, STEVEN",NJ,0.8,medium,nppes_deactivated,,,2006-03-21
-1093715690,"TELLAWI, ESSAM",MI,0.8,medium,nppes_deactivated,,,2006-03-21
+1093715690,"TELLAWI, ESSAM",MD,0.8,medium,nppes_deactivated,,,2006-03-21
 1093715757,"BIEDERMAN, AVIVA",CA,0.8,medium,nppes_deactivated,,,2006-06-28
 1093716698,"KHALIL, ABBAS",OH,0.8,medium,nppes_deactivated,,,2006-03-22
 1093718017,"LYONS, CHRISTOPH",PA,0.8,medium,nppes_deactivated,,,2006-03-16
@@ -9011,7 +9011,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1104333954,"SHOPE, MORGAN",,0.8,medium,nppes_deactivated,,,2021-06-22
 1104334192,"PEREZ, BRENDA",TX,0.8,medium,nppes_deactivated,,,2018-08-01
 1104334531,"AHANONU-ESSIET, EZIHE",NY,0.8,medium,nppes_deactivated,,,2018-09-02
-1104335702,"TAN, ESTHER",CA,0.8,medium,nppes_deactivated,,,2021-06-11
+1104335702,"TAN, ESTHER",MA,0.8,medium,nppes_deactivated,,,2021-06-11
 1104340868,"HATAE, MYCHAL",,0.8,medium,nppes_deactivated,,,2017-10-18
 1104341387,"CARTAGENA, MIRELISE",CA,0.8,medium,nppes_deactivated,,,2021-03-31
 1104343359,"HECIMOVIC, DAMIR",GA,0.8,medium,nppes_deactivated,,,2021-01-20
@@ -9040,11 +9040,11 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1104446673,"PHINN, JADE",WA,0.8,medium,nppes_deactivated,,,2022-06-01
 1104447036,"PINTO, DENVER",CO,0.8,medium,nppes_deactivated,,,2022-01-11
 1104447283,"NASIR, SAMAR",,0.8,medium,nppes_deactivated,,,2022-01-11
-1104447861,"RAJAN, DON",TN,0.8,medium,nppes_deactivated,,,2022-01-11
+1104447861,"RAJAN, DON",WA,0.8,medium,nppes_deactivated,,,2022-01-11
 1104448398,"VADASZ, BRIAN",IL,0.8,medium,nppes_deactivated,,,2022-01-11
 1104449206,"SHAH, KRUTI",NM,0.8,medium,nppes_deactivated,,,2022-01-18
 1104450568,"BROWN, ALLISON",VA,0.8,medium,nppes_deactivated,,,2024-12-03
-1104472588,"DOSHI, SHAGUN",CA,0.8,medium,nppes_deactivated,,,2023-01-12
+1104472588,"DOSHI, SHAGUN",NY,0.8,medium,nppes_deactivated,,,2023-01-12
 1104473628,"MASHBURN, CAMERON",TN,0.8,medium,nppes_deactivated,,,2020-07-29
 1104476100,"HEWITT, CASSANDRA",OK,0.8,medium,nppes_deactivated,,,2021-05-02
 1104480268,"SIDDIQUI, SOHAIB",RI,0.8,medium,nppes_deactivated,,,2019-12-09
@@ -9128,7 +9128,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1114133220,"OUZTS, MICHAEL",SC,0.8,medium,nppes_deactivated,,,2007-07-17
 1114158409,"AKINPELOYE, OMONIYI",LA,0.8,medium,nppes_deactivated,,,2025-12-25
 1114159019,"MARTINEZ-RAMIEREZ, JOEL",FL,0.8,medium,nppes_deactivated,,,2018-05-30
-1114161239,"LAING, AUDRA",NY,0.8,medium,nppes_deactivated,,,2024-08-01
+1114161239,"LAING, AUDRA",HI,0.8,medium,nppes_deactivated,,,2024-08-01
 1114169430,"CRISTINO, LORETTE",,0.8,medium,nppes_deactivated,,,2019-03-25
 1114177292,"NUTINI, JOSEPH",,0.8,medium,nppes_deactivated,,,2014-01-29
 1114197852,"KONSTIN, SYDNA",CA,0.8,medium,nppes_deactivated,,,2009-08-17
@@ -9197,7 +9197,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1114541364,"YARI, KOLSOUM",PA,0.8,medium,nppes_deactivated,,,2022-01-18
 1114542479,"ELFITURI, MAHMUD",CA,0.8,medium,nppes_deactivated,,,2022-01-18
 1114544574,"NGUYEN, SUZIE",CA,0.8,medium,nppes_deactivated,,,2022-01-03
-1114547346,"VERAS VICTORIA, ANDY",TN,0.8,medium,nppes_deactivated,,,2022-01-10
+1114547346,"VERAS VICTORIA, ANDY",VA,0.8,medium,nppes_deactivated,,,2022-01-10
 1114548245,"SOLIMAN, MOHAMED",FL,0.8,medium,nppes_deactivated,,,2022-01-10
 1114548690,"BLAGUSKI, REBECCA",,0.8,medium,nppes_deactivated,,,2022-01-11
 1114551876,"PATEL, SHIVAM",CA,0.8,medium,nppes_deactivated,,,2021-03-23
@@ -9394,9 +9394,9 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1124452784,"HAMILTON, ANGELA",,0.8,medium,nppes_deactivated,,,2017-08-09
 1124460589,"ZANANIRI, MICHELLE",VA,0.8,medium,nppes_deactivated,,,2025-12-09
 1124462783,"COFNAS, PAUL",FL,0.8,medium,nppes_deactivated,,,2022-06-27
-1124463963,"HAFEEZ, WAQAR",FL,0.8,medium,nppes_deactivated,,,2014-03-27
+1124463963,"HAFEEZ, WAQAR",MI,0.8,medium,nppes_deactivated,,,2014-03-27
 1124470117,"FENN, KATHLEEN",CA,0.8,medium,nppes_deactivated,,,2025-04-18
-1124475751,"MODY, TANVISHA",PA,0.8,medium,nppes_deactivated,,,2021-06-21
+1124475751,"MODY, TANVISHA",NY,0.8,medium,nppes_deactivated,,,2021-06-21
 1124481759,"CATANZARO, MICHAEL",NY,0.8,medium,nppes_deactivated,,,2018-04-10
 1124483474,"LOPEZ, WENDY",CA,0.8,medium,nppes_deactivated,,,2019-11-01
 1124483789,"PATEL, SHAILESH",TX,0.8,medium,nppes_deactivated,,,2020-09-12
@@ -9419,7 +9419,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1124525597,"ABDALLAH, AHMED",TN,0.8,medium,nppes_deactivated,,,2018-11-28
 1124529664,"SULLIVAN, CHRISTINE",PA,0.8,medium,nppes_deactivated,,,2020-03-26
 1124529797,"GHLICHLOO, IDA",CA,0.8,medium,nppes_deactivated,,,2022-04-11
-1124535075,"GLENN, ALEXANDRA",NC,0.8,medium,nppes_deactivated,,,2025-03-24
+1124535075,"GLENN, ALEXANDRA",FL,0.8,medium,nppes_deactivated,,,2025-03-24
 1124548110,"RODRIGUEZ, NEISA",CA,0.8,medium,nppes_deactivated,,,2018-08-01
 1124555883,"MCKITRICK, KAYLA",FL,0.8,medium,nppes_deactivated,,,2019-08-24
 1124562624,"DOUGLAS, ROSEMARY",TX,0.8,medium,nppes_deactivated,,,2018-03-11
@@ -9448,14 +9448,14 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1124667340,"RIDDICK, SHALANDA",PA,0.8,medium,nppes_deactivated,,,2020-01-08
 1124667761,"BLANCO, ALLISON",FL,0.8,medium,nppes_deactivated,,,2024-01-30
 1124673934,"COOPER, MCKENZIE",WA,0.8,medium,nppes_deactivated,,,2024-10-09
-1124681606,"SCHULTZ, KATELYN",SD,0.8,medium,nppes_deactivated,,,2020-09-14
+1124681606,"SCHULTZ, KATELYN",MN,0.8,medium,nppes_deactivated,,,2020-09-14
 1124683875,"SINGH, AJAYPAUL",MA,0.8,medium,nppes_deactivated,,,2019-12-16
 1124684048,"COOMAR, PARITOSH",NY,0.8,medium,nppes_deactivated,,,2022-07-25
-1124684550,"PUMPHREY, KATHERINE",TX,0.8,medium,nppes_deactivated,,,2019-05-10
+1124684550,"PUMPHREY, KATHERINE",AZ,0.8,medium,nppes_deactivated,,,2019-05-10
 1124686332,"BAUMGARTNER, KARI",OH,0.8,medium,nppes_deactivated,,,2020-06-22
 1124686548,"ENVER, NECATI",NY,0.8,medium,nppes_deactivated,,,2020-01-17
 1124686779,"LAUTURE, ASHLEY",NY,0.8,medium,nppes_deactivated,,,2023-07-21
-1124693064,"KUMAR, RAJESH",FL,0.8,medium,nppes_deactivated,,,2023-03-29
+1124693064,"KUMAR, RAJESH",AL,0.8,medium,nppes_deactivated,,,2023-03-29
 1124703822,"BECHARA, SIMON",IL,0.8,medium,nppes_deactivated,,,2024-01-29
 1124707138,"LITTLE, DELISHA",VA,0.8,medium,nppes_deactivated,,,2025-08-05
 1124707427,"SINGHA, SOUVIK",NY,0.8,medium,nppes_deactivated,,,2024-02-20
@@ -9547,7 +9547,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1134494552,"DUNLAP, CHRISTINE",,0.8,medium,nppes_deactivated,,,2012-12-17
 1134499957,"HEATH, JANAYE",,0.8,medium,nppes_deactivated,,,2017-12-20
 1134501182,"AFZAL, ZAKI",MI,0.8,medium,nppes_deactivated,,,2019-05-14
-1134506942,"CHAUHAN, AYUSHI",GA,0.8,medium,nppes_deactivated,,,2015-12-09
+1134506942,"CHAUHAN, AYUSHI",TX,0.8,medium,nppes_deactivated,,,2015-12-09
 1134518814,"WILLING, ALEX",,0.8,medium,nppes_deactivated,,,2019-08-05
 1134520760,"SUMANA, AGNES",,0.8,medium,nppes_deactivated,,,2022-07-13
 1134537384,"REPKO, JAMES",FL,0.8,medium,nppes_deactivated,,,2020-07-19
@@ -9556,7 +9556,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1134551476,"DESAI, SAUMEEN",TX,0.8,medium,nppes_deactivated,,,2024-06-17
 1134570021,"ALSHAIKH, LAMEES",,0.8,medium,nppes_deactivated,,,2017-02-02
 1134576440,"ASAD, MEHWISH",,0.8,medium,nppes_deactivated,,,2017-01-20
-1134576812,"MEMON, ASMABANU",SC,0.8,medium,nppes_deactivated,,,2017-01-20
+1134576812,"MEMON, ASMABANU",MA,0.8,medium,nppes_deactivated,,,2017-01-20
 1134580640,"SOTIROVIC, VUK",CT,0.8,medium,nppes_deactivated,,,2016-10-21
 1134583255,"OTTY, JENNIFER",,0.8,medium,nppes_deactivated,,,2016-06-09
 1134586357,"BURKETT, ANTHONY",TX,0.8,medium,nppes_deactivated,,,2020-08-18
@@ -9572,14 +9572,14 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1134623044,"VOEGELE, PAUL",CA,0.8,medium,nppes_deactivated,,,2022-05-18
 1134623663,"JOHNSON, NICOLE",HI,0.8,medium,nppes_deactivated,,,2022-12-07
 1134646219,"NIVASCH, SHARI",,0.8,medium,nppes_deactivated,,,2025-02-04
-1134653520,"KECK, IAN",MI,0.8,medium,nppes_deactivated,,,2019-06-18
+1134653520,"KECK, IAN",HI,0.8,medium,nppes_deactivated,,,2019-06-18
 1134655566,"SAETEURN, KELLY",CA,0.8,medium,nppes_deactivated,,,2018-09-14
 1134656630,"WAQAS ULLAH, FNU",PA,0.8,medium,nppes_deactivated,,,2017-12-18
 1134657026,"KIM, SOOJIN",IL,0.8,medium,nppes_deactivated,,,2017-12-28
 1134658321,"GONZALEZ ZAPATA, ALAN",KS,0.8,medium,nppes_deactivated,,,2018-01-11
 1134661234,"SEMONICK, CHRISTINA",CA,0.8,medium,nppes_deactivated,,,2018-09-02
 1134673940,"YUEN, DEVIN",HI,0.8,medium,nppes_deactivated,,,2020-11-18
-1134674732,"KIDD, MADELINE",CA,0.8,medium,nppes_deactivated,,,2022-04-20
+1134674732,"KIDD, MADELINE",NY,0.8,medium,nppes_deactivated,,,2022-04-20
 1134679558,"GARCIA, STACEY",,0.8,medium,nppes_deactivated,,,2019-01-15
 1134682941,"PATEL, AAKASH",OH,0.8,medium,nppes_deactivated,,,2019-11-06
 1134683766,"JEPSEN, CHRISTOPHER",CA,0.8,medium,nppes_deactivated,,,2019-12-02
@@ -9606,7 +9606,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1134743511,"AL-HARDAN, WALEED",NY,0.8,medium,nppes_deactivated,,,2022-01-18
 1134743727,"FORD, KYLA",MI,0.8,medium,nppes_deactivated,,,2024-03-05
 1134744154,"FIGALLO, VERONICA",,0.8,medium,nppes_deactivated,,,2020-08-12
-1134744303,"TUITELE, FENUNUIVAO",OH,0.8,medium,nppes_deactivated,,,2020-09-10
+1134744303,"TUITELE, FENUNUIVAO",NV,0.8,medium,nppes_deactivated,,,2020-09-10
 1134745243,"DARNAHAL, ALIREZA",NY,0.8,medium,nppes_deactivated,,,2022-02-22
 1134746894,"RAMTAHAL, VIKASH",NY,0.8,medium,nppes_deactivated,,,2022-01-17
 1134747306,"ENGEMAN, POLINE",CA,0.8,medium,nppes_deactivated,,,2023-11-11
@@ -9655,7 +9655,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1134976491,"PAGUIO, KAYLA",CA,0.8,medium,nppes_deactivated,,,2025-06-16
 1144003187,"HAMILTON, MICHAEL",PA,0.8,medium,nppes_deactivated,,,2024-03-18
 1144036120,"CHAALAN, MAHMOUD",NY,0.8,medium,nppes_deactivated,,,2025-12-04
-1144043241,"KHAN, USMAN",TN,0.8,medium,nppes_deactivated,,,2025-06-27
+1144043241,"KHAN, USMAN",SC,0.8,medium,nppes_deactivated,,,2025-06-27
 1144046012,"GARCIA, MARGARET",,0.8,medium,nppes_deactivated,,,2024-11-26
 1144048000,"SANDOVAL-MANCHA, JASMINA",CA,0.8,medium,nppes_deactivated,,,2024-09-30
 1144062670,"LOPEZ DIAZ, JOSE",NY,0.8,medium,nppes_deactivated,,,2025-01-16
@@ -9749,7 +9749,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1144730821,"ROMANO, AIRAM",CA,0.8,medium,nppes_deactivated,,,2019-03-14
 1144731274,"ORDORICA, MARILYN",CA,0.8,medium,nppes_deactivated,,,2018-05-23
 1144732710,"LEE, PAYING",CA,0.8,medium,nppes_deactivated,,,2019-11-05
-1144740150,"FREDERICK, CAMERON",FL,0.8,medium,nppes_deactivated,,,2025-08-08
+1144740150,"FREDERICK, CAMERON",OH,0.8,medium,nppes_deactivated,,,2025-08-08
 1144752791,"PIERRE-TOUSSAINT, FRANCESKA",MA,0.8,medium,nppes_deactivated,,,2019-10-22
 1144755059,"DIONISOPOULOS, ALEXANDRA",AZ,0.8,medium,nppes_deactivated,,,2017-12-04
 1144758251,"SCHMIEDECKE, LENA",PA,0.8,medium,nppes_deactivated,,,2019-05-13
@@ -9796,13 +9796,13 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1144927963,"MCLACHLAN, MURIEL",OR,0.8,medium,nppes_deactivated,,,2023-02-16
 1144937855,"CHRISTMAN, LATOYA",,0.8,medium,nppes_deactivated,,,2023-06-02
 1144938366,"ECHEVERRY, JASMEN",NY,0.8,medium,nppes_deactivated,,,2025-04-17
-1144939265,"MARCIANO, RACHEL",CA,0.8,medium,nppes_deactivated,,,2023-07-11
+1144939265,"MARCIANO, RACHEL",IL,0.8,medium,nppes_deactivated,,,2023-07-11
 1144940586,"SU, PEI-TZU",IN,0.8,medium,nppes_deactivated,,,2023-07-17
 1144960048,"KAZYAK, KELSA",MI,0.8,medium,nppes_deactivated,,,2023-05-15
 1144964180,"PEREIRA, KRISTAL",PA,0.8,medium,nppes_deactivated,,,2023-01-30
 1144964735,"PARKASH, NEERAJ",VA,0.8,medium,nppes_deactivated,,,2023-01-18
 1144965252,"CINGIREDDY, ANANYA REDDY",NM,0.8,medium,nppes_deactivated,,,2023-02-10
-1144965849,"NADEEM, RAMSHA",MD,0.8,medium,nppes_deactivated,,,2023-03-31
+1144965849,"NADEEM, RAMSHA",PA,0.8,medium,nppes_deactivated,,,2023-03-31
 1144966078,"KUMAR, NARESH",CT,0.8,medium,nppes_deactivated,,,2023-01-04
 1144969395,"DOMINIC, JERRY",FL,0.8,medium,nppes_deactivated,,,2023-03-01
 1144972498,"REEVES, MARY",TX,0.8,medium,nppes_deactivated,,,2023-08-17
@@ -9866,7 +9866,7 @@ npi,name,state,score,bucket,reasons,leie_excldate,sam_active_date,nppes_deactiva
 1154347037,"MORELLI, ANTHONY",,0.8,medium,nppes_deactivated,,,2022-09-25
 1154361426,"KOSTIS, VICTORIA",,0.8,medium,nppes_deactivated,,,2009-01-13
 1154362226,"BUSH, LATINA",MO,0.8,medium,nppes_deactivated,,,2022-08-23
-1154389393,"AYERS, DONNA",CA,0.8,medium,nppes_deactivated,,,2021-09-22
+1154389393,"AYERS, DONNA",NJ,0.8,medium,nppes_deactivated,,,2021-09-22
 1154400158,"SUSAS, JONATHAN",CA,0.8,medium,nppes_deactivated,,,2022-07-26
 1154432003,"VAGO, KELLY",TN,0.8,medium,nppes_deactivated,,,2007-07-17
 1154442572,"WYCHE, BRIAN",OK,0.8,medium,nppes_deactivated,,,2007-07-17

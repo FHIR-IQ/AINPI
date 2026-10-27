@@ -188,4 +188,27 @@ is consistent within itself and is left as published. Its 2026-10-07 side
 It was not rerun: doing so consistently needs both organization exports
 rewritten with the current flattener and the 2026-10-13 vendor download, and
 the only vendor cache available on 2026-10-27 is a 2026-10-26 download whose
-H51 output already differs from the published file.
+H51 output already differs from the published file. Superseded the same day by the rerun
+below, once practitioner state changed as well.
+
+## Rerun 2026-10-27 (FHI-84, practitioner step)
+
+Practitioner state now also comes from the physical address, which changes
+the denominator itself, so the pair was rerun rather than annotated. Both
+releases were re-exported to parquet with the current flattener (physical
+address for practitioner and organization) and run through the same chain.
+The 2026-10-13 vendor download is no longer on disk, so both sides hold the
+2026-10-26 download instead.
+
+| | 2026-08-20 | 2026-10-07 |
+|---|---|---|
+| Practitioners | 228,445 | 225,413 |
+| Any route | 52,530 (23.0%, 52.8% of affiliated) | 49,997 (22.2%, 50.8%) |
+| Deterministic | 8,034 (3.5%) | 6,381 (2.8%) |
+
+The change is -0.8 points any route and -0.7 deterministic, against -0.6
+and -0.6 as first published, so the reading above holds: reach fell slightly
+between the releases on a consistent method. The October side differs from
+the published ledger (49,995 any route, 6,352 deterministic) only through the
+vendor files. Tables above this note are the 2026-10-16 run as published.
+Run doc: `2026-10-27-fhi-84-practitioner-physical-address.md`.

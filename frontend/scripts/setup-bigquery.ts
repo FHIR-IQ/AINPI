@@ -51,9 +51,9 @@ const PRACTITIONER_SCHEMA = [
   { name: '_npi', type: 'STRING', description: 'Extracted NPI from identifier array' },
   { name: '_family_name', type: 'STRING', description: 'Extracted family name' },
   { name: '_given_name', type: 'STRING', description: 'Extracted first given name' },
-  { name: '_state', type: 'STRING', description: 'Extracted state from first address' },
-  { name: '_city', type: 'STRING', description: 'Extracted city from first address' },
-  { name: '_postal_code', type: 'STRING', description: 'Extracted postal code from first address' },
+  { name: '_state', type: 'STRING', description: 'State from the physical address (type physical/both, else use work, else first); FHI-84' },
+  { name: '_city', type: 'STRING', description: 'City from the same address as _state; FHI-84' },
+  { name: '_postal_code', type: 'STRING', description: 'Postal code from the same address as _state; FHI-84' },
 ];
 
 const PRACTITIONER_ROLE_SCHEMA = [

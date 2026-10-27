@@ -149,10 +149,44 @@ ID_NOTE_LOCATION = _UNSTABLE_ID + (
     "any Location cross-release join as lossy and state the match rate."
 )
 
+# FHI-84. The archive was not reloaded for the address rule change: the full
+# resource JSON is in every partition, so the comment carries the rule as SQL
+# instead. The snippet was run against the 2026-10-07 practitioner partition
+# on 2026-10-27 and reproduced the warehouse change exactly (119,906 rows).
+# It assumes address is an array; the Python rule also accepts a bare object,
+# which no 2026-10-07 practitioner record has.
+PHYSICAL_ADDRESS_SQL = (
+    "coalesce(try_element_at(filter(addrs, x -> x.type IN ('physical', 'both')), 1), "
+    "try_element_at(filter(addrs, x -> x.use = 'work'), 1), try_element_at(addrs, 1)) "
+    "where addrs = from_json(get_json_object(resource, '$.address'), "
+    "'array<struct<type:string,use:string,state:string,city:string,postalCode:string>>')"
+)
+
+
+def _address_note(columns: str, since: str, moved: str) -> str:
+    return (
+        f" Address columns: in the 2026-05-08, 2026-08-20 and 2026-10-07 "
+        f"partitions, {columns} come from the first entry of address, which "
+        f"the NDH often fills with the postal billing address. Since {since} "
+        f"ainpi.dev reads the physical address instead: the first entry typed "
+        f"physical or both, else the first with use work, else the first. On "
+        f"2026-10-07 that puts {moved} in a different state. Partitions loaded "
+        f"later use the new rule. To apply it to these partitions, take the "
+        f"fields of {PHYSICAL_ADDRESS_SQL}."
+    )
+
+
+ADDRESS_NOTE_PRACTITIONER = _address_note(
+    "_state, _city, _postal_code and _address_line", "2026-10-27",
+    "119,906 of 7,481,907 practitioners")
+ADDRESS_NOTE_ORGANIZATION = _address_note(
+    "_state, _city and _address_line", "2026-10-26",
+    "63,194 of 2,058,500 organizations")
+
 TABLE_COMMENTS = {
-    "practitioner": "NDH Practitioner resources. Full FHIR resource JSON plus flattened _* columns." + ID_NOTE_STABLE,
+    "practitioner": "NDH Practitioner resources. Full FHIR resource JSON plus flattened _* columns." + ID_NOTE_STABLE + ADDRESS_NOTE_PRACTITIONER,
     "practitioner_role": "NDH PractitionerRole. The practitioner-to-organization link, and the field whose absence is the directory's binding constraint.",
-    "organization": "NDH Organization. Contains both provider organizations and `ein` tax records; check type[0].text before counting." + ID_NOTE_STABLE,
+    "organization": "NDH Organization. Contains both provider organizations and `ein` tax records; check type[0].text before counting." + ID_NOTE_STABLE + ADDRESS_NOTE_ORGANIZATION,
     "location": "NDH Location. Carries the only geography in the directory, as position.latitude/longitude." + ID_NOTE_LOCATION,
     "endpoint": "NDH Endpoint. Mostly Direct Trust messaging addresses; filter connectionType.code = 'hl7-fhir-rest' for callable APIs." + ID_NOTE_ENDPOINT,
     "organization_affiliation": "NDH OrganizationAffiliation. Carries no relationship code, so an edge does not say what it means.",

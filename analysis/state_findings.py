@@ -315,7 +315,8 @@ def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) ->
       -- One row per excluded NPI. A provider carrying two exclusion records
       -- is still one person for an analyst to check; the earliest exclusion
       -- is the one worth showing.
-      SELECT NPI, MIN(EXCLDATE) AS EXCLDATE, ANY_VALUE(EXCLTYPE) AS EXCLTYPE
+      -- MIN, not ANY_VALUE: the sample must be the same on every run.
+      SELECT NPI, MIN(EXCLDATE) AS EXCLDATE, MIN(EXCLTYPE) AS EXCLTYPE
       FROM `{PROJECT}.{DATASET}.oig_leie`
       WHERE NPI IS NOT NULL AND NPI != ''
         AND (REINDATE IS NULL OR REINDATE = '' OR REINDATE = '00000000')
@@ -323,7 +324,9 @@ def query_verify_samples(client: bigquery.Client, state: str, limit: int = 5) ->
     ) l ON l.NPI = sp._npi
     WHERE sp._state = @state
       AND sp._npi IS NOT NULL
-    ORDER BY l.EXCLDATE
+    -- NPI breaks ties on the exclusion date, so a weekly refresh does not
+    -- shuffle the published sample with no change in the data.
+    ORDER BY l.EXCLDATE, sp._npi
     LIMIT @lim
     """
     job = client.query(
@@ -536,13 +539,14 @@ def run_for_state(state_code: str) -> None:
             f"{RELEASE_DATE} NPD release. NPI/taxonomy correctness here measures only H10 "
             f"(NPPES match); the full H11/H13 specialty-agreement re-run requires the "
             f"CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. "
-            f"Verify samples are five {state}-resident NPIs not present in NPPES — the "
-            f"actionable cohort the state PI team can revalidate first. "
+            f"Verify samples are up to five {state} practitioners on the OIG LEIE "
+            f"exclusion list with no reinstatement, earliest exclusion first, the "
+            f"rows a state program integrity team can check first. "
             f"Organization state is the physical address since 2026-10-26 "
-            f"(FHI-84); before that it was the first address, often the billing "
-            f"one, so the organization denominator and the H14/H15 state rate "
-            f"from earlier files are not comparable. Practitioner state still "
-            f"reads the first address."
+            f"and practitioner state since 2026-10-27 (FHI-84); before that "
+            f"each was the first address, often the billing one, so the "
+            f"practitioner and organization denominators and every rate built "
+            f"on them are not comparable with earlier files."
         ),
     }
 

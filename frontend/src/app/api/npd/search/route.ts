@@ -36,7 +36,7 @@ interface SearchParams {
   org?: string;
   type?: string;
   limit?: number;
-  /** 'primary' restricts geography to address[0]; anything else searches all. */
+  /** 'primary' restricts geography to the flattened physical address (FHI-84); anything else searches all. */
   scope?: string;
 }
 
@@ -83,14 +83,15 @@ async function searchPractitioners(params: SearchParams) {
   //
   //   deep (default)  every address in address[], via the resource JSON.
   //                   9.74 GB per call. Measured 2026-08-22.
-  //   primary         the flattened _state / _city, which is address[0].
+  //   primary         the flattened _state / _city: the physical address
+  //                   since FHI-84 (2026-10-27), not address[0].
   //                   0.43 GB per call.
   //
   // Deep stays the default because the recall is real, not theoretical:
   // 1,095,257 practitioners (14.85%) list addresses in more than one state,
   // and a patient searching their own state wants the clinician whose second
   // office is there. `scope=primary` is offered for integrators doing bulk
-  // work who can accept address[0] only, and is priced accordingly.
+  // work who can accept one address per provider, and is priced accordingly.
   const deepGeo = params.scope !== 'primary';
 
   if (params.state) {

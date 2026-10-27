@@ -3,11 +3,11 @@
   "state_name": "Tennessee",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-10-27T03:42:42+00:00",
+  "generated_at": "2026-10-27T14:10:19+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "8fcfade",
+  "commit_sha": "adb6d00",
   "denominators": {
-    "practitioner": 112857,
+    "practitioner": 114349,
     "organization": 29569,
     "location": 50375
   },
@@ -23,11 +23,11 @@
       ],
       "title": "NPI and taxonomy correctness",
       "state_computable": true,
-      "state_numerator": 108523,
-      "state_denominator": 112857,
-      "state_pct": 96.1597,
+      "state_numerator": 109925,
+      "state_denominator": 114349,
+      "state_pct": 96.1311,
       "national_pct": 97.7651,
-      "state_headline": "108,523 of 112,857 TN practitioner NPIs (96.1597%) match NPPES; 203 are flagged deactivated in NPPES while still active in the federal NDH.",
+      "state_headline": "109,925 of 114,349 TN practitioner NPIs (96.1311%) match NPPES; 184 are flagged deactivated in NPPES while still active in the federal NDH.",
       "not_computable_reason": null
     },
     {
@@ -52,11 +52,11 @@
       ],
       "title": "Temporal staleness",
       "state_computable": true,
-      "state_numerator": 192801,
-      "state_denominator": 192801,
+      "state_numerator": 194293,
+      "state_denominator": 194293,
       "state_pct": 100.0,
       "national_pct": 99.9958,
-      "state_headline": "192,801 of 192,801 TN-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
+      "state_headline": "194,293 of 194,293 TN-resident resources carry a meta.lastUpdated on the 2026-10-07 release day. As at the national level, meta.lastUpdated is a release-time stamp; state-scoping does not change this finding.",
       "not_computable_reason": null
     },
     {
@@ -113,7 +113,7 @@
       "npi": "1205959970",
       "display_name": "AL-AMIN, IHSAAN",
       "flagged_by": "oig-leie-exclusions",
-      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2000-10-19 (exclusion type 1128b14)",
+      "flag_reason": "Listed as an active practitioner in the NDH while excluded from federal health care programs by OIG since 2000-10-19 (exclusion type 1128a4)",
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1205959970",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     },
@@ -150,5 +150,5 @@
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/"
     }
   ],
-  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are five TN-resident NPIs not present in NPPES \u2014 the actionable cohort the state PI team can revalidate first. Organization state is the physical address since 2026-10-26 (FHI-84); before that it was the first address, often the billing one, so the organization denominator and the H14/H15 state rate from earlier files are not comparable. Practitioner state still reads the first address."
+  "notes": "State-scoped re-run of cleanly state-filterable AINPI findings against the 2026-10-07 NPD release. NPI/taxonomy correctness here measures only H10 (NPPES match); the full H11/H13 specialty-agreement re-run requires the CMS Medicare/NUCC crosswalk and is scheduled for a methodology v0.3 update. Verify samples are up to five TN practitioners on the OIG LEIE exclusion list with no reinstatement, earliest exclusion first, the rows a state program integrity team can check first. Organization state is the physical address since 2026-10-26 and practitioner state since 2026-10-27 (FHI-84); before that each was the first address, often the billing one, so the practitioner and organization denominators and every rate built on them are not comparable with earlier files."
 }

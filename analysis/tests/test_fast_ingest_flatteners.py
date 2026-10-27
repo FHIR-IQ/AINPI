@@ -205,12 +205,20 @@ class TestOrganizationPhysicalAddress:
         assert physical_address([]) == {}
         assert physical_address([None, "x"]) == {}
 
-    def test_practitioner_still_reads_address_zero(self):
-        """Practitioner has the same billing-first pattern (119,906 state
-        changes measured on 2026-10-07) but its _state is the denominator of
-        every per-state number, so it is changed separately. Pinned here so
-        the two cannot drift apart by accident."""
-        r = extract_practitioner({"id": "P", "address": [BILLING, PHYSICAL]})
+    def test_practitioner_reads_the_physical_address(self):
+        """Practitioner has the same billing-first pattern: 119,906 state
+        changes measured on 2026-10-07. Every flattened address column comes
+        from the same picked entry, the postal code included."""
+        billing = {**BILLING, "postalCode": "02895"}
+        physical = {**PHYSICAL, "postalCode": "17112"}
+        r = extract_practitioner({"id": "P", "address": [billing, physical]})
+        assert r["_state"] == "PA"
+        assert r["_city"] == "Harrisburg"
+        assert r["_postal_code"] == "17112"
+        assert r["_address_line"] == "5125 Jonestown Rd|Ste 331"
+
+    def test_practitioner_without_a_physical_address_keeps_address_zero(self):
+        r = extract_practitioner({"id": "P", "address": [BILLING]})
         assert r["_state"] == "RI"
 
 
