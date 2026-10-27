@@ -218,12 +218,31 @@ every organization in this release is active).
   1.98 MB after the update against 4.44 MB before, so pruning works.
 - The flattener and the SQL agree on 6,000 of 6,000 sampled multi-address
   records (a one-off check, not a test).
+- One malformed shape differed between the two: a bare string in place of
+  the `line` array. The SQL (`JSON_VALUE_ARRAY`) yields NULL; the Python
+  flattener joined the string's characters. The flattener now yields None as
+  well, with a test. The warehouse was written by the SQL, so it already held
+  NULL for any such record.
 - The UPDATE also recomputes `_phone` and `_telecom` from the resource JSON,
   as this backfill always has, and those two columns were not in the backup.
-  Organization `_phone` coverage reads 97.42% after the update, the same as
-  the 2026-10-07 `ndh-column-coverage.json` (97.42%), and `_address_line`
-  coverage is 81.74% before and after. That is consistent with no change but
-  does not prove it row by row.
+  BigQuery time travel proves they did not change. The snapshot at
+  `TIMESTAMP_MILLIS(1793069360000)` (2026-10-27 02:49:20 UTC) falls between
+  the backup and the UPDATE. Table-wide row fingerprints, each of the form
+  `BIT_XOR(FARM_FINGERPRINT(_id || '|' || IFNULL(<col>, '~')))`, run
+  2026-10-27 with the 100 GB cap (0.60 GB + 0.48 GB billed):
+
+  | Fingerprint | Pre-UPDATE (time travel) | Now | Backup table |
+  |---|---:|---:|---:|
+  | rows | 2,058,500 | 2,058,500 | 2,058,500 |
+  | `_phone` | -2273490497277010357 | -2273490497277010357 | |
+  | `_telecom` | -8166632363891282643 | -8166632363891282643 | |
+  | `_npi`, `_name`, `_org_type`, `_active` | 2175581868414352575 | 2175581868414352575 | |
+  | `_state`, `_city`, `_address_line` | 3917027149982458588 | -9004506659694116740 | 3917027149982458588 |
+
+  So every column other than the three address columns is identical row by
+  row, and the backup is an exact copy of the pre-UPDATE address columns.
+  Time travel on this table expires about 2026-11-02, after which the backup
+  is the only record.
 - The weekly refresh on Monday 2026-11-02 09:00 UTC reruns H15 and the VA,
   PA and OH slices against the changed warehouse. The FHI-84 notes in
   `h14_h15_duplicates.py` and `state_findings.py` reach those files only if

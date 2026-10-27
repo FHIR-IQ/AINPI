@@ -721,16 +721,15 @@ PUBLISHED_BEFORE_FHI73 = {
 }
 
 
-def funnel_corrections(state, summary):
+def funnel_corrections(state, summary, affiliation_edges=None):
     """Funnel-level correction for a state whose headline moved with FHI-73.
 
     Built from the run's own summary so the current figures cannot drift from
     the payload they sit in. Empty for a state with no earlier publication.
     """
-    out = []
     before = PUBLISHED_BEFORE_FHI73.get((state or "").upper())
     if not before:
-        return out + fhi84_correction(state, summary)
+        return fhi84_correction(state, summary, affiliation_edges)
     name = STATE_NAMES.get(state.upper(), state.upper())
     return [{
         "date": "2026-10-16",
@@ -754,57 +753,79 @@ def funnel_corrections(state, summary):
             f"release."
         ),
         "since": f"the {before['report']}",
-    }] + fhi84_correction(state, summary)
+    }] + fhi84_correction(state, summary, affiliation_edges)
 
 
 # As published before FHI-84 (2026-10-26), when organization _state/_city
-# read address[0], often the billing address. Measured: rerunning the
-# 2026-10-07 chain with the old columns reproduces these exactly.
+# read address[0], often the billing address. Measured on the 2026-10-07
+# release: rerunning that chain with the old columns reproduces these exactly.
+FHI84_RELEASE = "2026-10-07"
 PUBLISHED_BEFORE_FHI84 = {
     "PA": {
         "reaches_endpoint": 50812,
         "reaches_endpoint_pct": 22.3,
         "reaches_endpoint_pct_of_affiliated": 50.3,
+        "reaches_endpoint_deterministic": 6555,
         "affiliation_graph_edges": 6507,
         "orgs_moved_out": 4322,
         "orgs_moved_in": 1996,
     },
 }
 
+FHI84_METHOD = (
+    "Organization state and city were read from the first address on each "
+    "Organization record, which the NDH often fills with the postal billing "
+    "address. Since 2026-10-26 they come from the physical address (the "
+    "first entry typed physical or both, else use work, else the first). "
+    "The practitioner count is unaffected: it filters on the practitioner's "
+    "own state."
+)
 
-def fhi84_correction(state, summary):
+
+def fhi84_correction(state, summary, affiliation_edges=None):
     """Organization address correction (FHI-84), from the run's own summary.
 
-    The practitioner side of the ledger (its denominator) is unchanged: it
-    filters on Practitioner._state. What moved is every organization-side use
-    of state: H53's name-state and brand-state tiers, the out-of-state member
-    filter in the system rollup, and the in-state affiliation graph.
+    The numeric before/after is tied to the release it was measured on and is
+    emitted only for that release; any later run gets the method sentence
+    alone, because a comparison with the 2026-10-07 figure would mix the
+    method change with a release change.
     """
     before = PUBLISHED_BEFORE_FHI84.get((state or "").upper())
     if not before:
         return []
     name = STATE_NAMES.get(state.upper(), state.upper())
+    what = FHI84_METHOD
+    if NDH_RELEASE == FHI84_RELEASE:
+        det_before = before["reaches_endpoint_deterministic"]
+        det_after = summary.get("reaches_endpoint_deterministic")
+        what += (
+            f" On the {FHI84_RELEASE} release, 63,194 of 2,058,500 "
+            "organizations had been placed in a different state from their "
+            f"physical address, {before['orgs_moved_out']:,} of them out of "
+            f"{name} and {before['orgs_moved_in']:,} into it. Practitioners "
+            "reaching an endpoint by any route moved from "
+            f"{before['reaches_endpoint']:,} ({before['reaches_endpoint_pct']}%, "
+            f"{before['reaches_endpoint_pct_of_affiliated']}% of affiliated) as "
+            f"published for the {FHI84_RELEASE} release to "
+            f"{summary['reaches_endpoint']:,} ({summary['reaches_endpoint_pct']}%, "
+            f"{summary['reaches_endpoint_pct_of_affiliated']}% of affiliated)."
+        )
+        if det_after is not None:
+            what += (
+                f" Deterministic reach moved from {det_before:,} to "
+                f"{det_after:,}." if det_after != det_before else
+                f" Deterministic reach is unchanged at {det_after:,}."
+            )
+        if affiliation_edges is not None:
+            what += (
+                " The in-state affiliation graph, which selects organizations "
+                f"by state, went from {before['affiliation_graph_edges']:,} "
+                f"edges to {affiliation_edges:,}."
+            )
     return [{
         "date": "2026-10-26",
         "issue": "FHI-84",
-        "what": (
-            "Organization state and city were read from the first address on "
-            "each Organization record, which the NDH often fills with the "
-            "postal billing address; 63,194 of 2,058,500 organizations were "
-            f"placed in the wrong state, {before['orgs_moved_out']:,} of them "
-            f"out of {name} and {before['orgs_moved_in']:,} into it. They now "
-            "come from the physical "
-            "address. The practitioner count is unchanged. Practitioners "
-            "reaching an endpoint by any route moved from "
-            f"{before['reaches_endpoint']:,} ({before['reaches_endpoint_pct']}%, "
-            f"{before['reaches_endpoint_pct_of_affiliated']}% of affiliated) to "
-            f"{summary['reaches_endpoint']:,} ({summary['reaches_endpoint_pct']}%, "
-            f"{summary['reaches_endpoint_pct_of_affiliated']}% of affiliated), "
-            "through the name-state and brand-state tiers. The deterministic "
-            "figure did not move. The in-state affiliation graph changed most, "
-            f"from {before['affiliation_graph_edges']:,} edges, because it "
-            "selects organizations by state."
-        ),
+        "what": what,
         "since": "the 2026-10-16 correction (FHI-73)",
     }]
 
@@ -1783,7 +1804,9 @@ def build(state, rows, org_rows, edges, edge_names, parent_by_npi, owner_by_npi,
             "per role.",
         ],
     }
-    payload["corrections"] = funnel_corrections(state, payload["summary"])
+    payload["corrections"] = funnel_corrections(
+        state, payload["summary"],
+        (payload.get("systems") or {}).get("affiliation_graph", {}).get("edges"))
     return payload
 
 

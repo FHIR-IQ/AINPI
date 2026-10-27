@@ -148,9 +148,15 @@ def physical_address(raw):
 
 
 def _address_line(address):
-    """Join address.line entries. Accepts an Address or a list of them."""
+    """Join address.line entries. Accepts an Address or a list of them.
+
+    `line` is 0..* strings. A bare string in its place is malformed and yields
+    None, matching the SQL backfill (JSON_VALUE_ARRAY returns NULL for a
+    non-array); iterating it would join its characters.
+    """
     addr = first_address(address)
-    lines = [l for l in (addr.get("line") or []) if isinstance(l, str) and l]
+    raw = addr.get("line")
+    lines = [l for l in raw if isinstance(l, str) and l] if isinstance(raw, list) else []
     return "|".join(lines) or None
 
 

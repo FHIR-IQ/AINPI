@@ -119,6 +119,15 @@ class TestAddressLine:
         r = extract_organization({"id": "O", "address": [{"city": "Erie"}]})
         assert r["_address_line"] is None and r["_city"] == "Erie"
 
+    def test_bare_string_line_is_none_like_the_sql(self):
+        """JSON_VALUE_ARRAY returns NULL for a non-array, so the backfill
+        writes NULL. The flattener used to join the string's characters."""
+        r = extract_organization({"id": "O", "address": [
+            {"type": "physical", "line": "1 Main St", "state": "PA"}]})
+        assert r["_address_line"] is None and r["_state"] == "PA"
+        r = extract_location({"id": "L", "address": {"line": "1 Main St"}})
+        assert r["_address_line"] is None
+
     def test_first_address_skips_non_dict_entries(self):
         assert first_address(["junk", {"city": "Erie"}]) == {"city": "Erie"}
         assert first_address("nope") == {}
