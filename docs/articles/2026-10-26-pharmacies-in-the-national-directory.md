@@ -47,7 +47,8 @@ One note on the pharmacist number. All 11,865 people in it already hold an NPI,
 so it says nothing about whether pharmacists need one. It shows that having an
 NPI does not give someone a workplace record. Across professions, CMS NPD
 workplace records follow Medicare billing: in Pennsylvania 74.8% of physicians
-have one, against single digits for nurses (6.2%) and pharmacy (6.7%). Few
+have one, against single digits for nurses (6.2%) and the pharmacy category, technicians
+included (6.7%). Few
 pharmacists bill Medicare as providers, so few have one.
 
 ## Try it yourself
@@ -144,8 +145,12 @@ measured on 2026-10-22 and re-run on 2026-10-26 with the same results.
 
 The warehouse is not public. The same release is in the AINPI archive on
 Databricks, shared over OpenSharing (formerly Delta Sharing) as
-`workspace.ainpi`, partitioned by `release_date`, so the queries below port to
-it with a `WHERE release_date = '2026-10-07'`. Each one ran with a 100 GB cap:
+`workspace.ainpi`, partitioned by `release_date`. Its `organization` table
+holds the same raw `resource` JSON as a string, so the CMS NPD side of each
+query below can be rewritten against it with
+`WHERE release_date = '2026-10-07'`. The NPPES side is not in the archive; use
+the BigQuery public dataset or the NPPES monthly file. In BigQuery each query
+ran with a 100 GB cap:
 
 ```bash
 bq query --use_legacy_sql=false --maximum_bytes_billed=100000000000 < query.sql
