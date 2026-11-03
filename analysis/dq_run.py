@@ -160,6 +160,20 @@ def previous_release(release: str, root=None) -> str | None:
     return earlier[-1] if earlier else None
 
 
+def plan_releases(releases, no_previous: bool, root=None) -> list[tuple]:
+    """(release, release_dir, previous_dir or None) per requested release.
+
+    no_previous skips the previous-release lookup entirely: control_previous is
+    then null and the field control applies the non-zero test only.
+    """
+    root = pathlib.Path(root or PARQUET_ROOT)
+    plan = []
+    for rel in releases:
+        prev = None if no_previous else previous_release(rel, root)
+        plan.append((rel, root / rel, root / prev if prev else None))
+    return plan
+
+
 def _git_sha() -> str | None:
     try:
         return subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, check=True,
@@ -171,13 +185,12 @@ def _git_sha() -> str | None:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--release", action="append", required=True, metavar="YYYY-MM-DD")
+    ap.add_argument("--no-previous", action="store_true",
+                    help="do not use an earlier release; control_previous is null and the "
+                         "field control applies the non-zero test only")
     args = ap.parse_args(argv)
 
-    plan = []
-    for rel in args.release:
-        rdir = PARQUET_ROOT / rel
-        prev = previous_release(rel)
-        plan.append((rel, rdir, PARQUET_ROOT / prev if prev else None))
+    plan = plan_releases(args.release, args.no_previous, PARQUET_ROOT)
     try:
         for _, rdir, pdir in plan:
             for d in (rdir, pdir):

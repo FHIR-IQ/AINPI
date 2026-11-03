@@ -215,3 +215,39 @@ def test_previous_release_skips_retired_and_missing(tmp_path):
     assert D.previous_release("2026-05-08", tmp_path) is None
     (tmp_path / "2026-08-20").rmdir()
     assert D.previous_release("2026-10-07", tmp_path) == "2026-05-08"
+
+
+def test_plan_uses_previous_by_default(tmp_path):
+    for r in ("2026-05-08", "2026-08-20"):
+        (tmp_path / r).mkdir()
+    plan = D.plan_releases(["2026-08-20"], False, tmp_path)
+    assert plan == [("2026-08-20", tmp_path / "2026-08-20", tmp_path / "2026-05-08")]
+
+
+def test_plan_no_previous_ignores_earlier_release(tmp_path):
+    for r in ("2026-05-08", "2026-08-20"):
+        (tmp_path / r).mkdir()
+    plan = D.plan_releases(["2026-08-20"], True, tmp_path)
+    assert plan == [("2026-08-20", tmp_path / "2026-08-20", None)]
+
+
+def test_cli_no_previous_does_not_check_previous_release(tmp_path, monkeypatch, capsys):
+    _tiny_release(tmp_path, "2026-05-08")
+    _tiny_release(tmp_path, "2026-08-20")
+    monkeypatch.setattr(D, "PARQUET_ROOT", tmp_path)
+    # Only the previous release's file is a placeholder.
+    real = os.stat
+
+    def stat(p, *a, **k):
+        r = real(p, *a, **k)
+        if "2026-05-08" in str(p) and str(p).endswith("organization.parquet"):
+            return types.SimpleNamespace(st_flags=D.SF_DATALESS, st_size=r.st_size)
+        return r
+    monkeypatch.setattr(D.os, "stat", stat)
+    monkeypatch.setattr(D, "RESULTS", tmp_path / "dq-results.json")
+    monkeypatch.setitem(__import__("sys").modules, "duckdb", None)  # stop right after the pre-check
+    with pytest.raises(ImportError):
+        D.main(["--release", "2026-08-20", "--no-previous"])
+    code = D.main(["--release", "2026-08-20"])
+    assert code != 0
+    assert "2026-05-08" in capsys.readouterr().err
