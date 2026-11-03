@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-11-03T18:18:19Z",
+  "generated_at": "2026-11-03T19:01:19Z",
   "rows": [
     {
       "rule_id": "endpoint-org-linkage",
@@ -41,8 +41,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:14Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:09Z",
       "superseded_by": null,
       "measure_value": 0.1465401494057113,
       "measure_agrees": "true"
@@ -88,8 +88,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:14Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:09Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "not_paired"
@@ -133,8 +133,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:14Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:09Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "not_paired"
@@ -145,7 +145,7 @@
       "hypotheses": [
         "H9"
       ],
-      "relation": "partial",
+      "relation": "implements",
       "measure": "npi-validation-failures",
       "severity": "expect",
       "threshold": {
@@ -153,14 +153,14 @@
         "value": 0.999,
         "source_text": "NPI structural validity is \u226599.9%"
       },
-      "numerator": 11607656,
+      "numerator": 11607652,
       "denominator": 11607656,
-      "value": 1.0,
+      "value": 0.9999996553998499,
       "control_count": 11607656,
       "control_previous": null,
       "control_passed": true,
       "status": "pass",
-      "detail": "invalid=0",
+      "detail": "invalid=4",
       "release_date": "2026-08-20",
       "input_fingerprint": {
         "endpoint": {
@@ -182,11 +182,11 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:14Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:09Z",
       "superseded_by": null,
       "measure_value": 3.446001501078254e-07,
-      "measure_agrees": "false"
+      "measure_agrees": "true"
     },
     {
       "rule_id": "role-references-resolve",
@@ -233,8 +233,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:14Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:09Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "not_paired"
@@ -278,8 +278,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:19Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:19Z",
       "superseded_by": null,
       "measure_value": 0.14602863588563622,
       "measure_agrees": "true"
@@ -325,8 +325,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:19Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:19Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "not_paired"
@@ -370,8 +370,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:19Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:19Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "not_paired"
@@ -382,7 +382,7 @@
       "hypotheses": [
         "H9"
       ],
-      "relation": "partial",
+      "relation": "implements",
       "measure": "npi-validation-failures",
       "severity": "expect",
       "threshold": {
@@ -419,8 +419,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:19Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:19Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "no_point"
@@ -470,8 +470,8 @@
         "export_sha": null
       },
       "engine": "duckdb 2.0.0",
-      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
-      "run_at": "2026-11-03T18:18:19Z",
+      "git_sha": "ac99b37104818d2b957d5b8a7e87bafdf6496d0e",
+      "run_at": "2026-11-03T19:01:19Z",
       "superseded_by": null,
       "measure_value": null,
       "measure_agrees": "not_paired"
