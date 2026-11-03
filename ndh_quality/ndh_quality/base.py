@@ -12,7 +12,8 @@ SF_DATALESS = 0x40000000
 
 
 def parquet_source(release_dir: str | Path, resource: str) -> str:
-    return f"read_parquet('{Path(release_dir)}/{resource}.parquet')"
+    path = f"{Path(release_dir)}/{resource}.parquet".replace("'", "''")
+    return f"read_parquet('{path}')"
 
 
 def assert_not_dataless(paths: Iterable[Path]) -> None:
@@ -125,7 +126,7 @@ class NdhRule(InLaw):
         if cls.threshold is None:
             return True
         row = cls._row(engine, settings)
-        num, den = row["numerator"], row["denominator"]
+        num, den = int(row["numerator"] or 0), int(row["denominator"] or 0)
         if not den:
             return f"{cls.rule_id}: no denominator (numerator={num}, denominator={den})"
         sql = f"select {num} * 1.0 / {den} as value"

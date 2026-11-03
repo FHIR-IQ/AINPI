@@ -73,3 +73,11 @@ def test_empty_table_is_readable(release_dir):
     d = release_dir({"organization": []})
     n = duckdb.connect().execute(f"select count(_npi) from {parquet_source(d, 'organization')}").fetchone()[0]
     assert n == 0
+
+
+def test_measure_first_run_no_previous(release_dir):
+    d = release_dir({"practitioner": [{"_npi": "1"}, {"_npi": "2"}]})
+    m = _Rule.measure(open_engine(), {"release_dir": str(d)}, previous=None)
+    assert m["control_previous"] is None
+    assert m["control_passed"] is True
+    assert m["status"] == "pass"

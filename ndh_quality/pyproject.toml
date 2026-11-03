@@ -9,13 +9,11 @@ description = "Data-quality rules over CMS National Directory (NDH) parquet expo
 license = { text = "CC0-1.0" }
 requires-python = ">=3.10,<3.14"
 dependencies = [
-  "duckdb==2.0.0",
-  "duckdb_engine==0.17.0",
   "inlaw==0.2.0",
-  "great-expectations==1.24.1",
-  "sqlalchemy>=2,<2.2",
-  "pyarrow",
-  "pyyaml",
+  "great-expectations>=1,<2",
+  "duckdb>=2,<3",
+  "duckdb_engine",
+  "sqlalchemy>=2",
 ]
 
 [project.optional-dependencies]
