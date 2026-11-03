@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ndh-quality"
+version = "0.1.0"
+description = "Data-quality rules over CMS National Directory (NDH) parquet exports"
+license = { text = "CC0-1.0" }
+requires-python = ">=3.10,<3.14"
+dependencies = [
+  "duckdb==2.0.0",
+  "duckdb_engine==0.17.0",
+  "inlaw==0.2.0",
+  "great-expectations==1.24.1",
+  "sqlalchemy>=2,<2.2",
+  "pyarrow",
+  "pyyaml",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+ndh-quality = "ndh_quality.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ndh_quality*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
