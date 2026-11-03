@@ -142,6 +142,10 @@ CMS serves only the current export, so the outgoing release must be snapshotted 
 - [ ] Ingest the new release: `python3 analysis/fast_ingest_ndh.py` (check `--print-manifest-only` first; key formats have changed between releases before)
 - [ ] Bump `CURRENT_RELEASE` and `KNOWN_RELEASES` in `analysis/release.py` and `frontend/src/lib/release.ts` together, in the same commit as the reload (`frontend/tests/lib/release.test.ts` asserts they match)
 - [ ] Load the new release as a partition of the Databricks archive (`analysis/databricks_publish.py`)
+- [ ] Fingerprint the new release (needs the parquet export), then diff it against the previous one: `python3 analysis/ndh_fingerprint.py fingerprint --release {live}` and `python3 analysis/ndh_fingerprint.py diff --prev {outgoing} --new {live}`
+- [ ] Run the quality rules on the new release: `python3 analysis/dq_run.py --release {live}`
+- [ ] Generate the release diff report: `python3 analysis/dq_release_diff.py {outgoing} {live}` (fingerprint changes, status changes, moves beyond the ordinary move, `control_failed` rows, `measure_agrees = false` rows)
+- [ ] An agent run by the owner drafts `source_changes.yaml` entries (each citing the fingerprint diff line or `dq-results` row behind it), one GitHub issue per unexplained change, and the release-note paragraph; the owner reviews and merges, and nothing drafted is recorded until then
 - [ ] Recompute the measures: weekly-refresh finding scripts, then `analysis/build_stats.py`, then `analysis/build_manifest.py`
 
 Opened by `.github/workflows/ndh-release-watch.yml`.

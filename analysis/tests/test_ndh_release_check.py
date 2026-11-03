@@ -178,6 +178,12 @@ def test_issue_body_carries_the_checklist():
         "databricks_publish.py",
         "build_stats.py",
         "build_manifest.py",
+        "ndh_fingerprint.py",
+        "dq_run.py",
+        "dq_release_diff.py",
     ):
         assert needle in body
-    assert body.count("- [ ]") == 5
+    assert body.count("- [ ]") == 9
+    # The four release-quality steps come before any derived output is committed.
+    assert body.index("dq_release_diff.py") < body.index("build_stats.py")
+    assert body.index("ndh_fingerprint.py") > body.index("databricks_publish.py")
