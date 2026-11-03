@@ -175,9 +175,65 @@ MANIFEST_SCHEMA = {
     "required": ["service", "site", "release_date", "findings"],
 }
 
+_NULLABLE_NUM = {"type": ["number", "null"]}
+
+DQ_RESULTS_SCHEMA = {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://ainpi.dev/api/v1/schemas/dq_results.schema.json",
+    "title": "AINPI data-quality results",
+    "description": "One row per (release_date, rule_id, rule_version), merged append-safe by analysis/dq_run.py.",
+    "type": "object",
+    "properties": {
+        "schema_version": {"const": 1},
+        "generated_at": {"type": "string", "minLength": 1},
+        "rows": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "release_date": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+                    "rule_id": {"type": "string", "minLength": 1},
+                    "rule_version": {"type": "integer", "minimum": 1},
+                    "hypotheses": {"type": "array", "items": {"type": "string"}},
+                    "relation": {"type": "string", "enum": ["implements", "partial", "related"]},
+                    "severity": {"type": "string", "enum": ["pipeline", "expect", "monitor"]},
+                    "threshold": {
+                        "type": ["object", "null"],
+                        "properties": {"op": {"type": "string"}, "value": {"type": "number"},
+                                       "source_text": {"type": ["string", "null"]}},
+                    },
+                    "numerator": _NULLABLE_NUM,
+                    "denominator": _NULLABLE_NUM,
+                    "value": _NULLABLE_NUM,
+                    "control_count": _NULLABLE_NUM,
+                    "control_previous": _NULLABLE_NUM,
+                    "control_passed": {"type": "boolean"},
+                    "status": {"type": "string",
+                               "enum": ["pass", "fail", "control_failed", "error", "recorded"]},
+                    "measure": {"type": ["string", "null"]},
+                    "measure_value": _NULLABLE_NUM,
+                    "measure_agrees": {"type": "string",
+                                       "enum": ["true", "false", "no_point", "not_paired",
+                                                "definition_mismatch"]},
+                    "input_fingerprint": {"type": "object"},
+                    "engine": {"type": "string"},
+                    "git_sha": {"type": ["string", "null"]},
+                    "run_at": {"type": "string", "minLength": 1},
+                    "superseded_by": {"type": ["string", "null"]},
+                    "detail": {"type": ["string", "null"]},
+                },
+                "required": ["release_date", "rule_id", "rule_version", "status", "severity",
+                             "measure_agrees", "input_fingerprint", "run_at", "superseded_by"],
+            },
+        },
+    },
+    "required": ["schema_version", "generated_at", "rows"],
+}
+
 SCHEMAS = {
     "finding": FINDING_SCHEMA,
     "stats": STATS_SCHEMA,
     "state": STATE_SCHEMA,
     "manifest": MANIFEST_SCHEMA,
+    "dq_results": DQ_RESULTS_SCHEMA,
 }
