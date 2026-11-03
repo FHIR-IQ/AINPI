@@ -15,8 +15,8 @@ python -m venv .venv && .venv/bin/pip install -e .
 
 | Rule | Severity | Measures |
 | --- | --- | --- |
-| `npi-check-digit` | expect | Share of Practitioner and Organization NPIs that are 10 digits with a valid Luhn check digit (H9, partial: NPPES agreement is not covered). Expectation: at least 99.9%. |
-| `role-references-resolve` | expect | Share of PractitionerRole practitioner and organization references that resolve to a record in the same export (H6 to H8, role side only). Expectation: at least 99%. |
+| `npi-check-digit` | expect | Share of Practitioner and Organization NPIs that are ten digits, first digit 1 or 2, with a valid check digit (implements H9; NPPES agreement is H10 and is not covered). Expectation: at least 99.9%. |
+| `role-references-resolve` | expect | Share of PractitionerRole practitioner and organization references that resolve to a record in the same export (partial: H6 to H8, role side only). Expectation: at least 99%. The threshold applies to the role-reference part of H6 to H8 that this rule implements. |
 | `endpoint-types-present` | pipeline | Control. Both `hl7-fhir-rest` and `direct-project` endpoint types appear in the export. |
 | `fhir-rest-endpoint-share` | monitor | Share of Endpoint resources that are `hl7-fhir-rest`, the subset an integrator can GET (H28). |
 | `endpoint-org-linkage` | monitor | Share of `hl7-fhir-rest` endpoints whose managing organization is present in the Organization file (H50). |
@@ -28,14 +28,14 @@ Every row also carries a control: a count that must be nonzero, and must not fal
 - `pass`: the registered expectation holds for this release.
 - `fail`: the registered expectation does not hold for this release. It says nothing about why.
 - `control_failed`: the control did not hold, so the measured value is not trusted.
-- `error`: the rule could not run (for example a missing file). The detail names the exception type and its first line. Other rules still run.
+- `error`: the rule could not run (for example a missing file). The detail names the exception type and its first line. Other rules still run. A missing or renamed column is an `error` that names the column, never a `pass`.
 - `recorded`: a `monitor` rule, or a rule with no threshold. The value is stored, not judged.
 
 ## Severities
 
-- `pipeline`: the export itself is unusable if this is not `pass`. The CLI exits 1.
+- `pipeline`: our own read of the export failed if this is not `pass`. The CLI exits 1.
 - `expect`: a registered expectation about the data. A `fail` is a finding, not a pipeline stop.
-- `monitor`: recorded each release so change can be seen. Never fails.
+- `monitor`: recorded each release so change can be seen. It has no threshold, so it never reports `fail`, but it can report `control_failed` or `error`.
 
 ## Input
 
