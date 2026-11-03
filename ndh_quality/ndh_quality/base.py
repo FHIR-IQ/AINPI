@@ -122,8 +122,15 @@ class NdhRule(InLaw):
 
     @classmethod
     def run(cls, engine, settings=None) -> bool | str:
-        """InLaw interface: True on success, else a message with the counts."""
-        if cls.threshold is None:
+        """InLaw interface: True on success, else a message with the counts.
+
+        An unreadable or truncated field fails for every severity, monitor included.
+        """
+        m = cls.measure(engine, settings)
+        if not m["control_passed"]:
+            return (f"{cls.rule_id}: field control failed "
+                    f"(control_count={m['control_count']}, denominator={m['denominator']})")
+        if m["status"] in ("recorded", "pass"):
             return True
         row = cls._row(engine, settings)
         num, den = int(row["numerator"] or 0), int(row["denominator"] or 0)

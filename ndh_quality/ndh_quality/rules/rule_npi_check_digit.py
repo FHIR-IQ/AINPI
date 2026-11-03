@@ -1,4 +1,4 @@
-"""NPI structural validity (H9). CC0 1.0."""
+"""NPI structural validity (H9): ten digits, first digit 1 or 2, Luhn check digit. CC0 1.0."""
 from ndh_quality.base import NdhRule, parquet_source
 
 
@@ -6,7 +6,7 @@ class NpiCheckDigit(NdhRule):
     rule_id = "npi-check-digit"
     rule_version = 1
     hypotheses = ["H9"]
-    relation = "partial"  # H9 also covers NPPES agreement
+    relation = "implements"
     measure_name = "npi-validation-failures"
     severity = "expect"
     threshold = {"op": ">=", "value": 0.999, "source_text": "NPI structural validity is ≥99.9%"}
@@ -23,7 +23,7 @@ with n as (
   select cast(_npi as varchar) npi from {org} where _npi is not null
 ), v as (
   select coalesce(
-    regexp_full_match(npi, '[0-9]{{10}}') and
+    regexp_full_match(npi, '[12][0-9]{{9}}') and
     (10 - (24 + list_sum(list_transform(range(1, 10), lambda i:
        case when i % 2 = 1
             then (try_cast(substr(npi, i, 1) as int) * 2) // 10

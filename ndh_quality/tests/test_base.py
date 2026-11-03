@@ -54,7 +54,7 @@ class _Rule(NdhRule):
     def measure_sql(cls, settings):
         src = parquet_source(settings["release_dir"], "practitioner")
         return (f"select count(*) filter (where _npi is not null) as numerator, count(*) as denominator, "
-                f"count(*) as control_count, 'd' as detail from {src}")
+                f"count(_npi) as control_count, 'd' as detail from {src}")
 
 
 def test_rule_measure_and_run(release_dir):
@@ -81,3 +81,29 @@ def test_measure_first_run_no_previous(release_dir):
     assert m["control_previous"] is None
     assert m["control_passed"] is True
     assert m["status"] == "pass"
+
+
+class _MonitorRule(_Rule):
+    rule_id = "tm"
+    severity = "monitor"
+    threshold = None
+
+
+def test_run_fails_on_all_null_field(release_dir):
+    d = release_dir({"practitioner": [{"_npi": None}, {"_npi": None}]},
+                    types={"practitioner": {"_npi": "VARCHAR"}})
+    for rule in (_Rule, _MonitorRule):
+        msg = rule.run(open_engine(), {"release_dir": str(d)})
+        assert isinstance(msg, str) and "field control failed" in msg and msg.startswith(rule.rule_id)
+
+
+def test_run_fails_on_empty_table(release_dir):
+    d = release_dir({"practitioner": []})
+    for rule in (_Rule, _MonitorRule):
+        msg = rule.run(open_engine(), {"release_dir": str(d)})
+        assert isinstance(msg, str) and "field control failed" in msg
+
+
+def test_run_true_for_monitor_with_data(release_dir):
+    d = release_dir({"practitioner": [{"_npi": "1"}, {"_npi": None}]})
+    assert _MonitorRule.run(open_engine(), {"release_dir": str(d)}) is True

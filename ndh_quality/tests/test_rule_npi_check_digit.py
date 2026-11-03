@@ -1,4 +1,5 @@
 import random
+import re
 
 from ndh_quality.base import open_engine
 from ndh_quality.rules.rule_npi_check_digit import NpiCheckDigit
@@ -37,37 +38,64 @@ def test_empty_field_control_failed(release_dir):
     assert m["status"] == "control_failed"
 
 
-def luhn_ok(npi):
-    if len(npi) != 10 or not npi.isdigit():
+def h9_validate(npi):
+    """Reimplementation of validate() in analysis/h9_npi_luhn.py: ^[12]\\d{9}$ plus Luhn on 80840 + NPI."""
+    if not npi:
         return False
-    digits = "80840" + npi[:9]
+    if not re.match(r"^[12]\d{9}$", npi):
+        return False
     total = 0
-    for i, ch in enumerate(reversed(digits)):
-        d = int(ch)
-        if i % 2 == 0:
-            d *= 2
-            if d > 9:
-                d -= 9
-        total += d
-    return (10 - total % 10) % 10 == int(npi[9])
+    for i, ch in enumerate(reversed("80840" + npi)):
+        n = int(ch)
+        if i % 2 == 1:
+            n *= 2
+            if n > 9:
+                n -= 9
+        total += n
+    return total % 10 == 0
 
 
-def make_npi(body9):
+def luhn_only(npi):
+    total = 0
+    for i, ch in enumerate(reversed("80840" + npi)):
+        n = int(ch)
+        if i % 2 == 1:
+            n *= 2
+            if n > 9:
+                n -= 9
+        total += n
+    return total % 10 == 0
+
+
+def with_check(body9):
     for c in range(10):
-        if luhn_ok(body9 + str(c)):
+        if luhn_only(body9 + str(c)):
             return body9 + str(c)
     raise AssertionError
 
 
 def test_matches_h9_python(release_dir):
     rng = random.Random(9)
-    npis = [make_npi("".join(str(rng.randrange(10)) for _ in range(9))) for _ in range(2000)]
+
+    def body(first):
+        return first + "".join(str(rng.randrange(10)) for _ in range(8))
+
+    npis = [with_check(body(rng.choice("12"))) for _ in range(2000)]
     for i in range(200):
         n = npis[i]
         npis[i] = n[:9] + str((int(n[9]) + 1) % 10)
-    npis += ["123", "abcdefghij", "12345678ab"]
-    expected = sum(luhn_ok(n) for n in npis)
+    negatives = [with_check(body(rng.choice("0345678 9".replace(" ", "")))) for _ in range(100)]
+    assert all(luhn_only(n) and not h9_validate(n) for n in negatives)
+    npis += negatives + ["123", "abcdefghij", "12345678ab"]
+    expected = sum(h9_validate(n) for n in npis)
     assert 1700 < expected < 1900
     m = run(release_dir, {"practitioner": npi_row(npis), "organization": []})
     assert m["numerator"] == expected
     assert m["denominator"] == len(npis)
+
+
+def test_luhn_valid_first_digit_3_is_invalid(release_dir):
+    n = with_check("312345678")
+    assert luhn_only(n)
+    m = run(release_dir, {"practitioner": npi_row([n, "1234567893"]), "organization": []})
+    assert (m["numerator"], m["denominator"]) == (1, 2)
