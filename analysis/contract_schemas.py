@@ -195,7 +195,7 @@ DQ_RESULTS_SCHEMA = {
                     "rule_id": {"type": "string", "minLength": 1},
                     "rule_version": {"type": "integer", "minimum": 1},
                     "hypotheses": {"type": "array", "items": {"type": "string"}},
-                    "relation": {"type": "string", "enum": ["implements", "partial", "related"]},
+                    "relation": {"type": "string", "enum": ["implements", "partial", "related", "control"]},
                     "severity": {"type": "string", "enum": ["pipeline", "expect", "monitor"]},
                     "threshold": {
                         "type": ["object", "null"],

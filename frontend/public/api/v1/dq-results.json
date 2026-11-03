@@ -1,0 +1,480 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-03T18:18:19Z",
+  "rows": [
+    {
+      "rule_id": "endpoint-org-linkage",
+      "rule_version": 1,
+      "hypotheses": [
+        "H50"
+      ],
+      "relation": "implements",
+      "measure": "endpoint-org-linkage",
+      "severity": "monitor",
+      "threshold": null,
+      "numerator": 16262,
+      "denominator": 110973,
+      "value": 0.1465401494057113,
+      "control_count": 110973,
+      "control_previous": null,
+      "control_passed": true,
+      "status": "recorded",
+      "detail": "with_reference=16350",
+      "release_date": "2026-08-20",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1128169,
+          "bytes": 93742847
+        },
+        "organization": {
+          "rows": 4402671,
+          "bytes": 1197065855
+        },
+        "practitioner": {
+          "rows": 7373232,
+          "bytes": 1715964481
+        },
+        "practitioner_role": {
+          "rows": 16545158,
+          "bytes": 3261934722
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:14Z",
+      "superseded_by": null,
+      "measure_value": 0.1465401494057113,
+      "measure_agrees": "true"
+    },
+    {
+      "rule_id": "endpoint-types-present",
+      "rule_version": 1,
+      "hypotheses": [],
+      "relation": "control",
+      "measure": null,
+      "severity": "pipeline",
+      "threshold": {
+        "op": "==",
+        "value": 1.0,
+        "source_text": "Both hl7-fhir-rest and direct-project endpoint types are present."
+      },
+      "numerator": 2,
+      "denominator": 2,
+      "value": 1.0,
+      "control_count": 1128169,
+      "control_previous": null,
+      "control_passed": true,
+      "status": "pass",
+      "detail": "fhir_rest=110973 direct_project=1017196",
+      "release_date": "2026-08-20",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1128169,
+          "bytes": 93742847
+        },
+        "organization": {
+          "rows": 4402671,
+          "bytes": 1197065855
+        },
+        "practitioner": {
+          "rows": 7373232,
+          "bytes": 1715964481
+        },
+        "practitioner_role": {
+          "rows": 16545158,
+          "bytes": 3261934722
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:14Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "not_paired"
+    },
+    {
+      "rule_id": "fhir-rest-endpoint-share",
+      "rule_version": 1,
+      "hypotheses": [
+        "H28"
+      ],
+      "relation": "implements",
+      "measure": "fhir-rest-endpoint-share",
+      "severity": "monitor",
+      "threshold": null,
+      "numerator": 110973,
+      "denominator": 1128169,
+      "value": 0.09836558175237929,
+      "control_count": 1128169,
+      "control_previous": null,
+      "control_passed": true,
+      "status": "recorded",
+      "detail": "typed=1128169",
+      "release_date": "2026-08-20",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1128169,
+          "bytes": 93742847
+        },
+        "organization": {
+          "rows": 4402671,
+          "bytes": 1197065855
+        },
+        "practitioner": {
+          "rows": 7373232,
+          "bytes": 1715964481
+        },
+        "practitioner_role": {
+          "rows": 16545158,
+          "bytes": 3261934722
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:14Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "not_paired"
+    },
+    {
+      "rule_id": "npi-check-digit",
+      "rule_version": 1,
+      "hypotheses": [
+        "H9"
+      ],
+      "relation": "partial",
+      "measure": "npi-validation-failures",
+      "severity": "expect",
+      "threshold": {
+        "op": ">=",
+        "value": 0.999,
+        "source_text": "NPI structural validity is \u226599.9%"
+      },
+      "numerator": 11607656,
+      "denominator": 11607656,
+      "value": 1.0,
+      "control_count": 11607656,
+      "control_previous": null,
+      "control_passed": true,
+      "status": "pass",
+      "detail": "invalid=0",
+      "release_date": "2026-08-20",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1128169,
+          "bytes": 93742847
+        },
+        "organization": {
+          "rows": 4402671,
+          "bytes": 1197065855
+        },
+        "practitioner": {
+          "rows": 7373232,
+          "bytes": 1715964481
+        },
+        "practitioner_role": {
+          "rows": 16545158,
+          "bytes": 3261934722
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:14Z",
+      "superseded_by": null,
+      "measure_value": 3.446001501078254e-07,
+      "measure_agrees": "false"
+    },
+    {
+      "rule_id": "role-references-resolve",
+      "rule_version": 1,
+      "hypotheses": [
+        "H6",
+        "H7",
+        "H8"
+      ],
+      "relation": "partial",
+      "measure": null,
+      "severity": "expect",
+      "threshold": {
+        "op": ">=",
+        "value": 0.99,
+        "source_text": "Cross-resource references resolve at \u226599% inside the bulk export."
+      },
+      "numerator": 31748624,
+      "denominator": 31748624,
+      "value": 1.0,
+      "control_count": 16545158,
+      "control_previous": null,
+      "control_passed": true,
+      "status": "pass",
+      "detail": "dangling_practitioner=0 dangling_org=0",
+      "release_date": "2026-08-20",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1128169,
+          "bytes": 93742847
+        },
+        "organization": {
+          "rows": 4402671,
+          "bytes": 1197065855
+        },
+        "practitioner": {
+          "rows": 7373232,
+          "bytes": 1715964481
+        },
+        "practitioner_role": {
+          "rows": 16545158,
+          "bytes": 3261934722
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:14Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "not_paired"
+    },
+    {
+      "rule_id": "endpoint-org-linkage",
+      "rule_version": 1,
+      "hypotheses": [
+        "H50"
+      ],
+      "relation": "implements",
+      "measure": "endpoint-org-linkage",
+      "severity": "monitor",
+      "threshold": null,
+      "numerator": 16247,
+      "denominator": 111259,
+      "value": 0.14602863588563622,
+      "control_count": 111259,
+      "control_previous": 110973,
+      "control_passed": true,
+      "status": "recorded",
+      "detail": "with_reference=16353",
+      "release_date": "2026-10-07",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1140836,
+          "bytes": 94452749
+        },
+        "organization": {
+          "rows": 2058500,
+          "bytes": 514512077
+        },
+        "practitioner": {
+          "rows": 7481907,
+          "bytes": 1587916149
+        },
+        "practitioner_role": {
+          "rows": 11056751,
+          "bytes": 2208079491
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:19Z",
+      "superseded_by": null,
+      "measure_value": 0.14602863588563622,
+      "measure_agrees": "true"
+    },
+    {
+      "rule_id": "endpoint-types-present",
+      "rule_version": 1,
+      "hypotheses": [],
+      "relation": "control",
+      "measure": null,
+      "severity": "pipeline",
+      "threshold": {
+        "op": "==",
+        "value": 1.0,
+        "source_text": "Both hl7-fhir-rest and direct-project endpoint types are present."
+      },
+      "numerator": 2,
+      "denominator": 2,
+      "value": 1.0,
+      "control_count": 1140836,
+      "control_previous": 1128169,
+      "control_passed": true,
+      "status": "pass",
+      "detail": "fhir_rest=111259 direct_project=1029577",
+      "release_date": "2026-10-07",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1140836,
+          "bytes": 94452749
+        },
+        "organization": {
+          "rows": 2058500,
+          "bytes": 514512077
+        },
+        "practitioner": {
+          "rows": 7481907,
+          "bytes": 1587916149
+        },
+        "practitioner_role": {
+          "rows": 11056751,
+          "bytes": 2208079491
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:19Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "not_paired"
+    },
+    {
+      "rule_id": "fhir-rest-endpoint-share",
+      "rule_version": 1,
+      "hypotheses": [
+        "H28"
+      ],
+      "relation": "implements",
+      "measure": "fhir-rest-endpoint-share",
+      "severity": "monitor",
+      "threshold": null,
+      "numerator": 111259,
+      "denominator": 1140836,
+      "value": 0.09752409636442048,
+      "control_count": 1140836,
+      "control_previous": 1128169,
+      "control_passed": true,
+      "status": "recorded",
+      "detail": "typed=1140836",
+      "release_date": "2026-10-07",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1140836,
+          "bytes": 94452749
+        },
+        "organization": {
+          "rows": 2058500,
+          "bytes": 514512077
+        },
+        "practitioner": {
+          "rows": 7481907,
+          "bytes": 1587916149
+        },
+        "practitioner_role": {
+          "rows": 11056751,
+          "bytes": 2208079491
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:19Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "not_paired"
+    },
+    {
+      "rule_id": "npi-check-digit",
+      "rule_version": 1,
+      "hypotheses": [
+        "H9"
+      ],
+      "relation": "partial",
+      "measure": "npi-validation-failures",
+      "severity": "expect",
+      "threshold": {
+        "op": ">=",
+        "value": 0.999,
+        "source_text": "NPI structural validity is \u226599.9%"
+      },
+      "numerator": 9526462,
+      "denominator": 9526462,
+      "value": 1.0,
+      "control_count": 9526462,
+      "control_previous": 11607656,
+      "control_passed": true,
+      "status": "pass",
+      "detail": "invalid=0",
+      "release_date": "2026-10-07",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1140836,
+          "bytes": 94452749
+        },
+        "organization": {
+          "rows": 2058500,
+          "bytes": 514512077
+        },
+        "practitioner": {
+          "rows": 7481907,
+          "bytes": 1587916149
+        },
+        "practitioner_role": {
+          "rows": 11056751,
+          "bytes": 2208079491
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:19Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "no_point"
+    },
+    {
+      "rule_id": "role-references-resolve",
+      "rule_version": 1,
+      "hypotheses": [
+        "H6",
+        "H7",
+        "H8"
+      ],
+      "relation": "partial",
+      "measure": null,
+      "severity": "expect",
+      "threshold": {
+        "op": ">=",
+        "value": 0.99,
+        "source_text": "Cross-resource references resolve at \u226599% inside the bulk export."
+      },
+      "numerator": 20755282,
+      "denominator": 20755282,
+      "value": 1.0,
+      "control_count": 11056751,
+      "control_previous": 16545158,
+      "control_passed": true,
+      "status": "pass",
+      "detail": "dangling_practitioner=0 dangling_org=0",
+      "release_date": "2026-10-07",
+      "input_fingerprint": {
+        "endpoint": {
+          "rows": 1140836,
+          "bytes": 94452749
+        },
+        "organization": {
+          "rows": 2058500,
+          "bytes": 514512077
+        },
+        "practitioner": {
+          "rows": 7481907,
+          "bytes": 1587916149
+        },
+        "practitioner_role": {
+          "rows": 11056751,
+          "bytes": 2208079491
+        },
+        "export_sha": null
+      },
+      "engine": "duckdb 2.0.0",
+      "git_sha": "eed8e6a5c77521c11fafc7816969535d92d07015",
+      "run_at": "2026-11-03T18:18:19Z",
+      "superseded_by": null,
+      "measure_value": null,
+      "measure_agrees": "not_paired"
+    }
+  ]
+}
