@@ -174,6 +174,22 @@ def plan_releases(releases, no_previous: bool, root=None) -> list[tuple]:
     return plan
 
 
+def missing_inputs(plan) -> list[str]:
+    """Release directories, and their runner files, that do not exist.
+
+    Checked before ndh_quality is imported so a typo'd or deleted release can
+    never write error rows over good ones.
+    """
+    missing = []
+    for rel, rdir, _ in plan:
+        if not rdir.is_dir():
+            missing.append(f"release directory {rdir}")
+            continue
+        missing += [str(rdir / f"{r}.parquet") for r in RUNNER_RESOURCES
+                    if not (rdir / f"{r}.parquet").exists()]
+    return missing
+
+
 def _git_sha() -> str | None:
     try:
         return subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, check=True,
@@ -191,6 +207,11 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     plan = plan_releases(args.release, args.no_previous, PARQUET_ROOT)
+    missing = missing_inputs(plan)
+    if missing:
+        print("dq_run: refusing to run, nothing written. Missing: " + ", ".join(missing),
+              file=sys.stderr)
+        return 1
     try:
         for _, rdir, pdir in plan:
             for d in (rdir, pdir):

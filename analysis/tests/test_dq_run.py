@@ -251,3 +251,24 @@ def test_cli_no_previous_does_not_check_previous_release(tmp_path, monkeypatch, 
     code = D.main(["--release", "2026-08-20"])
     assert code != 0
     assert "2026-05-08" in capsys.readouterr().err
+
+
+def test_cli_refuses_missing_release_directory(tmp_path, monkeypatch, capsys):
+    monkeypatch.setattr(D, "PARQUET_ROOT", tmp_path)
+    monkeypatch.setattr(D, "RESULTS", tmp_path / "dq-results.json")
+    code = D.main(["--release", "2026-10-07"])
+    assert code == 1
+    assert "2026-10-07" in capsys.readouterr().err
+    assert not (tmp_path / "dq-results.json").exists()
+
+
+def test_cli_refuses_missing_resource_file(tmp_path, monkeypatch, capsys):
+    d = _tiny_release(tmp_path, "2026-10-07")
+    (d / "practitioner_role.parquet").unlink()
+    monkeypatch.setattr(D, "PARQUET_ROOT", tmp_path)
+    monkeypatch.setattr(D, "RESULTS", tmp_path / "dq-results.json")
+    monkeypatch.setitem(__import__("sys").modules, "duckdb", None)  # must stop before the import
+    code = D.main(["--release", "2026-10-07"])
+    assert code == 1
+    assert "practitioner_role.parquet" in capsys.readouterr().err
+    assert not (tmp_path / "dq-results.json").exists()
