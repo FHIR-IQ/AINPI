@@ -124,7 +124,7 @@ entries:
     before: "CMS Medicare specialty codes, such as 14-50, through the 2026-05-08 release"
     after: "NUCC taxonomy codes, such as 207R00000X"
     detected: "2026-08-21, re-running the findings on the new release."
-    impact: "Role specialty no longer validates against the Medicare crosswalk. Practitioner qualification and role specialty now both use NUCC codes and can be compared directly; the published finding reports them agreeing on 97.8% of Practitioner-to-Role pairs."
+    impact: "Role specialty no longer validates against the Medicare crosswalk. Practitioner qualification and role specialty now both use NUCC codes and can be compared directly."
     handled_by: "analysis/h10_h13_with_crosswalk.py:tax_sys"
     evidence: frontend/public/api/v1/findings/npi-taxonomy-correctness.json
     status: resolved
@@ -134,10 +134,10 @@ entries:
     resource: Organization
     element: type[0].text
     kind: value-pattern
-    before: "Records typed only as tax-ID records (text 'ein', no provider type): 2,199,519 of 4,402,671 Organization records at 2026-08-20, the first release measured for this"
+    before: "Organization records typed by the text 'ein': 2,199,519 of 4,402,671 at 2026-08-20, the earliest release in release-deltas.json (the earlier 2026-05-08 share is not in that file)"
     after: "79,721 such records at 2026-10-07"
     detected: "October 2026, comparing the 2026-10-07 reload with 2026-08-20 (release-deltas.json)."
-    impact: "Organization counts mix provider organizations and tax records, and nearly all of the Organization drop from August to October is the tax records leaving. Counting organizations without filtering on type overstates providers."
+    impact: "Organization counts mix provider organizations and tax-ID records. Organization rows fell by 2,344,171 from August to October, and 2,119,798 of that fall (2,199,519 minus 79,721) is records typed 'ein' leaving. A count of Organization records that does not filter on type counts tax-ID records as organizations."
     handled_by: "analysis/databricks_publish.py:TABLE_COMMENTS"
     evidence: frontend/public/api/v1/release-deltas.json
     status: active
