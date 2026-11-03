@@ -251,6 +251,13 @@ ORDER BY practitioners DESC
 """
 
 
+# `cross_source_agreement` keeps its key for the /api/v1 contract but measures
+# presence of the NPI in the bigquery-public-data NPPES snapshot only (newest
+# enumeration 2026-02-07); no field is compared and no payer or PECOS source is
+# read. The site labels it "Present in NPPES" since 2026-11-03.
+# `currency_days_median` is days since meta.lastUpdated, which holds the export
+# date on every record; the site labels it "Days since export".
+#
 # Cross-source agreement, reachability, and integrity require independent
 # joins (NPPES public dataset, Endpoint table, LEIE/SAM exclusion tables).
 # We compute each separately to keep the main query under the cap, then
