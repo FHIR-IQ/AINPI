@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ainpi.dev/api/v1/schemas/source_changes.schema.json",
+  "title": "AINPI source-changes log",
+  "description": "Curated changes to the CMS NDH export (and two upstream files) that changed how it must be read. Built from analysis/source_changes.yaml.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^sc-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$"
+          },
+          "first_release": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "resource": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "code-system",
+              "identifier",
+              "id-minting",
+              "vocabulary",
+              "file-layout",
+              "value-pattern",
+              "upstream-file"
+            ]
+          },
+          "before": {
+            "type": "string",
+            "minLength": 1
+          },
+          "after": {
+            "type": "string",
+            "minLength": 1
+          },
+          "detected": {
+            "type": "string",
+            "minLength": 1
+          },
+          "impact": {
+            "type": "string",
+            "minLength": 1
+          },
+          "handled_by": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "resolved"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "first_release",
+          "resource",
+          "element",
+          "kind",
+          "before",
+          "after",
+          "detected",
+          "impact",
+          "handled_by",
+          "evidence",
+          "status"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "entries"
+  ]
+}

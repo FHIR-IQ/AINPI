@@ -155,6 +155,8 @@ def schema_pass(rep: Report) -> None:
         check(API / "manifest.json", "manifest")
     if (API / "dq-results.json").exists():
         check(API / "dq-results.json", "dq_results")
+    if (API / "source-changes.json").exists():
+        check(API / "source-changes.json", "source_changes")
     for f in sorted((API / "findings").glob("*.json")):
         # `-detail` payloads are row-level companions to a finding, not
         # findings: they carry an array of records rather than a headline and
