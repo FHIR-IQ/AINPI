@@ -18,6 +18,7 @@ def test_all_resolve(release_dir):
     m = run(release_dir, [role("Practitioner/p1", "Organization/o1"), role("Practitioner/p2", "Organization/o1")])
     assert m["status"] == "pass"
     assert m["numerator"] == m["denominator"] == 4
+    assert m["measure"] is None
 
 
 def test_dangling_practitioner(release_dir):
@@ -42,3 +43,11 @@ def test_null_org_excluded_from_denominator(release_dir):
 def test_all_null_practitioner_control_failed(release_dir):
     m = run(release_dir, [role(None, None), role(None, None)])
     assert m["status"] == "control_failed"
+
+
+def test_dangling_org_alone(release_dir):
+    m = run(release_dir, [role("Practitioner/p1", "Organization/o1"), role("Practitioner/p2", "Organization/gone")])
+    assert "dangling_org=1" in m["detail"]
+    assert "dangling_practitioner=0" in m["detail"]
+    assert (m["numerator"], m["denominator"]) == (3, 4)
+    assert m["status"] == "fail"

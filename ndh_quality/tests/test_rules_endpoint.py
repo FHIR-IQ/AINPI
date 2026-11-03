@@ -22,7 +22,9 @@ def test_main_fixture(release_dir):
     assert "with_reference=2" in link["detail"]
     share = FhirRestEndpointShare.measure(eng, s)
     assert (share["numerator"], share["denominator"]) == (3, 5)
-    assert EndpointTypesPresent.measure(eng, s)["status"] == "pass"
+    types = EndpointTypesPresent.measure(eng, s)
+    assert types["status"] == "pass"
+    assert types["measure"] is None
 
 
 def test_no_direct_types_fail(release_dir):
@@ -37,3 +39,11 @@ def test_null_types_control_failed(release_dir):
     eng = open_engine()
     for r in (EndpointTypesPresent, FhirRestEndpointShare, EndpointOrgLinkage):
         assert r.measure(eng, s)["status"] == "control_failed", r.rule_id
+
+
+def test_duplicate_org_id_does_not_inflate_linkage(release_dir):
+    s = {"release_dir": str(release_dir({
+        "endpoint": [ep("hl7-fhir-rest", "Organization/o1"), ep("hl7-fhir-rest", None)],
+        "organization": [{"_id": "o1"}, {"_id": "o1"}]}))}
+    m = EndpointOrgLinkage.measure(open_engine(), s)
+    assert (m["numerator"], m["denominator"]) == (1, 2)

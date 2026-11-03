@@ -7,7 +7,7 @@ class RoleReferencesResolve(NdhRule):
     rule_version = 1
     hypotheses = ["H6", "H7", "H8"]
     relation = "partial"  # role references only
-    measure_name = "role-reference-resolution"
+    measure_name = None
     severity = "expect"
     threshold = {"op": ">=", "value": 0.99,
                  "source_text": "Cross-resource references resolve at ≥99% inside the bulk export."}

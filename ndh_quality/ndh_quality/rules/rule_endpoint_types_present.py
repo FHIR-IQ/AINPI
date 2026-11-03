@@ -7,7 +7,7 @@ class EndpointTypesPresent(NdhRule):
     rule_version = 1
     hypotheses = []
     relation = "control"
-    measure_name = "endpoint-types-present"
+    measure_name = None
     severity = "pipeline"
     threshold = {"op": "==", "value": 1.0,
                  "source_text": "Both hl7-fhir-rest and direct-project endpoint types are present."}
