@@ -82,7 +82,7 @@ const fixture: NetworksPayload = {
       standard: 'HL7 eCR.',
       how_to_join: 'Onboard with the reporting hub.',
       network_types: ['state_hie'],
-      sources: [src('https://example.org/ph-ecr')],
+      sources: [src('https://example.org/ph-ecr'), { url: 'javascript:alert(1)', title: 'Hostile source', accessed: '2026-11-01', primary: false }],
       ainpi_links: [],
     },
   ],
@@ -216,6 +216,16 @@ describe('/networks client', () => {
       '/api/v1/networks.json',
     );
     expect(within(s).getAllByRole('link').length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('renders a non-https source as plain text, never as an anchor', () => {
+    const { container } = renderClient('use=public-health');
+    for (const a of Array.from(container.querySelectorAll('a'))) {
+      expect((a.getAttribute('href') ?? '').toLowerCase()).not.toContain('javascript:');
+    }
+    const titles = screen.getAllByText('Hostile source');
+    expect(titles.length).toBeGreaterThan(0);
+    for (const t of titles) expect(t.closest('a')).toBeNull();
   });
 
   it('shows the disclaimer', () => {

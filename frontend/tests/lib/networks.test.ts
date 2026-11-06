@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { Network, NetworkRoute, NetworksPayload } from '@/lib/api-v1-types';
 import {
   JURISDICTIONS, DEFAULT_USE_CASE, parseUseCase, isStale, routesFor, networksForRoute,
-  stateCategory, networksInState, resolveAinpiLink, oldestCheck,
+  stateCategory, networksInState, resolveAinpiLink, oldestCheck, safeExternalHref,
 } from '@/lib/networks';
 
 const src = [{ url: 'https://example.org', title: 't', accessed: '2026-11-01', primary: true }];
@@ -84,6 +84,22 @@ describe('networks helpers', () => {
     expect(resolveAinpiLink({ label: 'x', finding_slug: 'payer-seed-coverage' })).toBeNull();
     expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' })).toEqual({ label: 'x', href: '/states/pa/connectivity' });
     expect(resolveAinpiLink({ label: 'x' })).toBeNull();
+  });
+  it('resolveAinpiLink accepts only single-slash internal paths', () => {
+    expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' })?.href).toBe('/states/pa/connectivity');
+    expect(resolveAinpiLink({ label: 'x', href: '//evil.com' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: 'https://x' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: 'javascript:alert(1)' })).toBeNull();
+  });
+  it('safeExternalHref keeps only https URLs', () => {
+    expect(safeExternalHref('https://example.org/a?b=1')).toBe('https://example.org/a?b=1');
+    expect(safeExternalHref('http://example.org')).toBeNull();
+    expect(safeExternalHref('javascript:alert(1)')).toBeNull();
+    expect(safeExternalHref('JavaScript:alert(1)')).toBeNull();
+    expect(safeExternalHref('data:text/html,<b>x</b>')).toBeNull();
+    expect(safeExternalHref('/relative/path')).toBeNull();
+    expect(safeExternalHref('not a url')).toBeNull();
+    expect(safeExternalHref('https://')).toBeNull();
   });
   it('oldestCheck', () => {
     expect(oldestCheck(p)).toBe('2026-08-01');

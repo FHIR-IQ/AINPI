@@ -14,6 +14,7 @@ import {
   oldestCheck,
   parseUseCase,
   resolveAinpiLink,
+  safeExternalHref,
   routesFor,
   stateCategory,
   type Overlays,
@@ -49,14 +50,25 @@ function asOfDate(buildDate: string): Date {
   return new Date(`${buildDate}T00:00:00Z`);
 }
 
+/** An https link from the data file, or plain text when the URL fails `safeExternalHref`. */
+function ExternalLink({ url, className, children }: { url: string; className: string; children: React.ReactNode }) {
+  const href = safeExternalHref(url);
+  if (!href) return <span>{children}</span>;
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  );
+}
+
 function Sources({ sources }: { sources: NetworkSource[] }) {
   return (
     <ul className="m-0 list-none space-y-1 p-0 text-sm">
       {sources.map((s) => (
         <li key={s.url}>
-          <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-primary-600 underline">
+          <ExternalLink url={s.url} className="text-primary-600 underline">
             {s.title}
-          </a>{' '}
+          </ExternalLink>{' '}
           <span className="text-gray-500">(accessed {s.accessed})</span>
         </li>
       ))}
@@ -85,9 +97,9 @@ function NetworkItem({ n, asOf }: { n: Network; asOf: Date }) {
   return (
     <li data-testid={`network-${n.id}`} className="border-t border-gray-200 py-2 first:border-t-0">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <a href={n.website} target="_blank" rel="noopener noreferrer" className="font-medium text-ink underline">
-          {n.name}
-        </a>
+        <ExternalLink url={n.website} className="font-medium text-ink underline">
+          <span className="font-medium text-ink">{n.name}</span>
+        </ExternalLink>
         <span className="text-[11px] uppercase tracking-wider text-gray-500">{TYPE_LABEL[n.type]}</span>
         {stale && (
           <span className="rounded-sm border border-signal px-1.5 text-[11px] font-medium text-signal">
@@ -104,9 +116,9 @@ function NetworkItem({ n, asOf }: { n: Network; asOf: Date }) {
             {n.sources.map((s, i) => (
               <span key={s.url}>
                 {i > 0 && ', '}
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="underline">
+                <ExternalLink url={s.url} className="underline">
                   {s.title}
-                </a>
+                </ExternalLink>
               </span>
             ))}
           </>
@@ -367,9 +379,9 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
           <ul className="m-0 mt-3 list-none space-y-1 p-0 text-sm">
             {sourceList.map((s) => (
               <li key={s.url} className="break-words">
-                <a href={s.url} target="_blank" rel="noopener noreferrer" className="text-primary-600 underline">
+                <ExternalLink url={s.url} className="text-primary-600 underline">
                   {s.title}
-                </a>{' '}
+                </ExternalLink>{' '}
                 <span className="text-gray-500">(accessed {s.accessed})</span>
               </li>
             ))}

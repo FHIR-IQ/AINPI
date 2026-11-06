@@ -55,6 +55,15 @@ def test_network_without_primary_source():
     assert e and any("n1" in x for x in e)
 
 
+def test_non_https_urls_rejected():
+    e = errs(lambda p: p["networks"][0].update(website="javascript:alert(1)"))
+    assert any("n1" in x and "https" in x for x in e)
+    e = errs(lambda p: p["routes"][0]["sources"][0].update(url="http://example.org"))
+    assert any("r1" in x and "https" in x for x in e)
+    e = errs(lambda p: p["networks"][1]["sources"][0].update(url=None))
+    assert any("n2" in x and "https" in x for x in e)
+
+
 def test_route_without_primary_source():
     e = errs(lambda p: p["routes"][0].update(sources=[src(False)]))
     assert e and any("r1" in x for x in e)

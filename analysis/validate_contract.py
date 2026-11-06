@@ -526,6 +526,15 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
             seen.add(i)
             if not any(s.get("primary") is True for s in sources_of(it)):
                 errors.append(f"{kind} {i} has no primary source")
+            # The page renders these as hrefs; only https is ever a link.
+            for j, s in enumerate(sources_of(it)):
+                u = s.get("url")
+                if not (isinstance(u, str) and u.startswith("https://")):
+                    errors.append(f"{kind} {i} sources[{j}].url {u!r} does not start with https://")
+            if kind == "network":
+                w = it.get("website")
+                if not (isinstance(w, str) and w.startswith("https://")):
+                    errors.append(f"network {i} website {w!r} does not start with https://")
 
     for r in routes:
         if not isinstance(r.get("use_case"), str) or r.get("use_case") not in NETWORK_USE_CASES:

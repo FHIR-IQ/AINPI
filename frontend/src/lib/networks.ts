@@ -82,7 +82,40 @@ export function resolveAinpiLink(link: AinpiLink): { label: string; href: string
     const f = FINDINGS.find((x) => x.slug === link.finding_slug);
     return f && f.status === 'published' ? { label: link.label, href: `/findings/${f.slug}` } : null;
   }
-  return link.href ? { label: link.label, href: link.href } : null;
+  return link.href && isInternalPath(link.href) ? { label: link.label, href: link.href } : null;
+}
+
+/**
+ * An AINPI link's `href` must be a path on this site: one leading slash, not
+ * two (`//host` is protocol-relative and leaves the site), and no backslash,
+ * which some browsers normalise to a slash.
+ */
+function isInternalPath(href: string): boolean {
+  return href.startsWith('/') && !href.startsWith('//') && !href.includes('\\');
+}
+
+/**
+ * Validate an external URL from networks.json before it reaches an `href`.
+ *
+ * CodeQL's stored-XSS analysis flags any string read from a data file and
+ * rendered as an anchor `href`, even though networks.json is authored by us
+ * and checked by `analysis/validate_contract.py`. The check is also real
+ * defence: nothing else restricts the scheme, so a `javascript:` or `data:`
+ * URL in the file would otherwise render as a live link. Only a URL that
+ * parses and whose protocol is exactly `https:` is returned; anything else is
+ * null, and callers render the label as plain text instead of a link. The
+ * returned value is the parsed, normalised href.
+ */
+export function safeExternalHref(url: string): string | null {
+  if (typeof url !== 'string') return null;
+  let parsed: URL;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return null;
+  }
+  if (parsed.protocol !== 'https:' || !parsed.hostname) return null;
+  return parsed.href;
 }
 
 export function oldestCheck(p: NetworksPayload): string | null {
