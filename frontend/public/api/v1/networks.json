@@ -2776,6 +2776,388 @@
         }
       ],
       "last_checked": "2026-11-06"
+    },
+    {
+      "id": "indiana-health-information-exchange",
+      "name": "Indiana Health Information Exchange (IHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "IN"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.ihie.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.ihie.org/",
+          "title": "Indiana Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ihie.org/about-us/",
+          "title": "About Us, Indiana Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "mihin",
+      "name": "Michigan Health Information Network Shared Services (MiHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MI"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://mihin.org/",
+      "how_to_join": "Contact MiHIN's Network Growth Team, which its Network Growth page names as the starting point for organizations exploring participation.",
+      "sources": [
+        {
+          "url": "https://mihin.org/",
+          "title": "Michigan Health Information Network Shared Services (MiHIN)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://mihin.org/who-we-are-v22/",
+          "title": "Who We Are, MiHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://mihin.org/networkgrowth/",
+          "title": "Network Growth, MiHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "clinisync",
+      "name": "CliniSync Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "OH"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://clinisync.org/",
+      "how_to_join": "Fill out the Sign Up For Services form on CliniSync's site, and a staff member will follow up.",
+      "sources": [
+        {
+          "url": "https://clinisync.org/",
+          "title": "CliniSync",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://clinisync.org/clinisync-services/sign-up-for-services/",
+          "title": "Sign Up For Services, CliniSync",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "wishin",
+      "name": "Wisconsin Statewide Health Information Network (WISHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WI"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wishin.org/",
+      "how_to_join": "Use the Join the WISHIN Network link on WISHIN's Services page; its site says hospitals, clinics and independent physicians can all participate.",
+      "sources": [
+        {
+          "url": "https://wishin.org/",
+          "title": "WISHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wishin.org/about/",
+          "title": "About WISHIN, WISHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wishin.org/wishin-services/",
+          "title": "WISHIN Services, WISHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "converge-health-iowa",
+      "name": "Converge Health Iowa",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "IA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.convergehlthiowa.org/",
+      "how_to_join": "Request a Participation Agreement on Converge Health Iowa's Participation page, then sign it and a Business Associate Agreement.",
+      "sources": [
+        {
+          "url": "https://www.convergehlthiowa.org/",
+          "title": "Converge Health Iowa",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.convergehlthiowa.org/participation",
+          "title": "Participation, Converge Health Iowa",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://hhs.iowa.gov/media/18170/download",
+          "title": "Health Information Exchange Transition FAQ, Iowa Department of Health and Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "koble-mn",
+      "name": "Koble-MN",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MN"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.koblemn.org/",
+      "how_to_join": "Review and sign the Koble-MN Participation Agreement and Business Associate Agreement linked from its Become a Participant section.",
+      "sources": [
+        {
+          "url": "https://www.koblemn.org/",
+          "title": "Koble-MN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.health.state.mn.us/facilities/ehealth/hie/certified.html",
+          "title": "Minnesota Certified HIOs, Minnesota Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "kansas-health-information-network",
+      "name": "Kansas Health Information Network (KHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "KS"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.khinonline.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.khinonline.org/",
+          "title": "Kansas Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "shine-of-missouri",
+      "name": "SHINE of Missouri (Show-Me Health Information Network)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.shineofmissouri.com/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.shineofmissouri.com/",
+          "title": "SHINE of Missouri",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "velatura-hie-corporation",
+      "name": "Velatura HIE Corporation (Missouri)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://velatura.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://velatura.org/velatura-hie-2/",
+          "title": "Velatura HIE, Velatura Public Benefit Corporation",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://velatura.org/patientconsent/",
+          "title": "Missouri Consent, Velatura Public Benefit Corporation",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "lewis-and-clark-information-exchange",
+      "name": "Lewis and Clark Information Exchange (LACIE)",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "KS",
+        "MO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://lacie-hie.com/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://lacie-hie.com/",
+          "title": "Lewis and Clark Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://lacie-hie.com/about/",
+          "title": "About Us, Lewis and Clark Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "cynchealth",
+      "name": "CyncHealth",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NE"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://cynchealth.org/",
+      "how_to_join": "Contact CyncHealth to get started; its Providers page says participants sign a Data Sharing Participation Agreement.",
+      "sources": [
+        {
+          "url": "https://cynchealth.org/",
+          "title": "CyncHealth",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://cynchealth.org/providers/",
+          "title": "Providers, CyncHealth",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "north-dakota-health-information-network",
+      "name": "North Dakota Health Information Network (NDHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "ND"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.ndhin.nd.gov/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.ndhin.nd.gov/",
+          "title": "North Dakota Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ndhin.nd.gov/about-us",
+          "title": "About Us, North Dakota Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "south-dakota-health-link",
+      "name": "South Dakota Health Link",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "SD",
+        "WY",
+        "MN",
+        "IA",
+        "ND",
+        "NE"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sdhealthlink.org/",
+      "how_to_join": "Call or email South Dakota Health Link to learn how to join; its home page gives both.",
+      "sources": [
+        {
+          "url": "https://sdhealthlink.org/",
+          "title": "South Dakota Health Link",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sdhealthlink.org/about-health-link/participating-members/",
+          "title": "Participating Members, South Dakota Health Link",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://doh.sd.gov/programs/health-link/",
+          "title": "South Dakota Health Link, South Dakota Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
     }
   ],
   "glossary": [

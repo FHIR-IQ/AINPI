@@ -181,3 +181,47 @@ CRISP's own pages describe CRISP as the State Designated HIE for Maryland and "t
 #### Pages that could not be read
 
 onehealthrecord.alabama.gov (HTTP 403, bot challenge; certificate error in WebFetch), medicaid.alabama.gov (timeout; certificate error in WebFetch), ms-hin.org (DNS), gnohie.org (certificate for another host), healthy.arkansas.gov (HTTP 403), hhs.texas.gov (HTTP 403 to curl with the user agent used for reading; read with WebFetch; the link check, which sends a different user agent, got a success status). The link check also reported the Maryland Health Care Commission HIE page as HTTP 403, although curl read it during research; it is listed for checking by hand.
+
+### Batch 7c: Midwest (IL, IN, MI, OH, WI, IA, KS, MN, MO, NE, ND, SD), read on 2026-11-06
+
+Pages were fetched with curl (`curl -sSL`, browser user agent) and converted to text locally; WebFetch was tried where curl failed, and the pages it also could not read are listed below. Every entry is at the basic level, as in batch 7b. Designation is described here only where a state page says it; the data file never states designation outside a source title.
+
+#### KONZA Health affiliates
+
+KONZA Health's home page lists the networks it serves, among them the Kansas Health Information Network (KHIN) and SHINE of Missouri. Each has its own site, which describes it as a health information exchange powered by KONZA Health: KHIN was founded by the Kansas Medical Society and the Kansas Hospital Association, and SHINE is delivered in partnership between the Missouri State Medical Association and KONZA Health. Both describe a state HIE service distinct from KONZA's QHIN service, so each gets its own state entry. `qhin-konza-health` (national, no states) was not changed. KONZA's list also names affiliates in states from earlier batches; those were not added or changed here.
+
+#### Iowa: CyncHealth to Converge Health Iowa
+
+The Iowa Department of Health and Human Services Health Information Exchange Transition FAQ (a PDF) says Iowa HHS announced in December 2025 that it would move HIE services from the former vendor, CyncHealth Iowa, to Converge Health Iowa, a nonprofit that submitted the winning proposal. CyncHealth's "Our Work in Iowa" post (dated May 6, 2026) says its time serving Iowa as the HIE concluded on May 6, 2026. CyncHealth's Participants page still lists Iowa organizations, but because its own later post says it no longer serves Iowa, the CyncHealth entry lists NE only, and Iowa's entry is Converge Health Iowa. Converge's home page calls itself Iowa's designated statewide HIE; the Iowa FAQ calls it the new vendor, so the data file does not state designation.
+
+#### South Dakota Health Link
+
+South Dakota Health Link is a South Dakota Department of Health program (the DOH program page links to sdhealthlink.org). Its own site lists participating members under South Dakota, Wyoming, Minnesota, Iowa, North Dakota and Nebraska, so it is one `multi_state` entry listing all six states, following the HealthShare Exchange precedent. Wyoming belongs to another batch. No South Dakota page read today uses the word designated, so the data file does not state designation.
+
+#### Basic-level entries
+
+- IL: no entry (see below).
+- IN: Indiana Health Information Exchange (IHIE). Its About page calls it a designated Health Data Utility without naming who designated it; no Indiana agency page was read. Its site offers only a contact form, so its how-to-join sentence is the fallback.
+- MI: MiHIN. Its Who We Are page says Michigan formalized MiHIN as the state designated HIE; no michigan.gov page was read, so the data file does not state designation. gl-hc.org redirects to a MiHIN page saying Great Lakes Health Connect became fully integrated into MiHIN on June 30, 2021, so GLHC gets no entry.
+- OH: CliniSync, run by the Ohio Health Information Partnership.
+- WI: WISHIN. Its About page calls it Wisconsin's state-designated entity for HIE; no Wisconsin agency page was read.
+- IA: Converge Health Iowa (see above). The Iowa HHS FAQ is cited as a state source.
+- KS: Kansas Health Information Network (KHIN), plus Lewis and Clark Information Exchange (below). KHIN's contact page returned 404 and its home page offers a demo request and contact form only, so its how-to-join sentence is the fallback.
+- MN: Koble-MN. The Minnesota Department of Health Certified HIOs page lists The Koble Group, LLC d/b/a Koble-MN as a certified health information organization, certified through May 15, 2027. South Dakota Health Link also lists Minnesota members.
+- MO: SHINE of Missouri, Velatura HIE Corporation, and Lewis and Clark Information Exchange. Velatura's HIE page says the Missouri TDSO evolved from Midwest Health Connection (formerly Missouri Health Connection) and that Velatura HIE Corporation manages it; Velatura's Missouri Consent page describes Velatura as a health information exchange that lets participating providers share records. The same Velatura page names GRAChIE, a separately named statewide exchange in Georgia, and a Florida TDSO it describes as being built; neither was added in this batch, so Velatura's entry lists MO only. Velatura's page lists an Illinois TDSO as "coming soon", which is not an operating network. Neither SHINE, Velatura nor LACIE gives joining steps, so all three use the fallback sentence.
+- KS and MO: Lewis and Clark Information Exchange (LACIE), one `multi_state` entry. Its About page says it was the first HIE to share data in both Kansas and Missouri, with a focus on the greater Kansas City region.
+- NE: CyncHealth (see above).
+- ND: North Dakota Health Information Network (NDHIN), on an official State of North Dakota site. Its access page covers individual user agreements, not how an organization joins, so its how-to-join sentence is the fallback.
+- SD: South Dakota Health Link (see above).
+
+#### Omitted states and candidates
+
+- IL: no entry, because no current statewide or regional HIE could be sourced. hie.illinois.gov (the former Illinois Health Information Exchange portal) returns HTTP 404. The Illinois Department of Healthcare and Family Services runs HealthChoice Illinois ADT, a statewide Medicaid data exchange platform that its HFS page says delivers admission, discharge and transfer notifications to Medicaid providers. It was not added as a basic `state_hie` entry, because under the map ruling a basic state HIE shades every state HIE route, including treatment records and public health, which this platform's page does not describe. It could be added later as a full entry carrying only the encounter alerts route.
+- IN: the Michiana Health Information Network gets no entry; mhin.org redirects to a domain-for-sale page. HealthLINC gets no entry; healthlinc.org returns 404.
+- OH: HealthBridge gets no entry; healthbridge.org returned HTTP 403, and The Health Collaborative's site describes no HIE service today.
+- MO: the Tiger Institute for Health Innovation gets no entry; tigerinstitute.org does not resolve. Search results describe a Missouri Department of Social Services page listing contracted Health Information Networks, but that page could not be read (below), so no Missouri state source is cited.
+- NE: none omitted.
+
+#### Pages that could not be read
+
+dss.mo.gov/mhd/hie.htm (HTTP 404 to curl and WebFetch), dss.mo.gov/mhd/hie-onboarding/ (HTTP 404 in WebFetch), missourihealthconnection.org (TLS handshake failure; HTTP 409 over http), hhs.iowa.gov/health-information-exchange (HTTP 404; the transition FAQ PDF was read instead), hie.illinois.gov (HTTP 404), mhin.org (parked), healthlinc.org (HTTP 404), tigerinstitute.org (DNS), healthbridge.org (HTTP 403), khinonline.org/contact-us/ (HTTP 404).
