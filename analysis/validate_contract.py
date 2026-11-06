@@ -448,22 +448,71 @@ def _strings(node, path=""):
             yield from _strings(v, f"{path}[{i}]")
 
 
-def check_networks(payload: dict) -> list[str]:
-    """One error string per violated invariant of networks.json."""
+def known_finding_slugs() -> set[str]:
+    """Slugs defined in frontend/src/data/findings.ts (path relative to the repo root)."""
+    text = FINDINGS_TS.read_text()
+    return set(re.findall(r"^\s*slug:\s*'([^']+)'", text, re.MULTILINE))
+
+
+def _finding_slugs_in(node):
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == "finding_slug" and isinstance(v, str):
+                yield v
+            else:
+                yield from _finding_slugs_in(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _finding_slugs_in(v)
+
+
+def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
+    """One error string per violated invariant of networks.json. Never raises."""
     errors: list[str] = []
-    use_cases = payload.get("use_cases", [])
-    routes = payload.get("routes", [])
-    networks = payload.get("networks", [])
+    if not isinstance(payload, dict):
+        return ["networks payload is not an object"]
+    if known_slugs is None:
+        try:
+            known_slugs = known_finding_slugs()
+        except OSError as e:
+            errors.append(f"cannot read findings.ts to check finding_slug links: {e}")
+            known_slugs = None
+
+    def section(name):
+        raw = payload.get(name, [])
+        if not isinstance(raw, list):
+            errors.append(f"{name} is not a list")
+            return []
+        out = []
+        for i, it in enumerate(raw):
+            if isinstance(it, dict):
+                out.append(it)
+            else:
+                errors.append(f"{name}[{i}] is not an object")
+        return out
+
+    use_cases = section("use_cases")
+    routes = section("routes")
+    networks = section("networks")
+    glossary = section("glossary")
     routes_by_id = {r.get("id"): r for r in routes}
 
     slugs = [u.get("slug") for u in use_cases]
-    if sorted(slugs) != sorted(NETWORK_USE_CASES):
-        missing = sorted(set(NETWORK_USE_CASES) - set(slugs))
-        extra = sorted(set(slugs) - set(NETWORK_USE_CASES))
+    if any(not isinstance(x, str) for x in slugs):
+        errors.append("a use case has a missing or non-string slug")
+    str_slugs = [x for x in slugs if isinstance(x, str)]
+    if sorted(str_slugs) != sorted(NETWORK_USE_CASES) or len(str_slugs) != len(slugs):
+        missing = sorted(set(NETWORK_USE_CASES) - set(str_slugs))
+        extra = sorted(set(str_slugs) - set(NETWORK_USE_CASES))
+        dup = sorted(x for x in set(str_slugs) if str_slugs.count(x) > 1)
         errors.append(
             f"use_cases must be exactly the seven agreed slugs; missing {missing}, "
-            f"unexpected or repeated {extra or sorted(s for s in set(slugs) if slugs.count(s) > 1)}"
+            f"unexpected {extra}, repeated {dup}"
         )
+
+    def sources_of(it):
+        raw = it.get("sources", [])
+        return [s for s in raw if isinstance(s, dict)] if isinstance(raw, list) else []
 
     for kind, items in (("route", routes), ("network", networks)):
         seen: set = set()
@@ -472,7 +521,7 @@ def check_networks(payload: dict) -> list[str]:
             if i in seen:
                 errors.append(f"duplicate {kind} id {i}")
             seen.add(i)
-            if not any(s.get("primary") is True for s in it.get("sources", [])):
+            if not any(s.get("primary") is True for s in sources_of(it)):
                 errors.append(f"{kind} {i} has no primary source")
 
     for r in routes:
@@ -483,6 +532,9 @@ def check_networks(payload: dict) -> list[str]:
     for n in networks:
         nid = n.get("id")
         states = n.get("states", [])
+        if not isinstance(states, list):
+            errors.append(f"network {nid} states is not a list")
+            states = []
         if n.get("national") and states:
             errors.append(f"network {nid} is national but lists states {states}")
         if not n.get("national") and not states:
@@ -495,28 +547,37 @@ def check_networks(payload: dict) -> list[str]:
             errors.append(f"network {nid} last_checked {lc!r} is not an ISO date")
         elif lc > today:
             errors.append(f"network {nid} last_checked {lc} is in the future")
-        if n.get("detail_level") == "basic" and n.get("routes"):
+        nroutes = n.get("routes", [])
+        if not isinstance(nroutes, list):
+            errors.append(f"network {nid} routes is not a list")
+            nroutes = []
+        if n.get("detail_level") == "basic" and nroutes:
             errors.append(f"network {nid} is basic but lists routes")
-        for rid in n.get("routes", []):
-            route = routes_by_id.get(rid)
+        for rid in nroutes:
+            route = routes_by_id.get(rid) if isinstance(rid, str) else None
             if route is None:
                 errors.append(f"network {nid} references unknown route {rid}")
-            elif n.get("type") not in route.get("network_types", []):
-                errors.append(
-                    f"network {nid} has type {n.get('type')} but route {rid} "
-                    f"does not accept it"
-                )
+            else:
+                types = route.get("network_types", [])
+                if not isinstance(types, list) or n.get("type") not in types:
+                    errors.append(
+                        f"network {nid} has type {n.get('type')} but route {rid} "
+                        f"does not accept it"
+                    )
 
-    for section, items, key in (("use_cases", use_cases, "slug"), ("routes", routes, "id"),
-                                ("networks", networks, "id"),
-                                ("glossary", payload.get("glossary", []), "term")):
+    for sec, items, key in (("use_cases", use_cases, "slug"), ("routes", routes, "id"),
+                            ("networks", networks, "id"), ("glossary", glossary, "term")):
         for it in items:
             for path, s in _strings(it):
-                where = f"{section} {it.get(key)} {path}"
+                where = f"{sec} {it.get(key)} {path}"
                 if "\u2014" in s:
                     errors.append(f"{where} contains an em dash")
                 if _COUNT_IN_PROSE.search(s):
                     errors.append(f"{where} states a count in prose")
+            if known_slugs is not None:
+                for fs in _finding_slugs_in(it):
+                    if fs not in known_slugs:
+                        errors.append(f"{sec} {it.get(key)} links unknown finding_slug {fs}")
     return errors
 
 

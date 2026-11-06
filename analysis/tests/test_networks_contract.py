@@ -1,7 +1,14 @@
 """Invariants of the networks.json contract (analysis/validate_contract.check_networks)."""
 import copy
 
-from analysis.validate_contract import check_networks
+from analysis.validate_contract import check_networks as _check, known_finding_slugs
+
+KNOWN = {"endpoint-url-validity"}
+
+
+def check_networks(p):
+    return _check(p, KNOWN)
+
 
 SLUGS = ["treatment-records", "individual-access", "find-endpoint", "payer-exchange",
          "encounter-alerts", "public-health", "community-referral"]
@@ -119,3 +126,28 @@ def test_count_in_prose():
 def test_em_dash_in_prose():
     e = errs(lambda p: p["use_cases"][0].update(summary="One — two."))
     assert e and any("treatment-records" in x for x in e)
+
+
+def test_unknown_finding_slug():
+    def m(p):
+        p["use_cases"][0]["ainpi_links"] = [{"label": "X", "finding_slug": "no-such-finding"}]
+    e = errs(m)
+    assert e and any("no-such-finding" in x for x in e)
+    def ok(p):
+        p["use_cases"][0]["ainpi_links"] = [{"label": "X", "finding_slug": "endpoint-url-validity"}]
+    assert errs(ok) == []
+
+
+def test_real_findings_slugs_parse():
+    assert "ndh-payer-endpoint-coverage" in known_finding_slugs()
+
+
+def test_malformed_payload_returns_errors_not_raise():
+    p = valid()
+    p["routes"] = ["not an object"]
+    p["use_cases"][0].pop("slug")
+    p["networks"][0]["sources"] = "bad"
+    p["networks"][0]["states"] = "PA"
+    e = check_networks(p)
+    assert e
+    assert check_networks([]) and check_networks({"use_cases": 5})

@@ -44,11 +44,7 @@
       "ainpi_links": [
         {
           "label": "Payer endpoints in the NDH",
-          "finding_slug": "ndh-payer-endpoints"
-        },
-        {
-          "label": "Payer seed coverage",
-          "finding_slug": "payer-seed-coverage"
+          "finding_slug": "ndh-payer-endpoint-coverage"
         }
       ]
     },
