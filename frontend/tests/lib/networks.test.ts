@@ -1,0 +1,92 @@
+import { describe, it, expect } from 'vitest';
+import type { Network, NetworkRoute, NetworksPayload } from '@/lib/api-v1-types';
+import {
+  JURISDICTIONS, DEFAULT_USE_CASE, parseUseCase, isStale, routesFor, networksForRoute,
+  stateCategory, networksInState, resolveAinpiLink, oldestCheck,
+} from '@/lib/networks';
+
+const src = [{ url: 'https://example.org', title: 't', accessed: '2026-11-01', primary: true }];
+const route = (id: string, use_case: NetworkRoute['use_case'], network_types: NetworkRoute['network_types']): NetworkRoute => ({
+  id, use_case, title: id, summary: '', who_can_use: '', rule: '', standard: '', how_to_join: '',
+  network_types, sources: src, ainpi_links: [],
+});
+const net = (o: Partial<Network> & Pick<Network, 'id' | 'type'>): Network => ({
+  name: o.id, national: false, states: [], detail_level: 'full', routes: [], website: 'https://example.org',
+  how_to_join: '', sources: src, last_checked: '2026-10-01', ...o,
+});
+const p: NetworksPayload = {
+  schema_version: 1, generated_at: '2026-11-06', use_cases: [], glossary: [],
+  routes: [
+    route('t1', 'treatment-records', ['state_hie', 'multi_state', 'qhin']),
+    route('t2', 'treatment-records', ['vendor_network']),
+    route('p1', 'public-health', ['state_hie']),
+  ],
+  networks: [
+    net({ id: 'pa-hie', type: 'state_hie', states: ['PA'], routes: ['p1'] }),
+    net({ id: 'nj-hie', type: 'state_hie', states: ['NJ'], detail_level: 'basic', last_checked: '2026-08-01' }),
+    net({ id: 'ms', type: 'multi_state', states: ['MD', 'DC'], routes: ['t1'] }),
+    net({ id: 'qhin', type: 'qhin', national: true, routes: ['t1'] }),
+    net({ id: 'va-hie', type: 'state_hie', states: ['VA'], routes: ['t1'] }),
+    net({ id: 'va-ms', type: 'multi_state', states: ['VA'], routes: ['t1'] }),
+  ],
+};
+const byId = (ns: Network[]) => ns.map((n) => n.id).sort();
+
+describe('networks helpers', () => {
+  it('parseUseCase', () => {
+    expect(parseUseCase('public-health')).toBe('public-health');
+    for (const v of ['bogus', undefined, '', ['a', 'b']]) expect(parseUseCase(v as never)).toBe(DEFAULT_USE_CASE);
+    expect(DEFAULT_USE_CASE).toBe('treatment-records');
+  });
+  it('isStale', () => {
+    expect(isStale('2026-05-10', new Date('2026-11-06'))).toBe(false);
+    expect(isStale('2026-05-09', new Date('2026-11-06'))).toBe(true);
+  });
+  it('JURISDICTIONS', () => {
+    expect(JURISDICTIONS.length).toBe(51);
+    expect(JURISDICTIONS).toContain('DC');
+    expect(JURISDICTIONS).not.toContain('PR');
+  });
+  it('routesFor', () => {
+    expect(routesFor(p, 'treatment-records').map((r) => r.id)).toEqual(['t1', 't2']);
+  });
+  it('stateCategory', () => {
+    expect(stateCategory(p, 'treatment-records', 'PA')).toEqual({ category: 'none', verified: true });
+    expect(stateCategory(p, 'public-health', 'PA')).toEqual({ category: 'state_hie', verified: true });
+    expect(stateCategory(p, 'treatment-records', 'NJ')).toEqual({ category: 'state_hie', verified: false });
+    expect(stateCategory(p, 'treatment-records', 'MD')).toEqual({ category: 'multi_state', verified: true });
+    expect(stateCategory(p, 'treatment-records', 'WY')).toEqual({ category: 'none', verified: true });
+  });
+  it('basic network does not count for a use case whose routes exclude its type', () => {
+    expect(stateCategory(p, 'public-health', 'NJ').category).toBe('state_hie');
+    const q: NetworksPayload = { ...p, routes: [route('v', 'treatment-records', ['vendor_network'])] };
+    expect(stateCategory(q, 'treatment-records', 'NJ')).toEqual({ category: 'none', verified: true });
+  });
+  it('overlays', () => {
+    expect(stateCategory(p, 'treatment-records', 'VA').category).toBe('both');
+    expect(stateCategory(p, 'treatment-records', 'VA', { state_hie: false, multi_state: true }).category).toBe('multi_state');
+    expect(stateCategory(p, 'treatment-records', 'VA', { state_hie: false, multi_state: false }).category).toBe('none');
+  });
+  it('networksInState', () => {
+    const r = networksInState(p, 'WY');
+    expect(r.local).toEqual([]);
+    expect(byId(r.national)).toEqual(['qhin']);
+    expect(byId(networksInState(p, 'MD').local)).toEqual(['ms']);
+  });
+  it('networksForRoute', () => {
+    expect(byId(networksForRoute(p, 't1', 'MD'))).toEqual(['ms', 'qhin']);
+    expect(byId(networksForRoute(p, 't1', null))).toEqual(['qhin']);
+    expect(byId(networksForRoute(p, 't1', 'NJ'))).toEqual(['nj-hie', 'qhin']);
+    expect(byId(networksForRoute(p, 'p1', 'PA'))).toEqual(['pa-hie']);
+  });
+  it('resolveAinpiLink', () => {
+    expect(resolveAinpiLink({ label: 'x', finding_slug: 'endpoint-url-validity' })).toEqual({ label: 'x', href: '/findings/endpoint-url-validity' });
+    expect(resolveAinpiLink({ label: 'x', finding_slug: 'payer-seed-coverage' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' })).toEqual({ label: 'x', href: '/states/pa/connectivity' });
+    expect(resolveAinpiLink({ label: 'x' })).toBeNull();
+  });
+  it('oldestCheck', () => {
+    expect(oldestCheck(p)).toBe('2026-08-01');
+    expect(oldestCheck({ ...p, networks: [] })).toBeNull();
+  });
+});
