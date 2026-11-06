@@ -45,6 +45,7 @@ function Defs() {
 export default function NetworkStateMap({ cells, selectedState, onStateClick, title }: NetworkStateMapProps) {
   const [topo, setTopo] = useState<any>(null);
   const [failed, setFailed] = useState(false);
+  const [focused, setFocused] = useState<string | null>(null);
   const idBase = useRef(`nsm-${Math.random().toString(36).slice(2, 8)}`).current;
 
   useEffect(() => {
@@ -96,14 +97,16 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
                 key={code ?? i}
                 d={d}
                 fill={st.patternId ? `url(#${st.patternId})` : st.fill}
-                stroke={selected ? '#171310' : '#faf8f5'}
-                strokeWidth={selected ? 1.5 : 0.5}
+                stroke="#faf8f5"
+                strokeWidth={0.5}
                 vectorEffect="non-scaling-stroke"
                 tabIndex={interactive ? 0 : undefined}
                 role={interactive ? 'button' : undefined}
                 aria-label={`${name}: ${st.label}`}
                 aria-pressed={interactive ? selected : undefined}
-                style={{ cursor: interactive ? 'pointer' : 'default', outlineOffset: 1 }}
+                style={{ cursor: interactive ? 'pointer' : 'default', outline: 'none' }}
+                onFocus={interactive ? () => setFocused(code!) : undefined}
+                onBlur={interactive ? () => setFocused((f) => (f === code ? null : f)) : undefined}
                 onClick={interactive ? () => onStateClick(code!) : undefined}
                 onKeyDown={
                   interactive
@@ -120,6 +123,22 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
           })}
         </g>
         {mesh && <path d={mesh} fill="none" stroke="#8a8279" strokeWidth={0.5} vectorEffect="non-scaling-stroke" pointerEvents="none" />}
+        {/* Outlines last so neighbours and the mesh never paint over them. Non-interactive. */}
+        <g data-testid="outline-layer" pointerEvents="none" aria-hidden="true" fill="none">
+          {features
+            .filter((f) => f.code && (f.code === selectedState || f.code === focused))
+            .map((f) => (
+              <path
+                key={f.code}
+                data-outline={f.code === selectedState ? 'selected' : 'focus'}
+                d={f.d}
+                stroke={f.code === selectedState ? '#171310' : '#a8321c'}
+                strokeWidth={f.code === selectedState ? 1.5 : 2}
+                strokeDasharray={f.code === selectedState ? undefined : '4 2'}
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+        </g>
       </svg>
       <figcaption className="mt-3">
         <ul className="m-0 flex list-none flex-wrap gap-x-5 gap-y-2 p-0 text-sm text-ink">
