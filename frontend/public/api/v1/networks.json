@@ -797,11 +797,11 @@
       "id": "public-health-state-hie",
       "use_case": "public-health",
       "title": "Public health reporting through a state HIE",
-      "summary": "A provider sends reportable data, such as lab results or immunizations, to its HIE, which passes it to state public health registries through a connection the state runs.",
-      "who_can_use": "Providers that are members of an HIE connected to the state's public health connection.",
+      "summary": "In some states, a provider sends reportable data, such as lab results or immunizations, to its HIE, which passes it to state public health programs where the state offers such a connection. Pennsylvania's Public Health Gateway is the example cited here.",
+      "who_can_use": "Providers that are members of an HIE that connects to its state's public health programs, in states that offer such a connection.",
       "rule": "State public health reporting requirements, each registry's own submission requirements, and the HIE's participation agreement.",
-      "standard": "Set by each registry and the state's connection; check the registry's requirements.",
-      "how_to_join": "Ask your HIE whether it connects to your state's public health registries and which ones. The networks listed here are those whose own pages, or a state agency page, say they do.",
+      "standard": "Set by each registry and by the state's connection where one exists; check the registry's requirements.",
+      "how_to_join": "Ask your HIE whether it connects to any of your state's public health programs, and which ones; not every state or HIE offers this. The networks with full detail here are those whose own pages, or a state agency page, say they do.",
       "network_types": [
         "state_hie",
         "multi_state"
@@ -872,11 +872,11 @@
       "id": "community-referral-hie",
       "use_case": "community-referral",
       "title": "A community referral platform offered through an HIE",
-      "summary": "A provider screens a person for social needs, refers them to a community organization through a referral platform its HIE offers, and sees whether the organization closed the loop.",
-      "who_can_use": "Healthcare organizations connected to an HIE that offers the platform, and community organizations that join the platform.",
+      "summary": "Some HIEs connect to a statewide referral tool, where the state runs one, so a provider can screen a person for social needs, refer them to a community organization, and see whether the organization closed the loop. Pennsylvania's PA Navigate is the example cited here.",
+      "who_can_use": "Healthcare organizations connected to an HIE that offers such a tool, in states that have one, and community organizations that join the tool.",
       "rule": "The platform's terms and the HIE's participation agreement.",
       "standard": "Set by the platform; some platforms integrate with the referring organization's EHR.",
-      "how_to_join": "Healthcare organizations ask their HIE; community organizations follow the platform's own sign-up steps.",
+      "how_to_join": "Healthcare organizations ask their HIE whether it offers a referral tool; not every state or HIE does. Community organizations follow the tool's own sign-up steps.",
       "network_types": [
         "state_hie",
         "multi_state"
@@ -891,12 +891,6 @@
         {
           "url": "https://healthshareexchange.org/pa-navigate/",
           "title": "PA NAVIGATE, HealthShare Exchange",
-          "accessed": "2026-11-06",
-          "primary": true
-        },
-        {
-          "url": "https://www.keyhie.org/products-services/pa-navigate",
-          "title": "PA Navigate, KeyHIE",
           "accessed": "2026-11-06",
           "primary": true
         },
@@ -1722,8 +1716,7 @@
       "routes": [
         "treatment-records-state-hie",
         "encounter-alerts-state-hie",
-        "public-health-state-hie",
-        "community-referral-hie"
+        "public-health-state-hie"
       ],
       "website": "https://www.keyhie.org/",
       "how_to_join": "Contact KeyHIE for pricing and next steps; its service pages give its member services email and phone number.",
@@ -1737,12 +1730,6 @@
         {
           "url": "https://www.keyhie.org/products-services/notifications-information-delivery",
           "title": "KeyHIE Notifications and Information Delivery Service, KeyHIE",
-          "accessed": "2026-11-06",
-          "primary": true
-        },
-        {
-          "url": "https://www.keyhie.org/products-services/pa-navigate",
-          "title": "PA Navigate, KeyHIE",
           "accessed": "2026-11-06",
           "primary": true
         },
@@ -3431,7 +3418,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://reliancehie.org/",
-      "how_to_join": "Call or email Reliance about services and enrollment; its FAQ gives both.",
+      "how_to_join": "Call or email Reliance about services and enrollment; its home page gives both.",
       "sources": [
         {
           "url": "https://reliancehie.org/",
