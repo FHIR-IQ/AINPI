@@ -3158,6 +3158,441 @@
         }
       ],
       "last_checked": "2026-11-06"
+    },
+    {
+      "id": "contexture",
+      "name": "Contexture",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "AZ",
+        "CO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://contexture.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://contexture.org/about-us/",
+          "title": "About Us, Contexture",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://contexture.org/hie-participant-onboarding/",
+          "title": "HIE Participant Onboarding Resources, Contexture",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://qualityhealthnetwork.org/",
+          "title": "Quality Health Network (QHN is now Contexture)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "idaho-health-data-exchange",
+      "name": "Idaho Health Data Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "ID"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://idahohde.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://idahohde.org/",
+          "title": "Idaho Health Data Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "big-sky-care-connect",
+      "name": "Big Sky Care Connect",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.mtbscc.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.mtbscc.org/",
+          "title": "Big Sky Care Connect",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://formergovernors.mt.gov/bullock/docs/EO-14-2019_Designating%20Big%20Sky%20Care%20Connect.pdf",
+          "title": "Executive Order 14-2019 designating Big Sky Care Connect, State of Montana Office of the Governor",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://news.mt.gov/Governors-Office/Governor_Gianforte_DPHHS_Announce_Major_Investment_in_Montanas_Health_Information_Exchange",
+          "title": "Governor Gianforte, DPHHS Announce Major Investment in Montana's Health Information Exchange, State of Montana",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthie-nevada",
+      "name": "HealtHIE Nevada",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NV"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://healthienevada.org/",
+      "how_to_join": "Submit its Sign Up / Learn More form to ask about signing up your organization to participate.",
+      "sources": [
+        {
+          "url": "https://healthienevada.org/",
+          "title": "HealtHIE Nevada",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthienevada.org/info",
+          "title": "Sign Up / Learn More, HealtHIE Nevada",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "syncronys",
+      "name": "SYNCRONYS",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NM"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.syncronys.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.syncronys.org/",
+          "title": "SYNCRONYS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.syncronys.org/about-us/",
+          "title": "About Us, SYNCRONYS",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "uhin",
+      "name": "UHIN Clinical Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "UT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://uhin.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://uhin.org/",
+          "title": "UHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "wyoming-frontier-information",
+      "name": "Wyoming Frontier Information (WYFI)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wyfi.solutions/",
+      "how_to_join": "Submit the Join Now form linked from its Providers page.",
+      "sources": [
+        {
+          "url": "https://wyfi.solutions/",
+          "title": "Wyoming Frontier Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wyfi.solutions/providers/",
+          "title": "Providers, Wyoming Frontier Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://health.wyo.gov/healthcarefin/wyoming_frontier_information_wyfi/",
+          "title": "Wyoming Frontier Information (WYFI), Wyoming Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healtheconnect-alaska",
+      "name": "healthEconnect Alaska",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "AK"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://healtheconnectak.org/",
+      "how_to_join": "Email or call healthEconnect Alaska to request a participation agreement.",
+      "sources": [
+        {
+          "url": "https://healtheconnectak.org/",
+          "title": "healthEconnect Alaska",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healtheconnectak.org/resources/provider-faqs/",
+          "title": "Provider FAQs, healthEconnect Alaska",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://health.alaska.gov/en/for-providers-professionals/for-health-care-facilities/",
+          "title": "For Health Care Facilities, Alaska Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "hawaii-health-information-exchange",
+      "name": "Hawaii Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "HI"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.hawaiihie.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.hawaiihie.org/",
+          "title": "Hawaii Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "reliance-ehealth-collaborative",
+      "name": "Reliance eHealth Collaborative",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "OR",
+        "WA",
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://reliancehie.org/",
+      "how_to_join": "Call or email Reliance about services and enrollment; its FAQ gives both.",
+      "sources": [
+        {
+          "url": "https://reliancehie.org/",
+          "title": "Reliance eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://reliancehie.org/partners/",
+          "title": "Community Partners, Reliance eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "onehealthport-hie",
+      "name": "OneHealthPort HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.onehealthport.com/hie-overview",
+      "how_to_join": "Sign the OneHealthPort HIE Participation Agreement through its online contracting process and pay an annual subscription fee based on your organization's revenue.",
+      "sources": [
+        {
+          "url": "https://www.onehealthport.com/hie-overview",
+          "title": "HIE Overview, OneHealthPort",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.onehealthport.com/hie/contracting",
+          "title": "HIE Contracting, OneHealthPort",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "manifest-medex",
+      "name": "Manifest MedEx",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.manifestmedex.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.manifestmedex.org/",
+          "title": "Manifest MedEx",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dxf.chhs.ca.gov/wp-content/uploads/sites/6/2025/07/DxF-QHIOs-At-a-Glance.pdf",
+          "title": "QHIOs at a Glance, CalHHS Data Exchange Framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "sacvalley-medshare",
+      "name": "SacValley MedShare",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sacvalleyms.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://sacvalleyms.org/",
+          "title": "SacValley MedShare",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dxf.chhs.ca.gov/wp-content/uploads/sites/6/2025/07/DxF-QHIOs-At-a-Glance.pdf",
+          "title": "QHIOs at a Glance, CalHHS Data Exchange Framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "san-diego-health-connect",
+      "name": "San Diego Health Connect",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sdhealthconnect.org/",
+      "how_to_join": "Fill out its Participant Inquiry Form, then sign a participation agreement and a Business Associate Agreement and agree a level of connectivity with its team.",
+      "sources": [
+        {
+          "url": "https://sdhealthconnect.org/",
+          "title": "San Diego Health Connect",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sdhealthconnect.org/faq/",
+          "title": "FAQ, San Diego Health Connect",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dxf.chhs.ca.gov/wp-content/uploads/sites/6/2025/07/DxF-QHIOs-At-a-Glance.pdf",
+          "title": "QHIOs at a Glance, CalHHS Data Exchange Framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "one-health-record",
+      "name": "One Health Record",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "AL"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.onehealthrecord.alabama.gov/",
+      "how_to_join": "Execute a participation agreement (DURSA) and a HIPAA Business Associate Agreement with the Alabama Health Information Exchange, as its policy manual requires before exchange begins.",
+      "sources": [
+        {
+          "url": "https://www.onehealthrecord.alabama.gov/Content/uploads/AHIE-Policies-And-Procedures%20Latest.pdf",
+          "title": "One Health Record, Alabama's Health Information Exchange Policy Manual",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://medicaid.alabama.gov/",
+          "title": "Alabama Medicaid Agency",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
     }
   ],
   "glossary": [

@@ -133,8 +133,8 @@ Not added as Pennsylvania networks: the Delaware Health Information Network (DHI
 
 #### Omitted states
 
-- NH: no entry. nhhio.org, the domain of the New Hampshire Health Information Organization created by state law in 2011, does not resolve, and no current New Hampshire state page or network page describing a statewide HIE was found. Search results were press coverage from 2011 to 2013.
-- RI: no entry. CurrentCare, run by the Rhode Island Quality Institute, could not be read: currentcareri.org fails the TLS handshake to curl and WebFetch, riqi.org serves a certificate for another host, and health.ri.gov returns HTTP 403 behind a bot challenge. A later batch or the monthly check should retry; the brief does not allow citing a page that was not read.
+- NH: no entry. nhhio.org, the domain of the New Hampshire Health Information Organization created by state law in 2011, does not resolve, and no current New Hampshire state page or network page describing a statewide HIE was found. Search results were press coverage from 2011 to 2013. Rechecked in batch 7d: still no entry (see Batch 7d).
+- RI: no entry. CurrentCare, run by the Rhode Island Quality Institute, could not be read: currentcareri.org fails the TLS handshake to curl and WebFetch, riqi.org serves a certificate for another host, and health.ri.gov returns HTTP 403 behind a bot challenge. A later batch or the monthly check should retry; the brief does not allow citing a page that was not read. Retried in batch 7d with the same result (see Batch 7d).
 
 #### Pages that could not be read
 
@@ -173,7 +173,7 @@ CRISP's own pages describe CRISP as the State Designated HIE for Maryland and "t
 
 #### Omitted states and candidates
 
-- AL: no entry, because the site could not be read. One Health Record (onehealthrecord.alabama.gov), which search results describe as run by the Alabama Medicaid Agency, returns HTTP 403 behind a bot challenge to curl and fails certificate verification in WebFetch; medicaid.alabama.gov timed out to curl and failed certificate verification in WebFetch.
+- AL: no entry in this batch, because the site could not be read. One Health Record (onehealthrecord.alabama.gov), which search results describe as run by the Alabama Medicaid Agency, returns HTTP 403 behind a bot challenge to curl and fails certificate verification in WebFetch; medicaid.alabama.gov timed out to curl and failed certificate verification in WebFetch. Resolved in batch 7d: One Health Record was added from its policy manual (see Batch 7d).
 - MS: the Mississippi Health Information Network (MS-HIN) gets no entry; ms-hin.org does not resolve and no current page was found.
 - LA: the Greater New Orleans Health Information Exchange gets no entry; gnohie.org serves a certificate for another host.
 - TX: PHIX, which THSA lists as a regional HIE, gets no entry; its site was not found at the domains tried.
@@ -216,7 +216,7 @@ South Dakota Health Link is a South Dakota Department of Health program (the DOH
 
 #### Omitted states and candidates
 
-- IL: no entry, because no current statewide or regional HIE could be sourced. hie.illinois.gov (the former Illinois Health Information Exchange portal) returns HTTP 404. The Illinois Department of Healthcare and Family Services runs HealthChoice Illinois ADT, a statewide Medicaid data exchange platform that its HFS page says delivers admission, discharge and transfer notifications to Medicaid providers. It was not added as a basic `state_hie` entry, because under the map ruling a basic state HIE shades every state HIE route, including treatment records and public health, which this platform's page does not describe. It could be added later as a full entry carrying only the encounter alerts route.
+- IL: no entry, because no current statewide or regional HIE could be sourced. hie.illinois.gov (the former Illinois Health Information Exchange portal) returns HTTP 404. The Illinois Department of Healthcare and Family Services runs HealthChoice Illinois ADT, a statewide Medicaid data exchange platform that its HFS page says delivers admission, discharge and transfer notifications to Medicaid providers. It was not added as a basic `state_hie` entry, because under the map ruling a basic state HIE shades every state HIE route, including treatment records and public health, which this platform's page does not describe. It could be added later as a full entry carrying only the encounter alerts route. Rechecked in batch 7d: still no entry (see Batch 7d).
 - IN: the Michiana Health Information Network gets no entry; mhin.org redirects to a domain-for-sale page. HealthLINC gets no entry; healthlinc.org returns 404.
 - OH: HealthBridge gets no entry; healthbridge.org returned HTTP 403, and The Health Collaborative's site describes no HIE service today.
 - MO: the Tiger Institute for Health Innovation gets no entry; tigerinstitute.org does not resolve. Search results describe a Missouri Department of Social Services page listing contracted Health Information Networks, but that page could not be read (below), so no Missouri state source is cited.
@@ -225,3 +225,60 @@ South Dakota Health Link is a South Dakota Department of Health program (the DOH
 #### Pages that could not be read
 
 dss.mo.gov/mhd/hie.htm (HTTP 404 to curl and WebFetch), dss.mo.gov/mhd/hie-onboarding/ (HTTP 404 in WebFetch), missourihealthconnection.org (TLS handshake failure; HTTP 409 over http), hhs.iowa.gov/health-information-exchange (HTTP 404; the transition FAQ PDF was read instead), hie.illinois.gov (HTTP 404), mhin.org (parked), healthlinc.org (HTTP 404), tigerinstitute.org (DNS), healthbridge.org (HTTP 403), khinonline.org/contact-us/ (HTTP 404).
+
+### Batch 7d: West (AZ, CO, ID, MT, NV, NM, UT, WY, AK, CA, HI, OR, WA) and retries (NH, RI, AL, IL), read on 2026-11-06
+
+Pages were fetched with curl (`curl -sSL`, browser user agent) and converted to text locally; WebFetch was tried where curl failed. Every entry is at the basic level, as in batches 7b and 7c. Designation is described here only where a state page says it; the data file never states designation outside a source title.
+
+#### Contexture (Arizona and Colorado)
+
+Contexture's About Us page says it is the statewide health information exchange for both Arizona and Colorado, and its HIE onboarding page addresses participants of the Contexture HIE in Arizona and Colorado, so it is one `multi_state` entry listing AZ and CO. Quality Health Network's home page says QHN is now Contexture and that the legacy QHN platform has been retired, so QHN gets no entry of its own; its page is cited on the Contexture entry. Contexture's Get Connected link leads to its contact page, so its how-to-join sentence is the fallback. No Arizona or Colorado agency page was cited: the AHCCCS Health Information Exchange page returns HTTP 200 with a "Page/Document not found" body, and the Colorado Office of eHealth Innovation home page was read but does not name Contexture.
+
+#### Reliance eHealth Collaborative
+
+Reliance's Community Partners page says it was founded in Southern Oregon in 2011 and now serves Oregon, Washington, and parts of Northern California, so it is one `multi_state` entry listing OR, WA and CA. reliancehie.org/about-reliance/ returns 404; the description is read from the About text served on the Community Partners page. No Oregon agency page was read.
+
+#### California
+
+The CalHHS Data Exchange Framework (DxF) "QHIOs at a Glance" PDF, last updated June 2026, lists eight Qualified Health Information Organizations (QHIOs); the DxF site defines a QHIO as a DxF designated intermediary. The PDF says its data are self-reported by the QHIOs and not independently verified by the DxF Program, so it is cited for the list only, not for the counties each organization serves. Entries were added for the three QHIOs whose own sites were read and describe a health information exchange an organization joins: Manifest MedEx, SacValley MedShare and San Diego Health Connect. The other five were not added:
+
+- Health Gorilla is already present as the national entry `qhin-health-gorilla`, with no states; a national entry is not extended with a state list.
+- Cozeva (Applied Research Works) and Long Health: their own home pages describe software products (quality and risk adjustment; AI summarization and data transformation), not a network an outside organization joins. Whether to list them is a lead decision.
+- Los Angeles Network for Enhanced Services (LANES): lanesla.org returns HTTP 403 behind a bot challenge to curl and WebFetch.
+- Orange County Partners in Health HIE: the state PDF gives ocphhiestg.wpengine.com, a staging host, as its website; that page carries a 2022 copyright and no production domain was found, so no staging URL is published.
+
+An earlier 2023 DxF PDF named a ninth QHIO, Serving Communities Health Information Organization; it is not on the June 2026 list and was not added.
+
+#### Basic-level entries
+
+- AZ, CO: Contexture (see above).
+- ID: Idaho Health Data Exchange (idahohde.org; idhde.org does not resolve). Its Join the Network link leads to a contact form, so its how-to-join sentence is the fallback. No Idaho agency page was read.
+- MT: Big Sky Care Connect (mtbscc.org; bigskycareconnect.org does not resolve). Executive Order 14-2019, on the State of Montana former governors site, designates Big Sky Care Connect as Montana's single, state-designated health information exchange entity; a 2022 Governor's Office release describes state investment in it. Its site gives no joining steps, so the fallback is used.
+- NV: HealtHIE Nevada. How to join from its Sign Up / Learn More page. dhhs.nv.gov reset the connection, so no Nevada agency page is cited.
+- NM: SYNCRONYS (www.syncronys.org; the bare domain fails the TLS handshake). Its home page calls it the operator of the state's designated HIE; no New Mexico agency page was read, so the data file does not state designation. Fallback join sentence.
+- UT: UHIN Clinical Health Information Exchange (CHIE). UHIN also runs a claims clearinghouse; the entry covers the CHIE. Its Let's Connect link is a sales form, so the fallback is used. No Utah agency page was read.
+- WY: Wyoming Frontier Information (WYFI), separately sourced from South Dakota Health Link, which already lists WY. The Wyoming Department of Health WYFI page describes WYFI as the statewide HIE the Department administers and links wyfi.solutions as the official site. How to join from the Join Now form on the WYFI Providers page. Search results describe a 2026 state procurement for a new WYFI build; that was not read on a state page and is not stated in the data file.
+- AK: healthEconnect Alaska (healtheconnectak.org; healthiealaska.org does not resolve). The Alaska Department of Health For Health Care Facilities page says it is designated as Alaska's HIE by the Department. How to join from its Provider FAQs.
+- CA: Manifest MedEx, SacValley MedShare, San Diego Health Connect (see above), plus Reliance eHealth Collaborative. How to join for San Diego Health Connect is from its FAQ; the other two use the fallback.
+- HI: Hawaii Health Information Exchange. Its home page calls it the state-designated HIE; no Hawaii agency page was read. Fallback join sentence.
+- OR: Reliance eHealth Collaborative (see above). How to join from its FAQ.
+- WA: OneHealthPort HIE, plus Reliance. How to join from its Contracting page, which describes a participation agreement signed online and an annual subscription fee; fee amounts are not repeated. No Washington agency page was read (the Health Care Authority HIE path tried returned 404).
+
+#### Retries for NH, RI, AL and IL
+
+- NH: still no entry. nhhio.org now resolves, but to an unrelated online gambling site, so the New Hampshire Health Information Organization's domain has lapsed. www.dhhs.nh.gov returned HTTP 403. A web search found no current page from a New Hampshire network or agency describing a statewide HIE. Nothing in the data file links nhhio.org.
+- RI: still no entry. currentcareri.org and www.currentcareri.org fail the TLS handshake to curl and WebFetch; riqi.org and www.riqi.org serve a certificate for another host (WP Engine) to curl and WebFetch; eohhs.ri.gov returns a bot challenge (HTTP 403). The pages were not read with certificate checks disabled, and a site that fails certificate verification could not pass the link check anyway.
+- AL: added. The One Health Record home page still returns HTTP 403 behind a bot challenge, but its policy manual PDF on the same domain (effective October 1, 2023; file created March 2024) was read with curl. It calls One Health Record Alabama's Health Information Exchange, says it is administered and managed by the Alabama Medicaid Agency, and says each participant must execute a DURSA (participation agreement) and a HIPAA Business Associate Agreement before exchange begins; the how-to-join sentence comes from that. The Alabama Medicaid Agency home page, read with curl, links "One Health Record - HIE" to onehealthrecord.alabama.gov. A 2015 Medicaid news item about One Health Record was read but is not cited, because it does not show current operation. The entry's website is the One Health Record home page, which the link check lists for checking by hand.
+- IL: still no entry. The HFS HealthChoice Illinois ADT page still loads; hfs.illinois.gov/medicalproviders/ehealth.html and the IDPH health information exchange path tried return 404, and the former www2.illinois.gov HIE site redirects to the illinois.gov home page. No page found describes a current statewide or regional HIE an outside organization can join, so the batch 7c reasoning stands.
+
+#### Pages that could not be read
+
+lanesla.org (HTTP 403, bot challenge, also in WebFetch), ocphhiestg.wpengine.com (read, but a staging host; not cited), azahcccs.gov HIE page (HTTP 200 with a not-found body), dhhs.nv.gov (connection reset), syncronys.org without www (TLS handshake failure), idhde.org, bigskycareconnect.org and healthiealaska.org (DNS), reliancehie.org/about-reliance/ (HTTP 404), hca.wa.gov HIE path tried (HTTP 404), dxf.chhs.ca.gov QHIO list PDFs at the 2023 and 2025 upload paths (HTTP 404; the June 2026 PDF under /wp-content/uploads/sites/6/ was read instead), currentcareri.org and riqi.org (TLS errors), eohhs.ri.gov and www.dhhs.nh.gov (HTTP 403), nhhio.org (unrelated gambling site), onehealthrecord.alabama.gov pages other than the policy manual PDF (HTTP 403 or timeout).
+
+#### Link check
+
+No dead or unreachable links. The check-by-hand list is the batch 7c list plus one new item: the One Health Record home page (HTTP 403, bot challenge).
+
+#### Coverage after Task 7
+
+Every jurisdiction has at least one local or multi-state entry except IL, NH and RI. This is not a claim that the networks listed are the only ones operating in any state.
