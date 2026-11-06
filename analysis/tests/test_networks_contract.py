@@ -1,0 +1,121 @@
+"""Invariants of the networks.json contract (analysis/validate_contract.check_networks)."""
+import copy
+
+from analysis.validate_contract import check_networks
+
+SLUGS = ["treatment-records", "individual-access", "find-endpoint", "payer-exchange",
+         "encounter-alerts", "public-health", "community-referral"]
+
+
+def src(primary=True):
+    return {"url": "https://example.org/a", "title": "A", "accessed": "2026-11-01", "primary": primary}
+
+
+def valid():
+    return {
+        "schema_version": 1,
+        "generated_at": "2026-11-06",
+        "use_cases": [{"slug": s, "label": s, "summary": "Summary.", "ainpi_links": []} for s in SLUGS],
+        "routes": [{
+            "id": "r1", "use_case": "treatment-records", "title": "T", "summary": "S",
+            "who_can_use": "W", "rule": "R", "standard": "S", "how_to_join": "H",
+            "network_types": ["state_hie", "qhin"], "sources": [src()], "ainpi_links": [],
+        }],
+        "networks": [
+            {"id": "n1", "name": "N1", "type": "state_hie", "national": False, "states": ["PA"],
+             "detail_level": "full", "routes": ["r1"], "website": "https://example.org",
+             "how_to_join": "Join.", "sources": [src()], "last_checked": "2026-11-01"},
+            {"id": "n2", "name": "N2", "type": "qhin", "national": True, "states": [],
+             "detail_level": "basic", "routes": [], "website": "https://example.org",
+             "how_to_join": "Join.", "sources": [src()], "last_checked": "2026-11-01"},
+        ],
+        "glossary": [{"term": "HIE", "definition": "A health information exchange."}],
+    }
+
+
+def errs(mutate):
+    p = copy.deepcopy(valid())
+    mutate(p)
+    return check_networks(p)
+
+
+def test_valid_minimal():
+    assert check_networks(valid()) == []
+
+
+def test_network_without_primary_source():
+    e = errs(lambda p: p["networks"][0].update(sources=[src(False)]))
+    assert e and any("n1" in x for x in e)
+
+
+def test_route_without_primary_source():
+    e = errs(lambda p: p["routes"][0].update(sources=[src(False)]))
+    assert e and any("r1" in x for x in e)
+
+
+def test_unknown_route_reference():
+    e = errs(lambda p: p["networks"][0].update(routes=["nope"]))
+    assert e and any("n1" in x and "nope" in x for x in e)
+
+
+def test_route_type_mismatch():
+    e = errs(lambda p: p["routes"][0].update(network_types=["qhin"]))
+    assert e and any("n1" in x for x in e)
+
+
+def test_national_with_states():
+    e = errs(lambda p: p["networks"][1].update(states=["PA"]))
+    assert e and any("n2" in x for x in e)
+
+
+def test_local_without_states():
+    e = errs(lambda p: p["networks"][0].update(states=[]))
+    assert e and any("n1" in x for x in e)
+
+
+def test_state_code_outside_51():
+    e = errs(lambda p: p["networks"][0].update(states=["PR"]))
+    assert e and any("n1" in x and "PR" in x for x in e)
+
+
+def test_dc_allowed():
+    assert errs(lambda p: p["networks"][0].update(states=["DC"])) == []
+
+
+def test_last_checked_in_future():
+    e = errs(lambda p: p["networks"][0].update(last_checked="2999-01-01"))
+    assert e and any("n1" in x for x in e)
+
+
+def test_last_checked_not_iso():
+    e = errs(lambda p: p["networks"][0].update(last_checked="11/01/2026"))
+    assert e and any("n1" in x for x in e)
+
+
+def test_duplicate_ids():
+    def m(p):
+        p["networks"][1]["id"] = "n1"
+    e = errs(m)
+    assert e and any("n1" in x for x in e)
+
+
+def test_use_cases_not_exactly_seven():
+    e = errs(lambda p: p.update(use_cases=p["use_cases"][:-1]))
+    assert e and any("community-referral" in x for x in e)
+
+
+def test_basic_network_with_routes():
+    e = errs(lambda p: p["networks"][1].update(routes=["r1"]))
+    assert e and any("n2" in x for x in e)
+
+
+def test_count_in_prose():
+    e = errs(lambda p: p["routes"][0].update(summary="Covers 12 QHINs today."))
+    assert e and any("r1" in x for x in e)
+    e = errs(lambda p: p["glossary"][0].update(definition="There are 40 networks."))
+    assert e
+
+
+def test_em_dash_in_prose():
+    e = errs(lambda p: p["use_cases"][0].update(summary="One — two."))
+    assert e and any("treatment-records" in x for x in e)

@@ -8,7 +8,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import type { ApiV1Stats, ApiV1Finding, ApiV1StateFindings } from './api-v1-types';
+import type { ApiV1Stats, ApiV1Finding, ApiV1StateFindings, NetworksPayload } from './api-v1-types';
 import type { LandscapePayload } from './landscape-types';
 import type { PaRuralPayload } from '@/lib/pa-rural-types';
 import type { ConnectivityPayload } from '@/lib/connectivity-types';
@@ -20,6 +20,15 @@ export function loadStats(): ApiV1Stats | null {
   try {
     const raw = fs.readFileSync(path.join(PUBLIC_API_ROOT, 'stats.json'), 'utf8');
     return JSON.parse(raw) as ApiV1Stats;
+  } catch {
+    return null;
+  }
+}
+
+export function loadNetworks(): NetworksPayload | null {
+  try {
+    const raw = fs.readFileSync(path.join(PUBLIC_API_ROOT, 'networks.json'), 'utf8');
+    return JSON.parse(raw) as NetworksPayload;
   } catch {
     return null;
   }

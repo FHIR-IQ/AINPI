@@ -157,6 +157,12 @@ def schema_pass(rep: Report) -> None:
         check(API / "dq-results.json", "dq_results")
     if (API / "source-changes.json").exists():
         check(API / "source-changes.json", "source_changes")
+    if (API / "networks.json").exists():
+        check(API / "networks.json", "networks")
+        doc = load(API / "networks.json")
+        if isinstance(doc, dict):
+            for msg in check_networks(doc):
+                rep.error("networks.json", msg)
     for f in sorted((API / "findings").glob("*.json")):
         # `-detail` payloads are row-level companions to a finding, not
         # findings: they carry an array of records rather than a headline and
@@ -414,6 +420,104 @@ def invariant_pass(rep: Report) -> None:
             when = when.replace(tzinfo=timezone.utc)
         if when > now:
             rep.error(f"findings/{slug}", f"generated_at is in the future: {ts}")
+
+
+# --------------------------------------------------------------------------
+# networks.json invariants
+# --------------------------------------------------------------------------
+NETWORK_USE_CASES = ["treatment-records", "individual-access", "find-endpoint",
+                     "payer-exchange", "encounter-alerts", "public-health",
+                     "community-referral"]
+STATE_CODES_51 = set(
+    "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO "
+    "MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split()
+)
+_COUNT_IN_PROSE = re.compile(r"\b\d+\s+(QHINs?|HIEs?|networks?)\b", re.IGNORECASE)
+_ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
+def _strings(node, path=""):
+    """Yield (path, string) for every string value under node, recursively."""
+    if isinstance(node, str):
+        yield path, node
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            yield from _strings(v, f"{path}.{k}" if path else k)
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            yield from _strings(v, f"{path}[{i}]")
+
+
+def check_networks(payload: dict) -> list[str]:
+    """One error string per violated invariant of networks.json."""
+    errors: list[str] = []
+    use_cases = payload.get("use_cases", [])
+    routes = payload.get("routes", [])
+    networks = payload.get("networks", [])
+    routes_by_id = {r.get("id"): r for r in routes}
+
+    slugs = [u.get("slug") for u in use_cases]
+    if sorted(slugs) != sorted(NETWORK_USE_CASES):
+        missing = sorted(set(NETWORK_USE_CASES) - set(slugs))
+        extra = sorted(set(slugs) - set(NETWORK_USE_CASES))
+        errors.append(
+            f"use_cases must be exactly the seven agreed slugs; missing {missing}, "
+            f"unexpected or repeated {extra or sorted(s for s in set(slugs) if slugs.count(s) > 1)}"
+        )
+
+    for kind, items in (("route", routes), ("network", networks)):
+        seen: set = set()
+        for it in items:
+            i = it.get("id")
+            if i in seen:
+                errors.append(f"duplicate {kind} id {i}")
+            seen.add(i)
+            if not any(s.get("primary") is True for s in it.get("sources", [])):
+                errors.append(f"{kind} {i} has no primary source")
+
+    for r in routes:
+        if r.get("use_case") not in NETWORK_USE_CASES:
+            errors.append(f"route {r.get('id')} names unknown use_case {r.get('use_case')}")
+
+    today = datetime.now(timezone.utc).date().isoformat()
+    for n in networks:
+        nid = n.get("id")
+        states = n.get("states", [])
+        if n.get("national") and states:
+            errors.append(f"network {nid} is national but lists states {states}")
+        if not n.get("national") and not states:
+            errors.append(f"network {nid} is not national and lists no states")
+        for st in states:
+            if st not in STATE_CODES_51:
+                errors.append(f"network {nid} has state code {st} outside the 50 states and DC")
+        lc = n.get("last_checked", "")
+        if not isinstance(lc, str) or not _ISO_DATE.match(lc):
+            errors.append(f"network {nid} last_checked {lc!r} is not an ISO date")
+        elif lc > today:
+            errors.append(f"network {nid} last_checked {lc} is in the future")
+        if n.get("detail_level") == "basic" and n.get("routes"):
+            errors.append(f"network {nid} is basic but lists routes")
+        for rid in n.get("routes", []):
+            route = routes_by_id.get(rid)
+            if route is None:
+                errors.append(f"network {nid} references unknown route {rid}")
+            elif n.get("type") not in route.get("network_types", []):
+                errors.append(
+                    f"network {nid} has type {n.get('type')} but route {rid} "
+                    f"does not accept it"
+                )
+
+    for section, items, key in (("use_cases", use_cases, "slug"), ("routes", routes, "id"),
+                                ("networks", networks, "id"),
+                                ("glossary", payload.get("glossary", []), "term")):
+        for it in items:
+            for path, s in _strings(it):
+                where = f"{section} {it.get(key)} {path}"
+                if "\u2014" in s:
+                    errors.append(f"{where} contains an em dash")
+                if _COUNT_IN_PROSE.search(s):
+                    errors.append(f"{where} states a count in prose")
+    return errors
 
 
 def write_schemas() -> None:

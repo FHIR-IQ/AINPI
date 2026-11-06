@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-06",
+  "use_cases": [
+    {
+      "slug": "treatment-records",
+      "label": "Get a patient's records for treatment",
+      "summary": "Ways a clinician can pull a patient's records from other organizations when treating them.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "individual-access",
+      "label": "Get my own records (as a patient)",
+      "summary": "Ways a patient can get their own records, through a portal, an app or a request.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "find-endpoint",
+      "label": "Find a provider's endpoint",
+      "summary": "Ways to find the electronic address where a provider or organization receives data.",
+      "ainpi_links": [
+        {
+          "label": "Endpoint URL validity",
+          "finding_slug": "endpoint-url-validity"
+        },
+        {
+          "label": "Endpoint-to-organization linkage",
+          "finding_slug": "endpoint-org-linkage"
+        },
+        {
+          "label": "Vendor endpoint attribution",
+          "finding_slug": "vendor-endpoint-attribution"
+        },
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
+    },
+    {
+      "slug": "payer-exchange",
+      "label": "Exchange data with a payer (patient access, provider access, payer-to-payer, prior authorization)",
+      "summary": "Ways data moves between payers, patients and providers under the CMS interoperability rules.",
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoints"
+        },
+        {
+          "label": "Payer seed coverage",
+          "finding_slug": "payer-seed-coverage"
+        }
+      ]
+    },
+    {
+      "slug": "encounter-alerts",
+      "label": "Get admit and discharge alerts",
+      "summary": "Ways to be notified when a patient is admitted to or discharged from a hospital or emergency department.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "public-health",
+      "label": "Report to public health",
+      "summary": "Ways to send reportable conditions, immunizations and lab results to public health agencies.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "community-referral",
+      "label": "Refer someone to a community organization",
+      "summary": "Ways to refer a person to a social service or community organization and track the outcome.",
+      "ainpi_links": []
+    }
+  ],
+  "routes": [],
+  "networks": [],
+  "glossary": [
+    {
+      "term": "HIE",
+      "definition": "Health information exchange: an organization or network that moves patient health data between providers and other authorized parties."
+    },
+    {
+      "term": "QHIN",
+      "definition": "Qualified Health Information Network: an organization designated under TEFCA to connect participants and route queries between networks."
+    },
+    {
+      "term": "TEFCA",
+      "definition": "Trusted Exchange Framework and Common Agreement: the federal framework that sets common rules for nationwide health information exchange."
+    },
+    {
+      "term": "Direct",
+      "definition": "A secure messaging standard for sending health information from one address to another, similar to encrypted email between providers."
+    },
+    {
+      "term": "FHIR",
+      "definition": "Fast Healthcare Interoperability Resources: the HL7 standard for exchanging health data over web APIs."
+    },
+    {
+      "term": "IHE",
+      "definition": "Integrating the Healthcare Enterprise: a body that publishes profiles for how systems exchange data, such as document sharing and patient lookup."
+    },
+    {
+      "term": "ADT",
+      "definition": "Admit, discharge and transfer: the messages a hospital sends when a patient arrives, leaves or moves."
+    },
+    {
+      "term": "NDH",
+      "definition": "National Directory of Healthcare: the HL7 FHIR implementation guide that describes how providers, organizations and endpoints are listed in a directory."
+    },
+    {
+      "term": "endpoint",
+      "definition": "The electronic address, usually a web URL or a Direct address, where an organization receives or serves health data."
+    }
+  ]
+}
