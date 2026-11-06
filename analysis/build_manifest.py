@@ -128,6 +128,7 @@ def main() -> None:
                 {"path": "/api/v1/manifest.json", "summary": "This document — discovery index"},
                 {"path": "/api/v1/findings/{slug}.json", "summary": "Per-finding detail (see findings list below)"},
                 {"path": "/api/v1/states/{state}.json", "summary": "State-scoped findings (see states list below)"},
+                {"path": "/api/v1/networks.json", "summary": "Health data networks, routes by use case, sources"},
             ],
             "live_api": [
                 {"path": "/api/npd/search?npi={npi}", "summary": "NDH-only NPI lookup"},

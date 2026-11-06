@@ -10,7 +10,7 @@
   "release_date": "2026-10-07",
   "methodology_version": "0.7.3-draft",
   "commit_sha": "adb6d00",
-  "generated_at": "2026-11-02T19:42:12+00:00",
+  "generated_at": "2026-11-06T16:45:47+00:00",
   "endpoints": {
     "static_contract": [
       {
@@ -28,6 +28,10 @@
       {
         "path": "/api/v1/states/{state}.json",
         "summary": "State-scoped findings (see states list below)"
+      },
+      {
+        "path": "/api/v1/networks.json",
+        "summary": "Health data networks, routes by use case, sources"
       }
     ],
     "live_api": [
