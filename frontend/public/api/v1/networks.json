@@ -254,7 +254,7 @@
       "use_case": "individual-access",
       "title": "Your health plan's Patient Access API",
       "summary": "You connect an app to your health plan's API to get your claims and encounter data, including cost, and a defined set of clinical data.",
-      "who_can_use": "Members of Medicare Advantage plans, Medicaid and CHIP programs and managed care plans, and Qualified Health Plan issuers on the federally facilitated exchanges.",
+      "who_can_use": "People enrolled in a Medicare Advantage plan, in Medicaid or CHIP (fee-for-service or managed care), or in a Qualified Health Plan on the federally facilitated exchanges. CMS excludes issuers offering only stand-alone dental plans (SADPs) and QHP issuers offering coverage in the Federally-facilitated Small Business Health Options Program (FF-SHOP).",
       "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); CMS-0057-F adds prior authorization information.",
       "standard": "HL7 FHIR R4 (Release 4.0.1) API.",
       "how_to_join": "Pick an app that connects to your plan's Patient Access API, or ask your plan which apps it supports.",
@@ -297,7 +297,7 @@
       "who_can_use": "Individuals, through an Individual Access Services provider connected to TEFCA by a QHIN, Participant or Subparticipant.",
       "rule": "TEFCA Common Agreement, Individual Access Services exchange purpose.",
       "standard": "Set by the QHIN Technical Framework and the Individual Access Services SOP.",
-      "how_to_join": "Use an app or portal whose operator offers Individual Access Services through a QHIN.",
+      "how_to_join": "Use an app or portal whose operator offers Individual Access Services through a QHIN. The QHINs listed here are those whose own pages say they offer this. Other QHINs may also support it, so ask a QHIN directly.",
       "network_types": [
         "qhin"
       ],
@@ -532,7 +532,7 @@
       "use_case": "payer-exchange",
       "title": "Provider Access API",
       "summary": "An in-network provider pulls claims, encounter, USCDI and prior authorization data for patients it treats, unless the patient opts out; payers must implement it by January 1, 2027.",
-      "who_can_use": "In-network providers with a treatment relationship to the patient, as set by the payer's attribution process.",
+      "who_can_use": "In-network or enrolled providers with whom the patient has a treatment relationship, as set by the payer's attribution process. Patients can opt out.",
       "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS states the exact compliance dates vary by type of payer.",
       "standard": "HL7 FHIR API.",
       "how_to_join": "Ask each impacted payer how it attributes patients to your organization and how to connect to its Provider Access API.",
@@ -651,7 +651,7 @@
       "summary": "A hospital sends admit, discharge and transfer messages to an HIE, which passes notices on to the patient's other providers.",
       "who_can_use": "Hospitals that send to the HIE, and providers that receive its notices under its participation agreement.",
       "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), which lets a hospital send notifications through an intermediary; the HIE's participation agreement.",
-      "standard": "HL7 v2 ADT messages (HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2)).",
+      "standard": "HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2); hospitals typically send these as HL7 v2 ADT (admit, discharge, transfer) messages.",
       "how_to_join": "Contact the HIE listed for your state on this page.",
       "network_types": [
         "state_hie",
@@ -683,10 +683,10 @@
       "id": "encounter-alerts-hospital-cop",
       "use_case": "encounter-alerts",
       "title": "Hospital e-notifications under the Medicare Conditions of Participation",
-      "summary": "A hospital's system notifies post-acute providers and the patient's established primary care practitioner when the patient registers in the emergency department, is admitted, or is discharged or transferred.",
+      "summary": "When a patient registers in the emergency department, is admitted, or is discharged or transferred, the hospital's system sends a notification. The hospital makes a reasonable effort to send it to post-acute providers and to the patient's established primary care practitioner or group, where applicable law allows and consistent with the patient's expressed privacy preferences.",
       "who_can_use": "Post-acute care providers and the practitioners or groups the rule names as recipients.",
       "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), added by CMS-9115-F; applies to hospitals whose systems conform to the content standard at 45 CFR 170.205(d)(2).",
-      "standard": "HL7 v2 ADT messages (HL7 2.5.1).",
+      "standard": "HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2); hospitals typically send these as HL7 v2 ADT (admit, discharge, transfer) messages.",
       "how_to_join": "Ask the hospital, or its HIE, how it sends notifications and how to be listed as a recipient.",
       "network_types": [],
       "sources": [
@@ -757,7 +757,7 @@
       "who_can_use": "Public health agencies and other organizations connected to TEFCA through a QHIN, Participant or Subparticipant.",
       "rule": "TEFCA Common Agreement, Public Health exchange purpose.",
       "standard": "Set by the QHIN Technical Framework.",
-      "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement.",
+      "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement. The QHINs listed here are those whose own pages say they offer this. Other QHINs may also support it, so ask a QHIN directly.",
       "network_types": [
         "qhin"
       ],
@@ -902,9 +902,7 @@
       "states": [],
       "detail_level": "full",
       "routes": [
-        "treatment-records-qhin",
-        "individual-access-tefca-ias",
-        "public-health-tefca"
+        "treatment-records-qhin"
       ],
       "website": "https://ehealthexchange.org/tefca/",
       "how_to_join": "eHealth Exchange participants can opt in to TEFCA exchange through it; other organizations contact eHealth Exchange.",
@@ -962,9 +960,7 @@
       "states": [],
       "detail_level": "full",
       "routes": [
-        "treatment-records-qhin",
-        "individual-access-tefca-ias",
-        "public-health-tefca"
+        "treatment-records-qhin"
       ],
       "website": "https://www.healthgorilla.com/",
       "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
