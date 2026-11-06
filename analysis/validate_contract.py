@@ -495,7 +495,7 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
     routes = section("routes")
     networks = section("networks")
     glossary = section("glossary")
-    routes_by_id = {r.get("id"): r for r in routes}
+    routes_by_id = {r["id"]: r for r in routes if isinstance(r.get("id"), str)}
 
     slugs = [u.get("slug") for u in use_cases]
     if any(not isinstance(x, str) for x in slugs):
@@ -518,6 +518,9 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
         seen: set = set()
         for it in items:
             i = it.get("id")
+            if not isinstance(i, str):
+                errors.append(f"{kind} id {i!r} is not a string")
+                i = repr(i)
             if i in seen:
                 errors.append(f"duplicate {kind} id {i}")
             seen.add(i)
@@ -525,7 +528,7 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
                 errors.append(f"{kind} {i} has no primary source")
 
     for r in routes:
-        if r.get("use_case") not in NETWORK_USE_CASES:
+        if not isinstance(r.get("use_case"), str) or r.get("use_case") not in NETWORK_USE_CASES:
             errors.append(f"route {r.get('id')} names unknown use_case {r.get('use_case')}")
 
     today = datetime.now(timezone.utc).date().isoformat()
@@ -540,13 +543,15 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
         if not n.get("national") and not states:
             errors.append(f"network {nid} is not national and lists no states")
         for st in states:
-            if st not in STATE_CODES_51:
+            if not isinstance(st, str) or st not in STATE_CODES_51:
                 errors.append(f"network {nid} has state code {st} outside the 50 states and DC")
         lc = n.get("last_checked", "")
         if not isinstance(lc, str) or not _ISO_DATE.match(lc):
             errors.append(f"network {nid} last_checked {lc!r} is not an ISO date")
         elif lc > today:
             errors.append(f"network {nid} last_checked {lc} is in the future")
+        if not isinstance(n.get("type"), str):
+            errors.append(f"network {nid} type {n.get('type')!r} is not a string")
         nroutes = n.get("routes", [])
         if not isinstance(nroutes, list):
             errors.append(f"network {nid} routes is not a list")
@@ -559,7 +564,11 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
                 errors.append(f"network {nid} references unknown route {rid}")
             else:
                 types = route.get("network_types", [])
-                if not isinstance(types, list) or n.get("type") not in types:
+                if not isinstance(types, list):
+                    errors.append(f"route {rid} network_types is not a list")
+                elif any(not isinstance(x, str) for x in types):
+                    errors.append(f"route {rid} network_types has a non-string entry")
+                elif n.get("type") not in types:
                     errors.append(
                         f"network {nid} has type {n.get('type')} but route {rid} "
                         f"does not accept it"

@@ -151,3 +151,36 @@ def test_malformed_payload_returns_errors_not_raise():
     e = check_networks(p)
     assert e
     assert check_networks([]) and check_networks({"use_cases": 5})
+
+
+import pytest
+
+
+def _bad_route_id(p):
+    p["routes"][0]["id"] = [1]
+
+
+def _bad_network_id(p):
+    p["networks"][0]["id"] = {"a": 1}
+
+
+def _bad_state(p):
+    p["networks"][0]["states"] = [{"x": 1}]
+
+
+def _bad_network_types(p):
+    p["routes"][0]["network_types"] = [["state_hie"], "qhin"]
+
+
+def _bad_route_ref(p):
+    p["networks"][0]["routes"] = [{"x": 1}]
+
+
+def _bad_network_type(p):
+    p["networks"][0]["type"] = ["state_hie"]
+
+
+@pytest.mark.parametrize("mutate", [_bad_route_id, _bad_network_id, _bad_state,
+                                    _bad_network_types, _bad_route_ref, _bad_network_type])
+def test_unhashable_values_return_errors(mutate):
+    assert errs(mutate)
