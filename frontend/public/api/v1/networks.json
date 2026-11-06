@@ -123,7 +123,12 @@
           "primary": true
         }
       ],
-      "ainpi_links": []
+      "ainpi_links": [
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
     },
     {
       "id": "treatment-records-qhin",
@@ -677,7 +682,12 @@
           "primary": true
         }
       ],
-      "ainpi_links": []
+      "ainpi_links": [
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
     },
     {
       "id": "encounter-alerts-hospital-cop",
@@ -784,6 +794,41 @@
       "ainpi_links": []
     },
     {
+      "id": "public-health-state-hie",
+      "use_case": "public-health",
+      "title": "Public health reporting through a state HIE",
+      "summary": "A provider sends reportable data, such as lab results or immunizations, to its HIE, which passes it to state public health registries through a connection the state runs.",
+      "who_can_use": "Providers that are members of an HIE connected to the state's public health connection.",
+      "rule": "State public health reporting requirements, each registry's own submission requirements, and the HIE's participation agreement.",
+      "standard": "Set by each registry and the state's connection; check the registry's requirements.",
+      "how_to_join": "Ask your HIE whether it connects to your state's public health registries and which ones. The networks listed here are those whose own pages, or a state agency page, say they do.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/phg",
+          "title": "Public Health Gateway (PHG), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.keyhie.org/products-services/pa-patient-and-provider-network-p3n",
+          "title": "PA Patient and Provider Network (P3N), KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/public-health/",
+          "title": "Public Health, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
       "id": "community-referral-direct",
       "use_case": "community-referral",
       "title": "A Direct message to the receiving organization",
@@ -817,6 +862,47 @@
         {
           "url": "https://directtrust.org/what-we-do/directory-services",
           "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "community-referral-hie",
+      "use_case": "community-referral",
+      "title": "A community referral platform offered through an HIE",
+      "summary": "A provider screens a person for social needs, refers them to a community organization through a referral platform its HIE offers, and sees whether the organization closed the loop.",
+      "who_can_use": "Healthcare organizations connected to an HIE that offers the platform, and community organizations that join the platform.",
+      "rule": "The platform's terms and the HIE's participation agreement.",
+      "standard": "Set by the platform; some platforms integrate with the referring organization's EHR.",
+      "how_to_join": "Healthcare organizations ask their HIE; community organizations follow the platform's own sign-up steps.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-residents/pa-navigate",
+          "title": "PA Navigate, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/pa-navigate/",
+          "title": "PA NAVIGATE, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.keyhie.org/products-services/pa-navigate",
+          "title": "PA Navigate, KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.clinicalconnecthie.com/services-info",
+          "title": "Services, ClinicalConnect HIE",
           "accessed": "2026-11-06",
           "primary": true
         }
@@ -1431,6 +1517,606 @@
         {
           "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
           "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "pa-patient-and-provider-network",
+      "name": "PA Patient and Provider Network (P3N)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie"
+      ],
+      "website": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+      "how_to_join": "Providers connect to the P3N through a certified regional network called a health information organization (HIO).",
+      "sources": [
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/hio-connection",
+          "title": "HIO Connection, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/phg",
+          "title": "Public Health Gateway (PHG), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/choose-your-hio",
+          "title": "Choose Your HIO, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "central-pennsylvania-connect-hie",
+      "name": "Central Pennsylvania Connect Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://www.centralpaconnect.org/",
+      "how_to_join": "Contact the network; the Pennsylvania DHS HIO table lists its contact details.",
+      "sources": [
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "clinicalconnect-hie",
+      "name": "ClinicalConnect HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://www.clinicalconnecthie.com/",
+      "how_to_join": "Complete the form on its How to Join page if you are a provider interested in its services.",
+      "sources": [
+        {
+          "url": "https://www.clinicalconnecthie.com/services-info",
+          "title": "Services, ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.clinicalconnecthie.com/how-to-join",
+          "title": "Join ClinicalConnect HIE, ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.clinicalconnecthie.com/",
+          "title": "ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthshare-exchange",
+      "name": "HealthShare Exchange (HSX)",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "PA",
+        "NJ",
+        "DE"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://healthshareexchange.org/",
+      "how_to_join": "Contact HSX Member Services for participation information.",
+      "sources": [
+        {
+          "url": "https://healthshareexchange.org/all-available-services/",
+          "title": "All Available Services, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/public-health/",
+          "title": "Public Health, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/pa-navigate/",
+          "title": "PA NAVIGATE, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/vision-and-mission/",
+          "title": "Vision and Mission, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "keystone-health-information-exchange",
+      "name": "Keystone Health Information Exchange (KeyHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://www.keyhie.org/",
+      "how_to_join": "Contact KeyHIE for pricing and next steps; its service pages give its member services email and phone number.",
+      "sources": [
+        {
+          "url": "https://www.keyhie.org/products-services/pa-patient-and-provider-network-p3n",
+          "title": "PA Patient and Provider Network (P3N), KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.keyhie.org/products-services/notifications-information-delivery",
+          "title": "KeyHIE Notifications and Information Delivery Service, KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.keyhie.org/products-services/pa-navigate",
+          "title": "PA Navigate, KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "lehigh-valley-health-network-hio",
+      "name": "Lehigh Valley Health Network (P3N certified HIO)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie"
+      ],
+      "website": "https://www.lvhn.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "connie",
+      "name": "Connie",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.conniect.org/",
+      "how_to_join": "Start the connection by filling out the Connie Registration Form, which assigns an account manager to your organization.",
+      "sources": [
+        {
+          "url": "https://www.conniect.org/",
+          "title": "Connie, Connecticut's Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.conniect.org/connectwithconnie",
+          "title": "Connect with Connie, Connie",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthinfonet",
+      "name": "HealthInfoNet",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "ME"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://hinfonet.org/",
+      "how_to_join": "Submit a participation request form so it can determine your organization's eligibility and next steps toward onboarding.",
+      "sources": [
+        {
+          "url": "https://hinfonet.org/",
+          "title": "HealthInfoNet, Maine's Statewide Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://hinfonet.org/inquiries/",
+          "title": "Inquiries, HealthInfoNet",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "mass-hiway",
+      "name": "Mass HIway",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.masshiway.net/",
+      "how_to_join": "Enroll through its Enroll page to start participation in the Mass HIway Direct Messaging network.",
+      "sources": [
+        {
+          "url": "https://www.masshiway.net/",
+          "title": "The Mass HIway, Massachusetts Health Information HIway",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.masshiway.net/Enroll",
+          "title": "Enroll in HIE Services, Mass HIway",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "vitl",
+      "name": "VITL (Vermont Health Information Exchange)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "VT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://vitl.net/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://vitl.net/",
+          "title": "VITL, Vermont Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://vitl.net/contact-us/",
+          "title": "Contact Us, VITL",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "new-jersey-health-information-network",
+      "name": "New Jersey Health Information Network (NJHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NJ"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.nj.gov/health/njhin/",
+      "how_to_join": "Check eligibility on its page; the New Jersey Department of Health has engaged NJII to support onboarding and integration.",
+      "sources": [
+        {
+          "url": "https://www.nj.gov/health/njhin/",
+          "title": "NJ Health Information Network, New Jersey Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "shin-ny",
+      "name": "Statewide Health Information Network for New York (SHIN-NY)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://nyehealth.org/shin-ny/what-is-the-shin-ny/",
+      "how_to_join": "To join the SHIN-NY, healthcare professionals first connect to one of the regional networks listed on its Connect and Use page.",
+      "sources": [
+        {
+          "url": "https://nyehealth.org/shin-ny/what-is-the-shin-ny/",
+          "title": "What is the SHIN-NY?, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "bronx-rhio",
+      "name": "Bronx RHIO",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://bronxrhio.org/how-to-participate/",
+      "how_to_join": "New members complete its application for participation and risk assessment, then the SHIN-NY Statewide Common Participation Agreement.",
+      "sources": [
+        {
+          "url": "https://bronxrhio.org/how-to-participate/",
+          "title": "How to Participate, Bronx RHIO",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healtheconnections",
+      "name": "HealtheConnections",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.healtheconnections.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.healtheconnections.org/",
+          "title": "HealtheConnections, New York Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthelink",
+      "name": "HEALTHeLINK",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wnyhealthelink.com/for-providers/how-to-join/",
+      "how_to_join": "Prospective participants complete its Registration Application and email it to its business development team.",
+      "sources": [
+        {
+          "url": "https://wnyhealthelink.com/for-providers/how-to-join/",
+          "title": "How To Join, HEALTHeLINK",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthix",
+      "name": "Healthix",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://healthix.org/healthix-community/new-to-healthix/",
+      "how_to_join": "Execute the Statewide Common Participation Agreement and the Healthix Service Agreement, then work with its team on technical onboarding.",
+      "sources": [
+        {
+          "url": "https://healthix.org/healthix-community/new-to-healthix/",
+          "title": "New to Healthix, Healthix",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "hixny",
+      "name": "Hixny",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://hixny.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://hixny.org/",
+          "title": "Hixny",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "rochester-rhio",
+      "name": "Rochester RHIO",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://rochesterrhio.org/ForDoctors",
+      "how_to_join": "Its site says it is transitioning its exchange services to HealtheConnections; contact HealtheConnections.",
+      "sources": [
+        {
+          "url": "https://rochesterrhio.org/ForDoctors",
+          "title": "For Doctors, Rochester RHIO",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
           "accessed": "2026-11-06",
           "primary": true
         }

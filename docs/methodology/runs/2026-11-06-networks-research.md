@@ -87,3 +87,55 @@ National networks: one QHIN entry for every organization on the RCE designated-Q
 ## Link check
 
 `python3 analysis/networks_link_check.py` on 2026-11-06 reported no dead links. Blocked (HTTP 403 to the bot user agent) and checked by hand: carequality.org, the DirectTrust pages, and oracle.com's QHIN page (which returned 200 to a browser user agent when it was read).
+
+## State and multi-state networks
+
+Task 7 adds state HIEs and multi-state networks in four regional batches. This section is written batch by batch; each batch appends its own subsection.
+
+### Batch 7a: Northeast (CT, ME, MA, NH, RI, VT, NJ, NY, PA), read on 2026-11-06
+
+Pages were fetched with curl (`curl -sSL`, browser user agent) and converted to text locally, or with WebFetch where curl failed. Pennsylvania gets full detail; the other states get the basic level (an entry with its website, a how-to-join sentence and sources, and no route list).
+
+#### Pennsylvania evidence bar
+
+A route is attached to a Pennsylvania network only when one of two sources says that network offers the service: the network's own page, or a row of the Pennsylvania Department of Human Services (DHS) table of P3N certified HIOs. The DHS table is a spreadsheet published on the DHS Choose Your HIO page (`ehealth-choose-your-hio.xlsx`, marked "Table Last Updated: 02-27-2025"). DHS says the information comes from questionnaires the HIOs completed and tells providers to contact each HIO for current information, so a table row is the HIO's own answer as published by the state, not a state finding. Menus, audience lists and general explanations of what an HIE is do not count, the same bar Task 6 used for QHINs.
+
+Networks placed in Pennsylvania by a primary source: the PA Patient and Provider Network (P3N), which the DHS eHealth Partnership runs, and the HIOs the DHS eHealth for Providers page names as P3N HIO members: Central PA Connect HIE, ClinicalConnect HIE, HealthShare Exchange, KeyHIE and Lehigh Valley Health Network.
+
+Attachments, with the statement behind each:
+
+- P3N. Treatment records: DHS eHealth for Providers and HIO Connection pages, which say the P3N helps providers find their patients' medical records in real time anywhere on the P3N network (paraphrased; the source sentence contains a dash). Encounter alerts: DHS eHealth for Providers, "The P3N operates a statewide alerting service using real-time admission discharge transfer (ADT) messages". Public health: DHS Public Health Gateway page, the PHG "provides a single, secure connection through which authorized agencies that participate in the Pennsylvania Patient and Provider Network (P3N) can report, query, and share data with the commonwealth's health data systems". Community referral is not attached to the P3N: the DHS PA Navigate page sends healthcare organizations to their HIO, not to the P3N.
+- Central PA Connect HIE. Its site (centralpaconnect.org) returns a bot-challenge page with no content to curl and WebFetch, so every attachment rests on the DHS table: "Provider-to-provider clinical: Yes" and a longitudinal medical record (treatment records); HIO-level ADT alerts "Yes for hospital emergency department, hospital inpatient, long term care admissions, discharges, and transfers" (encounter alerts); Public Health Gateway connection "Yes - Active connections to PA State Immunization Registry (PA-SIIS), Prescription Drug Montering Program (PDMP) and Electronic Lab Reporting (ELR)" (public health); "PA Navigate connection to the state-wide Resource and Referral Tool network" (community referral).
+- ClinicalConnect HIE. Its Services page: "ClinicalConnect HIE offers the longitudinal patient record" with "Query and retrieve access to trusted external partner data" (treatment records); "offers a real-time, secure service to notify healthcare providers of encounters at an emergency department or hospital" (encounter alerts); "offers integration to PA Navigate, the statewide community information network" and "Easily make referrals to community-based organizations" (community referral). Public health from the DHS table: "Yes, currently connected to Electronic Reportable Labs (ELR)."
+- HealthShare Exchange. Its All Available Services page: the Clinical Data Repository, where members "can see encounters, patient problems, medications procedures, Continuity of Care Documents (CCDs), lab results" from direct members, the P3N and eHealth Exchange (treatment records); the Encounter Notification Service, where members "receive notifications when these patients have had encounters" (encounter alerts). Its Public Health page lists "Electronic Lab Reporting (ELR) feeds to local and state agencies" and eICR reporting, and says HSX "is expanding ELR feeds to include many mandatory reportable conditions"; the DHS table row reads "Currently connected to Electronic Reportable Labs (ELR), Immunizations Registry, Cancer Registry" (public health). Its PA NAVIGATE page: organizations can "Use the PA Navigate platform to electronically refer individuals to an identified Community Based Organization" and know "when the CBO has closed the loop" (community referral).
+- KeyHIE. Its P3N page: "KeyHIE Portal users, are also able to manually query P3N for patients with whom they have a Treatment relationship" (treatment records), and on state registries, "KeyHIE currently participates in all available registries" (public health). Its Notifications and Information Delivery Service page: providers "subscribe to receive real-time alerts", including inpatient and emergency admission and discharge notifications (encounter alerts). Its PA Navigate page: "KeyHIE, along with other certified Pennsylvania HIOs, has established a new web-based platform" through which residents "may be referred to Community Based Organizations" (community referral). That page is written in the future tense ("expected to be in production in 2023"); the DHS table row for KeyHIE does not mention PA Navigate.
+- Lehigh Valley Health Network. lvhn.org is a hospital system site with no page about its HIO service, so every attachment rests on the DHS table: "Provider-to-provider clinical: Yes" and a longitudinal medical record (treatment records); "Active care coordination services: YES- ADT notificaiton to Primary care providers" and "P3N ADT" (encounter alerts); Public Health Gateway connection "Yes" (public health). Its "HIO-level ADT" cell lists registries instead of alert types and was not relied on. No statement on community referral, so that route is not attached.
+
+New routes, added because Pennsylvania sources support them:
+
+- `public-health-state-hie`. Sources: the DHS Public Health Gateway page, KeyHIE's P3N page and HSX's Public Health page.
+- `community-referral-hie`. Sources: the DHS PA Navigate page ("Healthcare organization interested in participating in the PA Navigate network, please reach out to your respective Health Information Organization"), and the HSX, KeyHIE and ClinicalConnect pages quoted above. The route text describes the platform generically and does not name it.
+
+`treatment-records-state-hie` and `encounter-alerts-state-hie` now link to the Pennsylvania connectivity ledger.
+
+HealthShare Exchange is typed `multi_state` with PA, NJ and DE. Its All Available Services page says it supports "data exchange across the state of Pennsylvania, in Delaware, New Jersey", its Vision page names the Philadelphia tri-state region (Pennsylvania, Delaware, New Jersey), and the DHS table lists New Jersey counties among those it covers. The South batch should extend this entry rather than add a second HSX entry for Delaware.
+
+Not added as Pennsylvania networks: the Delaware Health Information Network (DHIN) and the Chesapeake Regional Information System for our Patients (CRISP). The DHS page says the P3N ADT Service exchanges alerts with both for patients who cross state lines, which is a connection to the P3N, not operation in Pennsylvania. They belong to the South batch.
+
+#### Basic-level entries
+
+- CT: Connie (conniect.org; how to join from its Connect with Connie page). Connie's own page calls itself the state designated HIE; no Connecticut state page was read, so the data file does not state designation.
+- ME: HealthInfoNet (hinfonet.org; how to join from its Inquiries page).
+- MA: Mass HIway (masshiway.net; how to join from its Enroll page). mass.gov returned HTTP 403 to curl, so no mass.gov page is cited.
+- VT: VITL (vitl.net). Its site gives contact details but no joining steps, so its how-to-join sentence is the fallback.
+- NJ: New Jersey Health Information Network (NJHIN), cited from the New Jersey Department of Health page nj.gov/health/njhin, which describes the network and says NJII supports onboarding on the Department's behalf. njhin.org returns HTTP 200 but is a parked domain that redirects to a lander page, so it is not cited. HealthShare Exchange also lists New Jersey.
+- NY: the SHIN-NY, from the New York eHealth Collaborative (NYeC) pages, plus each regional network the NYeC Connect and Use page lists and links: Bronx RHIO, HealtheConnections, HEALTHeLINK, Healthix, Hixny and Rochester RHIO. Rochester RHIO's own page says it is transitioning its exchange services to HealtheConnections; it is kept because NYeC still lists it. health.ny.gov returned HTTP 403, so no New York State page was read and the data file does not state that any New York entity is state designated. NYeC's statistics (hospital coverage, outcome percentages) are not repeated.
+
+#### Omitted states
+
+- NH: no entry. nhhio.org, the domain of the New Hampshire Health Information Organization created by state law in 2011, does not resolve, and no current New Hampshire state page or network page describing a statewide HIE was found. Search results were press coverage from 2011 to 2013.
+- RI: no entry. CurrentCare, run by the Rhode Island Quality Institute, could not be read: currentcareri.org fails the TLS handshake to curl and WebFetch, riqi.org serves a certificate for another host, and health.ri.gov returns HTTP 403 behind a bot challenge. A later batch or the monthly check should retry; the brief does not allow citing a page that was not read.
+
+#### Pages that could not be read
+
+centralpaconnect.org (bot challenge, empty page; the link check still records HTTP 200), currentcareri.org and riqi.org (TLS errors), health.ri.gov, mass.gov and health.ny.gov (HTTP 403), nhhio.org (DNS), njhin.org (parked).
