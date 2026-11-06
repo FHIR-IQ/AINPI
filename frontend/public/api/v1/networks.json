@@ -67,8 +67,1381 @@
       "ainpi_links": []
     }
   ],
-  "routes": [],
-  "networks": [],
+  "routes": [
+    {
+      "id": "treatment-records-vendor-network",
+      "use_case": "treatment-records",
+      "title": "Your EHR vendor's network or a national framework",
+      "summary": "Your EHR looks up a patient at other organizations and pulls their documents through a network or framework your vendor has joined.",
+      "who_can_use": "Clinicians and organizations whose EHR or health IT vendor connects to the network or framework.",
+      "rule": "The participation agreement and policies of the network or framework your vendor joined.",
+      "standard": "IHE cross-community document query and retrieve (XCA); some networks also accept HL7 FHIR queries.",
+      "how_to_join": "Ask your EHR vendor which networks or frameworks it connects to and how your organization turns on access.",
+      "network_types": [
+        "vendor_network"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://carequality.org/",
+          "title": "Carequality, Interoperability framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/",
+          "title": "Connect to the Network, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "treatment-records-state-hie",
+      "use_case": "treatment-records",
+      "title": "Your state or regional HIE",
+      "summary": "Your organization joins a health information exchange and queries it for a patient's records held by other members.",
+      "who_can_use": "Providers and other organizations that sign the HIE's participation agreement.",
+      "rule": "The HIE's participation agreement and the health information laws of the state it operates in.",
+      "standard": "Query-based exchange; the standard varies by HIE and is stated on its entry.",
+      "how_to_join": "Contact the HIE listed for your state on this page.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "treatment-records-qhin",
+      "use_case": "treatment-records",
+      "title": "TEFCA, through a QHIN",
+      "summary": "Your organization connects to TEFCA through a QHIN, directly or through a participant of one, and queries other TEFCA participants for a patient's records.",
+      "who_can_use": "Organizations that sign on as a Participant or Subparticipant of a designated QHIN.",
+      "rule": "TEFCA Common Agreement, Treatment exchange purpose, with the Treatment exchange purpose implementation SOP.",
+      "standard": "IHE document exchange of C-CDA documents, as set by the QHIN Technical Framework; the RCE's FHIR roadmap adds HL7 FHIR as an option alongside the required IHE transactions.",
+      "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement.",
+      "network_types": [
+        "qhin"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/policy/tefca/",
+          "title": "TEFCA, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/exchange-purposes-explained/",
+          "title": "Exchange Purposes Explained, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/participate/",
+          "title": "Participate in TEFCA, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/tefca/how-it-works/",
+          "title": "How Does TEFCA Work?, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/rce-tefca-on-fhir/",
+          "title": "TEFCA and FHIR, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "treatment-records-direct",
+      "use_case": "treatment-records",
+      "title": "A Direct message",
+      "summary": "A clinician sends records to a known recipient's Direct address, an encrypted message pushed to one address rather than a search across organizations.",
+      "who_can_use": "Anyone holding a Direct address issued by a health information service provider (HISP), which is often supplied through the EHR.",
+      "rule": "The trust framework and certificate trust bundles of the sender's and receiver's HISPs.",
+      "standard": "Direct secure messaging (Applicability Statement for Secure Health Transport, Version 1.2).",
+      "how_to_join": "Get a Direct address from a HISP; ask your EHR vendor first, since EHR certification includes Direct messaging.",
+      "network_types": [
+        "direct"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/test-method/direct-project/",
+          "title": "Direct Project, 45 CFR 170.315(h)(1), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/direct-secure-messaging",
+          "title": "Direct Secure Messaging, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "individual-access-provider-api",
+      "use_case": "individual-access",
+      "title": "Your provider's patient API, through an app you choose",
+      "summary": "You connect an app to your provider's certified FHIR API and download your own records into it.",
+      "who_can_use": "Patients, and the apps they authorize, at providers whose health IT is certified to 45 CFR 170.315(g)(10).",
+      "rule": "ONC Health IT Certification Program: 45 CFR 170.315(g)(10) and the API Condition of Certification, 45 CFR 170.404.",
+      "standard": "HL7 FHIR R4 with the US Core implementation guide, with SMART authorization.",
+      "how_to_join": "Pick an app that connects to your provider's FHIR API and sign in with your patient portal account when the app asks.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://healthit.gov/test-method/standardized-api-for-patient-and-population-services-acb-atl/",
+          "title": "Standardized API for patient and population services, 45 CFR 170.315(g)(10), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-D/section-170.404",
+          "title": "45 CFR 170.404, Application programming interfaces (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-C/section-170.315",
+          "title": "45 CFR 170.315, ONC certification criteria for health IT (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "individual-access-payer-api",
+      "use_case": "individual-access",
+      "title": "Your health plan's Patient Access API",
+      "summary": "You connect an app to your health plan's API to get your claims and encounter data, including cost, and a defined set of clinical data.",
+      "who_can_use": "Members of Medicare Advantage plans, Medicaid and CHIP programs and managed care plans, and Qualified Health Plan issuers on the federally facilitated exchanges.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); CMS-0057-F adds prior authorization information.",
+      "standard": "HL7 FHIR R4 (Release 4.0.1) API.",
+      "how_to_join": "Pick an app that connects to your plan's Patient Access API, or ask your plan which apps it supports.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "individual-access-tefca-ias",
+      "use_case": "individual-access",
+      "title": "TEFCA Individual Access Services",
+      "summary": "You use an app from an organization that offers Individual Access Services through TEFCA to request your records from TEFCA participants.",
+      "who_can_use": "Individuals, through an Individual Access Services provider connected to TEFCA by a QHIN, Participant or Subparticipant.",
+      "rule": "TEFCA Common Agreement, Individual Access Services exchange purpose.",
+      "standard": "Set by the QHIN Technical Framework and the Individual Access Services SOP.",
+      "how_to_join": "Use an app or portal whose operator offers Individual Access Services through a QHIN.",
+      "network_types": [
+        "qhin"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/policy/tefca/",
+          "title": "TEFCA, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/exchange-purposes-explained/",
+          "title": "Exchange Purposes Explained, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/rce-tefca-for-individuals/",
+          "title": "TEFCA for Individuals, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/participate/",
+          "title": "Participate in TEFCA, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "find-endpoint-ndh",
+      "use_case": "find-endpoint",
+      "title": "The CMS National Provider Directory",
+      "summary": "CMS publishes practitioners, organizations, locations and endpoints as public FHIR files and a search site.",
+      "who_can_use": "Anyone; the directory is public.",
+      "rule": "Public data release by CMS; no participation agreement.",
+      "standard": "HL7 FHIR R4 resources in bulk NDJSON files, listed in a download manifest.",
+      "how_to_join": "Search at directory.cms.gov or download the bulk files listed in its manifest.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://directory.cms.gov/",
+          "title": "National Provider Directory, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directory.cms.gov/downloads/manifest.json",
+          "title": "National Provider Directory bulk download manifest, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://github.com/DSACMS/npd",
+          "title": "CMS National Provider Directory source repository (DSACMS)",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Endpoint URL validity",
+          "finding_slug": "endpoint-url-validity"
+        },
+        {
+          "label": "Endpoint-to-organization linkage",
+          "finding_slug": "endpoint-org-linkage"
+        }
+      ]
+    },
+    {
+      "id": "find-endpoint-vendor-lists",
+      "use_case": "find-endpoint",
+      "title": "EHR vendors' published endpoint lists",
+      "summary": "Developers of certified patient APIs publish the FHIR service base URLs of their customers, with each organization's name, location and identifier.",
+      "who_can_use": "Anyone; the lists must be published at no charge.",
+      "rule": "API Condition of Certification, 45 CFR 170.404(b)(2), service base URL publication.",
+      "standard": "HL7 FHIR R4 Endpoint and Organization resources collected in a Bundle, reviewed quarterly.",
+      "how_to_join": "Find the list in the EHR developer's published API documentation.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-D/section-170.404",
+          "title": "45 CFR 170.404, Application programming interfaces (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthit.gov/test-method/standardized-api-for-patient-and-population-services-acb-atl/",
+          "title": "Standardized API for patient and population services, 45 CFR 170.315(g)(10), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Vendor endpoint attribution",
+          "finding_slug": "vendor-endpoint-attribution"
+        },
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
+    },
+    {
+      "id": "find-endpoint-payer-directory",
+      "use_case": "find-endpoint",
+      "title": "Health plans' Provider Directory APIs",
+      "summary": "Health plans publish their provider directory through a public API that apps and other providers can read.",
+      "who_can_use": "Anyone; the rule requires the directory to be publicly available.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); applies to Medicare Advantage, Medicaid and CHIP, not to Qualified Health Plan issuers on the federally facilitated exchanges.",
+      "standard": "HL7 FHIR R4 API.",
+      "how_to_join": "Find the API in the health plan's developer documentation.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        },
+        {
+          "label": "Payer affiliation gap",
+          "finding_slug": "payer-affiliation-gap"
+        }
+      ]
+    },
+    {
+      "id": "find-endpoint-direct-directory",
+      "use_case": "find-endpoint",
+      "title": "Direct address directories",
+      "summary": "HISPs publish their users' Direct addresses to directories, and providers can record a Direct address or FHIR endpoint in NPPES as digital contact information.",
+      "who_can_use": "HISPs that contribute to an aggregated directory get access to it; NPPES contact information is entered by each provider.",
+      "rule": "The directory policies of the HISPs' trust framework; the CMS-9115-F digital contact information policy for NPPES.",
+      "standard": "Direct addresses; aggregated directory built to support FHIR API access.",
+      "how_to_join": "Ask your HISP whether it contributes to and reads an aggregated directory, and keep your NPPES digital contact information current.",
+      "network_types": [
+        "direct"
+      ],
+      "sources": [
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "payer-exchange-patient-access",
+      "use_case": "payer-exchange",
+      "title": "Patient Access API",
+      "summary": "A plan member's app pulls their claims, encounter and clinical data from the plan; CMS-0057-F adds prior authorization information (excluding drugs) by January 1, 2027.",
+      "who_can_use": "Members of impacted payers and the apps they authorize.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F), as amended by the CMS Interoperability and Prior Authorization final rule (CMS-0057-F).",
+      "standard": "HL7 FHIR R4 API.",
+      "how_to_join": "Members connect an app; app developers register with each payer's API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "payer-exchange-provider-access",
+      "use_case": "payer-exchange",
+      "title": "Provider Access API",
+      "summary": "An in-network provider pulls claims, encounter, USCDI and prior authorization data for patients it treats, unless the patient opts out; payers must implement it by January 1, 2027.",
+      "who_can_use": "In-network providers with a treatment relationship to the patient, as set by the payer's attribution process.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS states the exact compliance dates vary by type of payer.",
+      "standard": "HL7 FHIR API.",
+      "how_to_join": "Ask each impacted payer how it attributes patients to your organization and how to connect to its Provider Access API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "payer-exchange-payer-to-payer",
+      "use_case": "payer-exchange",
+      "title": "Payer-to-Payer API",
+      "summary": "When a patient who opted in changes plans, the new payer requests the patient's claims, encounter, USCDI and prior authorization data from the old one. The old payer must share data with a date of service within five years of the request. Payers must implement it by January 1, 2027.",
+      "who_can_use": "Impacted payers, for patients who opt in.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS states the exact compliance dates vary by type of payer.",
+      "standard": "HL7 FHIR API.",
+      "how_to_join": "Applies to impacted payers; each builds and maintains its own API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "payer-exchange-prior-authorization",
+      "use_case": "payer-exchange",
+      "title": "Prior Authorization API",
+      "summary": "A provider's system finds whether an item or service needs prior authorization, what documentation is required, and sends the request and gets the decision; required beginning January 1, 2027.",
+      "who_can_use": "Providers requesting prior authorization from an impacted payer, for items and services other than drugs.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F), with HHS enforcement discretion for the HIPAA X12 278 standard when an all-FHIR API is used.",
+      "standard": "HL7 FHIR API; X12 278 may also be offered.",
+      "how_to_join": "Ask your EHR vendor and each impacted payer how to connect to the payer's Prior Authorization API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "encounter-alerts-state-hie",
+      "use_case": "encounter-alerts",
+      "title": "Event notifications through an HIE",
+      "summary": "A hospital sends admit, discharge and transfer messages to an HIE, which passes notices on to the patient's other providers.",
+      "who_can_use": "Hospitals that send to the HIE, and providers that receive its notices under its participation agreement.",
+      "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), which lets a hospital send notifications through an intermediary; the HIE's participation agreement.",
+      "standard": "HL7 v2 ADT messages (HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2)).",
+      "how_to_join": "Contact the HIE listed for your state on this page.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-G/part-482/subpart-C/section-482.24",
+          "title": "42 CFR 482.24, Condition of participation: Medical record services (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-B/section-170.205",
+          "title": "45 CFR 170.205, Content exchange standards and implementation specifications (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "encounter-alerts-hospital-cop",
+      "use_case": "encounter-alerts",
+      "title": "Hospital e-notifications under the Medicare Conditions of Participation",
+      "summary": "A hospital's system notifies post-acute providers and the patient's established primary care practitioner when the patient registers in the emergency department, is admitted, or is discharged or transferred.",
+      "who_can_use": "Post-acute care providers and the practitioners or groups the rule names as recipients.",
+      "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), added by CMS-9115-F; applies to hospitals whose systems conform to the content standard at 45 CFR 170.205(d)(2).",
+      "standard": "HL7 v2 ADT messages (HL7 2.5.1).",
+      "how_to_join": "Ask the hospital, or its HIE, how it sends notifications and how to be listed as a recipient.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-G/part-482/subpart-C/section-482.24",
+          "title": "42 CFR 482.24, Condition of participation: Medical record services (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-B/section-170.205",
+          "title": "45 CFR 170.205, Content exchange standards and implementation specifications (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "public-health-direct-reporting",
+      "use_case": "public-health",
+      "title": "Reporting directly to a public health agency",
+      "summary": "Your EHR sends case reports, immunizations and lab results to the state or local public health agency in the formats certified health IT supports.",
+      "who_can_use": "Providers, hospitals and labs that report to a public health agency.",
+      "rule": "Each jurisdiction's public health reporting requirements; health IT certification criteria at 45 CFR 170.315(f).",
+      "standard": "HL7 2.5.1 for immunizations and lab results; HL7 CDA eICR or FHIR eCR for electronic case reports.",
+      "how_to_join": "Register with your state or local public health agency's reporting program and ask your EHR vendor which certified reporting functions you have.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://healthit.gov/test-method/transmission-public-health-agencies-electronic-case-reporting/",
+          "title": "Transmission to public health agencies, electronic case reporting, 45 CFR 170.315(f)(5), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-C/section-170.315",
+          "title": "45 CFR 170.315, ONC certification criteria for health IT (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-B/section-170.205",
+          "title": "45 CFR 170.205, Content exchange standards and implementation specifications (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "public-health-tefca",
+      "use_case": "public-health",
+      "title": "TEFCA, Public Health exchange purpose",
+      "summary": "Public health agencies and reporting organizations exchange data through TEFCA under its Public Health exchange purpose.",
+      "who_can_use": "Public health agencies and other organizations connected to TEFCA through a QHIN, Participant or Subparticipant.",
+      "rule": "TEFCA Common Agreement, Public Health exchange purpose.",
+      "standard": "Set by the QHIN Technical Framework.",
+      "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement.",
+      "network_types": [
+        "qhin"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/policy/tefca/",
+          "title": "TEFCA, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/exchange-purposes-explained/",
+          "title": "Exchange Purposes Explained, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/participate/",
+          "title": "Participate in TEFCA, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "community-referral-direct",
+      "use_case": "community-referral",
+      "title": "A Direct message to the receiving organization",
+      "summary": "A provider sends a referral and the supporting records to the receiving organization's Direct address.",
+      "who_can_use": "Organizations on both ends that hold Direct addresses.",
+      "rule": "The trust framework and certificate trust bundles of the sender's and receiver's HISPs.",
+      "standard": "Direct secure messaging (Applicability Statement for Secure Health Transport, Version 1.2).",
+      "how_to_join": "Get a Direct address from a HISP, and look up the receiving organization's address in a Direct directory.",
+      "network_types": [
+        "direct"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthit.gov/test-method/direct-project/",
+          "title": "Direct Project, 45 CFR 170.315(h)(1), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/direct-secure-messaging",
+          "title": "Direct Secure Messaging, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    }
+  ],
+  "networks": [
+    {
+      "id": "qhin-commonwell-health-alliance",
+      "name": "CommonWell Health Alliance (QHIN)",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.commonwellalliance.org/connect-to-the-network/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/",
+          "title": "Connect to the Network, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/carequality/",
+          "title": "TEFCA and Carequality, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-eclinicalworks-prismanet",
+      "name": "eClinicalWorks PRISMANet",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias"
+      ],
+      "website": "https://www.eclinicalworks.com/products-services/interoperability/tefca/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/astp-and-the-sequoia-project-designate-eclinicalworks-as-qhin/",
+          "title": "ASTP and The Sequoia Project Designate eClinicalWorks as QHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.eclinicalworks.com/products-services/interoperability/tefca/",
+          "title": "eClinicalWorks and TEFCA, eClinicalWorks",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-ehealth-exchange",
+      "name": "eHealth Exchange",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias",
+        "public-health-tefca"
+      ],
+      "website": "https://ehealthexchange.org/tefca/",
+      "how_to_join": "eHealth Exchange participants can opt in to TEFCA exchange through it; other organizations contact eHealth Exchange.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://ehealthexchange.org/tefca/",
+          "title": "TEFCA, eHealth Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-epic-nexus",
+      "name": "Epic Nexus",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias",
+        "public-health-tefca"
+      ],
+      "website": "https://open.epic.com/Home/Interoperate/TEFCA",
+      "how_to_join": "Epic states the Epic Nexus QHIN is currently only for Epic community members; others reach Epic organizations through any other QHIN.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://open.epic.com/Home/Interoperate/TEFCA",
+          "title": "Epic and TEFCA: Overview, open.epic",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-health-gorilla",
+      "name": "Health Gorilla",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias",
+        "public-health-tefca"
+      ],
+      "website": "https://www.healthgorilla.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.healthgorilla.com/",
+          "title": "Health Gorilla",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-kno2",
+      "name": "Kno2",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://kno2.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://kno2.com/",
+          "title": "Kno2",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-konza-health",
+      "name": "KONZA Health",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "public-health-tefca"
+      ],
+      "website": "https://www.konza.org/company/qhin/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.konza.org/company/qhin/",
+          "title": "QHIN, KONZA Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-medallies",
+      "name": "MedAllies",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.medallies.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.medallies.com/",
+          "title": "MedAllies",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-netsmart",
+      "name": "Netsmart",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.ntst.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/astp-and-the-sequoia-project-designate-netsmart-as-qhin/",
+          "title": "ASTP and The Sequoia Project Designate Netsmart as QHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ntst.com/",
+          "title": "Netsmart",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-oracle-health-information-network",
+      "name": "Oracle Health Information Network",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias"
+      ],
+      "website": "https://www.oracle.com/health/interoperability/qhin/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/new-designated-qhin-new-sops-and-more/",
+          "title": "New Designated QHIN, New SOPs, and More (TEFCA RCE update naming Oracle Health Information Network)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.oracle.com/health/interoperability/qhin/",
+          "title": "Oracle Health Information Network, Oracle",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-surescripts-health-information-network",
+      "name": "Surescripts Health Information Network",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://surescripts.com/surescripts-health-information-network/interconnect",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://surescripts.com/surescripts-health-information-network/interconnect",
+          "title": "Interconnect, Surescripts Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "carequality",
+      "name": "Carequality",
+      "type": "vendor_network",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-vendor-network"
+      ],
+      "website": "https://carequality.org/",
+      "how_to_join": "Health IT vendors and networks sign on as Implementers of the Carequality Interoperability Framework; their clients connect through them. Ask your EHR vendor whether it is an Implementer.",
+      "sources": [
+        {
+          "url": "https://carequality.org/",
+          "title": "Carequality, Interoperability framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/carequality/",
+          "title": "TEFCA and Carequality, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "commonwell-health-alliance",
+      "name": "CommonWell Health Alliance",
+      "type": "vendor_network",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-vendor-network"
+      ],
+      "website": "https://www.commonwellalliance.org/",
+      "how_to_join": "Health IT vendors become Service Adopter members and build CommonWell services into their software; providers connect through a vendor that has done so.",
+      "sources": [
+        {
+          "url": "https://www.commonwellalliance.org/",
+          "title": "CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/",
+          "title": "Connect to the Network, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/how-to-participate/membership-information/",
+          "title": "Membership Information, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "directtrust",
+      "name": "DirectTrust",
+      "type": "direct",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-direct",
+        "find-endpoint-direct-directory",
+        "community-referral-direct"
+      ],
+      "website": "https://directtrust.org/",
+      "how_to_join": "Get a Direct address from a HISP that takes part in the DirectTrust trust framework; ask your EHR vendor which HISP it uses.",
+      "sources": [
+        {
+          "url": "https://directtrust.org/what-we-do/direct-secure-messaging",
+          "title": "Direct Secure Messaging, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/trust-framework",
+          "title": "Trust Framework, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-patient-access-api",
+      "name": "Payer Patient Access API (CMS-9115-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "individual-access-payer-api",
+        "payer-exchange-patient-access"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-provider-directory-api",
+      "name": "Payer Provider Directory API (CMS-9115-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "find-endpoint-payer-directory"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-provider-access-api",
+      "name": "Payer Provider Access API (CMS-0057-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "payer-exchange-provider-access"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-to-payer-api",
+      "name": "Payer-to-Payer API (CMS-0057-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "payer-exchange-payer-to-payer"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-prior-authorization-api",
+      "name": "Payer Prior Authorization API (CMS-0057-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "payer-exchange-prior-authorization"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    }
+  ],
   "glossary": [
     {
       "term": "HIE",
