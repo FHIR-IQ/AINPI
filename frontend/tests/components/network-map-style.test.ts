@@ -43,5 +43,6 @@ describe('cellStyle', () => {
     const labels = LEGEND.map((e) => e.label);
     expect(labels).toContain('Network operates here; use-case detail pending');
     expect(labels).toContain('National routes (QHINs, vendor networks, payer APIs, Direct) are not tied to one state');
+    expect(labels).not.toContain('Not covered');
   });
 });

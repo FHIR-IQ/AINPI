@@ -109,3 +109,19 @@ def test_main_writes_body(tmp_path, monkeypatch):
     assert rc == 0 and "needs_attention=true" in out.read_text()
     assert "issue_title=Network sources need re-verification 2026-11" in out.read_text()
     assert "a" in body.read_text()
+
+
+def test_curl_argv_ends_options_before_url(monkeypatch):
+    seen = {}
+
+    class Done:
+        stdout = "200"
+        returncode = 0
+
+    def fake_run(argv, **kwargs):
+        seen["argv"] = argv
+        return Done()
+
+    monkeypatch.setattr(nlc.subprocess, "run", fake_run)
+    assert nlc.check_url("-K/etc/passwd") == ("ok", 200)
+    assert seen["argv"][-2:] == ["--", "-K/etc/passwd"]

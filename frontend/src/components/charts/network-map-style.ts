@@ -95,7 +95,6 @@ export const LEGEND: { key: string; label: string; style: CellStyle }[] = [
     label: 'Network operates here; use-case detail pending',
     style: cellStyle('PA', { category: 'state_hie', verified: false }),
   },
-  { key: 'out', label: 'Not covered', style: OUT },
   {
     key: 'national',
     label: 'National routes (QHINs, vendor networks, payer APIs, Direct) are not tied to one state',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import type { StateCategory } from '@/lib/networks';
@@ -15,6 +15,8 @@ export interface NetworkStateMapProps {
 
 const W = 960;
 const H = 560;
+/** Inset so the outlines of edge states (Maine, Florida, Washington) are not clipped by the viewBox. */
+const INSET = 4;
 
 function PatternMarks({ p }: { p: PatternDef }) {
   const s = p.size;
@@ -51,7 +53,10 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
   useEffect(() => {
     let live = true;
     fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`topology request failed: ${r.status}`);
+        return r.json();
+      })
       .then((t) => live && setTopo(t))
       .catch(() => live && setFailed(true));
     return () => {
@@ -59,18 +64,29 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
     };
   }, []);
 
-  let features: any[] = [];
-  let mesh = '';
-  if (topo) {
+  const { features, mesh } = useMemo(() => {
+    if (!topo) return { features: [] as { code: string | undefined; d: string }[], mesh: '' };
     const geo = topojson.feature(topo, topo.objects.states) as unknown as GeoJSON.FeatureCollection;
-    const projection = d3.geoAlbersUsa().fitSize([W, H], geo);
+    const projection = d3.geoAlbersUsa().fitExtent(
+      [
+        [INSET, INSET],
+        [W - INSET, H - INSET],
+      ],
+      geo,
+    );
     const path = d3.geoPath().projection(projection);
-    features = geo.features.map((f: any) => ({
-      code: FIPS_TO_STATE[String(f.id).padStart(2, '0')] as string | undefined,
-      d: path(f) ?? '',
-    }));
-    mesh = path(topojson.mesh(topo, topo.objects.states, (a: any, b: any) => a !== b) as any) ?? '';
-  }
+    return {
+      // Territories fall outside geoAlbersUsa and have no drawable path; skip them
+      // rather than render empty elements.
+      features: geo.features
+        .map((f: any) => ({
+          code: FIPS_TO_STATE[String(f.id).padStart(2, '0')] as string | undefined,
+          d: path(f) ?? '',
+        }))
+        .filter((f) => f.d !== ''),
+      mesh: path(topojson.mesh(topo, topo.objects.states, (a: any, b: any) => a !== b) as any) ?? '',
+    };
+  }, [topo]);
 
   return (
     <figure className="m-0">

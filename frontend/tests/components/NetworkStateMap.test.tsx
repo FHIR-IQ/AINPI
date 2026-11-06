@@ -7,6 +7,7 @@ const topo = {
   arcs: [
     [[-78, 40], [-78, 41], [-77, 41], [-77, 40], [-78, 40]],
     [[-81, 40], [-81, 41], [-80, 41], [-80, 40], [-81, 40]],
+    [[-66.5, 18], [-66.5, 18.4], [-66, 18.4], [-66, 18], [-66.5, 18]],
   ],
   objects: {
     states: {
@@ -14,6 +15,8 @@ const topo = {
       geometries: [
         { type: 'Polygon', id: '42', arcs: [[0]] },
         { type: 'Polygon', id: '39', arcs: [[1]] },
+        // Puerto Rico: outside geoAlbersUsa, so it has no drawable path.
+        { type: 'Polygon', id: '72', arcs: [[2]] },
       ],
     },
   },
@@ -24,8 +27,8 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function setup(selected: string | null) {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ json: () => Promise.resolve(topo) }));
+function setup(selected: string | null, ok = true) {
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok, json: () => Promise.resolve(topo) }));
   return render(
     <NetworkStateMap
       title="Map"
@@ -52,5 +55,39 @@ describe('NetworkStateMap outlines', () => {
     await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
     fireEvent.focus(screen.getByLabelText(/Ohio/));
     expect(container.querySelector('[data-outline="focus"]')).not.toBeNull();
+  });
+});
+
+describe('NetworkStateMap drawing', () => {
+  it('draws no path for a feature the projection cannot place', async () => {
+    const { container } = setup(null);
+    await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
+    expect(screen.queryByLabelText(/Territory/)).toBeNull();
+    const fills = Array.from(container.querySelectorAll('svg > g:not([data-testid]) > path'));
+    expect(fills).toHaveLength(2);
+    for (const p of fills) expect(p.getAttribute('d')).toBeTruthy();
+  });
+
+  it('insets the drawing so edge outlines are not clipped', async () => {
+    const { container } = setup('PA');
+    await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
+    const nums = Array.from(container.querySelectorAll('svg path[aria-label]'))
+      .flatMap((p) => (p.getAttribute('d') ?? '').match(/-?\d+(\.\d+)?/g) ?? [])
+      .map(Number);
+    expect(nums.length).toBeGreaterThan(0);
+    expect(Math.min(...nums)).toBeGreaterThanOrEqual(3.99);
+    expect(Math.max(...nums)).toBeLessThanOrEqual(956.01);
+  });
+
+  it('shows the error message when the topology request fails', async () => {
+    setup(null, false);
+    await waitFor(() => expect(screen.getByText('The map could not be loaded.')).toBeTruthy());
+    expect(screen.queryAllByRole('button')).toHaveLength(0);
+  });
+
+  it('has no Not covered legend entry, since no visible state uses it', async () => {
+    setup(null);
+    await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
+    expect(screen.queryByText('Not covered')).toBeNull();
   });
 });

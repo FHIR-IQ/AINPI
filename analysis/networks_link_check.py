@@ -51,7 +51,7 @@ def check_url(url: str, timeout: int = 20) -> Result:
     try:
         proc = subprocess.run(
             ["curl", "-sS", "-L", "-o", "/dev/null", "-w", "%{http_code}",
-             "--max-time", str(timeout), "-A", USER_AGENT, url],
+             "--max-time", str(timeout), "-A", USER_AGENT, "--", url],
             capture_output=True, text=True, timeout=timeout + 10,
         )
     except (subprocess.TimeoutExpired, OSError):

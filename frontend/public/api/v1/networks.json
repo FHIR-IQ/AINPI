@@ -110,7 +110,7 @@
       "who_can_use": "Providers and other organizations that sign the HIE's participation agreement.",
       "rule": "The HIE's participation agreement and the health information laws of the state it operates in.",
       "standard": "Query-based exchange, and directed exchange where the HIE offers it. The technical standards differ from one HIE to the next, so check the network's own site.",
-      "how_to_join": "Contact the HIE listed for your state on this page.",
+      "how_to_join": "Contact the HIE listed for your state on this page, if one is listed; if none is listed, ask your state health department whether an exchange operates in your state.",
       "network_types": [
         "state_hie",
         "multi_state"
@@ -657,7 +657,7 @@
       "who_can_use": "Hospitals that send to the HIE, and providers that receive its notices under its participation agreement.",
       "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), which lets a hospital send notifications through an intermediary; the HIE's participation agreement.",
       "standard": "HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2); hospitals typically send these as HL7 v2 ADT (admit, discharge, transfer) messages.",
-      "how_to_join": "Contact the HIE listed for your state on this page.",
+      "how_to_join": "Contact the HIE listed for your state on this page, if one is listed; if none is listed, ask your state health department whether an exchange operates in your state.",
       "network_types": [
         "state_hie",
         "multi_state"

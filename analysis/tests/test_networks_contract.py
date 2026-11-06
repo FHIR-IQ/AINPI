@@ -208,3 +208,15 @@ def _bad_network_type(p):
                                     _bad_network_types, _bad_route_ref, _bad_network_type])
 def test_unhashable_values_return_errors(mutate):
     assert errs(mutate)
+
+
+def test_state_hie_routes_do_not_assume_every_state_has_a_listed_hie():
+    import json
+    from pathlib import Path
+
+    p = json.loads((Path(__file__).resolve().parents[2] / "frontend/public/api/v1/networks.json").read_text())
+    routes = {r["id"]: r for r in p["routes"]}
+    for rid in ("treatment-records-state-hie", "encounter-alerts-state-hie"):
+        text = routes[rid]["how_to_join"]
+        assert "if one is listed" in text, rid
+        assert "—" not in text, rid
