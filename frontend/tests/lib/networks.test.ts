@@ -90,6 +90,10 @@ describe('networks helpers', () => {
     expect(resolveAinpiLink({ label: 'x', href: '//evil.com' })).toBeNull();
     expect(resolveAinpiLink({ label: 'x', href: 'https://x' })).toBeNull();
     expect(resolveAinpiLink({ label: 'x', href: 'javascript:alert(1)' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/\t/evil.com' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/\n/evil.com' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/ /evil.com' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/\\evil.com' })).toBeNull();
   });
   it('safeExternalHref keeps only https URLs', () => {
     expect(safeExternalHref('https://example.org/a?b=1')).toBe('https://example.org/a?b=1');

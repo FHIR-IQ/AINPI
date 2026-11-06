@@ -64,6 +64,21 @@ def test_non_https_urls_rejected():
     assert any("n2" in x and "https" in x for x in e)
 
 
+import pytest as _pytest
+
+
+@_pytest.mark.parametrize("href", ["//evil.com", "https://x", "/\t/evil.com", "/\n/evil.com",
+                                   "/ /evil.com", "javascript:alert(1)", 5])
+def test_ainpi_href_must_be_internal_path(href):
+    e = errs(lambda p: p["routes"][0].update(ainpi_links=[{"label": "L", "href": href}]))
+    assert any("r1" in x and "href" in x for x in e)
+
+
+def test_ainpi_internal_href_ok():
+    e = errs(lambda p: p["routes"][0].update(ainpi_links=[{"label": "L", "href": "/states/pa/connectivity"}]))
+    assert e == []
+
+
 def test_route_without_primary_source():
     e = errs(lambda p: p["routes"][0].update(sources=[src(False)]))
     assert e and any("r1" in x for x in e)

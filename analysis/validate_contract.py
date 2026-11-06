@@ -466,6 +466,30 @@ def _finding_slugs_in(node):
             yield from _finding_slugs_in(v)
 
 
+_UNSAFE_PATH_CHARS = re.compile(r"[\x00-\x1f\x7f\s]")
+
+
+def _is_internal_path(href) -> bool:
+    """A single leading '/', not '//' or '/\\', and no whitespace or control characters."""
+    return (isinstance(href, str) and href.startswith("/") and not href.startswith("//")
+            and not href.startswith("/\\") and not _UNSAFE_PATH_CHARS.search(href))
+
+
+def _ainpi_hrefs_in(node):
+    """Every href value inside an ainpi_links list under node."""
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if k == "ainpi_links" and isinstance(v, list):
+                for link in v:
+                    if isinstance(link, dict) and "href" in link:
+                        yield link["href"]
+            else:
+                yield from _ainpi_hrefs_in(v)
+    elif isinstance(node, list):
+        for v in node:
+            yield from _ainpi_hrefs_in(v)
+
+
 def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
     """One error string per violated invariant of networks.json. Never raises."""
     errors: list[str] = []
@@ -592,6 +616,9 @@ def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
                     errors.append(f"{where} contains an em dash")
                 if _COUNT_IN_PROSE.search(s):
                     errors.append(f"{where} states a count in prose")
+            for href in _ainpi_hrefs_in(it):
+                if not _is_internal_path(href):
+                    errors.append(f"{sec} {it.get(key)} ainpi_links href {href!r} is not an internal path")
             if known_slugs is not None:
                 for fs in _finding_slugs_in(it):
                     if fs not in known_slugs:

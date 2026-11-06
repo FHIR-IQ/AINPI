@@ -85,13 +85,25 @@ export function resolveAinpiLink(link: AinpiLink): { label: string; href: string
   return link.href && isInternalPath(link.href) ? { label: link.label, href: link.href } : null;
 }
 
+const SITE_ORIGIN = 'https://ainpi.dev';
+// ASCII control characters (including tab, CR, LF) and any whitespace. The URL
+// parser strips tab and newline, so `/\t/evil.com` would otherwise resolve to
+// `https://evil.com/`.
+const UNSAFE_PATH_CHARS = /[\u0000-\u001f\u007f\s]/;
+
 /**
- * An AINPI link's `href` must be a path on this site: one leading slash, not
- * two (`//host` is protocol-relative and leaves the site), and no backslash,
- * which some browsers normalise to a slash.
+ * An AINPI link's `href` must be a path on this site. It must start with `/`,
+ * contain no control characters or whitespace, and resolve against the site
+ * origin to that same origin, which rejects `//host`, `/\\host` and anything
+ * else the URL parser would send off-site.
  */
 function isInternalPath(href: string): boolean {
-  return href.startsWith('/') && !href.startsWith('//') && !href.includes('\\');
+  if (typeof href !== 'string' || !href.startsWith('/') || UNSAFE_PATH_CHARS.test(href)) return false;
+  try {
+    return new URL(href, SITE_ORIGIN).origin === SITE_ORIGIN;
+  } catch {
+    return false;
+  }
 }
 
 /**
