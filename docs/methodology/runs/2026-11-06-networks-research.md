@@ -139,3 +139,45 @@ Not added as Pennsylvania networks: the Delaware Health Information Network (DHI
 #### Pages that could not be read
 
 centralpaconnect.org (bot challenge, empty page; the link check still records HTTP 200), currentcareri.org and riqi.org (TLS errors), health.ri.gov, mass.gov and health.ny.gov (HTTP 403), nhhio.org (DNS), njhin.org (parked).
+
+### Batch 7b: South (DE, MD, DC, VA, WV, NC, SC, GA, FL, KY, TN, AL, MS, AR, LA, OK, TX), read on 2026-11-06
+
+Pages were fetched with curl (`curl -sSL`, browser user agent) and converted to text locally. Where curl got HTTP 403 and WebFetch could read the page, WebFetch was used and the page is named below. Every entry is at the basic level: website, a how-to-join sentence taken from the network's own site (or the fallback sentence where the site gives no joining steps), sources, and no route list. A state agency page is cited where one was read; designation is described here only where a state page says it, and the data file never states designation outside a source title.
+
+#### Route wording fix
+
+`treatment-records-state-hie` said its standard "is stated on its entry", but network entries have no standard field. The standard now reads: query-based exchange, and directed exchange where the HIE offers it, with technical standards that differ from one HIE to the next, so the reader checks the network's own site. ASTP/ONC's What is HIE? page, already cited on the route, names the two forms (directed and query-based exchange). No source read today says that state HIEs in general use a particular IHE profile or HL7 v2 feeds, so the route names neither.
+
+#### CRISP and CRISP Shared Services
+
+CRISP's own pages describe CRISP as the State Designated HIE for Maryland and "the regional health information exchange of Maryland", and name no other state it serves directly, so its entry lists MD only. The Maryland Health Care Commission HIE page refers to "the State-Designated HIE (CRISP)". The CRISP DC About page says CRISP DC is an affiliate of CRISP Shared Services "while operating as an independent District governed entity", and names the other affiliates as CRISP Maryland, West Virginia Health Information Network, HealtheConnect Alaska and Virginia Health Information. Each affiliate in this batch is its own entry under its own name and state. CRISP Shared Services itself gets no entry: its site describes a nonprofit that shares technology with affiliates and lists no exchange an organization joins. WVHIN's About page says it joined CRISP Shared Services in 2016 as its technology infrastructure partner; SCeHA's home page says it runs on the CRISP Shared Services platform; the Florida HIE's About page says CRISP Shared Services manages the day-to-day operations of its services. Alaska belongs to another batch.
+
+#### Basic-level entries
+
+- DE: Delaware Health Information Network (DHIN). Its About page says the Delaware General Assembly established it in 1997. HealthShare Exchange already lists DE from batch 7a and was not changed.
+- MD: CRISP (see above).
+- DC: CRISP DC and Capital Partners in Care Health Information Exchange (CPC-HIE). The DC Department of Health Care Finance (DHCF) DC HIE page lists Chesapeake Regional Information System for our Patients, Inc. DC as the District Designated HIE Entity and as a District Registered HIE Entity, and lists the District of Columbia Primary Care Association (CPC-HIE) as a District Registered HIE Entity. CPC-HIE has no site of its own; its entry cites the DC Primary Care Association program page (dated 2021 in substance) and uses DCPCA's home page as the website. Neither page gives joining steps, so its how-to-join sentence is the fallback.
+- VA: Virginia Health Information (VHI). ConnectVirginia's domain now redirects to VHI's HIE page. VHI's own page calls it Virginia's designated statewide HIE; no Virginia agency page was read, so the data file does not state designation.
+- WV: West Virginia Health Information Network (WVHIN).
+- NC: NC HealthConnex, run by the N.C. Health Information Exchange Authority on an official State of North Carolina site that calls it the state-designated health information exchange.
+- SC: South Carolina e-Health Alliance (SCeHA). schiex.org now redirects to sceha.org. Its home page calls it South Carolina's statewide HIE, operated by Health Sciences South Carolina; no South Carolina agency page was read.
+- GA: Georgia Health Information Network (GaHIN). GaHIN's Join page says its members include regional HIEs; those were not enumerated, because no Georgia agency page listing them was read (dch.georgia.gov returned 404 at the path tried).
+- FL: Florida Health Information Exchange. Its own page says the Agency for Health Care Administration governs it; no AHCA page was read (ahca.myflorida.com returned 404 at the path tried), so the data file does not state designation.
+- KY: Kentucky Health Information Exchange (KHIE), on an official Commonwealth of Kentucky site.
+- TN: Tennessee Health Information Exchange (TnHIE), formerly etHIN (ethin.org redirects to tnhie.org). Its page says it is based in Knoxville and continues to expand statewide; the entry lists TN only. No Tennessee agency page was read.
+- MS: IntelliTrue HIE, described on the Mississippi Hospital Association page that intellitrue.org redirects to.
+- AR: SHARE (Arkansas State Health Alliance for Records Exchange). Its Join page gives the Arkansas Department of Health, Office of Health Information Technology as its contact; healthy.arkansas.gov returned HTTP 403, so no other state page is cited.
+- LA: Louisiana Health Information Exchange (LaHIE), from the Louisiana Health Care Quality Forum's HIE Platform page. No joining steps there, so the fallback sentence is used.
+- OK: MyHealth Access Network. The Oklahoma Health Care Authority OKSHINE overview says the Office of the State Coordinator for HIE within OHCA oversees the state-designated entity for HIE, MyHealth Access Network.
+- TX: HIETexas (Texas Health Services Authority), C3HIE, Healthconnect Texas, Connected Care Exchange (doing business as Rio Grande Valley Health Information Exchange) and Connxus. The Texas Health and Human Services Commission Statewide Health Information Exchange page (HTTP 403 to curl, read with WebFetch) lists C3HIE, Healthconnect Texas and Connected Care Exchange as contracted local HIEs and names THSA's state-level platform, HIETexas. THSA's own HIETexas page says HIETexas is the state-level health information network THSA operates under Chapter 182 of the Texas Health and Safety Code. THSA's HIE Connectivity page lists C3HIE, Connected Care Exchange, Connxus and Healthconnect Texas as regional HIEs participating in HIETexas. THSA's list is cited as a secondary source on those regional entries, since THSA is not a state agency. Healthconnect Texas says it and Patient Care Intervention Center are now one organization; ghhconnect.org (Greater Houston Healthconnect) redirects to it. Connected Care Exchange's only joining text is a membership event dated March 2025, so its sentence is the fallback.
+
+#### Omitted states and candidates
+
+- AL: no entry, because the site could not be read. One Health Record (onehealthrecord.alabama.gov), which search results describe as run by the Alabama Medicaid Agency, returns HTTP 403 behind a bot challenge to curl and fails certificate verification in WebFetch; medicaid.alabama.gov timed out to curl and failed certificate verification in WebFetch.
+- MS: the Mississippi Health Information Network (MS-HIN) gets no entry; ms-hin.org does not resolve and no current page was found.
+- LA: the Greater New Orleans Health Information Exchange gets no entry; gnohie.org serves a certificate for another host.
+- TX: PHIX, which THSA lists as a regional HIE, gets no entry; its site was not found at the domains tried.
+
+#### Pages that could not be read
+
+onehealthrecord.alabama.gov (HTTP 403, bot challenge; certificate error in WebFetch), medicaid.alabama.gov (timeout; certificate error in WebFetch), ms-hin.org (DNS), gnohie.org (certificate for another host), healthy.arkansas.gov (HTTP 403), hhs.texas.gov (HTTP 403 to curl with the user agent used for reading; read with WebFetch; the link check, which sends a different user agent, got a success status). The link check also reported the Maryland Health Care Commission HIE page as HTTP 403, although curl read it during research; it is listed for checking by hand.

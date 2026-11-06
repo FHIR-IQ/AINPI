@@ -109,7 +109,7 @@
       "summary": "Your organization joins a health information exchange and queries it for a patient's records held by other members.",
       "who_can_use": "Providers and other organizations that sign the HIE's participation agreement.",
       "rule": "The HIE's participation agreement and the health information laws of the state it operates in.",
-      "standard": "Query-based exchange; the standard varies by HIE and is stated on its entry.",
+      "standard": "Query-based exchange, and directed exchange where the HIE offers it. The technical standards differ from one HIE to the next, so check the network's own site.",
       "how_to_join": "Contact the HIE listed for your state on this page.",
       "network_types": [
         "state_hie",
@@ -2119,6 +2119,660 @@
           "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
           "accessed": "2026-11-06",
           "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "delaware-health-information-network",
+      "name": "Delaware Health Information Network (DHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "DE"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://dhin.org/",
+      "how_to_join": "Fill out DHIN's enrollment form, which DHIN describes as the first step toward connecting a practice.",
+      "sources": [
+        {
+          "url": "https://dhin.org/",
+          "title": "Delaware Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhin.org/solutions/get-started/",
+          "title": "Get Started with DHIN, Delaware Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhin.org/who-we-are/about/",
+          "title": "About Us, Delaware Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "crisp",
+      "name": "CRISP (Chesapeake Regional Information System for our Patients)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MD"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.crisphealth.org/",
+      "how_to_join": "CRISP assigns an account manager who guides each organization through onboarding; its Onboarding page lists the steps.",
+      "sources": [
+        {
+          "url": "https://www.crisphealth.org/",
+          "title": "CRISP",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.crisphealth.org/about/",
+          "title": "About CRISP, CRISP",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.crisphealth.org/onboarding/",
+          "title": "Onboarding, CRISP",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://mhcc.maryland.gov/healthcare-communities/health-information-technology/health-information-exchange-hie",
+          "title": "Health Information Exchange (HIE), Maryland Health Care Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "crisp-dc",
+      "name": "CRISP DC",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "DC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://crispdc.org/",
+      "how_to_join": "Email the CRISP DC outreach team to get started; an organization signs a CRISP Participation Agreement and updates its Notice of Privacy Practices.",
+      "sources": [
+        {
+          "url": "https://crispdc.org/",
+          "title": "CRISP DC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://crispdc.org/who-we-are/",
+          "title": "About, CRISP DC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://crispdc.org/register-for-hie/",
+          "title": "Participate in the HIE, CRISP DC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhcf.dc.gov/dchie",
+          "title": "DC Health Information Exchange, DC Department of Health Care Finance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "capital-partners-in-care-hie",
+      "name": "Capital Partners in Care Health Information Exchange (CPC-HIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "DC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.dcpca.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.dcpca.org/programs/cpc-hie-governance-and-support",
+          "title": "Capital Partners in Care (CPC) Health Information Exchange, DC Primary Care Association",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhcf.dc.gov/dchie",
+          "title": "DC Health Information Exchange, DC Department of Health Care Finance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "virginia-health-information",
+      "name": "Virginia Health Information (VHI)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "VA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.vhi.org/",
+      "how_to_join": "VHI's Health Coordination Network page asks organizations to connect with VHI to get started and links onboarding information.",
+      "sources": [
+        {
+          "url": "https://www.vhi.org/hie/",
+          "title": "Virginia Statewide Health Information Exchange, Virginia Health Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.vhi.org/hie/health-coordination-network/",
+          "title": "Health Coordination Network, Virginia Health Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "west-virginia-health-information-network",
+      "name": "West Virginia Health Information Network (WVHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WV"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wvhin.org/",
+      "how_to_join": "Contact the WVHIN outreach team for information about gaining access.",
+      "sources": [
+        {
+          "url": "https://wvhin.org/",
+          "title": "West Virginia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wvhin.org/about-us/",
+          "title": "About Us, West Virginia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "nc-healthconnex",
+      "name": "NC HealthConnex (N.C. Health Information Exchange Authority)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://hiea.nc.gov/",
+      "how_to_join": "Start by filling out a participation agreement; the NC HIEA team then sends a welcome packet to begin onboarding.",
+      "sources": [
+        {
+          "url": "https://hiea.nc.gov/providers/how-connect",
+          "title": "How to Connect, N.C. Health Information Exchange Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://hiea.nc.gov/providers/about-nc-healthconnex",
+          "title": "About NC HealthConnex, N.C. Health Information Exchange Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "south-carolina-e-health-alliance",
+      "name": "South Carolina e-Health Alliance (SCeHA)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "SC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sceha.org/",
+      "how_to_join": "Tell SCeHA about your organization through its sign-up process, and a SCeHA representative guides onboarding, integration and go-live.",
+      "sources": [
+        {
+          "url": "https://sceha.org/",
+          "title": "South Carolina e-Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "georgia-health-information-network",
+      "name": "Georgia Health Information Network (GaHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "GA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.gahin.org/",
+      "how_to_join": "Use the Join Now link on GaHIN's Join GaHIN page.",
+      "sources": [
+        {
+          "url": "https://www.gahin.org/",
+          "title": "Georgia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.gahin.org/join-gahin",
+          "title": "Join GaHIN, Georgia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "florida-health-information-exchange",
+      "name": "Florida Health Information Exchange (Florida HIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "FL"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.flhie.org/",
+      "how_to_join": "The Connect with the Florida HIE page provides the participation agreement, onboarding documents and registration for an introductory webinar.",
+      "sources": [
+        {
+          "url": "https://www.flhie.org/",
+          "title": "The Florida HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.flhie.org/connect-with-the-florida-hie/",
+          "title": "Connect with the Florida HIE, The Florida HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "kentucky-health-information-exchange",
+      "name": "Kentucky Health Information Exchange (KHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "KY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://khie.ky.gov/",
+      "how_to_join": "Engage a KHIE Outreach Coordinator, who helps plan the services you want and sign the KHIE Participation Agreement.",
+      "sources": [
+        {
+          "url": "https://khie.ky.gov/About/Pages/About-KHIE.aspx",
+          "title": "About KHIE, Kentucky Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://khie.ky.gov/Get-Started/Pages/default.aspx",
+          "title": "Getting Started, Kentucky Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "tennessee-health-information-exchange",
+      "name": "Tennessee Health Information Exchange (TnHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TN"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://tnhie.org/",
+      "how_to_join": "Provide the information requested on TnHIE's How to Join page to schedule a meeting with its provider outreach staff.",
+      "sources": [
+        {
+          "url": "https://tnhie.org/",
+          "title": "Tennessee Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://tnhie.org/who-are-we/",
+          "title": "Who We Are, Tennessee Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://tnhie.org/healthcare-providers/how-to-join/",
+          "title": "How to Join, Tennessee Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "intellitrue-hie",
+      "name": "IntelliTrue HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MS"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.mhanet.org/intellitrue",
+      "how_to_join": "Independent physicians may sign up by contacting the hospitals where they have privileges or by emailing IntelliTrue.",
+      "sources": [
+        {
+          "url": "https://www.mhanet.org/intellitrue",
+          "title": "IntelliTrue, Mississippi Hospital Association",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "share-arkansas",
+      "name": "SHARE (Arkansas State Health Alliance for Records Exchange)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "AR"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sharearkansas.com/",
+      "how_to_join": "Fill out the Enroll With SHARE Today form on SHARE's Join SHARE page.",
+      "sources": [
+        {
+          "url": "https://sharearkansas.com/",
+          "title": "SHARE, Arkansas State Health Alliance for Records Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sharearkansas.com/about/about-share/",
+          "title": "About SHARE, Arkansas State Health Alliance for Records Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sharearkansas.com/contact/join-share/",
+          "title": "Join SHARE, Arkansas State Health Alliance for Records Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "louisiana-health-information-exchange",
+      "name": "Louisiana Health Information Exchange (LaHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "LA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://lhcqf.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://lhcqf.org/service/health-information-exchange-platform/",
+          "title": "Health Information Exchange Platform, Louisiana Health Care Quality Forum",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "myhealth-access-network",
+      "name": "MyHealth Access Network",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "OK"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://myhealthaccess.net/",
+      "how_to_join": "Use the Apply to Join link on MyHealth's OKSHINE page.",
+      "sources": [
+        {
+          "url": "https://myhealthaccess.net/",
+          "title": "MyHealth Access Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://myhealthaccess.net/okshine/",
+          "title": "OKSHINE, MyHealth Access Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://oklahoma.gov/ohca/okshine/overview.html",
+          "title": "OKSHINE Overview, Oklahoma Health Care Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "texas-health-services-authority",
+      "name": "HIETexas (Texas Health Services Authority)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://thsa.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://thsa.org/hie-texas/",
+          "title": "HIETexas, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "c3hie",
+      "name": "C3HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://c3hie.org/",
+      "how_to_join": "Sign C3HIE's Business Associate Agreement, Master Service Agreement and Statement of Work, then connect through C3HIE.",
+      "sources": [
+        {
+          "url": "https://c3hie.org/",
+          "title": "C3HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://c3hie.org/how-to-join/",
+          "title": "How to Join, C3HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthconnect-texas",
+      "name": "Healthconnect Texas",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.healthconnecttx.org/",
+      "how_to_join": "Its Providers page invites providers to contact the Healthconnect Texas team.",
+      "sources": [
+        {
+          "url": "https://www.healthconnecttx.org/",
+          "title": "Healthconnect Texas",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.healthconnecttx.org/providers/",
+          "title": "How We Serve Providers, Healthconnect Texas",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "connected-care-exchange",
+      "name": "Connected Care Exchange (Rio Grande Valley Health Information Exchange)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.ccehie.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.ccehie.org/",
+          "title": "Connected Care Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "connxus",
+      "name": "Connxus",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://connxus.org/",
+      "how_to_join": "Connxus asks organizations to connect with it to learn more about its data exchange platform.",
+      "sources": [
+        {
+          "url": "https://connxus.org/",
+          "title": "Connxus",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
         }
       ],
       "last_checked": "2026-11-06"
