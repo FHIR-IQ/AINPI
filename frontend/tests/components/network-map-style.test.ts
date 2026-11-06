@@ -31,7 +31,7 @@ describe('cellStyle', () => {
   });
   it('a jurisdiction with no listed network is not labelled Not covered', () => {
     const st = cellStyle('RI', { category: 'none', verified: true });
-    expect(st.label).toBe('None listed in our sources');
+    expect(st.label).toBe('No state or multi-state network for this use case in our sources');
     expect(st.patternId).toBeNull();
   });
   it('fills pairwise differ in luminance by at least 0.08', () => {

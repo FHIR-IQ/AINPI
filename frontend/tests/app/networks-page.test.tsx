@@ -34,6 +34,7 @@ vi.mock('next/dynamic', () => ({
     },
 }));
 
+import { cellStyle } from '@/components/charts/network-map-style';
 import NetworksClient from '@/app/networks/networks-client';
 
 const src = (url: string, accessed = '2026-11-01') => ({ url, title: `Source ${url}`, accessed, primary: true });
@@ -187,6 +188,17 @@ describe('/networks client', () => {
     expect(within(panel).getByText('No state or multi-state network found in our sources for this state.')).toBeTruthy();
     expect(within(panel).getByText('National networks and programs')).toBeTruthy();
     expect(within(panel).getByText('Example National QHIN')).toBeTruthy();
+  });
+
+  it('labels a state with listed networks but none for the selected use case without claiming nothing is listed', () => {
+    renderClient('use=public-health');
+    const cell = screen.getByTestId('cell-PA');
+    expect(cell.getAttribute('data-category')).toBe('none');
+    const label = cellStyle('PA', { category: 'none', verified: true }).label;
+    expect(label).toBe('No state or multi-state network for this use case in our sources');
+    expect(label).not.toMatch(/none listed|nothing/i);
+    fireEvent.click(cell);
+    expect(within(screen.getByTestId('state-panel')).getByText('Example PA Exchange')).toBeTruthy();
   });
 
   it('marks a network checked more than 180 days before the build date as needing re-check', () => {
