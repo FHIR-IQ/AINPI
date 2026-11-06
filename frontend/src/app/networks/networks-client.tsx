@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AinpiLink, Network, NetworkSource, NetworkType, NetworksPayload, UseCaseSlug } from '@/lib/api-v1-types';
 import {
   JURISDICTIONS,
+  STALE_AFTER_DAYS,
   isStale,
   networksForRoute,
   networksInState,
@@ -216,7 +217,7 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
     <div>
       <section aria-labelledby="use-case-label" className="mt-8">
         <p id="use-case-label" className="m-0 font-serif text-lg text-ink">
-          I want to
+          I want to…
         </p>
         <div role="group" aria-labelledby="use-case-label" className="mt-3 flex flex-wrap gap-2">
           {payload.use_cases.map((u) => {
@@ -354,7 +355,7 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
         </h2>
         <p className="measure m-0 text-sm text-gray-700">
           {oldest
-            ? `Oldest last-checked date on this page: ${oldest}. Entries checked more than 180 days before this page was built are marked "Needs re-check".`
+            ? `Oldest last-checked date on this page: ${oldest}. Entries checked more than ${STALE_AFTER_DAYS} days before this page was built are marked "Needs re-check".`
             : 'No network entries have been checked yet.'}{' '}
           The full data file is at{' '}
           <a href="/api/v1/networks.json" className="text-primary-600 underline">
