@@ -8,7 +8,7 @@ import NetworksClient, { NetworksExplorer } from './networks-client';
 export const dynamic = 'force-static';
 
 const DESCRIPTION =
-  'How US health data moves for a given job: the routes it can take, the rules and standards behind each, and which networks operate in each state, with sources and last-checked dates.';
+  'How US health data moves for a given job: the routes it can take, the rules and standards behind each, and which networks our sources list for each state, with sources and last-checked dates.';
 
 export const metadata: Metadata = {
   title: 'Health data networks',
@@ -34,7 +34,7 @@ export default function NetworksPage() {
         <h1 className="m-0 mt-2 font-serif text-4xl text-ink">Health data networks</h1>
         <p className="lede measure m-0 mt-4">
           Pick a job you need to do with health data. This page shows the routes that data can take for that job and
-          which networks operate in each state. Every entry links to its source with the date it was last checked.
+          the networks our sources list in each state. The lists are not complete. Every entry links to its source with the date it was last checked.
         </p>
         {payload ? (
           <Suspense fallback={<NetworksExplorer payload={payload} buildDate={buildDate} initialUse={DEFAULT_USE_CASE} />}>

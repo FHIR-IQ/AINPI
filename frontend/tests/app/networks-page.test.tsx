@@ -53,7 +53,7 @@ const fixture: NetworksPayload = {
         { label: 'Unpublished finding link', finding_slug: 'not-a-real-finding-slug' },
       ],
     },
-    { slug: 'payer-exchange', label: 'Exchange data with a payer', summary: 'Payer summary.', ainpi_links: [] },
+    { slug: 'payer-exchange', label: 'Exchange data with a health plan', summary: 'Payer summary.', ainpi_links: [] },
     { slug: 'encounter-alerts', label: 'Get admit and discharge alerts', summary: 'Alerts summary.', ainpi_links: [] },
     { slug: 'public-health', label: 'Report to public health', summary: 'Public health summary.', ainpi_links: [] },
     { slug: 'community-referral', label: 'Refer someone to a community organization', summary: 'Referral summary.', ainpi_links: [] },
@@ -184,8 +184,8 @@ describe('/networks client', () => {
     fireEvent.click(screen.getByTestId('cell-WY'));
     const panel = screen.getByTestId('state-panel');
     expect(within(panel).getByRole('heading', { name: 'Wyoming' })).toBeTruthy();
-    expect(within(panel).getByText('No state or multi-state network found in our sources for this state')).toBeTruthy();
-    expect(within(panel).getByText('Available in every state')).toBeTruthy();
+    expect(within(panel).getByText('No state or multi-state network found in our sources for this state.')).toBeTruthy();
+    expect(within(panel).getByText('National networks and programs')).toBeTruthy();
     expect(within(panel).getByText('Example National QHIN')).toBeTruthy();
   });
 
@@ -232,7 +232,7 @@ describe('/networks client', () => {
     renderClient();
     expect(
       screen.getByText(
-        'Educational resource, not legal advice and not an endorsement. Confirm details with the network before relying on them.',
+        'Educational resource, not legal advice and not an endorsement. AINPI is independent; no network, state agency or CMS reviewed or produced this page. Confirm details with the network before relying on them.',
       ),
     ).toBeTruthy();
   });

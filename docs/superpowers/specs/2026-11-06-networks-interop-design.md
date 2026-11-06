@@ -66,7 +66,7 @@ Layout, top to bottom (use-case-first was chosen by Gene over map-first and flow
 | `treatment-records` | Get a patient's records for treatment |
 | `individual-access` | Get my own records (as a patient) |
 | `find-endpoint` | Find a provider's endpoint |
-| `payer-exchange` | Exchange data with a payer (patient access, provider access, payer-to-payer, prior authorization) |
+| `payer-exchange` | Exchange data with a health plan |
 | `encounter-alerts` | Get admit and discharge alerts |
 | `public-health` | Report to public health |
 | `community-referral` | Refer someone to a community organization |

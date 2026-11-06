@@ -44,7 +44,7 @@ const TYPE_LABEL: Record<NetworkType, string> = {
 };
 
 export const DISCLAIMER =
-  'Educational resource, not legal advice and not an endorsement. Confirm details with the network before relying on them.';
+  'Educational resource, not legal advice and not an endorsement. AINPI is independent; no network, state agency or CMS reviewed or produced this page. Confirm details with the network before relying on them.';
 
 function asOfDate(buildDate: string): Date {
   return new Date(`${buildDate}T00:00:00Z`);
@@ -160,10 +160,10 @@ function StatePanel({
           Close
         </button>
       </div>
-      <p className="m-0 mt-1 text-sm text-gray-600">Every network in our sources for this state, of every type.</p>
+      <p className="m-0 mt-1 text-sm text-gray-600">Networks in our sources for this state, of every type. Other networks may operate here.</p>
       {local.length === 0 ? (
         <p className="m-0 mt-3 text-sm text-gray-700">
-          No state or multi-state network found in our sources for this state
+          No state or multi-state network found in our sources for this state.
         </p>
       ) : (
         <ul className="m-0 mt-2 list-none p-0">
@@ -172,7 +172,7 @@ function StatePanel({
           ))}
         </ul>
       )}
-      <h4 className="eyebrow m-0 mt-4">Available in every state</h4>
+      <h4 className="eyebrow m-0 mt-4">National networks and programs</h4>
       {national.length === 0 ? (
         <p className="m-0 mt-1 text-sm text-gray-700">No national network entries yet.</p>
       ) : (
@@ -338,9 +338,9 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
             cells={cells}
             selectedState={selectedState}
             onStateClick={(code: string) => setSelectedState((s) => (s === code ? null : code))}
-            title={`Where state and multi-state networks serve: ${current?.label ?? useCase}`}
+            title={`States with a state or multi-state network in our sources: ${current?.label ?? useCase}`}
           />
-          <p className="m-0 mt-2 text-xs text-gray-500">Select a state to list every network in it.</p>
+          <p className="m-0 mt-2 text-xs text-gray-500">Select a state to list the networks in our sources for it.</p>
           {selectedState && (
             <StatePanel payload={payload} state={selectedState} asOf={asOf} onClose={() => setSelectedState(null)} />
           )}

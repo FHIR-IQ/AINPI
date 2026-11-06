@@ -29,6 +29,11 @@ describe('cellStyle', () => {
     expect(cellStyle('PR', { category: 'both', verified: true }).label).toBe('Not covered');
     expect(cellStyle('PA', undefined).label).toBe('Not covered');
   });
+  it('a jurisdiction with no listed network is not labelled Not covered', () => {
+    const st = cellStyle('RI', { category: 'none', verified: true });
+    expect(st.label).toBe('None listed in our sources');
+    expect(st.patternId).toBeNull();
+  });
   it('fills pairwise differ in luminance by at least 0.08', () => {
     const l = CATS.map((category) => lum(cellStyle('PA', { category, verified: true }).fill));
     for (let i = 0; i < l.length; i++)
@@ -37,6 +42,6 @@ describe('cellStyle', () => {
   it('legend has required entries', () => {
     const labels = LEGEND.map((e) => e.label);
     expect(labels).toContain('Network operates here; use-case detail pending');
-    expect(labels).toContain('National routes (QHINs, vendor networks, payer APIs, Direct) apply in every state');
+    expect(labels).toContain('National routes (QHINs, vendor networks, payer APIs, Direct) are not tied to one state');
   });
 });

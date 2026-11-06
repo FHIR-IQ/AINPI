@@ -39,7 +39,7 @@
     },
     {
       "slug": "payer-exchange",
-      "label": "Exchange data with a payer (patient access, provider access, payer-to-payer, prior authorization)",
+      "label": "Exchange data with a health plan",
       "summary": "Ways data moves between payers, patients and providers under the CMS interoperability rules.",
       "ainpi_links": [
         {
@@ -137,7 +137,7 @@
       "summary": "Your organization connects to TEFCA through a QHIN, directly or through a participant of one, and queries other TEFCA participants for a patient's records.",
       "who_can_use": "Organizations that sign on as a Participant or Subparticipant of a designated QHIN.",
       "rule": "TEFCA Common Agreement, Treatment exchange purpose, with the Treatment exchange purpose implementation SOP.",
-      "standard": "IHE document exchange of C-CDA documents, as set by the QHIN Technical Framework; the RCE's FHIR roadmap adds HL7 FHIR as an option alongside the required IHE transactions.",
+      "standard": "IHE document exchange of C-CDA documents, as set by the QHIN Technical Framework. The RCE says a draft version 2 of that framework would add HL7 FHIR alongside the required IHE transactions.",
       "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement.",
       "network_types": [
         "qhin"
@@ -190,7 +190,7 @@
       "who_can_use": "Anyone holding a Direct address issued by a health information service provider (HISP), which is often supplied through the EHR.",
       "rule": "The trust framework and certificate trust bundles of the sender's and receiver's HISPs.",
       "standard": "Direct secure messaging (Applicability Statement for Secure Health Transport, Version 1.2).",
-      "how_to_join": "Get a Direct address from a HISP; ask your EHR vendor first, since EHR certification includes Direct messaging.",
+      "how_to_join": "Get a Direct address from a HISP; ask your EHR vendor first, since the Base EHR definition used in ONC certification includes Direct messaging.",
       "network_types": [
         "direct"
       ],
@@ -259,8 +259,8 @@
       "use_case": "individual-access",
       "title": "Your health plan's Patient Access API",
       "summary": "You connect an app to your health plan's API to get your claims and encounter data, including cost, and a defined set of clinical data.",
-      "who_can_use": "People enrolled in a Medicare Advantage plan, in Medicaid or CHIP (fee-for-service or managed care), or in a Qualified Health Plan on the federally facilitated exchanges. CMS excludes issuers offering only stand-alone dental plans (SADPs) and QHP issuers offering coverage in the Federally-facilitated Small Business Health Options Program (FF-SHOP).",
-      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); CMS-0057-F adds prior authorization information.",
+      "who_can_use": "People enrolled in a Medicare Advantage plan, in Medicaid or CHIP (fee-for-service or managed care), or in a Qualified Health Plan on the federally facilitated exchanges. Some dental-only plans and small-business exchange plans are excluded.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); CMS-0057-F adds prior authorization information. CMS excludes issuers offering only stand-alone dental plans (SADPs) and QHP issuers offering coverage in the Federally-facilitated Small Business Health Options Program (FF-SHOP).",
       "standard": "HL7 FHIR R4 (Release 4.0.1) API.",
       "how_to_join": "Pick an app that connects to your plan's Patient Access API, or ask your plan which apps it supports.",
       "network_types": [
@@ -614,9 +614,9 @@
       "id": "payer-exchange-prior-authorization",
       "use_case": "payer-exchange",
       "title": "Prior Authorization API",
-      "summary": "A provider's system finds whether an item or service needs prior authorization, what documentation is required, and sends the request and gets the decision; required beginning January 1, 2027.",
+      "summary": "A provider's system checks whether an item or service needs prior authorization and what documentation the payer requires, then sends the request and receives the decision. Payers must offer it beginning January 1, 2027.",
       "who_can_use": "Providers requesting prior authorization from an impacted payer, for items and services other than drugs.",
-      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F), with HHS enforcement discretion for the HIPAA X12 278 standard when an all-FHIR API is used.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS's fact sheet says HHS will use enforcement discretion for the HIPAA X12 278 standard when an all-FHIR Prior Authorization API is used.",
       "standard": "HL7 FHIR API; X12 278 may also be offered.",
       "how_to_join": "Ask your EHR vendor and each impacted payer how to connect to the payer's Prior Authorization API.",
       "network_types": [
@@ -693,7 +693,7 @@
       "id": "encounter-alerts-hospital-cop",
       "use_case": "encounter-alerts",
       "title": "Hospital e-notifications under the Medicare Conditions of Participation",
-      "summary": "When a patient registers in the emergency department, is admitted, or is discharged or transferred, the hospital's system sends a notification. The hospital makes a reasonable effort to send it to post-acute providers and to the patient's established primary care practitioner or group, where applicable law allows and consistent with the patient's expressed privacy preferences.",
+      "summary": "When a patient registers in the emergency department, is admitted, or is discharged or transferred, the hospital's system sends a notification. The hospital makes a reasonable effort to send it to post-acute providers and suppliers. It also tries the patient's established primary care practitioner or group, and any practitioner or group the patient names as primarily responsible for their care. Applicable law must allow it and it must not be inconsistent with the patient's expressed privacy preferences (42 CFR 482.24(d)(5)).",
       "who_can_use": "Post-acute care providers and the practitioners or groups the rule names as recipients.",
       "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), added by CMS-9115-F; applies to hospitals whose systems conform to the content standard at 45 CFR 170.205(d)(2).",
       "standard": "HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2); hospitals typically send these as HL7 v2 ADT (admit, discharge, transfer) messages.",
@@ -1015,7 +1015,7 @@
         "public-health-tefca"
       ],
       "website": "https://open.epic.com/Home/Interoperate/TEFCA",
-      "how_to_join": "Epic states the Epic Nexus QHIN is currently only for Epic community members; others reach Epic organizations through any other QHIN.",
+      "how_to_join": "Epic states the Epic Nexus QHIN is currently only for Epic community members; Epic says organizations outside the Epic community can reach Epic organizations by connecting to any other QHIN.",
       "sources": [
         {
           "url": "https://rce.sequoiaproject.org/designated-qhins/",
@@ -1281,7 +1281,7 @@
         "treatment-records-vendor-network"
       ],
       "website": "https://www.commonwellalliance.org/",
-      "how_to_join": "Health IT vendors become Service Adopter members and build CommonWell services into their software; providers connect through a vendor that has done so.",
+      "how_to_join": "Service Adopters are CommonWell members that connect to the network and build CommonWell services into their software. Ask your EHR vendor whether it is one.",
       "sources": [
         {
           "url": "https://www.commonwellalliance.org/",
@@ -2037,7 +2037,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://healthix.org/healthix-community/new-to-healthix/",
-      "how_to_join": "Execute the Statewide Common Participation Agreement and the Healthix Service Agreement, then work with its team on technical onboarding.",
+      "how_to_join": "Sign the Statewide Common Participation Agreement and the Healthix Service Agreement, then work with its team on technical onboarding.",
       "sources": [
         {
           "url": "https://healthix.org/healthix-community/new-to-healthix/",
@@ -2235,7 +2235,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://www.dcpca.org/",
-      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "how_to_join": "Contact the DC Primary Care Association, which runs it; its pages do not describe how to join.",
       "sources": [
         {
           "url": "https://www.dcpca.org/programs/cpc-hie-governance-and-support",
@@ -2487,7 +2487,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://www.mhanet.org/intellitrue",
-      "how_to_join": "Independent physicians may sign up by contacting the hospitals where they have privileges or by emailing IntelliTrue.",
+      "how_to_join": "Independent physicians can sign up by contacting the hospitals where they have privileges or by emailing IntelliTrue.",
       "sources": [
         {
           "url": "https://www.mhanet.org/intellitrue",
@@ -3446,7 +3446,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://www.onehealthport.com/hie-overview",
-      "how_to_join": "Sign the OneHealthPort HIE Participation Agreement through its online contracting process and pay an annual subscription fee based on your organization's revenue.",
+      "how_to_join": "Sign the OneHealthPort HIE Participation Agreement through its online contracting process and pay an annual subscription fee based on your organization's annual net operating revenue.",
       "sources": [
         {
           "url": "https://www.onehealthport.com/hie-overview",
@@ -3530,7 +3530,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://sdhealthconnect.org/",
-      "how_to_join": "Fill out its Participant Inquiry Form, then sign a participation agreement and a Business Associate Agreement and agree a level of connectivity with its team.",
+      "how_to_join": "Fill out its Participant Inquiry Form, then sign a participation agreement and a Business Associate Agreement and agree on a level of connectivity with its team.",
       "sources": [
         {
           "url": "https://sdhealthconnect.org/",
@@ -3564,7 +3564,7 @@
       "detail_level": "basic",
       "routes": [],
       "website": "https://www.onehealthrecord.alabama.gov/",
-      "how_to_join": "Execute a participation agreement (DURSA) and a HIPAA Business Associate Agreement with the Alabama Health Information Exchange, as its policy manual requires before exchange begins.",
+      "how_to_join": "Sign a participation agreement (DURSA) and a HIPAA Business Associate Agreement with the Alabama Health Information Exchange, as its policy manual requires before exchange begins.",
       "sources": [
         {
           "url": "https://www.onehealthrecord.alabama.gov/Content/uploads/AHIE-Policies-And-Procedures%20Latest.pdf",
@@ -3613,11 +3613,35 @@
     },
     {
       "term": "NDH",
-      "definition": "National Directory of Healthcare: the HL7 FHIR implementation guide that describes how providers, organizations and endpoints are listed in a directory."
+      "definition": "National Directory of Healthcare: the HL7 FHIR implementation guide that describes how providers, organizations and endpoints are listed in a directory. On ainpi.dev, 'the NDH' also refers to CMS's National Provider Directory, which follows this guide."
     },
     {
       "term": "endpoint",
       "definition": "The electronic address, usually a web URL or a Direct address, where an organization receives or serves health data."
+    },
+    {
+      "term": "HISP",
+      "definition": "Health Internet Service Provider: a service that issues Direct addresses and carries Direct messages between them."
+    },
+    {
+      "term": "USCDI",
+      "definition": "United States Core Data for Interoperability: the standard set of patient data classes and elements that certified health IT must be able to exchange."
+    },
+    {
+      "term": "RCE",
+      "definition": "Recognized Coordinating Entity: the organization that ONC chose to run TEFCA day to day, including the rules QHINs follow."
+    },
+    {
+      "term": "impacted payer",
+      "definition": "A health plan that the CMS interoperability rules apply to, such as Medicare Advantage plans, state Medicaid and CHIP programs, and Qualified Health Plan issuers on the federally facilitated exchanges."
+    },
+    {
+      "term": "Participant and Subparticipant",
+      "definition": "In TEFCA, a Participant is an organization that connects to a QHIN. A Subparticipant connects through a Participant instead of directly."
+    },
+    {
+      "term": "HIO",
+      "definition": "Health information organization: another name for a health information exchange, used in some state programs."
     }
   ]
 }

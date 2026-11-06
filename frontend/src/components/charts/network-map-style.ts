@@ -68,7 +68,7 @@ export const PATTERNS: PatternDef[] = [
 const OUT: CellStyle = { fill: '#faf8f5', patternId: 'nm-out', label: 'Not covered' };
 
 const BASE: Record<StateCategory, { fill: string; id: string | null; label: string }> = {
-  none: { fill: PAPER_TINT, id: null, label: 'No state-specific route' },
+  none: { fill: PAPER_TINT, id: null, label: 'None listed in our sources' },
   state_hie: { fill: HIE_FILL, id: 'nm-hie', label: 'State health information exchange' },
   multi_state: { fill: MULTI_FILL, id: 'nm-multi', label: 'Multi-state network' },
   both: { fill: BOTH_FILL, id: 'nm-both', label: 'State exchange and multi-state network' },
@@ -86,7 +86,7 @@ export function cellStyle(
 }
 
 export const LEGEND: { key: string; label: string; style: CellStyle }[] = [
-  { key: 'none', label: 'No state-specific route', style: cellStyle('PA', { category: 'none', verified: true }) },
+  { key: 'none', label: 'None listed in our sources', style: cellStyle('PA', { category: 'none', verified: true }) },
   { key: 'state_hie', label: 'State health information exchange', style: cellStyle('PA', { category: 'state_hie', verified: true }) },
   { key: 'multi_state', label: 'Multi-state network', style: cellStyle('PA', { category: 'multi_state', verified: true }) },
   { key: 'both', label: 'State exchange and multi-state network', style: cellStyle('PA', { category: 'both', verified: true }) },
@@ -98,7 +98,7 @@ export const LEGEND: { key: string; label: string; style: CellStyle }[] = [
   { key: 'out', label: 'Not covered', style: OUT },
   {
     key: 'national',
-    label: 'National routes (QHINs, vendor networks, payer APIs, Direct) apply in every state',
+    label: 'National routes (QHINs, vendor networks, payer APIs, Direct) are not tied to one state',
     style: { fill: 'none', patternId: null, label: 'National routes' },
   },
 ];
