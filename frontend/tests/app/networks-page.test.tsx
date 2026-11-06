@@ -118,9 +118,9 @@ const fixture: NetworksPayload = {
   glossary: [{ term: 'HIE', definition: 'Health information exchange.' }],
 };
 
-function renderClient(query = '') {
+function renderClient(query = '', payload: NetworksPayload = fixture) {
   nav.params = new URLSearchParams(query);
-  return render(<NetworksClient payload={fixture} buildDate="2026-11-06" />);
+  return render(<NetworksClient payload={payload} buildDate="2026-11-06" publishedSlugs={['endpoint-url-validity']} />);
 }
 
 beforeEach(() => nav.replace.mockClear());
@@ -218,6 +218,29 @@ describe('/networks client', () => {
       '/findings/endpoint-url-validity',
     );
     expect(screen.queryByText('Unpublished finding link')).toBeNull();
+  });
+
+  it('tags a basic-level network on a route card as use-case detail pending', () => {
+    const basic = {
+      id: 'nj-multi',
+      name: 'Example NJ Multi-state',
+      type: 'multi_state' as const,
+      national: false,
+      states: ['NJ'],
+      detail_level: 'basic' as const,
+      routes: [],
+      website: 'https://example.org/nj',
+      how_to_join: 'Contact the network.',
+      sources: [src('https://example.org/nj')],
+      last_checked: '2026-10-15',
+    };
+    renderClient('', { ...fixture, networks: [...fixture.networks, basic] });
+    fireEvent.click(screen.getByTestId('cell-NJ'));
+    const card = screen.getByTestId('route-tr-hie');
+    expect(within(within(card).getByTestId('network-nj-multi')).getByText('use-case detail pending')).toBeTruthy();
+    expect(within(within(card).getByTestId('network-old-qhin')).queryByText('use-case detail pending')).toBeNull();
+    const panel = screen.getByTestId('state-panel');
+    expect(within(within(panel).getByTestId('network-nj-multi')).queryByText('use-case detail pending')).toBeNull();
   });
 
   it('lists sources and freshness with a link to the JSON', () => {

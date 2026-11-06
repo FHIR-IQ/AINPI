@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import type { Network, NetworkRoute, NetworksPayload } from '@/lib/api-v1-types';
 import {
@@ -5,6 +7,7 @@ import {
   stateCategory, networksInState, resolveAinpiLink, oldestCheck, safeExternalHref,
 } from '@/lib/networks';
 
+const PUB: ReadonlySet<string> = new Set(['endpoint-url-validity']);
 const src = [{ url: 'https://example.org', title: 't', accessed: '2026-11-01', primary: true }];
 const route = (id: string, use_case: NetworkRoute['use_case'], network_types: NetworkRoute['network_types']): NetworkRoute => ({
   id, use_case, title: id, summary: '', who_can_use: '', rule: '', standard: '', how_to_join: '',
@@ -80,20 +83,21 @@ describe('networks helpers', () => {
     expect(byId(networksForRoute(p, 'p1', 'PA'))).toEqual(['pa-hie']);
   });
   it('resolveAinpiLink', () => {
-    expect(resolveAinpiLink({ label: 'x', finding_slug: 'endpoint-url-validity' })).toEqual({ label: 'x', href: '/findings/endpoint-url-validity' });
-    expect(resolveAinpiLink({ label: 'x', finding_slug: 'payer-seed-coverage' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' })).toEqual({ label: 'x', href: '/states/pa/connectivity' });
-    expect(resolveAinpiLink({ label: 'x' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', finding_slug: 'endpoint-url-validity' }, PUB)).toEqual({ label: 'x', href: '/findings/endpoint-url-validity' });
+    expect(resolveAinpiLink({ label: 'x', finding_slug: 'payer-seed-coverage' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', finding_slug: 'endpoint-url-validity' }, new Set())).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' }, PUB)).toEqual({ label: 'x', href: '/states/pa/connectivity' });
+    expect(resolveAinpiLink({ label: 'x' }, PUB)).toBeNull();
   });
   it('resolveAinpiLink accepts only single-slash internal paths', () => {
-    expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' })?.href).toBe('/states/pa/connectivity');
-    expect(resolveAinpiLink({ label: 'x', href: '//evil.com' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: 'https://x' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: 'javascript:alert(1)' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: '/\t/evil.com' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: '/\n/evil.com' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: '/ /evil.com' })).toBeNull();
-    expect(resolveAinpiLink({ label: 'x', href: '/\\evil.com' })).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' }, PUB)?.href).toBe('/states/pa/connectivity');
+    expect(resolveAinpiLink({ label: 'x', href: '//evil.com' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: 'https://x' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: 'javascript:alert(1)' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/\t/evil.com' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/\n/evil.com' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/ /evil.com' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', href: '/\\evil.com' }, PUB)).toBeNull();
   });
   it('safeExternalHref keeps only https URLs', () => {
     expect(safeExternalHref('https://example.org/a?b=1')).toBe('https://example.org/a?b=1');
@@ -108,5 +112,19 @@ describe('networks helpers', () => {
   it('oldestCheck', () => {
     expect(oldestCheck(p)).toBe('2026-08-01');
     expect(oldestCheck({ ...p, networks: [] })).toBeNull();
+  });
+});
+
+describe('client bundle boundary', () => {
+  it('no client-reachable networks module imports the findings catalog', () => {
+    const root = path.resolve(__dirname, '../../src');
+    for (const f of [
+      'lib/networks.ts',
+      'app/networks/networks-client.tsx',
+      'components/charts/NetworkStateMap.tsx',
+      'components/charts/network-map-style.ts',
+    ]) {
+      expect(fs.readFileSync(path.join(root, f), 'utf8'), f).not.toMatch(/@\/data\/findings|data\/findings/);
+    }
   });
 });

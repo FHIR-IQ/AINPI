@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, createContext, useContext, useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import type { AinpiLink, Network, NetworkSource, NetworkType, NetworksPayload, UseCaseSlug } from '@/lib/api-v1-types';
 import {
+  DEFAULT_USE_CASE,
   JURISDICTIONS,
   STALE_AFTER_DAYS,
   isStale,
@@ -32,7 +33,14 @@ export interface NetworksClientProps {
   payload: NetworksPayload;
   /** Build date, YYYY-MM-DD, computed once on the server. Staleness is judged against it. */
   buildDate: string;
+  /**
+   * Slugs of published findings that networks.json links to, computed on the
+   * server so the findings catalog stays out of the client bundle.
+   */
+  publishedSlugs: string[];
 }
+
+const PublishedContext = createContext<ReadonlySet<string>>(new Set());
 
 const TYPE_LABEL: Record<NetworkType, string> = {
   state_hie: 'State HIE',
@@ -77,7 +85,10 @@ function Sources({ sources }: { sources: NetworkSource[] }) {
 }
 
 function AinpiLinks({ links }: { links: AinpiLink[] }) {
-  const resolved = links.map(resolveAinpiLink).filter((l): l is { label: string; href: string } => l !== null);
+  const published = useContext(PublishedContext);
+  const resolved = links
+    .map((l) => resolveAinpiLink(l, published))
+    .filter((l): l is { label: string; href: string } => l !== null);
   if (resolved.length === 0) return null;
   return (
     <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-sm">
@@ -92,7 +103,7 @@ function AinpiLinks({ links }: { links: AinpiLink[] }) {
   );
 }
 
-function NetworkItem({ n, asOf }: { n: Network; asOf: Date }) {
+function NetworkItem({ n, asOf, tagPending = false }: { n: Network; asOf: Date; tagPending?: boolean }) {
   const stale = isStale(n.last_checked, asOf);
   return (
     <li data-testid={`network-${n.id}`} className="border-t border-gray-200 py-2 first:border-t-0">
@@ -101,6 +112,9 @@ function NetworkItem({ n, asOf }: { n: Network; asOf: Date }) {
           <span className="font-medium text-ink">{n.name}</span>
         </ExternalLink>
         <span className="text-[11px] uppercase tracking-wider text-gray-500">{TYPE_LABEL[n.type]}</span>
+        {tagPending && n.detail_level !== 'full' && (
+          <span className="rounded-sm border border-gray-400 px-1.5 text-[11px] text-gray-600">use-case detail pending</span>
+        )}
         {stale && (
           <span className="rounded-sm border border-signal px-1.5 text-[11px] font-medium text-signal">
             Needs re-check
@@ -187,21 +201,31 @@ function StatePanel({
 }
 
 /**
- * The interactive body of /networks. Holds the selected use case in state,
- * seeded from `initialUse`, and mirrors changes into `?use=` without a scroll.
- * Rendered directly as the Suspense fallback (default use case) so the static
- * HTML carries the full page, and through `NetworksClient` once search params
- * are available.
+ * Reads `?use=` and syncs it into the explorer's selection. Kept in its own
+ * Suspense boundary so the route can stay force-static: the static HTML shows
+ * the default use case, and this child applies the query once on the client.
+ * An unknown value falls back to the default.
  */
-export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksClientProps & { initialUse: UseCaseSlug }) {
+function UseCaseFromUrl({ onUse }: { onUse: (slug: UseCaseSlug) => void }) {
+  const params = useSearchParams();
+  const raw = params?.get('use') ?? undefined;
+  useEffect(() => onUse(parseUseCase(raw)), [raw, onUse]);
+  return null;
+}
+
+/**
+ * The interactive body of /networks. Holds the selected use case in state,
+ * starting at the default, and mirrors changes into `?use=` without a scroll.
+ * Rendered once with the payload; `UseCaseFromUrl` applies the query.
+ */
+export default function NetworksClient({ payload, buildDate, publishedSlugs }: NetworksClientProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const [useCase, setUseCase] = useState<UseCaseSlug>(initialUse);
+  const [useCase, setUseCase] = useState<UseCaseSlug>(DEFAULT_USE_CASE);
+  const published = useMemo(() => new Set(publishedSlugs), [publishedSlugs]);
   const [overlays, setOverlays] = useState<Overlays>({ state_hie: true, multi_state: true });
   const [selectedState, setSelectedState] = useState<string | null>(null);
   const asOf = useMemo(() => asOfDate(buildDate), [buildDate]);
-
-  useEffect(() => setUseCase(initialUse), [initialUse]);
 
   const current = payload.use_cases.find((u) => u.slug === useCase);
   const routes = routesFor(payload, useCase);
@@ -226,7 +250,10 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
   }
 
   return (
-    <div>
+    <PublishedContext.Provider value={published}>
+      <Suspense fallback={null}>
+        <UseCaseFromUrl onUse={setUseCase} />
+      </Suspense>
       <section aria-labelledby="use-case-label" className="mt-8">
         <p id="use-case-label" className="m-0 font-serif text-lg text-ink">
           I want to…
@@ -281,7 +308,7 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
                       <Field label="Rule" value={r.rule} />
                       <Field label="Standard" value={r.standard} />
                       <Field label="How to join" value={r.how_to_join} />
-                      {r.ainpi_links.some((l) => resolveAinpiLink(l) !== null) && (
+                      {r.ainpi_links.some((l) => resolveAinpiLink(l, published) !== null) && (
                         <div>
                           <h4 className="eyebrow m-0">On ainpi.dev</h4>
                           <div className="mt-1">
@@ -304,7 +331,7 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
                           </h4>
                           <ul className="m-0 mt-1 list-none p-0">
                             {nets.map((n) => (
-                              <NetworkItem key={n.id} n={n} asOf={asOf} />
+                              <NetworkItem key={n.id} n={n} asOf={asOf} tagPending />
                             ))}
                           </ul>
                         </div>
@@ -390,14 +417,7 @@ export function NetworksExplorer({ payload, buildDate, initialUse }: NetworksCli
       </section>
 
       <p className="mt-10 border-t border-gray-300 pt-3 text-sm text-gray-600">{DISCLAIMER}</p>
-    </div>
+    </PublishedContext.Provider>
   );
-}
-
-/** Reads `?use=` on the client so the route itself can stay force-static. */
-export default function NetworksClient(props: NetworksClientProps) {
-  const params = useSearchParams();
-  const initialUse = parseUseCase(params?.get('use') ?? undefined);
-  return <NetworksExplorer {...props} initialUse={initialUse} />;
 }
 

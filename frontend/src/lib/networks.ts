@@ -1,5 +1,4 @@
 import type { AinpiLink, Network, NetworkRoute, NetworksPayload, UseCaseSlug } from '@/lib/api-v1-types';
-import { FINDINGS } from '@/data/findings';
 
 export const JURISDICTIONS: readonly string[] = [
   'AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY',
@@ -77,10 +76,18 @@ export function networksInState(p: NetworksPayload, state: string): { local: Net
   };
 }
 
-export function resolveAinpiLink(link: AinpiLink): { label: string; href: string } | null {
+/**
+ * Resolve an AINPI link to a label and an internal href, or null. `published`
+ * holds the slugs of published findings; it is computed on the server
+ * (`publishedFindingSlugs` in networks-published.ts) so the findings catalog
+ * never reaches the client bundle.
+ */
+export function resolveAinpiLink(
+  link: AinpiLink,
+  published: ReadonlySet<string>,
+): { label: string; href: string } | null {
   if (link.finding_slug) {
-    const f = FINDINGS.find((x) => x.slug === link.finding_slug);
-    return f && f.status === 'published' ? { label: link.label, href: `/findings/${f.slug}` } : null;
+    return published.has(link.finding_slug) ? { label: link.label, href: `/findings/${link.finding_slug}` } : null;
   }
   return link.href && isInternalPath(link.href) ? { label: link.label, href: link.href } : null;
 }

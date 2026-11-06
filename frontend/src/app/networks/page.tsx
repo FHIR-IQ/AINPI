@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import Navbar from '@/components/Navbar';
 import { loadNetworks } from '@/lib/load-api-v1';
-import { DEFAULT_USE_CASE } from '@/lib/networks';
-import NetworksClient, { NetworksExplorer } from './networks-client';
+import { publishedFindingSlugs } from '@/lib/networks-published';
+import NetworksClient from './networks-client';
 
 export const dynamic = 'force-static';
 
@@ -17,12 +16,17 @@ export const metadata: Metadata = {
     title: 'Health data networks',
     description: DESCRIPTION,
     url: 'https://ainpi.dev/networks',
-    type: 'article',
+    type: 'website',
   },
 };
 
 export default function NetworksPage() {
   const payload = loadNetworks();
+  if (!payload) {
+    // Fail the build rather than ship a page with no data.
+    throw new Error('/networks: frontend/public/api/v1/networks.json could not be read or parsed.');
+  }
+  const publishedSlugs = publishedFindingSlugs(payload);
   // Computed once at build; the client never reads the clock for staleness.
   const buildDate = new Date().toISOString().slice(0, 10);
 
@@ -36,13 +40,7 @@ export default function NetworksPage() {
           Pick a job you need to do with health data. This page shows the routes that data can take for that job and
           the networks our sources list in each state. The lists are not complete. Every entry links to its source with the date it was last checked.
         </p>
-        {payload ? (
-          <Suspense fallback={<NetworksExplorer payload={payload} buildDate={buildDate} initialUse={DEFAULT_USE_CASE} />}>
-            <NetworksClient payload={payload} buildDate={buildDate} />
-          </Suspense>
-        ) : (
-          <p className="mt-8 text-sm text-gray-700">The networks data file could not be read.</p>
-        )}
+        <NetworksClient payload={payload} buildDate={buildDate} publishedSlugs={publishedSlugs} />
       </main>
     </div>
   );
