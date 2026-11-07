@@ -182,3 +182,10 @@ def test_full_network_without_routes():
 def test_duplicate_source_url_in_one_item():
     e = errs(lambda p: p["networks"][0].update(sources=[src(), src(False)]))
     assert any("n1" in x and "more than once" in x for x in e)
+
+
+@pytest.mark.parametrize("path", [("networks", 0, "website"), ("networks", 0, "last_checked")])
+def test_trailing_newline_rejected(path):
+    p = valid()
+    p[path[0]][path[1]][path[2]] += "\n"
+    assert any("ends in whitespace" in e for e in check_networks(p))

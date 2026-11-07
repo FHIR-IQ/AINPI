@@ -247,7 +247,7 @@ export interface ApiV1Measures {
 
 // --- /api/v1/networks.json (health data networks guide) ---
 export type NetworkType = 'state_hie' | 'multi_state' | 'qhin' | 'vendor_network' | 'payer_api' | 'direct';
-/** The seven use cases, in display order. The type below is derived from this one list. */
+/** The seven use cases. The type below is derived from this one list. */
 export const USE_CASE_SLUGS = [
   'treatment-records',
   'individual-access',

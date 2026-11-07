@@ -142,9 +142,9 @@ def build_report(payload: dict, results: dict[str, Result], as_of: dt.date) -> t
     sections = [
         ("Dead or moved", groups["dead"]),
         ("Unreachable", groups["unreachable"]),
-        ("Newly blocked by the site, check by hand", groups["blocked"]),
+        ("Blocked, not on the known-blocked list; check by hand", groups["blocked"]),
         (f"Stale entries (last checked more than {STALE_AFTER_DAYS} days ago)", stale),
-        ("Blocked, check by hand (hosts that always refuse automated requests; not a reason for this issue)",
+        ("Blocked, check by hand (these hosts refuse automated requests on every run; listed for information only)",
          groups["known_blocked"]),
     ]
     sections = [(h, lines) for h, lines in sections if lines]

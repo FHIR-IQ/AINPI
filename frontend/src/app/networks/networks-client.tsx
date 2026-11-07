@@ -272,7 +272,7 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
 
   function selectState(code: string | null) {
     if (code !== null) {
-      const active = typeof document !== 'undefined' ? document.activeElement : null;
+      const active = document.activeElement;
       returnFocus.current = active instanceof HTMLElement || active instanceof SVGElement ? active : null;
     }
     setSelectedState(code);
@@ -381,7 +381,7 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
           )}
         </section>
 
-        <section ref={mapRegion} tabIndex={-1} aria-labelledby="map-title" className="min-w-0 outline-none">
+        <section ref={mapRegion} tabIndex={-1} aria-labelledby="map-title" className="min-w-0 outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
           <h2 id="map-title" className="rule-heading font-serif text-xl text-ink">
             By state
           </h2>

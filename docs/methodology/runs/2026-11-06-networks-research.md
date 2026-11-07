@@ -26,7 +26,7 @@ TEFCA and QHINs (primary):
 - https://rce.sequoiaproject.org/news-and-announcements/
 - https://healthit.gov/policy/tefca/ (ASTP/ONC; redirected from the healthit.gov topic path)
 
-Each QHIN's own page, as linked from the RCE list: commonwellalliance.org (and its TEFCA and Carequality page), eclinicalworks.com TEFCA page, ehealthexchange.org/tefca, open.epic.com/Home/Interoperate/TEFCA (the RCE list links epic.com, whose home page does not describe the QHIN; Epic's TEFCA overview does), healthgorilla.com, kno2.com, konza.org/company/qhin, medallies.com, ntst.com, oracle.com/health/interoperability/qhin, surescripts.com Interconnect page.
+Each QHIN's own page, as linked from the RCE list. The pages are: commonwellalliance.org (and its TEFCA and Carequality page), eclinicalworks.com TEFCA page, ehealthexchange.org/tefca, open.epic.com/Home/Interoperate/TEFCA (the RCE list links epic.com, whose home page does not describe the QHIN, but Epic's TEFCA overview does), healthgorilla.com, kno2.com, konza.org/company/qhin, medallies.com, ntst.com, oracle.com/health/interoperability/qhin, surescripts.com Interconnect page.
 
 ASTP/ONC and eCFR (primary):
 
@@ -54,7 +54,7 @@ Networks (primary for their own entries):
 
 Routes added in the national pass: treatment-records-vendor-network, treatment-records-state-hie, treatment-records-qhin, treatment-records-direct, individual-access-provider-api, individual-access-payer-api, individual-access-tefca-ias, find-endpoint-ndh, find-endpoint-vendor-lists, find-endpoint-payer-directory, find-endpoint-direct-directory, payer-exchange-patient-access, payer-exchange-provider-access, payer-exchange-payer-to-payer, payer-exchange-prior-authorization, encounter-alerts-state-hie, encounter-alerts-hospital-cop, public-health-direct-reporting, public-health-tefca, community-referral-direct.
 
-National networks: one QHIN entry for every organization on the RCE designated-QHIN page as read on 2026-11-06 (CommonWell Health Alliance, eClinicalWorks PRISMANet, eHealth Exchange, Epic Nexus, Health Gorilla, Kno2, KONZA Health, MedAllies, Netsmart, Oracle Health Information Network, Surescripts Health Information Network); Carequality and CommonWell Health Alliance as `vendor_network`; DirectTrust as `direct`; and payer API entries for the Patient Access, Provider Directory, Provider Access, Payer-to-Payer and Prior Authorization APIs, each with the CMS rule page as `website`.
+National networks: one QHIN entry for every organization on the RCE designated-QHIN page as read on 2026-11-06 (CommonWell Health Alliance, eClinicalWorks PRISMANet, eHealth Exchange, Epic Nexus, Health Gorilla, Kno2, KONZA Health, MedAllies, Netsmart, Oracle Health Information Network, Surescripts Health Information Network). Carequality and CommonWell Health Alliance are also entered as `vendor_network`, and DirectTrust as `direct`. Payer API entries cover the Patient Access, Provider Directory, Provider Access, Payer-to-Payer and Prior Authorization APIs, each with the CMS rule page as `website`.
 
 ## Omitted candidates
 
@@ -257,7 +257,7 @@ An earlier 2023 DxF PDF named one more QHIO, Serving Communities Health Informat
 - NV: HealtHIE Nevada. How to join from its Sign Up / Learn More page. dhhs.nv.gov reset the connection, so no Nevada agency page is cited.
 - NM: SYNCRONYS (www.syncronys.org; the bare domain fails the TLS handshake). Its home page calls it the operator of the state's designated HIE; no New Mexico agency page was read, so the data file does not state designation. Fallback join sentence.
 - UT: UHIN Clinical Health Information Exchange (CHIE). UHIN also runs a claims clearinghouse; the entry covers the CHIE. Its Let's Connect link is a sales form, so the fallback is used. No Utah agency page was read.
-- WY: Wyoming Frontier Information (WYFI), separately sourced from South Dakota Health Link, which already lists WY. The Wyoming Department of Health WYFI page describes WYFI as the statewide HIE the Department administers and links wyfi.solutions as the official site. How to join from the Join Now form on the WYFI Providers page. Search results describe a 2026 state procurement for a new WYFI build; that was not read on a state page and is not stated in the data file.
+- WY: Wyoming Frontier Information (WYFI), sourced on its own pages. South Dakota Health Link lists Wyoming members but is entered for SD only. The Wyoming Department of Health WYFI page describes WYFI as the statewide HIE the Department administers and links wyfi.solutions as the official site. How to join from the Join Now form on the WYFI Providers page. Search results describe a 2026 state procurement for a new WYFI build; that was not read on a state page and is not stated in the data file.
 - AK: healthEconnect Alaska (healtheconnectak.org; healthiealaska.org does not resolve). The Alaska Department of Health For Health Care Facilities page says it is designated as Alaska's HIE by the Department. How to join from its Provider FAQs.
 - CA: Manifest MedEx, SacValley MedShare, San Diego Health Connect (see above), plus Reliance eHealth Collaborative. How to join for San Diego Health Connect is from its FAQ; the other two use the fallback.
 - HI: Hawaii Health Information Exchange. Its home page calls it the state-designated HIE; no Hawaii agency page was read. Fallback join sentence.

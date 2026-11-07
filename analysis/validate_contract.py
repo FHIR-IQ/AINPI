@@ -487,6 +487,11 @@ def check_networks(payload: dict, known_slugs: set[str] | None = None) -> list[s
     networks, glossary = payload["networks"], payload["glossary"]
     routes_by_id = {r["id"]: r for r in routes}
 
+    # The schema patterns end in `$`, which Python's re also matches before a final newline.
+    for path, s in _strings(payload):
+        if s != s.rstrip():
+            errors.append(f"{path} ends in whitespace")
+
     slugs = [u["slug"] for u in use_cases]
     if sorted(slugs) != sorted(USE_CASE_SLUGS):
         missing = sorted(set(USE_CASE_SLUGS) - set(slugs))

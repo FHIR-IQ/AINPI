@@ -57,7 +57,7 @@ def test_not_stale_at_180():
 def test_blocked_on_unknown_host_needs_attention():
     p = payload(net("n", "https://a.example/x"))
     needs, body = nlc.build_report(p, {"https://a.example/x": ("blocked", 403)}, AS_OF)
-    assert needs and "Newly blocked by the site" in body
+    assert needs and "not on the known-blocked list" in body
     assert "Dead or moved" not in body and "\u2014" not in body
 
 
