@@ -244,3 +244,54 @@ export interface ApiV1Measures {
   measures: ApiV1Measure[];
   excluded_candidates: { slug: string; reason: string }[];
 }
+
+// --- /api/v1/networks.json (health data networks guide) ---
+export type NetworkType = 'state_hie' | 'multi_state' | 'qhin' | 'vendor_network' | 'payer_api' | 'direct';
+/** The seven use cases. The type below is derived from this one list. */
+export const USE_CASE_SLUGS = [
+  'treatment-records',
+  'individual-access',
+  'find-endpoint',
+  'payer-exchange',
+  'encounter-alerts',
+  'public-health',
+  'community-referral',
+] as const;
+export type UseCaseSlug = (typeof USE_CASE_SLUGS)[number];
+export interface NetworkSource { url: string; title: string; accessed: string; primary: boolean }
+export interface AinpiLink { label: string; href?: string; finding_slug?: string }
+export interface NetworkUseCase { slug: UseCaseSlug; label: string; summary: string; ainpi_links: AinpiLink[] }
+export interface NetworkRoute {
+  id: string;
+  use_case: UseCaseSlug;
+  title: string;
+  summary: string;
+  who_can_use: string;
+  rule: string;
+  standard: string;
+  how_to_join: string;
+  network_types: NetworkType[];
+  sources: NetworkSource[];
+  ainpi_links: AinpiLink[];
+}
+export interface Network {
+  id: string;
+  name: string;
+  type: NetworkType;
+  national: boolean;
+  states: string[];
+  detail_level: 'basic' | 'full';
+  routes: string[];
+  website: string;
+  how_to_join: string;
+  sources: NetworkSource[];
+  last_checked: string;
+}
+export interface NetworksPayload {
+  schema_version: 1;
+  generated_at: string;
+  use_cases: NetworkUseCase[];
+  routes: NetworkRoute[];
+  networks: Network[];
+  glossary: { term: string; definition: string }[];
+}

@@ -40,7 +40,8 @@
             "enum": [
               "implements",
               "partial",
-              "related"
+              "related",
+              "control"
             ]
           },
           "severity": {

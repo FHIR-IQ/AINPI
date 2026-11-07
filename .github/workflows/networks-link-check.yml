@@ -1,0 +1,58 @@
+name: Networks link check
+
+# Monthly re-check of every source URL in frontend/public/api/v1/networks.json.
+# When something needs a person to re-verify (dead, moved, unreachable, newly
+# blocked by the site, or a stale last_checked date), it opens one issue with a
+# fixed title, or comments on that issue if it is still open. Pages on hosts
+# that always refuse automated requests (KNOWN_BLOCKED_HOSTS in the script) are
+# listed for a check by hand but never trigger the issue on their own.
+# If every URL is unreachable the check step fails instead of filing an issue.
+#
+# Side effects: at most one issue, or one comment on it, per run. No commits,
+# no labels, no cloud writes. Built-in GITHUB_TOKEN only.
+
+on:
+  schedule:
+    - cron: "37 10 3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: networks-link-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    name: Check network source links
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      # Standard library only, on the runner's own python3; no pip install.
+      - name: Check links
+        id: check
+        run: python3 analysis/networks_link_check.py --issue-body-file "$RUNNER_TEMP/networks-link-issue.md"
+
+      - name: Open or update issue
+        if: steps.check.outputs.needs_attention == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TITLE: ${{ steps.check.outputs.issue_title }}
+        run: |
+          set -euo pipefail
+          # Exact title match over open issues (the search index is eventually
+          # consistent). If the listing fails, pipefail fails the job rather
+          # than filing a duplicate.
+          existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 200 \
+            --json number,title | jq -r --arg t "$TITLE" 'first(.[] | select(.title == $t) | .number) // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" \
+              --body-file "$RUNNER_TEMP/networks-link-issue.md"
+            exit 0
+          fi
+          gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" \
+            --body-file "$RUNNER_TEMP/networks-link-issue.md"

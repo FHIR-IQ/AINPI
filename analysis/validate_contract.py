@@ -36,7 +36,7 @@ import sys
 from datetime import datetime, timezone
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from contract_schemas import SCHEMAS  # noqa: E402
+from contract_schemas import SCHEMAS, USE_CASE_SLUGS  # noqa: E402
 from release import CURRENT_RELEASE, KNOWN_RELEASES  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -157,6 +157,15 @@ def schema_pass(rep: Report) -> None:
         check(API / "dq-results.json", "dq_results")
     if (API / "source-changes.json").exists():
         check(API / "source-changes.json", "source_changes")
+    if (API / "networks.json").exists():
+        # Invariants run only on a payload the schema accepts; they assume its shape.
+        doc = load(API / "networks.json")
+        if isinstance(doc, json.JSONDecodeError):
+            rep.error("networks.json", f"not valid JSON: {doc}")
+        else:
+            rep.checked += 1
+            for msg in validate_networks(doc):
+                rep.error("networks.json", msg)
     for f in sorted((API / "findings").glob("*.json")):
         # `-detail` payloads are row-level companions to a finding, not
         # findings: they carry an array of records rather than a headline and
@@ -414,6 +423,131 @@ def invariant_pass(rep: Report) -> None:
             when = when.replace(tzinfo=timezone.utc)
         if when > now:
             rep.error(f"findings/{slug}", f"generated_at is in the future: {ts}")
+
+
+# --------------------------------------------------------------------------
+# networks.json invariants
+# --------------------------------------------------------------------------
+# Types, https URLs, ISO dates, state codes and enums live in NETWORKS_SCHEMA,
+# where an external consumer sees them too. check_networks runs only after the
+# schema passes, so it can assume the shape and holds only the rules a schema
+# cannot express: cross-references, uniqueness and prose rules.
+_COUNT_IN_PROSE = re.compile(r"\b\d+\s+(QHINs?|HIEs?|networks?)\b", re.IGNORECASE)
+
+
+def _strings(node, path=""):
+    """Yield (path, string) for every string value under node, recursively."""
+    if isinstance(node, str):
+        yield path, node
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            yield from _strings(v, f"{path}.{k}" if path else k)
+    elif isinstance(node, list):
+        for i, v in enumerate(node):
+            yield from _strings(v, f"{path}[{i}]")
+
+
+def known_finding_slugs() -> set[str]:
+    """Slugs defined in frontend/src/data/findings.ts (path relative to the repo root)."""
+    text = FINDINGS_TS.read_text()
+    return set(re.findall(r"^\s*slug:\s*'([^']+)'", text, re.MULTILINE))
+
+
+_UNSAFE_PATH_CHARS = re.compile(r"[\x00-\x1f\x7f\s]")
+
+
+def _is_internal_path(href) -> bool:
+    """A single leading '/', not '//' or '/\\', and no whitespace or control characters."""
+    return (isinstance(href, str) and href.startswith("/") and not href.startswith("//")
+            and not href.startswith("/\\") and not _UNSAFE_PATH_CHARS.search(href))
+
+
+def validate_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
+    """Schema errors for networks.json; when there are none, the invariant errors."""
+    from jsonschema import Draft202012Validator
+
+    v = Draft202012Validator(SCHEMAS["networks"])
+    errors = [
+        f"schema[networks] at {'/'.join(str(x) for x in e.path) or '(root)'}: {e.message}"
+        for e in sorted(v.iter_errors(payload), key=lambda e: list(e.path))
+    ]
+    return errors or check_networks(payload, known_slugs)
+
+
+def check_networks(payload: dict, known_slugs: set[str] | None = None) -> list[str]:
+    """One error string per violated invariant. Assumes the payload passed NETWORKS_SCHEMA."""
+    errors: list[str] = []
+    if known_slugs is None:
+        try:
+            known_slugs = known_finding_slugs()
+        except OSError as e:
+            errors.append(f"cannot read findings.ts to check finding_slug links: {e}")
+
+    use_cases, routes = payload["use_cases"], payload["routes"]
+    networks, glossary = payload["networks"], payload["glossary"]
+    routes_by_id = {r["id"]: r for r in routes}
+
+    # The schema patterns end in `$`, which Python's re also matches before a final newline.
+    for path, s in _strings(payload):
+        if s != s.rstrip():
+            errors.append(f"{path} ends in whitespace")
+
+    slugs = [u["slug"] for u in use_cases]
+    if sorted(slugs) != sorted(USE_CASE_SLUGS):
+        missing = sorted(set(USE_CASE_SLUGS) - set(slugs))
+        dup = sorted(x for x in set(slugs) if slugs.count(x) > 1)
+        errors.append(f"use_cases must be exactly the seven agreed slugs; missing {missing}, repeated {dup}")
+
+    for kind, items in (("route", routes), ("network", networks)):
+        seen: set[str] = set()
+        for it in items:
+            i = it["id"]
+            if i in seen:
+                errors.append(f"duplicate {kind} id {i}")
+            seen.add(i)
+            if not any(s["primary"] for s in it["sources"]):
+                errors.append(f"{kind} {i} has no primary source")
+            urls = [s["url"] for s in it["sources"]]
+            for u in sorted({u for u in urls if urls.count(u) > 1}):
+                errors.append(f"{kind} {i} cites source {u} more than once")
+
+    today = datetime.now(timezone.utc).date().isoformat()
+    for n in networks:
+        nid = n["id"]
+        if n["national"] and n["states"]:
+            errors.append(f"network {nid} is national but lists states {n['states']}")
+        if not n["national"] and not n["states"]:
+            errors.append(f"network {nid} is not national and lists no states")
+        if n["last_checked"] > today:
+            errors.append(f"network {nid} last_checked {n['last_checked']} is in the future")
+        if n["detail_level"] == "basic" and n["routes"]:
+            errors.append(f"network {nid} is basic but lists routes")
+        if n["detail_level"] == "full" and not n["routes"]:
+            errors.append(f"network {nid} is full but lists no routes")
+        for rid in n["routes"]:
+            route = routes_by_id.get(rid)
+            if route is None:
+                errors.append(f"network {nid} references unknown route {rid}")
+            elif n["type"] not in route["network_types"]:
+                errors.append(f"network {nid} has type {n['type']} but route {rid} does not accept it")
+
+    for sec, items, key in (("use_cases", use_cases, "slug"), ("routes", routes, "id"),
+                            ("networks", networks, "id"), ("glossary", glossary, "term")):
+        for it in items:
+            for path, s in _strings(it):
+                where = f"{sec} {it[key]} {path}"
+                if "\u2014" in s:
+                    errors.append(f"{where} contains an em dash")
+                if _COUNT_IN_PROSE.search(s):
+                    errors.append(f"{where} states a count in prose")
+            # ainpi_links sit only at the top level of a use case or a route.
+            for link in it.get("ainpi_links", []):
+                if "href" in link and not _is_internal_path(link["href"]):
+                    errors.append(f"{sec} {it[key]} ainpi_links href {link['href']!r} is not an internal path")
+                fs = link.get("finding_slug")
+                if known_slugs is not None and fs is not None and fs not in known_slugs:
+                    errors.append(f"{sec} {it[key]} links unknown finding_slug {fs}")
+    return errors
 
 
 def write_schemas() -> None:

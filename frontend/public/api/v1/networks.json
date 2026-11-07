@@ -1,0 +1,3642 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-06",
+  "use_cases": [
+    {
+      "slug": "treatment-records",
+      "label": "Get a patient's records for treatment",
+      "summary": "Ways a clinician can pull a patient's records from other organizations when treating them.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "individual-access",
+      "label": "Get my own records (as a patient)",
+      "summary": "Ways a patient can get their own records, through a portal, an app or a request.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "find-endpoint",
+      "label": "Find a provider's endpoint",
+      "summary": "Ways to find the electronic address where a provider or organization receives data.",
+      "ainpi_links": [
+        {
+          "label": "Endpoint URL validity",
+          "finding_slug": "endpoint-url-validity"
+        },
+        {
+          "label": "Endpoint-to-organization linkage",
+          "finding_slug": "endpoint-org-linkage"
+        },
+        {
+          "label": "Vendor endpoint attribution",
+          "finding_slug": "vendor-endpoint-attribution"
+        },
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
+    },
+    {
+      "slug": "payer-exchange",
+      "label": "Exchange data with a health plan",
+      "summary": "Ways data moves between payers, patients and providers under the CMS interoperability rules.",
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "slug": "encounter-alerts",
+      "label": "Get admit and discharge alerts",
+      "summary": "Ways to be notified when a patient is admitted to or discharged from a hospital or emergency department.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "public-health",
+      "label": "Report to public health",
+      "summary": "Ways to send reportable conditions, immunizations and lab results to public health agencies.",
+      "ainpi_links": []
+    },
+    {
+      "slug": "community-referral",
+      "label": "Refer someone to a community organization",
+      "summary": "Ways to refer a person to a social service or community organization and track the outcome.",
+      "ainpi_links": []
+    }
+  ],
+  "routes": [
+    {
+      "id": "treatment-records-vendor-network",
+      "use_case": "treatment-records",
+      "title": "Your EHR vendor's network or a national framework",
+      "summary": "Your EHR looks up a patient at other organizations and pulls their documents through a network or framework your vendor has joined.",
+      "who_can_use": "Clinicians and organizations whose EHR or health IT vendor connects to the network or framework.",
+      "rule": "The participation agreement and policies of the network or framework your vendor joined.",
+      "standard": "IHE cross-community document query and retrieve (XCA); some networks also accept HL7 FHIR queries.",
+      "how_to_join": "Ask your EHR vendor which networks or frameworks it connects to and how your organization turns on access.",
+      "network_types": [
+        "vendor_network"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://carequality.org/",
+          "title": "Carequality, Interoperability framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/",
+          "title": "Connect to the Network, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "treatment-records-state-hie",
+      "use_case": "treatment-records",
+      "title": "Your state or regional HIE",
+      "summary": "Your organization joins a health information exchange and queries it for a patient's records held by other members.",
+      "who_can_use": "Providers and other organizations that sign the HIE's participation agreement.",
+      "rule": "The HIE's participation agreement and the health information laws of the state it operates in.",
+      "standard": "Query-based exchange, and directed exchange where the HIE offers it. The technical standards differ from one HIE to the next, so check the network's own site.",
+      "how_to_join": "Contact the HIE listed for your state on this page, if one is listed; if none is listed, ask your state health department whether an exchange operates in your state.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
+    },
+    {
+      "id": "treatment-records-qhin",
+      "use_case": "treatment-records",
+      "title": "TEFCA, through a QHIN",
+      "summary": "Your organization connects to TEFCA through a QHIN, directly or through a participant of one, and queries other TEFCA participants for a patient's records.",
+      "who_can_use": "Organizations that sign on as a Participant or Subparticipant of a designated QHIN.",
+      "rule": "TEFCA Common Agreement, Treatment exchange purpose, with the Treatment exchange purpose implementation SOP.",
+      "standard": "IHE document exchange of C-CDA documents, as set by the QHIN Technical Framework. The RCE says a draft version 2 of that framework would add HL7 FHIR alongside the required IHE transactions.",
+      "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement.",
+      "network_types": [
+        "qhin"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/policy/tefca/",
+          "title": "TEFCA, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/exchange-purposes-explained/",
+          "title": "Exchange Purposes Explained, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/participate/",
+          "title": "Participate in TEFCA, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/tefca/how-it-works/",
+          "title": "How Does TEFCA Work?, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/rce-tefca-on-fhir/",
+          "title": "TEFCA and FHIR, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "treatment-records-direct",
+      "use_case": "treatment-records",
+      "title": "A Direct message",
+      "summary": "A clinician sends records to a known recipient's Direct address, an encrypted message pushed to one address rather than a search across organizations.",
+      "who_can_use": "Anyone holding a Direct address issued by a health information service provider (HISP), which is often supplied through the EHR.",
+      "rule": "The trust framework and certificate trust bundles of the sender's and receiver's HISPs.",
+      "standard": "Direct secure messaging (Applicability Statement for Secure Health Transport, Version 1.2).",
+      "how_to_join": "Get a Direct address from a HISP; ask your EHR vendor first, since the Base EHR definition used in ONC certification includes Direct messaging.",
+      "network_types": [
+        "direct"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/test-method/direct-project/",
+          "title": "Direct Project, 45 CFR 170.315(h)(1), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/direct-secure-messaging",
+          "title": "Direct Secure Messaging, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "individual-access-provider-api",
+      "use_case": "individual-access",
+      "title": "Your provider's patient API, through an app you choose",
+      "summary": "You connect an app to your provider's certified FHIR API and download your own records into it.",
+      "who_can_use": "Patients, and the apps they authorize, at providers whose health IT is certified to 45 CFR 170.315(g)(10).",
+      "rule": "ONC Health IT Certification Program: 45 CFR 170.315(g)(10) and the API Condition of Certification, 45 CFR 170.404.",
+      "standard": "HL7 FHIR R4 with the US Core implementation guide, with SMART authorization.",
+      "how_to_join": "Pick an app that connects to your provider's FHIR API and sign in with your patient portal account when the app asks.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://healthit.gov/test-method/standardized-api-for-patient-and-population-services-acb-atl/",
+          "title": "Standardized API for patient and population services, 45 CFR 170.315(g)(10), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-D/section-170.404",
+          "title": "45 CFR 170.404, Application programming interfaces (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-C/section-170.315",
+          "title": "45 CFR 170.315, ONC certification criteria for health IT (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "individual-access-payer-api",
+      "use_case": "individual-access",
+      "title": "Your health plan's Patient Access API",
+      "summary": "You connect an app to your health plan's API to get your claims and encounter data, including cost, and a defined set of clinical data.",
+      "who_can_use": "People enrolled in a Medicare Advantage plan, in Medicaid or CHIP (fee-for-service or managed care), or in a Qualified Health Plan on the federally facilitated exchanges. Some dental-only plans and small-business exchange plans are excluded.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); CMS-0057-F adds prior authorization information. CMS excludes issuers offering only stand-alone dental plans (SADPs) and QHP issuers offering coverage in the Federally-facilitated Small Business Health Options Program (FF-SHOP).",
+      "standard": "HL7 FHIR R4 (Release 4.0.1) API.",
+      "how_to_join": "Pick an app that connects to your plan's Patient Access API, or ask your plan which apps it supports.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "individual-access-tefca-ias",
+      "use_case": "individual-access",
+      "title": "TEFCA Individual Access Services",
+      "summary": "You use an app from an organization that offers Individual Access Services through TEFCA to request your records from TEFCA participants.",
+      "who_can_use": "Individuals, through an Individual Access Services provider connected to TEFCA by a QHIN, Participant or Subparticipant.",
+      "rule": "TEFCA Common Agreement, Individual Access Services exchange purpose.",
+      "standard": "Set by the QHIN Technical Framework and the Individual Access Services SOP.",
+      "how_to_join": "Use an app or portal whose operator offers Individual Access Services through a QHIN. The QHINs listed here are those whose own pages say they offer this. Other QHINs may also support it, so ask a QHIN directly.",
+      "network_types": [
+        "qhin"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/policy/tefca/",
+          "title": "TEFCA, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/exchange-purposes-explained/",
+          "title": "Exchange Purposes Explained, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/rce-tefca-for-individuals/",
+          "title": "TEFCA for Individuals, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/participate/",
+          "title": "Participate in TEFCA, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "find-endpoint-ndh",
+      "use_case": "find-endpoint",
+      "title": "The CMS National Provider Directory",
+      "summary": "CMS publishes practitioners, organizations, locations and endpoints as public FHIR files and a search site.",
+      "who_can_use": "Anyone; the directory is public.",
+      "rule": "Public data release by CMS; no participation agreement.",
+      "standard": "HL7 FHIR R4 resources in bulk NDJSON files, listed in a download manifest.",
+      "how_to_join": "Search at directory.cms.gov or download the bulk files listed in its manifest.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://directory.cms.gov/",
+          "title": "National Provider Directory, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directory.cms.gov/downloads/manifest.json",
+          "title": "National Provider Directory bulk download manifest, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://github.com/DSACMS/npd",
+          "title": "CMS National Provider Directory source repository (DSACMS)",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Endpoint URL validity",
+          "finding_slug": "endpoint-url-validity"
+        },
+        {
+          "label": "Endpoint-to-organization linkage",
+          "finding_slug": "endpoint-org-linkage"
+        }
+      ]
+    },
+    {
+      "id": "find-endpoint-vendor-lists",
+      "use_case": "find-endpoint",
+      "title": "EHR vendors' published endpoint lists",
+      "summary": "Developers of certified patient APIs publish the FHIR service base URLs of their customers, with each organization's name, location and identifier.",
+      "who_can_use": "Anyone; the lists must be published at no charge.",
+      "rule": "API Condition of Certification, 45 CFR 170.404(b)(2), service base URL publication.",
+      "standard": "HL7 FHIR R4 Endpoint and Organization resources collected in a Bundle, reviewed quarterly.",
+      "how_to_join": "Find the list in the EHR developer's published API documentation.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-D/section-170.404",
+          "title": "45 CFR 170.404, Application programming interfaces (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthit.gov/test-method/standardized-api-for-patient-and-population-services-acb-atl/",
+          "title": "Standardized API for patient and population services, 45 CFR 170.315(g)(10), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Vendor endpoint attribution",
+          "finding_slug": "vendor-endpoint-attribution"
+        },
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
+    },
+    {
+      "id": "find-endpoint-payer-directory",
+      "use_case": "find-endpoint",
+      "title": "Health plans' Provider Directory APIs",
+      "summary": "Health plans publish their provider directory through a public API that apps and other providers can read.",
+      "who_can_use": "Anyone; the rule requires the directory to be publicly available.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F); applies to Medicare Advantage, Medicaid and CHIP, not to Qualified Health Plan issuers on the federally facilitated exchanges.",
+      "standard": "HL7 FHIR R4 API.",
+      "how_to_join": "Find the API in the health plan's developer documentation.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        },
+        {
+          "label": "Payer affiliation gap",
+          "finding_slug": "payer-affiliation-gap"
+        }
+      ]
+    },
+    {
+      "id": "find-endpoint-direct-directory",
+      "use_case": "find-endpoint",
+      "title": "Direct address directories",
+      "summary": "HISPs publish their users' Direct addresses to directories, and providers can record a Direct address or FHIR endpoint in NPPES as digital contact information.",
+      "who_can_use": "HISPs that contribute to an aggregated directory get access to it; NPPES contact information is entered by each provider.",
+      "rule": "The directory policies of the HISPs' trust framework; the CMS-9115-F digital contact information policy for NPPES.",
+      "standard": "Direct addresses; aggregated directory built to support FHIR API access.",
+      "how_to_join": "Ask your HISP whether it contributes to and reads an aggregated directory, and keep your NPPES digital contact information current.",
+      "network_types": [
+        "direct"
+      ],
+      "sources": [
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "payer-exchange-patient-access",
+      "use_case": "payer-exchange",
+      "title": "Patient Access API",
+      "summary": "A plan member's app pulls their claims, encounter and clinical data from the plan; CMS-0057-F adds prior authorization information (excluding drugs) by January 1, 2027.",
+      "who_can_use": "Members of impacted payers and the apps they authorize.",
+      "rule": "CMS Interoperability and Patient Access final rule (CMS-9115-F), as amended by the CMS Interoperability and Prior Authorization final rule (CMS-0057-F).",
+      "standard": "HL7 FHIR R4 API.",
+      "how_to_join": "Members connect an app; app developers register with each payer's API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "payer-exchange-provider-access",
+      "use_case": "payer-exchange",
+      "title": "Provider Access API",
+      "summary": "An in-network provider pulls claims, encounter, USCDI and prior authorization data for patients it treats, unless the patient opts out; payers must generally implement it by January 1, 2027.",
+      "who_can_use": "In-network or enrolled providers with whom the patient has a treatment relationship, as set by the payer's attribution process. Patients can opt out.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS states the exact compliance dates vary by type of payer.",
+      "standard": "HL7 FHIR API.",
+      "how_to_join": "Ask each impacted payer how it attributes patients to your organization and how to connect to its Provider Access API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "payer-exchange-payer-to-payer",
+      "use_case": "payer-exchange",
+      "title": "Payer-to-Payer API",
+      "summary": "When a patient who opted in changes plans, the new payer requests the patient's claims, encounter, USCDI and prior authorization data from the old one. The old payer must share data with a date of service within five years of the request. Payers must implement it by January 1, 2027.",
+      "who_can_use": "Impacted payers, for patients who opt in.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS states the exact compliance dates vary by type of payer.",
+      "standard": "HL7 FHIR API.",
+      "how_to_join": "Applies to impacted payers; each builds and maintains its own API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "payer-exchange-prior-authorization",
+      "use_case": "payer-exchange",
+      "title": "Prior Authorization API",
+      "summary": "A provider's system checks whether an item or service needs prior authorization and what documentation the payer requires, then sends the request and receives the decision. Payers must generally offer it beginning January 1, 2027; dates vary by payer type.",
+      "who_can_use": "Providers requesting prior authorization from an impacted payer, for items and services other than drugs.",
+      "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS's fact sheet says HHS will use enforcement discretion for the HIPAA X12 278 standard when an all-FHIR Prior Authorization API is used.",
+      "standard": "HL7 FHIR API; X12 278 may also be offered.",
+      "how_to_join": "Ask your EHR vendor and each impacted payer how to connect to the payer's Prior Authorization API.",
+      "network_types": [
+        "payer_api"
+      ],
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Payer endpoints in the NDH",
+          "finding_slug": "ndh-payer-endpoint-coverage"
+        }
+      ]
+    },
+    {
+      "id": "encounter-alerts-state-hie",
+      "use_case": "encounter-alerts",
+      "title": "Event notifications through an HIE",
+      "summary": "A hospital sends admit, discharge and transfer messages to an HIE, which passes notices on to the patient's other providers.",
+      "who_can_use": "Hospitals that send to the HIE, and providers that receive its notices under its participation agreement.",
+      "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), which lets a hospital send notifications through an intermediary; the HIE's participation agreement.",
+      "standard": "HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2); hospitals typically send these as HL7 v2 ADT (admit, discharge, transfer) messages.",
+      "how_to_join": "Contact the HIE listed for your state on this page, if one is listed; if none is listed, ask your state health department whether an exchange operates in your state.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-G/part-482/subpart-C/section-482.24",
+          "title": "42 CFR 482.24, Condition of participation: Medical record services (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-B/section-170.205",
+          "title": "45 CFR 170.205, Content exchange standards and implementation specifications (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": [
+        {
+          "label": "Pennsylvania connectivity ledger",
+          "href": "/states/pa/connectivity"
+        }
+      ]
+    },
+    {
+      "id": "encounter-alerts-hospital-cop",
+      "use_case": "encounter-alerts",
+      "title": "Hospital e-notifications under the Medicare Conditions of Participation",
+      "summary": "When a patient registers in the emergency department, is admitted, or is discharged or transferred, the hospital's system sends a notification. The hospital makes a reasonable effort to send it to post-acute providers and suppliers. It also tries the patient's established primary care practitioner or group, and any practitioner or group the patient names as primarily responsible for their care. Applicable law must allow it and it must not be inconsistent with the patient's expressed privacy preferences (42 CFR 482.24(d)(5)).",
+      "who_can_use": "Post-acute care providers and the practitioners or groups the rule names as recipients.",
+      "rule": "Medicare Conditions of Participation, 42 CFR 482.24(d), added by CMS-9115-F; applies to hospitals whose systems conform to the content standard at 45 CFR 170.205(d)(2).",
+      "standard": "HL7 2.5.1, the content standard named in 45 CFR 170.205(d)(2); hospitals typically send these as HL7 v2 ADT (admit, discharge, transfer) messages.",
+      "how_to_join": "Ask the hospital, or its HIE, how it sends notifications and how to be listed as a recipient.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://www.ecfr.gov/current/title-42/chapter-IV/subchapter-G/part-482/subpart-C/section-482.24",
+          "title": "42 CFR 482.24, Condition of participation: Medical record services (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-B/section-170.205",
+          "title": "45 CFR 170.205, Content exchange standards and implementation specifications (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "public-health-direct-reporting",
+      "use_case": "public-health",
+      "title": "Reporting directly to a public health agency",
+      "summary": "Your EHR sends case reports, immunizations and lab results to the state or local public health agency in the formats certified health IT supports.",
+      "who_can_use": "Providers, hospitals and labs that report to a public health agency.",
+      "rule": "Each jurisdiction's public health reporting requirements; health IT certification criteria at 45 CFR 170.315(f).",
+      "standard": "HL7 2.5.1 for immunizations and lab results; HL7 CDA eICR or FHIR eCR for electronic case reports.",
+      "how_to_join": "Register with your state or local public health agency's reporting program and ask your EHR vendor which certified reporting functions you have.",
+      "network_types": [],
+      "sources": [
+        {
+          "url": "https://healthit.gov/test-method/transmission-public-health-agencies-electronic-case-reporting/",
+          "title": "Transmission to public health agencies, electronic case reporting, 45 CFR 170.315(f)(5), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-C/section-170.315",
+          "title": "45 CFR 170.315, ONC certification criteria for health IT (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ecfr.gov/current/title-45/subtitle-A/subchapter-D/part-170/subpart-B/section-170.205",
+          "title": "45 CFR 170.205, Content exchange standards and implementation specifications (eCFR)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "public-health-tefca",
+      "use_case": "public-health",
+      "title": "TEFCA, Public Health exchange purpose",
+      "summary": "Public health agencies and reporting organizations exchange data through TEFCA under its Public Health exchange purpose.",
+      "who_can_use": "Public health agencies and other organizations connected to TEFCA through a QHIN, Participant or Subparticipant.",
+      "rule": "TEFCA Common Agreement, Public Health exchange purpose.",
+      "standard": "Set by the QHIN Technical Framework.",
+      "how_to_join": "Choose a designated QHIN, or an HIE or vendor that participates in one, and sign its participation agreement. The QHINs listed here are those whose own pages say they offer this. Other QHINs may also support it, so ask a QHIN directly.",
+      "network_types": [
+        "qhin"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/policy/tefca/",
+          "title": "TEFCA, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/exchange-purposes-explained/",
+          "title": "Exchange Purposes Explained, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/participate/",
+          "title": "Participate in TEFCA, TEFCA Recognized Coordinating Entity",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "public-health-state-hie",
+      "use_case": "public-health",
+      "title": "Public health reporting through a state HIE",
+      "summary": "In some states, a provider sends reportable data, such as lab results or immunizations, to its HIE, which passes it to state public health programs where the state offers such a connection. Pennsylvania's Public Health Gateway is the example cited here.",
+      "who_can_use": "Providers that are members of an HIE that connects to its state's public health programs, in states that offer such a connection.",
+      "rule": "State public health reporting requirements, each registry's own submission requirements, and the HIE's participation agreement.",
+      "standard": "Set by each registry and by the state's connection where one exists; check the registry's requirements.",
+      "how_to_join": "Ask your HIE whether it connects to any of your state's public health programs, and which ones; not every state or HIE offers this. The networks with full detail here are those whose own pages, or a state agency page, say they do.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/phg",
+          "title": "Public Health Gateway (PHG), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.keyhie.org/products-services/pa-patient-and-provider-network-p3n",
+          "title": "PA Patient and Provider Network (P3N), KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/public-health/",
+          "title": "Public Health, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "community-referral-direct",
+      "use_case": "community-referral",
+      "title": "A Direct message to the receiving organization",
+      "summary": "A provider sends a referral and the supporting records to the receiving organization's Direct address.",
+      "who_can_use": "Organizations on both ends that hold Direct addresses.",
+      "rule": "The trust framework and certificate trust bundles of the sender's and receiver's HISPs.",
+      "standard": "Direct secure messaging (Applicability Statement for Secure Health Transport, Version 1.2).",
+      "how_to_join": "Get a Direct address from a HISP, and look up the receiving organization's address in a Direct directory.",
+      "network_types": [
+        "direct"
+      ],
+      "sources": [
+        {
+          "url": "https://healthit.gov/health-it-basics/hie/",
+          "title": "What is HIE?, Assistant Secretary for Technology Policy / ONC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthit.gov/test-method/direct-project/",
+          "title": "Direct Project, 45 CFR 170.315(h)(1), ASTP/ONC certification test method",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/direct-secure-messaging",
+          "title": "Direct Secure Messaging, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    },
+    {
+      "id": "community-referral-hie",
+      "use_case": "community-referral",
+      "title": "A community referral platform offered through an HIE",
+      "summary": "Some HIEs connect to a statewide referral tool, where the state runs one, so a provider can screen a person for social needs, refer them to a community organization, and see whether the organization closed the loop. Pennsylvania's PA Navigate is the example cited here.",
+      "who_can_use": "Healthcare organizations connected to an HIE that offers such a tool, in states that have one, and community organizations that join the tool.",
+      "rule": "The platform's terms and the HIE's participation agreement.",
+      "standard": "Set by the platform; some platforms integrate with the referring organization's EHR.",
+      "how_to_join": "Healthcare organizations ask their HIE whether it offers a referral tool; not every state or HIE does. Community organizations follow the tool's own sign-up steps.",
+      "network_types": [
+        "state_hie",
+        "multi_state"
+      ],
+      "sources": [
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-residents/pa-navigate",
+          "title": "PA Navigate, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/pa-navigate/",
+          "title": "PA NAVIGATE, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.clinicalconnecthie.com/services-info",
+          "title": "Services, ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "ainpi_links": []
+    }
+  ],
+  "networks": [
+    {
+      "id": "qhin-commonwell-health-alliance",
+      "name": "CommonWell Health Alliance (QHIN)",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.commonwellalliance.org/connect-to-the-network/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/",
+          "title": "Connect to the Network, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/carequality/",
+          "title": "TEFCA and Carequality, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-eclinicalworks-prismanet",
+      "name": "eClinicalWorks PRISMANet",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias"
+      ],
+      "website": "https://www.eclinicalworks.com/products-services/interoperability/tefca/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/astp-and-the-sequoia-project-designate-eclinicalworks-as-qhin/",
+          "title": "ASTP and The Sequoia Project Designate eClinicalWorks as QHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.eclinicalworks.com/products-services/interoperability/tefca/",
+          "title": "eClinicalWorks and TEFCA, eClinicalWorks",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-ehealth-exchange",
+      "name": "eHealth Exchange",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://ehealthexchange.org/tefca/",
+      "how_to_join": "eHealth Exchange participants can opt in to TEFCA exchange through it; other organizations contact eHealth Exchange.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://ehealthexchange.org/tefca/",
+          "title": "TEFCA, eHealth Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-epic-nexus",
+      "name": "Epic Nexus",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias",
+        "public-health-tefca"
+      ],
+      "website": "https://open.epic.com/Home/Interoperate/TEFCA",
+      "how_to_join": "Epic states the Epic Nexus QHIN is currently only for Epic community members; Epic says organizations outside the Epic community can reach Epic organizations by connecting to any other QHIN.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://open.epic.com/Home/Interoperate/TEFCA",
+          "title": "Epic and TEFCA: Overview, open.epic",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-health-gorilla",
+      "name": "Health Gorilla",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.healthgorilla.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.healthgorilla.com/",
+          "title": "Health Gorilla",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-kno2",
+      "name": "Kno2",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://kno2.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://kno2.com/",
+          "title": "Kno2",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-konza-health",
+      "name": "KONZA Health",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "public-health-tefca"
+      ],
+      "website": "https://www.konza.org/company/qhin/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.konza.org/company/qhin/",
+          "title": "QHIN, KONZA Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-medallies",
+      "name": "MedAllies",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.medallies.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.medallies.com/",
+          "title": "MedAllies",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-netsmart",
+      "name": "Netsmart",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://www.ntst.com/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/astp-and-the-sequoia-project-designate-netsmart-as-qhin/",
+          "title": "ASTP and The Sequoia Project Designate Netsmart as QHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ntst.com/",
+          "title": "Netsmart",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-oracle-health-information-network",
+      "name": "Oracle Health Information Network",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin",
+        "individual-access-tefca-ias"
+      ],
+      "website": "https://www.oracle.com/health/interoperability/qhin/",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://rce.sequoiaproject.org/new-designated-qhin-new-sops-and-more/",
+          "title": "New Designated QHIN, New SOPs, and More (TEFCA RCE update naming Oracle Health Information Network)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.oracle.com/health/interoperability/qhin/",
+          "title": "Oracle Health Information Network, Oracle",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "qhin-surescripts-health-information-network",
+      "name": "Surescripts Health Information Network",
+      "type": "qhin",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-qhin"
+      ],
+      "website": "https://surescripts.com/surescripts-health-information-network/interconnect",
+      "how_to_join": "Contact the QHIN about becoming a Participant or Subparticipant, or ask your EHR vendor or HIE which QHIN it uses.",
+      "sources": [
+        {
+          "url": "https://rce.sequoiaproject.org/designated-qhins/",
+          "title": "Designated QHINs, TEFCA Recognized Coordinating Entity (The Sequoia Project)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://surescripts.com/surescripts-health-information-network/interconnect",
+          "title": "Interconnect, Surescripts Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "carequality",
+      "name": "Carequality",
+      "type": "vendor_network",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-vendor-network"
+      ],
+      "website": "https://carequality.org/",
+      "how_to_join": "Health IT vendors and networks sign on as Implementers of the Carequality Interoperability Framework; their clients connect through them. Ask your EHR vendor whether it is an Implementer.",
+      "sources": [
+        {
+          "url": "https://carequality.org/",
+          "title": "Carequality, Interoperability framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/carequality/",
+          "title": "TEFCA and Carequality, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "commonwell-health-alliance",
+      "name": "CommonWell Health Alliance",
+      "type": "vendor_network",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-vendor-network"
+      ],
+      "website": "https://www.commonwellalliance.org/",
+      "how_to_join": "Service Adopters are CommonWell members that connect to the network and build CommonWell services into their software. Ask your EHR vendor whether it is one.",
+      "sources": [
+        {
+          "url": "https://www.commonwellalliance.org/",
+          "title": "CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/connect-to-the-network/",
+          "title": "Connect to the Network, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.commonwellalliance.org/how-to-participate/membership-information/",
+          "title": "Membership Information, CommonWell Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "directtrust",
+      "name": "DirectTrust",
+      "type": "direct",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-direct",
+        "find-endpoint-direct-directory",
+        "community-referral-direct"
+      ],
+      "website": "https://directtrust.org/",
+      "how_to_join": "Get a Direct address from a HISP that takes part in the DirectTrust trust framework; ask your EHR vendor which HISP it uses.",
+      "sources": [
+        {
+          "url": "https://directtrust.org/what-we-do/direct-secure-messaging",
+          "title": "Direct Secure Messaging, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/directory-services",
+          "title": "Directory Services, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://directtrust.org/what-we-do/trust-framework",
+          "title": "Trust Framework, DirectTrust",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-patient-access-api",
+      "name": "Payer Patient Access API (CMS-9115-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "individual-access-payer-api",
+        "payer-exchange-patient-access"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-provider-directory-api",
+      "name": "Payer Provider Directory API (CMS-9115-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "find-endpoint-payer-directory"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-patient-access-final-rule-cms-9115-f",
+          "title": "CMS Interoperability and Patient Access Final Rule (CMS-9115-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/interoperability-and-patient-access-fact-sheet",
+          "title": "Interoperability and Patient Access Fact Sheet, CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2020/05/01/2020-05050/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-interoperability-and",
+          "title": "Interoperability and Patient Access final rule, Federal Register, 85 FR 25510 (May 1, 2020)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-provider-access-api",
+      "name": "Payer Provider Access API (CMS-0057-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "payer-exchange-provider-access"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-to-payer-api",
+      "name": "Payer-to-Payer API (CMS-0057-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "payer-exchange-payer-to-payer"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "payer-prior-authorization-api",
+      "name": "Payer Prior Authorization API (CMS-0057-F)",
+      "type": "payer_api",
+      "national": true,
+      "states": [],
+      "detail_level": "full",
+      "routes": [
+        "payer-exchange-prior-authorization"
+      ],
+      "website": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+      "how_to_join": "Each impacted payer runs its own API; look for it in the payer's developer or interoperability documentation.",
+      "sources": [
+        {
+          "url": "https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F), CMS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.cms.gov/newsroom/fact-sheets/cms-interoperability-prior-authorization-final-rule-cms-0057-f",
+          "title": "CMS Interoperability and Prior Authorization Final Rule CMS-0057-F, CMS fact sheet",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.federalregister.gov/documents/2024/02/08/2024-00895/medicare-and-medicaid-programs-patient-protection-and-affordable-care-act-advancing-interoperability",
+          "title": "Advancing Interoperability and Improving Prior Authorization Processes final rule, Federal Register (February 8, 2024)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "pa-patient-and-provider-network",
+      "name": "PA Patient and Provider Network (P3N)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie"
+      ],
+      "website": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+      "how_to_join": "Providers connect to the P3N through a certified regional network called a health information organization (HIO).",
+      "sources": [
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/hio-connection",
+          "title": "HIO Connection, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/phg",
+          "title": "Public Health Gateway (PHG), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers/choose-your-hio",
+          "title": "Choose Your HIO, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "central-pennsylvania-connect-hie",
+      "name": "Central Pennsylvania Connect Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://www.centralpaconnect.org/",
+      "how_to_join": "Contact the network; the Pennsylvania DHS HIO table lists its contact details.",
+      "sources": [
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "clinicalconnect-hie",
+      "name": "ClinicalConnect HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://www.clinicalconnecthie.com/",
+      "how_to_join": "Complete the form on its How to Join page if you are a provider interested in its services.",
+      "sources": [
+        {
+          "url": "https://www.clinicalconnecthie.com/services-info",
+          "title": "Services, ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.clinicalconnecthie.com/how-to-join",
+          "title": "Join ClinicalConnect HIE, ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.clinicalconnecthie.com/",
+          "title": "ClinicalConnect HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthshare-exchange",
+      "name": "HealthShare Exchange (HSX)",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "PA",
+        "NJ",
+        "DE"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie",
+        "community-referral-hie"
+      ],
+      "website": "https://healthshareexchange.org/",
+      "how_to_join": "Contact HSX Member Services for participation information.",
+      "sources": [
+        {
+          "url": "https://healthshareexchange.org/all-available-services/",
+          "title": "All Available Services, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/public-health/",
+          "title": "Public Health, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/pa-navigate/",
+          "title": "PA NAVIGATE, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthshareexchange.org/vision-and-mission/",
+          "title": "Vision and Mission, HealthShare Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "keystone-health-information-exchange",
+      "name": "Keystone Health Information Exchange (KeyHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie"
+      ],
+      "website": "https://www.keyhie.org/",
+      "how_to_join": "Contact KeyHIE for pricing and next steps; its service pages give its member services email and phone number.",
+      "sources": [
+        {
+          "url": "https://www.keyhie.org/products-services/pa-patient-and-provider-network-p3n",
+          "title": "PA Patient and Provider Network (P3N), KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.keyhie.org/products-services/notifications-information-delivery",
+          "title": "KeyHIE Notifications and Information Delivery Service, KeyHIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "lehigh-valley-health-network-hio",
+      "name": "Lehigh Valley Health Network (P3N certified HIO)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "PA"
+      ],
+      "detail_level": "full",
+      "routes": [
+        "treatment-records-state-hie",
+        "encounter-alerts-state-hie",
+        "public-health-state-hie"
+      ],
+      "website": "https://www.lvhn.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.pa.gov/content/dam/copapwp-pagov/en/dhs/documents/ehealth/documents/ehealth-choose-your-hio.xlsx",
+          "title": "P3N Certified Health Information Organizations table (HIO questionnaire answers, table last updated 2025-02-27), Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.pa.gov/agencies/dhs/resources/for-providers/ehealth-providers",
+          "title": "eHealth for Providers, Pennsylvania Department of Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "connie",
+      "name": "Connie",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.conniect.org/",
+      "how_to_join": "Start the connection by filling out the Connie Registration Form, which assigns an account manager to your organization.",
+      "sources": [
+        {
+          "url": "https://www.conniect.org/",
+          "title": "Connie, Connecticut's Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.conniect.org/connectwithconnie",
+          "title": "Connect with Connie, Connie",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthinfonet",
+      "name": "HealthInfoNet",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "ME"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://hinfonet.org/",
+      "how_to_join": "Submit a participation request form so it can determine your organization's eligibility and next steps toward onboarding.",
+      "sources": [
+        {
+          "url": "https://hinfonet.org/",
+          "title": "HealthInfoNet, Maine's Statewide Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://hinfonet.org/inquiries/",
+          "title": "Inquiries, HealthInfoNet",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "mass-hiway",
+      "name": "Mass HIway",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.masshiway.net/",
+      "how_to_join": "Enroll through its Enroll page to start participation in the Mass HIway Direct Messaging network.",
+      "sources": [
+        {
+          "url": "https://www.masshiway.net/",
+          "title": "The Mass HIway, Massachusetts Health Information HIway",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.masshiway.net/Enroll",
+          "title": "Enroll in HIE Services, Mass HIway",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "vitl",
+      "name": "VITL (Vermont Health Information Exchange)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "VT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://vitl.net/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://vitl.net/",
+          "title": "VITL, Vermont Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://vitl.net/contact-us/",
+          "title": "Contact Us, VITL",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "new-jersey-health-information-network",
+      "name": "New Jersey Health Information Network (NJHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NJ"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.nj.gov/health/njhin/",
+      "how_to_join": "Check eligibility on its page; the New Jersey Department of Health has engaged NJII to support onboarding and integration.",
+      "sources": [
+        {
+          "url": "https://www.nj.gov/health/njhin/",
+          "title": "NJ Health Information Network, New Jersey Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "shin-ny",
+      "name": "Statewide Health Information Network for New York (SHIN-NY)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://nyehealth.org/shin-ny/what-is-the-shin-ny/",
+      "how_to_join": "To join the SHIN-NY, healthcare professionals first connect to one of the regional networks listed on its Connect and Use page.",
+      "sources": [
+        {
+          "url": "https://nyehealth.org/shin-ny/what-is-the-shin-ny/",
+          "title": "What is the SHIN-NY?, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "bronx-rhio",
+      "name": "Bronx RHIO",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://bronxrhio.org/how-to-participate/",
+      "how_to_join": "New members complete its application for participation and risk assessment, then the SHIN-NY Statewide Common Participation Agreement.",
+      "sources": [
+        {
+          "url": "https://bronxrhio.org/how-to-participate/",
+          "title": "How to Participate, Bronx RHIO",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healtheconnections",
+      "name": "HealtheConnections",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.healtheconnections.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.healtheconnections.org/",
+          "title": "HealtheConnections, New York Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthelink",
+      "name": "HEALTHeLINK",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wnyhealthelink.com/for-providers/how-to-join/",
+      "how_to_join": "Prospective participants complete its Registration Application and email it to its business development team.",
+      "sources": [
+        {
+          "url": "https://wnyhealthelink.com/for-providers/how-to-join/",
+          "title": "How To Join, HEALTHeLINK",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthix",
+      "name": "Healthix",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://healthix.org/healthix-community/new-to-healthix/",
+      "how_to_join": "Sign the Statewide Common Participation Agreement and the Healthix Service Agreement, then work with its team on technical onboarding.",
+      "sources": [
+        {
+          "url": "https://healthix.org/healthix-community/new-to-healthix/",
+          "title": "New to Healthix, Healthix",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "hixny",
+      "name": "Hixny",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://hixny.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://hixny.org/",
+          "title": "Hixny",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "rochester-rhio",
+      "name": "Rochester RHIO",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://rochesterrhio.org/ForDoctors",
+      "how_to_join": "Its site says it is transitioning its exchange services to HealtheConnections; contact HealtheConnections.",
+      "sources": [
+        {
+          "url": "https://rochesterrhio.org/ForDoctors",
+          "title": "For Doctors, Rochester RHIO",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://nyehealth.org/shin-ny/connect-use/",
+          "title": "How to Connect and Use the SHIN-NY, New York eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "delaware-health-information-network",
+      "name": "Delaware Health Information Network (DHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "DE"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://dhin.org/",
+      "how_to_join": "Fill out DHIN's enrollment form, which DHIN describes as the first step toward connecting a practice.",
+      "sources": [
+        {
+          "url": "https://dhin.org/",
+          "title": "Delaware Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhin.org/solutions/get-started/",
+          "title": "Get Started with DHIN, Delaware Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhin.org/who-we-are/about/",
+          "title": "About Us, Delaware Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "crisp",
+      "name": "CRISP (Chesapeake Regional Information System for our Patients)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MD"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.crisphealth.org/",
+      "how_to_join": "CRISP assigns an account manager who guides each organization through onboarding; its Onboarding page lists the steps.",
+      "sources": [
+        {
+          "url": "https://www.crisphealth.org/",
+          "title": "CRISP",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.crisphealth.org/about/",
+          "title": "About CRISP, CRISP",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.crisphealth.org/onboarding/",
+          "title": "Onboarding, CRISP",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://mhcc.maryland.gov/healthcare-communities/health-information-technology/health-information-exchange-hie",
+          "title": "Health Information Exchange (HIE), Maryland Health Care Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "crisp-dc",
+      "name": "CRISP DC",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "DC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://crispdc.org/",
+      "how_to_join": "Email the CRISP DC outreach team to get started; an organization signs a CRISP Participation Agreement and updates its Notice of Privacy Practices.",
+      "sources": [
+        {
+          "url": "https://crispdc.org/",
+          "title": "CRISP DC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://crispdc.org/who-we-are/",
+          "title": "About, CRISP DC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://crispdc.org/register-for-hie/",
+          "title": "Participate in the HIE, CRISP DC",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhcf.dc.gov/dchie",
+          "title": "DC Health Information Exchange, DC Department of Health Care Finance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "capital-partners-in-care-hie",
+      "name": "Capital Partners in Care Health Information Exchange (CPC-HIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "DC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.dcpca.org/",
+      "how_to_join": "Contact the DC Primary Care Association, which runs it; its pages do not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.dcpca.org/programs/cpc-hie-governance-and-support",
+          "title": "Capital Partners in Care (CPC) Health Information Exchange, DC Primary Care Association",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dhcf.dc.gov/dchie",
+          "title": "DC Health Information Exchange, DC Department of Health Care Finance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "virginia-health-information",
+      "name": "Virginia Health Information (VHI)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "VA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.vhi.org/",
+      "how_to_join": "VHI's Health Coordination Network page asks organizations to connect with VHI to get started and links onboarding information.",
+      "sources": [
+        {
+          "url": "https://www.vhi.org/hie/",
+          "title": "Virginia Statewide Health Information Exchange, Virginia Health Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.vhi.org/hie/health-coordination-network/",
+          "title": "Health Coordination Network, Virginia Health Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "west-virginia-health-information-network",
+      "name": "West Virginia Health Information Network (WVHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WV"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wvhin.org/",
+      "how_to_join": "Contact the WVHIN outreach team for information about gaining access.",
+      "sources": [
+        {
+          "url": "https://wvhin.org/",
+          "title": "West Virginia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wvhin.org/about-us/",
+          "title": "About Us, West Virginia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "nc-healthconnex",
+      "name": "NC HealthConnex (N.C. Health Information Exchange Authority)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://hiea.nc.gov/",
+      "how_to_join": "Start by filling out a participation agreement; the NC HIEA team then sends a welcome packet to begin onboarding.",
+      "sources": [
+        {
+          "url": "https://hiea.nc.gov/providers/how-connect",
+          "title": "How to Connect, N.C. Health Information Exchange Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://hiea.nc.gov/providers/about-nc-healthconnex",
+          "title": "About NC HealthConnex, N.C. Health Information Exchange Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "south-carolina-e-health-alliance",
+      "name": "South Carolina e-Health Alliance (SCeHA)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "SC"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sceha.org/",
+      "how_to_join": "Tell SCeHA about your organization through its sign-up process, and a SCeHA representative guides onboarding, integration and go-live.",
+      "sources": [
+        {
+          "url": "https://sceha.org/",
+          "title": "South Carolina e-Health Alliance",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "georgia-health-information-network",
+      "name": "Georgia Health Information Network (GaHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "GA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.gahin.org/",
+      "how_to_join": "Use the Join Now link on GaHIN's Join GaHIN page.",
+      "sources": [
+        {
+          "url": "https://www.gahin.org/",
+          "title": "Georgia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.gahin.org/join-gahin",
+          "title": "Join GaHIN, Georgia Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "florida-health-information-exchange",
+      "name": "Florida Health Information Exchange (Florida HIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "FL"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.flhie.org/",
+      "how_to_join": "The Connect with the Florida HIE page provides the participation agreement, onboarding documents and registration for an introductory webinar.",
+      "sources": [
+        {
+          "url": "https://www.flhie.org/",
+          "title": "The Florida HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.flhie.org/connect-with-the-florida-hie/",
+          "title": "Connect with the Florida HIE, The Florida HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "kentucky-health-information-exchange",
+      "name": "Kentucky Health Information Exchange (KHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "KY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://khie.ky.gov/",
+      "how_to_join": "Engage a KHIE Outreach Coordinator, who helps plan the services you want and sign the KHIE Participation Agreement.",
+      "sources": [
+        {
+          "url": "https://khie.ky.gov/About/Pages/About-KHIE.aspx",
+          "title": "About KHIE, Kentucky Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://khie.ky.gov/Get-Started/Pages/default.aspx",
+          "title": "Getting Started, Kentucky Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "tennessee-health-information-exchange",
+      "name": "Tennessee Health Information Exchange (TnHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TN"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://tnhie.org/",
+      "how_to_join": "Provide the information requested on TnHIE's How to Join page to schedule a meeting with its provider outreach staff.",
+      "sources": [
+        {
+          "url": "https://tnhie.org/",
+          "title": "Tennessee Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://tnhie.org/who-are-we/",
+          "title": "Who We Are, Tennessee Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://tnhie.org/healthcare-providers/how-to-join/",
+          "title": "How to Join, Tennessee Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "intellitrue-hie",
+      "name": "IntelliTrue HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MS"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.mhanet.org/intellitrue",
+      "how_to_join": "Independent physicians can sign up by contacting the hospitals where they have privileges or by emailing IntelliTrue.",
+      "sources": [
+        {
+          "url": "https://www.mhanet.org/intellitrue",
+          "title": "IntelliTrue, Mississippi Hospital Association",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "share-arkansas",
+      "name": "SHARE (Arkansas State Health Alliance for Records Exchange)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "AR"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sharearkansas.com/",
+      "how_to_join": "Fill out the Enroll With SHARE Today form on SHARE's Join SHARE page.",
+      "sources": [
+        {
+          "url": "https://sharearkansas.com/",
+          "title": "SHARE, Arkansas State Health Alliance for Records Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sharearkansas.com/about/about-share/",
+          "title": "About SHARE, Arkansas State Health Alliance for Records Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sharearkansas.com/contact/join-share/",
+          "title": "Join SHARE, Arkansas State Health Alliance for Records Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "louisiana-health-information-exchange",
+      "name": "Louisiana Health Information Exchange (LaHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "LA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://lhcqf.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://lhcqf.org/service/health-information-exchange-platform/",
+          "title": "Health Information Exchange Platform, Louisiana Health Care Quality Forum",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "myhealth-access-network",
+      "name": "MyHealth Access Network",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "OK"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://myhealthaccess.net/",
+      "how_to_join": "Use the Apply to Join link on MyHealth's OKSHINE page.",
+      "sources": [
+        {
+          "url": "https://myhealthaccess.net/",
+          "title": "MyHealth Access Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://myhealthaccess.net/okshine/",
+          "title": "OKSHINE, MyHealth Access Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://oklahoma.gov/ohca/okshine/overview.html",
+          "title": "OKSHINE Overview, Oklahoma Health Care Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "texas-health-services-authority",
+      "name": "HIETexas (Texas Health Services Authority)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://thsa.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://thsa.org/hie-texas/",
+          "title": "HIETexas, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "c3hie",
+      "name": "C3HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://c3hie.org/",
+      "how_to_join": "Sign C3HIE's Business Associate Agreement, Master Service Agreement and Statement of Work, then connect through C3HIE.",
+      "sources": [
+        {
+          "url": "https://c3hie.org/",
+          "title": "C3HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://c3hie.org/how-to-join/",
+          "title": "How to Join, C3HIE",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthconnect-texas",
+      "name": "Healthconnect Texas",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.healthconnecttx.org/",
+      "how_to_join": "Its Providers page invites providers to contact the Healthconnect Texas team.",
+      "sources": [
+        {
+          "url": "https://www.healthconnecttx.org/",
+          "title": "Healthconnect Texas",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.healthconnecttx.org/providers/",
+          "title": "How We Serve Providers, Healthconnect Texas",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "connected-care-exchange",
+      "name": "Connected Care Exchange (Rio Grande Valley Health Information Exchange)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.ccehie.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.ccehie.org/",
+          "title": "Connected Care Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.hhs.texas.gov/about/process-improvement/improving-services-texans/health-information-technology-health-information-exchange/statewide-health-information-exchange",
+          "title": "Statewide Health Information Exchange, Texas Health and Human Services Commission",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "connxus",
+      "name": "Connxus",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "TX"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://connxus.org/",
+      "how_to_join": "Connxus asks organizations to connect with it to learn more about its data exchange platform.",
+      "sources": [
+        {
+          "url": "https://connxus.org/",
+          "title": "Connxus",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://thsa.org/hie-texas/eden/hie-connectivity/",
+          "title": "HIE Connectivity, Texas Health Services Authority",
+          "accessed": "2026-11-06",
+          "primary": false
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "indiana-health-information-exchange",
+      "name": "Indiana Health Information Exchange (IHIE)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "IN"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.ihie.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.ihie.org/",
+          "title": "Indiana Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ihie.org/about-us/",
+          "title": "About Us, Indiana Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "mihin",
+      "name": "Michigan Health Information Network Shared Services (MiHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MI"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://mihin.org/",
+      "how_to_join": "Contact MiHIN's Network Growth Team, which its Network Growth page names as the starting point for organizations exploring participation.",
+      "sources": [
+        {
+          "url": "https://mihin.org/",
+          "title": "Michigan Health Information Network Shared Services (MiHIN)",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://mihin.org/who-we-are-v22/",
+          "title": "Who We Are, MiHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://mihin.org/networkgrowth/",
+          "title": "Network Growth, MiHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "clinisync",
+      "name": "CliniSync Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "OH"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://clinisync.org/",
+      "how_to_join": "Fill out the Sign Up For Services form on CliniSync's site, and a staff member will follow up.",
+      "sources": [
+        {
+          "url": "https://clinisync.org/",
+          "title": "CliniSync",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://clinisync.org/clinisync-services/sign-up-for-services/",
+          "title": "Sign Up For Services, CliniSync",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "wishin",
+      "name": "Wisconsin Statewide Health Information Network (WISHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WI"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wishin.org/",
+      "how_to_join": "Use the Join the WISHIN Network link on WISHIN's Services page; its site says hospitals, clinics and independent physicians can all participate.",
+      "sources": [
+        {
+          "url": "https://wishin.org/",
+          "title": "WISHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wishin.org/about/",
+          "title": "About WISHIN, WISHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wishin.org/wishin-services/",
+          "title": "WISHIN Services, WISHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "converge-health-iowa",
+      "name": "Converge Health Iowa",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "IA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.convergehlthiowa.org/",
+      "how_to_join": "Request a Participation Agreement on Converge Health Iowa's Participation page, then sign it and a Business Associate Agreement.",
+      "sources": [
+        {
+          "url": "https://www.convergehlthiowa.org/",
+          "title": "Converge Health Iowa",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.convergehlthiowa.org/participation",
+          "title": "Participation, Converge Health Iowa",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://hhs.iowa.gov/media/18170/download",
+          "title": "Health Information Exchange Transition FAQ, Iowa Department of Health and Human Services",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "koble-mn",
+      "name": "Koble-MN",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MN"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.koblemn.org/",
+      "how_to_join": "Review and sign the Koble-MN Participation Agreement and Business Associate Agreement linked from its Become a Participant section.",
+      "sources": [
+        {
+          "url": "https://www.koblemn.org/",
+          "title": "Koble-MN",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.health.state.mn.us/facilities/ehealth/hie/certified.html",
+          "title": "Minnesota Certified HIOs, Minnesota Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "kansas-health-information-network",
+      "name": "Kansas Health Information Network (KHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "KS"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.khinonline.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.khinonline.org/",
+          "title": "Kansas Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "shine-of-missouri",
+      "name": "SHINE of Missouri (Show-Me Health Information Network)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.shineofmissouri.com/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.shineofmissouri.com/",
+          "title": "SHINE of Missouri",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "velatura-hie-corporation",
+      "name": "Velatura HIE Corporation (Missouri)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://velatura.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://velatura.org/velatura-hie-2/",
+          "title": "Velatura HIE, Velatura Public Benefit Corporation",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://velatura.org/patientconsent/",
+          "title": "Missouri Consent, Velatura Public Benefit Corporation",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "lewis-and-clark-information-exchange",
+      "name": "Lewis and Clark Information Exchange (LACIE)",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "KS",
+        "MO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://lacie-hie.com/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://lacie-hie.com/",
+          "title": "Lewis and Clark Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://lacie-hie.com/about/",
+          "title": "About Us, Lewis and Clark Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "cynchealth",
+      "name": "CyncHealth",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NE"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://cynchealth.org/",
+      "how_to_join": "Contact CyncHealth to get started; its Providers page says participants sign a Data Sharing Participation Agreement.",
+      "sources": [
+        {
+          "url": "https://cynchealth.org/",
+          "title": "CyncHealth",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://cynchealth.org/providers/",
+          "title": "Providers, CyncHealth",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "north-dakota-health-information-network",
+      "name": "North Dakota Health Information Network (NDHIN)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "ND"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.ndhin.nd.gov/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.ndhin.nd.gov/",
+          "title": "North Dakota Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.ndhin.nd.gov/about-us",
+          "title": "About Us, North Dakota Health Information Network",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "south-dakota-health-link",
+      "name": "South Dakota Health Link",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "SD"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sdhealthlink.org/",
+      "how_to_join": "Call South Dakota Health Link at 605-800-1678 to learn how to join. It is a service of the South Dakota Department of Health; its Participating Members section has pages for South Dakota, Wyoming, Minnesota, Iowa, North Dakota and Nebraska.",
+      "sources": [
+        {
+          "url": "https://sdhealthlink.org/",
+          "title": "South Dakota Health Link",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sdhealthlink.org/about-health-link/participating-members/",
+          "title": "Participating Members, South Dakota Health Link",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://doh.sd.gov/programs/health-link/",
+          "title": "South Dakota Health Link, South Dakota Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "contexture",
+      "name": "Contexture",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "AZ",
+        "CO"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://contexture.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://contexture.org/about-us/",
+          "title": "About Us, Contexture",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://contexture.org/hie-participant-onboarding/",
+          "title": "HIE Participant Onboarding Resources, Contexture",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://qualityhealthnetwork.org/",
+          "title": "Quality Health Network (QHN is now Contexture)",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "idaho-health-data-exchange",
+      "name": "Idaho Health Data Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "ID"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://idahohde.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://idahohde.org/",
+          "title": "Idaho Health Data Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "big-sky-care-connect",
+      "name": "Big Sky Care Connect",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "MT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.mtbscc.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.mtbscc.org/",
+          "title": "Big Sky Care Connect",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://formergovernors.mt.gov/bullock/docs/EO-14-2019_Designating%20Big%20Sky%20Care%20Connect.pdf",
+          "title": "Executive Order 14-2019 designating Big Sky Care Connect, State of Montana Office of the Governor",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://news.mt.gov/Governors-Office/Governor_Gianforte_DPHHS_Announce_Major_Investment_in_Montanas_Health_Information_Exchange",
+          "title": "Governor Gianforte, DPHHS Announce Major Investment in Montana's Health Information Exchange, State of Montana",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healthie-nevada",
+      "name": "HealtHIE Nevada",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NV"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://healthienevada.org/",
+      "how_to_join": "Submit its Sign Up / Learn More form to ask about signing up your organization to participate.",
+      "sources": [
+        {
+          "url": "https://healthienevada.org/",
+          "title": "HealtHIE Nevada",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healthienevada.org/info",
+          "title": "Sign Up / Learn More, HealtHIE Nevada",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "syncronys",
+      "name": "SYNCRONYS",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "NM"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.syncronys.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.syncronys.org/",
+          "title": "SYNCRONYS",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.syncronys.org/about-us/",
+          "title": "About Us, SYNCRONYS",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "uhin",
+      "name": "UHIN Clinical Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "UT"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://uhin.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://uhin.org/",
+          "title": "UHIN",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "wyoming-frontier-information",
+      "name": "Wyoming Frontier Information (WYFI)",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WY"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://wyfi.solutions/",
+      "how_to_join": "Submit the Join Now form linked from its Providers page.",
+      "sources": [
+        {
+          "url": "https://wyfi.solutions/",
+          "title": "Wyoming Frontier Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://wyfi.solutions/providers/",
+          "title": "Providers, Wyoming Frontier Information",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://health.wyo.gov/healthcarefin/wyoming_frontier_information_wyfi/",
+          "title": "Wyoming Frontier Information (WYFI), Wyoming Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "healtheconnect-alaska",
+      "name": "healthEconnect Alaska",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "AK"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://healtheconnectak.org/",
+      "how_to_join": "Email or call healthEconnect Alaska to request a participation agreement.",
+      "sources": [
+        {
+          "url": "https://healtheconnectak.org/",
+          "title": "healthEconnect Alaska",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://healtheconnectak.org/resources/provider-faqs/",
+          "title": "Provider FAQs, healthEconnect Alaska",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://health.alaska.gov/en/for-providers-professionals/for-health-care-facilities/",
+          "title": "For Health Care Facilities, Alaska Department of Health",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "hawaii-health-information-exchange",
+      "name": "Hawaii Health Information Exchange",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "HI"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.hawaiihie.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.hawaiihie.org/",
+          "title": "Hawaii Health Information Exchange",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "reliance-ehealth-collaborative",
+      "name": "Reliance eHealth Collaborative",
+      "type": "multi_state",
+      "national": false,
+      "states": [
+        "OR",
+        "WA",
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://reliancehie.org/",
+      "how_to_join": "Call or email Reliance about services and enrollment; its home page gives both.",
+      "sources": [
+        {
+          "url": "https://reliancehie.org/",
+          "title": "Reliance eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://reliancehie.org/partners/",
+          "title": "Community Partners, Reliance eHealth Collaborative",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "onehealthport-hie",
+      "name": "OneHealthPort HIE",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "WA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.onehealthport.com/hie-overview",
+      "how_to_join": "Sign the OneHealthPort HIE Participation Agreement through its online contracting process and pay an annual subscription fee based on your organization's annual net operating revenue.",
+      "sources": [
+        {
+          "url": "https://www.onehealthport.com/hie-overview",
+          "title": "HIE Overview, OneHealthPort",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://www.onehealthport.com/hie/contracting",
+          "title": "HIE Contracting, OneHealthPort",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "manifest-medex",
+      "name": "Manifest MedEx",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.manifestmedex.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://www.manifestmedex.org/",
+          "title": "Manifest MedEx",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dxf.chhs.ca.gov/wp-content/uploads/sites/6/2025/07/DxF-QHIOs-At-a-Glance.pdf",
+          "title": "QHIOs at a Glance, CalHHS Data Exchange Framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "sacvalley-medshare",
+      "name": "SacValley MedShare",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sacvalleyms.org/",
+      "how_to_join": "Contact the network; its site does not describe how to join.",
+      "sources": [
+        {
+          "url": "https://sacvalleyms.org/",
+          "title": "SacValley MedShare",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dxf.chhs.ca.gov/wp-content/uploads/sites/6/2025/07/DxF-QHIOs-At-a-Glance.pdf",
+          "title": "QHIOs at a Glance, CalHHS Data Exchange Framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "san-diego-health-connect",
+      "name": "San Diego Health Connect",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "CA"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://sdhealthconnect.org/",
+      "how_to_join": "Fill out its Participant Inquiry Form, then sign a participation agreement and a Business Associate Agreement and agree on a level of connectivity with its team.",
+      "sources": [
+        {
+          "url": "https://sdhealthconnect.org/",
+          "title": "San Diego Health Connect",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://sdhealthconnect.org/faq/",
+          "title": "FAQ, San Diego Health Connect",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://dxf.chhs.ca.gov/wp-content/uploads/sites/6/2025/07/DxF-QHIOs-At-a-Glance.pdf",
+          "title": "QHIOs at a Glance, CalHHS Data Exchange Framework",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    },
+    {
+      "id": "one-health-record",
+      "name": "One Health Record",
+      "type": "state_hie",
+      "national": false,
+      "states": [
+        "AL"
+      ],
+      "detail_level": "basic",
+      "routes": [],
+      "website": "https://www.onehealthrecord.alabama.gov/",
+      "how_to_join": "Sign a participation agreement (DURSA) and a HIPAA Business Associate Agreement with the Alabama Health Information Exchange, as its policy manual requires before exchange begins.",
+      "sources": [
+        {
+          "url": "https://www.onehealthrecord.alabama.gov/Content/uploads/AHIE-Policies-And-Procedures%20Latest.pdf",
+          "title": "One Health Record, Alabama's Health Information Exchange Policy Manual",
+          "accessed": "2026-11-06",
+          "primary": true
+        },
+        {
+          "url": "https://medicaid.alabama.gov/",
+          "title": "Alabama Medicaid Agency",
+          "accessed": "2026-11-06",
+          "primary": true
+        }
+      ],
+      "last_checked": "2026-11-06"
+    }
+  ],
+  "glossary": [
+    {
+      "term": "HIE",
+      "definition": "Health information exchange: an organization or network that moves patient health data between providers and other authorized parties."
+    },
+    {
+      "term": "QHIN",
+      "definition": "Qualified Health Information Network: an organization designated under TEFCA to connect participants and route queries between networks."
+    },
+    {
+      "term": "TEFCA",
+      "definition": "Trusted Exchange Framework and Common Agreement: the federal framework that sets common rules for nationwide health information exchange."
+    },
+    {
+      "term": "Direct",
+      "definition": "A secure messaging standard for sending health information from one address to another, similar to encrypted email between providers."
+    },
+    {
+      "term": "FHIR",
+      "definition": "Fast Healthcare Interoperability Resources: the HL7 standard for exchanging health data over web APIs."
+    },
+    {
+      "term": "IHE",
+      "definition": "Integrating the Healthcare Enterprise: a body that publishes profiles for how systems exchange data, such as document sharing and patient lookup."
+    },
+    {
+      "term": "ADT",
+      "definition": "Admit, discharge and transfer: the messages a hospital sends when a patient arrives, leaves or moves."
+    },
+    {
+      "term": "NDH",
+      "definition": "National Directory of Healthcare: the HL7 FHIR implementation guide that describes how providers, organizations and endpoints are listed in a directory. On ainpi.dev, 'the NDH' also refers to CMS's National Provider Directory, which follows this guide."
+    },
+    {
+      "term": "endpoint",
+      "definition": "The electronic address, usually a web URL or a Direct address, where an organization receives or serves health data."
+    },
+    {
+      "term": "HISP",
+      "definition": "Health Internet Service Provider: a service that issues Direct addresses and carries Direct messages between them."
+    },
+    {
+      "term": "USCDI",
+      "definition": "United States Core Data for Interoperability: the standard set of patient data classes and elements that certified health IT must be able to exchange."
+    },
+    {
+      "term": "RCE",
+      "definition": "Recognized Coordinating Entity: the organization that ONC chose to run TEFCA day to day, including the rules QHINs follow."
+    },
+    {
+      "term": "impacted payer",
+      "definition": "A health plan that the CMS interoperability rules apply to, such as Medicare Advantage plans, state Medicaid and CHIP programs, and Qualified Health Plan issuers on the federally facilitated exchanges."
+    },
+    {
+      "term": "Participant and Subparticipant",
+      "definition": "In TEFCA, a Participant is an organization that connects to a QHIN. A Subparticipant connects through a Participant instead of directly."
+    },
+    {
+      "term": "HIO",
+      "definition": "Health information organization: another name for a health information exchange, used in some state programs."
+    }
+  ]
+}

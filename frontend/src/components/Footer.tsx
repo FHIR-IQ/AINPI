@@ -16,6 +16,7 @@ export default function Footer() {
             <li><Link href="/data-sources" className="hover:text-white">Data sources</Link></li>
             <li><Link href="/archive" className="hover:text-white">Release archive</Link></li>
             <li><Link href="/primer" className="hover:text-white">Primer</Link></li>
+            <li><Link href="/networks" className="hover:text-white">Health data networks</Link></li>
             <li><Link href="/partners" className="hover:text-white">Related work</Link></li>
             <li><Link href="/smd-revalidation" className="hover:text-white">SMD-response citation language</Link></li>
             <li><a href="https://github.com/FHIR-IQ/AINPI" target="_blank" rel="noopener noreferrer" className="hover:text-white">GitHub</a></li>
