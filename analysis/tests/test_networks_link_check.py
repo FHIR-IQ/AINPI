@@ -54,11 +54,38 @@ def test_not_stale_at_180():
     assert not needs
 
 
-def test_blocked_only():
+def test_blocked_on_unknown_host_needs_attention():
     p = payload(net("n", "https://a.example/x"))
     needs, body = nlc.build_report(p, {"https://a.example/x": ("blocked", 403)}, AS_OF)
-    assert needs and "Check by hand" in body
-    assert "Dead or moved" not in body and "—" not in body
+    assert needs and "Newly blocked by the site" in body
+    assert "Dead or moved" not in body and "\u2014" not in body
+
+
+def test_known_blocked_host_is_informational_only():
+    url = "https://www.directtrust.org/what-we-do/"
+    p = payload(net("dt", url))
+    needs, body = nlc.build_report(p, {url: ("blocked", 403)}, AS_OF)
+    assert not needs
+    assert "Blocked, check by hand" in body and f"network dt: {url} (HTTP 403)" in body
+
+
+def test_known_blocked_host_returning_404_is_dead():
+    url = "https://carequality.org/gone"
+    needs, body = nlc.build_report(payload(net("cq", url)), {url: ("dead", 404)}, AS_OF)
+    assert needs and "Dead or moved" in body
+
+
+def test_known_blocked_matches_host_not_substring():
+    assert nlc.known_blocked("https://directtrust.org/")
+    assert nlc.known_blocked("https://www.oracle.com/health/")
+    assert not nlc.known_blocked("https://notdirecttrust.org/")
+    assert not nlc.known_blocked("https://example.org/directtrust.org")
+
+
+def test_non_https_url_is_dead_without_probing(monkeypatch):
+    monkeypatch.setattr(nlc.subprocess, "run", lambda *a, **k: (_ for _ in ()).throw(AssertionError))
+    assert nlc.check_url("file:///etc/passwd") == ("dead", None)
+    assert nlc.check_url("http://169.254.169.254/") == ("dead", None)
 
 
 def test_all_ok():
@@ -107,8 +134,18 @@ def test_main_writes_body(tmp_path, monkeypatch):
     body = tmp_path / "body.md"
     rc = nlc.main(["--networks", str(f), "--issue-body-file", str(body), "--as-of", "2026-11-06"])
     assert rc == 0 and "needs_attention=true" in out.read_text()
-    assert "issue_title=Network sources need re-verification 2026-11" in out.read_text()
-    assert "a" in body.read_text()
+    assert "issue_title=Network sources need re-verification\n" in out.read_text()
+    assert "network a: https://a.example/ (HTTP 404)" in body.read_text()
+
+
+def test_main_known_blocked_only_writes_no_issue_body(tmp_path, monkeypatch):
+    f = _write(tmp_path, payload(net("cq", "https://carequality.org/")))
+    out = tmp_path / "out"
+    monkeypatch.setenv("GITHUB_OUTPUT", str(out))
+    monkeypatch.setattr(nlc, "check_url", lambda url, timeout=20: ("blocked", 403))
+    body = tmp_path / "body.md"
+    rc = nlc.main(["--networks", str(f), "--issue-body-file", str(body), "--as-of", "2026-11-06"])
+    assert rc == 0 and "needs_attention=false" in out.read_text() and not body.exists()
 
 
 def test_curl_argv_ends_options_before_url(monkeypatch):
@@ -123,5 +160,8 @@ def test_curl_argv_ends_options_before_url(monkeypatch):
         return Done()
 
     monkeypatch.setattr(nlc.subprocess, "run", fake_run)
-    assert nlc.check_url("-K/etc/passwd") == ("ok", 200)
-    assert seen["argv"][-2:] == ["--", "-K/etc/passwd"]
+    assert nlc.check_url("https://a.example/-K") == ("ok", 200)
+    argv = seen["argv"]
+    assert argv[-2:] == ["--", "https://a.example/-K"]
+    assert argv[argv.index("--proto") + 1] == "=https"
+    assert argv[argv.index("--proto-redir") + 1] == "=https"

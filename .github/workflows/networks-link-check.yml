@@ -1,12 +1,15 @@
 name: Networks link check
 
 # Monthly re-check of every source URL in frontend/public/api/v1/networks.json.
-# Opens one issue per month when something needs a person to re-verify (dead,
-# moved, unreachable, blocked by the site, or a stale last_checked date).
+# When something needs a person to re-verify (dead, moved, unreachable, newly
+# blocked by the site, or a stale last_checked date), it opens one issue with a
+# fixed title, or comments on that issue if it is still open. Pages on hosts
+# that always refuse automated requests (KNOWN_BLOCKED_HOSTS in the script) are
+# listed for a check by hand but never trigger the issue on their own.
 # If every URL is unreachable the check step fails instead of filing an issue.
 #
-# Side effects: at most one GitHub issue per month. No commits, no labels, no
-# cloud writes. Built-in GITHUB_TOKEN only.
+# Side effects: at most one issue, or one comment on it, per run. No commits,
+# no labels, no cloud writes. Built-in GITHUB_TOKEN only.
 
 on:
   schedule:
@@ -29,16 +32,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
-      # Standard library only; no pip install.
+      # Standard library only, on the runner's own python3; no pip install.
       - name: Check links
         id: check
         run: python3 analysis/networks_link_check.py --issue-body-file "$RUNNER_TEMP/networks-link-issue.md"
 
-      - name: Open issue
+      - name: Open or update issue
         if: steps.check.outputs.needs_attention == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -49,9 +48,10 @@ jobs:
           # consistent). If the listing fails, pipefail fails the job rather
           # than filing a duplicate.
           existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 200 \
-            --json number,title | jq -r --arg t "$TITLE" '.[] | select(.title == $t) | .number')
+            --json number,title | jq -r --arg t "$TITLE" '.[] | select(.title == $t) | .number' | head -n1)
           if [ -n "$existing" ]; then
-            echo "Open issue #$existing already tracks: $TITLE"
+            gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" \
+              --body-file "$RUNNER_TEMP/networks-link-issue.md"
             exit 0
           fi
           gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" \
