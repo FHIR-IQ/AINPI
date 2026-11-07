@@ -10,7 +10,7 @@ export const dynamic = 'force-static';
 export const metadata: Metadata = {
   title: 'AINPI: provider data landscape',
   description:
-    'Every state and specialty in the CMS National Provider Directory, scored on six dimensions of accuracy: completeness, cross-source agreement, currency, endpoint reachability, federal integrity, and specialty validity. Free and public, and the scoring maps to the REAL Health Providers Act.',
+    'Every state and specialty in the CMS National Provider Directory, scored on six dimensions: completeness, presence in NPPES, days since export, endpoint reachability, federal integrity, and specialty validity. Free and public, and the scoring maps to the REAL Health Providers Act.',
   openGraph: {
     title: 'AINPI: provider data landscape',
     description:
@@ -237,9 +237,9 @@ export default function HomePage() {
                 Per-dimension methodology references:{' '}
                 <Link href="/findings/referential-integrity" className="underline text-primary-700">completeness</Link>
                 {' · '}
-                <Link href="/findings/npi-taxonomy-correctness" className="underline text-primary-700">cross-source agreement</Link>
+                <Link href="/findings/npi-taxonomy-correctness" className="underline text-primary-700">presence in NPPES</Link>
                 {' · '}
-                <Link href="/findings/temporal-staleness" className="underline text-primary-700">currency</Link>
+                <Link href="/findings/temporal-staleness" className="underline text-primary-700">days since export</Link>
                 {' · '}
                 <Link href="/findings/endpoint-liveness" className="underline text-primary-700">reachability</Link>
                 {' · '}
