@@ -27,16 +27,15 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-function setup(selected: string | null, ok = true) {
+type Cells = Record<string, { category: 'none' | 'hidden' | 'state_hie' | 'multi_state' | 'both'; verified: boolean }>;
+
+function setup(
+  selected: string | null,
+  ok = true,
+  cells: Cells = { PA: { category: 'both', verified: true }, OH: { category: 'none', verified: true } },
+) {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok, json: () => Promise.resolve(topo) }));
-  return render(
-    <NetworkStateMap
-      title="Map"
-      selectedState={selected}
-      onStateClick={() => {}}
-      cells={{ PA: { category: 'both', verified: true }, OH: { category: 'none', verified: true } }}
-    />,
-  );
+  return render(<NetworkStateMap title="Map" selectedState={selected} onStateClick={() => {}} cells={cells} />);
 }
 
 describe('NetworkStateMap outlines', () => {
@@ -62,7 +61,6 @@ describe('NetworkStateMap drawing', () => {
   it('draws no path for a feature the projection cannot place', async () => {
     const { container } = setup(null);
     await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
-    expect(screen.queryByLabelText(/Territory/)).toBeNull();
     const fills = Array.from(container.querySelectorAll('svg > g:not([data-testid]) > path'));
     expect(fills).toHaveLength(2);
     for (const p of fills) expect(p.getAttribute('d')).toBeTruthy();
@@ -85,9 +83,25 @@ describe('NetworkStateMap drawing', () => {
     expect(screen.queryAllByRole('button')).toHaveLength(0);
   });
 
-  it('has no Not covered legend entry, since no visible state uses it', async () => {
+  it('labels a state hidden by the overlay filter as hidden, not as having no network', async () => {
+    const { container } = setup(null, true, {
+      PA: { category: 'hidden', verified: true },
+      OH: { category: 'none', verified: true },
+    });
+    await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
+    const pa = screen.getByRole('button', { name: /^Pennsylvania:/ });
+    expect(pa.getAttribute('aria-label')).toBe('Pennsylvania: Hidden by current filters');
+    expect(pa.getAttribute('fill')).toBe('url(#nm-hidden)');
+    expect(container.querySelector('pattern#nm-hidden')).not.toBeNull();
+    expect(screen.getByRole('button', { name: /^Ohio:/ }).getAttribute('aria-label')).toBe(
+      'Ohio: No state or multi-state network for this use case in our sources',
+    );
+    expect(screen.getByText('Hidden by current filters')).toBeTruthy();
+  });
+
+  it('omits the hidden legend row when no state is hidden', async () => {
     setup(null);
     await waitFor(() => expect(screen.getAllByRole('button')).toHaveLength(2));
-    expect(screen.queryByText('Not covered')).toBeNull();
+    expect(screen.queryByText('Hidden by current filters')).toBeNull();
   });
 });

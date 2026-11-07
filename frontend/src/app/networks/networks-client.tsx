@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -21,7 +21,7 @@ import {
   type Overlays,
   type StateCategory,
 } from '@/lib/networks';
-import { STATE_NAMES } from '@/components/charts/network-map-style';
+import { ALL_STATE_NAMES } from '@/data/states';
 
 // D3 stays out of SSR; the map fetches its topology on the client.
 const NetworkStateMap = dynamic(() => import('@/components/charts/NetworkStateMap'), {
@@ -29,7 +29,7 @@ const NetworkStateMap = dynamic(() => import('@/components/charts/NetworkStateMa
   loading: () => <div className="aspect-[960/560] w-full border border-gray-200 bg-gray-100" aria-hidden="true" />,
 });
 
-export interface NetworksClientProps {
+interface NetworksClientProps {
   payload: NetworksPayload;
   /** Build date, YYYY-MM-DD, computed once on the server. Staleness is judged against it. */
   buildDate: string;
@@ -39,8 +39,6 @@ export interface NetworksClientProps {
    */
   publishedSlugs: string[];
 }
-
-const PublishedContext = createContext<ReadonlySet<string>>(new Set());
 
 const TYPE_LABEL: Record<NetworkType, string> = {
   state_hie: 'State HIE',
@@ -69,11 +67,11 @@ function ExternalLink({ url, className, children }: { url: string; className: st
   );
 }
 
-function Sources({ sources }: { sources: NetworkSource[] }) {
+function Sources({ sources, className = '' }: { sources: NetworkSource[]; className?: string }) {
   return (
-    <ul className="m-0 list-none space-y-1 p-0 text-sm">
+    <ul className={`m-0 list-none space-y-1 p-0 text-sm ${className}`}>
       {sources.map((s) => (
-        <li key={s.url}>
+        <li key={s.url} className="break-words">
           <ExternalLink url={s.url} className="text-primary-600 underline">
             {s.title}
           </ExternalLink>{' '}
@@ -84,13 +82,21 @@ function Sources({ sources }: { sources: NetworkSource[] }) {
   );
 }
 
-function AinpiLinks({ links }: { links: AinpiLink[] }) {
-  const published = useContext(PublishedContext);
+/** Links to AINPI pages that resolve; renders nothing (heading included) when none do. */
+function AinpiLinks({
+  links,
+  published,
+  heading,
+}: {
+  links: AinpiLink[];
+  published: ReadonlySet<string>;
+  heading?: string;
+}) {
   const resolved = links
     .map((l) => resolveAinpiLink(l, published))
     .filter((l): l is { label: string; href: string } => l !== null);
   if (resolved.length === 0) return null;
-  return (
+  const list = (
     <ul className="m-0 flex list-none flex-wrap gap-x-4 gap-y-1 p-0 text-sm">
       {resolved.map((l) => (
         <li key={l.href}>
@@ -100,6 +106,13 @@ function AinpiLinks({ links }: { links: AinpiLink[] }) {
         </li>
       ))}
     </ul>
+  );
+  if (!heading) return list;
+  return (
+    <div>
+      <h4 className="eyebrow m-0">{heading}</h4>
+      <div className="mt-1">{list}</div>
+    </div>
   );
 }
 
@@ -163,7 +176,7 @@ function StatePanel({
   onClose: () => void;
 }) {
   const { local, national } = networksInState(payload, state);
-  const name = STATE_NAMES[state] ?? state;
+  const name = ALL_STATE_NAMES[state] ?? state;
   return (
     <section data-testid="state-panel" aria-labelledby="state-panel-title" className="mt-4 border-t-2 border-ink pt-3">
       <div className="flex items-baseline justify-between gap-3">
@@ -236,21 +249,52 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
     return out;
   }, [payload, useCase, overlays]);
 
+  // One row per URL. When two entries cite the same URL, show the latest
+  // accessed date, so the list never reports an older check than a card does.
   const sourceList = useMemo(() => {
     const seen = new Map<string, NetworkSource>();
-    for (const r of payload.routes) for (const s of r.sources) if (!seen.has(s.url)) seen.set(s.url, s);
-    for (const n of payload.networks) for (const s of n.sources) if (!seen.has(s.url)) seen.set(s.url, s);
+    for (const s of [...payload.routes, ...payload.networks].flatMap((x) => x.sources)) {
+      const prev = seen.get(s.url);
+      if (!prev || s.accessed > prev.accessed) seen.set(s.url, s);
+    }
     return [...seen.values()];
   }, [payload]);
   const oldest = oldestCheck(payload);
+  const stateOptions = useMemo(
+    () => JURISDICTIONS.map((code) => ({ code, name: ALL_STATE_NAMES[code] ?? code })).sort((a, b) => a.name.localeCompare(b.name)),
+    [],
+  );
+
+  // Where focus was when a state was chosen (a map path or the picker), so
+  // closing the panel can return it there instead of dropping it on <body>.
+  const returnFocus = useRef<HTMLElement | SVGElement | null>(null);
+  const mapRegion = useRef<HTMLElement>(null);
+
+  function selectState(code: string | null) {
+    if (code !== null) {
+      const active = typeof document !== 'undefined' ? document.activeElement : null;
+      returnFocus.current = active instanceof HTMLElement || active instanceof SVGElement ? active : null;
+    }
+    setSelectedState(code);
+  }
+
+  function closePanel() {
+    setSelectedState(null);
+    const target = returnFocus.current;
+    if (target && target.isConnected && target !== document.body) target.focus();
+    else mapRegion.current?.focus();
+  }
 
   function choose(slug: UseCaseSlug) {
     setUseCase(slug);
-    router.replace(`${pathname}?use=${slug}`, { scroll: false });
+    // Keep any other query parameters (utm_* and the like).
+    const q = new URLSearchParams(window.location.search);
+    q.set('use', slug);
+    router.replace(`${pathname}?${q.toString()}`, { scroll: false });
   }
 
   return (
-    <PublishedContext.Provider value={published}>
+    <>
       <Suspense fallback={null}>
         <UseCaseFromUrl onUse={setUseCase} />
       </Suspense>
@@ -281,7 +325,7 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
             <p className="m-0 text-gray-700">{current.summary}</p>
             {current.ainpi_links.length > 0 && (
               <div className="mt-2">
-                <AinpiLinks links={current.ainpi_links} />
+                <AinpiLinks links={current.ainpi_links} published={published} />
               </div>
             )}
           </div>
@@ -308,14 +352,7 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
                       <Field label="Rule" value={r.rule} />
                       <Field label="Standard" value={r.standard} />
                       <Field label="How to join" value={r.how_to_join} />
-                      {r.ainpi_links.some((l) => resolveAinpiLink(l, published) !== null) && (
-                        <div>
-                          <h4 className="eyebrow m-0">On ainpi.dev</h4>
-                          <div className="mt-1">
-                            <AinpiLinks links={r.ainpi_links} />
-                          </div>
-                        </div>
-                      )}
+                      <AinpiLinks links={r.ainpi_links} published={published} heading="On ainpi.dev" />
                       <div>
                         <h4 className="eyebrow m-0">Sources</h4>
                         <div className="mt-1">
@@ -326,7 +363,7 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
                         <div>
                           <h4 className="eyebrow m-0">
                             {selectedState
-                              ? `Networks for this route in ${STATE_NAMES[selectedState] ?? selectedState} and nationally`
+                              ? `Networks for this route in ${ALL_STATE_NAMES[selectedState] ?? selectedState} and nationally`
                               : 'National networks for this route'}
                           </h4>
                           <ul className="m-0 mt-1 list-none p-0">
@@ -344,7 +381,7 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
           )}
         </section>
 
-        <section aria-labelledby="map-title" className="min-w-0">
+        <section ref={mapRegion} tabIndex={-1} aria-labelledby="map-title" className="min-w-0 outline-none">
           <h2 id="map-title" className="rule-heading font-serif text-xl text-ink">
             By state
           </h2>
@@ -361,16 +398,33 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
               </label>
             ))}
           </fieldset>
+          <label className="mb-3 flex flex-wrap items-center gap-2 text-sm text-gray-800">
+            <span>Choose a state</span>
+            <select
+              data-testid="state-picker"
+              value={selectedState ?? ''}
+              onChange={(e) => selectState(e.target.value || null)}
+              className="rounded-sm border border-gray-300 bg-paper px-2 py-1 text-sm text-ink"
+            >
+              <option value="">None selected</option>
+              {stateOptions.map((o) => (
+                <option key={o.code} value={o.code}>
+                  {o.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <NetworkStateMap
             cells={cells}
             selectedState={selectedState}
-            onStateClick={(code: string) => setSelectedState((s) => (s === code ? null : code))}
+            onStateClick={(code: string) => selectState(selectedState === code ? null : code)}
             title={`States with a state or multi-state network in our sources: ${current?.label ?? useCase}`}
           />
-          <p className="m-0 mt-2 text-xs text-gray-500">Select a state to list the networks in our sources for it.</p>
-          {selectedState && (
-            <StatePanel payload={payload} state={selectedState} asOf={asOf} onClose={() => setSelectedState(null)} />
-          )}
+          <p className="m-0 mt-2 text-xs text-gray-500">Select a state on the map or in the list to see the networks in our sources for it.</p>
+          <p className="sr-only" aria-live="polite">
+            {selectedState ? `Showing networks for ${ALL_STATE_NAMES[selectedState] ?? selectedState} below the map.` : ''}
+          </p>
+          {selectedState && <StatePanel payload={payload} state={selectedState} asOf={asOf} onClose={closePanel} />}
         </section>
       </div>
 
@@ -402,22 +456,11 @@ export default function NetworksClient({ payload, buildDate, publishedSlugs }: N
           </a>
           .
         </p>
-        {sourceList.length > 0 && (
-          <ul className="m-0 mt-3 list-none space-y-1 p-0 text-sm">
-            {sourceList.map((s) => (
-              <li key={s.url} className="break-words">
-                <ExternalLink url={s.url} className="text-primary-600 underline">
-                  {s.title}
-                </ExternalLink>{' '}
-                <span className="text-gray-500">(accessed {s.accessed})</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        {sourceList.length > 0 && <Sources sources={sourceList} className="mt-3" />}
       </section>
 
       <p className="mt-10 border-t border-gray-300 pt-3 text-sm text-gray-600">{DISCLAIMER}</p>
-    </PublishedContext.Provider>
+    </>
   );
 }
 

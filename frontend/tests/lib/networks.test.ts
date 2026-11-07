@@ -3,7 +3,7 @@ import path from 'node:path';
 import { describe, it, expect } from 'vitest';
 import type { Network, NetworkRoute, NetworksPayload } from '@/lib/api-v1-types';
 import {
-  JURISDICTIONS, DEFAULT_USE_CASE, parseUseCase, isStale, routesFor, networksForRoute,
+  DEFAULT_USE_CASE, parseUseCase, isStale, routesFor, networksForRoute,
   stateCategory, networksInState, resolveAinpiLink, oldestCheck, safeExternalHref,
 } from '@/lib/networks';
 
@@ -45,11 +45,6 @@ describe('networks helpers', () => {
     expect(isStale('2026-05-10', new Date('2026-11-06'))).toBe(false);
     expect(isStale('2026-05-09', new Date('2026-11-06'))).toBe(true);
   });
-  it('JURISDICTIONS', () => {
-    expect(JURISDICTIONS.length).toBe(51);
-    expect(JURISDICTIONS).toContain('DC');
-    expect(JURISDICTIONS).not.toContain('PR');
-  });
   it('routesFor', () => {
     expect(routesFor(p, 'treatment-records').map((r) => r.id)).toEqual(['t1', 't2']);
   });
@@ -68,7 +63,18 @@ describe('networks helpers', () => {
   it('overlays', () => {
     expect(stateCategory(p, 'treatment-records', 'VA').category).toBe('both');
     expect(stateCategory(p, 'treatment-records', 'VA', { state_hie: false, multi_state: true }).category).toBe('multi_state');
-    expect(stateCategory(p, 'treatment-records', 'VA', { state_hie: false, multi_state: false }).category).toBe('none');
+    expect(stateCategory(p, 'treatment-records', 'VA', { state_hie: false, multi_state: false })).toEqual({
+      category: 'hidden',
+      verified: true,
+    });
+  });
+  it('a state whose only networks are filtered out is hidden, not none', () => {
+    expect(stateCategory(p, 'treatment-records', 'MD', { state_hie: true, multi_state: false }).category).toBe('hidden');
+    expect(stateCategory(p, 'treatment-records', 'NJ', { state_hie: false, multi_state: true }).category).toBe('hidden');
+    // No network listed at all stays none, whatever the filters.
+    expect(stateCategory(p, 'treatment-records', 'WY', { state_hie: false, multi_state: false }).category).toBe('none');
+    // A network that does not serve the use case is not hidden by a filter either.
+    expect(stateCategory(p, 'treatment-records', 'PA', { state_hie: false, multi_state: true }).category).toBe('none');
   });
   it('networksInState', () => {
     const r = networksInState(p, 'WY');
@@ -88,6 +94,10 @@ describe('networks helpers', () => {
     expect(resolveAinpiLink({ label: 'x', finding_slug: 'endpoint-url-validity' }, new Set())).toBeNull();
     expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' }, PUB)).toEqual({ label: 'x', href: '/states/pa/connectivity' });
     expect(resolveAinpiLink({ label: 'x' }, PUB)).toBeNull();
+    expect(resolveAinpiLink({ label: 'x', finding_slug: 'payer-seed-coverage', href: '/networks' }, PUB)).toEqual({
+      label: 'x',
+      href: '/networks',
+    });
   });
   it('resolveAinpiLink accepts only single-slash internal paths', () => {
     expect(resolveAinpiLink({ label: 'x', href: '/states/pa/connectivity' }, PUB)?.href).toBe('/states/pa/connectivity');

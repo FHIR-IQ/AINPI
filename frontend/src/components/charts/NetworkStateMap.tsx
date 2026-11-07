@@ -4,9 +4,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import * as topojson from 'topojson-client';
 import type { StateCategory } from '@/lib/networks';
-import { cellStyle, FIPS_TO_STATE, LEGEND, PATTERNS, STATE_NAMES, type PatternDef } from './network-map-style';
+import { ALL_STATE_NAMES } from '@/data/states';
+import { FIPS_TO_STATE } from './fips';
+import { cellStyle, legendFor, NATIONAL_NOTE, PATTERNS, type PatternDef } from './network-map-style';
 
-export interface NetworkStateMapProps {
+interface NetworkStateMapProps {
   cells: Record<string, { category: StateCategory; verified: boolean }>;
   selectedState: string | null;
   onStateClick: (code: string) => void;
@@ -52,7 +54,7 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
 
   useEffect(() => {
     let live = true;
-    fetch('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json')
+    fetch('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json')
       .then((r) => {
         if (!r.ok) throw new Error(`topology request failed: ${r.status}`);
         return r.json();
@@ -65,7 +67,7 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
   }, []);
 
   const { features, mesh } = useMemo(() => {
-    if (!topo) return { features: [] as { code: string | undefined; d: string }[], mesh: '' };
+    if (!topo) return { features: [] as { code: string; d: string }[], mesh: '' };
     const geo = topojson.feature(topo, topo.objects.states) as unknown as GeoJSON.FeatureCollection;
     const projection = d3.geoAlbersUsa().fitExtent(
       [
@@ -76,14 +78,14 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
     );
     const path = d3.geoPath().projection(projection);
     return {
-      // Territories fall outside geoAlbersUsa and have no drawable path; skip them
-      // rather than render empty elements.
+      // Territories fall outside geoAlbersUsa and FIPS_TO_STATE; skip them
+      // rather than render empty or unlabelled elements.
       features: geo.features
         .map((f: any) => ({
           code: FIPS_TO_STATE[String(f.id).padStart(2, '0')] as string | undefined,
           d: path(f) ?? '',
         }))
-        .filter((f) => f.d !== ''),
+        .filter((f): f is { code: string; d: string } => f.code !== undefined && f.d !== ''),
       mesh: path(topojson.mesh(topo, topo.objects.states, (a: any, b: any) => a !== b) as any) ?? '',
     };
   }, [topo]);
@@ -102,38 +104,37 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
             The map could not be loaded.
           </text>
         )}
+        {!failed && !topo && (
+          <text x={W / 2} y={H / 2} textAnchor="middle" fontSize={14} fill="#8a8279">
+            Loading map
+          </text>
+        )}
         <g>
-          {features.map(({ code, d }, i) => {
-            const st = cellStyle(code ?? '', code ? cells[code] : undefined);
-            const selected = code === selectedState;
-            const interactive = !!code && st.label !== 'Not covered';
-            const name = code ? STATE_NAMES[code] ?? code : 'Territory';
+          {features.map(({ code, d }) => {
+            const st = cellStyle(cells[code] ?? { category: 'none', verified: true });
             return (
               <path
-                key={code ?? i}
+                key={code}
+                data-code={code}
                 d={d}
                 fill={st.patternId ? `url(#${st.patternId})` : st.fill}
                 stroke="#faf8f5"
                 strokeWidth={0.5}
                 vectorEffect="non-scaling-stroke"
-                tabIndex={interactive ? 0 : undefined}
-                role={interactive ? 'button' : undefined}
-                aria-label={`${name}: ${st.label}`}
-                aria-pressed={interactive ? selected : undefined}
-                style={{ cursor: interactive ? 'pointer' : 'default', outline: 'none' }}
-                onFocus={interactive ? () => setFocused(code!) : undefined}
-                onBlur={interactive ? () => setFocused((f) => (f === code ? null : f)) : undefined}
-                onClick={interactive ? () => onStateClick(code!) : undefined}
-                onKeyDown={
-                  interactive
-                    ? (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          onStateClick(code!);
-                        }
-                      }
-                    : undefined
-                }
+                tabIndex={0}
+                role="button"
+                aria-label={`${ALL_STATE_NAMES[code] ?? code}: ${st.label}`}
+                aria-pressed={code === selectedState}
+                style={{ cursor: 'pointer', outline: 'none' }}
+                onFocus={() => setFocused(code)}
+                onBlur={() => setFocused((f) => (f === code ? null : f))}
+                onClick={() => onStateClick(code)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    onStateClick(code);
+                  }
+                }}
               />
             );
           })}
@@ -142,7 +143,7 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
         {/* Outlines last so neighbours and the mesh never paint over them. Non-interactive. */}
         <g data-testid="outline-layer" pointerEvents="none" aria-hidden="true" fill="none">
           {features
-            .filter((f) => f.code && (f.code === selectedState || f.code === focused))
+            .filter((f) => f.code === selectedState || f.code === focused)
             .map((f) => (
               <path
                 key={f.code}
@@ -158,23 +159,22 @@ export default function NetworkStateMap({ cells, selectedState, onStateClick, ti
       </svg>
       <figcaption className="mt-3">
         <ul className="m-0 flex list-none flex-wrap gap-x-5 gap-y-2 p-0 text-sm text-ink">
-          {LEGEND.map((e) => (
+          {legendFor(cells).map((e) => (
             <li key={e.key} className="flex items-center gap-2">
-              {e.key !== 'national' && (
-                <svg width={18} height={14} aria-hidden="true">
-                  <rect
-                    width={18}
-                    height={14}
-                    fill={e.style.patternId ? `url(#${e.style.patternId})` : e.style.fill}
-                    stroke="#8a8279"
-                    strokeWidth={0.5}
-                  />
-                </svg>
-              )}
+              <svg width={18} height={14} aria-hidden="true">
+                <rect
+                  width={18}
+                  height={14}
+                  fill={e.style.patternId ? `url(#${e.style.patternId})` : e.style.fill}
+                  stroke="#8a8279"
+                  strokeWidth={0.5}
+                />
+              </svg>
               <span>{e.label}</span>
             </li>
           ))}
         </ul>
+        <p className="m-0 mt-2 text-sm text-ink">{NATIONAL_NOTE}</p>
       </figcaption>
     </figure>
   );

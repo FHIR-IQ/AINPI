@@ -35,7 +35,7 @@ vi.mock('next/dynamic', () => ({
 }));
 
 import { cellStyle } from '@/components/charts/network-map-style';
-import NetworksClient from '@/app/networks/networks-client';
+import NetworksClient, { DISCLAIMER } from '@/app/networks/networks-client';
 
 const src = (url: string, accessed = '2026-11-01') => ({ url, title: `Source ${url}`, accessed, primary: true });
 
@@ -177,7 +177,43 @@ describe('/networks client', () => {
     expect(multi.checked).toBe(true);
     expect(screen.getByTestId('cell-PA').getAttribute('data-category')).toBe('state_hie');
     fireEvent.click(hie);
-    expect(screen.getByTestId('cell-PA').getAttribute('data-category')).toBe('none');
+    // PA still has a network for this use case; the filter hides it, it does not remove it.
+    expect(screen.getByTestId('cell-PA').getAttribute('data-category')).toBe('hidden');
+    expect(screen.getByTestId('cell-WY').getAttribute('data-category')).toBe('none');
+  });
+
+  it('keeps other query parameters when the use case changes', () => {
+    window.history.replaceState(null, '', '/networks?utm_source=x');
+    try {
+      renderClient('utm_source=x');
+      fireEvent.click(chip('Report to public health'));
+      expect(nav.replace).toHaveBeenCalledWith('/networks?utm_source=x&use=public-health', { scroll: false });
+    } finally {
+      window.history.replaceState(null, '', '/');
+    }
+  });
+
+  it('opens a state from the picker and returns focus to it when the panel closes', () => {
+    renderClient();
+    const picker = screen.getByLabelText('Choose a state') as HTMLSelectElement;
+    expect(picker.options[1].textContent).toBe('Alabama');
+    picker.focus();
+    fireEvent.change(picker, { target: { value: 'PA' } });
+    const panel = screen.getByTestId('state-panel');
+    expect(within(panel).getByRole('heading', { name: 'Pennsylvania' })).toBeTruthy();
+    fireEvent.click(within(panel).getByRole('button', { name: 'Close' }));
+    expect(screen.queryByTestId('state-panel')).toBeNull();
+    expect(document.activeElement).toBe(picker);
+    expect(picker.value).toBe('');
+  });
+
+  it('returns focus to the map state that opened the panel', () => {
+    renderClient();
+    const cell = screen.getByTestId('cell-PA');
+    cell.focus();
+    fireEvent.click(cell);
+    fireEvent.click(within(screen.getByTestId('state-panel')).getByRole('button', { name: 'Close' }));
+    expect(document.activeElement).toBe(cell);
   });
 
   it('opens a state panel with the empty message and the national list for WY', () => {
@@ -194,7 +230,7 @@ describe('/networks client', () => {
     renderClient('use=public-health');
     const cell = screen.getByTestId('cell-PA');
     expect(cell.getAttribute('data-category')).toBe('none');
-    const label = cellStyle('PA', { category: 'none', verified: true }).label;
+    const label = cellStyle({ category: 'none', verified: true }).label;
     expect(label).toBe('No state or multi-state network for this use case in our sources');
     expect(label).not.toMatch(/none listed|nothing/i);
     fireEvent.click(cell);
@@ -265,11 +301,8 @@ describe('/networks client', () => {
 
   it('shows the disclaimer', () => {
     renderClient();
-    expect(
-      screen.getByText(
-        'Educational resource, not legal advice and not an endorsement. AINPI is independent; no network, state agency or CMS reviewed or produced this page. Confirm details with the network before relying on them.',
-      ),
-    ).toBeTruthy();
+    expect(DISCLAIMER).toMatch(/^Educational resource, not legal advice and not an endorsement\./);
+    expect(screen.getByText(DISCLAIMER)).toBeTruthy();
   });
 
   it('contains no em dash in any text node', () => {

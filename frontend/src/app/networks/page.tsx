@@ -28,6 +28,9 @@ export default function NetworksPage() {
   }
   const publishedSlugs = publishedFindingSlugs(payload);
   // Computed once at build; the client never reads the clock for staleness.
+  // The page is force-static, so "Needs re-check" only advances when the site
+  // is rebuilt. The weekly refresh pushes to main and redeploys it; without
+  // deploys for months, stale entries would go unmarked.
   const buildDate = new Date().toISOString().slice(0, 10);
 
   return (

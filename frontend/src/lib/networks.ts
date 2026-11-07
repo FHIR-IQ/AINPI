@@ -1,23 +1,29 @@
-import type { AinpiLink, Network, NetworkRoute, NetworksPayload, UseCaseSlug } from '@/lib/api-v1-types';
+import {
+  USE_CASE_SLUGS,
+  type AinpiLink,
+  type Network,
+  type NetworkRoute,
+  type NetworksPayload,
+  type UseCaseSlug,
+} from '@/lib/api-v1-types';
+import { ALL_STATE_NAMES } from '@/data/states';
 
-export const JURISDICTIONS: readonly string[] = [
-  'AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY',
-  'LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH',
-  'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY',
-];
+/** The 50 states and DC, as two-letter codes. */
+export const JURISDICTIONS: readonly string[] = Object.keys(ALL_STATE_NAMES);
 
-const USE_CASES: readonly UseCaseSlug[] = [
-  'treatment-records', 'individual-access', 'find-endpoint', 'payer-exchange',
-  'encounter-alerts', 'public-health', 'community-referral',
-];
 export const DEFAULT_USE_CASE: UseCaseSlug = 'treatment-records';
 export const STALE_AFTER_DAYS = 180;
 
-export type StateCategory = 'none' | 'state_hie' | 'multi_state' | 'both';
+/**
+ * `hidden`: the state has a matching network in our sources, but every one of
+ * them belongs to an overlay the reader has switched off. Kept apart from
+ * `none` so a display filter never reads as a statement about the sources.
+ */
+export type StateCategory = 'none' | 'hidden' | 'state_hie' | 'multi_state' | 'both';
 export interface Overlays { state_hie: boolean; multi_state: boolean }
 
 export function parseUseCase(raw: string | string[] | undefined): UseCaseSlug {
-  return typeof raw === 'string' && (USE_CASES as readonly string[]).includes(raw)
+  return typeof raw === 'string' && (USE_CASE_SLUGS as readonly string[]).includes(raw)
     ? (raw as UseCaseSlug)
     : DEFAULT_USE_CASE;
 }
@@ -56,16 +62,21 @@ export function stateCategory(
   const routes = routesFor(p, useCase);
   let hie = false;
   let multi = false;
+  let filteredOut = false;
   let verified = true;
   for (const n of p.networks) {
     if (n.national || !n.states.includes(state)) continue;
     if (n.type !== 'state_hie' && n.type !== 'multi_state') continue;
-    if (!overlays[n.type]) continue;
     if (!routes.some((r) => attached(n, r))) continue;
+    if (!overlays[n.type]) {
+      filteredOut = true;
+      continue;
+    }
     if (n.type === 'state_hie') hie = true; else multi = true;
     if (n.detail_level !== 'full') verified = false;
   }
-  const category: StateCategory = hie && multi ? 'both' : hie ? 'state_hie' : multi ? 'multi_state' : 'none';
+  if (!hie && !multi) return { category: filteredOut ? 'hidden' : 'none', verified: true };
+  const category: StateCategory = hie && multi ? 'both' : hie ? 'state_hie' : 'multi_state';
   return { category, verified };
 }
 
@@ -80,14 +91,15 @@ export function networksInState(p: NetworksPayload, state: string): { local: Net
  * Resolve an AINPI link to a label and an internal href, or null. `published`
  * holds the slugs of published findings; it is computed on the server
  * (`publishedFindingSlugs` in networks-published.ts) so the findings catalog
- * never reaches the client bundle.
+ * never reaches the client bundle. A link to an unpublished finding falls back
+ * to its `href` when it has one, and is otherwise dropped.
  */
 export function resolveAinpiLink(
   link: AinpiLink,
   published: ReadonlySet<string>,
 ): { label: string; href: string } | null {
-  if (link.finding_slug) {
-    return published.has(link.finding_slug) ? { label: link.label, href: `/findings/${link.finding_slug}` } : null;
+  if (link.finding_slug && published.has(link.finding_slug)) {
+    return { label: link.label, href: `/findings/${link.finding_slug}` };
   }
   return link.href && isInternalPath(link.href) ? { label: link.label, href: link.href } : null;
 }
