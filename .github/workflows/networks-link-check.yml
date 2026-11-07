@@ -48,7 +48,7 @@ jobs:
           # consistent). If the listing fails, pipefail fails the job rather
           # than filing a duplicate.
           existing=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --limit 200 \
-            --json number,title | jq -r --arg t "$TITLE" '.[] | select(.title == $t) | .number' | head -n1)
+            --json number,title | jq -r --arg t "$TITLE" 'first(.[] | select(.title == $t) | .number) // empty')
           if [ -n "$existing" ]; then
             gh issue comment "$existing" --repo "$GITHUB_REPOSITORY" \
               --body-file "$RUNNER_TEMP/networks-link-issue.md"
