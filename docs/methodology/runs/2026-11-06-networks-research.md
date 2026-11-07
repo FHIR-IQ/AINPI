@@ -196,7 +196,7 @@ The Iowa Department of Health and Human Services Health Information Exchange Tra
 
 #### South Dakota Health Link
 
-South Dakota Health Link is a South Dakota Department of Health program (the DOH program page links to sdhealthlink.org). Its own site lists participating members under South Dakota, Wyoming, Minnesota, Iowa, North Dakota and Nebraska, so it is one `multi_state` entry listing all six states, following the HealthShare Exchange precedent. Wyoming belongs to another batch. No South Dakota page read today uses the word designated, so the data file does not state designation.
+South Dakota Health Link is a South Dakota Department of Health program (the DOH program page links to sdhealthlink.org). Its own site lists participating members under South Dakota, Wyoming, Minnesota, Iowa, North Dakota and Nebraska. It was first entered as one `multi_state` entry listing all six states. On 2026-11-07, after review, it was retyped `state_hie` listing SD only: the sdhealthlink.org footer says "Health Link is a service of the South Dakota Department of Health", so it is the state-run exchange for South Dakota, and listing five neighbouring states rested on member organizations there rather than statewide service. The out-of-state members are named in its `how_to_join` text instead. Wyoming belongs to another batch. No South Dakota page read today uses the word designated, so the data file does not state designation.
 
 #### Basic-level entries
 

@@ -3110,20 +3110,15 @@
     {
       "id": "south-dakota-health-link",
       "name": "South Dakota Health Link",
-      "type": "multi_state",
+      "type": "state_hie",
       "national": false,
       "states": [
-        "SD",
-        "WY",
-        "MN",
-        "IA",
-        "ND",
-        "NE"
+        "SD"
       ],
       "detail_level": "basic",
       "routes": [],
       "website": "https://sdhealthlink.org/",
-      "how_to_join": "Call or email South Dakota Health Link to learn how to join; its home page gives both.",
+      "how_to_join": "Call or email South Dakota Health Link to learn how to join; its home page gives both. It is a service of the South Dakota Department of Health, and its member list also includes organizations in Wyoming, Minnesota, Iowa, North Dakota and Nebraska.",
       "sources": [
         {
           "url": "https://sdhealthlink.org/",
