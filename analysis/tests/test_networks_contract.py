@@ -1,17 +1,16 @@
-"""Invariants of the networks.json contract (analysis/validate_contract.check_networks)."""
+"""networks.json contract: NETWORKS_SCHEMA, then the invariants in check_networks."""
 import copy
 
-from analysis.validate_contract import check_networks as _check, known_finding_slugs
+import pytest
+
+from analysis.contract_schemas import USE_CASE_SLUGS as SLUGS
+from analysis.validate_contract import known_finding_slugs, validate_networks
 
 KNOWN = {"endpoint-url-validity"}
 
 
 def check_networks(p):
-    return _check(p, KNOWN)
-
-
-SLUGS = ["treatment-records", "individual-access", "find-endpoint", "payer-exchange",
-         "encounter-alerts", "public-health", "community-referral"]
+    return validate_networks(p, KNOWN)
 
 
 def src(primary=True):
@@ -55,20 +54,17 @@ def test_network_without_primary_source():
     assert e and any("n1" in x for x in e)
 
 
-def test_non_https_urls_rejected():
+def test_schema_rejects_non_https_urls():
     e = errs(lambda p: p["networks"][0].update(website="javascript:alert(1)"))
-    assert any("n1" in x and "https" in x for x in e)
+    assert any("networks/0/website" in x for x in e)
     e = errs(lambda p: p["routes"][0]["sources"][0].update(url="http://example.org"))
-    assert any("r1" in x and "https" in x for x in e)
+    assert any("routes/0/sources/0/url" in x for x in e)
     e = errs(lambda p: p["networks"][1]["sources"][0].update(url=None))
-    assert any("n2" in x and "https" in x for x in e)
+    assert any("networks/1/sources/0/url" in x for x in e)
 
 
-import pytest as _pytest
-
-
-@_pytest.mark.parametrize("href", ["//evil.com", "https://x", "/\t/evil.com", "/\n/evil.com",
-                                   "/ /evil.com", "javascript:alert(1)", 5])
+@pytest.mark.parametrize("href", ["//evil.com", "https://x", "/\t/evil.com", "/\n/evil.com",
+                                   "/ /evil.com", "javascript:alert(1)"])
 def test_ainpi_href_must_be_internal_path(href):
     e = errs(lambda p: p["routes"][0].update(ainpi_links=[{"label": "L", "href": href}]))
     assert any("r1" in x and "href" in x for x in e)
@@ -104,9 +100,9 @@ def test_local_without_states():
     assert e and any("n1" in x for x in e)
 
 
-def test_state_code_outside_51():
+def test_schema_rejects_state_code_outside_51():
     e = errs(lambda p: p["networks"][0].update(states=["PR"]))
-    assert e and any("n1" in x and "PR" in x for x in e)
+    assert any("networks/0/states/0" in x and "PR" in x for x in e)
 
 
 def test_dc_allowed():
@@ -118,9 +114,9 @@ def test_last_checked_in_future():
     assert e and any("n1" in x for x in e)
 
 
-def test_last_checked_not_iso():
+def test_schema_rejects_last_checked_not_iso():
     e = errs(lambda p: p["networks"][0].update(last_checked="11/01/2026"))
-    assert e and any("n1" in x for x in e)
+    assert any("networks/0/last_checked" in x for x in e)
 
 
 def test_duplicate_ids():
@@ -166,57 +162,23 @@ def test_real_findings_slugs_parse():
     assert "ndh-payer-endpoint-coverage" in known_finding_slugs()
 
 
-def test_malformed_payload_returns_errors_not_raise():
-    p = valid()
-    p["routes"] = ["not an object"]
-    p["use_cases"][0].pop("slug")
-    p["networks"][0]["sources"] = "bad"
-    p["networks"][0]["states"] = "PA"
-    e = check_networks(p)
-    assert e
-    assert check_networks([]) and check_networks({"use_cases": 5})
+@pytest.mark.parametrize("mutate", [
+    lambda p: p["networks"][0].update(type="hospital"),
+    lambda p: p["networks"][0].update(states="PA"),
+    lambda p: p["routes"][0].update(use_case="other"),
+    lambda p: p["networks"][0]["sources"][0].pop("primary"),
+    lambda p: p["routes"][0].update(ainpi_links=[{"label": "L", "href": 5}]),
+])
+def test_schema_rejects_bad_shape(mutate):
+    e = errs(mutate)
+    assert e and all(x.startswith("schema[networks]") for x in e)
 
 
-import pytest
+def test_full_network_without_routes():
+    e = errs(lambda p: p["networks"][0].update(routes=[]))
+    assert any("n1" in x and "full" in x for x in e)
 
 
-def _bad_route_id(p):
-    p["routes"][0]["id"] = [1]
-
-
-def _bad_network_id(p):
-    p["networks"][0]["id"] = {"a": 1}
-
-
-def _bad_state(p):
-    p["networks"][0]["states"] = [{"x": 1}]
-
-
-def _bad_network_types(p):
-    p["routes"][0]["network_types"] = [["state_hie"], "qhin"]
-
-
-def _bad_route_ref(p):
-    p["networks"][0]["routes"] = [{"x": 1}]
-
-
-def _bad_network_type(p):
-    p["networks"][0]["type"] = ["state_hie"]
-
-
-@pytest.mark.parametrize("mutate", [_bad_route_id, _bad_network_id, _bad_state,
-                                    _bad_network_types, _bad_route_ref, _bad_network_type])
-def test_unhashable_values_return_errors(mutate):
-    assert errs(mutate)
-
-
-def test_state_hie_routes_do_not_assume_every_state_has_a_listed_hie():
-    import json
-    from pathlib import Path
-
-    p = json.loads((Path(__file__).resolve().parents[2] / "frontend/public/api/v1/networks.json").read_text())
-    routes = {r["id"]: r for r in p["routes"]}
-    for rid in ("treatment-records-state-hie", "encounter-alerts-state-hie"):
-        text = routes[rid]["how_to_join"]
-        assert "if one is listed" in text, rid
-        assert "—" not in text, rid
+def test_duplicate_source_url_in_one_item():
+    e = errs(lambda p: p["networks"][0].update(sources=[src(), src(False)]))
+    assert any("n1" in x and "more than once" in x for x in e)

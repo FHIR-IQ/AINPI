@@ -36,7 +36,7 @@ import sys
 from datetime import datetime, timezone
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
-from contract_schemas import SCHEMAS  # noqa: E402
+from contract_schemas import SCHEMAS, USE_CASE_SLUGS  # noqa: E402
 from release import CURRENT_RELEASE, KNOWN_RELEASES  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
@@ -158,10 +158,13 @@ def schema_pass(rep: Report) -> None:
     if (API / "source-changes.json").exists():
         check(API / "source-changes.json", "source_changes")
     if (API / "networks.json").exists():
-        check(API / "networks.json", "networks")
+        # Invariants run only on a payload the schema accepts; they assume its shape.
         doc = load(API / "networks.json")
-        if isinstance(doc, dict):
-            for msg in check_networks(doc):
+        if isinstance(doc, json.JSONDecodeError):
+            rep.error("networks.json", f"not valid JSON: {doc}")
+        else:
+            rep.checked += 1
+            for msg in validate_networks(doc):
                 rep.error("networks.json", msg)
     for f in sorted((API / "findings").glob("*.json")):
         # `-detail` payloads are row-level companions to a finding, not
@@ -425,15 +428,11 @@ def invariant_pass(rep: Report) -> None:
 # --------------------------------------------------------------------------
 # networks.json invariants
 # --------------------------------------------------------------------------
-NETWORK_USE_CASES = ["treatment-records", "individual-access", "find-endpoint",
-                     "payer-exchange", "encounter-alerts", "public-health",
-                     "community-referral"]
-STATE_CODES_51 = set(
-    "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO "
-    "MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split()
-)
+# Types, https URLs, ISO dates, state codes and enums live in NETWORKS_SCHEMA,
+# where an external consumer sees them too. check_networks runs only after the
+# schema passes, so it can assume the shape and holds only the rules a schema
+# cannot express: cross-references, uniqueness and prose rules.
 _COUNT_IN_PROSE = re.compile(r"\b\d+\s+(QHINs?|HIEs?|networks?)\b", re.IGNORECASE)
-_ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def _strings(node, path=""):
@@ -454,18 +453,6 @@ def known_finding_slugs() -> set[str]:
     return set(re.findall(r"^\s*slug:\s*'([^']+)'", text, re.MULTILINE))
 
 
-def _finding_slugs_in(node):
-    if isinstance(node, dict):
-        for k, v in node.items():
-            if k == "finding_slug" and isinstance(v, str):
-                yield v
-            else:
-                yield from _finding_slugs_in(v)
-    elif isinstance(node, list):
-        for v in node:
-            yield from _finding_slugs_in(v)
-
-
 _UNSAFE_PATH_CHARS = re.compile(r"[\x00-\x1f\x7f\s]")
 
 
@@ -475,154 +462,86 @@ def _is_internal_path(href) -> bool:
             and not href.startswith("/\\") and not _UNSAFE_PATH_CHARS.search(href))
 
 
-def _ainpi_hrefs_in(node):
-    """Every href value inside an ainpi_links list under node."""
-    if isinstance(node, dict):
-        for k, v in node.items():
-            if k == "ainpi_links" and isinstance(v, list):
-                for link in v:
-                    if isinstance(link, dict) and "href" in link:
-                        yield link["href"]
-            else:
-                yield from _ainpi_hrefs_in(v)
-    elif isinstance(node, list):
-        for v in node:
-            yield from _ainpi_hrefs_in(v)
+def validate_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
+    """Schema errors for networks.json; when there are none, the invariant errors."""
+    from jsonschema import Draft202012Validator
+
+    v = Draft202012Validator(SCHEMAS["networks"])
+    errors = [
+        f"schema[networks] at {'/'.join(str(x) for x in e.path) or '(root)'}: {e.message}"
+        for e in sorted(v.iter_errors(payload), key=lambda e: list(e.path))
+    ]
+    return errors or check_networks(payload, known_slugs)
 
 
-def check_networks(payload, known_slugs: set[str] | None = None) -> list[str]:
-    """One error string per violated invariant of networks.json. Never raises."""
+def check_networks(payload: dict, known_slugs: set[str] | None = None) -> list[str]:
+    """One error string per violated invariant. Assumes the payload passed NETWORKS_SCHEMA."""
     errors: list[str] = []
-    if not isinstance(payload, dict):
-        return ["networks payload is not an object"]
     if known_slugs is None:
         try:
             known_slugs = known_finding_slugs()
         except OSError as e:
             errors.append(f"cannot read findings.ts to check finding_slug links: {e}")
-            known_slugs = None
 
-    def section(name):
-        raw = payload.get(name, [])
-        if not isinstance(raw, list):
-            errors.append(f"{name} is not a list")
-            return []
-        out = []
-        for i, it in enumerate(raw):
-            if isinstance(it, dict):
-                out.append(it)
-            else:
-                errors.append(f"{name}[{i}] is not an object")
-        return out
+    use_cases, routes = payload["use_cases"], payload["routes"]
+    networks, glossary = payload["networks"], payload["glossary"]
+    routes_by_id = {r["id"]: r for r in routes}
 
-    use_cases = section("use_cases")
-    routes = section("routes")
-    networks = section("networks")
-    glossary = section("glossary")
-    routes_by_id = {r["id"]: r for r in routes if isinstance(r.get("id"), str)}
-
-    slugs = [u.get("slug") for u in use_cases]
-    if any(not isinstance(x, str) for x in slugs):
-        errors.append("a use case has a missing or non-string slug")
-    str_slugs = [x for x in slugs if isinstance(x, str)]
-    if sorted(str_slugs) != sorted(NETWORK_USE_CASES) or len(str_slugs) != len(slugs):
-        missing = sorted(set(NETWORK_USE_CASES) - set(str_slugs))
-        extra = sorted(set(str_slugs) - set(NETWORK_USE_CASES))
-        dup = sorted(x for x in set(str_slugs) if str_slugs.count(x) > 1)
-        errors.append(
-            f"use_cases must be exactly the seven agreed slugs; missing {missing}, "
-            f"unexpected {extra}, repeated {dup}"
-        )
-
-    def sources_of(it):
-        raw = it.get("sources", [])
-        return [s for s in raw if isinstance(s, dict)] if isinstance(raw, list) else []
+    slugs = [u["slug"] for u in use_cases]
+    if sorted(slugs) != sorted(USE_CASE_SLUGS):
+        missing = sorted(set(USE_CASE_SLUGS) - set(slugs))
+        dup = sorted(x for x in set(slugs) if slugs.count(x) > 1)
+        errors.append(f"use_cases must be exactly the seven agreed slugs; missing {missing}, repeated {dup}")
 
     for kind, items in (("route", routes), ("network", networks)):
-        seen: set = set()
+        seen: set[str] = set()
         for it in items:
-            i = it.get("id")
-            if not isinstance(i, str):
-                errors.append(f"{kind} id {i!r} is not a string")
-                i = repr(i)
+            i = it["id"]
             if i in seen:
                 errors.append(f"duplicate {kind} id {i}")
             seen.add(i)
-            if not any(s.get("primary") is True for s in sources_of(it)):
+            if not any(s["primary"] for s in it["sources"]):
                 errors.append(f"{kind} {i} has no primary source")
-            # The page renders these as hrefs; only https is ever a link.
-            for j, s in enumerate(sources_of(it)):
-                u = s.get("url")
-                if not (isinstance(u, str) and u.startswith("https://")):
-                    errors.append(f"{kind} {i} sources[{j}].url {u!r} does not start with https://")
-            if kind == "network":
-                w = it.get("website")
-                if not (isinstance(w, str) and w.startswith("https://")):
-                    errors.append(f"network {i} website {w!r} does not start with https://")
-
-    for r in routes:
-        if not isinstance(r.get("use_case"), str) or r.get("use_case") not in NETWORK_USE_CASES:
-            errors.append(f"route {r.get('id')} names unknown use_case {r.get('use_case')}")
+            urls = [s["url"] for s in it["sources"]]
+            for u in sorted({u for u in urls if urls.count(u) > 1}):
+                errors.append(f"{kind} {i} cites source {u} more than once")
 
     today = datetime.now(timezone.utc).date().isoformat()
     for n in networks:
-        nid = n.get("id")
-        states = n.get("states", [])
-        if not isinstance(states, list):
-            errors.append(f"network {nid} states is not a list")
-            states = []
-        if n.get("national") and states:
-            errors.append(f"network {nid} is national but lists states {states}")
-        if not n.get("national") and not states:
+        nid = n["id"]
+        if n["national"] and n["states"]:
+            errors.append(f"network {nid} is national but lists states {n['states']}")
+        if not n["national"] and not n["states"]:
             errors.append(f"network {nid} is not national and lists no states")
-        for st in states:
-            if not isinstance(st, str) or st not in STATE_CODES_51:
-                errors.append(f"network {nid} has state code {st} outside the 50 states and DC")
-        lc = n.get("last_checked", "")
-        if not isinstance(lc, str) or not _ISO_DATE.match(lc):
-            errors.append(f"network {nid} last_checked {lc!r} is not an ISO date")
-        elif lc > today:
-            errors.append(f"network {nid} last_checked {lc} is in the future")
-        if not isinstance(n.get("type"), str):
-            errors.append(f"network {nid} type {n.get('type')!r} is not a string")
-        nroutes = n.get("routes", [])
-        if not isinstance(nroutes, list):
-            errors.append(f"network {nid} routes is not a list")
-            nroutes = []
-        if n.get("detail_level") == "basic" and nroutes:
+        if n["last_checked"] > today:
+            errors.append(f"network {nid} last_checked {n['last_checked']} is in the future")
+        if n["detail_level"] == "basic" and n["routes"]:
             errors.append(f"network {nid} is basic but lists routes")
-        for rid in nroutes:
-            route = routes_by_id.get(rid) if isinstance(rid, str) else None
+        if n["detail_level"] == "full" and not n["routes"]:
+            errors.append(f"network {nid} is full but lists no routes")
+        for rid in n["routes"]:
+            route = routes_by_id.get(rid)
             if route is None:
                 errors.append(f"network {nid} references unknown route {rid}")
-            else:
-                types = route.get("network_types", [])
-                if not isinstance(types, list):
-                    errors.append(f"route {rid} network_types is not a list")
-                elif any(not isinstance(x, str) for x in types):
-                    errors.append(f"route {rid} network_types has a non-string entry")
-                elif n.get("type") not in types:
-                    errors.append(
-                        f"network {nid} has type {n.get('type')} but route {rid} "
-                        f"does not accept it"
-                    )
+            elif n["type"] not in route["network_types"]:
+                errors.append(f"network {nid} has type {n['type']} but route {rid} does not accept it")
 
     for sec, items, key in (("use_cases", use_cases, "slug"), ("routes", routes, "id"),
                             ("networks", networks, "id"), ("glossary", glossary, "term")):
         for it in items:
             for path, s in _strings(it):
-                where = f"{sec} {it.get(key)} {path}"
+                where = f"{sec} {it[key]} {path}"
                 if "\u2014" in s:
                     errors.append(f"{where} contains an em dash")
                 if _COUNT_IN_PROSE.search(s):
                     errors.append(f"{where} states a count in prose")
-            for href in _ainpi_hrefs_in(it):
-                if not _is_internal_path(href):
-                    errors.append(f"{sec} {it.get(key)} ainpi_links href {href!r} is not an internal path")
-            if known_slugs is not None:
-                for fs in _finding_slugs_in(it):
-                    if fs not in known_slugs:
-                        errors.append(f"{sec} {it.get(key)} links unknown finding_slug {fs}")
+            # ainpi_links sit only at the top level of a use case or a route.
+            for link in it.get("ainpi_links", []):
+                if "href" in link and not _is_internal_path(link["href"]):
+                    errors.append(f"{sec} {it[key]} ainpi_links href {link['href']!r} is not an internal path")
+                fs = link.get("finding_slug")
+                if known_slugs is not None and fs is not None and fs not in known_slugs:
+                    errors.append(f"{sec} {it[key]} links unknown finding_slug {fs}")
     return errors
 
 

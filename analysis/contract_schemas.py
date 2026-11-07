@@ -268,8 +268,16 @@ SOURCE_CHANGES_SCHEMA = {
 }
 
 _NETWORK_TYPES = ["state_hie", "multi_state", "qhin", "vendor_network", "payer_api", "direct"]
-_USE_CASE_SLUGS = ["treatment-records", "individual-access", "find-endpoint", "payer-exchange",
-                   "encounter-alerts", "public-health", "community-referral"]
+USE_CASE_SLUGS = ["treatment-records", "individual-access", "find-endpoint", "payer-exchange",
+                  "encounter-alerts", "public-health", "community-referral"]
+# The 50 states and DC. Territories are out of scope for the networks map.
+STATE_CODES_51 = (
+    "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO "
+    "MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY"
+).split()
+_ISO_DATE_PATTERN = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+# The page renders these as hrefs; only https is ever a link.
+_HTTPS_URL = {"type": "string", "pattern": "^https://[^\\s]+$"}
 _AINPI_LINK = {
     "type": "object",
     "properties": {
@@ -282,9 +290,9 @@ _AINPI_LINK = {
 _NETWORK_SOURCE = {
     "type": "object",
     "properties": {
-        "url": {"type": "string", "minLength": 1},
+        "url": _HTTPS_URL,
         "title": {"type": "string", "minLength": 1},
-        "accessed": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"},
+        "accessed": {"type": "string", "pattern": _ISO_DATE_PATTERN},
         "primary": {"type": "boolean"},
     },
     "required": ["url", "title", "accessed", "primary"],
@@ -304,7 +312,7 @@ NETWORKS_SCHEMA = {
             "items": {
                 "type": "object",
                 "properties": {
-                    "slug": {"enum": _USE_CASE_SLUGS},
+                    "slug": {"enum": USE_CASE_SLUGS},
                     "label": {"type": "string", "minLength": 1},
                     "summary": {"type": "string", "minLength": 1},
                     "ainpi_links": {"type": "array", "items": _AINPI_LINK},
@@ -318,7 +326,7 @@ NETWORKS_SCHEMA = {
                 "type": "object",
                 "properties": {
                     "id": {"type": "string", "minLength": 1},
-                    "use_case": {"enum": _USE_CASE_SLUGS},
+                    "use_case": {"enum": USE_CASE_SLUGS},
                     "title": {"type": "string", "minLength": 1},
                     "summary": {"type": "string", "minLength": 1},
                     "who_can_use": {"type": "string", "minLength": 1},
@@ -342,13 +350,13 @@ NETWORKS_SCHEMA = {
                     "name": {"type": "string", "minLength": 1},
                     "type": {"enum": _NETWORK_TYPES},
                     "national": {"type": "boolean"},
-                    "states": {"type": "array", "items": {"type": "string"}},
+                    "states": {"type": "array", "items": {"enum": STATE_CODES_51}},
                     "detail_level": {"enum": ["basic", "full"]},
                     "routes": {"type": "array", "items": {"type": "string"}},
-                    "website": {"type": "string", "minLength": 1},
+                    "website": _HTTPS_URL,
                     "how_to_join": {"type": "string", "minLength": 1},
                     "sources": {"type": "array", "items": _NETWORK_SOURCE},
-                    "last_checked": {"type": "string"},
+                    "last_checked": {"type": "string", "pattern": _ISO_DATE_PATTERN},
                 },
                 "required": ["id", "name", "type", "national", "states", "detail_level",
                              "routes", "website", "how_to_join", "sources", "last_checked"],
