@@ -614,7 +614,7 @@
       "id": "payer-exchange-prior-authorization",
       "use_case": "payer-exchange",
       "title": "Prior Authorization API",
-      "summary": "A provider's system checks whether an item or service needs prior authorization and what documentation the payer requires, then sends the request and receives the decision. Payers must offer it beginning January 1, 2027.",
+      "summary": "A provider's system checks whether an item or service needs prior authorization and what documentation the payer requires, then sends the request and receives the decision. Payers must generally offer it beginning January 1, 2027; dates vary by payer type.",
       "who_can_use": "Providers requesting prior authorization from an impacted payer, for items and services other than drugs.",
       "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS's fact sheet says HHS will use enforcement discretion for the HIPAA X12 278 standard when an all-FHIR Prior Authorization API is used.",
       "standard": "HL7 FHIR API; X12 278 may also be offered.",
