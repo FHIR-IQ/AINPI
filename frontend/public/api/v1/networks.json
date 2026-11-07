@@ -536,7 +536,7 @@
       "id": "payer-exchange-provider-access",
       "use_case": "payer-exchange",
       "title": "Provider Access API",
-      "summary": "An in-network provider pulls claims, encounter, USCDI and prior authorization data for patients it treats, unless the patient opts out; payers must implement it by January 1, 2027.",
+      "summary": "An in-network provider pulls claims, encounter, USCDI and prior authorization data for patients it treats, unless the patient opts out; payers must generally implement it by January 1, 2027.",
       "who_can_use": "In-network or enrolled providers with whom the patient has a treatment relationship, as set by the payer's attribution process. Patients can opt out.",
       "rule": "CMS Interoperability and Prior Authorization final rule (CMS-0057-F). CMS states the exact compliance dates vary by type of payer.",
       "standard": "HL7 FHIR API.",
