@@ -13,8 +13,8 @@ api.secure.bcbsks.com,https://api.secure.bcbsks.com/bcbsks/fhir-prov-dire/api/v4
 apicmsqa.hmhs.com,https://apicmsqa.hmhs.com/cms/fhir/v4/providers/BCBSDE/Practitioner,active,
 apif1.aetna.com,https://apif1.aetna.com/fhir/v1/providerdirectorydata/,active,
 apif1.aetna.com,https://apif1.aetna.com/fhir/v1/realtimepharmacybenefitcheck/,active,
-apif1.aetna.com,https://apif1.aetna.com/fhir/v2/patientaccess/,active,
 apif1.aetna.com,https://apif1.aetna.com/fhir/v2/patientaccess/,active,Organization/Organization-1548036445
+apif1.aetna.com,https://apif1.aetna.com/fhir/v2/patientaccess/,active,
 apif1.aetna.com,https://apif1.aetna.com/fhir/v3/patientaccess/,active,
 apigw.bcbsfl.com,https://apigw.bcbsfl.com/interop/interop-developer-portal/emr/api/v1/fhir/,active,
 app.meldrx.com,https://app.meldrx.com/api/fhir/rt_andwellhealthpartners,active,

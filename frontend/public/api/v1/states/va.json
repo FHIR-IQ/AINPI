@@ -3,9 +3,9 @@
   "state_name": "Virginia",
   "status": "published",
   "release_date": "2026-10-07",
-  "generated_at": "2026-11-02T19:20:41+00:00",
+  "generated_at": "2026-11-16T19:25:20+00:00",
   "methodology_version": "0.2.0",
-  "commit_sha": "adb6d00",
+  "commit_sha": "089f6d9",
   "denominators": {
     "practitioner": 132116,
     "organization": 38517,

@@ -1,34 +1,64 @@
 {
   "samples": [
     {
-      "npi": "1902966955",
-      "display_name": "NATHANIEL, SOLOMON",
-      "ndh_state": "",
-      "leie_state": "PA",
-      "exclusion_type": "1128a1",
-      "exclusion_date": "20110720",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1902966955"
-    },
-    {
-      "npi": "1144368911",
-      "display_name": "HARIHAN, THOMAS",
-      "ndh_state": "NC",
-      "leie_state": "VA",
+      "npi": "1861504425",
+      "display_name": "MELTON, MARK",
+      "ndh_state": "MI",
+      "leie_state": "MI",
       "exclusion_type": "1128b4",
-      "exclusion_date": "20110620",
+      "exclusion_date": "20100120",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144368911"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861504425"
     },
     {
-      "npi": "1356519953",
-      "display_name": "COX, SUSAN",
-      "ndh_state": "",
+      "npi": "1861425696",
+      "display_name": "VINCENT, NEIL",
+      "ndh_state": "CA",
       "leie_state": "CA",
       "exclusion_type": "1128b4",
-      "exclusion_date": "20110818",
+      "exclusion_date": "20100120",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1356519953"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861425696"
+    },
+    {
+      "npi": "1124216833",
+      "display_name": "MCDADE, DANA",
+      "ndh_state": "TX",
+      "leie_state": "MI",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20090618",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124216833"
+    },
+    {
+      "npi": "1154442275",
+      "display_name": "LAGGNER, ALFRED",
+      "ndh_state": "",
+      "leie_state": "WA",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20090618",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1154442275"
+    },
+    {
+      "npi": "1700877149",
+      "display_name": "RESNIK, BRIAN",
+      "ndh_state": "NY",
+      "leie_state": "NY",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20080918",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700877149"
+    },
+    {
+      "npi": "1548481914",
+      "display_name": "ESQUERRA, JEF",
+      "ndh_state": "UT",
+      "leie_state": "UT",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20080918",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1548481914"
     },
     {
       "npi": "1346421815",
@@ -41,44 +71,14 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346421815"
     },
     {
-      "npi": "1578732210",
-      "display_name": "COUSIN, KLAVA",
-      "ndh_state": "",
-      "leie_state": "CA",
+      "npi": "1952387425",
+      "display_name": "PAGKALIWANGAN, LILLIAN",
+      "ndh_state": "FL",
+      "leie_state": "FL",
       "exclusion_type": "1128a1",
-      "exclusion_date": "20110320",
+      "exclusion_date": "20110620",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1578732210"
-    },
-    {
-      "npi": "1366510752",
-      "display_name": "SUNDQUIST, CHRISTOPH",
-      "ndh_state": "",
-      "leie_state": "ID",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20100120",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1366510752"
-    },
-    {
-      "npi": "1861504425",
-      "display_name": "MELTON, MARK",
-      "ndh_state": "MI",
-      "leie_state": "MI",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20100120",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861504425"
-    },
-    {
-      "npi": "1235364670",
-      "display_name": "THANGARASAN, BASKARAN",
-      "ndh_state": "MI",
-      "leie_state": "OH",
-      "exclusion_type": "1128a1",
-      "exclusion_date": "20110720",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1235364670"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1952387425"
     },
     {
       "npi": "1942345129",
@@ -91,44 +91,44 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942345129"
     },
     {
-      "npi": "1861425696",
-      "display_name": "VINCENT, NEIL",
-      "ndh_state": "CA",
-      "leie_state": "CA",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20100120",
+      "npi": "1073567962",
+      "display_name": "DAWSEY-DAVIS, DEBBIE",
+      "ndh_state": "",
+      "leie_state": "SC",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20110420",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861425696"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1073567962"
     }
   ],
   "state_breakdown": [
     {
       "state": "UNKNOWN",
-      "n": 1489
+      "n": 1498
     },
     {
       "state": "CA",
-      "n": 830
+      "n": 833
     },
     {
       "state": "FL",
-      "n": 524
+      "n": 525
     },
     {
       "state": "NY",
-      "n": 481
+      "n": 478
     },
     {
       "state": "TX",
-      "n": 374
+      "n": 375
     },
     {
       "state": "OH",
-      "n": 286
+      "n": 287
     },
     {
       "state": "MI",
-      "n": 282
+      "n": 285
     },
     {
       "state": "PA",
@@ -140,7 +140,7 @@
     },
     {
       "state": "TN",
-      "n": 139
+      "n": 140
     }
   ]
 }
