@@ -119,7 +119,9 @@ def remote_sizes(release: str, run: Callable = _run) -> dict[str, int]:
     r = run(["databricks", "fs", "ls", f"dbfs:{release_dir(release)}", "--long", "--output", "json"])
     if r.returncode != 0:
         msg = (r.stderr or r.stdout or "").strip()
-        if "not found" in msg.lower() or "does not exist" in msg.lower():
+        # The CLI words a missing directory as "no such directory" (v1.26);
+        # older messages said "not found" or "does not exist".
+        if any(m in msg.lower() for m in ("no such directory", "no such file", "not found", "does not exist")):
             return {}
         raise ArchiveError(f"could not list {release_dir(release)}: {msg[:300]}")
     try:

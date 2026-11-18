@@ -83,8 +83,14 @@ def cp(rc=0, out="", err=""):
     return subprocess.CompletedProcess([], rc, out, err)
 
 
-def test_remote_sizes_missing_dir_is_empty():
-    run = lambda cmd: cp(1, err="Error: no such directory: does not exist")  # noqa: E731
+@pytest.mark.parametrize("err", [
+    # Verbatim from Databricks CLI v1.26.0 against a missing volume directory.
+    "Error: no such directory: /Volumes/workspace/ainpi/staging/raw/release_date=2026-11-03",
+    "Error: Resource not found",
+    "Error: path does not exist",
+])
+def test_remote_sizes_missing_dir_is_empty(err):
+    run = lambda cmd: cp(1, err=err)  # noqa: E731
     assert ra.remote_sizes("2026-11-03", run) == {}
 
 
