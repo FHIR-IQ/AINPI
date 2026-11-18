@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Navbar from '@/components/Navbar';
+import { NEWSLETTER_NAME, substackSubscribeUrl } from '@/lib/newsletter';
 
 export default function SubscribePage() {
   const [email, setEmail] = useState('');
@@ -19,8 +20,10 @@ export default function SubscribePage() {
         body: JSON.stringify({ email, source: 'subscribe_page' }),
       });
       if (res.ok) {
+        // The row above is for source attribution; the list itself is
+        // Substack's, and the reader confirms there.
         setStatus('ok');
-        setEmail('');
+        window.location.href = substackSubscribeUrl(email);
       } else {
         const data = await res.json().catch(() => ({}));
         setStatus('err');
@@ -38,16 +41,19 @@ export default function SubscribePage() {
       <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">Subscribe for updates</h1>
         <p className="text-gray-600 mb-8">
-          Periodic updates on new AINPI findings and methodology changes. One email per major
-          release, plus the annual <em>State of the NDH</em> report. No marketing, no spam.
+          AINPI findings, release updates and the annual <em>State of the NDH</em> report go out
+          in <em>{NEWSLETTER_NAME}</em>, Eugene Vestel&apos;s newsletter on Substack, alongside
+          the <em>Out of the FHIR</em> podcast and essays on FHIR and healthcare data. You confirm
+          on Substack after this step.
         </p>
 
         {status === 'ok' ? (
           <div className="bg-green-50 border border-green-200 rounded-lg p-5 text-green-900">
-            <p className="font-semibold">You&apos;re on the list.</p>
+            <p className="font-semibold">Opening Substack to confirm your subscription.</p>
             <p className="text-sm mt-1">
-              We&apos;ll send the first update when the next material finding lands.
-              Your email sits in Supabase until then: see <a href="/privacy" className="underline">privacy policy</a> for how it&apos;s handled.
+              If it does not open,{' '}
+              <a href={substackSubscribeUrl(email)} className="underline">confirm on Substack</a>.
+              Nothing is sent until you do.
             </p>
           </div>
         ) : (
@@ -77,7 +83,8 @@ export default function SubscribePage() {
               <p className="mt-3 text-sm text-red-600">{errorMsg}</p>
             )}
             <p className="mt-4 text-xs text-gray-500">
-              By subscribing you agree to AINPI emailing you release updates. Unsubscribe any time by replying with &quot;remove&quot; or emailing{' '}
+              Substack sends the newsletter and every issue has an unsubscribe link. To remove the
+              address saved here as well, email{' '}
               <a href="mailto:gene@fhiriq.com" className="underline">gene@fhiriq.com</a>.
             </p>
           </form>

@@ -17,6 +17,7 @@
  */
 
 import { Resend } from 'resend';
+import { NEWSLETTER_NAME, substackSubscribeUrl } from './newsletter';
 
 const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS || 'AINPI <onboarding@resend.dev>';
 const REPLY_TO = 'gene@fhiriq.com';
@@ -33,42 +34,34 @@ function getClient(): Resend | null {
 export async function sendSubscribeWelcome(email: string): Promise<boolean> {
   const resend = getClient();
   if (!resend) return false;
+  const confirmUrl = substackSubscribeUrl(email);
   try {
     await resend.emails.send({
       from: FROM_ADDRESS,
       to: email,
       replyTo: REPLY_TO,
-      subject: "You're subscribed to AINPI updates",
+      subject: 'Confirm your subscription on Substack',
       text: [
-        `Thanks for subscribing to AINPI, the open-source audit of the`,
-        `CMS National Provider Directory.`,
+        `Thanks for signing up on ainpi.dev.`,
         ``,
-        `What to expect:`,
-        `  • One email per major finding (typically once a month)`,
-        `  • The annual State of the NDH report in June`,
-        `  • No marketing. No filler. You can reply to any email to`,
-        `    unsubscribe or ask a question.`,
+        `AINPI findings go out in ${NEWSLETTER_NAME}, Eugene Vestel's newsletter`,
+        `on Substack, which also carries the Out of the FHIR podcast and essays`,
+        `on FHIR and healthcare data. Substack only sends it once you confirm.`,
+        `If you already confirmed, you can ignore this email.`,
         ``,
-        `Current findings: https://ainpi.dev/findings`,
-        `Methodology:    https://ainpi.dev/methodology`,
-        `Full report:    https://ainpi.dev/download`,
+        `Confirm: ${confirmUrl}`,
+        ``,
+        `Every issue has an unsubscribe link. To remove the address saved on`,
+        `ainpi.dev as well, reply to this email.`,
         ``,
         `Eugene Vestel, FHIR IQ`,
       ].join('\n'),
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937; line-height: 1.5;">
-          <p>Thanks for subscribing to <strong>AINPI</strong>, the open-source audit of the CMS National Provider Directory.</p>
-          <p><strong>What to expect:</strong></p>
-          <ul>
-            <li>One email per major finding (typically once a month)</li>
-            <li>The annual <em>State of the NDH</em> report in June</li>
-            <li>No marketing, no filler. Reply to any email to unsubscribe or ask a question.</li>
-          </ul>
-          <p>
-            <a href="https://ainpi.dev/findings" style="color: #2557eb;">Current findings</a> ·
-            <a href="https://ainpi.dev/methodology" style="color: #2557eb;">Methodology</a> ·
-            <a href="https://ainpi.dev/download" style="color: #2557eb;">Download the full report</a>
-          </p>
+          <p>Thanks for signing up on <strong>ainpi.dev</strong>.</p>
+          <p>AINPI findings go out in <em>${NEWSLETTER_NAME}</em>, Eugene Vestel's newsletter on Substack, which also carries the <em>Out of the FHIR</em> podcast and essays on FHIR and healthcare data. Substack only sends it once you confirm. If you already confirmed, you can ignore this email.</p>
+          <p><a href="${confirmUrl}" style="color: #2557eb; font-weight: 600;">Confirm on Substack</a></p>
+          <p style="color: #6b7280; font-size: 14px;">Every issue has an unsubscribe link. To remove the address saved on ainpi.dev as well, reply to this email.</p>
           <p style="color: #6b7280; font-size: 14px;">Eugene Vestel, FHIR IQ</p>
         </div>
       `,

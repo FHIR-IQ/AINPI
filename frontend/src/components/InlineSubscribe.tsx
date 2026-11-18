@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { NEWSLETTER_NAME, substackSubscribeUrl } from '@/lib/newsletter';
 
 interface InlineSubscribeProps {
   /**
@@ -16,11 +17,14 @@ interface InlineSubscribeProps {
 /**
  * Compact email-capture strip for content pages. Posts to the same
  * /api/v1/subscribe endpoint as the /subscribe page; the only difference
- * is the source tag. Success and error states render inline, no redirect.
+ * is the source tag. The reader then confirms on Substack (see
+ * lib/newsletter.ts). No redirect here: the form sits mid-article and a
+ * same-tab redirect loses the reader's place, while window.open after an
+ * await is blocked as a popup. So success shows a link to confirm.
  */
 export default function InlineSubscribe({
   source,
-  prompt = 'Get the next finding in your inbox. One email per release, no filler.',
+  prompt = `Get new findings in ${NEWSLETTER_NAME}, the newsletter on Substack that also carries the podcast and essays.`,
 }: InlineSubscribeProps) {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'submitting' | 'ok' | 'err'>('idle');
@@ -44,7 +48,16 @@ export default function InlineSubscribe({
   if (status === 'ok') {
     return (
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
-        Subscribed. The next release update will land in your inbox.
+        One more step:{' '}
+        <a
+          href={substackSubscribeUrl(email)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold underline"
+        >
+          confirm on Substack
+        </a>
+        . Nothing is sent until you do.
       </div>
     );
   }

@@ -144,7 +144,7 @@ Prisma reads env vars from `.env`; tooling expects you to keep `.env.local` auth
 - `/smd-revalidation` — Citable methodology landing page mapping AINPI to the 5 elements of the CMS State Medicaid Director letter. Anchored in 42 CFR § 455.436 federal database checks (NPPES + LEIE + SAM + SSA-DMF). Includes copy-paste citation language for state response submissions.
 - `/faq`, `/privacy`, `/security` — Policy pages sourced from `docs/*.md` via `next/mdx`-style markdown reads.
 - `/privacy/remove` — NPI removal request form (see "NPI removal requests"). `noindex`.
-- `/subscribe` — Resend-backed email signup; POST to `/api/v1/subscribe`. Fires a realtime admin alert on every new signup (see Admin notifications).
+- `/subscribe` — POST to `/api/v1/subscribe` saves the address (source attribution, admin alert), then hands the reader to Substack to confirm. **The newsletter list is Substack's** (`evestel.substack.com`, *FHIR IQ Playbook*, shared with fhiriq.com and eugenevestel.com); see `frontend/src/lib/newsletter.ts`. The `subscribers` table counts sign-ups, not newsletter readers, so never present it as a reader count.
 - `/download`, `/report` — Report picker (4 reports today) with email gate → `/api/v1/download-report` streams a Playwright-generated PDF of `/report` (or redirects to a web report). Fires a realtime admin alert on every download.
 - `/provider-search` — Real-time cross-source merged search: NDH (BigQuery) + NPPES NPI Registry + 4 payer FHIR directories (Humana, Cigna, UHC via Optum FLEX, Molina via Sapphire360). Returns per-source results so disagreements are visible side-by-side.
 - `/magic-scanner` — AI-powered (Anthropic / OpenAI / Perplexity) provider discovery + NPPES staleness check
@@ -669,6 +669,8 @@ Two-layer admin-visibility stack, all keyed off `ADMIN_EMAIL` (default `gene@fhi
 When changing the cron cadence, edit `frontend/vercel.json#crons` (not the repo-root file, which Vercel ignores). The endpoint can also be hit manually for testing with `curl -H "Authorization: Bearer ${CRON_SECRET}" https://ainpi.dev/api/v1/admin/weekly-report`.
 
 ### Subscriber newsletters (`frontend/scripts/send-YYYY-MM-DD-update.ts`)
+
+**Moving to Substack (November 2026).** New sign-ups confirm on Substack, and new findings should be published there (`scripts/substack-prep.ts`). The Resend send scripts below remain only to reach the subscribers who signed up before the move, until they are migrated or invited to Substack; do not send the same issue through both channels to the same people.
 
 One hand-written send script per release. Each new one copies the previous (same CLI shape) and rewrites `buildBody()`.
 

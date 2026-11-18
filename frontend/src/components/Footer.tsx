@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import SubscriberCount from './SubscriberCount';
 import { REPORTS } from '@/data/reports';
 import { METHODOLOGY_VERSION } from '@/data/site-meta';
 
@@ -49,9 +48,6 @@ export default function Footer() {
               <Link href="/subscribe" className="hover:text-white">
                 Subscribe to updates
               </Link>
-              <span className="block text-xs text-slate-500 mt-0.5">
-                <SubscriberCount />
-              </span>
             </li>
             <li><Link href={REPORTS[0].url} className="hover:text-white">Latest release update</Link></li>
             <li><Link href="/insights" className="hover:text-white">Provenance + variance analysis</Link></li>
