@@ -17,7 +17,7 @@
  */
 
 import { Resend } from 'resend';
-import { NEWSLETTER_NAME, substackSubscribeUrl } from './newsletter';
+import { NEWSLETTER_NAME, SUBSTACK_SIGNUP_PAGE } from './newsletter';
 
 const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS || 'AINPI <onboarding@resend.dev>';
 const REPLY_TO = 'gene@fhiriq.com';
@@ -31,25 +31,31 @@ function getClient(): Resend | null {
   return new Resend(key);
 }
 
+/**
+ * Sent when someone ticks "also subscribe" on the download page. That form
+ * cannot also submit to Substack, so this note carries the free sign-up link.
+ * The /subscribe and inline forms sign up on Substack directly and do not
+ * send it.
+ */
 export async function sendSubscribeWelcome(email: string): Promise<boolean> {
   const resend = getClient();
   if (!resend) return false;
-  const confirmUrl = substackSubscribeUrl(email);
+  const confirmUrl = SUBSTACK_SIGNUP_PAGE;
   try {
     await resend.emails.send({
       from: FROM_ADDRESS,
       to: email,
       replyTo: REPLY_TO,
-      subject: 'Confirm your subscription on Substack',
+      subject: 'One step left: the newsletter is on Substack',
       text: [
-        `Thanks for signing up on ainpi.dev.`,
+        `You asked to subscribe when you downloaded an AINPI report.`,
         ``,
         `AINPI findings go out in ${NEWSLETTER_NAME}, Eugene Vestel's newsletter`,
         `on Substack, which also carries the Out of the FHIR podcast and essays`,
-        `on FHIR and healthcare data. Substack only sends it once you confirm.`,
-        `If you already confirmed, you can ignore this email.`,
+        `on FHIR and healthcare data. It is free. Enter this address on`,
+        `Substack to start getting it; if you already subscribed, ignore this.`,
         ``,
-        `Confirm: ${confirmUrl}`,
+        `Subscribe: ${confirmUrl}`,
         ``,
         `Every issue has an unsubscribe link. To remove the address saved on`,
         `ainpi.dev as well, reply to this email.`,
@@ -58,9 +64,9 @@ export async function sendSubscribeWelcome(email: string): Promise<boolean> {
       ].join('\n'),
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 560px; margin: 0 auto; color: #1f2937; line-height: 1.5;">
-          <p>Thanks for signing up on <strong>ainpi.dev</strong>.</p>
-          <p>AINPI findings go out in <em>${NEWSLETTER_NAME}</em>, Eugene Vestel's newsletter on Substack, which also carries the <em>Out of the FHIR</em> podcast and essays on FHIR and healthcare data. Substack only sends it once you confirm. If you already confirmed, you can ignore this email.</p>
-          <p><a href="${confirmUrl}" style="color: #2557eb; font-weight: 600;">Confirm on Substack</a></p>
+          <p>You asked to subscribe when you downloaded an AINPI report.</p>
+          <p>AINPI findings go out in <em>${NEWSLETTER_NAME}</em>, Eugene Vestel's newsletter on Substack, which also carries the <em>Out of the FHIR</em> podcast and essays on FHIR and healthcare data. It is free. Enter this address on Substack to start getting it; if you already subscribed, ignore this.</p>
+          <p><a href="${confirmUrl}" style="color: #2557eb; font-weight: 600;">Subscribe on Substack</a></p>
           <p style="color: #6b7280; font-size: 14px;">Every issue has an unsubscribe link. To remove the address saved on ainpi.dev as well, reply to this email.</p>
           <p style="color: #6b7280; font-size: 14px;">Eugene Vestel, FHIR IQ</p>
         </div>

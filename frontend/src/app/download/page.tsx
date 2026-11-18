@@ -182,7 +182,7 @@ export default function DownloadPage() {
               disabled={status === 'submitting'}
             />
             <span>
-              Also subscribe me to the newsletter (FHIR IQ Playbook on Substack: AINPI findings, the podcast and essays). You will get an email to confirm.
+              Also subscribe me to the newsletter (FHIR IQ Playbook on Substack: AINPI findings, the podcast and essays). We will email you the free sign-up link.
             </span>
           </label>
 
