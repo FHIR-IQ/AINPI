@@ -1,7 +1,7 @@
 ---
 title: Privacy policy
-version: 0.3.0
-last_updated: 2026-10-24
+version: 0.4.0
+last_updated: 2026-11-17
 ---
 
 # Privacy policy
@@ -10,17 +10,18 @@ AINPI is a research project. This privacy policy covers the public website at [a
 
 ## TL;DR
 
-- No analytics, no cookies, no tracking pixels, no fingerprinting.
+- Cookieless page-view counts through Vercel Web Analytics and Speed Insights. No cookies, no tracking pixels, no fingerprinting, no advertising tags.
 - The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report).
-- Submitted emails are stored in Supabase Postgres (US region) and are used only for the stated purpose. No resale, no sharing with third parties.
+- Submitted emails are stored in Supabase Postgres (US region) and are used only for the stated purpose. No resale.
+- The newsletter is sent by Substack. The subscribe forms sign you up on Substack directly; Substack's privacy policy applies to the list.
 - Removal on request: email [gene@fhiriq.com](mailto:gene@fhiriq.com).
 - Providers can have their NPI's page and rows removed from ainpi.dev at [/privacy/remove](/privacy/remove). See [Removal requests](#removal-requests).
 
 ## What we collect
 
-**When you browse the site:** nothing. No Google Analytics, no Mixpanel, no Hotjar, no Meta Pixel. The site ships no tracking bundles. Vercel (our hosting provider) logs request metadata as part of standard web-server operation; those logs are retained per [Vercel's privacy policy](https://vercel.com/legal/privacy-policy).
+**When you browse the site:** Vercel Web Analytics counts page views and Vercel Speed Insights measures page load times. Neither sets cookies or identifies individual visitors. No Google Analytics, no Mixpanel, no Hotjar, no Meta Pixel. Vercel (our hosting provider) also logs request metadata as part of standard web-server operation; those logs are retained per [Vercel's privacy policy](https://vercel.com/legal/privacy-policy).
 
-**When you subscribe to updates:** your email address and the timestamp of your submission. Nothing else.
+**When you subscribe to updates:** your email address, which form you used, and the timestamp. We use this to see which pages bring subscribers. The same form signs you up on Substack, which holds the newsletter list and sends it.
 
 **When you download the full report:** your email address, name (optional), organization (optional), stated use case (optional), and the submission timestamp. This form exists so we can tell who's using AINPI research. The information helps us prioritize and reach back out when major findings land.
 
@@ -30,14 +31,18 @@ AINPI is a research project. This privacy policy covers the public website at [a
 
 ## How we use submitted information
 
-- **Subscribe:** we send periodic updates about new findings and methodology
-  changes. Resend delivers them. Every message carries a reply-to address, and
-  replying with a removal request is enough to unsubscribe.
+- **Subscribe:** AINPI findings go out in *FHIR IQ Playbook*, Eugene Vestel's
+  free newsletter on Substack, which also carries the *Out of the FHIR* podcast
+  and essays. Every issue has an unsubscribe link. If you ticked "also
+  subscribe" on the download page, we send one email through Resend with the
+  Substack sign-up link. To remove the address saved on ainpi.dev as well,
+  email us.
 - **Download report:** we record the capture so we can tell who is using the
   research. We may email you about a major update or a follow-up question.
 
 We do not sell, trade, or share your email address with any third party outside
-Resend, which delivers the updates.
+Resend, which delivers our emails, and Substack, which sends the newsletter once
+you sign up there.
 
 ## Where data is stored
 
@@ -58,7 +63,9 @@ Browser-level cookies you may see in DevTools (`__cf_bm` etc.) are set by the CD
 |---|---|---|
 | Vercel | Hosting + CDN | Request metadata (IP, user-agent, path) |
 | Supabase | Email + contact storage | Form submissions only, not browsing data |
-| Resend | Delivers subscriber updates and removal confirmations | Your email address and the message |
+| Resend | Delivers the download-page sign-up note and removal confirmations | Your email address and the message |
+| Substack | Sends the newsletter | Your email address, from the subscribe form |
+| Vercel Web Analytics and Speed Insights | Cookieless page-view counts and page load times | Page path, referrer, browser and device type, country |
 | Google BigQuery | Analytics warehouse for audit findings | No user data, only the public CMS NPD + NPPES datasets |
 | GitHub | Source hosting, issues, discussions | Your GitHub activity, per GitHub's privacy policy |
 

@@ -10,7 +10,7 @@ const GITHUB_URL = `https://github.com/FHIR-IQ/AINPI/blob/main/${DOC_PATH}`;
 export const metadata: Metadata = {
   title: 'Privacy policy',
   description:
-    'AINPI collects no analytics and sets no tracking cookies. Email is collected only when you explicitly submit a form.',
+    'AINPI sets no tracking cookies and counts page views without identifying visitors. Email is collected only when you explicitly submit a form.',
   openGraph: {
     title: 'Privacy policy | AINPI',
     description: 'How AINPI handles your data: none, unless you ask us to.',
