@@ -35,6 +35,18 @@ export interface MarkdownDoc {
 }
 
 /**
+ * Parse markdown text that is already in memory (for example a file bundled
+ * at build time) into front matter and body.
+ */
+export function parseMarkdown(raw: string): MarkdownDoc {
+  const { data, content } = matter(raw);
+  return {
+    frontMatter: coerceToStrings(data as Record<string, unknown>),
+    body: content,
+  };
+}
+
+/**
  * Load a markdown file by repo-relative path (e.g. 'docs/faq.md').
  *
  * Returns a fallback stub if the file is missing so pages don't crash.
@@ -45,11 +57,7 @@ export function loadMarkdown(
 ): MarkdownDoc {
   try {
     const raw = fs.readFileSync(path.join(REPO_ROOT, repoRelativePath), 'utf8');
-    const { data, content } = matter(raw);
-    return {
-      frontMatter: coerceToStrings(data as Record<string, unknown>),
-      body: content,
-    };
+    return parseMarkdown(raw);
   } catch {
     return {
       frontMatter: { title: fallbackTitle, version: 'missing' },

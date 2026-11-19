@@ -2,8 +2,17 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
+// Mirrors the asset/source rule in next.config.js: a .md import is its text.
+const markdownAsText = {
+  name: 'markdown-as-text',
+  transform(code: string, id: string) {
+    if (!id.endsWith('.md')) return null;
+    return { code: `export default ${JSON.stringify(code)};`, map: null };
+  },
+};
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), markdownAsText],
   test: {
     environment: 'jsdom',
     globals: true,

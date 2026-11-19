@@ -51,20 +51,23 @@ const nextConfig = {
       { source: '/landscape', destination: '/', permanent: true },
     ];
   },
+  webpack(config) {
+    // /npd-mcp imports docs/npd-mcp/tool-goals.md as a string, so the text is
+    // part of the bundle. The page re-renders in a lambda (revalidate = 600)
+    // and Vercel's Root Directory is frontend/, so a runtime read of ../docs
+    // could find no file there. Scoped to that folder so no other .md changes.
+    config.module.rules.push({
+      test: /docs[\\/]npd-mcp[\\/].*\.md$/,
+      type: 'asset/source',
+    });
+    return config;
+  },
   experimental: {
     // public/api/v1/** is served as static CDN assets by Vercel, never read from
     // inside a lambda at runtime — the loaders only touch them during `next build`
     // for static page generation. Tracer is over-inclusive and bundles them into
     // every serverless function, blowing past Vercel's 250 MB limit once the
     // per-state H37/H38/H39 CSVs and the 508K-row PECOS detail files landed.
-    // /npd-mcp re-renders in a lambda every 10 minutes (revalidate = 600) and
-    // reads its text from docs/ at render time, which the tracer cannot see
-    // through loadMarkdown's computed path. Without this the lambda cannot
-    // read the doc; the page then throws and keeps its last good render, so
-    // the "Who has joined" list would only update on a deploy.
-    outputFileTracingIncludes: {
-      '/npd-mcp': ['../docs/npd-mcp/tool-goals.md'],
-    },
     outputFileTracingExcludes: {
       '*': [
         'public/api/v1/findings/**',
