@@ -51,6 +51,17 @@ const nextConfig = {
       { source: '/landscape', destination: '/', permanent: true },
     ];
   },
+  webpack(config) {
+    // /npd-mcp imports docs/npd-mcp/tool-goals.md as a string, so the text is
+    // part of the bundle. The page re-renders in a lambda (revalidate = 600)
+    // and Vercel's Root Directory is frontend/, so a runtime read of ../docs
+    // could find no file there. Scoped to that folder so no other .md changes.
+    config.module.rules.push({
+      test: /docs[\\/]npd-mcp[\\/].*\.md$/,
+      type: 'asset/source',
+    });
+    return config;
+  },
   experimental: {
     // public/api/v1/** is served as static CDN assets by Vercel, never read from
     // inside a lambda at runtime — the loaders only touch them during `next build`

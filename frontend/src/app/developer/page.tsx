@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -482,6 +483,14 @@ export default function DeveloperPage() {
               </a>{' '}
               for how to get one. An unrecognised or revoked key is refused with{' '}
               <code className="font-mono">401</code> rather than served anonymously.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              To help build the next tools (report how an exchange went, update a record once),
+              join the{' '}
+              <Link href="/npd-mcp" className="text-primary-600 hover:underline">
+                NPD MCP working group
+              </Link>
+              .
             </p>
           </div>
           <ul className="text-sm text-gray-700 space-y-2 mb-4">

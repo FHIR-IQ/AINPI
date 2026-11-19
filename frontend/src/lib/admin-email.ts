@@ -222,6 +222,91 @@ export async function sendSurveyAlert(args: SurveyAlertArgs): Promise<void> {
   await sendOnce({ subject, text, html, tag: `survey-${survey}` });
 }
 
+export interface NpdMcpSignupAlertArgs {
+  /** Row id, for the approve statement. */
+  id: string;
+  organization: string;
+  contactName: string;
+  email: string;
+  orgType: string;
+  participation: string[];
+  useCase: string | null;
+  listPublicly: boolean;
+}
+
+/**
+ * Fires on POST /api/v1/npd-mcp/participate for every accepted sign-up,
+ * repeats included. Same contract as the other alerts: skips without
+ * RESEND_API_KEY and never throws.
+ */
+export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promise<void> {
+  const { id, organization, contactName, email, orgType, participation, useCase, listPublicly } = args;
+  // A newline in a subject header can break the message; collapse all runs.
+  const subject = `NPD MCP sign-up: ${organization.replace(/\s+/g, ' ').trim()}`;
+  const takePart = participation.length > 0 ? participation.join(', ') : '(none selected)';
+  // Listing needs approval. Single quotes in the id are doubled so the
+  // statement stays one literal whatever the id holds.
+  const approveSql = listPublicly
+    ? `update npd_mcp_participants set approved = true where id = '${id.replace(/'/g, "''")}';`
+    : null;
+
+  const text = [
+    `New sign-up for the NPD MCP working group (${SITE_URL}/npd-mcp).`,
+    ``,
+    `Organization: ${organization}`,
+    `Type:         ${orgType}`,
+    `Contact:      ${contactName}`,
+    `Email:        ${email}`,
+    `Take part:    ${takePart}`,
+    `List name publicly: ${listPublicly ? 'yes, after approval' : 'no'}`,
+    ``,
+    `--- Use case ---`,
+    useCase || '(none)',
+    ...(approveSql
+      ? [``, `--- To list this organization on the page ---`, `Run in the Supabase SQL editor after checking the sign-up:`, approveSql]
+      : []),
+  ].join('\n');
+
+  const row = (label: string, value: string, mono = false) =>
+    `<tr><td style="padding:6px 0;color:#7d7466;width:160px;">${label}</td><td style="padding:6px 0;${mono ? 'font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;' : ''}">${esc(value)}</td></tr>`;
+
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#171310;line-height:1.5;">
+      <div style="border-left:4px solid #08519c;padding:14px 18px;background:#eef4fb;margin-bottom:20px;">
+        <p style="margin:0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#08519c;">AINPI Admin · NPD MCP sign-up</p>
+        <h1 style="margin:6px 0 0 0;font-size:18px;color:#171310;">${esc(organization)}</h1>
+      </div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:18px;">
+        ${row('Type', orgType, true)}
+        ${row('Contact', contactName)}
+        ${row('Email', email, true)}
+        ${row('Take part', takePart, true)}
+        ${row('List name publicly', listPublicly ? 'yes, after approval' : 'no')}
+      </table>
+      ${
+        useCase
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">Use case</p>
+              <blockquote style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:13px;white-space:pre-wrap;">${esc(useCase)}</blockquote>
+            </div>`
+          : ''
+      }
+      ${
+        approveSql
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">To list this organization on the page</p>
+              <p style="margin:0 0 6px 0;font-size:13px;">Run in the Supabase SQL editor after checking the sign-up:</p>
+              <pre style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:12px;white-space:pre-wrap;">${esc(approveSql)}</pre>
+            </div>`
+          : ''
+      }
+      <p style="margin:0;font-size:11px;color:#a49b8c;">Admin alerts only · sent by /api/v1/npd-mcp/participate</p>
+    </div>
+  `.trim();
+
+  await sendOnce({ subject, text, html, tag: 'npd-mcp-signup' });
+}
+
 export async function sendDownloadAlert(
   args: DownloadAlertArgs,
 ): Promise<void> {
