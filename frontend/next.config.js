@@ -57,6 +57,14 @@ const nextConfig = {
     // for static page generation. Tracer is over-inclusive and bundles them into
     // every serverless function, blowing past Vercel's 250 MB limit once the
     // per-state H37/H38/H39 CSVs and the 508K-row PECOS detail files landed.
+    // /npd-mcp re-renders in a lambda every 10 minutes (revalidate = 600) and
+    // reads its text from docs/ at render time, which the tracer cannot see
+    // through loadMarkdown's computed path. Without this the lambda cannot
+    // read the doc; the page then throws and keeps its last good render, so
+    // the "Who has joined" list would only update on a deploy.
+    outputFileTracingIncludes: {
+      '/npd-mcp': ['../docs/npd-mcp/tool-goals.md'],
+    },
     outputFileTracingExcludes: {
       '*': [
         'public/api/v1/findings/**',
