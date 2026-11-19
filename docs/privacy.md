@@ -1,7 +1,7 @@
 ---
 title: Privacy policy
-version: 0.3.0
-last_updated: 2026-10-24
+version: 0.4.0
+last_updated: 2026-11-19
 ---
 
 # Privacy policy
@@ -11,7 +11,7 @@ AINPI is a research project. This privacy policy covers the public website at [a
 ## TL;DR
 
 - No analytics, no cookies, no tracking pixels, no fingerprinting.
-- The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report).
+- The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report, the NPD MCP working group sign-up, an NPI removal request).
 - Submitted emails are stored in Supabase Postgres (US region) and are used only for the stated purpose. No resale, no sharing with third parties.
 - Removal on request: email [gene@fhiriq.com](mailto:gene@fhiriq.com).
 - Providers can have their NPI's page and rows removed from ainpi.dev at [/privacy/remove](/privacy/remove). See [Removal requests](#removal-requests).
@@ -24,6 +24,8 @@ AINPI is a research project. This privacy policy covers the public website at [a
 
 **When you download the full report:** your email address, name (optional), organization (optional), stated use case (optional), and the submission timestamp. This form exists so we can tell who's using AINPI research. The information helps us prioritize and reach back out when major findings land.
 
+**When you join the NPD MCP working group:** your organization's name and type, your name, your email address, how you want to take part, the use case you describe (optional), whether you ticked the box to be listed, the submission timestamp, and the IP address and browser user agent the form was sent from. We keep the IP address and user agent only to spot and block abusive submissions. Only your organization's name and type are ever published, on the [/npd-mcp](/npd-mcp) page, and only if you ticked the box and we have checked the sign-up. We use the rest only to coordinate the group. Each sign-up also sends us an email notification with what you submitted.
+
 **When you ask for an NPI to be removed:** the NPI, the email address you give for the confirmation, how the request arrived (form, email or by hand), and when it was received, applied and confirmed. We keep this so the NPI stays removed from future releases. It is never published.
 
 **When you file a GitHub issue or open a pull request:** that information is subject to [GitHub's privacy policy](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement), not ours.
@@ -35,9 +37,12 @@ AINPI is a research project. This privacy policy covers the public website at [a
   replying with a removal request is enough to unsubscribe.
 - **Download report:** we record the capture so we can tell who is using the
   research. We may email you about a major update or a follow-up question.
+- **NPD MCP working group:** we contact you about the group's work, such as
+  drafts to review and testing sessions. Nothing else.
 
 We do not sell, trade, or share your email address with any third party outside
-Resend, which delivers the updates.
+Resend, which delivers the updates and our own notifications about form
+submissions.
 
 ## Where data is stored
 
@@ -58,7 +63,7 @@ Browser-level cookies you may see in DevTools (`__cf_bm` etc.) are set by the CD
 |---|---|---|
 | Vercel | Hosting + CDN | Request metadata (IP, user-agent, path) |
 | Supabase | Email + contact storage | Form submissions only, not browsing data |
-| Resend | Delivers subscriber updates and removal confirmations | Your email address and the message |
+| Resend | Delivers subscriber updates, removal confirmations, and notifications to us about form submissions | Your email address and the message; for a notification to us, what you submitted in the form |
 | Google BigQuery | Analytics warehouse for audit findings | No user data, only the public CMS NPD + NPPES datasets |
 | GitHub | Source hosting, issues, discussions | Your GitHub activity, per GitHub's privacy policy |
 

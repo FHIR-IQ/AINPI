@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Navbar from '@/components/Navbar';
-import { loadMarkdown } from '@/lib/load-markdown';
+import { TOOL_GOALS_DOC } from '@/lib/npd-mcp-doc';
 import { listPublicParticipants } from '@/lib/npd-mcp-participants';
 import { orgTypeLabel } from '@/data/npd-mcp';
 import SignupForm from './SignupForm';
@@ -13,12 +13,12 @@ import SignupForm from './SignupForm';
  * organizations that chose to be listed.
  *
  * Re-rendered at most every 10 minutes, so a new listing appears without a
- * deploy and the database is read at most once per window. The doc must be
- * readable in the lambda for that: next.config.js traces it in.
+ * deploy and the database is read at most once per window. The doc is bundled
+ * as text at build time (src/lib/npd-mcp-doc.ts), so a re-render reads no
+ * file.
  */
 export const revalidate = 600;
 
-const DOC_PATH = 'docs/npd-mcp/tool-goals.md';
 // The typography plugin colours prose with its own cool gray. Point every
 // prose colour at the site's warm tokens (ink, primary.600, the gray ramp in
 // tailwind.config.ts) so the table rules and inline code match the page.
@@ -37,13 +37,15 @@ const PROSE_TOKENS = [
   '[--tw-prose-bullets:theme(colors.gray.400)]',
 ].join(' ');
 const DESCRIPTION =
-  'An open working group to implement and test MCP tools over National Provider Directory data, draft standards, and validate use cases. Sign up without an account.';
+  'An independent, open-source AINPI working group to implement and test MCP tools over National Provider Directory data. Not affiliated with CMS. Sign up without an account.';
 
 export const metadata: Metadata = {
+  // The root layout's title template appends " | AINPI", so the page title
+  // carries the name once. The Open Graph title is not templated.
   title: 'NPD MCP working group',
   description: DESCRIPTION,
   openGraph: {
-    title: 'NPD MCP working group',
+    title: 'NPD MCP working group (AINPI)',
     description: DESCRIPTION,
     url: 'https://ainpi.dev/npd-mcp',
     type: 'website',
@@ -51,12 +53,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NpdMcpPage() {
-  const doc = loadMarkdown(DOC_PATH, 'NPD MCP working group');
-  if (doc.frontMatter.version === 'missing') {
-    // Throwing keeps the last good render when a revalidation cannot read the
-    // doc, rather than replacing the page with a "not found" stub.
-    throw new Error(`/npd-mcp: ${DOC_PATH} could not be read.`);
-  }
+  const doc = TOOL_GOALS_DOC;
   const participants = await listPublicParticipants();
 
   return (
@@ -95,7 +92,7 @@ export default async function NpdMcpPage() {
         <section id="join" className="mt-14 scroll-mt-20 border-t border-gray-200 pt-8">
           <h2 className="m-0 font-serif text-2xl text-ink">Join the working group</h2>
           <p className="measure mt-2 text-sm text-gray-600">
-            No account is needed. Only your organization&apos;s name and type are ever shown on this page, and only if you tick the box.
+            No account is needed. Only your organization&apos;s name and type are ever shown on this page, and only if you tick the box. A listing appears after a check that the sign-up is genuine.
           </p>
           <div className="mt-6">
             <SignupForm />
@@ -104,7 +101,9 @@ export default async function NpdMcpPage() {
 
         <section className="mt-14 border-t border-gray-200 pt-8">
           <h2 className="m-0 font-serif text-2xl text-ink">Who has joined</h2>
-          <p className="mt-2 text-sm text-gray-600">Organizations that asked to be listed.</p>
+          <p className="mt-2 text-sm text-gray-600">
+            Organizations that asked to be listed, shown after a check. A listing means the organization signed up. It is not an endorsement.
+          </p>
           {participants.length === 0 ? (
             <p className="mt-4 text-sm text-ink">Be the first to sign up.</p>
           ) : (

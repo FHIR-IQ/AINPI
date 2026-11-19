@@ -20,7 +20,7 @@ export const ORG_TYPES: readonly { code: OrgType; label: string }[] = [
 export const PARTICIPATION: readonly { code: Participation; label: string }[] = [
   { code: 'implement', label: 'Implement the tools' },
   { code: 'test', label: 'Test at the connectathon' },
-  { code: 'standards', label: 'Draft or review standards' },
+  { code: 'standards', label: 'Draft or review specifications' },
   { code: 'use_case', label: 'Bring a use case' },
 ];
 
