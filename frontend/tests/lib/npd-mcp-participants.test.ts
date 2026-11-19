@@ -10,12 +10,12 @@ beforeEach(() => {
 });
 
 describe('listPublicParticipants', () => {
-  it('asks only for opted-in rows and only for organization and type', async () => {
+  it('asks only for opted-in, approved rows and only for organization and type', async () => {
     m.findMany.mockResolvedValue([{ organization: 'Acme Health', orgType: 'payer' }]);
     const rows = await listPublicParticipants();
     expect(rows).toEqual([{ organization: 'Acme Health', orgType: 'payer' }]);
     expect(m.findMany).toHaveBeenCalledWith({
-      where: { listPublicly: true },
+      where: { listPublicly: true, approved: true },
       select: { organization: true, orgType: true },
       orderBy: { createdAt: 'asc' },
     });

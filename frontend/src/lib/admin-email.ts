@@ -223,6 +223,8 @@ export async function sendSurveyAlert(args: SurveyAlertArgs): Promise<void> {
 }
 
 export interface NpdMcpSignupAlertArgs {
+  /** Row id, for the approve statement. */
+  id: string;
   organization: string;
   contactName: string;
   email: string;
@@ -238,9 +240,15 @@ export interface NpdMcpSignupAlertArgs {
  * RESEND_API_KEY and never throws.
  */
 export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promise<void> {
-  const { organization, contactName, email, orgType, participation, useCase, listPublicly } = args;
-  const subject = `NPD MCP sign-up: ${organization}`;
+  const { id, organization, contactName, email, orgType, participation, useCase, listPublicly } = args;
+  // A newline in a subject header can break the message; collapse all runs.
+  const subject = `NPD MCP sign-up: ${organization.replace(/\s+/g, ' ').trim()}`;
   const takePart = participation.length > 0 ? participation.join(', ') : '(none selected)';
+  // Listing needs approval. Single quotes in the id are doubled so the
+  // statement stays one literal whatever the id holds.
+  const approveSql = listPublicly
+    ? `update npd_mcp_participants set approved = true where id = '${id.replace(/'/g, "''")}';`
+    : null;
 
   const text = [
     `New sign-up for the NPD MCP working group (${SITE_URL}/npd-mcp).`,
@@ -250,10 +258,13 @@ export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promis
     `Contact:      ${contactName}`,
     `Email:        ${email}`,
     `Take part:    ${takePart}`,
-    `List name publicly: ${listPublicly ? 'yes' : 'no'}`,
+    `List name publicly: ${listPublicly ? 'yes, after approval' : 'no'}`,
     ``,
     `--- Use case ---`,
     useCase || '(none)',
+    ...(approveSql
+      ? [``, `--- To list this organization on the page ---`, `Run in the Supabase SQL editor after checking the sign-up:`, approveSql]
+      : []),
   ].join('\n');
 
   const row = (label: string, value: string, mono = false) =>
@@ -270,13 +281,22 @@ export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promis
         ${row('Contact', contactName)}
         ${row('Email', email, true)}
         ${row('Take part', takePart, true)}
-        ${row('List name publicly', listPublicly ? 'yes' : 'no')}
+        ${row('List name publicly', listPublicly ? 'yes, after approval' : 'no')}
       </table>
       ${
         useCase
           ? `<div style="margin-bottom:14px;">
               <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">Use case</p>
               <blockquote style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:13px;white-space:pre-wrap;">${esc(useCase)}</blockquote>
+            </div>`
+          : ''
+      }
+      ${
+        approveSql
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">To list this organization on the page</p>
+              <p style="margin:0 0 6px 0;font-size:13px;">Run in the Supabase SQL editor after checking the sign-up:</p>
+              <pre style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:12px;white-space:pre-wrap;">${esc(approveSql)}</pre>
             </div>`
           : ''
       }

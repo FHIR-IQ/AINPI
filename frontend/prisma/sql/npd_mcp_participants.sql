@@ -5,8 +5,12 @@
 --
 -- Access model:
 --   * The app's own Prisma connection (role `postgres`, the table owner)
---     inserts sign-ups and reads the opted-in organization names for the
---     page. As owner it is not subject to RLS.
+--     inserts sign-ups and reads the opted-in, approved organization names
+--     for the page. As owner it is not subject to RLS.
+--   * `approved` starts false. A row is listed on the page only when both
+--     list_publicly and approved are true. The admin alert for a sign-up that
+--     asked to be listed carries the update statement that approves it, run
+--     by hand in the SQL editor after a check.
 --   * anon / authenticated / service_role (PostgREST): no privileges, and
 --     RLS has no policy for them, so the REST API returns nothing. Contact
 --     name, email, IP and user agent are never readable through it.
@@ -30,11 +34,16 @@ create table if not exists public.npd_mcp_participants (
   participation jsonb        not null,
   use_case      text,
   list_publicly boolean      not null default false,
+  approved      boolean      not null default false,
   ip_address    text,
   user_agent    text,
   created_at    timestamp(3) not null default current_timestamp,
   constraint npd_mcp_participants_pkey primary key (id)
 );
+
+-- Upgrades a table created before `approved` existed.
+alter table public.npd_mcp_participants
+  add column if not exists approved boolean not null default false;
 
 create index if not exists npd_mcp_participants_list_publicly_created_at_idx
   on public.npd_mcp_participants (list_publicly, created_at);

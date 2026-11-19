@@ -410,6 +410,9 @@ model NpdMcpParticipant {
   participation Json // string[] of PARTICIPATION codes (src/data/npd-mcp.ts)
   useCase       String?  @map("use_case") @db.Text
   listPublicly  Boolean  @default(false) @map("list_publicly")
+  // Set by hand (SQL in the admin alert) after a check; the page lists a row
+  // only when listPublicly and approved are both true.
+  approved      Boolean  @default(false)
   ipAddress     String?  @map("ip_address")
   userAgent     String?  @map("user_agent") @db.Text
   createdAt     DateTime @default(now()) @map("created_at")
