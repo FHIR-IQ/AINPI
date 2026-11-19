@@ -20,6 +20,8 @@ export default function SignupForm() {
   const [participation, setParticipation] = useState<Participation[]>([]);
   const [useCase, setUseCase] = useState('');
   const [listPublicly, setListPublicly] = useState(false);
+  // Honeypot: off screen and out of the tab order, so only a bot fills it.
+  const [website, setWebsite] = useState('');
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -41,7 +43,7 @@ export default function SignupForm() {
       const res = await fetch('/api/v1/npd-mcp/participate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ organization, contactName, email, orgType, participation, useCase, listPublicly }),
+        body: JSON.stringify({ organization, contactName, email, orgType, participation, useCase, listPublicly, website }),
       });
       const body = await res.json().catch(() => ({}));
       if (res.ok && body?.ok) {
@@ -118,6 +120,20 @@ export default function SignupForm() {
         </label>
       </div>
 
+      <div aria-hidden="true" className="absolute -left-[10000px] h-px w-px overflow-hidden">
+        <label>
+          Leave this field empty
+          <input
+            type="text"
+            name="website"
+            tabIndex={-1}
+            autoComplete="off"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </label>
+      </div>
+
       <fieldset>
         <legend className="mb-2 font-medium text-ink">
           How you want to take part <span className="font-normal text-gray-500">(optional)</span>
@@ -162,8 +178,9 @@ export default function SignupForm() {
             onChange={(e) => setListPublicly(e.target.checked)}
             className="mt-1"
           />
-          <span>List our organization&apos;s name on this page</span>
+          <span>List our organization&apos;s name and type on this page</span>
         </label>
+        <p className="mt-1 text-xs text-gray-600">The listing appears after a check that the sign-up is genuine.</p>
         <p className="mt-2 text-xs text-gray-600">
           We use your contact details only to coordinate this group. See our{' '}
           <Link href="/privacy" className="text-primary-600 underline underline-offset-2">

@@ -21,10 +21,10 @@ import { POST } from '@/app/api/v1/npd-mcp/participate/route';
 
 const VALID = { organization: 'Acme Health', contactName: 'Pat', email: 'pat@acme.org', orgType: 'payer' };
 
-function req(body: unknown, raw = false) {
+function req(body: unknown, raw = false, extraHeaders: Record<string, string> = {}) {
   return new NextRequest('http://localhost/api/v1/npd-mcp/participate', {
     method: 'POST',
-    headers: { 'content-type': 'application/json', 'user-agent': 'vitest' },
+    headers: { 'content-type': 'application/json', 'user-agent': 'vitest', ...extraHeaders },
     body: raw ? (body as string) : JSON.stringify(body),
   });
 }
@@ -54,7 +54,7 @@ describe('POST /api/v1/npd-mcp/participate', () => {
       userAgent: 'vitest',
     });
     expect(m.alert).toHaveBeenCalledTimes(1);
-    expect(m.alert.mock.calls[0][0]).toMatchObject({ organization: 'Acme Health', email: 'pat@acme.org' });
+    expect(m.alert.mock.calls[0][0]).toMatchObject({ id: 'row', organization: 'Acme Health', email: 'pat@acme.org' });
   });
 
   it('same body twice gives two rows and two 200s', async () => {
@@ -103,8 +103,36 @@ describe('POST /api/v1/npd-mcp/participate', () => {
   });
 
   it('counts junk against the limit before parsing', async () => {
-    await POST(req('{not json', true));
+    const res = await POST(req('{not json', true));
+    expect(res.status).toBe(400);
     expect(m.bump).toHaveBeenCalledTimes(2);
+  });
+
+  it('a body over 16 KB returns 413 and writes nothing', async () => {
+    const res = await POST(req(VALID, false, { 'content-length': '16385' }));
+    expect(res.status).toBe(413);
+    expect((await res.json()).ok).toBe(false);
+    expect(m.create).not.toHaveBeenCalled();
+  });
+
+  it('a filled honeypot gets the same 200 and stores nothing', async () => {
+    const res = await POST(req({ ...VALID, website: 'http://spam.example' }));
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+    expect(m.create).not.toHaveBeenCalled();
+    expect(m.alert).not.toHaveBeenCalled();
+  });
+
+  it('a filled honeypot gets 200 even when the rest of the body is invalid', async () => {
+    const res = await POST(req({ website: 'x' }));
+    expect(res.status).toBe(200);
+    expect(m.create).not.toHaveBeenCalled();
+  });
+
+  it('an empty honeypot is a normal sign-up', async () => {
+    const res = await POST(req({ ...VALID, website: '' }));
+    expect(res.status).toBe(200);
+    expect(m.create).toHaveBeenCalledTimes(1);
   });
 
   it('limiter unreachable', async () => {
@@ -116,7 +144,11 @@ describe('POST /api/v1/npd-mcp/participate', () => {
 
   it('prisma error returns 503 with the plain message', async () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    m.create.mockRejectedValue(new Error('relation "npd_mcp_participants" does not exist'));
+    // A database error message can echo the submitted values. Only the code
+    // may be logged.
+    m.create.mockRejectedValue(
+      Object.assign(new Error('Unique constraint failed for email pat@acme.org (Pat)'), { code: 'P2002' }),
+    );
     const res = await POST(req(VALID));
     expect(res.status).toBe(503);
     expect(await res.json()).toEqual({ ok: false, error: 'Sign-up is not open yet. Please try again soon.' });
@@ -125,6 +157,7 @@ describe('POST /api/v1/npd-mcp/participate', () => {
     const logged = spy.mock.calls.flat().join(' ');
     expect(logged).not.toContain('pat@acme.org');
     expect(logged).not.toContain('Pat');
+    expect(logged).toContain('P2002');
     spy.mockRestore();
   });
 

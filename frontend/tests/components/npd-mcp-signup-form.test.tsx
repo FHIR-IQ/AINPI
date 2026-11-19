@@ -29,7 +29,7 @@ describe('SignupForm', () => {
     for (const label of ['Organization name', 'Your name', 'Email', 'Organization type']) {
       expect(screen.getByLabelText(label)).toBeRequired();
     }
-    expect(screen.getByLabelText("List our organization's name on this page")).not.toBeChecked();
+    expect(screen.getByLabelText("List our organization's name and type on this page")).not.toBeChecked();
     expect(screen.getByRole('link', { name: 'privacy policy' }).getAttribute('href')).toBe('/privacy');
   });
 
@@ -52,6 +52,7 @@ describe('SignupForm', () => {
       participation: ['test'],
       useCase: '',
       listPublicly: false,
+      website: '',
     });
     expect(screen.getByRole('button', { name: /Sign up|Sending/ })).toBeDisabled();
   });
@@ -60,7 +61,7 @@ describe('SignupForm', () => {
     fetchMock.mockReturnValue(okResponse({ ok: true }));
     render(<SignupForm />);
     fill();
-    fireEvent.click(screen.getByLabelText("List our organization's name on this page"));
+    fireEvent.click(screen.getByLabelText("List our organization's name and type on this page"));
     fireEvent.click(screen.getByRole('button', { name: 'Sign up' }));
     await screen.findByText("Thanks. You're on the list.");
     expect(JSON.parse(fetchMock.mock.calls[0][1].body).listPublicly).toBe(true);
