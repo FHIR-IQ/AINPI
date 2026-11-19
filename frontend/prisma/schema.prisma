@@ -395,6 +395,29 @@ model HealthcareServiceSurveyResponse {
   @@map("hcs_survey_responses")
 }
 
+// One row per sign-up to the NPD MCP working group (/npd-mcp). Created in
+// production by prisma/sql/npd_mcp_participants.sql (run by hand in the
+// Supabase SQL editor), which also enables RLS; keep the two in sync.
+// Only organization + orgType of rows with listPublicly = true are ever shown
+// publicly; contact name, email, IP, use case and participation never are.
+// Duplicates are kept on purpose: the admin sees every submission.
+model NpdMcpParticipant {
+  id            String   @id @default(uuid())
+  organization  String
+  contactName   String   @map("contact_name")
+  email         String
+  orgType       String   @map("org_type")
+  participation Json // string[] of PARTICIPATION codes (src/data/npd-mcp.ts)
+  useCase       String?  @map("use_case") @db.Text
+  listPublicly  Boolean  @default(false) @map("list_publicly")
+  ipAddress     String?  @map("ip_address")
+  userAgent     String?  @map("user_agent") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([listPublicly, createdAt])
+  @@map("npd_mcp_participants")
+}
+
 // Email capture gating the downloadable white paper at /download.
 // Captures role/org context so we understand who's using the research.
 // One row per Databricks Marketplace install of the release archive, keyed
