@@ -19,6 +19,23 @@ import SignupForm from './SignupForm';
 export const revalidate = 600;
 
 const DOC_PATH = 'docs/npd-mcp/tool-goals.md';
+// The typography plugin colours prose with its own cool gray. Point every
+// prose colour at the site's warm tokens (ink, primary.600, the gray ramp in
+// tailwind.config.ts) so the table rules and inline code match the page.
+const PROSE_TOKENS = [
+  '[--tw-prose-body:theme(colors.ink)]',
+  '[--tw-prose-headings:theme(colors.ink)]',
+  '[--tw-prose-bold:theme(colors.ink)]',
+  '[--tw-prose-code:theme(colors.ink)]',
+  '[--tw-prose-links:theme(colors.primary.600)]',
+  '[--tw-prose-th-borders:theme(colors.gray.300)]',
+  '[--tw-prose-td-borders:theme(colors.gray.200)]',
+  '[--tw-prose-hr:theme(colors.gray.200)]',
+  '[--tw-prose-quotes:theme(colors.gray.700)]',
+  '[--tw-prose-quote-borders:theme(colors.gray.200)]',
+  '[--tw-prose-counters:theme(colors.gray.500)]',
+  '[--tw-prose-bullets:theme(colors.gray.400)]',
+].join(' ');
 const DESCRIPTION =
   'An open working group to implement and test MCP tools over National Provider Directory data, draft standards, and validate use cases. Sign up without an account.';
 
@@ -60,7 +77,7 @@ export default async function NpdMcpPage() {
           </a>
         </p>
 
-        <article className="measure prose mt-8 [overflow-wrap:anywhere] prose-headings:font-serif prose-headings:font-normal prose-headings:text-ink prose-p:text-ink prose-a:text-primary-600 prose-strong:text-ink prose-code:font-mono prose-code:text-sm prose-table:text-sm">
+        <article className={`measure prose mt-8 [overflow-wrap:anywhere] prose-headings:font-serif prose-headings:font-normal prose-code:font-mono prose-code:text-sm prose-table:text-sm ${PROSE_TOKENS}`}>
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{

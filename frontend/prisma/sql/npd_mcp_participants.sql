@@ -11,6 +11,11 @@
 --     RLS has no policy for them, so the REST API returns nothing. Contact
 --     name, email, IP and user agent are never readable through it.
 --
+-- Use this file, not `prisma db push`: db push would create the table with
+-- Supabase's default API grants and no RLS, leaving contact details readable
+-- through the REST API. If db push ever created the table first, run this
+-- file anyway; the RLS and revoke statements below repair it.
+--
 -- Safe to re-run. Until it has run, the page renders with an empty
 -- "Who has joined" list and the sign-up route answers 503.
 
