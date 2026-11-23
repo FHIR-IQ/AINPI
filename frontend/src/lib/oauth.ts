@@ -31,6 +31,13 @@ export const ACCESS_PREFIX = 'ainpi_at_';
 export const REFRESH_PREFIX = 'ainpi_rt_';
 export const CODE_PREFIX = 'ainpi_ac_';
 
+/**
+ * SHA-256 for lookup hashes. Not a password hash, and deliberately so: every
+ * input is a 256-bit random secret (AINPI API keys, OAuth codes and tokens),
+ * which no slow hash would make stronger, and api_keys.key_hash already
+ * stores SHA-256 (scripts/api-key.ts, identify()), so sign-in must match it.
+ * CodeQL js/insufficient-password-hash reads the pasted key as a password.
+ */
 export function sha256Hex(s: string): string {
   return createHash('sha256').update(s).digest('hex');
 }
