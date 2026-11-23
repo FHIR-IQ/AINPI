@@ -36,4 +36,8 @@ Out of scope:
 
 ## Data handling
 
-AINPI processes only public CMS NPD bulk data. The repository and the deployed app do not store PHI or any non-public personal data. If you discover that a commit or deployment has inadvertently leaked non-public data, treat it as a vulnerability and report it via this channel.
+AINPI's data is public: the CMS NPD bulk files and the other public federal and vendor files listed on /data-sources. No AINPI page, API route or MCP tool asks for or returns patient data or PHI. Roster verification takes NPIs, which are public provider identifiers, and its audit log keeps counts only, never the NPIs submitted.
+
+The app stores contact details only where a person gives them to us: newsletter and report-download email addresses, trial and working-group sign-ups (name, email, organization), and NPI removal requests (the requester's email). These are never published. API keys and OAuth tokens are stored as SHA-256 hashes.
+
+If you discover that a commit or deployment has inadvertently leaked non-public data, treat it as a vulnerability and report it via this channel.

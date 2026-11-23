@@ -138,6 +138,56 @@ async function loadCohort(): Promise<Map<string, Record<string, string>>> {
 
 // lookup_organization's index is shared with roster verification: src/lib/org-index.ts.
 
+type Annotations = {
+  title: string;
+  readOnlyHint: boolean;
+  destructiveHint?: boolean;
+  idempotentHint?: boolean;
+  openWorldHint: boolean;
+};
+
+/**
+ * Tool annotations, required by connector directories and used by clients to
+ * decide whether to ask before a call. Every tool reads, except
+ * report_interaction, which stores one sandbox row keyed on reportId (a repeat
+ * returns the same receipt, so it is idempotent and never destructive).
+ * openWorldHint is true only where a call reaches a service outside AINPI:
+ * verify_roster queries the live NPPES registry. A tool registered without an
+ * entry here fails at startup, so a new tool cannot ship unannotated.
+ */
+export const TOOL_ANNOTATIONS: Record<string, Annotations> = {
+  list_findings: { title: 'List AINPI findings', readOnlyHint: true, openWorldHint: false },
+  get_finding: { title: 'Read an AINPI finding', readOnlyHint: true, openWorldHint: false },
+  get_state_audit: { title: 'Read a state audit slice', readOnlyHint: true, openWorldHint: false },
+  check_npi_cohort: { title: 'Check the high-risk cohort for an NPI', readOnlyHint: true, openWorldHint: false },
+  lookup_npi: { title: 'Look up a provider by NPI', readOnlyHint: true, openWorldHint: false },
+  lookup_organization: { title: 'Find FHIR endpoints for an organization', readOnlyHint: true, openWorldHint: false },
+  search_organizations: { title: 'Search organizations by name', readOnlyHint: true, openWorldHint: false },
+  verify_roster: { title: 'Verify a roster of NPIs against federal sources', readOnlyHint: true, openWorldHint: true },
+  report_interaction: {
+    title: 'Report how an exchange went (sandbox)',
+    readOnlyHint: false,
+    destructiveHint: false,
+    idempotentHint: true,
+    openWorldHint: false,
+  },
+  get_interaction_report: { title: 'Read your interaction report receipt', readOnlyHint: true, openWorldHint: false },
+};
+
+type Annotatable = { update(u: { annotations?: Annotations }): void };
+
+function applyToolAnnotations(server: unknown): void {
+  // McpServer keeps registered tools in a private map; mcp-handler 1.1 passes
+  // the server through unchanged. tests/api/mcp-tool-annotations.test.ts
+  // fails if this stops reaching the tools/list response.
+  const registered = (server as { _registeredTools?: Record<string, Annotatable> })._registeredTools ?? {};
+  for (const [name, tool] of Object.entries(registered)) {
+    const a = TOOL_ANNOTATIONS[name];
+    if (!a) throw new Error(`MCP tool "${name}" has no entry in TOOL_ANNOTATIONS`);
+    tool.update({ annotations: a });
+  }
+}
+
 /** The MCP handler, mounted at `${basePath}/mcp`. */
 export function buildMcpHandler(basePath: string) {
   return createMcpHandler(
@@ -415,6 +465,8 @@ export function buildMcpHandler(basePath: string) {
         return storeResultToTool(await getReport(r.reporter!, reportId, Date.now(), prisma));
       },
     );
+
+    applyToolAnnotations(server);
   },
   {
     serverInfo: { name: 'ainpi', version: '1.0.0' },
