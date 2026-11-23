@@ -590,7 +590,7 @@ export default function DeveloperPage() {
                     <Link href="/trial" className="text-primary-600 hover:underline">
                       start a trial
                     </Link>
-                    .
+                    . Paused with anonymous traffic when the daily ceiling trips.
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200">

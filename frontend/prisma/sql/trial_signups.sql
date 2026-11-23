@@ -24,11 +24,15 @@ create table if not exists public.trial_signups (
   reminder_sent_at timestamp(3),
   ended_sent_at    timestamp(3),
   converted_at     timestamp(3),
+  revoked_at       timestamp(3),
   ip_address       text,
   user_agent       text,
   created_at       timestamp(3) not null default current_timestamp,
   constraint trial_signups_pkey primary key (id)
 );
+
+-- For a table created by an earlier draft of this file.
+alter table public.trial_signups add column if not exists revoked_at timestamp(3);
 
 create unique index if not exists trial_signups_email_norm_key on public.trial_signups (email_norm);
 create index if not exists trial_signups_expires_at_idx on public.trial_signups (expires_at);

@@ -63,13 +63,22 @@ export async function POST(req: NextRequest) {
   const parsed = parseTrial(body);
   if (!parsed.ok) return fail(400, parsed.error);
 
-  // Counted only for valid submissions, so malformed posts cannot pause trials.
-  const today = await bump(`trial:global:d:${day}`, 1, 172_800_000);
-  if (today !== null && today > DAILY_CEILING) {
-    const first = await bump(`trial:ceiling-alert:d:${day}`, 1, 172_800_000);
-    if (first === 1) void sendTrialCeilingAlert(DAILY_CEILING).catch(() => {});
-    return fail(503, 'New trials are paused for today. Please try again tomorrow, or email gene@fhiriq.com.');
-  }
+  const gates = {
+    // One automated email per address per UTC day, whatever the kind.
+    mailOnce: async (emailNorm: string) => {
+      const n = await bump(`trial:mailto:${emailNorm}:d:${day}`, 1, 172_800_000);
+      return n === null || n <= 1;
+    },
+    // Charged only for a brand-new address (startTrial calls it after the
+    // existing-address check), so repeats cannot pause real sign-ups.
+    reserveNew: async () => {
+      const today = await bump(`trial:global:d:${day}`, 1, 172_800_000);
+      if (today === null || today <= DAILY_CEILING) return true;
+      const first = await bump(`trial:ceiling-alert:d:${day}`, 1, 172_800_000);
+      if (first === 1) void sendTrialCeilingAlert(DAILY_CEILING).catch(() => {});
+      return false;
+    },
+  };
 
   try {
     const outcome = await startTrial(
@@ -78,7 +87,11 @@ export async function POST(req: NextRequest) {
       now,
       prisma as unknown as TrialDb,
       sendTrialEmail,
+      gates,
     );
+    if (outcome.kind === 'paused') {
+      return fail(503, 'New trials are paused for today. Please try again tomorrow, or email gene@fhiriq.com.');
+    }
     if (outcome.kind === 'send-failed') {
       return fail(503, 'We could not send the email with your key. Please check the address and try again.');
     }

@@ -69,7 +69,7 @@ async function main() {
     const expiresAt = new Date(base + days * 86_400_000);
     if (!confirm) return console.log(`Dry run. --confirm moves the end to ${expiresAt.toISOString().slice(0, 10)}.`);
     await prisma.apiKey.update({ where: { id: t.apiKeyId }, data: { expiresAt, active: true, revokedAt: null } });
-    await prisma.trialSignup.update({ where: { id: t.id }, data: { expiresAt, reminderSentAt: null, endedSentAt: null } });
+    await prisma.trialSignup.update({ where: { id: t.id }, data: { expiresAt, reminderSentAt: null, endedSentAt: null, revokedAt: null } });
     return console.log(`Extended to ${expiresAt.toISOString().slice(0, 10)}. The key works again if it had expired.`);
   }
   if (cmd === 'convert') {
@@ -91,7 +91,8 @@ async function main() {
     const t = await load(id);
     if (!confirm) return console.log('Dry run. --confirm stops the key now.');
     await prisma.apiKey.update({ where: { id: t.apiKeyId }, data: { active: false, revokedAt: new Date() } });
-    return console.log('Revoked.');
+    await prisma.trialSignup.update({ where: { id: t.id }, data: { revokedAt: new Date() } });
+    return console.log('Revoked. No more trial emails go to this address.');
   }
   console.error('Usage: list | extend <id> --days N | convert <id> [--tier partner] | revoke <id>  (add --confirm)');
   process.exit(2);

@@ -437,6 +437,8 @@ model TrialSignup {
   reminderSentAt DateTime? @map("reminder_sent_at")
   endedSentAt    DateTime? @map("ended_sent_at")
   convertedAt    DateTime? @map("converted_at")
+  /// Set by scripts/trial.ts revoke; the reminder cron skips revoked trials.
+  revokedAt      DateTime? @map("revoked_at")
   ipAddress      String?   @map("ip_address")
   userAgent      String?   @map("user_agent") @db.Text
   createdAt      DateTime  @default(now()) @map("created_at")

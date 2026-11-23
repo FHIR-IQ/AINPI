@@ -76,8 +76,8 @@ export default function TrialPage() {
         <section className="mt-12 border-t border-gray-200 pt-8">
           <h2 className="m-0 font-serif text-2xl text-ink">After the trial</h2>
           <p className="measure mt-2 text-sm text-gray-600">
-            A plan keeps the higher limits, keeps your key working when anonymous traffic is throttled, and includes direct
-            support. Pricing depends on volume:{' '}
+            A plan has higher limits than the trial, keeps your key working when the daily spend ceiling pauses anonymous and
+            trial traffic, and includes direct support. Pricing depends on volume:{' '}
             <a href="mailto:gene@fhiriq.com?subject=AINPI%20API%20plan" className="text-primary-600 underline underline-offset-2">
               email us
             </a>{' '}
@@ -89,6 +89,10 @@ export default function TrialPage() {
           <h2 className="m-0 font-serif text-2xl text-ink">Trial terms</h2>
           <ul className="measure mt-3 list-disc space-y-1 pl-5 text-sm text-gray-700">
             <li>The trial lasts {TRIAL_DAYS} days from sign-up. After that the key returns 401 unless you move to a plan.</li>
+            <li>
+              If total daily use of the site passes its spend ceiling, trial keys are paused along with anonymous traffic
+              until the next UTC day. Plan keys keep working.
+            </li>
             <li>One trial per email address.</li>
             <li>Keep the key private. All use of it counts against your quota.</li>
             <li>

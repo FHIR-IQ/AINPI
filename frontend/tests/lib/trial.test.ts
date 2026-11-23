@@ -20,6 +20,7 @@ const INPUT = {
 };
 const NOW = new Date('2026-11-22T12:00:00Z');
 const META = { ip: '203.0.113.9', userAgent: 'test' };
+const OPEN = { mailOnce: async () => true, reserveNew: async () => true };
 
 function fakeDb(opts: { existing?: boolean; createError?: unknown } = {}) {
   const keys: Record<string, unknown>[] = [];
@@ -84,13 +85,18 @@ describe('normalizeEmail', () => {
   it('lowercases and trims, so case cannot buy a second trial', () => {
     expect(normalizeEmail('  Pat@Example.COM ')).toBe('pat@example.com');
   });
+  it('drops +tags everywhere and Gmail dots, so aliases cannot buy more trials', () => {
+    expect(normalizeEmail('pat+t1@example.com')).toBe('pat@example.com');
+    expect(normalizeEmail('P.a.t+x@googlemail.com')).toBe('pat@gmail.com');
+    expect(normalizeEmail('p.at@example.com')).toBe('p.at@example.com');
+  });
 });
 
 describe('startTrial', () => {
   it('issues a trial-tier key that expires in 14 days and emails it, never returning it', async () => {
     const f = fakeDb();
     const sent: Email[] = [];
-    const out = await startTrial(parsed(), META, NOW, f.db, async (e) => (sent.push(e), true));
+    const out = await startTrial(parsed(), META, NOW, f.db, async (e) => (sent.push(e), true), OPEN);
     expect(out.kind).toBe('issued');
     expect(JSON.stringify(out)).not.toContain('ainpi_live_');
     const key = f.keys[0];
@@ -110,7 +116,7 @@ describe('startTrial', () => {
   it('for an address that already had a trial: no new key, an "already" email, same outcome to the caller', async () => {
     const f = fakeDb({ existing: true });
     const sent: Email[] = [];
-    const out = await startTrial(parsed(), META, NOW, f.db, async (e) => (sent.push(e), true));
+    const out = await startTrial(parsed(), META, NOW, f.db, async (e) => (sent.push(e), true), OPEN);
     expect(out.kind).toBe('existing');
     expect(f.keys).toHaveLength(0);
     expect(sent[0].text).not.toContain('ainpi_live_');
@@ -120,7 +126,7 @@ describe('startTrial', () => {
   it('revokes the key when a concurrent sign-up for the same address wins', async () => {
     const f = fakeDb({ createError: Object.assign(new Error('dup'), { code: 'P2002' }) });
     const send = vi.fn(async () => true);
-    const out = await startTrial(parsed(), META, NOW, f.db, send);
+    const out = await startTrial(parsed(), META, NOW, f.db, send, OPEN);
     expect(out.kind).toBe('existing');
     expect(f.keyUpdates[0]).toMatchObject({ active: false });
     expect(send).not.toHaveBeenCalled();
@@ -128,7 +134,7 @@ describe('startTrial', () => {
 
   it('rolls back key and row when the email cannot be sent, so nobody-held keys never exist', async () => {
     const f = fakeDb();
-    const out = await startTrial(parsed(), META, NOW, f.db, async () => false);
+    const out = await startTrial(parsed(), META, NOW, f.db, async () => false, OPEN);
     expect(out.kind).toBe('send-failed');
     expect(f.keyUpdates[0]).toMatchObject({ active: false });
     expect(f.deleted).toHaveLength(1);
@@ -138,14 +144,14 @@ describe('startTrial', () => {
     const f = fakeDb();
     const out = await startTrial(parsed(), META, NOW, f.db, async () => {
       throw new Error('network');
-    });
+    }, OPEN);
     expect(out.kind).toBe('send-failed');
     expect(f.deleted).toHaveLength(1);
   });
 
   it('propagates other database errors after revoking the key', async () => {
     const f = fakeDb({ createError: Object.assign(new Error('no table'), { code: 'P2021' }) });
-    await expect(startTrial(parsed(), META, NOW, f.db, async () => true)).rejects.toThrow();
+    await expect(startTrial(parsed(), META, NOW, f.db, async () => true, OPEN)).rejects.toThrow();
     expect(f.keyUpdates[0]).toMatchObject({ active: false });
   });
 });
@@ -158,5 +164,37 @@ describe('trial tier economics', () => {
   it('is never worse than a free key, so the trial is worth starting', () => {
     expect(TIERS.trial.perDay).toBeGreaterThanOrEqual(TIERS.free.perDay);
     expect(TIERS.trial.perMinute).toBeGreaterThanOrEqual(TIERS.free.perMinute);
+  });
+});
+
+describe('review fixes', () => {
+  it('refuses link-like names and organizations, so the key email cannot carry a phishing link', () => {
+    expect(parseTrial({ ...INPUT, organization: 'Click https://evil.example' }).ok).toBe(false);
+    expect(parseTrial({ ...INPUT, contactName: 'see www.evil.example' }).ok).toBe(false);
+    expect(parseTrial({ ...INPUT, organization: 'Acme.com' }).ok).toBe(true);
+  });
+  it('does not charge the new-trial ceiling for an existing address, and mails it at most once a day', async () => {
+    const f = fakeDb({ existing: true });
+    const reserveNew = vi.fn(async () => true);
+    const send = vi.fn(async () => true);
+    await startTrial(parsed(), META, NOW, f.db, send, { mailOnce: async () => false, reserveNew });
+    expect(reserveNew).not.toHaveBeenCalled();
+    expect(send).not.toHaveBeenCalled();
+  });
+  it('issues nothing when the daily ceiling is reached', async () => {
+    const f = fakeDb();
+    const out = await startTrial(parsed(), META, NOW, f.db, async () => true, {
+      mailOnce: async () => true,
+      reserveNew: async () => false,
+    });
+    expect(out.kind).toBe('paused');
+    expect(f.keys).toHaveLength(0);
+  });
+});
+
+describe('trial pool', () => {
+  it('keeps every trial key together well under the global breaker', async () => {
+    const { TRIAL_POOL_UNITS, DAILY_BREAKER_UNITS } = await import('@/lib/rate-limit');
+    expect(TRIAL_POOL_UNITS).toBeLessThanOrEqual(DAILY_BREAKER_UNITS / 4);
   });
 });

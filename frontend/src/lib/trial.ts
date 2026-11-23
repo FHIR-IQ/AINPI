@@ -45,9 +45,26 @@ function text(v: unknown): string {
   return typeof v === 'string' ? v.trim() : '';
 }
 
+/**
+ * The identity used for one-trial-per-address: lowercased, `+tag` removed,
+ * and for Gmail the dots too (Gmail ignores them), with googlemail.com folded
+ * into gmail.com. Catch-all domains are bounded by the per-IP limits, the
+ * global ceiling and the shared trial pool instead.
+ */
 export function normalizeEmail(email: string): string {
-  return email.trim().toLowerCase();
+  const e = email.trim().toLowerCase();
+  const at = e.lastIndexOf('@');
+  if (at < 1) return e;
+  let local = e.slice(0, at).split('+')[0];
+  let domain = e.slice(at + 1);
+  if (domain === 'googlemail.com') domain = 'gmail.com';
+  if (domain === 'gmail.com') local = local.replace(/\./g, '');
+  return `${local}@${domain}`;
 }
+
+// The key email repeats the name and organization the form was given, so a
+// value that looks like a link could turn our email into someone's phishing.
+const LINKISH = /:\/\/|www\.|<|>/i;
 
 export function parseTrial(body: unknown): ParseResult {
   if (!body || typeof body !== 'object' || Array.isArray(body)) {
@@ -58,6 +75,9 @@ export function parseTrial(body: unknown): ParseResult {
   if (!organization) return { ok: false, error: "Please enter your organization's name." };
   const contactName = text(b.contactName).slice(0, MAX_CONTACT_NAME);
   if (!contactName) return { ok: false, error: 'Please enter your name.' };
+  if (LINKISH.test(organization) || LINKISH.test(contactName)) {
+    return { ok: false, error: 'Please enter the organization and your name without links.' };
+  }
   const email = text(b.email);
   if (!email) return { ok: false, error: 'Please enter your work email address.' };
   if (email.length > MAX_EMAIL || !EMAIL_RE.test(email)) {
@@ -114,7 +134,8 @@ export function keyEmail(t: TrialInput, key: string, expiresAt: Date): Email {
       `Docs and limits: ${SITE}/developer`,
       ``,
       `The published data under ${SITE}/api/v1/ is free and needs no key, during the trial and after.`,
-      `AINPI is research on public CMS data: verify any number against the primary source before`,
+      `AINPI is research on public CMS, federal and payer-directory data: verify any number against`,
+      `the primary source before`,
       `acting on it.`,
       ``,
       `Reply to this email to talk about a plan, or with any question.`,
@@ -139,15 +160,16 @@ export function alreadyEmail(contactName: string, to: string): Email {
 export function reminderEmail(contactName: string, organization: string, to: string, expiresAt: Date): Email {
   return {
     to,
-    subject: 'Your AINPI API trial ends in 3 days',
+    subject: `Your AINPI API trial ends on ${day(expiresAt)}`,
     text: [
       `Hello ${contactName},`,
       ``,
       `The API trial key for ${organization} stops working on ${day(expiresAt)} (UTC).`,
       ``,
-      `To keep the higher limits, reply to this email and we will set up a plan. A plan adds`,
-      `higher limits, service that continues when anonymous traffic is throttled, and direct`,
-      `support. If you need a few more days to finish evaluating, reply and say so.`,
+      `To keep the key working, reply to this email and we will set up a plan. A plan has`,
+      `higher limits than the trial, keeps working when the daily spend ceiling pauses anonymous`,
+      `and trial traffic, and includes direct support. If you need a few more days to finish`,
+      `evaluating, reply and say so.`,
       ``,
       `The published data under ${SITE}/api/v1/ stays free with or without a key.`,
     ].join('\n'),
@@ -187,9 +209,22 @@ export interface TrialDb {
 
 export type Send = (e: Email) => Promise<boolean>;
 
+/**
+ * Rate gates owned by the route (they use the shared counter). `mailOnce`
+ * returns false when this address was already emailed today. `reserveNew`
+ * returns false when today's ceiling of new trials is reached; it is charged
+ * only for an address that has never had a trial, so repeat requests for
+ * existing addresses cannot use up the ceiling.
+ */
+export interface Gates {
+  mailOnce(emailNorm: string): Promise<boolean>;
+  reserveNew(): Promise<boolean>;
+}
+
 export type StartOutcome =
   | { kind: 'issued'; signupId: string; expiresAt: Date }
   | { kind: 'existing' }
+  | { kind: 'paused' }
   | { kind: 'send-failed' };
 
 function isUniqueViolation(e: unknown): boolean {
@@ -206,13 +241,19 @@ export async function startTrial(
   now: Date,
   db: TrialDb,
   send: Send,
+  gates: Gates,
 ): Promise<StartOutcome> {
   const emailNorm = normalizeEmail(t.email);
   const existing = await db.trialSignup.findUnique({ where: { emailNorm } });
   if (existing) {
-    await send(alreadyEmail(existing.contactName, t.email)).catch(() => false);
+    if (await gates.mailOnce(emailNorm)) {
+      await send(alreadyEmail(existing.contactName, t.email)).catch(() => false);
+    }
     return { kind: 'existing' };
   }
+  if (!(await gates.reserveNew())) return { kind: 'paused' };
+  // Count the key email against the address's one email a day.
+  await gates.mailOnce(emailNorm);
 
   const signupId = randomUUID();
   const expiresAt = new Date(now.getTime() + TRIAL_DAYS * 86_400_000);

@@ -98,7 +98,7 @@ export default function TrialForm() {
         </span>
       </label>
       <p className="text-xs text-gray-600">
-        We email you the key, one reminder before the trial ends, and one note when it ends. See our{' '}
+        We email you the key, one reminder before the trial ends, and one note when it ends. A second request from the same address gets one reply saying it already has a trial. See our{' '}
         <Link href="/privacy" className="text-primary-600 underline underline-offset-2">privacy policy</Link>.
       </p>
 

@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const due = await prisma.trialSignup.findMany({
-      where: { convertedAt: null, reminderSentAt: null, expiresAt: { gt: now, lte: soon } },
+      where: { convertedAt: null, revokedAt: null, reminderSentAt: null, expiresAt: { gt: now, lte: soon } },
       orderBy: { expiresAt: 'asc' },
       take: MAX_SENDS,
     });
@@ -49,12 +49,13 @@ export async function GET(req: NextRequest) {
       if (await sendTrialEmail(reminderEmail(t.contactName, t.organization, t.email, t.expiresAt))) reminded++;
       else {
         failed++;
-        await prisma.trialSignup.update({ where: { id: t.id }, data: { reminderSentAt: null } });
+        // A failed release must not abort the run; worst case this email is skipped.
+        await prisma.trialSignup.update({ where: { id: t.id }, data: { reminderSentAt: null } }).catch(() => {});
       }
     }
 
     const over = await prisma.trialSignup.findMany({
-      where: { convertedAt: null, endedSentAt: null, expiresAt: { lte: now } },
+      where: { convertedAt: null, revokedAt: null, endedSentAt: null, expiresAt: { lte: now } },
       orderBy: { expiresAt: 'asc' },
       take: Math.max(0, MAX_SENDS - due.length),
     });
@@ -67,7 +68,7 @@ export async function GET(req: NextRequest) {
       if (await sendTrialEmail(endedEmail(t.contactName, t.organization, t.email))) ended++;
       else {
         failed++;
-        await prisma.trialSignup.update({ where: { id: t.id }, data: { endedSentAt: null } });
+        await prisma.trialSignup.update({ where: { id: t.id }, data: { endedSentAt: null } }).catch(() => {});
       }
     }
   } catch (err) {
