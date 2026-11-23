@@ -48,6 +48,8 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
+import { ACCESS_PREFIX } from '@/lib/oauth';
+import { keyIdForAccessToken, type OAuthDb } from '@/lib/oauth-store';
 
 // ---------------------------------------------------------------------------
 // Cost model
@@ -84,6 +86,10 @@ export const ROUTE_COST: Record<string, number> = {
   // own limiter (src/lib/removal-limit.ts); this entry exists so the shape is
   // priced if anything ever passes it here, and it is in NON_WAREHOUSE_SHAPES.
   'privacy/remove': 100,
+  // Roster verification: one capped query per batch (dry-run upper bound
+  // 28.8 MB, 2026-11-22) plus live NPPES calls. Charged as units: base + per
+  // NPI by the caller (src/lib/roster.ts rosterUnits), so this is the floor.
+  'roster/verify': 5,
   default: 25,
 };
 
@@ -201,6 +207,9 @@ export function clientIp(req: NextRequest): string {
   return req.headers.get('x-real-ip') ?? 'unknown';
 }
 
+/** Paths where an OAuth access token stands in for its API key. */
+export const TOKEN_PATHS = ['/api/mcp', '/api/account/mcp', '/api/npd/search'];
+
 export async function identify(req: NextRequest): Promise<Caller> {
   const header =
     req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ??
@@ -210,7 +219,21 @@ export async function identify(req: NextRequest): Promise<Caller> {
   if (header) {
     try {
       const keyHash = await sha256Hex(header);
-      const row = await prisma.apiKey.findUnique({ where: { keyHash } });
+      // An OAuth access token (MCP sign-in) stands for the API key it was
+      // issued against; the key's own state is checked below either way.
+      // Audience: a token is accepted only where MCP traffic arrives (the two
+      // MCP endpoints, and the search route their tools call), never on the
+      // REST API, so a token leaked from a connector is not the key itself.
+      const tokenAllowed = TOKEN_PATHS.some((p) => req.nextUrl.pathname.startsWith(p));
+      const tokenKeyId =
+        header.startsWith(ACCESS_PREFIX) && tokenAllowed
+          ? await keyIdForAccessToken(header, prisma as unknown as OAuthDb, Date.now())
+          : null;
+      const row = header.startsWith(ACCESS_PREFIX)
+        ? tokenKeyId
+          ? await prisma.apiKey.findUnique({ where: { id: tokenKeyId } })
+          : null
+        : await prisma.apiKey.findUnique({ where: { keyHash } });
       // An expired key (trials) is refused exactly like a revoked one.
       const live = row && row.active && !row.revokedAt && (!row.expiresAt || row.expiresAt.getTime() > Date.now());
       if (row && live) {
@@ -237,7 +260,15 @@ export async function identify(req: NextRequest): Promise<Caller> {
         dailyUnitCap: 0,
       };
     } catch {
-      // Database unreachable. Fall through to anonymous rather than 500.
+      // Database unreachable. Serve as anonymous rather than 500, but mark it,
+      // so a sign-in-only surface can answer 503 instead of "invalid token"
+      // (which would make an MCP client discard a good token).
+      return {
+        subject: `dberror:${clientIp(req)}`,
+        tier: TIERS.anonymous,
+        keyId: null,
+        dailyUnitCap: TIERS.anonymous.perDay,
+      };
     }
   }
   return {
@@ -353,8 +384,18 @@ export async function enforceRateLimit(
   req: NextRequest,
   opts: LimitOptions = {},
 ): Promise<LimitResult> {
+  return enforceForCaller(await identify(req), opts);
+}
+
+/**
+ * The same checks for a caller already identified, e.g. an MCP tool charging
+ * its own cost on top of the per-request charge the MCP route took.
+ */
+export async function enforceForCaller(
+  caller: Caller,
+  opts: LimitOptions = {},
+): Promise<LimitResult> {
   const units = opts.units ?? ROUTE_COST[opts.shape ?? 'default'] ?? ROUTE_COST.default;
-  const caller = await identify(req);
 
   // Free surfaces skip every layer: charging quota for a CDN read would make
   // the MCP server's static tools feel metered when they cost nothing.

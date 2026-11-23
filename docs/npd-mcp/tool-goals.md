@@ -36,7 +36,7 @@ The step numbers refer to the numbered flow diagram (`docs/NPD_Query_Flow.png`) 
 | Goal | NPD flow step | Status | Today |
 | --- | --- | --- | --- |
 | Discover: find an organization or practitioner and its endpoints | Steps 1 to 2 | Available | `search_organizations` (by name, optionally within a state), `lookup_organization` (an organization's endpoints, by NPI), `lookup_npi` (a practitioner, by NPI). No practitioner search by name yet |
-| Validate: check status, such as Medicare enrollment, OIG and SAM exclusions, and NPI validity | Step 5 | Partly available | `check_npi_cohort`: OIG and SAM exclusions and the NPI check digit, for practitioner NPIs in the NDH, as of the last weekly run. No Medicare enrollment check yet |
+| Validate: check status, such as Medicare enrollment, OIG and SAM exclusions, and NPI validity | Step 5 | Partly available | `verify_roster` (a list of NPIs, with a key): NDH record and roles, live NPPES status, OIG and SAM exclusions, endpoint reach, each with its source and date. `check_npi_cohort`: the high-risk cohort, as of the last weekly run. No Medicare enrollment check yet |
 | Report how an exchange went | Step 7 | Sandbox available | `report_interaction` and `get_interaction_report`, plus `POST` and `GET /api/v1/interaction-reports` on ainpi.dev, following the NPD Endpoint Feedback API proposal, v0.2. An AINPI test service, not an NPD API. Needs a key issued to a working-group participant |
 | Update once, route to everyone | Not in the flow | Proposed | None yet. This is the hardest goal |
 

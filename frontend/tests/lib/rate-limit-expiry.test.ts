@@ -63,3 +63,13 @@ describe('enforceRateLimit: trial keys', () => {
     expect(r.ok).toBe(true);
   });
 });
+
+describe('identify: OAuth token audience', () => {
+  it('an access token is not accepted outside the MCP paths', async () => {
+    row.current = { ...base, tier: 'partner', expiresAt: null };
+    const r = new NextRequest('https://ainpi.dev/api/v1/roster/verify', { headers: { authorization: 'Bearer ainpi_at_whatever' } });
+    const c = await identify(r);
+    expect(c.keyId).toBeNull();
+    expect(c.subject.startsWith('badkey:')).toBe(true);
+  });
+});

@@ -36,7 +36,15 @@ export default function TrialPage() {
           app developers. Your key arrives by email in about a minute. No card is needed.
         </p>
 
-        <section className="mt-10 grid gap-6 sm:grid-cols-3">
+        <section className="mt-10 grid gap-6 sm:grid-cols-2">
+          <div className="border-t border-gray-300 pt-3">
+            <h2 className="m-0 text-base font-medium text-ink">Roster verification</h2>
+            <p className="mt-1 text-sm text-gray-600">
+              Check up to 25 NPIs per call against the CMS National Provider Directory, the live NPPES registry, OIG and SAM
+              exclusions, and FHIR endpoint reach, with every source and its date. Results are signals to verify at the source, not a
+              clearance. Medicare enrollment is not checked yet.
+            </p>
+          </div>
           <div className="border-t border-gray-300 pt-3">
             <h2 className="m-0 text-base font-medium text-ink">Higher limits</h2>
             <p className="mt-1 text-sm text-gray-600">
@@ -54,7 +62,8 @@ export default function TrialPage() {
           <div className="border-t border-gray-300 pt-3">
             <h2 className="m-0 text-base font-medium text-ink">MCP server</h2>
             <p className="mt-1 text-sm text-gray-600">
-              Connect an AI agent to organization and endpoint lookup, NPI checks and the published findings.
+              Add <code>https://ainpi.dev/api/account/mcp</code> to Claude, ChatGPT or another assistant and sign in with your
+              key, or connect an agent directly.
             </p>
           </div>
         </section>

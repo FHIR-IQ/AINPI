@@ -41,6 +41,23 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // OAuth sign-in. Listed after the rule above so its CSP replaces the
+        // site-wide one: form-action governs where the form's 303 may land,
+        // which for desktop clients is a loopback URL or an app scheme
+        // (APP_SCHEMES in src/lib/oauth.ts; keep the two lists equal). Never
+        // framed, so a key cannot be typed into a page dressed up by a framer.
+        source: '/oauth/authorize',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value:
+              "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; " +
+              "form-action 'self' https: http://localhost:* http://127.0.0.1:* http://[::1]:* cursor: vscode: vscode-insiders: windsurf:",
+          },
+          { key: 'X-Frame-Options', value: 'DENY' },
+        ],
+      },
     ];
   },
   async redirects() {
