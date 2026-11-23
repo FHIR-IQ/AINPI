@@ -104,7 +104,11 @@ export default async function NpdMcpPage() {
           </p>
           <h3 className="mt-6 font-serif text-lg text-ink">Report an exchange over HTTP</h3>
           <p className="measure mt-2 text-sm text-gray-600">
-            The report sandbox follows the NPD Endpoint Feedback API proposal, version 0.2: the same body, issue codes, receipts and errors. Generate a new UUID v4 for each <code>reportId</code> and reuse it on retry. Reports are visible only to your organization and are deleted after 90 days. Use test exchanges only, and never put patient data, credentials or raw payloads in a report.
+            The report sandbox follows the{' '}
+            <a href="https://github.com/ftrotter-gov/CMSPayerEndpointSeed/blob/main/docs/npd-how-did-it-go-api.md" className="text-primary-600 hover:underline">
+              NPD Endpoint Feedback API proposal (v0.2)
+            </a>
+            : the same body, issue codes and errors, and the same receipt except that the reporter is named as <code>NpdMcpParticipant/&lt;id&gt;</code>. Generate a new UUID v4 for each <code>reportId</code> and reuse it on retry. Reports are visible only to your organization and are deleted after 90 days. Use test exchanges only, and never put patient data, credentials or raw payloads in a report.
           </p>
           <pre className="mt-2 overflow-x-auto rounded-sm border border-gray-200 bg-white p-3 font-mono text-xs text-ink">
             {`curl -X POST https://ainpi.dev/api/v1/interaction-reports \

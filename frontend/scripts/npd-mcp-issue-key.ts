@@ -10,7 +10,8 @@
  *   npx tsx scripts/npd-mcp-issue-key.ts <participant-id> --confirm   # issue + email
  *   npx tsx scripts/npd-mcp-issue-key.ts <participant-id> --confirm --reissue
  *
- * --reissue revokes the participant's existing working-group keys first.
+ * --reissue replaces the participant's existing working-group keys: they are revoked
+ * only after the new key has been emailed.
  *
  * The plaintext key goes only into the email to the participant; it is never
  * printed or stored. If the email cannot be sent, the new key is revoked
@@ -50,7 +51,7 @@ export function keyEmailText(organization: string, contactName: string, key: str
     `Examples and the tool list: https://ainpi.dev/npd-mcp#test`,
     ``,
     `This is a test service run by AINPI, an independent open-source project. It is not an NPD`,
-    `or CMS service. Reports are visible only to your organization and are deleted after 90 days.`,
+    `or CMS service, and CMS has not reviewed or adopted the proposal. Reports are visible only to your organization and are deleted after 90 days.`,
     `Use test exchanges only, and never put patient data, credentials or raw payloads in a report.`,
     ``,
     `Reply to this email with questions, or if the key should be revoked.`,
@@ -92,14 +93,6 @@ async function main() {
     process.exit(1);
   }
 
-  if (existing.length) {
-    await prisma.apiKey.updateMany({
-      where: { id: { in: existing.map((k) => k.id) } },
-      data: { active: false, revokedAt: new Date() },
-    });
-    console.log(`Revoked ${existing.length} earlier key(s).`);
-  }
-
   const plaintext = `ainpi_live_${randomBytes(32).toString('base64url')}`;
   const row = await prisma.apiKey.create({
     data: {
@@ -113,18 +106,38 @@ async function main() {
     },
   });
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const { error } = await resend.emails.send({
-    from: FROM,
-    to: p.email,
-    replyTo: REPLY_TO,
-    subject: 'Your AINPI API key for the NPD MCP working group',
-    text: keyEmailText(p.organization, p.contactName, plaintext),
-  });
-  if (error) {
+  // The new key exists only in this process until the email goes out. Any
+  // failure, thrown or returned, revokes it, and earlier keys stay as they
+  // were, so the participant is never left without the key they already had.
+  let sendFailure: string | null = null;
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const { error } = await resend.emails.send({
+      from: FROM,
+      to: p.email,
+      replyTo: REPLY_TO,
+      subject: 'Your AINPI API key for the NPD MCP working group',
+      text: keyEmailText(p.organization, p.contactName, plaintext),
+    });
+    if (error) sendFailure = error.name;
+  } catch (e) {
+    sendFailure = e instanceof Error ? e.name : 'send threw';
+  }
+  if (sendFailure) {
     await prisma.apiKey.update({ where: { id: row.id }, data: { active: false, revokedAt: new Date() } });
-    console.error(`Email failed (${error.name}); the key was revoked. Nothing is outstanding.`);
+    console.error(
+      `Email failed (${sendFailure}); the new key was revoked${existing.length ? ' and earlier keys are unchanged' : ''}. ` +
+        'If the email did arrive, that key no longer works; run this again to send a working one.',
+    );
     process.exit(1);
+  }
+
+  if (existing.length) {
+    await prisma.apiKey.updateMany({
+      where: { id: { in: existing.map((k) => k.id) } },
+      data: { active: false, revokedAt: new Date() },
+    });
+    console.log(`Revoked ${existing.length} earlier key(s).`);
   }
   console.log(`Issued key ${row.keyPrefix}… (id ${row.id}) and emailed it to ${p.email}.`);
 }

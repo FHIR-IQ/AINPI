@@ -147,7 +147,12 @@ function optString(
 export function parseRfc3339(v: unknown): number | null {
   if (typeof v !== 'string' || !RFC3339.test(v)) return null;
   const ms = Date.parse(v.toUpperCase());
-  return Number.isFinite(ms) ? ms : null;
+  if (!Number.isFinite(ms)) return null;
+  // Date.parse rolls 2026-02-30 over to March; refuse a date that does not exist.
+  const [y, m, d] = v.slice(0, 10).split('-').map(Number);
+  const check = new Date(Date.UTC(y, m - 1, d));
+  if (check.getUTCFullYear() !== y || check.getUTCMonth() !== m - 1 || check.getUTCDate() !== d) return null;
+  return ms;
 }
 
 /**
@@ -206,7 +211,8 @@ export function validateInteractionReport(body: unknown, now: number): Validatio
   };
   for (const [key, max, pattern] of [
     ['fhirVersion', 20, /^[0-9A-Za-z.\-]+$/],
-    ['operation', 40, /^[a-z][a-z\-$]*$/],
+    // An interaction name (search-type) or a FHIR operation ($everything).
+    ['operation', 40, /^\$?[a-z][A-Za-z\-]*$/],
     ['resourceType', 64, RESOURCE_TYPE],
   ] as const) {
     const v = optString(ix, key, 'interaction.', max, pattern);
@@ -249,7 +255,8 @@ export function validateInteractionReport(body: unknown, now: number): Validatio
     if (!isObject(it)) return fail(`${at} must be an object.`);
     const itExtra = unknownKey(it, ISSUE_KEYS, at);
     if (itExtra) return fail(itExtra);
-    if (typeof it.stage !== 'string' || !(it.stage in ISSUE_VOCABULARY)) {
+    // Own keys only: `in` would also accept names inherited from Object.prototype.
+    if (typeof it.stage !== 'string' || !Object.hasOwn(ISSUE_VOCABULARY, it.stage)) {
       return fail(`${at}.stage is required and must be a stage from the issue vocabulary.`);
     }
     if (typeof it.code !== 'string') return fail(`${at}.code is required.`);
@@ -277,7 +284,8 @@ export function validateInteractionReport(body: unknown, now: number): Validatio
     reportId: (body.reportId as string).toLowerCase(),
     reporterRole: body.reporterRole as InteractionReport['reporterRole'],
     ...(typeof counterpartyReference === 'string' ? { counterpartyReference } : {}),
-    ...(typeof counterpartyFpi === 'string' ? { counterpartyFpi: counterpartyFpi.toLowerCase() } : {}),
+    // Echoed as submitted (proposal: "without any assertion that it was verified").
+    ...(typeof counterpartyFpi === 'string' ? { counterpartyFpi } : {}),
     ...(typeof endpointReference === 'string' ? { endpointReference } : {}),
     interaction,
     outcome: body.outcome as InteractionReport['outcome'],

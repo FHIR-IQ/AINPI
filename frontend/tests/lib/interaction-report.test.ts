@@ -229,3 +229,34 @@ describe('buildReceipt', () => {
   });
 });
 
+
+describe('review fixes', () => {
+  it.each(['constructor', '__proto__', 'toString', 'hasOwnProperty'])(
+    'rejects inherited name %s as a stage with a 400, never a throw',
+    (stage) => {
+      const b = clone(FAILURE);
+      b.issues[0] = { stage, code: 'other', severity: 'error', description: 'x' } as never;
+      expect(() => validateInteractionReport(b, NOW)).not.toThrow();
+      reject(b);
+      b.issues[0] = { stage, code: 'timeout', severity: 'error' } as never;
+      expect(() => validateInteractionReport(b, NOW)).not.toThrow();
+      reject(b);
+    },
+  );
+  it('accepts a FHIR operation name such as $everything', () => {
+    const b = clone(FAILURE);
+    b.interaction.operation = '$everything';
+    expect(validateInteractionReport(b, NOW).ok).toBe(true);
+  });
+  it('rejects a calendar date that does not exist', () => {
+    const b = clone(FAILURE);
+    b.interaction.startedAt = '2026-02-30T00:00:00Z';
+    reject(b);
+  });
+  it('echoes counterpartyFpi as submitted', () => {
+    const upper = FAILURE.counterpartyFpi.toUpperCase();
+    const r = validateInteractionReport({ ...FAILURE, counterpartyFpi: upper }, NOW);
+    if (!r.ok) throw new Error(r.detail);
+    expect(r.value.counterpartyFpi).toBe(upper);
+  });
+});

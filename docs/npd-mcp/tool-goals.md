@@ -44,12 +44,15 @@ The tools available today run on the AINPI MCP server at `https://ainpi.dev/api/
 
 ### The report sandbox
 
-The sandbox implements the proposal as written: the same body, issue vocabulary, timestamp rules, receipts, retries and error format. It exists so that requesters and responders can test reporting before any NPD-hosted service does. Where the proposal leaves a choice open, the sandbox makes these:
+The sandbox follows the [proposal](https://github.com/ftrotter-gov/CMSPayerEndpointSeed/blob/main/docs/npd-how-did-it-go-api.md): the same body, issue vocabulary, timestamp rules, retries and error format. It differs in one place, the reporter reference on the receipt (below). It exists so that requesters and responders can test the proposed format now. No NPD-hosted service exists. Where the proposal leaves a choice open or the sandbox has to differ, it does this:
 
 - The reporting organization is the working-group participant the key was issued to. The receipt names it as `NpdMcpParticipant/<id>`, because the sandbox has no NPD Organization record for it.
 - A report with a property the proposal does not define is rejected, so free-form data cannot ride along.
 - A report is visible only to the organization that sent it and is deleted 90 days after receipt, the proposal's deduplication window. Nothing is published or aggregated.
 - Each key may submit 30 reports a minute and 1,000 a UTC day.
+- Two submissions count as the same report when their values are the same after normalizing: property order, `reportId` case and timestamp offsets do not count as a change.
+- A retry of a stored report is checked against the thirty-day rule like any submission, so once `endedAt` is more than thirty days old a retry gets `400`; read the receipt with `GET` instead.
+- `endpointReference` must name an Endpoint (`Endpoint/<id>`), and `httpMethod` must be a standard HTTP method.
 
 Use test exchanges only. The sandbox cannot check that a description is free of patient data, so never put patient data, credentials or raw payloads in a report.
 

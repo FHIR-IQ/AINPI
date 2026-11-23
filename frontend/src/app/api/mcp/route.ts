@@ -29,7 +29,7 @@ import {
   submitReport,
   type StoreResult,
 } from '@/lib/interaction-report-store';
-import { ISSUE_VOCABULARY } from '@/lib/interaction-report';
+import { ISSUE_VOCABULARY, MAX_BODY_BYTES, problem } from '@/lib/interaction-report';
 import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
@@ -48,7 +48,22 @@ const DISCLAIMER =
  * The request's caller, set by guarded() around each MCP request so a tool can
  * act as the organization whose API key the connection carries.
  */
-const requestCaller = new AsyncLocalStorage<{ caller: Caller; keyPresented: boolean }>();
+const requestCaller = new AsyncLocalStorage<{ caller: Caller; keyPresented: boolean; keyHeader: string | null }>();
+
+/**
+ * Fetch one of our own capped search routes as the MCP caller: forward the
+ * caller's key so the route charges that key's quota rather than the
+ * anonymous bucket of this lambda's outbound IP, which every keyless MCP user
+ * shares.
+ */
+async function fetchJsonAsCaller(url: string): Promise<unknown> {
+  const key = requestCaller.getStore()?.keyHeader;
+  const res = await fetch(url, {
+    headers: { accept: 'application/json', ...(key ? { 'x-api-key': key } : {}) },
+  });
+  if (!res.ok) throw new Error(`${url} returned ${res.status}`);
+  return res.json();
+}
 
 function storeResultToTool(r: StoreResult) {
   return {
@@ -272,7 +287,7 @@ const handler = createMcpHandler(
             ),
           );
         }
-        const data = await fetchJson(`${BASE}/api/npd/search?npi=${npi}`);
+        const data = await fetchJsonAsCaller(`${BASE}/api/npd/search?npi=${npi}`);
         return text(JSON.stringify(data, null, 1));
       },
     );
@@ -330,7 +345,7 @@ const handler = createMcpHandler(
       async ({ name, state }) => {
         const qs = new URLSearchParams({ org: name, type: 'organization', limit: '20' });
         if (state) qs.set('state', state.toUpperCase());
-        const data = await fetchJson(`${BASE}/api/npd/search?${qs}`);
+        const data = await fetchJsonAsCaller(`${BASE}/api/npd/search?${qs}`);
         return text(JSON.stringify(data, null, 1));
       },
     );
@@ -359,6 +374,9 @@ const handler = createMcpHandler(
       async ({ report }) => {
         const r = await reporterOrError();
         if ('error' in r) return r.error!;
+        if (Buffer.byteLength(JSON.stringify(report), 'utf8') > MAX_BODY_BYTES) {
+          return storeResultToTool({ status: 413, body: problem(413, 'The report exceeds the 256 KiB limit.') });
+        }
         return storeResultToTool(await submitReport(r.reporter!, report, Date.now(), prisma));
       },
     );
@@ -381,6 +399,10 @@ const handler = createMcpHandler(
   },
   {
     basePath: '/api',
+    // The legacy SSE transport runs tool calls from Redis callbacks outside
+    // the request's AsyncLocalStorage context, so a report tool could act as
+    // the wrong caller. Streamable HTTP only.
+    disableSse: true,
     verboseLogs: false,
     maxDuration: 60,
   },
@@ -408,8 +430,12 @@ async function guarded(
 ): Promise<Response> {
   const rl = await enforceRateLimit(req, { shape: 'mcp:lookup' });
   if (!rl.ok) return rl.response!;
-  const keyPresented = Boolean(req.headers.get('authorization') || req.headers.get('x-api-key'));
-  const res = await requestCaller.run({ caller: rl.caller, keyPresented }, () => run(req));
+  const keyHeader =
+    req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') || req.headers.get('x-api-key') || null;
+  const res = await requestCaller.run(
+    { caller: rl.caller, keyPresented: Boolean(keyHeader), keyHeader },
+    () => run(req),
+  );
   return annotate(res, rl);
 }
 
