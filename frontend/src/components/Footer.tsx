@@ -38,6 +38,7 @@ export default function Footer() {
             <li><Link href="/magic-scanner" className="hover:text-white">Magic Scanner</Link></li>
             <li><Link href="/payer-healthcare-service-survey" className="hover:text-white">Healthcare Service Survey</Link></li>
             <li><Link href="/npd-mcp" className="hover:text-white">NPD MCP working group</Link></li>
+            <li><Link href="/trial" className="hover:text-white">API trial</Link></li>
             <li><Link href="/data-quality" className="hover:text-white">Data quality dashboard</Link></li>
           </ul>
         </div>

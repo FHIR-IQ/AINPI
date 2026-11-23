@@ -421,6 +421,32 @@ model NpdMcpParticipant {
   @@map("npd_mcp_participants")
 }
 
+// Self-serve API trials (/trial). Created by prisma/sql/trial_signups.sql,
+// never by `db push`: RLS on, no API-role grants. One row per email address,
+// ever (emailNorm unique), so a trial cannot be renewed by signing up again.
+model TrialSignup {
+  id             String    @id @default(uuid())
+  organization   String
+  contactName    String    @map("contact_name")
+  email          String
+  emailNorm      String    @unique @map("email_norm")
+  role           String?
+  useCase        String?   @map("use_case") @db.Text
+  apiKeyId       String?   @map("api_key_id")
+  expiresAt      DateTime  @map("expires_at")
+  reminderSentAt DateTime? @map("reminder_sent_at")
+  endedSentAt    DateTime? @map("ended_sent_at")
+  convertedAt    DateTime? @map("converted_at")
+  /// Set by scripts/trial.ts revoke; the reminder cron skips revoked trials.
+  revokedAt      DateTime? @map("revoked_at")
+  ipAddress      String?   @map("ip_address")
+  userAgent      String?   @map("user_agent") @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("trial_signups")
+}
+
 // Sandbox of the NPD Endpoint Feedback API proposal v0.2 (/api/v1/interaction-reports).
 // Created by prisma/sql/interaction_reports.sql, never by `db push`: RLS on,
 // no API-role grants. One row per (reporter, reportId); deleted 90 days after
@@ -520,6 +546,9 @@ model ApiKey {
   createdAt    DateTime  @default(now()) @map("created_at")
   lastUsedAt   DateTime? @map("last_used_at")
   revokedAt    DateTime? @map("revoked_at")
+  /// After this instant the key is refused like a revoked one. Null = no expiry.
+  /// Set on trial keys (/trial). Added by prisma/sql/trial_signups.sql.
+  expiresAt    DateTime? @map("expires_at")
 
   @@index([tier])
   @@index([active])

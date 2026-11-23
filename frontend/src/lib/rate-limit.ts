@@ -114,6 +114,10 @@ export const TIERS: Record<string, Tier> = {
   anonymous: { name: 'anonymous', perMinute: 120, perDay: 2_000, survivesBreaker: false },
   // Free issued key. Enough to build and test an integration.
   free: { name: 'free', perMinute: 600, perDay: 20_000, survivesBreaker: false },
+  // Self-serve 14-day trial (/trial). The free key's daily quota (~$2 of
+  // scan) with more per-minute headroom. All trial keys together also share
+  // TRIAL_POOL_UNITS a day (below), and the tier does not survive the breaker.
+  trial: { name: 'trial', perMinute: 1_000, perDay: 20_000, survivesBreaker: false },
   // Named partner. ~$10/day of scan at the ceiling.
   partner: { name: 'partner', perMinute: 3_000, perDay: 100_000, survivesBreaker: true },
   // Contracted. Cap lives on the key row, not here.
@@ -129,6 +133,16 @@ export const TIERS: Record<string, Tier> = {
  * trend. They are different instruments and the breaker firing on ordinary
  * traffic would be worse than useless.
  */
+/**
+ * All trial keys together share one daily pool, well under the breaker, so
+ * abuse of self-serve trials (aliases, catch-all domains) can never trip the
+ * breaker and take anonymous search down with it. 50,000 units ~= $5.
+ */
+export const TRIAL_POOL_UNITS = Number(process.env.TRIAL_POOL_UNITS ?? 50_000);
+
+/** Shapes a trial key may not use: LLM spend, not warehouse spend. */
+export const TRIAL_EXCLUDED_SHAPES: ReadonlySet<string> = new Set(['magic-scanner']);
+
 export const DAILY_BREAKER_UNITS = Number(
   process.env.RATE_LIMIT_DAILY_UNITS ?? 300_000,
 );
@@ -197,7 +211,9 @@ export async function identify(req: NextRequest): Promise<Caller> {
     try {
       const keyHash = await sha256Hex(header);
       const row = await prisma.apiKey.findUnique({ where: { keyHash } });
-      if (row && row.active && !row.revokedAt) {
+      // An expired key (trials) is refused exactly like a revoked one.
+      const live = row && row.active && !row.revokedAt && (!row.expiresAt || row.expiresAt.getTime() > Date.now());
+      if (row && live) {
         const tier = TIERS[row.tier] ?? TIERS.free;
         // Fire and forget: last-used is for support, and awaiting it would put
         // a write on the hot path of every authenticated request.
@@ -349,11 +365,20 @@ export async function enforceRateLimit(
       ok: false,
       caller,
       units,
-      response: deny(401, 'API key not recognised, or revoked.', 60, caller),
+      response: deny(401, 'API key not recognised, revoked or expired.', 60, caller),
     };
   }
 
   const w = windowIds(caller.subject);
+
+  if (caller.tier.name === 'trial' && TRIAL_EXCLUDED_SHAPES.has(opts.shape ?? 'default')) {
+    return {
+      ok: false,
+      caller,
+      units,
+      response: deny(403, 'This route is not included in the API trial.', 3600, caller),
+    };
+  }
 
   // Layer 1
   if (!memConsume(w.minute, units, caller.tier.perMinute)) {
@@ -385,6 +410,24 @@ export async function enforceRateLimit(
     };
   }
 
+  // Trial pool: every trial key together, before the global ledger.
+  if (caller.tier.name === 'trial') {
+    const pool = await bump(`pool:trial:d:${w.utcDay}`, units, 172_800_000);
+    if (pool !== null && pool > TRIAL_POOL_UNITS) {
+      return {
+        ok: false,
+        caller,
+        units,
+        response: deny(
+          503,
+          'Trial capacity for today is used up. It resets at 00:00 UTC. Static data under /api/v1/ is unaffected.',
+          3600,
+          caller,
+        ),
+      };
+    }
+  }
+
   // Layer 3
   const globalUnits = await recordSpend(w.utcDay, units, opts.shape ?? 'default');
   if (
@@ -402,7 +445,7 @@ export async function enforceRateLimit(
       response: deny(
         503,
         'Service temporarily limited: the daily query budget for anonymous ' +
-          'traffic is exhausted. Static data under /api/v1/ is unaffected and ' +
+          'and trial traffic is exhausted. Static data under /api/v1/ is unaffected and ' +
           'remains free.',
         3600,
         caller,

@@ -1,6 +1,6 @@
 ---
 title: Privacy policy
-version: 0.5.0
+version: 0.6.0
 last_updated: 2026-11-22
 ---
 
@@ -11,7 +11,7 @@ AINPI is a research project. This privacy policy covers the public website at [a
 ## TL;DR
 
 - No analytics, no cookies, no tracking pixels, no fingerprinting.
-- The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report, the NPD MCP working group sign-up, an NPI removal request).
+- The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report, the NPD MCP working group sign-up, an API trial, an NPI removal request).
 - Submitted emails are stored in Supabase Postgres (US region) and are used only for the stated purpose. No resale, no sharing with third parties.
 - Removal on request: email [gene@fhiriq.com](mailto:gene@fhiriq.com).
 - Providers can have their NPI's page and rows removed from ainpi.dev at [/privacy/remove](/privacy/remove). See [Removal requests](#removal-requests).
@@ -25,6 +25,8 @@ AINPI is a research project. This privacy policy covers the public website at [a
 **When you download the full report:** your email address, name (optional), organization (optional), stated use case (optional), and the submission timestamp. This form exists so we can tell who's using AINPI research. The information helps us prioritize and reach back out when major findings land.
 
 **When you join the NPD MCP working group:** your organization's name and type, your name, your email address, how you want to take part, the use case you describe (optional), whether you ticked the box to be listed, the submission timestamp, and the IP address and browser user agent the form was sent from. We keep the IP address and user agent only to spot and block abusive submissions. Only your organization's name and type are ever published, on the [/npd-mcp](/npd-mcp) page, and only if you ticked the box and we have checked the sign-up. We use the rest only to coordinate the group. Each sign-up also sends us an email notification with what you submitted.
+
+**When you start an API trial** ([/trial](/trial)): your organization, your name, your work email, your role and what you want to build (both optional), the submission timestamp, and the IP address and browser user agent the form was sent from (kept only to spot and block abuse). We store the API key only as a hash; the key itself is sent once, to your email, through our email provider (Resend), which keeps a copy of sent messages. We email you three times: the key, one reminder before the trial ends, and one note when it ends. If the same address asks for a second trial, we send one reply saying it already has one. We use the rest to follow up about a plan, and each trial sends us an email notification with what you submitted. We keep the record so that each address gets one trial; ask us to delete it at gene@fhiriq.com.
 
 **When a working-group participant submits an interaction report** (the test sandbox at `/api/v1/interaction-reports`, or the `report_interaction` tool): the report as sent, which API key sent it, and when it arrived. A report is visible only to the organization that sent it, is never published, and is deleted 90 days after it arrives. Reports are meant to describe test exchanges between organizations; do not put patient data in them.
 
