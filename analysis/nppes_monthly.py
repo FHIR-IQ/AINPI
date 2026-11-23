@@ -21,7 +21,10 @@ complete pass.
 
 `control` is the positive control: the load fails if the newest enumeration
 date is more than 45 days before the file's own month, which is what a stale
-or truncated file looks like.
+or truncated file looks like. Enumeration dates after the file month's last
+day are typos and are left out of that max (the rows are kept); how many were
+left out is reported as `future_enumeration_dates_ignored`, so one bad date
+cannot make a stale file look current.
 
 The download is about 1 GB and is announced before it runs:
 
@@ -237,8 +240,20 @@ def _convert(row: list[str], idx: dict[str, int], tax_idx: list[tuple[int, int]]
     return out
 
 
-def _stream(zip_path: Path, member: str, encoding: str, tmp_out: Path) -> tuple[int, date | None]:
+def _month_end(file_month: str) -> date:
+    """'2026-11' -> 2026-11-30."""
+    y, m = (int(x) for x in file_month.split("-"))
+    return date(y, m, calendar.monthrange(y, m)[1])
+
+
+def _stream(zip_path: Path, member: str, encoding: str, tmp_out: Path,
+            cutoff: date | None = None) -> tuple[int, date | None, int]:
+    """Returns (rows, max enumeration date, enumeration dates ignored).
+
+    An enumeration date after `cutoff` (the file month's last day) cannot be
+    real, so it is left out of the max and counted; the row itself is kept."""
     rows = 0
+    ignored = 0
     max_enum = None
     writer = pq.ParquetWriter(tmp_out, SCHEMA, compression="zstd")
     try:
@@ -260,7 +275,9 @@ def _stream(zip_path: Path, member: str, encoding: str, tmp_out: Path) -> tuple[
                 rec = _convert(row, idx, tax_idx)
                 batch.append(rec)
                 e = rec["enumeration_date"]
-                if e and (max_enum is None or e > max_enum):
+                if e and cutoff is not None and e > cutoff:
+                    ignored += 1
+                elif e and (max_enum is None or e > max_enum):
                     max_enum = e
                 if len(batch) >= BATCH_ROWS:
                     writer.write_table(pa.Table.from_pylist(batch, schema=SCHEMA))
@@ -271,12 +288,22 @@ def _stream(zip_path: Path, member: str, encoding: str, tmp_out: Path) -> tuple[
                 rows += len(batch)
     finally:
         writer.close()
-    return rows, max_enum
+    return rows, max_enum, ignored
 
 
-def load(zip_path: Path, out_dir: Path) -> dict:
-    """Stream the main NPPES CSV into out_dir/nppes.parquet. Returns the summary."""
+def load(zip_path: Path, out_dir: Path, *, month: str | None = None) -> dict:
+    """Stream the main NPPES CSV into out_dir/nppes.parquet. Returns the summary.
+
+    `month` (YYYY-MM) defaults to the one in the file name. Enumeration dates
+    after that month's last day are typos; they are excluded from
+    `max_enumeration_date` and counted in `future_enumeration_dates_ignored`."""
     zip_path = Path(zip_path)
+    if month is None:
+        try:
+            month = file_month(zip_path.name)
+        except ValueError:
+            month = None
+    cutoff = _month_end(month) if month else None
     st = _stat(zip_path)
     if getattr(st, "st_flags", 0) & SF_DATALESS:
         raise RuntimeError(
@@ -294,7 +321,7 @@ def load(zip_path: Path, out_dir: Path) -> dict:
     try:
         for encoding in ("utf-8-sig", "latin-1"):
             try:
-                rows, max_enum = _stream(zip_path, member, encoding, tmp)
+                rows, max_enum, ignored = _stream(zip_path, member, encoding, tmp, cutoff)
                 used = encoding
                 break
             except UnicodeDecodeError:
@@ -312,6 +339,7 @@ def load(zip_path: Path, out_dir: Path) -> dict:
         "size": st.st_size,
         "rows": rows,
         "max_enumeration_date": max_enum.isoformat() if max_enum else None,
+        "future_enumeration_dates_ignored": ignored,
         "encoding": used,
         "loaded_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
@@ -322,7 +350,9 @@ def control(summary: dict, file_month: str) -> bool:
 
     Fails when MAX(enumeration_date) is more than 45 days before the first
     day of the file's month. An empty or stale file must not stand in for
-    "these providers are not in NPPES".
+    "these providers are not in NPPES". Also fails when the max is after the
+    month's last day: `load` drops such dates from the max, so one here means
+    the summary was built without that filter and a typo is hiding staleness.
     """
     if not summary.get("rows"):
         return False
@@ -330,6 +360,8 @@ def control(summary: dict, file_month: str) -> bool:
     if not raw:
         return False
     newest = date.fromisoformat(str(raw))
+    if newest > _month_end(file_month):
+        return False
     y, m = (int(x) for x in file_month.split("-"))
     return newest >= date(y, m, 1) - timedelta(days=CONTROL_MAX_LAG_DAYS)
 
@@ -360,14 +392,16 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     month = file_month(args.load.name)
-    summary = load(args.load, DATA_ROOT / month)
+    summary = load(args.load, DATA_ROOT / month, month=month)
     ok = control(summary, month)
     print(json.dumps(summary, indent=2))
     if not ok:
         print(f"CONTROL FAILED: newest enumeration {summary['max_enumeration_date']} is more than "
-              f"{CONTROL_MAX_LAG_DAYS} days before {month}; not writing {SUMMARY_PATH.name}")
+              f"{CONTROL_MAX_LAG_DAYS} days before {month}, or after its last day; "
+              f"not writing {SUMMARY_PATH.name}")
         return 1
-    published = {k: summary[k] for k in ("file", "size", "rows", "max_enumeration_date", "loaded_at")}
+    published = {k: summary[k] for k in ("file", "size", "rows", "max_enumeration_date",
+                                         "future_enumeration_dates_ignored", "loaded_at")}
     published["file_month"] = month
     SUMMARY_PATH.write_text(json.dumps(published, indent=2) + "\n")
     print(f"wrote {SUMMARY_PATH}")

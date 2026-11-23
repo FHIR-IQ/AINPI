@@ -188,6 +188,50 @@ def test_load_refuses_dataless_zip(nppes_zip, tmp_path, monkeypatch):
         nm.load(nppes_zip, tmp_path / "o")
 
 
+def _zip_with(tmp_path, rows, name="NPPES_Data_Dissemination_November_2026_V2.zip"):
+    p = tmp_path / name
+    with zipfile.ZipFile(p, "w") as z:
+        z.writestr("npidata_pfile_20050523-20261109.csv", _csv_bytes(rows, "utf-8"))
+    return p
+
+
+FUTURE = _row("5555555556", "1", "TYPO", "TINA", "", "5 ASH", "ERIE", "PA",
+              "16501", "8145550111", "01/05/2031", "11/01/2026", "", [("207Q00000X", "Y")])
+
+
+def test_load_ignores_future_enumeration_dates_for_the_max(tmp_path):
+    s = nm.load(_zip_with(tmp_path, ROWS + [FUTURE]), tmp_path / "o")
+    assert s["rows"] == 6                                  # the row is kept
+    assert s["max_enumeration_date"] == "2026-11-01"       # the typo is not the max
+    assert s["future_enumeration_dates_ignored"] == 1
+    assert nm.control(s, "2026-11") is True
+
+
+def test_stale_file_with_a_future_typo_still_fails_the_control(tmp_path):
+    stale = [r for r in ROWS if r[11] not in ("10/15/2026", "11/01/2026")]
+    s = nm.load(_zip_with(tmp_path, stale + [FUTURE]), tmp_path / "o")
+    assert s["max_enumeration_date"] == "2010-03-02"
+    assert s["future_enumeration_dates_ignored"] == 1
+    assert nm.control(s, "2026-11") is False
+
+
+def test_month_end_handles_december(tmp_path):
+    dec_last = _row("5555555556", "1", "LATE", "LEE", "", "5 ASH", "ERIE", "PA",
+                    "16501", "8145550111", "12/31/2026", "12/31/2026", "", [])
+    s = nm.load(_zip_with(tmp_path, ROWS + [dec_last],
+                          name="NPPES_Data_Dissemination_December_2026_V2.zip"), tmp_path / "o")
+    assert s["max_enumeration_date"] == "2026-12-31"
+    assert s["future_enumeration_dates_ignored"] == 0
+
+
+def test_load_takes_an_explicit_month(tmp_path):
+    p = tmp_path / "renamed.zip"
+    with zipfile.ZipFile(p, "w") as z:
+        z.writestr("npidata_pfile_20050523-20261109.csv", _csv_bytes(ROWS + [FUTURE], "utf-8"))
+    s = nm.load(p, tmp_path / "o", month="2026-11")
+    assert s["future_enumeration_dates_ignored"] == 1
+
+
 # --- control ----------------------------------------------------------------
 
 def test_control_fails_when_snapshot_is_60_days_behind():
@@ -197,6 +241,12 @@ def test_control_fails_when_snapshot_is_60_days_behind():
 def test_control_passes_when_recent():
     assert nm.control({"rows": 10, "max_enumeration_date": "2026-11-01"}, "2026-11") is True
     assert nm.control({"rows": 10, "max_enumeration_date": "2026-10-10"}, "2026-11") is True
+
+
+def test_control_fails_when_max_is_after_the_file_month():
+    # An unfiltered max past the month's last day can only be a typo.
+    assert nm.control({"rows": 10, "max_enumeration_date": "2031-01-05"}, "2026-11") is False
+    assert nm.control({"rows": 10, "max_enumeration_date": "2026-11-30"}, "2026-11") is True
 
 
 def test_control_fails_on_empty_or_missing():
