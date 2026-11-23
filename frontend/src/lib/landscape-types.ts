@@ -66,17 +66,17 @@ export const LANDSCAPE_METRICS: LandscapeMetricDef[] = [
   },
   {
     key: 'cross_source_agreement',
-    label: 'Cross-source agreement',
+    label: 'Present in NPPES',
     description:
-      'Share of practitioners findable in NPPES AND at least one payer FHIR directory AND PECOS. The intersection a plan cannot grade itself on.',
+      'Share of practitioners whose NPI appears in the public NPPES copy, whose newest enumeration date is 2026-02-07, older than the release. It measures presence only: no field is compared, and payer directories and PECOS are not read. Corrected 2026-11-03: this was labelled "Cross-source agreement" and described as presence in NPPES, a payer directory and PECOS, which the computation never measured.',
     invert: false,
     format: (v) => `${(v * 100).toFixed(1)}%`,
   },
   {
     key: 'currency_days_median',
-    label: 'Currency',
+    label: 'Days since export',
     description:
-      'Median days since meta.lastUpdated. A proxy only: § 6220 requires plans to verify their own directories at least every 90 days, and the NDH is not a plan directory.',
+      'Median days since meta.lastUpdated. Every record in a release carries the export date in that field, so this is the age of the export, not the date anyone checked a value. Corrected 2026-11-03: this was labelled "Currency".',
     invert: true,
     format: (v) => `${Math.round(v)} days`,
   },
