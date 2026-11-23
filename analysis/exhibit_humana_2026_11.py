@@ -67,7 +67,7 @@ def wilson(k: int, n: int, z: float = Z95) -> tuple[float, float] | None:
 def share(k: int, n: int) -> dict:
     ci = wilson(k, n)
     return {"k": k, "n": n, "share": (k / n) if n else None,
-            "ci95": [round(ci[0], 4), round(ci[1], 4)] if ci else None}
+            "ci95": [round(ci[0], 6), round(ci[1], 6)] if ci else None}
 
 
 THREE_WAY = ("all_three_match", "payer_differs_npd_nppes_match", "npd_differs",
