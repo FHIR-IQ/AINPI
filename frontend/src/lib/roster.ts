@@ -74,9 +74,10 @@ export function parseRoster(input: unknown, limit: number): ParsedRoster {
 
 export interface WarehouseRow {
   npi: string;
-  prac: { active: boolean | null; family: string | null; given: string | null; state: string | null } | null;
+  prac: { npi: string | null; active: boolean | null; family: string | null; given: string | null; state: string | null } | null;
   org: { active: boolean | null; name: string | null; state: string | null } | null;
-  roles: { active_roles: number | null; org_refs: string[] | null } | null;
+  /** Active roles only; org_npis are the role organizations resolved to NPIs in SQL. */
+  roles: { active_roles: number | null; org_npis: string[] | null; org_refs_total: number | null } | null;
   leie: { excldate: string | null; excltype: string | null } | null;
   sam: {
     active_date: string | null;
@@ -188,16 +189,13 @@ export function samNameMatches(sam: NonNullable<WarehouseRow['sam']>, nppes: Npp
   return samName !== '' && samName === normName(nppes.name);
 }
 
-function orgNpiFromRef(ref: string): string | null {
-  const m = /Organization\/Organization-(\d{10})$/.exec(ref);
-  return m ? m[1] : null;
-}
-
 /** Endpoints for one or more organization NPIs, deterministic routes first. */
-export function endpointsFor(orgNpis: string[], index: OrgIndex) {
+export function endpointsFor(orgNpis: string[], index: OrgIndex, hidden: ReadonlySet<string> = new Set()) {
   const out: RosterEndpoint[] = [];
   let practiceWide = 0;
   for (const npi of orgNpis) {
+    // An NPI under a removal request never appears, even as an organization.
+    if (hidden.has(npi)) continue;
     const r = lookupOrganization(index, npi);
     for (const e of r.endpoints) {
       const listCount = e.vendor_file?.npis_on_url ?? null;
@@ -218,10 +216,17 @@ export interface AssembleInput {
   nppes: NppesResult;
   index: OrgIndex | null;
   suppressed: boolean;
+  /** False when the exclusion tables failed their positive control. */
+  exclusionsOk?: boolean;
+  /** Organization NPIs under a full-scope removal request. */
+  hiddenOrgNpis?: ReadonlySet<string>;
 }
 
+/** Flags meaning a source was not consulted for this NPI. */
+export const NOT_CHECKED_FLAGS = ['directory_not_checked', 'nppes_not_checked', 'exclusions_not_checked', 'endpoint_not_checked'];
+
 /** One NPI's result. `row` null means the warehouse query failed. */
-export function assemble({ npi, row, nppes, index, suppressed }: AssembleInput): RosterResult {
+export function assemble({ npi, row, nppes, index, suppressed, exclusionsOk = true, hiddenOrgNpis }: AssembleInput): RosterResult {
   const flags: string[] = [];
   const base: RosterResult = {
     npi,
@@ -239,9 +244,10 @@ export function assemble({ npi, row, nppes, index, suppressed }: AssembleInput):
     verify_urls: verifyUrls(npi),
   };
 
-  // A removal request: answer exactly as for an NPI no source could check.
+  // A removal request: answer exactly as for an NPI no source could check,
+  // which the summary counts as incomplete (verify at the primary source).
   if (suppressed) {
-    flags.push('not_checked');
+    flags.push(...NOT_CHECKED_FLAGS);
     return base;
   }
 
@@ -255,7 +261,7 @@ export function assemble({ npi, row, nppes, index, suppressed }: AssembleInput):
     return base;
   }
 
-  const prac = row.prac && row.prac.active !== null ? row.prac : null;
+  const prac = row.prac && row.prac.npi !== null ? row.prac : null;
   const org = row.org && row.org.name !== null ? row.org : null;
   base.directory.checked = true;
   if (prac) {
@@ -267,7 +273,7 @@ export function assemble({ npi, row, nppes, index, suppressed }: AssembleInput):
       name: [prac.given, prac.family].filter(Boolean).join(' ') || null,
       state: prac.state,
       active_roles: row.roles?.active_roles ?? 0,
-      linked_organizations: row.roles?.org_refs?.length ?? 0,
+      linked_organizations: row.roles?.org_refs_total ?? 0,
     };
   } else if (org) {
     base.directory = { checked: true, found: true, kind: 'organization', active: org.active, name: org.name, state: org.state, active_roles: null, linked_organizations: null };
@@ -276,6 +282,9 @@ export function assemble({ npi, row, nppes, index, suppressed }: AssembleInput):
   else if (base.directory.active === false) flags.push('ndh_inactive');
   if (base.directory.kind === 'practitioner' && (base.directory.active_roles ?? 0) === 0) flags.push('no_active_role');
 
+  if (!exclusionsOk) {
+    flags.push('exclusions_not_checked');
+  } else {
   base.exclusions.checked = true;
   if (row.leie && row.leie.excldate) {
     base.exclusions.oig_leie = { excluded: true, exclusion_date: row.leie.excldate, exclusion_type: row.leie.excltype };
@@ -287,13 +296,11 @@ export function assemble({ npi, row, nppes, index, suppressed }: AssembleInput):
     base.exclusions.sam = { excluded: true, active_date: row.sam.active_date, agency: row.sam.agency, name_matches_nppes: match, needs_review: needsReview };
     flags.push(needsReview ? 'sam_excluded_needs_review' : 'sam_excluded');
   }
+  }
 
   if (index) {
-    const orgNpis =
-      base.directory.kind === 'organization'
-        ? [npi]
-        : Array.from(new Set((row.roles?.org_refs ?? []).map(orgNpiFromRef).filter((x): x is string => x !== null)));
-    const { endpoints, practiceWide } = endpointsFor(orgNpis, index);
+    const orgNpis = base.directory.kind === 'organization' ? [npi] : Array.from(new Set(row.roles?.org_npis ?? []));
+    const { endpoints, practiceWide } = endpointsFor(orgNpis, index, hiddenOrgNpis);
     base.endpoint = {
       checked: true,
       reachable: endpoints.length > 0,
@@ -320,6 +327,10 @@ export interface RosterSummary {
   verified: number;
   duplicates_removed: number;
   flagged: number;
+  /** NPIs for which at least one source was not consulted. */
+  incomplete: number;
+  /** False whenever any NPI is incomplete: the batch is not a full check. */
+  complete: boolean;
   by_flag: Record<string, number>;
 }
 
@@ -338,15 +349,26 @@ export const ACTION_FLAGS = new Set([
 export function summarize(results: RosterResult[], duplicates: number): RosterSummary {
   const byFlag: Record<string, number> = {};
   let flagged = 0;
+  let incomplete = 0;
   for (const r of results) {
     if (r.flags.some((f) => ACTION_FLAGS.has(f))) flagged++;
+    if (r.flags.some((f) => NOT_CHECKED_FLAGS.includes(f))) incomplete++;
     for (const f of r.flags) byFlag[f] = (byFlag[f] ?? 0) + 1;
   }
-  return { submitted: results.length + duplicates, verified: results.length, duplicates_removed: duplicates, flagged, by_flag: byFlag };
+  return {
+    submitted: results.length + duplicates,
+    verified: results.length,
+    duplicates_removed: duplicates,
+    flagged,
+    incomplete,
+    complete: incomplete === 0,
+    by_flag: byFlag,
+  };
 }
 
 export const DISCLAIMER =
   'Signals from public federal sources, not findings. Absence of a flag is not clearance, and a source marked ' +
-  '"checked: false" was not consulted. A SAM match on the NPI field has a documented false-positive history; ' +
-  'needs_review means the SAM name did not match NPPES. Verify every flag at the primary source (verify_urls) ' +
+  '"checked: false" was not consulted (summary.complete is false whenever any was not). OIG LEIE and SAM are matched ' +
+  'on the NPI field, which most LEIE records do not carry, so check exclusions by name at the primary source too. A SAM match on the NPI field has a documented false-positive history; ' +
+  'needs_review means the SAM name did not match NPPES, or could not be compared (for example, NPPES did not answer). Verify every flag at the primary source (verify_urls) ' +
   'before acting on it.';

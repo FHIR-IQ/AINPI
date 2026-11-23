@@ -461,7 +461,8 @@ export default function DeveloperPage() {
               connector and sign in with your AINPI API key. The server supports OAuth 2.1 with
               dynamic client registration and PKCE (metadata at{' '}
               <code className="font-mono">/.well-known/oauth-authorization-server</code>); the
-              application gets a token that stops working if your key is revoked or expires.
+              application gets a 1-hour access token and a 30-day refresh token that rotates on use.
+              Both stop working if your key is revoked or expires.
               <code className="font-mono"> /api/mcp</code> stays open without sign-in and also
               accepts a key or token.
             </p>
@@ -470,9 +471,10 @@ export default function DeveloperPage() {
               <code className="font-mono">POST /api/v1/roster/verify</code> with{' '}
               <code className="font-mono">{'{"npis": ["..."]}'}</code> and your key. Per NPI: NDH
               record and active roles, live NPPES status, OIG LEIE and SAM exclusions (a SAM match
-              whose name differs from NPPES is <code className="font-mono">needs_review</code>),
+              whose name differs from NPPES, or cannot be compared, is <code className="font-mono">needs_review</code>),
               and endpoint reach, with each source&apos;s date. Up to 25 NPIs per call on a trial
-              key and 200 on a partner key; each call costs 5 units plus 2 per NPI. Medicare
+              key, 200 on partner and 500 on enterprise; each call costs 5 units plus 2 per distinct
+              NPI (duplicates are not charged). Medicare
               enrollment is not checked yet.
             </p>
             <p className="text-xs text-gray-600 mt-2">

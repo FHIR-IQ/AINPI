@@ -6,7 +6,7 @@
 import { prisma } from '@/lib/prisma';
 import { CURRENT_RELEASE } from '@/lib/release';
 import { enforceForCaller, type Caller } from '@/lib/rate-limit';
-import { getSuppressedNpis } from '@/lib/suppression';
+import { getOrgSuppressedNpis, getSuppressedNpis } from '@/lib/suppression';
 import { getDatasetId, getProjectId, queryBigQuery } from '@/lib/bigquery';
 import { loadOrgIndex } from '@/lib/org-index';
 import {
@@ -17,10 +17,13 @@ import {
   parseRoster,
   rosterUnits,
   summarize,
+  type NppesResult,
   type RosterResult,
   type RosterSummary,
 } from '@/lib/roster';
 import { fetchNppes, queryWarehouse } from '@/lib/roster-sources';
+
+const BATCH_DEADLINE_MS = 40_000;
 
 export interface RosterResponse {
   checked_at: string;
@@ -34,25 +37,62 @@ export type RunOutcome =
   | { status: 200; body: RosterResponse }
   | { status: number; body: { error: string }; retryAfter?: number };
 
-let tableDates: { at: number; value: Record<string, string> } | null = null;
+/**
+ * Positive control for the exclusion checks: how many active, NPI-bearing
+ * rows each table holds right now. 9,023 (LEIE) and 7,063 (SAM) on
+ * 2026-11-22. Below these floors the table is broken or the filter no longer
+ * matches (the H24 "0 of 0" failure of 2026-10-12), and every NPI would read
+ * as not excluded, so exclusions are reported as not checked instead.
+ */
+export const LEIE_FLOOR = 4500;
+export const SAM_FLOOR = 3500;
 
-/** When the exclusion tables were last loaded. Metadata only; cached 6 hours. */
-async function exclusionDates(): Promise<Record<string, string>> {
-  if (tableDates && Date.now() - tableDates.at < 6 * 3_600_000) return tableDates.value;
+interface ExclusionState {
+  ok: boolean;
+  dates: Record<string, string>;
+}
+let exclusionCache: { at: number; value: ExclusionState } | null = null;
+
+async function exclusionState(): Promise<ExclusionState> {
+  if (exclusionCache && Date.now() - exclusionCache.at < 6 * 3_600_000) return exclusionCache.value;
+  const p = `${getProjectId()}.${getDatasetId()}`;
   try {
-    const rows = await queryBigQuery<{ table_id: string; last_modified_time: number }>(
-      `SELECT table_id, last_modified_time FROM \`${getProjectId()}.${getDatasetId()}.__TABLES__\`
-       WHERE table_id IN ('oig_leie', 'sam_exclusions')`,
+    const [row] = await queryBigQuery<{ leie: number; sam: number; leie_mod: number; sam_mod: number }>(
+      `SELECT
+         (SELECT COUNT(*) FROM \`${p}.oig_leie\` WHERE NPI NOT IN ('', '0000000000')
+            AND (REINDATE = '00000000' OR REINDATE IS NULL OR REINDATE = '')) AS leie,
+         (SELECT COUNT(*) FROM \`${p}.sam_exclusions\` WHERE record_status = 'Active'
+            AND REGEXP_CONTAINS(npi, r'^[1-9]\\d{9}$')) AS sam,
+         (SELECT last_modified_time FROM \`${p}.__TABLES__\` WHERE table_id = 'oig_leie') AS leie_mod,
+         (SELECT last_modified_time FROM \`${p}.__TABLES__\` WHERE table_id = 'sam_exclusions') AS sam_mod`,
       undefined,
-      { maximumBytesBilled: 10_000_000 },
+      { maximumBytesBilled: 500_000_000 },
     );
-    const value: Record<string, string> = {};
-    for (const r of rows) value[r.table_id] = new Date(Number(r.last_modified_time)).toISOString().slice(0, 10);
-    tableDates = { at: Date.now(), value };
+    const day = (ms: number) => new Date(Number(ms)).toISOString().slice(0, 10);
+    const value: ExclusionState = {
+      ok: Number(row.leie) >= LEIE_FLOOR && Number(row.sam) >= SAM_FLOOR,
+      dates: { oig_leie: day(row.leie_mod), sam_exclusions: day(row.sam_mod) },
+    };
+    exclusionCache = { at: Date.now(), value };
+    if (!value.ok) console.error('[roster] exclusion tables below their floors; exclusions reported as not checked');
     return value;
   } catch {
-    return {};
+    // Unknown is not "fine": without the control, do not vouch for a zero.
+    return { ok: false, dates: {} };
   }
+}
+
+/**
+ * Positive control for NPPES: a batch in which every lookup came back "not
+ * found" is far likelier to be a changed or failing API than a roster of
+ * deactivated NPIs, so it is reported as not checked.
+ */
+export function nppesControl(results: Map<string, NppesResult>): Map<string, NppesResult> {
+  const checked = Array.from(results.values()).filter((r) => r.checked);
+  if (checked.length >= 5 && checked.every((r) => r.checked && !r.found)) {
+    return new Map(Array.from(results.keys()).map((k) => [k, { checked: false } as NppesResult]));
+  }
+  return results;
 }
 
 function audit(caller: Caller, surface: string, npiCount: number, flagged: number, outcome: string) {
@@ -85,14 +125,18 @@ export async function runRoster(caller: Caller, input: unknown, surface: 'api' |
     };
   }
 
-  const suppressed = await getSuppressedNpis();
+  const [suppressed, hiddenOrgNpis] = await Promise.all([getSuppressedNpis(), getOrgSuppressedNpis()]);
   const lookup = parsed.npis.filter((x) => !suppressed.has(x));
-  const [warehouse, nppes, index, dates] = await Promise.all([
+  // The whole batch must finish inside the 60 s function limit.
+  const deadline = Date.now() + BATCH_DEADLINE_MS;
+  const [warehouse, nppesRaw, index, exclusions] = await Promise.all([
     queryWarehouse(lookup).catch(() => null),
-    fetchNppes(lookup),
+    fetchNppes(lookup, deadline),
     loadOrgIndex().then((l) => l.index).catch(() => null),
-    exclusionDates(),
+    exclusionState(),
   ]);
+  const nppes = nppesControl(nppesRaw);
+  const dates = exclusions.dates;
 
   const results: RosterResult[] = parsed.npis.map((npi) =>
     assemble({
@@ -101,6 +145,8 @@ export async function runRoster(caller: Caller, input: unknown, surface: 'api' |
       nppes: nppes.get(npi) ?? { checked: false },
       index,
       suppressed: suppressed.has(npi),
+      exclusionsOk: exclusions.ok,
+      hiddenOrgNpis,
     }),
   );
   for (const npi of parsed.invalid) results.push(invalidResult(npi));
@@ -115,8 +161,8 @@ export async function runRoster(caller: Caller, input: unknown, surface: 'api' |
       sources: {
         ndh: `CMS National Provider Directory bulk export, release ${CURRENT_RELEASE}`,
         nppes: 'NPPES NPI Registry API, queried live',
-        oig_leie: `OIG LEIE${dates.oig_leie ? `, loaded ${dates.oig_leie}` : ''}`,
-        sam: `SAM.gov exclusions extract${dates.sam_exclusions ? `, loaded ${dates.sam_exclusions}` : ''}`,
+        oig_leie: `OIG LEIE${dates.oig_leie ? `, loaded ${dates.oig_leie}` : ', load date unknown'}; matched on NPI, which most LEIE records lack`,
+        sam: `SAM.gov exclusions extract${dates.sam_exclusions ? `, loaded ${dates.sam_exclusions}` : ', load date unknown'}; matched on NPI`,
         endpoints: 'AINPI H50 NDH endpoint crosswalk and H51 EHR vendor endpoint files',
       },
       results,

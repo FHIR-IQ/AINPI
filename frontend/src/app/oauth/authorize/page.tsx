@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 import Navbar from '@/components/Navbar';
-import { checkAuthorize, redirectWith, ISSUER } from '@/lib/oauth';
+import { checkAuthorize } from '@/lib/oauth';
 import { loadClient } from '@/lib/oauth-client';
 
 /**
@@ -23,9 +22,10 @@ export default async function AuthorizePage({ searchParams }: { searchParams: Se
   for (const k of PASSED) q[k] = first(searchParams[k]);
   const client = await loadClient(q.client_id);
   const check = checkAuthorize(q, client);
-  if (!check.ok && check.redirect) {
-    redirect(redirectWith(check.redirectUri, { error: check.error, error_description: check.description, state: check.state, iss: ISSUER }));
-  }
+  // Never redirect from a GET: registration is open, so an automatic bounce
+  // on an error would make ainpi.dev a redirector to any registered address
+  // (RFC 9700 4.11.2). The error is shown here; redirects happen only after
+  // the user presses Allow or Cancel.
   const badKey = first(searchParams.error) === 'bad_key';
   const host = check.ok ? new URL(check.params.redirectUri).host || check.params.redirectUri : '';
 
@@ -43,11 +43,14 @@ export default async function AuthorizePage({ searchParams }: { searchParams: Se
           <>
             <p className="mt-4 text-sm text-gray-700">
               An application{client?.clientName ? <> calling itself <strong>{client.clientName}</strong></> : null} wants to use the
-              AINPI tools as you. It will return to <code className="font-mono text-xs">{host}</code>. Approve only if you started
-              this connection.
+              AINPI tools as you. It will return to <code className="font-mono text-xs">{host}</code>. Choose Allow only if you
+              started this connection.
             </p>
             <form method="post" action="/api/oauth/authorize" className="mt-6 space-y-4 text-sm">
               {PASSED.map((k) => (q[k] !== undefined ? <input key={k} type="hidden" name={k} value={q[k]} /> : null))}
+              <p className="text-xs text-gray-700">
+                Check that your browser&apos;s address bar shows <strong>ainpi.dev</strong> before you paste your key.
+              </p>
               <label className="block">
                 <span className="mb-1 block font-medium text-ink">Your AINPI API key</span>
                 <input
@@ -62,7 +65,7 @@ export default async function AuthorizePage({ searchParams }: { searchParams: Se
               </label>
               {badKey && (
                 <p role="alert" className="text-signal">
-                  That key was not recognised, or it has been revoked or has expired.
+                  That key was not recognized, or it has been revoked or has expired.
                 </p>
               )}
               <p className="text-xs text-gray-600">

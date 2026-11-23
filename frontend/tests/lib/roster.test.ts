@@ -4,6 +4,7 @@ import { buildOrgIndex } from '@/lib/org-lookup';
 import {
   assemble,
   invalidResult,
+  NOT_CHECKED_FLAGS,
   parseRoster,
   rosterUnits,
   samNameMatches,
@@ -29,9 +30,9 @@ const NPPES_O: NppesResult = {
 
 const row = (over: Partial<WarehouseRow> = {}): WarehouseRow => ({
   npi: P,
-  prac: { active: true, family: 'EXAMPLE', given: 'PAT', state: 'PA' },
+  prac: { npi: P, active: true, family: 'EXAMPLE', given: 'PAT', state: 'PA' },
   org: null,
-  roles: { active_roles: 2, org_refs: [`Organization/Organization-${O}`] },
+  roles: { active_roles: 2, org_npis: [O], org_refs_total: 1 },
   leie: null,
   sam: null,
   ...over,
@@ -128,9 +129,11 @@ describe('assemble', () => {
     expect(r.flags).toEqual(expect.arrayContaining(['not_in_nppes', 'not_in_ndh']));
   });
 
-  it('a suppressed NPI returns nothing from any source', () => {
+  it('a suppressed NPI returns nothing, looking exactly like an NPI no source could check', () => {
     const r = assemble({ npi: P, row: row({ leie: { excldate: '20180101', excltype: 'x' } }), nppes: NPPES_P, index, suppressed: true });
-    expect(r.flags).toEqual(['not_checked']);
+    expect(r.flags).toEqual(NOT_CHECKED_FLAGS);
+    const s = summarize([r], 0);
+    expect(s).toMatchObject({ incomplete: 1, complete: false });
     expect(r.directory.found).toBe(false);
     expect(r.nppes.checked).toBe(false);
     expect(r.exclusions.oig_leie.excluded).toBe(false);
@@ -168,5 +171,40 @@ describe('parseNppes', () => {
     expect(parseNppes({ result_count: 0, results: [] })).toEqual({ checked: true, found: false });
     expect(parseNppes({ Errors: [{ description: 'x' }] })).toEqual({ checked: false });
     expect(parseNppes('nonsense')).toEqual({ checked: false });
+  });
+});
+
+describe('review fixes', () => {
+  it('a failed warehouse query makes the summary incomplete, never a clean roster', () => {
+    const r = assemble({ npi: P, row: null, nppes: NPPES_P, index, suppressed: false });
+    const s = summarize([r], 0);
+    expect(s.flagged).toBe(0);
+    expect(s).toMatchObject({ incomplete: 1, complete: false });
+  });
+  it('exclusion tables failing their control report exclusions as not checked', () => {
+    const r = assemble({ npi: P, row: row({ leie: { excldate: '20180101', excltype: 'x' } }), nppes: NPPES_P, index, suppressed: false, exclusionsOk: false });
+    expect(r.exclusions.checked).toBe(false);
+    expect(r.flags).toContain('exclusions_not_checked');
+    expect(r.flags).not.toContain('oig_excluded');
+  });
+  it('a practitioner whose active flag is null is still found', () => {
+    const r = assemble({ npi: P, row: row({ prac: { npi: P, active: null, family: 'X', given: 'Y', state: null } }), nppes: NPPES_P, index, suppressed: false });
+    expect(r.directory.found).toBe(true);
+    expect(r.flags).not.toContain('not_in_ndh');
+  });
+  it('never shows an endpoint through an organization NPI under a removal request', () => {
+    const r = assemble({ npi: P, row: row(), nppes: NPPES_P, index, suppressed: false, hiddenOrgNpis: new Set([O]) });
+    expect(r.endpoint.endpoints).toHaveLength(0);
+  });
+});
+
+describe('nppesControl', () => {
+  it('downgrades a batch where every lookup was "not found" to not checked', async () => {
+    const { nppesControl } = await import('@/lib/roster-run');
+    const all = new Map(Array.from({ length: 5 }, (_, i) => [String(i), { checked: true, found: false } as NppesResult]));
+    expect(Array.from(nppesControl(all).values()).every((r) => !r.checked)).toBe(true);
+    const mixed = new Map(all);
+    mixed.set('x', NPPES_P);
+    expect(nppesControl(mixed).get('0')).toEqual({ checked: true, found: false });
   });
 });

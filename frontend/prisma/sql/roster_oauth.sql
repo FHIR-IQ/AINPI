@@ -45,6 +45,7 @@ create index if not exists oauth_codes_expires_at_idx on public.oauth_codes (exp
 create table if not exists public.oauth_tokens (
   token_hash text         not null,
   kind       text         not null,
+  family_id  text         not null,
   client_id  text         not null,
   api_key_id text         not null,
   expires_at timestamp(3) not null,
@@ -53,6 +54,7 @@ create table if not exists public.oauth_tokens (
   constraint oauth_tokens_pkey primary key (token_hash)
 );
 create index if not exists oauth_tokens_api_key_id_idx on public.oauth_tokens (api_key_id);
+create index if not exists oauth_tokens_family_id_idx on public.oauth_tokens (family_id);
 create index if not exists oauth_tokens_expires_at_idx on public.oauth_tokens (expires_at);
 
 alter table public.roster_verifications enable row level security;

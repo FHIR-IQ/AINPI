@@ -468,6 +468,10 @@ model OAuthCode {
 model OAuthToken {
   tokenHash String    @id @map("token_hash")
   kind      String // access | refresh
+  /// The authorization code that started this sign-in (its hash). Every token
+  /// from one sign-in shares it, so a replayed code or refresh token can
+  /// revoke the whole family (RFC 9700 4.14.2).
+  familyId  String    @map("family_id")
   clientId  String    @map("client_id")
   apiKeyId  String    @map("api_key_id")
   expiresAt DateTime  @map("expires_at")
@@ -475,6 +479,7 @@ model OAuthToken {
   createdAt DateTime  @default(now()) @map("created_at")
 
   @@index([apiKeyId])
+  @@index([familyId])
   @@index([expiresAt])
   @@map("oauth_tokens")
 }

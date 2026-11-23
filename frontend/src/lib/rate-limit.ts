@@ -207,6 +207,9 @@ export function clientIp(req: NextRequest): string {
   return req.headers.get('x-real-ip') ?? 'unknown';
 }
 
+/** Paths where an OAuth access token stands in for its API key. */
+export const TOKEN_PATHS = ['/api/mcp', '/api/account/mcp', '/api/npd/search'];
+
 export async function identify(req: NextRequest): Promise<Caller> {
   const header =
     req.headers.get('authorization')?.replace(/^Bearer\s+/i, '') ??
@@ -218,9 +221,14 @@ export async function identify(req: NextRequest): Promise<Caller> {
       const keyHash = await sha256Hex(header);
       // An OAuth access token (MCP sign-in) stands for the API key it was
       // issued against; the key's own state is checked below either way.
-      const tokenKeyId = header.startsWith(ACCESS_PREFIX)
-        ? await keyIdForAccessToken(header, prisma as unknown as OAuthDb, Date.now())
-        : null;
+      // Audience: a token is accepted only where MCP traffic arrives (the two
+      // MCP endpoints, and the search route their tools call), never on the
+      // REST API, so a token leaked from a connector is not the key itself.
+      const tokenAllowed = TOKEN_PATHS.some((p) => req.nextUrl.pathname.startsWith(p));
+      const tokenKeyId =
+        header.startsWith(ACCESS_PREFIX) && tokenAllowed
+          ? await keyIdForAccessToken(header, prisma as unknown as OAuthDb, Date.now())
+          : null;
       const row = header.startsWith(ACCESS_PREFIX)
         ? tokenKeyId
           ? await prisma.apiKey.findUnique({ where: { id: tokenKeyId } })
@@ -252,7 +260,15 @@ export async function identify(req: NextRequest): Promise<Caller> {
         dailyUnitCap: 0,
       };
     } catch {
-      // Database unreachable. Fall through to anonymous rather than 500.
+      // Database unreachable. Serve as anonymous rather than 500, but mark it,
+      // so a sign-in-only surface can answer 503 instead of "invalid token"
+      // (which would make an MCP client discard a good token).
+      return {
+        subject: `dberror:${clientIp(req)}`,
+        tier: TIERS.anonymous,
+        keyId: null,
+        dailyUnitCap: TIERS.anonymous.perDay,
+      };
     }
   }
   return {

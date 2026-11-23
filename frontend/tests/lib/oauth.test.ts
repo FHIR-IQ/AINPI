@@ -5,6 +5,7 @@ import {
   ACCESS_PREFIX,
   authorizationServerMetadata,
   checkAuthorize,
+  redirectMatches,
   parseRegistration,
   pkceMatches,
   sha256Hex,
@@ -47,7 +48,12 @@ function fakeDb(keyState: { active?: boolean; revokedAt?: Date | null; expiresAt
       create: async ({ data }) => tokens.set(data.tokenHash, { ...data, revokedAt: null }),
       findUnique: async ({ where }) => tokens.get(where.tokenHash) ?? null,
       updateMany: async ({ where, data }) => {
-        const t = tokens.get(where.tokenHash);
+        if (where.familyId) {
+          let n = 0;
+          for (const t of tokens.values()) if (t.familyId === where.familyId && !t.revokedAt) { t.revokedAt = data.revokedAt; n++; }
+          return { count: n };
+        }
+        const t = tokens.get(where.tokenHash as string);
         if (!t || t.revokedAt) return { count: 0 };
         t.revokedAt = data.revokedAt;
         return { count: 1 };
@@ -74,6 +80,7 @@ describe('redirect URIs and registration', () => {
     ['http://localhost:6274/oauth/callback', true],
     ['http://127.0.0.1:33418/cb', true],
     ['cursor://anysphere.cursor-retrieval/oauth/callback', true],
+    ['com.evil.app:/cb', false],
     ['http://evil.example/cb', false],
     ['https://ok.example/cb#frag', false],
     ['javascript:alert(1)', false],
@@ -104,6 +111,15 @@ describe('checkAuthorize', () => {
     expect(checkAuthorize({ ...q, code_challenge_method: 'plain' }, client)).toMatchObject({ ok: false, redirect: true, error: 'invalid_request' });
     expect(checkAuthorize({ ...q, response_type: 'token' }, client)).toMatchObject({ ok: false, redirect: true, error: 'unsupported_response_type' });
     expect(checkAuthorize({ ...q, resource: 'https://other.example/mcp' }, client)).toMatchObject({ error: 'invalid_target' });
+  });
+});
+
+describe('redirectMatches', () => {
+  it('lets a loopback redirect change port, nothing else', () => {
+    expect(redirectMatches('http://127.0.0.1:1111/cb', 'http://127.0.0.1:2222/cb')).toBe(true);
+    expect(redirectMatches('http://127.0.0.1:1111/cb', 'http://127.0.0.1:2222/other')).toBe(false);
+    expect(redirectMatches('https://a.example/cb', 'https://a.example:444/cb')).toBe(false);
+    expect(redirectMatches('http://localhost:1/cb', 'http://127.0.0.1:1/cb')).toBe(false);
   });
 });
 
@@ -158,6 +174,27 @@ describe('grant flows', () => {
     expect(await keyIdForAccessToken(r.tokens.access_token, f.db, NOW)).toBe('key1');
     expect(await keyIdForAccessToken(r.tokens.access_token, f.db, NOW + 3_601_000)).toBeNull();
     expect(await keyIdForAccessToken(r.tokens.refresh_token, f.db, NOW)).toBeNull();
+  });
+
+  it('a replayed code revokes every token from that sign-in', async () => {
+    const f = fakeDb();
+    const code = await issueCode(PARAMS, 'key1', f.db, NOW);
+    const r = await redeemCode({ code, client_id: 'c1', code_verifier: VERIFIER }, f.db, NOW);
+    if (!r.ok) throw new Error('fixture');
+    expect((await redeemCode({ code, client_id: 'c1', code_verifier: VERIFIER }, f.db, NOW)).ok).toBe(false);
+    expect(await keyIdForAccessToken(r.tokens.access_token, f.db, NOW)).toBeNull();
+  });
+
+  it('a replayed, rotated-out refresh token revokes the whole family', async () => {
+    const f = fakeDb();
+    const code = await issueCode(PARAMS, 'key1', f.db, NOW);
+    const first = await redeemCode({ code, client_id: 'c1', code_verifier: VERIFIER }, f.db, NOW);
+    if (!first.ok) throw new Error('fixture');
+    const second = await refreshTokens({ refresh_token: first.tokens.refresh_token, client_id: 'c1' }, f.db, NOW);
+    if (!second.ok) throw new Error('fixture');
+    await refreshTokens({ refresh_token: first.tokens.refresh_token, client_id: 'c1' }, f.db, NOW); // replay
+    expect(await keyIdForAccessToken(second.tokens.access_token, f.db, NOW)).toBeNull();
+    expect((await refreshTokens({ refresh_token: second.tokens.refresh_token, client_id: 'c1' }, f.db, NOW)).ok).toBe(false);
   });
 
   it('a key revoked after sign-in cannot refresh', async () => {

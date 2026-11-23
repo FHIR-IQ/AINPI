@@ -3,14 +3,15 @@
  * NPPES registry, and the shared endpoint index. Rules for interpreting what
  * comes back live in src/lib/roster.ts.
  *
- * Cost: the warehouse query filters every table on its cluster key or on a
- * small table (dry-run upper bound 28.8 MB for any batch, 2026-11-22) and runs
- * under ROSTER_MAX_BYTES, far below the project default.
+ * Cost: the practitioner, organization-by-NPI and role filters use cluster
+ * keys; resolving role organizations by id scans the organization id column.
+ * Dry-run upper bound for a 500-NPI batch: ~0.8 GB (~$0.005), measured
+ * 2026-11-22; the query runs under ROSTER_MAX_BYTES.
  */
 import { getDatasetId, getProjectId, queryBigQuery } from '@/lib/bigquery';
 import type { NppesResult, WarehouseRow } from '@/lib/roster';
 
-export const ROSTER_MAX_BYTES = 2_000_000_000; // 2 GB; the measured bound is 28.8 MB
+export const ROSTER_MAX_BYTES = 3_000_000_000; // 3 GB cap over a measured ~0.8 GB upper bound
 const NPPES_URL = 'https://npiregistry.cms.hhs.gov/api/?version=2.1&number=';
 const NPPES_TIMEOUT_MS = 5000;
 const NPPES_CONCURRENCY = 8;
@@ -25,9 +26,16 @@ prac AS (SELECT _npi AS npi, _active AS active, _family_name AS family, _given_n
          FROM ${t('practitioner')} WHERE _npi IN UNNEST(@npis)),
 org AS (SELECT _npi AS npi, _active AS active, _name AS name, _state AS state
         FROM ${t('organization')} WHERE _npi IN UNNEST(@npis)),
-roles AS (SELECT REGEXP_EXTRACT(_practitioner_id, r'(\\d{10})$') AS npi, COUNTIF(_active) AS active_roles,
-                 ARRAY_AGG(DISTINCT _org_id IGNORE NULLS LIMIT 50) AS org_refs
-          FROM ${t('practitioner_role')} WHERE _practitioner_id IN UNNEST(@prefs) GROUP BY 1),
+role_rows AS (SELECT REGEXP_EXTRACT(_practitioner_id, r'(\\d{10})$') AS npi, _org_id AS org_ref
+              FROM ${t('practitioner_role')} WHERE _practitioner_id IN UNNEST(@prefs) AND _active),
+-- Organization ids are a mix of NPI-based and UUID ids, so resolve every
+-- role's organization to its NPI by joining on the id, not by parsing it.
+role_orgs AS (SELECT DISTINCT r.org_ref, o._npi AS org_npi
+              FROM role_rows r JOIN ${t('organization')} o ON CONCAT('Organization/', o._id) = r.org_ref),
+roles AS (SELECT r.npi, COUNT(*) AS active_roles,
+                 ARRAY_AGG(DISTINCT ro.org_npi IGNORE NULLS LIMIT 50) AS org_npis,
+                 COUNT(DISTINCT r.org_ref) AS org_refs_total
+          FROM role_rows r LEFT JOIN role_orgs ro ON ro.org_ref = r.org_ref GROUP BY 1),
 leie AS (SELECT NPI AS npi, MIN(EXCLDATE) AS excldate, ANY_VALUE(EXCLTYPE) AS excltype
          FROM ${t('oig_leie')}
          WHERE NPI IN UNNEST(@npis) AND (REINDATE = '00000000' OR REINDATE IS NULL OR REINDATE = '') GROUP BY 1),
@@ -130,14 +138,18 @@ async function fetchOne(npi: string): Promise<NppesResult> {
   }
 }
 
-/** Live registry lookups, NPPES_CONCURRENCY at a time. Never throws. */
-export async function fetchNppes(npis: string[]): Promise<Map<string, NppesResult>> {
+/**
+ * Live registry lookups, NPPES_CONCURRENCY at a time. Never throws. Stops
+ * starting new lookups at `deadline` (epoch ms), so a slow registry cannot
+ * push the function past its time limit; NPIs not reached read "not checked".
+ */
+export async function fetchNppes(npis: string[], deadline = Infinity): Promise<Map<string, NppesResult>> {
   const out = new Map<string, NppesResult>();
   let next = 0;
   const worker = async () => {
     while (next < npis.length) {
       const npi = npis[next++];
-      out.set(npi, await fetchOne(npi));
+      out.set(npi, Date.now() < deadline ? await fetchOne(npi) : { checked: false });
     }
   };
   await Promise.all(Array.from({ length: Math.min(NPPES_CONCURRENCY, npis.length) }, worker));

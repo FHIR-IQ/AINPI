@@ -12,12 +12,16 @@ import { json, preflight } from '@/lib/oauth-http';
 
 export const dynamic = 'force-dynamic';
 
+/** All registrations together, a UTC day: bounds table growth whatever the IP. */
+const GLOBAL_DAILY = 1000;
+
 export async function POST(req: NextRequest) {
   const ip = clientIp(req);
   const now = Date.now();
   const h = await bump(`oauth:reg:${ip}:h:${Math.floor(now / 3_600_000)}`, 1, 7_200_000);
   const d = await bump(`oauth:reg:${ip}:d:${Math.floor(now / 86_400_000)}`, 1, 172_800_000);
-  if ((h !== null && h > 10) || (d !== null && d > 50)) {
+  const g = await bump(`oauth:reg:global:d:${Math.floor(now / 86_400_000)}`, 1, 172_800_000);
+  if ((h !== null && h > 10) || (d !== null && d > 50) || (g !== null && g > GLOBAL_DAILY)) {
     return json(oauthError('temporarily_unavailable', 'Too many registrations. Try again later.'), 429, { 'retry-after': '3600' });
   }
   let body: unknown;
@@ -28,6 +32,11 @@ export async function POST(req: NextRequest) {
   }
   const r = parseRegistration(body);
   if (!r.ok) return json(oauthError(r.error, r.description), 400);
+  // Clients that never completed a sign-in within a day are dropped.
+  void prisma.$executeRaw`
+    DELETE FROM oauth_clients c
+    WHERE c.created_at < NOW() - INTERVAL '1 day'
+      AND NOT EXISTS (SELECT 1 FROM oauth_tokens t WHERE t.client_id = c.id)`.catch(() => {});
   try {
     const row = await prisma.oAuthClient.create({
       data: { clientName: r.value.clientName, redirectUris: r.value.redirectUris, ipAddress: ip === 'unknown' ? null : ip },

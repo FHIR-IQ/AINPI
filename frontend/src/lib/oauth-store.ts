@@ -40,6 +40,7 @@ interface CodeRow {
 interface TokenRow {
   tokenHash: string;
   kind: string;
+  familyId: string;
   clientId: string;
   apiKeyId: string;
   expiresAt: Date;
@@ -58,8 +59,16 @@ export interface OAuthDb {
   oAuthToken: {
     create(a: { data: Omit<TokenRow, 'revokedAt'> }): Promise<unknown>;
     findUnique(a: { where: { tokenHash: string } }): Promise<TokenRow | null>;
-    updateMany(a: { where: { tokenHash: string; revokedAt: null }; data: { revokedAt: Date } }): Promise<{ count: number }>;
+    updateMany(a: {
+      where: { tokenHash?: string; familyId?: string; revokedAt: null };
+      data: { revokedAt: Date };
+    }): Promise<{ count: number }>;
   };
+}
+
+/** Revoke every token from one sign-in: the response to a replayed code or refresh token. */
+async function revokeFamily(familyId: string, db: OAuthDb, now: number) {
+  await db.oAuthToken.updateMany({ where: { familyId, revokedAt: null }, data: { revokedAt: new Date(now) } });
 }
 
 /** The API key a user pasted, if it is one that may sign in. */
@@ -85,14 +94,14 @@ export async function issueCode(p: AuthorizeParams, apiKeyId: string, db: OAuthD
   return code;
 }
 
-async function issuePair(clientId: string, apiKeyId: string, db: OAuthDb, now: number): Promise<TokenPair> {
+async function issuePair(clientId: string, apiKeyId: string, familyId: string, db: OAuthDb, now: number): Promise<TokenPair> {
   const access = newSecret(ACCESS_PREFIX);
   const refresh = newSecret(REFRESH_PREFIX);
   await db.oAuthToken.create({
-    data: { tokenHash: sha256Hex(access), kind: 'access', clientId, apiKeyId, expiresAt: new Date(now + ACCESS_TTL_S * 1000) },
+    data: { tokenHash: sha256Hex(access), kind: 'access', familyId, clientId, apiKeyId, expiresAt: new Date(now + ACCESS_TTL_S * 1000) },
   });
   await db.oAuthToken.create({
-    data: { tokenHash: sha256Hex(refresh), kind: 'refresh', clientId, apiKeyId, expiresAt: new Date(now + REFRESH_TTL_MS) },
+    data: { tokenHash: sha256Hex(refresh), kind: 'refresh', familyId, clientId, apiKeyId, expiresAt: new Date(now + REFRESH_TTL_MS) },
   });
   return { access_token: access, token_type: 'Bearer', expires_in: ACCESS_TTL_S, refresh_token: refresh, scope: SCOPE };
 }
@@ -110,16 +119,24 @@ export async function redeemCode(
     return { ok: false, error: 'invalid_request', description: 'code, client_id and code_verifier are required.' };
   }
   const row = await db.oAuthCode.findUnique({ where: { codeHash: sha256Hex(f.code) } });
-  if (!row || row.usedAt || row.expiresAt.getTime() <= now) return invalidGrant('The code is invalid, used or expired.');
+  if (row?.usedAt) {
+    // A replayed code may mean it was stolen: end that whole sign-in.
+    await revokeFamily(row.codeHash, db, now);
+    return invalidGrant('The code is invalid, used or expired.');
+  }
+  if (!row || row.expiresAt.getTime() <= now) return invalidGrant('The code is invalid, used or expired.');
   if (row.clientId !== f.client_id) return invalidGrant('The code was issued to another client.');
   if (f.redirect_uri !== undefined && f.redirect_uri !== row.redirectUri) return invalidGrant('redirect_uri does not match.');
   if (!pkceMatches(f.code_verifier, row.codeChallenge)) return invalidGrant('code_verifier does not match the code_challenge.');
   // Single use, even under concurrent redemption.
   const claim = await db.oAuthCode.updateMany({ where: { codeHash: row.codeHash, usedAt: null }, data: { usedAt: new Date(now) } });
-  if (claim.count !== 1) return invalidGrant('The code is invalid, used or expired.');
+  if (claim.count !== 1) {
+    await revokeFamily(row.codeHash, db, now);
+    return invalidGrant('The code is invalid, used or expired.');
+  }
   const key = await db.apiKey.findUnique({ where: { id: row.apiKeyId } });
   if (!keyIsLive(key, now)) return invalidGrant('The API key behind this sign-in is no longer active.');
-  return { ok: true, tokens: await issuePair(row.clientId, row.apiKeyId, db, now) };
+  return { ok: true, tokens: await issuePair(row.clientId, row.apiKeyId, row.codeHash, db, now) };
 }
 
 export async function refreshTokens(
@@ -131,16 +148,24 @@ export async function refreshTokens(
     return { ok: false, error: 'invalid_request', description: 'refresh_token and client_id are required.' };
   }
   const row = await db.oAuthToken.findUnique({ where: { tokenHash: sha256Hex(f.refresh_token) } });
-  if (!row || row.kind !== 'refresh' || row.revokedAt || row.expiresAt.getTime() <= now) {
+  if (row && row.kind === 'refresh' && row.revokedAt) {
+    // A rotated-out refresh token came back: someone holds a copy. End the sign-in.
+    await revokeFamily(row.familyId, db, now);
+    return invalidGrant('The refresh token is invalid, revoked or expired.');
+  }
+  if (!row || row.kind !== 'refresh' || row.expiresAt.getTime() <= now) {
     return invalidGrant('The refresh token is invalid, revoked or expired.');
   }
   if (row.clientId !== f.client_id) return invalidGrant('The refresh token was issued to another client.');
   // Rotation: the old refresh token works exactly once.
   const claim = await db.oAuthToken.updateMany({ where: { tokenHash: row.tokenHash, revokedAt: null }, data: { revokedAt: new Date(now) } });
-  if (claim.count !== 1) return invalidGrant('The refresh token is invalid, revoked or expired.');
+  if (claim.count !== 1) {
+    await revokeFamily(row.familyId, db, now);
+    return invalidGrant('The refresh token is invalid, revoked or expired.');
+  }
   const key = await db.apiKey.findUnique({ where: { id: row.apiKeyId } });
   if (!keyIsLive(key, now)) return invalidGrant('The API key behind this sign-in is no longer active.');
-  return { ok: true, tokens: await issuePair(row.clientId, row.apiKeyId, db, now) };
+  return { ok: true, tokens: await issuePair(row.clientId, row.apiKeyId, row.familyId, db, now) };
 }
 
 /** The api_keys id an access token stands for, or null. The key's own state is checked by the caller. */

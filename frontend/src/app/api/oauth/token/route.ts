@@ -34,6 +34,11 @@ export async function POST(req: NextRequest) {
   const m = await bump(`oauth:token:${ip}:m:${Math.floor(Date.now() / 60_000)}`, 1, 120_000);
   if (m !== null && m > 60) return json(oauthError('temporarily_unavailable', 'Too many requests.'), 429, { 'retry-after': '60' });
 
+  // Expired codes and tokens are swept a day after expiry (indexed deletes).
+  const cutoff = new Date(Date.now() - 86_400_000);
+  void prisma.oAuthCode.deleteMany({ where: { expiresAt: { lt: cutoff } } }).catch(() => {});
+  void prisma.oAuthToken.deleteMany({ where: { expiresAt: { lt: cutoff } } }).catch(() => {});
+
   const f = await readForm(req);
   const db = prisma as unknown as OAuthDb;
   const now = Date.now();

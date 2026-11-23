@@ -353,9 +353,9 @@ export function buildMcpHandler(basePath: string) {
         'reachable through the NPI\'s organizations. Returns per-NPI results with flags, each ' +
         'source and its date, and primary-source verify URLs, plus a summary. Needs an AINPI API ' +
         'key (a 14-day trial is free at https://ainpi.dev/trial); up to 25 NPIs per call on a ' +
-        'trial key, 200 on a partner key. Flags are signals, not findings: a source marked ' +
+        'trial or free key, 200 on partner, 500 on enterprise. Flags are signals, not findings: a source marked ' +
         '"checked: false" was not consulted, and sam_excluded_needs_review means the SAM name ' +
-        'did not match NPPES. Medicare enrollment is not checked in this version.',
+        'did not match NPPES or could not be compared. Medicare enrollment is not checked in this version.',
       {
         npis: z.array(z.string()).min(1).max(500).describe('10-digit NPIs, practitioners or organizations'),
       },
@@ -473,6 +473,12 @@ export async function guarded(
     // An unknown or expired token on the sign-in endpoint restarts OAuth.
     if (opts.requireAuth && rl.response?.status === 401) return authChallenge('invalid_token');
     return rl.response!;
+  }
+  if (opts.requireAuth && rl.caller.subject.startsWith('dberror:')) {
+    return new Response(JSON.stringify({ error: 'temporarily_unavailable' }), {
+      status: 503,
+      headers: { 'content-type': 'application/json', 'retry-after': '30', 'cache-control': 'no-store' },
+    });
   }
   if (opts.requireAuth && !rl.caller.keyId) return authChallenge('invalid_token');
   const keyHeader =

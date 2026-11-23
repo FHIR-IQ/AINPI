@@ -48,6 +48,7 @@ export function authorizationServerMetadata() {
     response_types_supported: ['code'],
     grant_types_supported: ['authorization_code', 'refresh_token'],
     code_challenge_methods_supported: ['S256'],
+    authorization_response_iss_parameter_supported: true,
     token_endpoint_auth_methods_supported: ['none'],
     scopes_supported: [SCOPE],
     service_documentation: `${ISSUER}/developer#mcp`,
@@ -69,13 +70,18 @@ export function protectedResourceMetadata(resource: string) {
 // Redirect URIs and registration
 // ---------------------------------------------------------------------------
 
-const BLOCKED_SCHEMES = new Set(['javascript:', 'data:', 'file:', 'vbscript:', 'about:', 'blob:']);
+/**
+ * App schemes desktop clients use for their callback. Must equal the list in
+ * the /oauth/authorize form-action CSP in next.config.js, or the browser
+ * blocks the final redirect.
+ */
+export const APP_SCHEMES = new Set(['cursor:', 'vscode:', 'vscode-insiders:', 'windsurf:']);
 const LOOPBACK = new Set(['localhost', '127.0.0.1', '[::1]']);
 
 /**
  * Allowed: https anywhere, http only to a loopback host (RFC 8252 native
- * apps), and private-use schemes such as `cursor://` or `com.example.app:`.
- * Never a fragment, never credentials in the URL.
+ * apps), and the app schemes in APP_SCHEMES. Never a fragment, never
+ * credentials in the URL.
  */
 export function validRedirectUri(raw: unknown): raw is string {
   if (typeof raw !== 'string' || raw.length === 0 || raw.length > 2000) return false;
@@ -88,7 +94,7 @@ export function validRedirectUri(raw: unknown): raw is string {
   if (u.hash || u.username || u.password) return false;
   if (u.protocol === 'https:') return Boolean(u.hostname);
   if (u.protocol === 'http:') return LOOPBACK.has(u.hostname);
-  return !BLOCKED_SCHEMES.has(u.protocol) && /^[a-z][a-z0-9+.-]*:$/.test(u.protocol);
+  return APP_SCHEMES.has(u.protocol);
 }
 
 export interface Registration {
@@ -163,7 +169,7 @@ export function checkAuthorize(
 ): AuthorizeCheck {
   if (!q.client_id || !client) return { ok: false, redirect: false, description: 'Unknown application (client_id).' };
   const redirectUri = q.redirect_uri ?? (client.redirectUris.length === 1 ? client.redirectUris[0] : undefined);
-  if (!redirectUri || !client.redirectUris.includes(redirectUri)) {
+  if (!redirectUri || !client.redirectUris.some((r) => redirectMatches(r, redirectUri))) {
     return { ok: false, redirect: false, description: 'The redirect address does not match what this application registered.' };
   }
   const state = q.state ?? null;
@@ -177,6 +183,24 @@ export function checkAuthorize(
     return back('invalid_target', 'Unknown resource.');
   }
   return { ok: true, params: { clientId: q.client_id, redirectUri, state, codeChallenge: q.code_challenge, resource } };
+}
+
+/**
+ * Exact match, except that a loopback redirect may use any port (RFC 8252
+ * 7.3): native apps pick a free port at run time.
+ */
+export function redirectMatches(registered: string, requested: string): boolean {
+  if (registered === requested) return true;
+  try {
+    const a = new URL(registered);
+    const b = new URL(requested);
+    return (
+      a.protocol === 'http:' && b.protocol === 'http:' && LOOPBACK.has(a.hostname) && a.hostname === b.hostname &&
+      a.pathname === b.pathname && a.search === b.search && !b.hash && !b.username && !b.password
+    );
+  } catch {
+    return false;
+  }
 }
 
 export function redirectWith(redirectUri: string, params: Record<string, string | null>): string {

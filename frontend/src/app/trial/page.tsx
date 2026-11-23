@@ -41,7 +41,8 @@ export default function TrialPage() {
             <h2 className="m-0 text-base font-medium text-ink">Roster verification</h2>
             <p className="mt-1 text-sm text-gray-600">
               Check up to 25 NPIs per call against the CMS National Provider Directory, the live NPPES registry, OIG and SAM
-              exclusions, and FHIR endpoint reach, with every source and its date. Medicare enrollment is not checked yet.
+              exclusions, and FHIR endpoint reach, with every source and its date. Results are signals to verify at the source, not a
+              clearance. Medicare enrollment is not checked yet.
             </p>
           </div>
           <div className="border-t border-gray-300 pt-3">
