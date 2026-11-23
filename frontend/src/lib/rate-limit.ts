@@ -84,6 +84,10 @@ export const ROUTE_COST: Record<string, number> = {
   // own limiter (src/lib/removal-limit.ts); this entry exists so the shape is
   // priced if anything ever passes it here, and it is in NON_WAREHOUSE_SHAPES.
   'privacy/remove': 100,
+  // Roster verification: one capped query per batch (dry-run upper bound
+  // 28.8 MB, 2026-11-22) plus live NPPES calls. Charged as units: base + per
+  // NPI by the caller (src/lib/roster.ts rosterUnits), so this is the floor.
+  'roster/verify': 5,
   default: 25,
 };
 
@@ -353,8 +357,18 @@ export async function enforceRateLimit(
   req: NextRequest,
   opts: LimitOptions = {},
 ): Promise<LimitResult> {
+  return enforceForCaller(await identify(req), opts);
+}
+
+/**
+ * The same checks for a caller already identified, e.g. an MCP tool charging
+ * its own cost on top of the per-request charge the MCP route took.
+ */
+export async function enforceForCaller(
+  caller: Caller,
+  opts: LimitOptions = {},
+): Promise<LimitResult> {
   const units = opts.units ?? ROUTE_COST[opts.shape ?? 'default'] ?? ROUTE_COST.default;
-  const caller = await identify(req);
 
   // Free surfaces skip every layer: charging quota for a CDN read would make
   // the MCP server's static tools feel metered when they cost nothing.

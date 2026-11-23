@@ -421,6 +421,22 @@ model NpdMcpParticipant {
   @@map("npd_mcp_participants")
 }
 
+// Audit log for roster verification (/api/v1/roster/verify, MCP verify_roster).
+// Counts only: the NPI list is never stored. Created by
+// prisma/sql/roster_oauth.sql (RLS on, no API-role grants).
+model RosterVerification {
+  id           String   @id @default(uuid())
+  keyId        String   @map("key_id")
+  surface      String
+  npiCount     Int      @map("npi_count")
+  flaggedCount Int      @map("flagged_count")
+  outcome      String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([keyId, createdAt])
+  @@map("roster_verifications")
+}
+
 // Self-serve API trials (/trial). Created by prisma/sql/trial_signups.sql,
 // never by `db push`: RLS on, no API-role grants. One row per email address,
 // ever (emailNorm unique), so a trial cannot be renewed by signing up again.

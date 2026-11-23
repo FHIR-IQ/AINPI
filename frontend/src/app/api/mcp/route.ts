@@ -33,7 +33,9 @@ import { ISSUE_VOCABULARY, MAX_BODY_BYTES, problem } from '@/lib/interaction-rep
 import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
-import { createOrgIndexLoader, lookupOrganization } from '@/lib/org-lookup';
+import { lookupOrganization } from '@/lib/org-lookup';
+import { loadOrgIndex } from '@/lib/org-index';
+import { runRoster } from '@/lib/roster-run';
 import { getOrgSuppressedNpis, getSuppressedNpis } from '@/lib/suppression';
 
 const BASE = 'https://ainpi.dev';
@@ -132,18 +134,7 @@ async function loadCohort(): Promise<Map<string, Record<string, string>>> {
   return cohortCache;
 }
 
-// Module-scope cache for lookup_organization: the H50 crosswalk (~3.3 MB) and
-// the H51 vendor attribution file (~7.9 MB), fetched from the CDN, parsed
-// once (~150 ms, ~33 MB heap) and held for six hours per warm instance.
-const loadOrgIndex = createOrgIndexLoader({
-  base: BASE,
-  ttlMs: 6 * 60 * 60 * 1000,
-  fetchText: async (url) => {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`${url} returned ${res.status}`);
-    return res.text();
-  },
-});
+// lookup_organization's index is shared with roster verification: src/lib/org-index.ts.
 
 const handler = createMcpHandler(
   (server) => {
@@ -347,6 +338,33 @@ const handler = createMcpHandler(
         if (state) qs.set('state', state.toUpperCase());
         const data = await fetchJsonAsCaller(`${BASE}/api/npd/search?${qs}`);
         return text(JSON.stringify(data, null, 1));
+      },
+    );
+
+    server.tool(
+      'verify_roster',
+      'Verify a list of NPIs against the public federal sources in one call: the CMS National ' +
+        'Provider Directory (record, active flag, active roles), the live NPPES registry (status, ' +
+        'type, primary taxonomy), OIG LEIE and SAM.gov exclusions, and whether a FHIR endpoint is ' +
+        'reachable through the NPI\'s organizations. Returns per-NPI results with flags, each ' +
+        'source and its date, and primary-source verify URLs, plus a summary. Needs an AINPI API ' +
+        'key (a 14-day trial is free at https://ainpi.dev/trial); up to 25 NPIs per call on a ' +
+        'trial key, 200 on a partner key. Flags are signals, not findings: a source marked ' +
+        '"checked: false" was not consulted, and sam_excluded_needs_review means the SAM name ' +
+        'did not match NPPES. Medicare enrollment is not checked in this version.',
+      {
+        npis: z.array(z.string()).min(1).max(500).describe('10-digit NPIs, practitioners or organizations'),
+      },
+      async ({ npis }) => {
+        const ctx = requestCaller.getStore();
+        if (!ctx) {
+          return { isError: true, content: [{ type: 'text' as const, text: 'Caller context unavailable. Retry.' }] };
+        }
+        const out = await runRoster(ctx.caller, npis, 'mcp');
+        return {
+          ...(out.status !== 200 ? { isError: true } : {}),
+          content: [{ type: 'text' as const, text: JSON.stringify(out.status === 200 ? out.body : { httpStatus: out.status, ...out.body }, null, 1) }],
+        };
       },
     );
 
