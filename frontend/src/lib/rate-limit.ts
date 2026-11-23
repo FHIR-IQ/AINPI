@@ -114,6 +114,10 @@ export const TIERS: Record<string, Tier> = {
   anonymous: { name: 'anonymous', perMinute: 120, perDay: 2_000, survivesBreaker: false },
   // Free issued key. Enough to build and test an integration.
   free: { name: 'free', perMinute: 600, perDay: 20_000, survivesBreaker: false },
+  // Self-serve 14-day trial (/trial). The free key's daily quota (~$2 of
+  // scan) with more per-minute headroom, and it does NOT survive the breaker,
+  // so the global daily ceiling bounds what every trial key together spends.
+  trial: { name: 'trial', perMinute: 1_000, perDay: 20_000, survivesBreaker: false },
   // Named partner. ~$10/day of scan at the ceiling.
   partner: { name: 'partner', perMinute: 3_000, perDay: 100_000, survivesBreaker: true },
   // Contracted. Cap lives on the key row, not here.
@@ -197,7 +201,9 @@ export async function identify(req: NextRequest): Promise<Caller> {
     try {
       const keyHash = await sha256Hex(header);
       const row = await prisma.apiKey.findUnique({ where: { keyHash } });
-      if (row && row.active && !row.revokedAt) {
+      // An expired key (trials) is refused exactly like a revoked one.
+      const live = row && row.active && !row.revokedAt && (!row.expiresAt || row.expiresAt.getTime() > Date.now());
+      if (row && live) {
         const tier = TIERS[row.tier] ?? TIERS.free;
         // Fire and forget: last-used is for support, and awaiting it would put
         // a write on the hot path of every authenticated request.
@@ -349,7 +355,7 @@ export async function enforceRateLimit(
       ok: false,
       caller,
       units,
-      response: deny(401, 'API key not recognised, or revoked.', 60, caller),
+      response: deny(401, 'API key not recognised, revoked or expired.', 60, caller),
     };
   }
 

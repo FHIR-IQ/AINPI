@@ -582,10 +582,22 @@ export default function DeveloperPage() {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200">
+                  <td className="py-2 pr-4">Trial key</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">1,000</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">20,000</td>
+                  <td className="py-2">
+                    Self-serve, 14 days:{' '}
+                    <Link href="/trial" className="text-primary-600 hover:underline">
+                      start a trial
+                    </Link>
+                    .
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-200">
                   <td className="py-2 pr-4">Partner</td>
                   <td className="py-2 pr-4 text-right tabular-nums">3,000</td>
                   <td className="py-2 pr-4 text-right tabular-nums">100,000</td>
-                  <td className="py-2">Named integrations. Ask.</td>
+                  <td className="py-2">Paid plan. Keeps working when the daily ceiling trips. Ask.</td>
                 </tr>
               </tbody>
             </table>
