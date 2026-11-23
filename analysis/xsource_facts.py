@@ -29,6 +29,9 @@ stored resource JSON. The flattened practitioner `_postal_code` column is
 only between independent sources: NPD equal to NPPES is copy fidelity and is
 reported under `by_relation['upstream']` as a match, never as `agree`. Payer
 lineage is unknown, so payer pairs land under `by_relation['unknown']`.
+NPPES taxonomy is compared on the primary slot only (`nppes_taxonomy_scope`
+in the result), so a role specialty matching a secondary NPPES taxonomy reads
+as differ.
 
 Output: analysis/data/xsource/<release>/facts.parquet (gitignored; it holds
 per-NPI values and, once payer rows are added, payer values that must not
@@ -242,30 +245,56 @@ def _classify(a: set, b: set) -> str:
 
 _TOP = {"match": "agree", "differ": "disagree", "one_sided": "one_sided", "neither": "neither"}
 
+# Fields whose payer value comes from the role's Location, so a payer that did
+# not return the referenced Locations leaves them unknown rather than empty.
+LOCATION_FIELDS = ("zip5", "phone10")
+
+# NPPES taxonomy is the primary slot only (nppes_monthly.primary_taxonomy).
+NPPES_TAXONOMY_SCOPE = "primary_only"
+
 
 def _zero_rel() -> dict:
-    return {"match": 0, "differ": 0, "one_sided": 0, "neither": 0}
+    return {"match": 0, "differ": 0, "one_sided": 0, "neither": 0, "locations_missing": 0}
 
 
-def compare(facts, npi_set: Iterable[str], payer_rows: Iterable[dict]) -> dict:
+def _zero_top() -> dict:
+    return {"agree": 0, "disagree": 0, "one_sided": 0, "neither": 0, "locations_missing": 0}
+
+
+def compare(facts, npi_set: Iterable[str], payer_rows: Iterable[dict], *,
+            locations_missing: Iterable[str] = ()) -> dict:
     """Counts per field for the NPIs in `npi_set`.
 
     payer_rows: dicts with npi, source (a LINEAGE key), field, value_norm, all
-    from one payer. Returns, per field:
+    from one payer. locations_missing: NPIs the payer lists whose roles
+    referenced Locations the payer did not return (payer_sample's
+    `locations_missing` flag). Returns, per field:
 
-        agree, disagree, one_sided, neither
+        agree, disagree, one_sided, neither, locations_missing
             payer vs the NPD role element (Location address or telecom, role
             specialty), any-to-any. Sums to len(npi_set). "agree" is a value
             match with a source of unknown lineage, not corroboration.
+            For zip5 and phone10, an NPI in `locations_missing` is counted
+            only under locations_missing: the payer's side is unknown, not
+            empty, so it is neither one-sided nor a comparison. The flag does
+            not apply to taxonomy, which the payer sample does not supply.
         by_element[<npd element>]
             the same tallies against each NPD element separately, so a match
             only on the practitioner's own address is visible and labelled.
         by_relation[upstream|independent|unknown]
-            match / differ / one_sided / neither for every source pair,
-            grouped by lineage relation: NPD vs NPPES is upstream, payer vs
-            NPD and payer vs NPPES are unknown.
+            match / differ / one_sided / neither / locations_missing for every
+            source pair, grouped by lineage relation: NPD vs NPPES is
+            upstream, payer vs NPD and payer vs NPPES are unknown.
+
+    NPPES taxonomy is the primary slot only. nppes_monthly keeps one
+    `primary_taxonomy` per NPI (the slot switched Y, else the first populated
+    slot), so an NPD role specialty that equals one of the provider's
+    secondary NPPES taxonomies reads as `differ` under by_relation. The result
+    says so in `nppes_taxonomy_scope: 'primary_only'`; widening it needs every
+    NPPES slot in the facts table, a schema change this version does not make.
     """
     npis = set(npi_set)
+    flagged = set(locations_missing) & npis
     payer_rows = [r for r in payer_rows if r.get("npi") in npis]
     payers = {r["source"] for r in payer_rows}
     if len(payers) > 1:
@@ -289,24 +318,36 @@ def compare(facts, npi_set: Iterable[str], payer_rows: Iterable[dict]) -> dict:
             out |= vals.get((npi, "nppes", el, field), set())
         return out
 
+    # Payer lineage is unknown for every v1 payer; with no payer rows at all
+    # the flagged NPIs still belong to that relation.
+    rel_npd = relation(payer, "npd") if payer is not None else "unknown"
+    rel_nppes = relation(payer, "nppes") if payer is not None else "unknown"
+
     result = {}
     for field in FIELDS:
-        top = {"agree": 0, "disagree": 0, "one_sided": 0, "neither": 0}
-        by_el = {el: {"agree": 0, "disagree": 0, "one_sided": 0, "neither": 0}
-                 for el in NPD_ELEMENTS[field]}
+        top = _zero_top()
+        by_el = {el: _zero_top() for el in NPD_ELEMENTS[field]}
         by_rel = {k: _zero_rel() for k in ("upstream", "independent", "unknown")}
         for npi in npis:
             p = pay.get((npi, field), set())
             role = vals.get((npi, "npd", ROLE_ELEMENT[field], field), set())
             nppes_v = nppes_vals(npi, field)
+            by_rel[relation("npd", "nppes")][_classify(role, nppes_v)] += 1
+            if field in LOCATION_FIELDS and npi in flagged:
+                top["locations_missing"] += 1
+                for el in NPD_ELEMENTS[field]:
+                    by_el[el]["locations_missing"] += 1
+                by_rel[rel_npd]["locations_missing"] += 1
+                by_rel[rel_nppes]["locations_missing"] += 1
+                continue
             top[_TOP[_classify(p, role)]] += 1
             for el in NPD_ELEMENTS[field]:
                 by_el[el][_TOP[_classify(p, vals.get((npi, "npd", el, field), set()))]] += 1
-            by_rel[relation("npd", "nppes")][_classify(role, nppes_v)] += 1
-            if payer is not None:
-                by_rel[relation(payer, "npd")][_classify(p, role)] += 1
-                by_rel[relation(payer, "nppes")][_classify(p, nppes_v)] += 1
+            if payer is not None or flagged:
+                by_rel[rel_npd][_classify(p, role)] += 1
+                by_rel[rel_nppes][_classify(p, nppes_v)] += 1
         result[field] = {**top, "by_element": by_el, "by_relation": by_rel}
+    result["nppes_taxonomy_scope"] = NPPES_TAXONOMY_SCOPE
     return result
 
 

@@ -152,15 +152,64 @@ def test_payer_pairs_are_unknown_lineage(facts_path):
     assert rel["upstream"]["match"] == 1
 
 
+def _rel(match=0, differ=0, one_sided=0, neither=0, locations_missing=0):
+    return {"match": match, "differ": differ, "one_sided": one_sided,
+            "neither": neither, "locations_missing": locations_missing}
+
+
 def test_buckets_sum_to_compared_set(facts_path):
     npis = {P1, P2, P4}  # P4 is not in the facts at all
     out = xf.compare(facts_path, npis, [payer(P1, "phone10", "4125550122")])
     for field in xf.FIELDS:
         f = out[field]
-        assert f["agree"] + f["disagree"] + f["one_sided"] + f["neither"] == len(npis)
-        for rel in f["by_relation"].values():
-            assert sum(rel.values()) % len(npis) == 0
+        assert (f["agree"] + f["disagree"] + f["one_sided"] + f["neither"]
+                + f["locations_missing"]) == len(npis)
     assert out["phone10"]["agree"] == 1
+    # Exact per-relation tallies, derived by hand from ndh_fixture:
+    #   P1 role zip {15206, 15213}, role phone {..0111, ..0122}, role tax 207Q;
+    #      NPPES 15206 / ..0111 / 207Q.
+    #   P2 role zip {17101}, no role phone, role tax 363LF; NPPES 16501 / none / 363LF.
+    #   P4 nothing. The only payer value is P1's phone ..0122.
+    # upstream is NPD role vs NPPES (one pair per NPI); unknown is payer vs NPD
+    # plus payer vs NPPES (two pairs per NPI).
+    rel = {f: out[f]["by_relation"] for f in xf.FIELDS}
+    assert rel["zip5"] == {"upstream": _rel(match=1, differ=1, neither=1),
+                           "independent": _rel(),
+                           "unknown": _rel(one_sided=4, neither=2)}
+    assert rel["phone10"] == {"upstream": _rel(match=1, neither=2),
+                              "independent": _rel(),
+                              "unknown": _rel(match=1, differ=1, neither=4)}
+    assert rel["taxonomy"] == {"upstream": _rel(match=2, neither=1),
+                               "independent": _rel(),
+                               "unknown": _rel(one_sided=4, neither=2)}
+
+
+def test_locations_missing_is_counted_apart_from_one_sided(facts_path):
+    # P2 is listed by the payer, but its role Locations were not returned, so
+    # the payer side holds no ZIP or phone. That is not "payer has no value".
+    out = xf.compare(facts_path, {P1, P2}, [payer(P1, "zip5", "15213")],
+                     locations_missing={P2})
+    z = out["zip5"]
+    assert z["agree"] == 1 and z["one_sided"] == 0 and z["locations_missing"] == 1
+    assert z["by_element"][ROLE_ZIP]["locations_missing"] == 1
+    assert z["by_element"][ROLE_ZIP]["one_sided"] == 0
+    assert z["by_relation"]["unknown"]["locations_missing"] == 2
+    assert z["by_relation"]["upstream"]["locations_missing"] == 0
+    assert out["phone10"]["locations_missing"] == 1
+    # The payer never supplies taxonomy, so the flag does not apply to it.
+    assert out["taxonomy"]["locations_missing"] == 0
+
+
+def test_locations_missing_without_any_payer_rows(facts_path):
+    out = xf.compare(facts_path, {P2}, [], locations_missing={P2})
+    assert out["zip5"]["locations_missing"] == 1 and out["zip5"]["one_sided"] == 0
+    assert out["zip5"]["by_relation"]["unknown"]["locations_missing"] == 2
+
+
+def test_compare_labels_nppes_taxonomy_as_primary_only(facts_path):
+    out = xf.compare(facts_path, {P1}, [])
+    assert out["nppes_taxonomy_scope"] == "primary_only"
+    assert "primary" in xf.compare.__doc__
 
 
 def test_compare_ignores_rows_outside_npi_set(facts_path):

@@ -376,6 +376,13 @@ def to_fact_rows(results: dict[str, PayerResult], payer: str, observed_at: str) 
     return rows
 
 
+def locations_missing_npis(results: dict[str, PayerResult]) -> set[str]:
+    """Listed NPIs whose role Locations the payer did not return, for
+    xsource_facts.compare(..., locations_missing=...)."""
+    return {npi for npi, r in results.items()
+            if r["status"] == "listed" and r.get("locations_missing")}
+
+
 _OUT_SCHEMA = pa.schema([
     ("npi", pa.string()), ("status", pa.string()),
     ("zips", pa.list_(pa.string())), ("phones", pa.list_(pa.string())),

@@ -501,3 +501,10 @@ def test_counts_report_truncated_and_locations_missing(export, tmp_path):
     assert counts["locations_missing"] == 2 and counts["truncated"] == 0
     rows = pq.read_table(tmp_path / "out" / "humana" / "2026-11-22-seed11.parquet").to_pylist()
     assert all(r["locations_missing"] is True and r["truncated"] is False for r in rows)
+
+
+def test_locations_missing_npis_for_compare():
+    res = {P1: ps._result("listed", locations_missing=True),
+           P2: ps._result("listed"),
+           P3: ps._result("lookup_failed", locations_missing=True)}
+    assert ps.locations_missing_npis(res) == {P1}
