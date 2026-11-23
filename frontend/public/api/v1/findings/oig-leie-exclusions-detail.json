@@ -1,26 +1,6 @@
 {
   "samples": [
     {
-      "npi": "1861504425",
-      "display_name": "MELTON, MARK",
-      "ndh_state": "MI",
-      "leie_state": "MI",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20100120",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861504425"
-    },
-    {
-      "npi": "1861425696",
-      "display_name": "VINCENT, NEIL",
-      "ndh_state": "CA",
-      "leie_state": "CA",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20100120",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1861425696"
-    },
-    {
       "npi": "1124216833",
       "display_name": "MCDADE, DANA",
       "ndh_state": "TX",
@@ -31,24 +11,54 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1124216833"
     },
     {
-      "npi": "1154442275",
-      "display_name": "LAGGNER, ALFRED",
-      "ndh_state": "",
-      "leie_state": "WA",
+      "npi": "1619188695",
+      "display_name": "CHIH, HUI-CHANG",
+      "ndh_state": "CA",
+      "leie_state": "CA",
       "exclusion_type": "1128b4",
-      "exclusion_date": "20090618",
+      "exclusion_date": "20100720",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1154442275"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1619188695"
     },
     {
-      "npi": "1700877149",
-      "display_name": "RESNIK, BRIAN",
-      "ndh_state": "NY",
-      "leie_state": "NY",
+      "npi": "1144368911",
+      "display_name": "HARIHAN, THOMAS",
+      "ndh_state": "NC",
+      "leie_state": "VA",
       "exclusion_type": "1128b4",
-      "exclusion_date": "20080918",
+      "exclusion_date": "20110620",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1700877149"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144368911"
+    },
+    {
+      "npi": "1891769063",
+      "display_name": "BOLYARD, TIMOTHY",
+      "ndh_state": "WV",
+      "leie_state": "NJ",
+      "exclusion_type": "1128a4",
+      "exclusion_date": "20100720",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1891769063"
+    },
+    {
+      "npi": "1144376732",
+      "display_name": "BRAGG, BILLY",
+      "ndh_state": "WV",
+      "leie_state": "WV",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20100819",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1144376732"
+    },
+    {
+      "npi": "1578732210",
+      "display_name": "COUSIN, KLAVA",
+      "ndh_state": "",
+      "leie_state": "CA",
+      "exclusion_type": "1128a1",
+      "exclusion_date": "20110320",
+      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1578732210"
     },
     {
       "npi": "1548481914",
@@ -61,16 +71,6 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1548481914"
     },
     {
-      "npi": "1346421815",
-      "display_name": "ZITTLE, KRISTINA",
-      "ndh_state": "",
-      "leie_state": "VA",
-      "exclusion_type": "1128b4",
-      "exclusion_date": "20100120",
-      "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1346421815"
-    },
-    {
       "npi": "1952387425",
       "display_name": "PAGKALIWANGAN, LILLIAN",
       "ndh_state": "FL",
@@ -81,24 +81,24 @@
       "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1952387425"
     },
     {
-      "npi": "1942345129",
-      "display_name": "KHAYAT, MARWAN",
-      "ndh_state": "MD",
-      "leie_state": "DC",
+      "npi": "1306973581",
+      "display_name": "MAZUREK, BRIDGETTE",
+      "ndh_state": "MT",
+      "leie_state": "MT",
       "exclusion_type": "1128b4",
-      "exclusion_date": "20100520",
+      "exclusion_date": "20091220",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1942345129"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1306973581"
     },
     {
-      "npi": "1073567962",
-      "display_name": "DAWSEY-DAVIS, DEBBIE",
+      "npi": "1154442275",
+      "display_name": "LAGGNER, ALFRED",
       "ndh_state": "",
-      "leie_state": "SC",
-      "exclusion_type": "1128a1",
-      "exclusion_date": "20110420",
+      "leie_state": "WA",
+      "exclusion_type": "1128b4",
+      "exclusion_date": "20090618",
       "leie_lookup_url": "https://exclusions.oig.hhs.gov/",
-      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1073567962"
+      "nppes_lookup_url": "https://npiregistry.cms.hhs.gov/provider-view/1154442275"
     }
   ],
   "state_breakdown": [
