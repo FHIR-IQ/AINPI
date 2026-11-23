@@ -129,8 +129,8 @@ def test_taxonomy_without_map_uses_lazy_loader(monkeypatch):
 # --- telecom parsing -------------------------------------------------------
 
 def test_phones_from_telecom_keeps_phone_system_only():
-    raw = "fax:4129148635|phone:1-412-319-7866|phone:345-5134|email:a@b.c"
-    assert xn.phones_from_telecom(raw) == ["4123197866"]
+    raw = "fax:4125559998|phone:1-412-555-0177|phone:345-5134|email:a@b.c"
+    assert xn.phones_from_telecom(raw) == ["4125550177"]
     assert xn.phones_from_telecom(None) == []
 
 
