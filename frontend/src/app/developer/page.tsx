@@ -440,12 +440,16 @@ export default function DeveloperPage() {
               <code>claude mcp add --transport http ainpi https://ainpi.dev/api/mcp</code>
             </pre>
             <p className="text-xs text-gray-600">
-              Six tools: <code className="font-mono">list_findings</code>,{' '}
+              Nine tools: <code className="font-mono">list_findings</code>,{' '}
               <code className="font-mono">get_finding</code>,{' '}
               <code className="font-mono">get_state_audit</code>,{' '}
               <code className="font-mono">check_npi_cohort</code>,{' '}
               <code className="font-mono">lookup_npi</code>,{' '}
-              <code className="font-mono">lookup_organization</code>. No key is required. Every
+              <code className="font-mono">lookup_organization</code>,{' '}
+              <code className="font-mono">search_organizations</code>, and two report-sandbox
+              tools, <code className="font-mono">report_interaction</code> and{' '}
+              <code className="font-mono">get_interaction_report</code>. Only the report tools
+              need a key, issued to NPD MCP working group participants. Every
               response carries provenance (release date, methodology version) and the
               signals-not-findings disclaimer where flags are involved.
             </p>
@@ -485,8 +489,10 @@ export default function DeveloperPage() {
               <code className="font-mono">401</code> rather than served anonymously.
             </p>
             <p className="text-xs text-gray-600 mt-2">
-              To help build the next tools (report how an exchange went, update a record once),
-              join the{' '}
+              The report tools write to an AINPI sandbox of the proposed NPD Endpoint Feedback
+              API (v0.2), also served over HTTP at{' '}
+              <code className="font-mono">/api/v1/interaction-reports</code>. To get a key, test
+              the tools or help draft the next one (update a record once), join the{' '}
               <Link href="/npd-mcp" className="text-primary-600 hover:underline">
                 NPD MCP working group
               </Link>

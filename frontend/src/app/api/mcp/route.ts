@@ -17,9 +17,19 @@
  * Connect (Claude Code):
  *   claude mcp add --transport http ainpi https://ainpi.dev/api/mcp
  */
+import { AsyncLocalStorage } from 'node:async_hooks';
 import type { NextRequest } from 'next/server';
 import { createMcpHandler } from 'mcp-handler';
-import { enforceRateLimit, type LimitResult } from '@/lib/rate-limit';
+import { bump, enforceRateLimit, type Caller, type LimitResult } from '@/lib/rate-limit';
+import { prisma } from '@/lib/prisma';
+import {
+  checkReportRate,
+  getReport,
+  resolveReporter,
+  submitReport,
+  type StoreResult,
+} from '@/lib/interaction-report-store';
+import { ISSUE_VOCABULARY } from '@/lib/interaction-report';
 import { z } from 'zod';
 import { FINDINGS, allSlugs } from '@/data/findings';
 import { allStateCodes } from '@/data/states';
@@ -33,6 +43,35 @@ const DISCLAIMER =
   'not investigative findings. The SAM.gov NPI field has a documented ' +
   'false-positive history; verify any flag against the primary sources ' +
   '(NPPES Registry, OIG LEIE, SAM.gov) before acting.';
+
+/**
+ * The request's caller, set by guarded() around each MCP request so a tool can
+ * act as the organization whose API key the connection carries.
+ */
+const requestCaller = new AsyncLocalStorage<{ caller: Caller; keyPresented: boolean }>();
+
+function storeResultToTool(r: StoreResult) {
+  return {
+    ...(r.status >= 400 ? { isError: true } : {}),
+    content: [{ type: 'text' as const, text: JSON.stringify({ httpStatus: r.status, ...r.body }, null, 1) }],
+  };
+}
+
+async function reporterOrError() {
+  const ctx = requestCaller.getStore();
+  if (!ctx) {
+    return { error: storeResultToTool({ status: 503, body: { type: 'about:blank', title: 'Service Unavailable', status: 503, detail: 'Caller context unavailable. Retry.' } }) };
+  }
+  const r = await resolveReporter(ctx.caller, ctx.keyPresented, prisma);
+  if ('status' in r) return { error: storeResultToTool(r) };
+  const limited = await checkReportRate(r, Date.now(), bump);
+  if (limited) return { error: storeResultToTool(limited) };
+  return { reporter: r };
+}
+
+const VOCABULARY_TEXT = Object.entries(ISSUE_VOCABULARY)
+  .map(([stage, codes]) => `${stage}: ${codes.join(', ')}`)
+  .join('; ');
 
 function text(s: string) {
   return { content: [{ type: 'text' as const, text: s }] };
@@ -278,6 +317,64 @@ const handler = createMcpHandler(
         }
       },
     );
+
+    server.tool(
+      'search_organizations',
+      'Find organizations in the NDH bulk export by name, optionally within one state. ' +
+        'Returns NPI, name, type, state and city for up to 20 matches; pass an NPI to ' +
+        'lookup_organization for its endpoints. Wraps the public /api/npd/search route.',
+      {
+        name: z.string().min(3).max(100).describe('Part of the organization name, e.g. "Geisinger"'),
+        state: z.string().length(2).optional().describe('Two-letter state code, e.g. "PA"'),
+      },
+      async ({ name, state }) => {
+        const qs = new URLSearchParams({ org: name, type: 'organization', limit: '20' });
+        if (state) qs.set('state', state.toUpperCase());
+        const data = await fetchJson(`${BASE}/api/npd/search?${qs}`);
+        return text(JSON.stringify(data, null, 1));
+      },
+    );
+
+    server.tool(
+      'report_interaction',
+      'Report how an exchange with another organization went, to the AINPI sandbox of the ' +
+        'proposed NPD Endpoint Feedback API (v0.2). This is a test service, not an NPD API: ' +
+        'reports are private to the reporting organization and deleted after 90 days. Requires ' +
+        'an API key issued to an NPD MCP working group participant (https://ainpi.dev/npd-mcp), ' +
+        'sent on the MCP connection as Authorization: Bearer <key>. The reporter is the key\'s ' +
+        'organization, never a field in the report. Generate a new UUID v4 reportId per report ' +
+        'and reuse it on retry. Never include patient data, secrets, tokens or raw payloads. ' +
+        'Issue vocabulary (stage: codes): ' + VOCABULARY_TEXT + '. Code "other" is allowed with ' +
+        'any stage and then needs a description.',
+      {
+        report: z
+          .record(z.string(), z.unknown())
+          .describe(
+            'The report body exactly as POST /api/v1/interaction-reports takes it: schemaVersion "1.0", ' +
+              'reportId, reporterRole, optional counterpartyReference / counterpartyFpi / endpointReference, ' +
+              'interaction {startedAt, endedAt, optional fhirVersion, operation, resourceType, httpMethod, ' +
+              'httpStatus}, outcome, optional rating 1-5, issues[].',
+          ),
+      },
+      async ({ report }) => {
+        const r = await reporterOrError();
+        if ('error' in r) return r.error!;
+        return storeResultToTool(await submitReport(r.reporter!, report, Date.now(), prisma));
+      },
+    );
+
+    server.tool(
+      'get_interaction_report',
+      'Read the receipt of an interaction report your own organization submitted to the AINPI ' +
+        'sandbox, by reportId. Another organization\'s report returns not found. Requires the same ' +
+        'API key as report_interaction.',
+      { reportId: z.string().describe('The UUID v4 reportId you submitted') },
+      async ({ reportId }) => {
+        const r = await reporterOrError();
+        if ('error' in r) return r.error!;
+        return storeResultToTool(await getReport(r.reporter!, reportId, Date.now(), prisma));
+      },
+    );
   },
   {
     serverInfo: { name: 'ainpi', version: '1.0.0' },
@@ -311,7 +408,9 @@ async function guarded(
 ): Promise<Response> {
   const rl = await enforceRateLimit(req, { shape: 'mcp:lookup' });
   if (!rl.ok) return rl.response!;
-  return annotate(await run(req), rl);
+  const keyPresented = Boolean(req.headers.get('authorization') || req.headers.get('x-api-key'));
+  const res = await requestCaller.run({ caller: rl.caller, keyPresented }, () => run(req));
+  return annotate(res, rl);
 }
 
 /**

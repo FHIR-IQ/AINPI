@@ -89,6 +89,50 @@ export default async function NpdMcpPage() {
           </ReactMarkdown>
         </article>
 
+        <section id="test" className="mt-14 scroll-mt-20 border-t border-gray-200 pt-8">
+          <h2 className="m-0 font-serif text-2xl text-ink">Test the tools</h2>
+          <p className="measure mt-2 text-sm text-gray-600">
+            The lookup tools are open to anyone. Reporting needs an API key, which is emailed to each organization after a check that its sign-up is genuine, because the key is what says which organization a report comes from.
+          </p>
+          <h3 className="mt-6 font-serif text-lg text-ink">Connect an MCP client</h3>
+          <pre className="mt-2 overflow-x-auto rounded-sm border border-gray-200 bg-white p-3 font-mono text-xs text-ink">
+            {`claude mcp add --transport http ainpi https://ainpi.dev/api/mcp \
+  --header "Authorization: Bearer <your key>"`}
+          </pre>
+          <p className="measure mt-2 text-sm text-gray-600">
+            Without a key, leave out the header. Tools: <code>search_organizations</code>, <code>lookup_organization</code>, <code>lookup_npi</code>, <code>check_npi_cohort</code>, <code>report_interaction</code> and <code>get_interaction_report</code> (key required), plus the AINPI findings tools.
+          </p>
+          <h3 className="mt-6 font-serif text-lg text-ink">Report an exchange over HTTP</h3>
+          <p className="measure mt-2 text-sm text-gray-600">
+            The report sandbox follows the NPD Endpoint Feedback API proposal, version 0.2: the same body, issue codes, receipts and errors. Generate a new UUID v4 for each <code>reportId</code> and reuse it on retry. Reports are visible only to your organization and are deleted after 90 days. Use test exchanges only, and never put patient data, credentials or raw payloads in a report.
+          </p>
+          <pre className="mt-2 overflow-x-auto rounded-sm border border-gray-200 bg-white p-3 font-mono text-xs text-ink">
+            {`curl -X POST https://ainpi.dev/api/v1/interaction-reports \
+  -H "X-API-Key: <your key>" -H "Content-Type: application/json" \
+  -d '{
+    "schemaVersion": "1.0",
+    "reportId": "<new UUID v4>",
+    "reporterRole": "requester",
+    "endpointReference": "Endpoint/<id from the NDH>",
+    "interaction": {
+      "startedAt": "<RFC 3339 UTC time>",
+      "endedAt": "<RFC 3339 UTC time>",
+      "httpMethod": "GET",
+      "httpStatus": 401
+    },
+    "outcome": "failure",
+    "issues": [{
+      "stage": "authentication",
+      "code": "credentials-rejected",
+      "severity": "error"
+    }]
+  }'`}
+          </pre>
+          <p className="measure mt-2 text-sm text-gray-600">
+            A new report returns <code>201</code> with a receipt. Sending the same report again returns <code>200</code> and the original receipt; the same <code>reportId</code> with different content returns <code>409</code>. Read a receipt back with <code>GET /api/v1/interaction-reports/&lt;reportId&gt;</code>. This is a test service run by AINPI, not an NPD or CMS service.
+          </p>
+        </section>
+
         <section id="join" className="mt-14 scroll-mt-20 border-t border-gray-200 pt-8">
           <h2 className="m-0 font-serif text-2xl text-ink">Join the working group</h2>
           <p className="measure mt-2 text-sm text-gray-600">

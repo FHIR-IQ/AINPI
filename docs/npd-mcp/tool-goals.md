@@ -1,7 +1,7 @@
 ---
 title: "Open-source MCP tools for the National Provider Directory"
-version: "0.1-draft"
-updated: "2026-11-19"
+version: "0.2-draft"
+updated: "2026-11-22"
 ---
 
 ## What this is
@@ -35,12 +35,23 @@ The step numbers refer to the numbered flow diagram (`docs/NPD_Query_Flow.png`) 
 
 | Goal | NPD flow step | Status | Today |
 | --- | --- | --- | --- |
-| Discover: find an organization or practitioner and its endpoints | Steps 1 to 2 | Partly available | `lookup_npi` (a practitioner, by NPI), `lookup_organization` (an organization's endpoints, by NPI). No search by name yet |
+| Discover: find an organization or practitioner and its endpoints | Steps 1 to 2 | Available | `search_organizations` (by name, optionally within a state), `lookup_organization` (an organization's endpoints, by NPI), `lookup_npi` (a practitioner, by NPI). No practitioner search by name yet |
 | Validate: check status, such as Medicare enrollment, OIG and SAM exclusions, and NPI validity | Step 5 | Partly available | `check_npi_cohort`: OIG and SAM exclusions and the NPI check digit, for practitioner NPIs in the NDH, as of the last weekly run. No Medicare enrollment check yet |
-| Report how an exchange went | Step 7 | Proposed | None yet. A tool would wrap the proposed `POST /api/v1/interaction-reports` (NPD Endpoint Feedback API proposal, v0.2), with an AINPI sandbox for testing. No NPD-hosted version exists |
+| Report how an exchange went | Step 7 | Sandbox available | `report_interaction` and `get_interaction_report`, plus `POST` and `GET /api/v1/interaction-reports` on ainpi.dev, following the NPD Endpoint Feedback API proposal, v0.2. An AINPI test service, not an NPD API. Needs a key issued to a working-group participant |
 | Update once, route to everyone | Not in the flow | Proposed | None yet. This is the hardest goal |
 
-The tools available today run on the AINPI MCP server at `https://ainpi.dev/api/mcp`. The proposed tools do not exist yet. The group will draft and review them first.
+The tools available today run on the AINPI MCP server at `https://ainpi.dev/api/mcp`. The update tool does not exist yet; the group will draft and review it first.
+
+### The report sandbox
+
+The sandbox implements the proposal as written: the same body, issue vocabulary, timestamp rules, receipts, retries and error format. It exists so that requesters and responders can test reporting before any NPD-hosted service does. Where the proposal leaves a choice open, the sandbox makes these:
+
+- The reporting organization is the working-group participant the key was issued to. The receipt names it as `NpdMcpParticipant/<id>`, because the sandbox has no NPD Organization record for it.
+- A report with a property the proposal does not define is rejected, so free-form data cannot ride along.
+- A report is visible only to the organization that sent it and is deleted 90 days after receipt, the proposal's deduplication window. Nothing is published or aggregated.
+- Each key may submit 30 reports a minute and 1,000 a UTC day.
+
+Use test exchanges only. The sandbox cannot check that a description is free of patient data, so never put patient data, credentials or raw payloads in a report.
 
 ## What MCP does not solve
 
@@ -52,6 +63,6 @@ MCP does not decide who may update what. The update goal needs an agreement on w
 
 ## How the group works
 
-Sign up on this page. The first piece of work is to implement the tools above and test them against real directory data at the upcoming NPD community connectathon. AINPI takes part as a participant, not an organizer. The group reviews drafts in the open on GitHub in `FHIR-IQ/AINPI`. Anyone can propose a use case.
+Sign up on this page. After a check that the sign-up is genuine, the organization's contact receives an API key by email. The first piece of work is to test the tools above against real directory data at the upcoming NPD community connectathon. AINPI takes part as a participant, not an organizer. The group reviews drafts in the open on GitHub in `FHIR-IQ/AINPI`. Anyone can propose a use case.
 
 Independent open-source work by AINPI. Not produced, reviewed, or endorsed by CMS or the NPD team.
