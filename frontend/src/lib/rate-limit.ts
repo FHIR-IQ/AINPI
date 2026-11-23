@@ -48,6 +48,8 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/prisma';
+import { ACCESS_PREFIX } from '@/lib/oauth';
+import { keyIdForAccessToken, type OAuthDb } from '@/lib/oauth-store';
 
 // ---------------------------------------------------------------------------
 // Cost model
@@ -214,7 +216,16 @@ export async function identify(req: NextRequest): Promise<Caller> {
   if (header) {
     try {
       const keyHash = await sha256Hex(header);
-      const row = await prisma.apiKey.findUnique({ where: { keyHash } });
+      // An OAuth access token (MCP sign-in) stands for the API key it was
+      // issued against; the key's own state is checked below either way.
+      const tokenKeyId = header.startsWith(ACCESS_PREFIX)
+        ? await keyIdForAccessToken(header, prisma as unknown as OAuthDb, Date.now())
+        : null;
+      const row = header.startsWith(ACCESS_PREFIX)
+        ? tokenKeyId
+          ? await prisma.apiKey.findUnique({ where: { id: tokenKeyId } })
+          : null
+        : await prisma.apiKey.findUnique({ where: { keyHash } });
       // An expired key (trials) is refused exactly like a revoked one.
       const live = row && row.active && !row.revokedAt && (!row.expiresAt || row.expiresAt.getTime() > Date.now());
       if (row && live) {

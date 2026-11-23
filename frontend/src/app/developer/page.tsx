@@ -432,7 +432,7 @@ export default function DeveloperPage() {
             for &quot;is this provider real / active / federally excluded?&quot; queries inside an
             LLM tool surface.
           </p>
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4">
+          <div id="mcp" className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4 scroll-mt-20">
             <p className="text-sm font-semibold text-gray-900 mb-1">
               Live MCP server (streamable HTTP)
             </p>
@@ -440,7 +440,7 @@ export default function DeveloperPage() {
               <code>claude mcp add --transport http ainpi https://ainpi.dev/api/mcp</code>
             </pre>
             <p className="text-xs text-gray-600">
-              Nine tools: <code className="font-mono">list_findings</code>,{' '}
+              Ten tools: <code className="font-mono">list_findings</code>,{' '}
               <code className="font-mono">get_finding</code>,{' '}
               <code className="font-mono">get_state_audit</code>,{' '}
               <code className="font-mono">check_npi_cohort</code>,{' '}
@@ -448,10 +448,32 @@ export default function DeveloperPage() {
               <code className="font-mono">lookup_organization</code>,{' '}
               <code className="font-mono">search_organizations</code>, and two report-sandbox
               tools, <code className="font-mono">report_interaction</code> and{' '}
-              <code className="font-mono">get_interaction_report</code>. Only the report tools
-              need a key, issued to NPD MCP working group participants. Every
-              response carries provenance (release date, methodology version) and the
-              signals-not-findings disclaimer where flags are involved.
+              <code className="font-mono">get_interaction_report</code>, and{' '}
+              <code className="font-mono">verify_roster</code>. The report tools need a key issued
+              to NPD MCP working group participants; <code className="font-mono">verify_roster</code>{' '}
+              needs any AINPI key (<Link href="/trial" className="text-primary-600 hover:underline">a
+              14-day trial</Link> is free). Every response carries provenance (release date,
+              methodology version) and the signals-not-findings disclaimer where flags are involved.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              <strong>Sign in from Claude, ChatGPT or another assistant.</strong> Add{' '}
+              <code className="font-mono">https://ainpi.dev/api/account/mcp</code> as a custom
+              connector and sign in with your AINPI API key. The server supports OAuth 2.1 with
+              dynamic client registration and PKCE (metadata at{' '}
+              <code className="font-mono">/.well-known/oauth-authorization-server</code>); the
+              application gets a token that stops working if your key is revoked or expires.
+              <code className="font-mono"> /api/mcp</code> stays open without sign-in and also
+              accepts a key or token.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              <strong>Roster verification over HTTP:</strong>{' '}
+              <code className="font-mono">POST /api/v1/roster/verify</code> with{' '}
+              <code className="font-mono">{'{"npis": ["..."]}'}</code> and your key. Per NPI: NDH
+              record and active roles, live NPPES status, OIG LEIE and SAM exclusions (a SAM match
+              whose name differs from NPPES is <code className="font-mono">needs_review</code>),
+              and endpoint reach, with each source&apos;s date. Up to 25 NPIs per call on a trial
+              key and 200 on a partner key; each call costs 5 units plus 2 per NPI. Medicare
+              enrollment is not checked yet.
             </p>
             <p className="text-xs text-gray-600 mt-2">
               <code className="font-mono">lookup_organization</code> takes an organization NPI

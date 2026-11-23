@@ -437,6 +437,48 @@ model RosterVerification {
   @@map("roster_verifications")
 }
 
+// OAuth 2.1 for the MCP server (sign in with an AINPI API key). Created by
+// prisma/sql/roster_oauth.sql (RLS on, no API-role grants). Codes and tokens
+// are stored only as SHA-256 hashes and bound to an api_keys row, so revoking
+// or expiring the key ends every token issued for it.
+model OAuthClient {
+  id           String   @id @default(uuid())
+  clientName   String?  @map("client_name")
+  redirectUris Json     @map("redirect_uris")
+  ipAddress    String?  @map("ip_address")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("oauth_clients")
+}
+
+model OAuthCode {
+  codeHash      String    @id @map("code_hash")
+  clientId      String    @map("client_id")
+  apiKeyId      String    @map("api_key_id")
+  redirectUri   String    @map("redirect_uri")
+  codeChallenge String    @map("code_challenge")
+  expiresAt     DateTime  @map("expires_at")
+  usedAt        DateTime? @map("used_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("oauth_codes")
+}
+
+model OAuthToken {
+  tokenHash String    @id @map("token_hash")
+  kind      String // access | refresh
+  clientId  String    @map("client_id")
+  apiKeyId  String    @map("api_key_id")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([apiKeyId])
+  @@index([expiresAt])
+  @@map("oauth_tokens")
+}
+
 // Self-serve API trials (/trial). Created by prisma/sql/trial_signups.sql,
 // never by `db push`: RLS on, no API-role grants. One row per email address,
 // ever (emailNorm unique), so a trial cannot be renewed by signing up again.

@@ -1,6 +1,6 @@
 ---
 title: Privacy policy
-version: 0.6.0
+version: 0.7.0
 last_updated: 2026-11-22
 ---
 
@@ -27,6 +27,8 @@ AINPI is a research project. This privacy policy covers the public website at [a
 **When you join the NPD MCP working group:** your organization's name and type, your name, your email address, how you want to take part, the use case you describe (optional), whether you ticked the box to be listed, the submission timestamp, and the IP address and browser user agent the form was sent from. We keep the IP address and user agent only to spot and block abusive submissions. Only your organization's name and type are ever published, on the [/npd-mcp](/npd-mcp) page, and only if you ticked the box and we have checked the sign-up. We use the rest only to coordinate the group. Each sign-up also sends us an email notification with what you submitted.
 
 **When you start an API trial** ([/trial](/trial)): your organization, your name, your work email, your role and what you want to build (both optional), the submission timestamp, and the IP address and browser user agent the form was sent from (kept only to spot and block abuse). We store the API key only as a hash; the key itself is sent once, to your email, through our email provider (Resend), which keeps a copy of sent messages. We email you three times: the key, one reminder before the trial ends, and one note when it ends. If the same address asks for a second trial, we send one reply saying it already has one. We use the rest to follow up about a plan, and each trial sends us an email notification with what you submitted. We keep the record so that each address gets one trial; ask us to delete it at gene@fhiriq.com.
+
+**When you verify a roster or sign in an application** (`/api/v1/roster/verify`, the `verify_roster` tool, or OAuth sign-in for the MCP server): for each verification we record which API key made it, how many NPIs it checked, how many were flagged, and when. We do not store the NPIs you send. To answer, we look each NPI up in the live NPPES registry, a public CMS service. When you sign an application in, we store the application's registration (its name and return address) and hashes of the codes and tokens issued to it, each tied to your key; the key you paste is checked and not stored again.
 
 **When a working-group participant submits an interaction report** (the test sandbox at `/api/v1/interaction-reports`, or the `report_interaction` tool): the report as sent, which API key sent it, and when it arrived. A report is visible only to the organization that sent it, is never published, and is deleted 90 days after it arrives. Reports are meant to describe test exchanges between organizations; do not put patient data in them.
 
