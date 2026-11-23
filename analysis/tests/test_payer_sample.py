@@ -166,6 +166,12 @@ def test_non_list_entry_does_not_crash():
     assert ps.lookup_humana(P1, get=lambda url: (200, b))["status"] == "lookup_failed"
 
 
+def test_non_list_entry_without_total_is_lookup_failed():
+    b = json.dumps({"resourceType": "Bundle", "entry": {"resource": {}}})
+    assert ps.lookup_humana(P1, get=lambda url: (200, b))["status"] == "lookup_failed"
+    assert ps.lookup_humana(P1, get=lambda url: (404, b))["status"] == "lookup_failed"
+
+
 def _role_with_refs(refs, locs):
     entries = [{"resource": {"resourceType": "PractitionerRole", "id": "r1",
                              "location": [{"reference": r} for r in refs]}}]
@@ -207,6 +213,13 @@ def test_referenced_locations_not_returned_are_flagged():
     r = ps.lookup_humana(P1, get=_two_step(body))
     assert r["status"] == "listed" and r["locations_missing"] is True
     assert r["zips"] == {"15213"}
+
+
+def test_unresolvable_location_refs_are_flagged_missing():
+    for ref in ("urn:uuid:0f0e", "#contained1", "abc"):
+        body = _role_with_refs([ref], [("abc", "15213")])
+        r = ps.lookup_humana(P1, get=_two_step(body))
+        assert r["status"] == "listed" and r["locations_missing"] is True, ref
 
 
 def test_role_without_location_refs_is_not_missing():
@@ -456,6 +469,17 @@ def test_malformed_payload_records_lookup_failed_not_crash(export, tmp_path):
                               "identifier": [{"system": "http://hl7.org/fhir/sid/us-npi",
                                               "value": npi_in(url)}]}}]})
         return 200, role_bundle()
+    counts, _, _ = _run(export, tmp_path, fetch=fetch)
+    assert counts["lookup_failed"] == 2 and counts["queried"] == 2
+
+
+def test_unexpected_parse_error_is_a_counted_lookup_failure(export, tmp_path):
+    # urljoin raises ValueError on a malformed next link; the run records a
+    # failed lookup and carries on rather than losing the run.
+    def fetch(url):
+        b = json.loads(prac_bundle(npi_in(url)))
+        b["link"] = [{"relation": "next", "url": "http://[bad"}]
+        return 200, json.dumps(b)
     counts, _, _ = _run(export, tmp_path, fetch=fetch)
     assert counts["lookup_failed"] == 2 and counts["queried"] == 2
 

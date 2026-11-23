@@ -196,6 +196,8 @@ def _empty_search(bundle: dict) -> bool:
     total = _total(bundle)
     if total is not None and total > 0:
         return False
+    if "entry" in bundle and bundle["entry"] is not None and not isinstance(bundle["entry"], list):
+        return False
     return all(_is_outcome_entry(e) for e in _entries(bundle))
 
 
@@ -266,15 +268,21 @@ def _search(base: str, first_url: str, get: Fetch,
 
 def _role_locations(bundles: list[dict]) -> tuple[set, set, bool]:
     """ZIPs and phones of the Locations the roles reference, across all pages,
-    and whether any referenced Location was not returned."""
+    and whether any referenced Location was not returned. A non-empty
+    reference that does not resolve to a Location id (urn:uuid, #contained, a
+    bare id) counts as not returned: its values are unknown, not absent."""
     refs = set()
+    unresolved = False
     for b in bundles:
         for role in _resources(b, "PractitionerRole"):
             locs = role.get("location")
             for loc in locs if isinstance(locs, list) else []:
-                rid = _ref_id(loc.get("reference")) if isinstance(loc, dict) else None
+                ref = loc.get("reference") if isinstance(loc, dict) else None
+                rid = _ref_id(ref)
                 if rid:
                     refs.add(rid)
+                elif isinstance(ref, str) and ref.strip():
+                    unresolved = True
     zips, phones, found = set(), set(), set()
     for b in bundles:
         for loc in _resources(b, "Location"):
@@ -294,7 +302,7 @@ def _role_locations(bundles: list[dict]) -> tuple[set, set, bool]:
                     p = phone10(t.get("value"))
                     if p:
                         phones.add(p)
-    return zips, phones, bool(refs - found)
+    return zips, phones, unresolved or bool(refs - found)
 
 
 def lookup(base: str, npi: str, get: Fetch) -> PayerResult:

@@ -339,7 +339,8 @@ def load(zip_path: Path, out_dir: Path, *, month: str | None = None) -> dict:
         "size": st.st_size,
         "rows": rows,
         "max_enumeration_date": max_enum.isoformat() if max_enum else None,
-        "future_enumeration_dates_ignored": ignored,
+        # None: no file month was known, so the filter was not applied.
+        "future_enumeration_dates_ignored": ignored if cutoff is not None else None,
         "encoding": used,
         "loaded_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }

@@ -195,7 +195,7 @@ def _zip_with(tmp_path, rows, name="NPPES_Data_Dissemination_November_2026_V2.zi
     return p
 
 
-FUTURE = _row("5555555556", "1", "TYPO", "TINA", "", "5 ASH", "ERIE", "PA",
+FUTURE = _row("5555555551", "1", "TYPO", "TINA", "", "5 ASH", "ERIE", "PA",
               "16501", "8145550111", "01/05/2031", "11/01/2026", "", [("207Q00000X", "Y")])
 
 
@@ -216,7 +216,7 @@ def test_stale_file_with_a_future_typo_still_fails_the_control(tmp_path):
 
 
 def test_month_end_handles_december(tmp_path):
-    dec_last = _row("5555555556", "1", "LATE", "LEE", "", "5 ASH", "ERIE", "PA",
+    dec_last = _row("5555555551", "1", "LATE", "LEE", "", "5 ASH", "ERIE", "PA",
                     "16501", "8145550111", "12/31/2026", "12/31/2026", "", [])
     s = nm.load(_zip_with(tmp_path, ROWS + [dec_last],
                           name="NPPES_Data_Dissemination_December_2026_V2.zip"), tmp_path / "o")
@@ -230,6 +230,13 @@ def test_load_takes_an_explicit_month(tmp_path):
         z.writestr("npidata_pfile_20050523-20261109.csv", _csv_bytes(ROWS + [FUTURE], "utf-8"))
     s = nm.load(p, tmp_path / "o", month="2026-11")
     assert s["future_enumeration_dates_ignored"] == 1
+
+
+def test_no_month_means_the_future_filter_was_not_applied(tmp_path):
+    p = tmp_path / "renamed.zip"
+    with zipfile.ZipFile(p, "w") as z:
+        z.writestr("npidata_pfile_20050523-20261109.csv", _csv_bytes(ROWS, "utf-8"))
+    assert nm.load(p, tmp_path / "o")["future_enumeration_dates_ignored"] is None
 
 
 # --- control ----------------------------------------------------------------
