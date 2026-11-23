@@ -421,6 +421,25 @@ model NpdMcpParticipant {
   @@map("npd_mcp_participants")
 }
 
+// Sandbox of the NPD Endpoint Feedback API proposal v0.2 (/api/v1/interaction-reports).
+// Created by prisma/sql/interaction_reports.sql, never by `db push`: RLS on,
+// no API-role grants. One row per (reporter, reportId); deleted 90 days after
+// receipt. Reporter = the NpdMcpParticipant named in the API key's label.
+model InteractionReport {
+  id                    String   @id @default(uuid())
+  reportId              String   @map("report_id")
+  reporterParticipantId String   @map("reporter_participant_id")
+  reporterKeyId         String   @map("reporter_key_id")
+  bodyHash              String   @map("body_hash")
+  body                  Json
+  receipt               Json
+  receivedAt            DateTime @map("received_at")
+
+  @@unique([reporterParticipantId, reportId])
+  @@index([receivedAt])
+  @@map("interaction_reports")
+}
+
 // Email capture gating the downloadable white paper at /download.
 // Captures role/org context so we understand who's using the research.
 // One row per Databricks Marketplace install of the release archive, keyed

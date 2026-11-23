@@ -249,6 +249,8 @@ export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promis
   const approveSql = listPublicly
     ? `update npd_mcp_participants set approved = true where id = '${id.replace(/'/g, "''")}';`
     : null;
+  // The id is a server-generated UUID; the quotes keep the command one shell word regardless.
+  const issueCmd = `npx tsx scripts/npd-mcp-issue-key.ts '${id.replace(/'/g, '')}'`;
 
   const text = [
     `New sign-up for the NPD MCP working group (${SITE_URL}/npd-mcp).`,
@@ -265,6 +267,10 @@ export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promis
     ...(approveSql
       ? [``, `--- To list this organization on the page ---`, `Run in the Supabase SQL editor after checking the sign-up:`, approveSql]
       : []),
+    ``,
+    `--- To give this organization a test API key ---`,
+    `After checking the sign-up, from frontend/ (dry run first, then add --confirm):`,
+    issueCmd,
   ].join('\n');
 
   const row = (label: string, value: string, mono = false) =>
@@ -300,6 +306,11 @@ export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promis
             </div>`
           : ''
       }
+      <div style="margin-bottom:14px;">
+        <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">To give this organization a test API key</p>
+        <p style="margin:0 0 6px 0;font-size:13px;">After checking the sign-up, from frontend/ (dry run first, then add --confirm):</p>
+        <pre style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:12px;white-space:pre-wrap;">${esc(issueCmd)}</pre>
+      </div>
       <p style="margin:0;font-size:11px;color:#a49b8c;">Admin alerts only · sent by /api/v1/npd-mcp/participate</p>
     </div>
   `.trim();
