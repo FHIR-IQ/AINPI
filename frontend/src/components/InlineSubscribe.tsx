@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import SubstackSignupForm from './SubstackSignupForm';
+import { NEWSLETTER_NAME } from '@/lib/newsletter';
 
 interface InlineSubscribeProps {
   /**
@@ -14,37 +16,20 @@ interface InlineSubscribeProps {
 }
 
 /**
- * Compact email-capture strip for content pages. Posts to the same
- * /api/v1/subscribe endpoint as the /subscribe page; the only difference
- * is the source tag. Success and error states render inline, no redirect.
+ * Compact email-capture strip for content pages. Submits to Substack's free
+ * sign-up in a new tab, so the reader keeps their place in the article; the
+ * source tag is recorded on ainpi.dev on the way (see lib/newsletter.ts).
  */
 export default function InlineSubscribe({
   source,
-  prompt = 'Get the next finding in your inbox. One email per release, no filler.',
+  prompt = `Get new findings in ${NEWSLETTER_NAME}, the free newsletter on Substack that also carries the podcast and essays.`,
 }: InlineSubscribeProps) {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'ok' | 'err'>('idle');
+  const [sent, setSent] = useState(false);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (status === 'submitting') return;
-    setStatus('submitting');
-    try {
-      const res = await fetch('/api/v1/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source }),
-      });
-      setStatus(res.ok ? 'ok' : 'err');
-    } catch {
-      setStatus('err');
-    }
-  }
-
-  if (status === 'ok') {
+  if (sent) {
     return (
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm text-green-800">
-        Subscribed. The next release update will land in your inbox.
+        Substack opened in a new tab to finish your sign-up.
       </div>
     );
   }
@@ -52,29 +37,14 @@ export default function InlineSubscribe({
   return (
     <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
       <p className="text-sm text-gray-700 mb-2">{prompt}</p>
-      <form onSubmit={submit} className="flex gap-2 flex-wrap">
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
-          aria-label="Email address"
-          className="flex-1 min-w-[200px] px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-        />
-        <button
-          type="submit"
-          disabled={status === 'submitting'}
-          className="px-4 py-1.5 text-sm font-medium bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50"
-        >
-          {status === 'submitting' ? 'Subscribing…' : 'Subscribe'}
-        </button>
-      </form>
-      {status === 'err' && (
-        <p className="text-xs text-red-600 mt-2">
-          That did not go through. Try again, or email gene@fhiriq.com.
-        </p>
-      )}
+      <SubstackSignupForm
+        source={source}
+        newTab
+        onSubmitted={() => setSent(true)}
+        formClassName="flex gap-2 flex-wrap"
+        inputClassName="flex-1 min-w-[200px] px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+        buttonClassName="px-4 py-1.5 text-sm font-medium bg-primary-600 text-white rounded-md hover:bg-primary-700 disabled:opacity-50"
+      />
     </div>
   );
 }

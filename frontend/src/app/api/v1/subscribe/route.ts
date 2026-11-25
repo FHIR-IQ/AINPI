@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { sendSubscribeWelcome } from '@/lib/email';
 import { sendSubscriptionAlert } from '@/lib/admin-email';
 
 export const dynamic = 'force-dynamic';
@@ -40,9 +39,10 @@ export async function POST(req: NextRequest) {
   const normalizedSource = source && VALID_SOURCES.has(source) ? source : 'unspecified';
 
   try {
-    // Upsert so re-subscribes don't 500 on unique constraint.
-    // Also track whether this row was newly created so we only send
-    // a welcome email on the first subscribe.
+    // Upsert so re-subscribes don't 500 on unique constraint. The forms
+    // that call this submit to Substack's free sign-up at the same time
+    // (lib/newsletter.ts), so Substack sends the welcome; this row is for
+    // source attribution and the admin alert only.
     const existing = await prisma.subscriber.findUnique({
       where: { email: normalizedEmail },
       select: { id: true },
@@ -53,8 +53,6 @@ export async function POST(req: NextRequest) {
       create: { email: normalizedEmail, source: normalizedSource },
     });
     if (!existing) {
-      // Fire-and-forget; the response shouldn't wait on SMTP
-      void sendSubscribeWelcome(normalizedEmail);
       // Realtime admin alert. Skip the totalAfter count if it errors: // the alert itself is more important than the count enrichment.
       void prisma.subscriber
         .count()
