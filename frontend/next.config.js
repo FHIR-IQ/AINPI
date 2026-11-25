@@ -41,6 +41,23 @@ const nextConfig = {
           },
         ],
       },
+      {
+        // OAuth sign-in. Listed after the rule above so its CSP replaces the
+        // site-wide one: form-action governs where the form's 303 may land,
+        // which for desktop clients is a loopback URL or an app scheme
+        // (APP_SCHEMES in src/lib/oauth.ts; keep the two lists equal). Never
+        // framed, so a key cannot be typed into a page dressed up by a framer.
+        source: '/oauth/authorize',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value:
+              "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; " +
+              "form-action 'self' https: http://localhost:* http://127.0.0.1:* http://[::1]:* cursor: vscode: vscode-insiders: windsurf:",
+          },
+          { key: 'X-Frame-Options', value: 'DENY' },
+        ],
+      },
     ];
   },
   async redirects() {
@@ -50,6 +67,17 @@ const nextConfig = {
       // and the social-share-card URL working.
       { source: '/landscape', destination: '/', permanent: true },
     ];
+  },
+  webpack(config) {
+    // /npd-mcp imports docs/npd-mcp/tool-goals.md as a string, so the text is
+    // part of the bundle. The page re-renders in a lambda (revalidate = 600)
+    // and Vercel's Root Directory is frontend/, so a runtime read of ../docs
+    // could find no file there. Scoped to that folder so no other .md changes.
+    config.module.rules.push({
+      test: /docs[\\/]npd-mcp[\\/].*\.md$/,
+      type: 'asset/source',
+    });
+    return config;
   },
   experimental: {
     // public/api/v1/** is served as static CDN assets by Vercel, never read from

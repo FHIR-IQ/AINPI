@@ -1,7 +1,7 @@
 ---
 title: Privacy policy
-version: 0.4.0
-last_updated: 2026-11-17
+version: 0.8.0
+last_updated: 2026-11-24
 ---
 
 # Privacy policy
@@ -11,7 +11,7 @@ AINPI is a research project. This privacy policy covers the public website at [a
 ## TL;DR
 
 - Cookieless page-view counts through Vercel Web Analytics and Speed Insights. No cookies, no tracking pixels, no fingerprinting, no advertising tags.
-- The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report).
+- The site collects email + contact info **only** when you explicitly submit a form (Subscribe, Download report, the NPD MCP working group sign-up, an API trial, an NPI removal request).
 - Submitted emails are stored in Supabase Postgres (US region) and are used only for the stated purpose. No resale.
 - The newsletter is sent by Substack. The subscribe forms sign you up on Substack directly; Substack's privacy policy applies to the list.
 - Removal on request: email [gene@fhiriq.com](mailto:gene@fhiriq.com).
@@ -24,6 +24,14 @@ AINPI is a research project. This privacy policy covers the public website at [a
 **When you subscribe to updates:** your email address, which form you used, and the timestamp. We use this to see which pages bring subscribers. The same form signs you up on Substack, which holds the newsletter list and sends it.
 
 **When you download the full report:** your email address, name (optional), organization (optional), stated use case (optional), and the submission timestamp. This form exists so we can tell who's using AINPI research. The information helps us prioritize and reach back out when major findings land.
+
+**When you join the NPD MCP working group:** your organization's name and type, your name, your email address, how you want to take part, the use case you describe (optional), whether you ticked the box to be listed, the submission timestamp, and the IP address and browser user agent the form was sent from. We keep the IP address and user agent only to spot and block abusive submissions. Only your organization's name and type are ever published, on the [/npd-mcp](/npd-mcp) page, and only if you ticked the box and we have checked the sign-up. We use the rest only to coordinate the group. Each sign-up also sends us an email notification with what you submitted.
+
+**When you start an API trial** ([/trial](/trial)): your organization, your name, your work email, your role and what you want to build (both optional), the submission timestamp, and the IP address and browser user agent the form was sent from (kept only to spot and block abuse). We store the API key only as a hash; the key itself is sent once, to your email, through our email provider (Resend), which keeps a copy of sent messages. We email you three times: the key, one reminder before the trial ends, and one note when it ends. If the same address asks for a second trial, we send one reply saying it already has one. We use the rest to follow up about a plan, and each trial sends us an email notification with what you submitted. We keep the record so that each address gets one trial; ask us to delete it at gene@fhiriq.com.
+
+**When you verify a roster or sign in an application** (`/api/v1/roster/verify`, the `verify_roster` tool, or OAuth sign-in for the MCP server): for each verification we record which API key made it, how many NPIs it checked, how many were flagged, and when. We do not store the NPIs you send. To answer, we look each NPI up in the live NPPES registry, a public CMS service. When you sign an application in, we store the application's registration (its name, its return addresses and the IP address it registered from) and hashes of the codes and tokens issued to it, each tied to your key; the key you paste is checked and not stored again.
+
+**When a working-group participant submits an interaction report** (the test sandbox at `/api/v1/interaction-reports`, or the `report_interaction` tool): the report as sent, which API key sent it, and when it arrived. A report is visible only to the organization that sent it, is never published, and is deleted 90 days after it arrives. Reports are meant to describe test exchanges between organizations; do not put patient data in them.
 
 **When you ask for an NPI to be removed:** the NPI, the email address you give for the confirmation, how the request arrived (form, email or by hand), and when it was received, applied and confirmed. We keep this so the NPI stays removed from future releases. It is never published.
 
@@ -39,10 +47,12 @@ AINPI is a research project. This privacy policy covers the public website at [a
   email us.
 - **Download report:** we record the capture so we can tell who is using the
   research. We may email you about a major update or a follow-up question.
+- **NPD MCP working group:** we contact you about the group's work, such as
+  drafts to review and testing sessions. Nothing else.
 
 We do not sell, trade, or share your email address with any third party outside
-Resend, which delivers our emails, and Substack, which sends the newsletter once
-you sign up there.
+Resend, which delivers our emails and our own notifications about form
+submissions, and Substack, which sends the newsletter once you sign up there.
 
 ## Where data is stored
 
@@ -63,7 +73,7 @@ Browser-level cookies you may see in DevTools (`__cf_bm` etc.) are set by the CD
 |---|---|---|
 | Vercel | Hosting + CDN | Request metadata (IP, user-agent, path) |
 | Supabase | Email + contact storage | Form submissions only, not browsing data |
-| Resend | Delivers the download-page sign-up note and removal confirmations | Your email address and the message |
+| Resend | Delivers the download-page sign-up note, removal confirmations, and notifications to us about form submissions | Your email address and the message; for a notification to us, what you submitted in the form |
 | Substack | Sends the newsletter | Your email address, from the subscribe form |
 | Vercel Web Analytics and Speed Insights | Cookieless page-view counts and page load times | Page path, referrer, browser and device type, country |
 | Google BigQuery | Analytics warehouse for audit findings | No user data, only the public CMS NPD + NPPES datasets |

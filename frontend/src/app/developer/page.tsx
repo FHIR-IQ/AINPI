@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -431,7 +432,7 @@ export default function DeveloperPage() {
             for &quot;is this provider real / active / federally excluded?&quot; queries inside an
             LLM tool surface.
           </p>
-          <div className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4">
+          <div id="mcp" className="bg-primary-50 border border-primary-200 rounded-lg p-4 mb-4 scroll-mt-20">
             <p className="text-sm font-semibold text-gray-900 mb-1">
               Live MCP server (streamable HTTP)
             </p>
@@ -439,14 +440,42 @@ export default function DeveloperPage() {
               <code>claude mcp add --transport http ainpi https://ainpi.dev/api/mcp</code>
             </pre>
             <p className="text-xs text-gray-600">
-              Six tools: <code className="font-mono">list_findings</code>,{' '}
+              Ten tools: <code className="font-mono">list_findings</code>,{' '}
               <code className="font-mono">get_finding</code>,{' '}
               <code className="font-mono">get_state_audit</code>,{' '}
               <code className="font-mono">check_npi_cohort</code>,{' '}
               <code className="font-mono">lookup_npi</code>,{' '}
-              <code className="font-mono">lookup_organization</code>. No key is required. Every
-              response carries provenance (release date, methodology version) and the
-              signals-not-findings disclaimer where flags are involved.
+              <code className="font-mono">lookup_organization</code>,{' '}
+              <code className="font-mono">search_organizations</code>, and two report-sandbox
+              tools, <code className="font-mono">report_interaction</code> and{' '}
+              <code className="font-mono">get_interaction_report</code>, and{' '}
+              <code className="font-mono">verify_roster</code>. The report tools need a key issued
+              to NPD MCP working group participants; <code className="font-mono">verify_roster</code>{' '}
+              needs any AINPI key (<Link href="/trial" className="text-primary-600 hover:underline">a
+              14-day trial</Link> is free). Every response carries provenance (release date,
+              methodology version) and the signals-not-findings disclaimer where flags are involved.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              <strong>Sign in from Claude, ChatGPT or another assistant.</strong> Add{' '}
+              <code className="font-mono">https://ainpi.dev/api/account/mcp</code> as a custom
+              connector and sign in with your AINPI API key. The server supports OAuth 2.1 with
+              dynamic client registration and PKCE (metadata at{' '}
+              <code className="font-mono">/.well-known/oauth-authorization-server</code>); the
+              application gets a 1-hour access token and a 30-day refresh token that rotates on use.
+              Both stop working if your key is revoked or expires.
+              <code className="font-mono"> /api/mcp</code> stays open without sign-in and also
+              accepts a key or token.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              <strong>Roster verification over HTTP:</strong>{' '}
+              <code className="font-mono">POST /api/v1/roster/verify</code> with{' '}
+              <code className="font-mono">{'{"npis": ["..."]}'}</code> and your key. Per NPI: NDH
+              record and active roles, live NPPES status, OIG LEIE and SAM exclusions (a SAM match
+              whose name differs from NPPES, or cannot be compared, is <code className="font-mono">needs_review</code>),
+              and endpoint reach, with each source&apos;s date. Up to 25 NPIs per call on a trial
+              key, 200 on partner and 500 on enterprise; each call costs 5 units plus 2 per distinct
+              NPI (duplicates are not charged). Medicare
+              enrollment is not checked yet.
             </p>
             <p className="text-xs text-gray-600 mt-2">
               <code className="font-mono">lookup_organization</code> takes an organization NPI
@@ -482,6 +511,16 @@ export default function DeveloperPage() {
               </a>{' '}
               for how to get one. An unrecognised or revoked key is refused with{' '}
               <code className="font-mono">401</code> rather than served anonymously.
+            </p>
+            <p className="text-xs text-gray-600 mt-2">
+              The report tools write to an AINPI sandbox of the proposed NPD Endpoint Feedback
+              API (v0.2), also served over HTTP at{' '}
+              <code className="font-mono">/api/v1/interaction-reports</code>. To get a key, test
+              the tools or help draft the next one (update a record once), join the{' '}
+              <Link href="/npd-mcp" className="text-primary-600 hover:underline">
+                NPD MCP working group
+              </Link>
+              .
             </p>
           </div>
           <ul className="text-sm text-gray-700 space-y-2 mb-4">
@@ -567,10 +606,22 @@ export default function DeveloperPage() {
                   </td>
                 </tr>
                 <tr className="border-b border-gray-200">
+                  <td className="py-2 pr-4">Trial key</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">1,000</td>
+                  <td className="py-2 pr-4 text-right tabular-nums">20,000</td>
+                  <td className="py-2">
+                    Self-serve, 14 days:{' '}
+                    <Link href="/trial" className="text-primary-600 hover:underline">
+                      start a trial
+                    </Link>
+                    . Paused with anonymous traffic when the daily ceiling trips.
+                  </td>
+                </tr>
+                <tr className="border-b border-gray-200">
                   <td className="py-2 pr-4">Partner</td>
                   <td className="py-2 pr-4 text-right tabular-nums">3,000</td>
                   <td className="py-2 pr-4 text-right tabular-nums">100,000</td>
-                  <td className="py-2">Named integrations. Ask.</td>
+                  <td className="py-2">Paid plan. Keeps working when the daily ceiling trips. Ask.</td>
                 </tr>
               </tbody>
             </table>

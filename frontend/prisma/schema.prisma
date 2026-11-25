@@ -395,6 +395,140 @@ model HealthcareServiceSurveyResponse {
   @@map("hcs_survey_responses")
 }
 
+// One row per sign-up to the NPD MCP working group (/npd-mcp). Created in
+// production by prisma/sql/npd_mcp_participants.sql (run by hand in the
+// Supabase SQL editor), which also enables RLS; keep the two in sync.
+// Only organization + orgType of rows with listPublicly = true are ever shown
+// publicly; contact name, email, IP, use case and participation never are.
+// Duplicates are kept on purpose: the admin sees every submission.
+model NpdMcpParticipant {
+  id            String   @id @default(uuid())
+  organization  String
+  contactName   String   @map("contact_name")
+  email         String
+  orgType       String   @map("org_type")
+  participation Json // string[] of PARTICIPATION codes (src/data/npd-mcp.ts)
+  useCase       String?  @map("use_case") @db.Text
+  listPublicly  Boolean  @default(false) @map("list_publicly")
+  // Set by hand (SQL in the admin alert) after a check; the page lists a row
+  // only when listPublicly and approved are both true.
+  approved      Boolean  @default(false)
+  ipAddress     String?  @map("ip_address")
+  userAgent     String?  @map("user_agent") @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([listPublicly, createdAt])
+  @@map("npd_mcp_participants")
+}
+
+// Audit log for roster verification (/api/v1/roster/verify, MCP verify_roster).
+// Counts only: the NPI list is never stored. Created by
+// prisma/sql/roster_oauth.sql (RLS on, no API-role grants).
+model RosterVerification {
+  id           String   @id @default(uuid())
+  keyId        String   @map("key_id")
+  surface      String
+  npiCount     Int      @map("npi_count")
+  flaggedCount Int      @map("flagged_count")
+  outcome      String
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([keyId, createdAt])
+  @@map("roster_verifications")
+}
+
+// OAuth 2.1 for the MCP server (sign in with an AINPI API key). Created by
+// prisma/sql/roster_oauth.sql (RLS on, no API-role grants). Codes and tokens
+// are stored only as SHA-256 hashes and bound to an api_keys row, so revoking
+// or expiring the key ends every token issued for it.
+model OAuthClient {
+  id           String   @id @default(uuid())
+  clientName   String?  @map("client_name")
+  redirectUris Json     @map("redirect_uris")
+  ipAddress    String?  @map("ip_address")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@map("oauth_clients")
+}
+
+model OAuthCode {
+  codeHash      String    @id @map("code_hash")
+  clientId      String    @map("client_id")
+  apiKeyId      String    @map("api_key_id")
+  redirectUri   String    @map("redirect_uri")
+  codeChallenge String    @map("code_challenge")
+  expiresAt     DateTime  @map("expires_at")
+  usedAt        DateTime? @map("used_at")
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("oauth_codes")
+}
+
+model OAuthToken {
+  tokenHash String    @id @map("token_hash")
+  kind      String // access | refresh
+  /// The authorization code that started this sign-in (its hash). Every token
+  /// from one sign-in shares it, so a replayed code or refresh token can
+  /// revoke the whole family (RFC 9700 4.14.2).
+  familyId  String    @map("family_id")
+  clientId  String    @map("client_id")
+  apiKeyId  String    @map("api_key_id")
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([apiKeyId])
+  @@index([familyId])
+  @@index([expiresAt])
+  @@map("oauth_tokens")
+}
+
+// Self-serve API trials (/trial). Created by prisma/sql/trial_signups.sql,
+// never by `db push`: RLS on, no API-role grants. One row per email address,
+// ever (emailNorm unique), so a trial cannot be renewed by signing up again.
+model TrialSignup {
+  id             String    @id @default(uuid())
+  organization   String
+  contactName    String    @map("contact_name")
+  email          String
+  emailNorm      String    @unique @map("email_norm")
+  role           String?
+  useCase        String?   @map("use_case") @db.Text
+  apiKeyId       String?   @map("api_key_id")
+  expiresAt      DateTime  @map("expires_at")
+  reminderSentAt DateTime? @map("reminder_sent_at")
+  endedSentAt    DateTime? @map("ended_sent_at")
+  convertedAt    DateTime? @map("converted_at")
+  /// Set by scripts/trial.ts revoke; the reminder cron skips revoked trials.
+  revokedAt      DateTime? @map("revoked_at")
+  ipAddress      String?   @map("ip_address")
+  userAgent      String?   @map("user_agent") @db.Text
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  @@index([expiresAt])
+  @@map("trial_signups")
+}
+
+// Sandbox of the NPD Endpoint Feedback API proposal v0.2 (/api/v1/interaction-reports).
+// Created by prisma/sql/interaction_reports.sql, never by `db push`: RLS on,
+// no API-role grants. One row per (reporter, reportId); deleted 90 days after
+// receipt. Reporter = the NpdMcpParticipant named in the API key's label.
+model InteractionReport {
+  id                    String   @id @default(uuid())
+  reportId              String   @map("report_id")
+  reporterParticipantId String   @map("reporter_participant_id")
+  reporterKeyId         String   @map("reporter_key_id")
+  bodyHash              String   @map("body_hash")
+  body                  Json
+  receipt               Json
+  receivedAt            DateTime @map("received_at")
+
+  @@unique([reporterParticipantId, reportId])
+  @@index([receivedAt])
+  @@map("interaction_reports")
+}
+
 // Email capture gating the downloadable white paper at /download.
 // Captures role/org context so we understand who's using the research.
 // One row per Databricks Marketplace install of the release archive, keyed
@@ -475,6 +609,9 @@ model ApiKey {
   createdAt    DateTime  @default(now()) @map("created_at")
   lastUsedAt   DateTime? @map("last_used_at")
   revokedAt    DateTime? @map("revoked_at")
+  /// After this instant the key is refused like a revoked one. Null = no expiry.
+  /// Set on trial keys (/trial). Added by prisma/sql/trial_signups.sql.
+  expiresAt    DateTime? @map("expires_at")
 
   @@index([tier])
   @@index([active])

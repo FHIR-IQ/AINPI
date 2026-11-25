@@ -12,9 +12,18 @@ name: NDH release watch
 # A broken fetch must never read as "nothing new", so the check step's exit
 # code is the job result and the issue step only runs on status == new.
 #
-# Side effects: at most one GitHub issue per detected release. No commits, no
-# labels, no cloud writes. Uses only the built-in GITHUB_TOKEN; contents: read
-# is the minimum actions/checkout needs.
+# Side effects: at most one GitHub issue per detected release, and (archive
+# job) the raw files of whatever release CMS is serving, copied unchanged into
+# /Volumes/workspace/ainpi/staging/raw/release_date=<date>/. No commits, no
+# labels. contents: read is the minimum actions/checkout needs.
+#
+# The archive job runs every day, not only on a new release: CMS now publishes
+# about weekly and keeps only the latest, so a release has to be copied while
+# it is being served, whether or not the warehouse is ever reloaded from it.
+# It is idempotent (files already archived at the manifest's size are skipped)
+# and costs storage only, about 2.4 GB per release; no SQL warehouse runs.
+# Without DATABRICKS_HOST and DATABRICKS_TOKEN secrets it warns and skips, so
+# the watch itself never depends on Databricks.
 
 on:
   schedule:
@@ -64,3 +73,39 @@ jobs:
           fi
           gh issue create --repo "$GITHUB_REPOSITORY" --title "$TITLE" \
             --body-file "$RUNNER_TEMP/ndh-release-issue.md"
+
+  archive:
+    name: Archive raw release files
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+    steps:
+      - name: Check credentials
+        id: creds
+        run: |
+          if [ -z "$DATABRICKS_HOST" ] || [ -z "$DATABRICKS_TOKEN" ]; then
+            echo "::warning::DATABRICKS_HOST/DATABRICKS_TOKEN not set; raw release files are NOT being archived"
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.creds.outputs.ok == 'true'
+        uses: actions/checkout@v6
+
+      - if: steps.creds.outputs.ok == 'true'
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      # v1.26.0, pinned by commit.
+      - if: steps.creds.outputs.ok == 'true'
+        uses: databricks/setup-cli@2da6132749245fbffb3c10d57cec219de3669967
+
+      # Standard library plus the Databricks CLI; downloads one file at a time
+      # into RUNNER_TEMP and deletes it after upload.
+      - if: steps.creds.outputs.ok == 'true'
+        name: Archive
+        run: python3 analysis/ndh_raw_archive.py

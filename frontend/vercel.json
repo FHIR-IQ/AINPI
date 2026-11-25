@@ -22,6 +22,10 @@
     {
       "path": "/api/v1/admin/suppression-confirm",
       "schedule": "41 15 * * *"
+    },
+    {
+      "path": "/api/v1/admin/trial-reminders",
+      "schedule": "23 15 * * *"
     }
   ]
 }

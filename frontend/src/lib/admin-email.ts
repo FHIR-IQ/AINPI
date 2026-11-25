@@ -222,6 +222,102 @@ export async function sendSurveyAlert(args: SurveyAlertArgs): Promise<void> {
   await sendOnce({ subject, text, html, tag: `survey-${survey}` });
 }
 
+export interface NpdMcpSignupAlertArgs {
+  /** Row id, for the approve statement. */
+  id: string;
+  organization: string;
+  contactName: string;
+  email: string;
+  orgType: string;
+  participation: string[];
+  useCase: string | null;
+  listPublicly: boolean;
+}
+
+/**
+ * Fires on POST /api/v1/npd-mcp/participate for every accepted sign-up,
+ * repeats included. Same contract as the other alerts: skips without
+ * RESEND_API_KEY and never throws.
+ */
+export async function sendNpdMcpSignupAlert(args: NpdMcpSignupAlertArgs): Promise<void> {
+  const { id, organization, contactName, email, orgType, participation, useCase, listPublicly } = args;
+  // A newline in a subject header can break the message; collapse all runs.
+  const subject = `NPD MCP sign-up: ${organization.replace(/\s+/g, ' ').trim()}`;
+  const takePart = participation.length > 0 ? participation.join(', ') : '(none selected)';
+  // Listing needs approval. Single quotes in the id are doubled so the
+  // statement stays one literal whatever the id holds.
+  const approveSql = listPublicly
+    ? `update npd_mcp_participants set approved = true where id = '${id.replace(/'/g, "''")}';`
+    : null;
+  // The id is a server-generated UUID; the quotes keep the command one shell word regardless.
+  const issueCmd = `npx tsx scripts/npd-mcp-issue-key.ts '${id.replace(/'/g, '')}'`;
+
+  const text = [
+    `New sign-up for the NPD MCP working group (${SITE_URL}/npd-mcp).`,
+    ``,
+    `Organization: ${organization}`,
+    `Type:         ${orgType}`,
+    `Contact:      ${contactName}`,
+    `Email:        ${email}`,
+    `Take part:    ${takePart}`,
+    `List name publicly: ${listPublicly ? 'yes, after approval' : 'no'}`,
+    ``,
+    `--- Use case ---`,
+    useCase || '(none)',
+    ...(approveSql
+      ? [``, `--- To list this organization on the page ---`, `Run in the Supabase SQL editor after checking the sign-up:`, approveSql]
+      : []),
+    ``,
+    `--- To give this organization a test API key ---`,
+    `After checking the sign-up, from frontend/ (dry run first, then add --confirm):`,
+    issueCmd,
+  ].join('\n');
+
+  const row = (label: string, value: string, mono = false) =>
+    `<tr><td style="padding:6px 0;color:#7d7466;width:160px;">${label}</td><td style="padding:6px 0;${mono ? 'font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;' : ''}">${esc(value)}</td></tr>`;
+
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#171310;line-height:1.5;">
+      <div style="border-left:4px solid #08519c;padding:14px 18px;background:#eef4fb;margin-bottom:20px;">
+        <p style="margin:0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#08519c;">AINPI Admin · NPD MCP sign-up</p>
+        <h1 style="margin:6px 0 0 0;font-size:18px;color:#171310;">${esc(organization)}</h1>
+      </div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:18px;">
+        ${row('Type', orgType, true)}
+        ${row('Contact', contactName)}
+        ${row('Email', email, true)}
+        ${row('Take part', takePart, true)}
+        ${row('List name publicly', listPublicly ? 'yes, after approval' : 'no')}
+      </table>
+      ${
+        useCase
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">Use case</p>
+              <blockquote style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:13px;white-space:pre-wrap;">${esc(useCase)}</blockquote>
+            </div>`
+          : ''
+      }
+      ${
+        approveSql
+          ? `<div style="margin-bottom:14px;">
+              <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">To list this organization on the page</p>
+              <p style="margin:0 0 6px 0;font-size:13px;">Run in the Supabase SQL editor after checking the sign-up:</p>
+              <pre style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:12px;white-space:pre-wrap;">${esc(approveSql)}</pre>
+            </div>`
+          : ''
+      }
+      <div style="margin-bottom:14px;">
+        <p style="margin:0 0 6px 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#5d564b;">To give this organization a test API key</p>
+        <p style="margin:0 0 6px 0;font-size:13px;">After checking the sign-up, from frontend/ (dry run first, then add --confirm):</p>
+        <pre style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:12px;white-space:pre-wrap;">${esc(issueCmd)}</pre>
+      </div>
+      <p style="margin:0;font-size:11px;color:#a49b8c;">Admin alerts only · sent by /api/v1/npd-mcp/participate</p>
+    </div>
+  `.trim();
+
+  await sendOnce({ subject, text, html, tag: 'npd-mcp-signup' });
+}
+
 export async function sendDownloadAlert(
   args: DownloadAlertArgs,
 ): Promise<void> {
@@ -470,4 +566,92 @@ export async function sendRemovalSenderOverflowAlert(sender: string, reason: str
     html: `<p>${esc(text)}</p>`,
     tag: 'removal-sender-overflow',
   });
+}
+
+// ---------------------------------------------------------------------------
+// API trials (/trial)
+// ---------------------------------------------------------------------------
+
+/**
+ * Send one email to a trialist (not the admin). Reply-To is ADMIN_EMAIL, so
+ * "reply to talk about a plan" reaches a person. Returns false on any failure
+ * so the caller can roll back an undelivered key.
+ */
+export async function sendTrialEmail(e: { to: string; subject: string; text: string }): Promise<boolean> {
+  const resend = getResend();
+  if (!resend) return false;
+  try {
+    const { error } = await resend.emails.send({
+      from: FROM_ADDRESS,
+      to: e.to,
+      replyTo: ADMIN_EMAIL,
+      subject: e.subject,
+      text: e.text,
+    });
+    if (error) {
+      console.error('[trial-email] resend error:', error.name);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error('[trial-email] send failed:', err instanceof Error ? err.name : 'unknown');
+    return false;
+  }
+}
+
+export interface TrialAlertArgs {
+  signupId: string;
+  organization: string;
+  contactName: string;
+  email: string;
+  role: string | null;
+  useCase: string | null;
+  expiresAt: Date;
+}
+
+export async function sendTrialAlert(a: TrialAlertArgs): Promise<void> {
+  const ends = a.expiresAt.toISOString().slice(0, 10);
+  const cmd = `npx tsx scripts/trial.ts convert '${a.signupId.replace(/'/g, '')}'`;
+  const text = [
+    `New API trial (${SITE_URL}/trial). The key was emailed to the contact; it ends ${ends}.`,
+    ``,
+    `Organization: ${a.organization}`,
+    `Contact:      ${a.contactName}`,
+    `Email:        ${a.email}`,
+    `Role:         ${a.role || '(not given)'}`,
+    ``,
+    `--- Use case ---`,
+    a.useCase || '(none)',
+    ``,
+    `--- When they become a customer ---`,
+    `From frontend/ (dry run first, then add --confirm):`,
+    cmd,
+    `Also: npx tsx scripts/trial.ts extend '${a.signupId.replace(/'/g, '')}' --days 7`,
+  ].join('\n');
+  const row = (label: string, value: string) =>
+    `<tr><td style="padding:6px 0;color:#7d7466;width:120px;">${label}</td><td style="padding:6px 0;">${esc(value)}</td></tr>`;
+  const html = `
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:600px;margin:0 auto;color:#171310;line-height:1.5;">
+      <div style="border-left:4px solid #08519c;padding:14px 18px;background:#eef4fb;margin-bottom:20px;">
+        <p style="margin:0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#08519c;">AINPI Admin · API trial</p>
+        <h1 style="margin:6px 0 0 0;font-size:18px;color:#171310;">${esc(a.organization)}</h1>
+        <p style="margin:4px 0 0 0;font-size:13px;color:#5d564b;">Key emailed to the contact. Ends ${esc(ends)}.</p>
+      </div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:18px;">
+        ${row('Contact', a.contactName)}
+        ${row('Email', a.email)}
+        ${row('Role', a.role || '(not given)')}
+      </table>
+      ${a.useCase ? `<blockquote style="margin:0 0 14px 0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:13px;white-space:pre-wrap;">${esc(a.useCase)}</blockquote>` : ''}
+      <p style="margin:0 0 6px 0;font-size:13px;">When they become a customer, from frontend/ (dry run first, then add --confirm):</p>
+      <pre style="margin:0;padding:10px 14px;background:#faf8f5;border-left:3px solid #e4dfd6;font-size:12px;white-space:pre-wrap;">${esc(cmd)}</pre>
+    </div>`;
+  const subject = `API trial: ${a.organization.replace(/\s+/g, ' ').trim()}`;
+  await sendOnce({ subject, text, html, tag: 'trial' });
+}
+
+/** One alert a UTC day when the global trial ceiling is reached. */
+export async function sendTrialCeilingAlert(ceiling: number): Promise<void> {
+  const text = `The daily ceiling of ${ceiling} new API trials was reached. Further sign-ups today get "trials are paused, try tomorrow". Raise TRIAL_DAILY_CEILING in Vercel if this is real demand.`;
+  await sendOnce({ subject: 'API trials paused for today (ceiling reached)', text, html: `<p>${esc(text)}</p>`, tag: 'trial-ceiling' });
 }

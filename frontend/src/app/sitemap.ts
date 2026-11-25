@@ -39,6 +39,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/map', priority: 0.8 },
     { path: '/primer', priority: 0.9 },
     { path: '/networks', priority: 0.8 },
+    { path: '/npd-mcp', priority: 0.6 },
+    { path: '/trial', priority: 0.6 },
     { path: '/methodology', priority: 0.8 },
     { path: '/for-state-medicaid', priority: 0.8 },
     { path: '/smd-revalidation', priority: 0.7 },
